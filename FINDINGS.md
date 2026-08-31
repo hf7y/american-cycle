@@ -467,11 +467,12 @@ midterm races at the current −2, and 19% at −4 — against a reality of loss
 points, because a modifier cannot punish anyone in a race nobody contests. This
 is F6 downstream again.
 
-**The runaway is acquitted.** §16 worries that hand size, endorsements and
-capture stack into a leader who cannot be caught. Across presidency hand bonus
-0→4, determination sits flat near 30% and the **comeback rate rises** from 67%
-to 87%. The Senate bonus is flat too. At no tested setting does the leader run
-away. The tuning worry should move elsewhere.
+**The runaway.** ~~Acquitted.~~ **This claim was wrong — see F18.** It rested
+on two metrics that were not the ones SIM-BRIEF defines: a per-game
+determination proxy, and a "comeback rate" that counted any game containing a
+lead change. Measured to the brief's definitions the runaway is real. What
+survives is the narrower result: the presidency and Senate hand bonuses are not
+what causes it.
 
 **Two sweeps returned nothing usable, and say so rather than dressing it up.**
 Game length is invariant at 16 years across every hand size because `maxYears`
@@ -577,3 +578,48 @@ asks: **one era pack is not a viable pool.** Median game length by pool size,
 four players: 114 cards → 3 years, 212 → 13, 400 → 13. Two eras is the minimum,
 which makes §14's "refill packs draw from later years" load-bearing rather than
 flavour.
+
+---
+
+## F18. The runaway is real. F14's acquittal was measured wrong.
+
+**Correcting myself.** F14 reported the runaway "acquitted at every tested
+setting". That was two bad metrics, not a finding.
+
+SIM-BRIEF defines the determination point as a **cross-game curve** — at each
+year, the share of games where the *current* leader is the *eventual* winner —
+reported as the first year that share exceeds 80%. I had measured a per-game
+proxy instead. And it defines comeback rate as "share of games won by a player
+who was **last at the halfway mark**"; I had counted any game containing a lead
+change, which is a far easier bar and gave a cheerful 67–87%.
+
+To the brief's definitions, 120 games each:
+
+| presidency hand bonus | determination | comeback | lead changes |
+|---|---|---|---|
+| 0 | 44% | **1%** | 1.3 |
+| 2 (current) | 38% | **0%** | 1.1 |
+| 4 | 50% | **1%** | 1.0 |
+
+Healthy determination is 75–85% of the way through. **This is 38–50%** — the
+winner is settled around the halfway mark. And the year-by-year curve shows
+where it starts:
+
+`54 57 68 68 73 73 80 81 85 86 90 90 90 90 100 100`
+
+**In year one, the eventual winner is already leading 54% of the time**, against
+25% for a four-player coin flip. The early game decides too much, and once
+ahead a player is essentially never caught: **the comeback rate is 1%.**
+
+**What survives from F14** is the narrower and still useful result: the
+presidency and Senate hand bonuses are *not* the cause. Determination does not
+trend across bonus 0→4, and the Senate bonus sweep is flat. §16 names hand
+size, endorsements and capture as the three stacking loops to suspect; on this
+evidence hand size is innocent and the other two are unexamined.
+
+**Three of my own numbers have now had to be corrected** — the independents
+win rate (walkovers), the seat bias (two harness bugs), and this. The pattern
+is the same each time: a convenient proxy standing in for the metric that was
+actually specified. The brief warned about exactly this — *"assume the
+instrumentation is wrong before assuming the design is right"* — and it has
+been right every time.

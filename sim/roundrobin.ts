@@ -38,6 +38,48 @@ export function roundRobin(names: string[], cards: Card[], cfg: Config, n: numbe
   return { wins, games };
 }
 
+/** SIM-BRIEF §2's runaway measures, to its definitions rather than to
+ *  convenient proxies.
+ *
+ *  Determination point: across games, at each year, the share where the
+ *  CURRENT leader is the EVENTUAL winner. The reported figure is the first
+ *  year that share exceeds 80%, as a fraction of game length. Healthy is
+ *  75-85%; early means the positive-feedback stack is broken.
+ *
+ *  Comeback rate: share of games won by a player who was LAST at the halfway
+ *  mark -- not, as an easier proxy would have it, any game with a lead change.
+ */
+export function runawayMetrics(seeds: number[], agents: string[], cards: Card[], cfg: Config) {
+  const runs = seeds.map((s) => playOne(agents, cards, cfg, s)).filter((r) => r.scoreHistory.length > 1);
+  const maxLen = Math.max(...runs.map((r) => r.scoreHistory.length));
+  const curve: number[] = [];
+  for (let y = 0; y < maxLen; y++) {
+    let n = 0, hit = 0;
+    for (const r of runs) {
+      const row = r.scoreHistory[y];
+      if (!row) continue;
+      n++;
+      const best = Math.max(...row);
+      // ties at the top count as "leading", which is the generous reading
+      if (row[r.winner] === best) hit++;
+    }
+    if (n) curve.push(hit / n);
+  }
+  const idx = curve.findIndex((x) => x > 0.8);
+  const determination = idx < 0 ? 1 : idx / curve.length;
+
+  let comebacks = 0, leadChanges = 0;
+  for (const r of runs) {
+    const half = r.scoreHistory[Math.floor(r.scoreHistory.length / 2)];
+    if (half) {
+      const worst = Math.min(...half);
+      if (half[r.winner] === worst) comebacks++;
+    }
+    leadChanges += r.leadChanges;
+  }
+  return { determination, curve, comeback: comebacks / runs.length, leadChanges: leadChanges / runs.length, games: runs.length };
+}
+
 if (import.meta.filename === process.argv[1]) {
   const cfg = loadConfig(process.argv[2] ?? 'tuned.json');
   const cards = loadPacks(['1976', '1992', '2008', '2016']);

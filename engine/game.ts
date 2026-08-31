@@ -124,6 +124,9 @@ export interface GameResult {
   /** share of race-slots that drew declarations from more than one player */
   contestedSlotShare: number;
   decisionCounts: number[];
+  /** score by player, one row per year -- the runaway metrics in SIM-BRIEF §2
+   *  are cross-game curves over this, not per-game summaries. */
+  scoreHistory: number[][];
   seatsByOffice: Record<Office, number>;
 }
 
@@ -867,6 +870,7 @@ export class Game {
       uncontestedShare: this.events.length ? uncontested / this.events.length : 0,
       contestedSlotShare: this.stats.raceSlots ? this.stats.contestedSlots / this.stats.raceSlots : 0,
       decisionCounts: this.stats.decisions, seatsByOffice,
+      scoreHistory: this.scoreHistory,
     };
   }
 }
