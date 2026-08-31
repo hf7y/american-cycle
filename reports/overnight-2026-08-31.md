@@ -6,111 +6,119 @@ Ten scripted agents. Every figure below is reproducible from its seed.
 
 A caution up front, in the brief's own spirit: this run found the design's
 problems faster than it found its numbers. Several sweeps that were supposed to
-tune constants instead hit a structural issue that makes the constants moot
-until it is fixed. That is reported as it happened rather than smoothed over.
+tune constants instead hit structural issues that make the constants moot until
+they are fixed. That is reported as it happened rather than smoothed over.
+
+**And a caution about this report.** Four of my own numbers had to be corrected
+during the night, each time because a convenient proxy had been measured
+instead of the metric SIM-BRIEF specifies — decision density (declarations made
+rather than legal moves available, which *inverted* the conclusion), the
+runaway metrics (per-game proxies rather than cross-game curves, which also
+inverted it), the independents win rate (walkovers included), and the seat bias
+(two harness bugs manufacturing ~25pp that was not there). Every headline
+figure below has since been re-measured on the current engine. The brief's own
+instruction — *"assume the instrumentation is wrong before assuming the design
+is right"* — was correct four times out of four, and the corrections are kept
+visible in `FINDINGS.md` rather than quietly overwritten.
 
 ---
 
 ## 1. Top five design changes
 
-### 1. Decay must be biennial. Annual makes realignment arithmetically impossible.
+Ranked by confidence. Every figure is reproducible from its seed; the twenty
+numbered findings behind them are in `FINDINGS.md`.
+
+**Read the ordering as a claim about causation, not just severity.** Change 2
+is one root cause behind four separate failing metrics — contest rate, decision
+density, realignment, and dead turns — so it buys more than its position
+suggests. Changes 3 and 4 are independent of it and of each other.
+
+### 1. Decay must be biennial. Annual makes realignment impossible. *Applied.*
 **Metric** lean in one state after ten consecutive blowout cycles.
 **Observed** annual decay pins the map at 2 pips, forever, at any margin.
-**Target** a state that keeps being won decisively reaches a durable 4+ lean.
-**Change** `lean.decayFrequency: "biennial"`. Already applied to the baseline.
+**Target** a state repeatedly won decisively reaches a durable 4+ lean.
+**Change** `lean.decayFrequency: "biennial"`, already applied to every config.
 
 §16 calls this the question that "decides whether realignment is possible at
 all" and asks for simulation. It needs none — annual decay removes 2 pips a
 cycle against a maximum push of 2, so total dominance nets exactly zero. Only
-one of the four decay/push pairings accumulates:
-
-| decay | push | after 10 blowout cycles |
-|---|---|---|
-| annual | flat +1 | pinned at 1 |
-| annual | margin-based | pinned at 2 |
-| biennial | flat +1 | pinned at 1 |
-| biennial | margin-based | 2→3→4→5→6→7→8 ✓ |
+biennial decay with margin-based pushes accumulates.
 
 Confidence: **certain**. It is arithmetic, and it is a passing test.
 
-### 2. The board is far too large for the table — 79% of races go uncontested.
-**Metric** share of race-slots drawing declarations from more than one player.
-**Observed** 21–24% contested at the design's stated numbers.
-**Target** SIM-BRIEF wants uncontested under 40%, i.e. contested above 60%.
-**Change** cut district supply hard, raise base hand above 12, and scale the
-card pool with the table.
+### 2. Cut district supply hard. One change moves five metrics.
+**Metric** contested race-slots; legal moves per turn; realignment; dead turns.
+**Observed** 35% contested (target >60%), **39 legal races per player-turn**
+(target 4–25), 0.21 states realigned a game, 4.4% of turns with no legal move.
+**Change** cut district supply, raise base hand size, scale the pool with the
+table.
 
-The mechanism is a ratio: **cards per player ÷ eligible races per player.** At
-year 6 of a four-player game each player had ~60 eligible races and 4–10 cards,
-so everyone farms their own territory. Overlap was never the constraint — 66%
-of races were eligible to more than one player and simply not worth taking.
+Contest rate is governed by **cards per player ÷ eligible races per player**,
+and at the design's own numbers that sits near 1:5 — at year 6 a player has
+~60 eligible races and 4–10 cards. Everyone farms their own territory. The
+*same* abundance is what puts 39 races in front of a player each turn, which
+is analysis paralysis; and realignment barely happens because an uncontested
+race has no margin and pushes nothing.
 
-| players | hand | districts | contested | states realigned | years |
-|---|---|---|---|---|---|
-| 2 | 12 | 0.15 | 10% | 0.0 | 24 |
-| 4 | 12 | 0.15 | 23% | 0.1 | 14 |
-| 4 | 20 | 0.06 | 44% | 1.1 | 7 |
-| 6 | 12 | 0.15 | 40% | 0.9 | 9 |
-| 6 | 20 | 0.06 | **63%** | 1.5 | 5 |
+**Two-player is structurally broken** at 10–20% contest, at every setting
+tested, and the design claims 2–6.
 
-Two things fall out. **Two-player is structurally broken** at 10–20% contest —
-two solitaires sharing a scoreboard, at every setting tested. And **contest and
-game length trade off directly**: everything that makes players fight burns
-cards, and the 63% row lasts five years.
+Confidence: **high** on direction and mechanism; the exact numbers depend on
+the card pool.
 
-Confidence: **high**. The direction is unambiguous and monotone; the exact
-numbers depend on the card pool.
-
-### 3. Safe seats cannot exist — the pip scale has a ceiling.
-**Metric** distribution of House margins, sim against 9,555 real races 1976–2018.
-**Observed** median 8 points against a real 32.5; safe seats (40+ pts) are
+### 3. A safe seat cannot exist. The pip scale has a ceiling.
+**Metric** House margin distribution, sim against 9,555 real races 1976–2018.
+**Observed** median 8 points against a real 32.5; safe seats (40+ points) are
 **0.0% of simulated races and 37.5% of real ones**.
-**Target** the real distribution is bimodal — a thin competitive middle and a
-large safe mass. SIM-BRIEF calls this the deepest test.
 **Change** decide what a safe seat *is* in this game, then make the scale match.
 
-This is arithmetic, not tuning. A margin is the modifier difference plus
-3d6 − 3d6. Mean stack depth is 2.43 entries of 1–3 pips, so a large realistic
-stack is +8 pips — a 16-point margin at §3's rate. **A 40-point margin needs
-+20 pips and the game's entire vocabulary cannot express it at any setting.**
+Arithmetic, not tuning. Mean stack depth is 2.43 entries of 1–3 pips, so a big
+realistic stack is +8 pips — 16 points at §3's rate. **A 40-point margin needs
++20 pips and the vocabulary cannot express it at any setting.**
 
-One qualification in the design's favour: the game encodes a safe seat as an
-*uncontested* race, where reality encodes it as a contested race won by forty
-points. Adjusting for that narrows the gap from 37.5%-vs-0% to roughly
-46%-vs-93.5% "effectively safe". It narrows and does not close. Either accept
-that a safe seat *is* a walkover and stop comparing margins to reality, or
-widen the scale so a locked district can print a modifier that locks it.
+In the design's favour: the game encodes a safe seat as an *uncontested* race
+where reality encodes it as a 40-point win. Adjusting for that narrows the gap
+to roughly 46% against 93.5% "effectively safe". It narrows; it does not close.
 
 Confidence: **certain** on the ceiling, **open** on which way to resolve it.
 
-**(The presidency finding that stood here has been fixed — see §2 and F10.)**
+### 4. The leader runs away, and hand size is not why.
+**Metric** SIM-BRIEF's determination point and comeback rate.
+**Observed** determination **38–50%** of the way through (healthy 75–85%);
+comeback rate **1%**; in year one the eventual winner already leads 54% of the
+time, against 25% for a four-player coin flip.
+**Change** unknown — and that is the finding. §16 names three suspects: hand
+size, endorsements, capture. **Hand size is innocent** (determination does not
+trend across presidency bonus 0→4, and the Senate bonus is flat). Endorsements
+and capture are unexamined and are where to look next.
 
-### 4. The omnibill is stalled — 16% pass rate.
-**Metric** share of proposed bills that pass.
-**Observed** 16% over 2,250 attempts.
-**Target** SIM-BRIEF: "If they pass 20%, the primary scoring engine is stalled
-and victory conditions never trigger."
-**Change** the 60% Senate threshold is doing exactly what §12 designed it to do
-— forcing cross-benching — but with scoring available only on passage, the
-minority's incentive to cross is too weak. Either lower the threshold, or give
-cross-benchers a reward that does not depend on the bill passing.
+Confidence: **high** on the runaway, **none** on the cause.
 
-Cross-bench votes are frequent (72 a game), so players *are* reaching across;
-the bills still fail. The threshold binds harder than intended.
+### 5. SenateFlood is dominant at 51.7%, and the filibuster stalls the bill.
+**Metric** six-way round robin; bill pass rate.
+**Observed** SenateFlood 51.7% against SIM-BRIEF's 40% dominance line. Bills
+pass **20%** at the current 60% Senate threshold, against a 20% stall line —
+and 63% at a 50% threshold, 0% at 67%.
+**Change** for the Senate: it pays four ways at once — points, a six-year term,
+hand size, and the midterm lean push it inherits from §10's priority ordering.
+Governor appointments are a fifth route in. For the bill: the threshold shape
+is unambiguous, but **do not change it on this evidence** — the omnibill is a
+negotiation and no agent here can negotiate.
 
-Confidence: **high** on the measurement, **medium** on the cause.
+Confidence: **high** on both measurements, **low** on the bill remedy.
 
-### 5. Turns are analysis paralysis — 39 legal races per player-turn.
-**Metric** mean legal moves per player-turn, per SIM-BRIEF's definition.
-**Observed** median **39**, mean 37.2, p90 49, max 64.
-**Target** the brief's band is 4–25; under 4 is automatic, over 25 is paralysis.
-**Change** downstream of #2. Cutting district supply cuts both the uncontested
-rate and the option set, because they are the same abundance seen twice.
+---
 
-*An earlier draft of this section reported the opposite* — "median 2, turns are
-automatic" — from counting declarations **made** rather than legal moves
-**available**. See F19. Also: 4.4% of player-turns have no legal move at all,
-against a target near zero.
+### What is already working
+
+Most of this report is problems, so the successes are worth naming: district
+gating kills wide-and-empty stone dead (0% win rate, 100% loss head-to-head);
+**+1 incumbency reproduces reality within a point** (93–94% against 94.1%); the
+single-token economy holds at a peak of 151 against a 200 failure line; the
+modifier stack averages 2.43 entries so the mental arithmetic really is mental;
+and the dice do exactly what the corrected odds table predicts (32.1% observed
+upsets against 34.6% predicted). **The resolution machinery is sound. The
+problems are scale and structure.**
 
 ---
 
