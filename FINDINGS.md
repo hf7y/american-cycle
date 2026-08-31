@@ -1122,3 +1122,52 @@ is playing.
 single-variable sweep. Every headline number in this report has now been
 checked against a change in the one variable a simulator most easily holds
 fixed by accident — the players.
+
+---
+
+## F29. The engine reproduces the 1976 electoral college within three votes.
+
+The last item on Zach's list — *"try to represent a real election in the
+gamestate"* — and the closest thing to an end-to-end validation available.
+
+1976 is the fairest test: it is the founding era pack, the race was close, and
+the map has a clean regional story. The board is seeded with the real
+pre-election lean (South solidly Democratic, Mountain West and Plains solidly
+Republican, industrial North contested), Carter and Ford are the two nominees,
+and §9's resolution runs exactly as it would in a game. Nothing is tuned.
+Averaged over 300 replays:
+
+| | simulated | real |
+|---|---|---|
+| Carter | **294** | **297** |
+| Ford | **241** | **240** |
+
+**Three electoral votes.** And the per-state agreement is the interesting part,
+because it tracks how much the board actually knew:
+
+| board lean | agreement with the real result | states |
+|---|---|---|
+| 3+ pips | **79.3%** | 17 |
+| 1–2 pips | 63.5% | 24 |
+| **0 pips** | **52.8%** | 9 |
+
+A state the board knows nothing about is a coin flip, and the model duly calls
+it at 52.8%. A state the board leans hard on is called four times in five. That
+is a model whose confidence matches its information, which is the behaviour you
+want and not a given.
+
+The five worst-called states are VA, CA, WA, NJ and OR — four of them carry
+zero lean on my seeded map, so the engine had no information to be right with.
+Virginia is the genuine miss: the board leans it one pip to Carter and Ford
+took it.
+
+**And the ceiling shows up here too.** 79.3% agreement on *solid* states looks
+low until you check it against §3: three pips is a 76% favourite. **The engine
+is not underperforming — it is doing exactly what the odds table says**, and it
+cannot make a safe state safer than about 80% because the pip scale does not go
+high enough. That is F8, measured a third independent way, in a real election.
+
+**What this does and does not show.** It shows §9's resolution converts a
+correct map into a correct outcome, with calibrated per-state confidence. It
+does *not* show the game can discover the map — that is F23, and the map was
+handed to it here.
