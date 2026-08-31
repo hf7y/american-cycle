@@ -14,15 +14,15 @@ Branch: `phase1-engine`. Land as a PR; never commit to main.
       but typescript). Removed the superseded Python toy.
 - [x] design-doc.md §3 odds table corrected — dice right, table wrong (Zach
       confirmed). True 3d6 values now in the doc.
-- [ ] engine/states.ts — 50 states, gubernatorial schedule, delegation sizes
-- [ ] engine/types, engine/config/baseline.json (every constant named;
+- [x] engine/states.ts — 50 states, gubernatorial schedule, delegation sizes
+- [x] engine/types, engine/config/baseline.json (every constant named;
       §16 open questions flagged as placeholders, never silently invented)
-- [ ] engine/rules/rng.ts — seeded, reproducible from a seed
-- [ ] engine/rules/resolution.ts — 3 labeled dice, modifier stack, event log
+- [x] engine/rules/rng.ts — seeded, reproducible from a seed
+- [x] engine/rules/resolution.ts — 3 labeled dice, modifier stack, event log
       with the zero-dice counterfactual (SIM-BRIEF ground rule)
-- [ ] engine/rules/lean.ts — margin push, decay; governors never push
-- [ ] engine/rules/economy.ts — economy walk, accumulated G, 2d6 Fed roll-under
-- [ ] engine/rules/legislature.ts — omnibill, 60% Senate, veto, impeachment
+- [x] engine/rules/lean.ts — margin push, decay; governors never push
+- [x] engine/rules/economy.ts — economy walk, accumulated G, 2d6 Fed roll-under
+- [x] engine/rules/legislature.ts — omnibill, 60% Senate, veto, impeachment
 - [ ] engine/rules/elections.ts — declaration, withdrawal-before-reveal,
       primaries, generals, coattails, seating, capture
 - [ ] engine/rules/year.ts + engine/game.ts — §7 sequence
@@ -40,6 +40,12 @@ Branch: `phase1-engine`. Land as a PR; never commit to main.
 
 ## Notes / decisions taken while unattended
 
+- Node strip-only mode bans `constructor(private x)` parameter properties and
+  `enum`. Engine avoids both throughout.
+- Fractional thresholds (2/3 of 9) need an epsilon compare; `legislature.ts`
+  routes every threshold through `atLeast`/`moreThan`.
+- §16 Q1 (decay frequency) is SETTLED by arithmetic, not simulation -- biennial
+  is the only setting under which realignment is possible. See FINDINGS.md F2.
 - Tie on equal totals: design doc does not specify. Placeholder = even break
   (coin flip), which is what makes edge 0 exactly 50%. Flagged for DECISIONS.md
   open list, not silently invented.
