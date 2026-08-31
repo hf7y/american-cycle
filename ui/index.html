@@ -1443,7 +1443,17 @@ class Game {
 
       const nominees = this.runPrimaries(group, ctx, wave, human);
       if (!nominees.length) continue;
-      for (const d of nominees) d.incumbent = !!incumbent && incumbent.holder .cardId === d.card.id;
+      // §11: "Governors ... carry incumbency into Senate and presidential
+      // runs." Incumbency was granted only for holding THIS seat, so a sitting
+      // governor stepping up ran as a challenger -- one of the four things the
+      // office is supposed to be worth, unimplemented. Same shape as the
+      // district clause that killed the presidency (F10).
+      for (const d of nominees) {
+        const holdsThis = !!incumbent && incumbent.holder .cardId === d.card.id;
+        const isGovernor = (office === 'senator' || office === 'president')
+          && this.seats.some((st) => st.office === 'governor' && st.holder?.cardId === d.card.id);
+        d.incumbent = holdsThis || isGovernor;
+      }
 
       const out = runRace({
         ctx, round: 'general', declarations: nominees, wave, rng: this.rng,

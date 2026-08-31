@@ -1255,3 +1255,37 @@ office currently does nothing a player should plan around.
 **The in-app guidance now quotes these numbers** rather than my reasoning about
 my own agent. The distinction matters: the first version was a plausible story
 about why Lookahead wins, and the second is what winners actually hold.
+
+---
+
+## F32. The governorship is the one office nobody should plan around.
+
+F31 measured governors at exactly neutral — 1.02× between winners and losers.
+Before reporting that as a design fact I checked whether the office's abilities
+were actually implemented, and one was not.
+
+**§11: "Governors ... carry incumbency into Senate and presidential runs."**
+Incumbency was granted only for holding *that* seat, so a sitting governor
+stepping up ran as a challenger. Same shape as F10's district clause, and the
+fifth unimplemented clause found this way.
+
+**Implemented — and it changed nothing.** Governor advantage went from 1.02× to
+**0.95×**. Winners hold 3.4 governorships, everyone else 3.5.
+
+So the office now does everything §11 promises: it scores 2, appoints to Senate
+vacancies (~12 a game), endorses at +2 in its own state's primaries, and now
+carries incumbency upward. **It is still not worth planning around**, because
+each of those is small against the alternative use of the card and the
+declaration — a Senate seat scores 3, runs six years, grants hand size, and
+takes the midterm lean push.
+
+**This is a design observation, not a defect.** §11 already says governors have
+no effect on the map, and the measurement extends that: they have no effect on
+the outcome either. A card that is worth taking when it is cheap but never
+decisive is a perfectly reasonable thing for a board to contain — the design
+should just know that is what it has. **If the intent was that a governorship
+is a real strategic option, it needs to pay more than it does.**
+
+Filed as a decision rather than changed: it is §11's call whether the office
+should matter, and the sim cannot tell you whether "Baker in Massachusetts" is
+worth having on the board for its own sake.
