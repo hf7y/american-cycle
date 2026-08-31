@@ -307,7 +307,17 @@ export class Game {
     // sparse that players never meet, and the game becomes solitaire.
     const inPlay = new Map<string, { state: string; number: number }>();
     for (const p of this.players) for (const d of p.districts) inPlay.set(d.id, d);
-    for (const d of inPlay.values()) {
+    // ORDER MATTERS, and must not follow seat order. Agents sort options by
+    // edge, Array.prototype.sort is stable, and ties therefore resolve to
+    // whatever came first -- which was every district held by player 0. Their
+    // seats drew the most declarations, so they lost them to capture most
+    // often, and since districts are ballast (F21) being stripped was an
+    // ADVANTAGE: seat 0 won 32% of five-player games against a 20% share.
+    // Sorting by state and number makes the board's order a property of the
+    // board rather than of the table.
+    const houses = [...inPlay.values()].sort((a, b) =>
+      a.state === b.state ? a.number - b.number : a.state.localeCompare(b.state));
+    for (const d of houses) {
       out.push({ office: 'representative', state: d.state, slot: d.number,
                  incumbent: this.seatFor('representative', d.state, d.number) });
     }
@@ -525,7 +535,7 @@ export class Game {
       results.push({ ev: out.event, won });
       for (const d of nominees) if (d.player !== out.event.winner) this.discardCard(d);
       this.seat(office as Office, state, slot, won);
-      if (office === 'representative' && this.cfg.game.captureEnabled !== false) this.capture(won, state);
+      if (office === 'representative' && this.cfg.game.captureEnabled !== false) this.capture(won, state, slot);
     }
 
     this.pushLean(results);
@@ -725,11 +735,21 @@ export class Game {
     p.score += office === 'president' ? 5 : office === 'senator' ? 3 : office === 'governor' ? 2 : 1;
   }
 
-  /** §15: winning a House seat transfers the district card to the winner. */
-  private capture(won: Declaration, state: string): void {
+  /** §15: "Winning a seat transfers the district card to the winner." THE
+   *  district — the one the race was fought over, identified by its number —
+   *  not merely some card the winner's opponent happens to hold in that state.
+   *
+   *  Taking an arbitrary district from the first opponent in seat order was a
+   *  real bias and not a cosmetic one. It robbed low seats systematically, and
+   *  because districts are ballast rather than presence (F21 — hand size caps
+   *  total cards, so every district crowds out a candidate), being robbed was
+   *  an ADVANTAGE. Seat 0 scored 164 against seat 4's 143 and won 32% of
+   *  five-player games against a 20% share, entirely from this. */
+  private capture(won: Declaration, state: string, slot: number | undefined): void {
+    if (slot === undefined) return;
     for (const p of this.players) {
       if (p.id === won.player) continue;
-      const i = p.districts.findIndex((d) => d.state === state);
+      const i = p.districts.findIndex((d) => d.state === state && d.number === slot);
       if (i >= 0) { this.players[won.player].districts.push(p.districts.splice(i, 1)[0]); return; }
     }
   }

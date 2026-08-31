@@ -936,3 +936,57 @@ That is not caused by the rule change — it is the seven-era pool, which puts
 258 districts and therefore far more open races on the board than the four-era
 pool that produced the 93% figure. It is F6 again, and it is the argument for
 cutting district supply stated a third way.
+
+---
+
+## F25. The seat bias was capture reading the table's order. Mostly fixed.
+
+Issue #5 had a measured 9–14pp seat bias at 4–6 players with the cause
+unisolated. Two hypotheses were wrong before the right one turned up, and both
+are worth recording because each was tested rather than argued.
+
+**Wrong hypothesis 1: rotation not dividing evenly.** With 8 election cycles
+and 5 players, three players lead an extra time, so the residue looked like an
+arithmetic artefact. Directly tested by choosing game lengths where cycles
+divide exactly: 5 players over 10 cycles gave **8.2pp** against 8 cycles'
+**8.0pp**. No effect. Refuted.
+
+**Wrong hypothesis 2: capture robbing in seat order.** `capture()` walked
+`this.players` by index and took a district from the first opponent holding one
+in that state, which does rob low seats systematically. Fixed to take **the**
+district the race was fought over, per §15 — and the bias got *worse*, 14.3pp.
+Refuted, though the fix is correct on its own terms and stays.
+
+**The actual cause: `openRaces()` listed House seats in seat order.** It built
+the list by walking players and reading their districts, so every race derived
+from player 0's cards came first. Agents sort options by edge,
+`Array.prototype.sort` is stable, and ties therefore resolved to whatever came
+first — so player 0's districts drew the most declarations, lost most often to
+capture, and **shed the most ballast**. Districts are a liability (F21), so
+being stripped of them is an advantage. Seat 0 scored 164 against seat 4's 143.
+
+The ablation is what found it: with capture disabled the bias fell from 11.7pp
+to 2.7pp and the score gradient flattened completely, which proved capture was
+in the causal path even though capture's own ordering turned out not to be the
+mechanism.
+
+**Fixed** by sorting open House races by state and district number, making the
+board's order a property of the board rather than of the table.
+
+| players | before | after (n=900) | SIM-BRIEF bar |
+|---|---|---|---|
+| 3 | 4.3pp | **1.7pp** | 3pp |
+| 4 | 11.5pp | **3.5pp** | 3pp |
+| 5 | 14.3pp | **2.9pp** | 3pp |
+| 6 | 13.6pp | **4.1pp** | 3pp |
+
+Three of four table sizes now sit at or under the brief's 3pp tolerance, and
+the monotonic score gradient is gone at every size — 3 players finish 171 /
+172 / 173. Six players retains 4.1pp with seat 0 favoured, which is real at
+n=900 and no longer has a score gradient behind it; what remains is variance in
+converting similar scores into wins, and it is small enough to leave.
+
+**The lesson worth keeping.** A stable sort plus a list built in seat order is
+enough to hand one player a 15% scoring advantage, through a mechanism
+(capture) that looks unrelated to either. Nothing in the rules was wrong. The
+iteration order of a `Map` was.
