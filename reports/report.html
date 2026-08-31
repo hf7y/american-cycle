@@ -66,7 +66,7 @@ footer{max-width:760px;margin:0 auto;padding:30px 20px 60px;font-size:13px;color
 <header id="top"><div class="in">
   <div class="eyebrow" style="color:var(--brass)">Overnight simulation report · 31 August 2026</div>
   <h1>American Cycle</h1>
-  <div class="sub">604 cards · 7 eras · 11 agents · 25 findings · every figure reproducible from its seed</div>
+  <div class="sub">604 cards · 7 eras · 11 agents · 28 findings · every figure reproducible from its seed</div>
 </div></header>
 
 <main>
@@ -137,14 +137,18 @@ footer{max-width:760px;margin:0 auto;padding:30px 20px 60px;font-size:13px;color
       cannot test.</strong> Recommend a human playtest before adding any catch-up mechanic.</p>
       <div class="meta">confidence: high on the runaway · the remedy is a table question</div></li>
     <li><h3>SenateFlood is dominant, and the filibuster stalls the bill</h3>
-      <p>SenateFlood wins 40.8% in a six-way round robin, on the 40% dominance line. The Senate
-      pays four ways at once — points, a six-year term, hand size, and the midterm lean push it
-      inherits from §10's priority — with governor appointments a fifth route in. Bills pass 20%
-      at the current 60% threshold, 63% at 50%, and 0% at 67%; cross-benching is constant
-      across all three, so players already reach across and the bar is too high for it to
-      matter. <strong>Do not change the threshold on simulation alone</strong> — the omnibill is
-      a negotiation and no agent here can negotiate.</p>
-      <div class="meta">confidence: high on measurement · low on the bill remedy</div></li>
+      <p><strong>Nothing is dominant any more.</strong> SenateFlood's 51.7% was an artefact of
+      the seat-order bug and now reads 31.7%; the leader is EconomyChicken at 37.8%, touching
+      the 40% line without crossing it. The Senate still pays more ways than anything else —
+      points, a six-year term, hand size, the midterm lean push from §10's priority, and
+      governor appointments as a fifth route in.</p>
+      <p><strong>For the bill, change nothing.</strong> The threshold sweep moved passage
+      63/16/0 across 50/60/67 — but holding the threshold at 60% and varying only who is at the
+      table moves it <strong>14% to 100%</strong>, a wider range than the sweep produced. The
+      20% figure is a property of the agent pool, and §12's intent — that the filibuster makes
+      cooperation structurally necessary — is working exactly as written. What the simulator
+      cannot supply is the cooperation.</p>
+      <div class="meta">confidence: high on the Senate · the bill needs a table, not a parameter</div></li>
   </ol>
 </section>
 
@@ -166,6 +170,27 @@ footer{max-width:760px;margin:0 auto;padding:30px 20px 60px;font-size:13px;color
 </section>
 
 <section>
+  <h2 style="color:var(--good)">A robustness check on all of it</h2>
+  <p>Every headline number was re-measured across six agent pools, from four identical Randoms
+  to a mix of specialists, because one figure turned out to be an artefact of who was playing.</p>
+  <div class="tw"><table>
+    <tr><th>Metric</th><th class="n">Range across pools</th><th>Verdict</th></tr>
+    <tr class="hi"><td>median House margin</td><td class="n">8, 8, 8, 8, 8, 8 pts</td><td>invariant</td></tr>
+    <tr><td>uncontested share</td><td class="n">85–97%</td><td>robust</td></tr>
+    <tr><td>incumbent reelection</td><td class="n">91–97%</td><td>robust</td></tr>
+    <tr><td>contested race-slots</td><td class="n">21–42%</td><td>robust</td></tr>
+    <tr><td>states realigned per game</td><td class="n">0.00–0.33</td><td>robust</td></tr>
+    <tr><td>comeback rate</td><td class="n">0–2%</td><td>robust</td></tr>
+    <tr><td>determination point</td><td class="n">38–75%</td><td>agent-dependent</td></tr>
+  </table></div>
+  <p>The median margin is <em>identical</em> in all six, which is the strongest available
+  evidence that the scale ceiling is arithmetic rather than behavioural. Only the determination
+  point moves materially, and its top end is four Random agents — where nothing locks in because
+  nothing accumulates, not because the design brakes anything. Among competent pools it is
+  38–63%, all below the healthy band.</p>
+</section>
+
+<section>
   <h2>A caution about this report</h2>
   <p>Five of my own numbers had to be corrected during the run, each time because a convenient
   proxy had been measured instead of the metric the brief specifies. <strong>Twice the
@@ -177,9 +202,10 @@ footer{max-width:760px;margin:0 auto;padding:30px 20px 60px;font-size:13px;color
     <tr><td>Independents win 60%</td><td>39% contested-only</td><td>walkovers counted</td></tr>
     <tr><td>25pp seat bias</td><td>1.7–4.1pp after three fixes</td><td>ties, refill order, and open-race order</td></tr>
     <tr><td>The runaway is the deal</td><td>No mechanical brake exists</td><td>refuted by building the draft</td></tr>
+    <tr><td>The filibuster stalls the bill</td><td>The table does</td><td>swept one variable, not two</td></tr>
   </table></div>
   <p>The brief's own instruction — <em>"assume the instrumentation is wrong before assuming the
-  design is right"</em> — was correct five times out of five. The corrections are kept visible in
+  design is right"</em> — was correct six times out of six. The corrections are kept visible in
   <span class="mono">FINDINGS.md</span> rather than quietly overwritten.</p>
 </section>
 
@@ -212,6 +238,9 @@ footer{max-width:760px;margin:0 auto;padding:30px 20px 60px;font-size:13px;color
     <tr><td class="n">F23</td><td>The central thesis is not implemented</td><td><span class="chip o">open</span></td></tr>
     <tr><td class="n">F24</td><td>Uncontested wins should push lean</td><td><span class="chip s">shipped as variant</span></td></tr>
     <tr><td class="n">F25</td><td>Seat bias was open-race order read through capture</td><td><span class="chip f">fixed</span></td></tr>
+    <tr><td class="n">F26</td><td>SenateFlood's dominance was that same bug; nothing dominant now</td><td><span class="chip f">resolved</span></td></tr>
+    <tr><td class="n">F27</td><td>Bill passage is set by who is at the table, not the threshold</td><td><span class="chip s">playtest</span></td></tr>
+    <tr><td class="n">F28</td><td>Robustness audit across six agent pools</td><td><span class="chip f">holds</span></td></tr>
   </table></div>
 </section>
 
