@@ -681,3 +681,63 @@ Together with §5's district gating killing wide-and-empty (0% win rate), the
 stack averaging 2.43 entries so the mental arithmetic really is mental — the
 design's core resolution machinery is sound. **Its problems are all in scale
 and structure, not in the dice.**
+
+---
+
+## F21. The runaway is the opening deal, and districts are a liability. CONFIRMED.
+
+F18 established the runaway is real (determination 38–50% against a healthy
+75–85%, comeback 1%) but left the cause open. §16 names three stacking loops to
+suspect: hand size, endorsements, capture. **All three are innocent.**
+
+Switching each off, 120 games apiece:
+
+| variant | determination | comeback |
+|---|---|---|
+| baseline (all three on) | 50% | 1% |
+| endorsements off | 50% | 0% |
+| capture off | 50% | 0% |
+| both off | 50% | 0% |
+| hand bonuses off | **38%** | 0% |
+
+Removing the suspects changes nothing, and removing hand bonuses makes the
+runaway **worse**. That last one has a clean explanation: since F7 made the
+office bonuses per-office-held rather than per-seat, they cap at +3 and saturate
+the moment a player holds one seat of each kind. They are a **catch-up**
+mechanic in practice, not a compounding one.
+
+**The cause is the opening deal.** Over 250 games, correlating each player's
+opening hand — measured before a single die is rolled — against their final
+score:
+
+| opening measure | correlation with final score | player dealt the best wins |
+|---|---|---|
+| total home-state bonus in hand | **+0.316** | **48%** |
+| districts held | **−0.324** | **9%** |
+| distinct states of presence | −0.303 | 10% |
+| total district synergy | −0.290 | 8% |
+
+Chance is 25%. **The player dealt the strongest home-state bonuses wins nearly
+twice as often as chance**, which is why the determination curve already stands
+at 54% in year one. The game is substantially decided before anyone declares.
+
+**And districts are actively bad to hold.** Every district measure correlates
+*negatively* with winning, and the player dealt the most districts wins 9% of
+the time — a third of chance. This directly contradicts §5: *"presence is
+scarce and must be purchased in the draft."* Presence is not scarce. It is
+**ballast**. Hand size caps total cards, so every district crowds out a
+candidate, and on a board this large a district buys access to races you have
+no one left to run in.
+
+**This is the second independent argument for the same change.** Cutting
+district supply was already recommendation #2 on the contest-rate evidence.
+It now also fixes the draft: fewer districts means each one is worth holding,
+which is what §5 believed was already true.
+
+**What it does not fix** is the home-state draw. If a single dealt statistic
+predicts the winner at twice chance, the draft needs to be a draft — pack-pass,
+as §6 specifies — rather than the random deal the simulator uses. That is a
+real limitation of this harness and not a finding about the design: **§6's
+take-one-and-pass draft is unimplemented here**, and implementing it is the
+obvious next thing, because it is exactly the mechanism that would let players
+correct a bad opening.

@@ -33,7 +33,12 @@ export interface Config {
   economy: econ.EconomyConfig;
   legislature: leg.LegislatureConfig;
   draft: { packSize: number; districtsPerPack: number; refillToHandSize: boolean };
-  game: { startYear: number; maxYears: number; victory: string; deckOutEnds: boolean; billTarget?: number };
+  game: { startYear: number; maxYears: number; victory: string; deckOutEnds: boolean; billTarget?: number;
+          /** diagnostic only: §16 names hand size, endorsements and capture as
+           *  the three stacking feedback loops. Hand size is cleared (F18);
+           *  this switches the other two off so each can be isolated. Not a
+           *  rules option -- both default on. */
+          captureEnabled?: boolean };
 }
 
 export interface PlayerState {
@@ -464,7 +469,7 @@ export class Game {
       results.push({ ev: out.event, won });
       for (const d of nominees) if (d.player !== out.event.winner) this.discardCard(d);
       this.seat(office as Office, state, slot, won);
-      if (office === 'representative') this.capture(won, state);
+      if (office === 'representative' && this.cfg.game.captureEnabled !== false) this.capture(won, state);
     }
 
     this.pushLean(results);
