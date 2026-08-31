@@ -9,7 +9,11 @@ export type Lean = Record<string, number>;
 export interface LeanConfig {
   pushByMargin: { maxPips: number; push: number }[];
   decayPerTick: number;
-  decayFrequency: 'annual' | 'biennial';
+  /** 'annual' removes a counter every year, 'biennial' only in election years,
+   *  'annual-stochastic' every year with probability 1/2 -- the same EXPECTED
+   *  drift as biennial, with more variance. Whether expectation or variance is
+   *  what matters for realignment is an empirical question, not an obvious one. */
+  decayFrequency: 'annual' | 'biennial' | 'annual-stochastic';
   governorPushes: 'never' | 'with-lean';
   honeymoonCounter: number;
   maxLean: number;
@@ -63,8 +67,9 @@ export function applyPush(
 /** Decay removes one counter from every state, toward zero. §10: it happens at
  *  the top of the year, so the board players see when they declare is already
  *  decayed -- and pushes land later, on election night. */
-export function decay(lean: Lean, cfg: LeanConfig, year: number): void {
+export function decay(lean: Lean, cfg: LeanConfig, year: number, rng?: { bool(): boolean }): void {
   if (cfg.decayFrequency === 'biennial' && year % 2 !== 0) return;
+  if (cfg.decayFrequency === 'annual-stochastic' && rng && !rng.bool()) return;
   for (const st of Object.keys(lean)) {
     const v = lean[st];
     if (v === 0) continue;

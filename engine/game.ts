@@ -31,7 +31,12 @@ export interface Config {
   primaryGeneral: { extremistPrimary: number; extremistGeneral: number; heterodoxPrimaryPenalty: number; crossBenchPrimaryPenalty: number; billCounterPips: number };
   lean: lean.LeanConfig;
   economy: econ.EconomyConfig;
-  legislature: leg.LegislatureConfig;
+  legislature: leg.LegislatureConfig & {
+    /** §7 runs the omnibill every year. 'biennial' runs it only in election
+     *  years, which empties the odd year and effectively makes the game a
+     *  two-year cycle. */
+    billFrequency?: 'annual' | 'biennial';
+  };
   draft: { packSize: number; districtsPerPack: number; refillToHandSize: boolean };
   game: { startYear: number; maxYears: number; victory: string; deckOutEnds: boolean; billTarget?: number;
           /** diagnostic only: §16 names hand size, endorsements and capture as
@@ -827,7 +832,7 @@ export class Game {
     const fed = econ.fedCheck(this.economy, this.cfg.economy, this.rng);
     if (fed.rateRise) { this.stats.rateRises++; this.log.push(`${this.year}: the Fed tightens`); }
     econ.walk(this.economy, this.cfg.economy, this.rng);
-    lean.decay(this.leanMap, this.cfg.lean, this.year);
+    lean.decay(this.leanMap, this.cfg.lean, this.year, this.rng);
 
     if (this.year % 2 === 0) {
       const open = this.openRaces();
@@ -945,14 +950,15 @@ export class Game {
   /** One annual tick — §7. */
   tick(): void {
     for (const p of this.players) p.tapped.clear();      // 1. action phase
-    if (!this.impeachment()) this.omnibill();            // 2-3. bill, or a removal instead
+    const billYear = this.cfg.legislature.billFrequency !== 'biennial' || this.year % 2 === 0;
+    if (billYear && !this.impeachment()) this.omnibill();   // 2-3. bill, or a removal instead
     const fed = econ.fedCheck(this.economy, this.cfg.economy, this.rng);  // 4.
     // Logged in BOTH paths. The interactive tick logged this and the headless
     // one did not, so a coverage sweep that reads the log reported the Fed as
     // a dead rule when it fires in 44% of games.
     if (fed.rateRise) { this.stats.rateRises++; this.log.push(`${this.year}: the Fed tightens`); }
     econ.walk(this.economy, this.cfg.economy, this.rng);
-    lean.decay(this.leanMap, this.cfg.lean, this.year);  // 5.
+    lean.decay(this.leanMap, this.cfg.lean, this.year, this.rng);  // 5.
 
     if (this.year % 2 === 0) {
       this.elections();                                  // 6-9.
