@@ -79,6 +79,9 @@ export interface Agent {
    *  decision taken instead of legislating, not alongside it. */
   moveImpeach?(v: GameView): boolean;
   voteImpeach?(v: GameView, seat: Seat): boolean;
+  /** §6: "Standard pack-pass draft: take one, pass the rest." Given a pack,
+   *  return the card to take. Omit for the default heuristic. */
+  draftPick?(v: GameView, pack: Card[]): Card | undefined;
   /** §11: the VP's real function is as a bargaining chip during the
    *  nomination. Any player may offer a card to any ticket. */
   offerVP?(v: GameView, nominee: { player: number; party: Party }): CandidateCard | undefined;
@@ -174,7 +177,7 @@ export class Game {
     this.eraQueue = eras.map((e) => this.rng.shuffle(cards.filter((c) => c.era === e)));
     this.talon = this.eraQueue.shift() ?? [];
     for (const c of cards) if (c.kind === 'candidate') this.cardById.set(c.id, c);
-    this.deal();
+    this.draft();
   }
 
   /** §6/§11: the office bonuses are per OFFICE HELD, not per seat. The doc's
@@ -206,10 +209,63 @@ export class Game {
     }
   }
 
-  private deal(): void {
-    // Same reasoning as refill(): a fixed sweep favours the low seats whenever
-    // the pack cannot cover the table.
-    for (const p of this.players) this.draw(p, this.handSize(p));
+  /** §6's draft: packs are dealt, each player takes one card and passes the
+   *  rest, and the pass repeats until the packs are exhausted. Repeat until
+   *  hands are full.
+   *
+   *  This replaces a random deal, and the difference is not cosmetic: dealing
+   *  at random made the opening hand predict the winner at twice chance (F21),
+   *  because nobody could correct a bad opening. A draft is exactly the
+   *  mechanism that lets them. */
+  private draft(): void {
+    const size = this.cfg.draft.packSize;
+    let guard = 0;
+    while (this.players.some((p) => this.held(p) < this.handSize(p)) && guard++ < 40) {
+      const packs: Card[][] = [];
+      for (let i = 0; i < this.players.length; i++) {
+        const pack: Card[] = [];
+        for (let k = 0; k < size; k++) {
+          const c = this.nextCard();
+          if (!c) break;
+          pack.push(c);
+        }
+        packs.push(pack);
+      }
+      if (packs.every((pk) => !pk.length)) return;      // pool exhausted
+
+      while (packs.some((pk) => pk.length)) {
+        const taken: (Card | undefined)[] = [];
+        for (let i = 0; i < this.players.length; i++) {
+          const pack = packs[i];
+          if (!pack.length) { taken.push(undefined); continue; }
+          const p = this.players[i];
+          const want = this.held(p) < this.handSize(p);
+          const pick = want
+            ? (this.agents[i].draftPick?.(this.view(i), pack) ?? defaultPick(pack, p))
+            : pack[0];
+          const idx = pack.findIndex((c) => c === pick);
+          taken.push(pack.splice(idx >= 0 ? idx : 0, 1)[0]);
+        }
+        taken.forEach((c, i) => {
+          if (!c) return;
+          const p = this.players[i];
+          if (this.held(p) >= this.handSize(p)) { this.discard.push(c); return; }
+          if (c.kind === 'district') p.districts.push(c); else p.hand.push(c);
+        });
+        // pass the remainder around the table
+        packs.unshift(packs.pop()!);
+      }
+    }
+  }
+
+  /** Pull one card from the talon, advancing eras and reshuffling as §14 says. */
+  private nextCard(): Card | undefined {
+    if (!this.talon.length) {
+      if (this.eraQueue.length) this.talon = this.eraQueue.shift()!;
+      else if (this.discard.length) { this.talon = this.rng.shuffle(this.discard); this.discard = []; }
+      else return undefined;
+    }
+    return this.talon.pop();
   }
 
   /** total cards held: candidates in hand plus districts in play */
@@ -881,4 +937,20 @@ export class Game {
 }
 
 function clampInt(v: number, lo: number, hi: number): number { return Math.max(lo, Math.min(hi, Math.round(v))); }
+
+/** The default draft heuristic. Candidates are valued by home-state bonus and
+ *  card text; districts only while a player is thin on presence, because
+ *  holding many is measurably a liability (F21) -- hand size caps total cards,
+ *  so every district crowds out someone to run. */
+function defaultPick(pack: Card[], p: PlayerState): Card {
+  const states = new Set(p.districts.map((d) => d.state));
+  const value = (c: Card): number => {
+    if (c.kind === 'district') {
+      const need = Math.max(0, 4 - states.size);
+      return (states.has(c.state) ? 0.5 : 1) * (need > 0 ? 2 + c.synergy : c.synergy - 2);
+    }
+    return 2 + c.homeStateBonus + c.effects.length;
+  };
+  return pack.reduce((best, c) => (value(c) > value(best) ? c : best), pack[0]);
+}
 export { STATES, BY_CODE, electors, type StateDef };

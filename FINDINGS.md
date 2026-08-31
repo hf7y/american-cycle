@@ -706,7 +706,9 @@ office bonuses per-office-held rather than per-seat, they cap at +3 and saturate
 the moment a player holds one seat of each kind. They are a **catch-up**
 mechanic in practice, not a compounding one.
 
-**The cause is the opening deal.** Over 250 games, correlating each player's
+**The deal predicts the winner strongly** — though *"the cause is the opening
+deal"*, as this finding originally claimed, turned out to be too strong. See
+F22. Over 250 games, correlating each player's
 opening hand — measured before a single die is rolled — against their final
 score:
 
@@ -741,3 +743,64 @@ real limitation of this harness and not a finding about the design: **§6's
 take-one-and-pass draft is unimplemented here**, and implementing it is the
 obvious next thing, because it is exactly the mechanism that would let players
 correct a bad opening.
+
+---
+
+## F22. The design has no mechanical brake on a leader. Only table politics.
+
+**Correcting F21's overreach.** F21 concluded the runaway *is* the opening
+deal. Implementing §6's pack-pass draft — which is exactly the mechanism that
+lets a player correct a bad opening — tests that claim directly:
+
+| | random deal | with §6's draft |
+|---|---|---|
+| home-state bonus correlation | +0.316 | **+0.208** |
+| best-dealt player wins | 48% | **38%** |
+| districts correlation | −0.324 | −0.223 |
+| **determination point** | **50%** | **50%** |
+| comeback rate | 1% | 0% |
+
+The draft cuts the deal's grip by a third — and moves determination **not at
+all**. So the deal is a real advantage but it is not what locks the game in.
+
+**What locks it in is that nothing in the design can take points away.**
+
+| measure | value |
+|---|---|
+| player-scores that never decrease, all game | **100%** |
+| second-half vs first-half accrual ratio | 0.86 (roughly steady) |
+| leader's margin over second place, at halfway | 26 |
+| the same margin at the end | **51** |
+
+Scores are strictly monotonic, accrual is roughly steady, and the leader's gap
+**doubles** over the second half. With no mechanism that reduces a score, a
+player who is ahead at the midpoint cannot be caught by anyone accruing at a
+similar rate. Determination near 50% is not a symptom of a feedback loop — it
+is what a monotonic scoring game looks like.
+
+**This reframes §16's question.** The doc asks whether hand size, endorsements
+and capture "stack into a runaway", and names three intended brakes: the
+midterm penalty, recession, and *"other players ganging up"*. Measured:
+
+- **hand size, endorsements, capture** — none of them causes it (F21)
+- **the midterm penalty** — does not bind; doubling it moves outcomes three
+  points (F14)
+- **recession** — hits the president's party, who need not be the leader
+- **players ganging up on the leader** — the social layer
+
+**So the design's only effective brake on a runaway leader is table politics,
+and that is precisely the thing this simulator cannot test.** SIM-BRIEF's own
+caution applies exactly: *"Where a finding depends on the social layer, say so
+and recommend a human playtest rather than a parameter change."*
+
+**Recommend a human playtest before adding any catch-up mechanic.** Real
+players do gang up on a leader, and the design may well be right that this is
+enough. But it should be a deliberate choice that the brake is social, because
+at present there is no mechanical one — and if a table ever fails to coordinate,
+nothing else stops the leader.
+
+**A note on method.** This is the fifth correction to one of my own claims
+tonight, and the second where implementing the missing mechanism was the only
+honest way to test the claim. Reasoning about whether a draft *would* fix the
+deal was not good enough; building it and measuring took twenty minutes and
+gave the opposite answer.

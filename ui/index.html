@@ -941,7 +941,12 @@ function runRace(a             ) {
                               
                                      
                                                                                    
-                                                                                                            
+                                                                                                          
+                                                                               
+                                                                            
+                                                                            
+                                                 
+                                     
  
 
                               
@@ -982,6 +987,9 @@ function runRace(a             ) {
                                                                  
                                      
                                                  
+                                                                            
+                                                                 
+                                                          
                                                                     
                                                                
                                                                                               
@@ -1032,6 +1040,9 @@ const sameRace = (a                                                  , b        
                                                                              
                              
                            
+                                                                              
+                                                                 
+                           
                                         
  
 
@@ -1074,7 +1085,7 @@ class Game {
     this.eraQueue = eras.map((e) => this.rng.shuffle(cards.filter((c) => c.era === e)));
     this.talon = this.eraQueue.shift() ?? [];
     for (const c of cards) if (c.kind === 'candidate') this.cardById.set(c.id, c);
-    this.deal();
+    this.draft();
   }
 
   /** §6/§11: the office bonuses are per OFFICE HELD, not per seat. The doc's
@@ -1106,10 +1117,63 @@ class Game {
     }
   }
 
-          deal()       {
-    // Same reasoning as refill(): a fixed sweep favours the low seats whenever
-    // the pack cannot cover the table.
-    for (const p of this.players) this.draw(p, this.handSize(p));
+  /** §6's draft: packs are dealt, each player takes one card and passes the
+   *  rest, and the pass repeats until the packs are exhausted. Repeat until
+   *  hands are full.
+   *
+   *  This replaces a random deal, and the difference is not cosmetic: dealing
+   *  at random made the opening hand predict the winner at twice chance (F21),
+   *  because nobody could correct a bad opening. A draft is exactly the
+   *  mechanism that lets them. */
+          draft()       {
+    const size = this.cfg.draft.packSize;
+    let guard = 0;
+    while (this.players.some((p) => this.held(p) < this.handSize(p)) && guard++ < 40) {
+      const packs           = [];
+      for (let i = 0; i < this.players.length; i++) {
+        const pack         = [];
+        for (let k = 0; k < size; k++) {
+          const c = this.nextCard();
+          if (!c) break;
+          pack.push(c);
+        }
+        packs.push(pack);
+      }
+      if (packs.every((pk) => !pk.length)) return;      // pool exhausted
+
+      while (packs.some((pk) => pk.length)) {
+        const taken                       = [];
+        for (let i = 0; i < this.players.length; i++) {
+          const pack = packs[i];
+          if (!pack.length) { taken.push(undefined); continue; }
+          const p = this.players[i];
+          const want = this.held(p) < this.handSize(p);
+          const pick = want
+            ? (this.agents[i].draftPick?.(this.view(i), pack) ?? defaultPick(pack, p))
+            : pack[0];
+          const idx = pack.findIndex((c) => c === pick);
+          taken.push(pack.splice(idx >= 0 ? idx : 0, 1)[0]);
+        }
+        taken.forEach((c, i) => {
+          if (!c) return;
+          const p = this.players[i];
+          if (this.held(p) >= this.handSize(p)) { this.discard.push(c); return; }
+          if (c.kind === 'district') p.districts.push(c); else p.hand.push(c);
+        });
+        // pass the remainder around the table
+        packs.unshift(packs.pop() );
+      }
+    }
+  }
+
+  /** Pull one card from the talon, advancing eras and reshuffling as §14 says. */
+          nextCard()                   {
+    if (!this.talon.length) {
+      if (this.eraQueue.length) this.talon = this.eraQueue.shift() ;
+      else if (this.discard.length) { this.talon = this.rng.shuffle(this.discard); this.discard = []; }
+      else return undefined;
+    }
+    return this.talon.pop();
   }
 
   /** total cards held: candidates in hand plus districts in play */
@@ -1369,7 +1433,7 @@ class Game {
       results.push({ ev: out.event, won });
       for (const d of nominees) if (d.player !== out.event.winner) this.discardCard(d);
       this.seat(office          , state, slot, won);
-      if (office === 'representative') this.capture(won, state);
+      if (office === 'representative' && this.cfg.game.captureEnabled !== false) this.capture(won, state);
     }
 
     this.pushLean(results);
@@ -1775,11 +1839,28 @@ class Game {
       uncontestedShare: this.events.length ? uncontested / this.events.length : 0,
       contestedSlotShare: this.stats.raceSlots ? this.stats.contestedSlots / this.stats.raceSlots : 0,
       decisionCounts: this.stats.decisions, seatsByOffice,
+      scoreHistory: this.scoreHistory,
     };
   }
 }
 
 function clampInt(v        , lo        , hi        )         { return Math.max(lo, Math.min(hi, Math.round(v))); }
+
+/** The default draft heuristic. Candidates are valued by home-state bonus and
+ *  card text; districts only while a player is thin on presence, because
+ *  holding many is measurably a liability (F21) -- hand size caps total cards,
+ *  so every district crowds out someone to run. */
+function defaultPick(pack        , p             )       {
+  const states = new Set(p.districts.map((d) => d.state));
+  const value = (c      )         => {
+    if (c.kind === 'district') {
+      const need = Math.max(0, 4 - states.size);
+      return (states.has(c.state) ? 0.5 : 1) * (need > 0 ? 2 + c.synergy : c.synergy - 2);
+    }
+    return 2 + c.homeStateBonus + c.effects.length;
+  };
+  return pack.reduce((best, c) => (value(c) > value(best) ? c : best), pack[0]);
+}
 
 
 // ---- sim/agents.ts ----
