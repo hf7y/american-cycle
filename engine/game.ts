@@ -689,7 +689,7 @@ export class Game {
         margin: r.ev.uncontested ? (this.cfg.lean.uncontestedPush ?? 0) * 2 : r.ev.margin });
     }
     for (const [st, races] of byState) {
-      const top = lean.nationalizedRace(races);
+      const top = lean.nationalizedRace(races, this.cfg.lean.priority);
       if (!top) continue;
       lean.applyPush(this.leanMap, this.cfg.lean, st, top.party, top.office, top.margin);
     }

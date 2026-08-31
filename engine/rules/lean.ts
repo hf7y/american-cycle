@@ -18,6 +18,10 @@ export interface LeanConfig {
    *  0 reads it as "a race nobody tested tells you nothing"; 1 reads running
    *  unopposed as itself decisive. The gap is real either way (F5). */
   uncontestedPush?: number;
+  /** §10's nationalisation ordering, as data rather than a constant, so the
+   *  claim that the Senate's lean push is what makes it dominant can be
+   *  tested by moving the House above it. Default is the doc's order. */
+  priority?: Office[];
 }
 
 export function sign(p: Party): number { return p === 'R' ? 1 : p === 'D' ? -1 : 0; }
@@ -32,8 +36,8 @@ export function pushForMargin(cfg: LeanConfig, marginPips: number): number {
  *  -- the exclusion falls out of the priority rule rather than being asserted. */
 const PRIORITY: Office[] = ['president', 'senator', 'representative', 'governor'];
 
-export function nationalizedRace<T extends { office: Office }>(races: T[]): T | undefined {
-  for (const office of PRIORITY) {
+export function nationalizedRace<T extends { office: Office }>(races: T[], order: Office[] = PRIORITY): T | undefined {
+  for (const office of order) {
     const hit = races.filter((r) => r.office === office);
     if (hit.length) return hit[0];
   }

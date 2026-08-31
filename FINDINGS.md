@@ -990,3 +990,44 @@ converting similar scores into wins, and it is small enough to leave.
 enough to hand one player a 15% scoring advantage, through a mechanism
 (capture) that looks unrelated to either. Nothing in the rules was wrong. The
 iteration order of a `Map` was.
+
+---
+
+## F26. SenateFlood's dominance was partly the seat-order bug. Resolved, not designed away.
+
+Issue #8 recorded SenateFlood at **51.7%**, well past SIM-BRIEF's 40% dominance
+line. Re-measured on the current engine, n=360:
+
+| strategy | at #8 | now |
+|---|---|---|
+| EconomyChicken | 19.2% | **37.8%** (borderline) |
+| SenateFlood | **51.7%** | **31.7%** |
+| BillMaximizer | 24.2% | 25.6% |
+| HeterodoxSpecialist | 5.0% | 4.2% |
+| HouseFarm | 0.0% | 0.6% |
+| WideAndEmpty | 0.0% | 0.3% |
+
+**Nothing is dominant any more.** The top strategy sits at 37.8% with a 3.9pp
+two-sigma band, so it touches the line without crossing it.
+
+**This was not fixed by design work, and that matters.** Two ablations were run
+first, and neither explains it: zeroing the Senate hand bonus moves SenateFlood
+34.0% → 31.3%, and demoting the Senate below the House in §10's nationalisation
+priority moves it 34.0% → 30.7%. Both are small. The dominance fell out of the
+**F25 capture fix** — open races were listed in seat order, which fed the whole
+declaration economy a systematic distortion.
+
+So the honest reading of the original 51.7% is that it was measuring a
+board with a bug in it, in the same way F11's numbers were measuring a board
+with five mechanics switched off. **Any round robin in this report taken before
+its neighbouring fix is void**, and that is now true of three of them.
+
+`lean.priority` is kept as config even though it did not turn out to be the
+lever, because §10's ordering is an assertion the design makes and it should be
+testable rather than compiled in.
+
+**What survives from #8:** the Senate still pays more ways than anything else
+on the board — points, a six-year term, hand size, the midterm push, and
+governor appointments as a fifth route in. It is no longer *dominant*, but it
+is still the best thing to do, and EconomyChicken's rise to 37.8% is a new
+question rather than an answer.
