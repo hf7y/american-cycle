@@ -804,3 +804,62 @@ tonight, and the second where implementing the missing mechanism was the only
 honest way to test the claim. Reasoning about whether a draft *would* fix the
 deal was not good enough; building it and measuring took twenty minutes and
 gave the opposite answer.
+
+---
+
+## F23. The central thesis is not implemented. Realignment is a driftless walk.
+
+This is the capstone, and it is the one finding that tests what the design
+exists to argue. §1: *"Realignment is not inevitable. It is the accumulated
+residue of individual races won by individual candidates."*
+
+**The residue does not accumulate.**
+
+With seven era packs in rotation, playing 1932→1992 — the largest realignment
+in American history, and the game now holds the cards for both ends of it — 60
+games:
+
+| region | mean final lean (+ = Republican) | reality 1932→1992 |
+|---|---|---|
+| South | **−0.14** | solid D → solid R |
+| Northeast | **−0.08** | solid R → solid D |
+| elsewhere | **−0.01** | — |
+
+Nothing moves. Only 18% of games see even one state reach a durable 4+ lean.
+
+**The mechanism, over 45,000 state-election-cycles:**
+
+| | share |
+|---|---|
+| lean moved **away** from zero (a push outran decay) | **44.6%** |
+| lean moved **toward** zero (decay won) | **45.5%** |
+| unchanged | 9.9% |
+| state-cycles sitting at 4+ pips | 0.62% |
+
+Push and decay cancel to within a percentage point. **A state's lean is a
+driftless random walk**: it can wander as far as the ±8 cap and does, but it has
+no tendency to go anywhere and no memory of having been there.
+
+**F2 was necessary and not sufficient.** Fixing annual decay to biennial made
+accumulation *arithmetically possible* — under annual decay the map was pinned
+at 2 forever. But possible is not likely. Realignment needs one party to keep
+winning a state *decisively*, and three separate measured facts prevent it:
+
+1. **93% of races are uncontested** (F6), and an uncontested win has no margin,
+   so it pushes nothing at all.
+2. **Contested races have a median margin of 8 points** — 4 pips (F8) — which
+   buys a push of 1 or 2 against a decay of 1.
+3. **Which party wins a given state alternates** often enough that consecutive
+   pushes rarely share a sign.
+
+**What this means for the design.** The thesis is sound and the mechanism
+chosen to express it — margin-based pushes against decay — is a reasonable one.
+It is calibrated wrong by roughly a factor of two: at present the expected
+drift is zero. Making realignment happen needs some combination of a larger
+push for a blowout, a slower decay, or — most promisingly, because it fixes
+four other findings at once — **a contested board**, since a race nobody
+contests cannot be evidence about anything.
+
+**This is the finding to act on first.** Not because it is the worst number in
+the report, but because it is the only one that measures whether the game does
+what it is for.

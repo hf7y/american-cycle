@@ -24,6 +24,30 @@ visible in `FINDINGS.md` rather than quietly overwritten.
 
 ---
 
+## 0. The headline
+
+**The design's central thesis is not implemented.** §1 argues that realignment
+is "the accumulated residue of individual races won by individual candidates".
+Played across 1932→1992 with era packs for both ends of the largest realignment
+in American history, **nothing moves**: mean final lean is −0.14 in the South,
+−0.08 in the Northeast, −0.01 elsewhere.
+
+Over 45,000 state-election-cycles, lean moves away from zero 44.6% of the time
+and toward zero 45.5% of the time. **Push and decay cancel to within a
+percentage point, so the map is a driftless random walk.**
+
+The mechanism the design chose is sound; it is calibrated to roughly zero net
+drift. Three measured facts hold it there — 93% of races are uncontested and so
+push nothing, contested margins run a median of 8 points against a decay of 1
+pip a cycle, and the winning party in a state alternates too often for pushes to
+share a sign. Fixing the contest rate (change 2 below) is the most promising
+single lever, because it is upstream of all three.
+
+Everything else in this report is detail next to this. Full working in
+`FINDINGS.md` F23.
+
+---
+
 ## 1. Top five design changes
 
 Ranked by confidence. Every figure is reproducible from its seed; the twenty
