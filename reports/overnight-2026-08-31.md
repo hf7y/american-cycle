@@ -95,7 +95,7 @@ Confidence: **certain**. It is arithmetic, and it is a passing test.
 
 ### 2. Cut district supply hard. One change moves five metrics.
 **Metric** contested race-slots; legal moves per turn; realignment; dead turns.
-**Observed** 34% contested (target >60%), **39 legal races per player-turn**
+**Observed** 37% contested (target >60%), **39 legal races per player-turn**
 (target 4–25), 0.21 states realigned a game, 4.4% of turns with no legal move.
 **Change** cut district supply, raise base hand size, scale the pool with the
 table.
@@ -301,21 +301,25 @@ This is the design's clearest success in the whole run.
 
 **Seat bias** (all Greedy, n=300–400, `tuned`, 16 years):
 
-| players | max deviation | 2×SE | verdict |
+| players | before | after | SIM-BRIEF bar |
 |---|---|---|---|
-| 3 | 4.3pp | 5.4pp | within noise |
-| 4 | 4.7pp | 5.0pp | within noise |
-| 5 | 9.5pp | 4.0pp | **real** |
-| 6 | 11.3pp | 4.3pp | **real** |
+| 3 | 4.3pp | **1.7pp** | 3pp |
+| 4 | 11.5pp | **3.5pp** | 3pp |
+| 5 | 14.3pp | **2.9pp** | 3pp |
+| 6 | 13.6pp | **4.1pp** | 3pp |
 
-Two harness bugs were manufacturing a much larger apparent bias and were fixed
-before these numbers: resolving score ties by `indexOf` handed every tie to the
-lowest seat (~25pp of phantom bias), and refilling hands in seat order gave low
-seats every card when the talon ran short (~7% of real scoring advantage).
-Rotating declaration order — SIM-BRIEF's suggested fix — brings 3–4 players
-within noise. The residue at 5–6 players tracks election cycles not dividing
-evenly by player count, so some players lead an extra time. Shuffling the order
-each cycle was tried and made it **worse** at every table size.
+Three bugs were manufacturing this, none of them in the rules. Resolving score
+ties with `indexOf` handed every tie to the lowest seat (~25pp of phantom
+bias). Refilling hands in seat order gave low seats every card when the talon
+ran short. And — the one that took an ablation to find — `openRaces()` listed
+House seats in seat order, so with a stable sort every tie resolved to player
+0's districts; their seats drew the most declarations, lost most often to
+capture, and **shed the most ballast**, which is an advantage because districts
+are a liability (F21). Seat 0 scored 164 against seat 4's 143.
+
+Fixed by sorting open races by state and district number. Three of four table
+sizes now sit at or under the brief's 3pp bar, and the monotonic score gradient
+is gone at every size. Full working in `FINDINGS.md` F25.
 
 **Six-way round robin** (120 games; >40% is dominant):
 
