@@ -377,10 +377,50 @@ export class Game {
     this.resolveDeclared(decls, wave, -1);
   }
 
+  /** §9: "Endorsement is a tap. A card taps to endorse and untaps at cycle
+   *  start. Incumbents may endorse and run in the same cycle." A president
+   *  endorses anywhere for +3; a governor endorses in their own state for +2.
+   *  Endorsements are primary-only -- the general effect is coattails, already
+   *  modelled, and a general endorsement would double-count.
+   *
+   *  The +3 is the single largest modifier in the game and had never been
+   *  spent, because nothing ever assigned one. Each endorser backs the
+   *  player's most contested primary, which is where an endorsement is worth
+   *  having. */
+  private assignEndorsements(decls: Declaration[]): void {
+    const contenders = (d: Declaration) =>
+      decls.filter((o) => o !== d && o.office === d.office && o.state === d.state
+        && o.slot === d.slot && o.card.party === d.card.party).length;
+
+    for (const p of this.players) {
+      const endorsers: { pips: number; state?: string; cardId: string }[] = [];
+      for (const seat of this.seats) {
+        if (seat.holder?.player !== p.id) continue;
+        if (p.tapped.has(seat.holder.cardId)) continue;
+        if (seat.office === 'president') {
+          endorsers.push({ pips: this.cfg.endorsements.president, cardId: seat.holder.cardId });
+        } else if (seat.office === 'governor') {
+          endorsers.push({ pips: this.cfg.endorsements.governorInState, state: seat.state, cardId: seat.holder.cardId });
+        }
+      }
+      if (!endorsers.length) continue;
+      const mine = decls.filter((d) => d.player === p.id)
+        .sort((a, b) => contenders(b) - contenders(a));
+      for (const e of endorsers) {
+        const target = mine.find((d) => !d.endorsements && contenders(d) > 0
+          && (!e.state || d.state === e.state));
+        if (!target) continue;
+        target.endorsements = (target.endorsements ?? 0) + e.pips;
+        p.tapped.add(e.cardId);
+      }
+    }
+  }
+
   /** Everything after declaration: primaries, generals, seating, capture and
    *  the lean pushes. Shared by the headless tick and the interactive one so
    *  the rules exist exactly once. */
   private resolveDeclared(decls: Declaration[], wave: Wave, human: number): void {
+    this.assignEndorsements(decls);
     const presidential = decls.filter((d) => d.office === 'president');
     const presidentialWinner = presidential.length ? this.presidentialRace(presidential, wave, human) : undefined;
 
@@ -569,12 +609,41 @@ export class Game {
     }
   }
 
+  /** §11: "Governors appoint Senate vacancies, placing a card from hand with
+   *  no election." A vacancy arises here the way it does in life: a sitting
+   *  senator wins a different office and leaves the seat behind. The governor
+   *  of that state fills it, which is the only route to a seat that never
+   *  faces the voters. */
+  private fillVacancy(state: string, slot: number | undefined): void {
+    const gov = this.seats.find((s) => s.office === 'governor' && s.state === state && s.holder);
+    if (!gov) return;
+    const p = this.players[gov.holder!.player];
+    const pick = p.hand.find((c) => c.kind === 'candidate') as (CandidateCard & { kind: 'candidate' }) | undefined;
+    if (!pick) return;
+    const seat = this.seats.find((s) => s.office === 'senator' && s.state === state && s.slot === slot);
+    if (!seat) return;
+    seat.holder = { cardId: pick.id, player: gov.holder!.player, party: pick.party, since: this.year };
+    p.hand = p.hand.filter((c) => !(c.kind === 'candidate' && c.id === pick.id));
+    p.score += 3;
+    this.log.push(`${this.year}: the governor of ${state} appoints ${pick.name} to the Senate`);
+  }
+
   private seat(office: Office, state: string, slot: number | undefined, d: Declaration): void {
     const existing = this.seats.find((s) => s.office === office && s.state === state && s.slot === slot);
     const holder = { cardId: d.card.id, player: d.player, party: d.card.party, since: this.year };
     if (existing) existing.holder = holder;
     else this.seats.push({ office, state, slot, senateClass: office === 'senator' ? (slot as 1 | 2 | 3) : undefined, holder });
     if (office === 'president') this.president = { ...holder };
+
+    // A sitting senator who wins something else leaves a vacancy behind.
+    const vacated = this.seats.find((s) => s.office === 'senator' && s.holder?.cardId === d.card.id
+      && !(s.state === state && s.slot === slot));
+    if (vacated) {
+      const vs = vacated.state, vslot = vacated.slot;
+      vacated.holder = undefined;
+      this.fillVacancy(vs, vslot);
+    }
+
     const p = this.players[d.player];
     p.hand = p.hand.filter((c) => !(c.kind === 'candidate' && c.id === d.card.id));
     p.score += office === 'president' ? 5 : office === 'senator' ? 3 : office === 'governor' ? 2 : 1;

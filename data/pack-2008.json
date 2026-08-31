@@ -1376,6 +1376,44 @@
    ],
    "synergy": 2,
    "note": "Eastside"
+  },
+  {
+   "kind": "candidate",
+   "id": "joe-lieberman-2008",
+   "name": "Joe Lieberman",
+   "party": "I",
+   "homeState": "CT",
+   "homeStateBonus": 2,
+   "identities": [
+    "jewish",
+    "ivy"
+   ],
+   "belief": "Lost the primary, won the general",
+   "era": 2008,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "bernie-sanders-2008",
+   "name": "Bernie Sanders",
+   "party": "I",
+   "homeState": "VT",
+   "homeStateBonus": 3,
+   "identities": [
+    "jewish",
+    "academic"
+   ],
+   "belief": "Caucuses with the Democrats",
+   "era": 2008,
+   "effects": [
+    {
+     "type": "extremist"
+    }
+   ]
   }
  ]
 }

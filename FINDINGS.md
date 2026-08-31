@@ -389,3 +389,57 @@ bottom 9.2%, nothing dominant. That is **not** evidence that SenateFlood's
 51.7% dominance was resolved: the agent set changed, and the two strategies
 removed (`WideAndEmpty`, `HouseFarm`) were both winning 0% and functioning as
 free wins for everyone else. The two round robins are not comparable.
+
+---
+
+## F13. The last three unbuilt rules are live, and none of them should be cut.
+
+SIM-BRIEF's dead-rule list named all three as cut candidates. All three were
+firing at 0% because they were **unimplemented**, not because they were
+unwanted — the same trap as F9 and F10.
+
+**Endorsements — the largest modifier in the game had never been spent.** §9
+gives a president +3 in any primary and a governor +2 in their own state, as a
+tap that untaps at cycle start. Nothing ever assigned one. Now each endorser
+backs their player's most contested primary:
+
+| | value |
+|---|---|
+| primaries with an endorsement spent | **32%** (was 0%) |
+| endorsed candidate wins its primary | **72%** |
+
+That 72% is also a clean consistency check on the corrected odds table: §3 puts
++3 pips at 76%, and an endorsement rarely arrives unopposed by other modifiers.
+**Keep. It is load-bearing and correctly sized.**
+
+**Independent candidacies — half of the brief's prior is right.** SIM-BRIEF
+guessed "no primary, no coattails, may be pure downside". The engine had
+supported party `I` from the first commit; no pack contained one, so the rule
+was unmeasurable. Eight real independents added across the four eras — Harry
+Byrd Jr., Eugene McCarthy, Weicker, Perot, Lieberman, Sanders, King, McMullin.
+
+| measure | value |
+|---|---|
+| contested generals featuring an independent | 559 |
+| independent wins **in contested generals** | **39%** |
+
+Below the ~50% two-way baseline, so forfeiting coattails is a real cost — but
+they reach far more generals than party candidates, because skipping the
+primary means no primary attrition and no card reveal. **Not pure downside:
+a worse race, entered more often. Keep.**
+
+*A measurement note against myself:* the first cut of this said independents
+win **60%**, which counted walkovers. Uncontested wins say nothing about a
+candidate's strength, and on a board that is 79% walkovers they dominate any
+raw win rate. The contested-only figure is the real one.
+
+**Governor Senate appointments — implemented, and they may be too good.** §11:
+"Governors appoint Senate vacancies, placing a card from hand with no
+election." A vacancy now arises the way it does in life: a sitting senator wins
+a different office and leaves the seat behind. Roughly **12 appointments a
+game**, each worth 3 points and a Senate seat that never faced a voter.
+
+**Flagged rather than cut.** This compounds F11 — the Senate already pays four
+ways, and appointment is a fifth route into it that skips the electorate
+entirely. Anyone acting on hf7y/american-cycle#8 should weigh appointments as
+part of the same problem.

@@ -1387,6 +1387,44 @@
    ],
    "synergy": 3,
    "note": "Eastside, flipped"
+  },
+  {
+   "kind": "candidate",
+   "id": "angus-king-2016",
+   "name": "Angus King",
+   "party": "I",
+   "homeState": "ME",
+   "homeStateBonus": 3,
+   "identities": [
+    "business",
+    "rural"
+   ],
+   "belief": "Independent by habit, not by accident",
+   "era": 2016,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "evan-mcmullin-2016",
+   "name": "Evan McMullin",
+   "party": "I",
+   "homeState": "UT",
+   "homeStateBonus": 1,
+   "identities": [
+    "evangelical",
+    "ivy"
+   ],
+   "belief": "Ran to deny a majority",
+   "era": 2016,
+   "effects": [
+    {
+     "type": "extremist"
+    }
+   ]
   }
  ]
 }

@@ -1741,6 +1741,41 @@
    ],
    "synergy": 2,
    "note": "Lowcountry"
+  },
+  {
+   "kind": "candidate",
+   "id": "harry-f-byrd-jr",
+   "name": "Harry F. Byrd Jr.",
+   "party": "I",
+   "homeState": "VA",
+   "homeStateBonus": 3,
+   "identities": [
+    "rural",
+    "business"
+   ],
+   "belief": "Left the party and held the seat",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "eugene-mccarthy",
+   "name": "Eugene McCarthy",
+   "party": "I",
+   "homeState": "MN",
+   "homeStateBonus": 2,
+   "identities": [
+    "catholic",
+    "academic",
+    "ivy"
+   ],
+   "belief": "Ran outside both parties",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "extremist"
+    }
+   ]
   }
  ]
 }

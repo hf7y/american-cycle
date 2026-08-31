@@ -1468,6 +1468,44 @@
    ],
    "synergy": 1,
    "note": "Hartford"
+  },
+  {
+   "kind": "candidate",
+   "id": "lowell-weicker-1992",
+   "name": "Lowell Weicker",
+   "party": "I",
+   "homeState": "CT",
+   "homeStateBonus": 3,
+   "identities": [
+    "ivy",
+    "business"
+   ],
+   "belief": "Won the governorship as A Connecticut Party",
+   "era": 1992,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "ross-perot-1992",
+   "name": "Ross Perot",
+   "party": "I",
+   "homeState": "TX",
+   "homeStateBonus": 2,
+   "identities": [
+    "business",
+    "veteran"
+   ],
+   "belief": "Nineteen percent and no electoral votes",
+   "era": 1992,
+   "effects": [
+    {
+     "type": "extremist"
+    }
+   ]
   }
  ]
 }
