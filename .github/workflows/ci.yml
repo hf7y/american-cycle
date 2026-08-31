@@ -1,0 +1,60 @@
+name: ci
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+jobs:
+  engine:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '24' }
+      - run: npm ci || npm install
+      - name: typecheck
+        run: npx tsc --noEmit
+      # The findings half of this is the shape checks only. Their expensive
+      # half re-runs every predicate, which is exactly what the step below
+      # does, and running both cost this job four minutes twice over.
+      - name: tests
+        run: npm test
+      # Findings are predicates, not prose. A stale headline is information
+      # rather than a failure, so this reports drift and only fails on BROKEN.
+      # At a cut sample size, so this asks "does every predicate still run",
+      # not "does every headline still hold" — that is a full-N question and
+      # the answer moves, so it is asked by hand: `node sim/findings.ts`.
+      - name: findings still re-derive
+        run: node sim/findings.ts
+        env:
+          FINDINGS_SEEDS: 12
+
+  board:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '24' }
+      - run: npm ci || npm install
+      # The bundler refuses to emit a page whose scripts declare colliding
+      # top-level names. That is not a style check: a collision renders the
+      # board BLANK, and one shipped before this existed.
+      - name: build the board
+        run: node ui/build.ts
+      - name: playwright
+        run: |
+          pip install --quiet playwright
+          playwright install --with-deps chromium
+      # The engine tests exercise the engine. These exercise the page, which is
+      # where three bugs hid that nothing else could see.
+      - name: play a full game in a browser
+        run: python3 sim/playtest.py
+      - name: both themes, both widths, every rule set and era
+        run: python3 sim/playtest-matrix.py
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: screenshots
+          path: /tmp/american-cycle-shots/*.png
+          if-no-files-found: ignore

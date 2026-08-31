@@ -1,0 +1,1006 @@
+{
+  "name": "2024",
+  "era": 2024,
+  "note": "Fully nationalised, and the mirror of 1932. Home-state bonuses are 0-3 and the 3s belong almost entirely to the heterodox survivors -- Scott, Collins, Murkowski, Beshear -- who win where their party cannot. Ticket-splitting has collapsed to a handful of names. The district cards are the realignment completed: the Iron Range and Appalachia gone, the Rio Grande Valley moving, the suburbs flipped.",
+  "cards": [
+    {
+      "kind": "candidate",
+      "id": "kamala-harris-2024",
+      "name": "Kamala Harris",
+      "party": "D",
+      "homeState": "CA",
+      "homeStateBonus": 0,
+      "identities": [
+        "black",
+        "hispanic",
+        "urban"
+      ],
+      "belief": "A new way forward",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "joe-biden-2024",
+      "name": "Joe Biden",
+      "party": "D",
+      "homeState": "DE",
+      "homeStateBonus": 1,
+      "identities": [
+        "catholic"
+      ],
+      "belief": "Stepped aside in July",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "tim-walz-2024",
+      "name": "Tim Walz",
+      "party": "D",
+      "homeState": "MN",
+      "homeStateBonus": 1,
+      "identities": [
+        "rural",
+        "veteran",
+        "academic"
+      ],
+      "belief": "Coach from the Iron Range",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "josh-shapiro-2024",
+      "name": "Josh Shapiro",
+      "party": "D",
+      "homeState": "PA",
+      "homeStateBonus": 1,
+      "identities": [
+        "jewish",
+        "suburban"
+      ],
+      "belief": "Won by fifteen in a tied state",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "gretchen-whitmer-2024",
+      "name": "Gretchen Whitmer",
+      "party": "D",
+      "homeState": "MI",
+      "homeStateBonus": 1,
+      "identities": [
+        "suburban",
+        "ivy"
+      ],
+      "belief": "Fix the damn roads",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "jon-tester-2024",
+      "name": "Jon Tester",
+      "party": "D",
+      "homeState": "MT",
+      "homeStateBonus": 3,
+      "identities": [
+        "farm",
+        "rural"
+      ],
+      "belief": "Lost at last",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "sherrod-brown-2024",
+      "name": "Sherrod Brown",
+      "party": "D",
+      "homeState": "OH",
+      "homeStateBonus": 2,
+      "identities": [
+        "union",
+        "academic"
+      ],
+      "belief": "Lost at last",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "ruben-gallego-2024",
+      "name": "Ruben Gallego",
+      "party": "D",
+      "homeState": "AZ",
+      "homeStateBonus": 2,
+      "identities": [
+        "hispanic",
+        "veteran"
+      ],
+      "belief": "Ran ahead of the ticket",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "elissa-slotkin-2024",
+      "name": "Elissa Slotkin",
+      "party": "D",
+      "homeState": "MI",
+      "homeStateBonus": 2,
+      "identities": [
+        "suburban",
+        "ivy"
+      ],
+      "belief": "Held Michigan by a point",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "tammy-baldwin-2024",
+      "name": "Tammy Baldwin",
+      "party": "D",
+      "homeState": "WI",
+      "homeStateBonus": 2,
+      "identities": [
+        "academic",
+        "urban"
+      ],
+      "belief": "Held Wisconsin",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "andy-beshear-2024",
+      "name": "Andy Beshear",
+      "party": "D",
+      "homeState": "KY",
+      "homeStateBonus": 3,
+      "identities": [
+        "rural",
+        "evangelical"
+      ],
+      "belief": "Governor of a state that votes 30 points the other way",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "raphael-warnock-2024",
+      "name": "Raphael Warnock",
+      "party": "D",
+      "homeState": "GA",
+      "homeStateBonus": 1,
+      "identities": [
+        "black",
+        "evangelical",
+        "urban"
+      ],
+      "belief": "Ebenezer's pastor",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "mark-kelly-2024",
+      "name": "Mark Kelly",
+      "party": "D",
+      "homeState": "AZ",
+      "homeStateBonus": 1,
+      "identities": [
+        "veteran",
+        "suburban"
+      ],
+      "belief": "Astronaut",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "john-fetterman-2024",
+      "name": "John Fetterman",
+      "party": "D",
+      "homeState": "PA",
+      "homeStateBonus": 1,
+      "identities": [
+        "rural",
+        "union"
+      ],
+      "belief": "Hoodie in the Senate",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "hakeem-jeffries-2024",
+      "name": "Hakeem Jeffries",
+      "party": "D",
+      "homeState": "NY",
+      "homeStateBonus": 0,
+      "identities": [
+        "black",
+        "urban",
+        "ivy"
+      ],
+      "belief": "The leader",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "alexandria-ocasio-cortez-2024",
+      "name": "Alexandria Ocasio-Cortez",
+      "party": "D",
+      "homeState": "NY",
+      "homeStateBonus": 1,
+      "identities": [
+        "hispanic",
+        "urban"
+      ],
+      "belief": "The Bronx",
+      "era": 2024,
+      "effects": [
+        {
+          "type": "extremist"
+        }
+      ]
+    },
+    {
+      "kind": "candidate",
+      "id": "bernie-sanders-2024",
+      "name": "Bernie Sanders",
+      "party": "I",
+      "homeState": "VT",
+      "homeStateBonus": 2,
+      "identities": [
+        "jewish",
+        "academic"
+      ],
+      "belief": "Still an independent",
+      "era": 2024,
+      "effects": [
+        {
+          "type": "extremist"
+        },
+        {
+          "type": "may_endorse",
+          "pips": 2,
+          "note": "an ideological validator with a national following (\u00a79)"
+        }
+      ]
+    },
+    {
+      "kind": "candidate",
+      "id": "angus-king-2024",
+      "name": "Angus King",
+      "party": "I",
+      "homeState": "ME",
+      "homeStateBonus": 2,
+      "identities": [
+        "business",
+        "rural"
+      ],
+      "belief": "Still an independent",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "donald-trump-2024",
+      "name": "Donald Trump",
+      "party": "R",
+      "homeState": "FL",
+      "homeStateBonus": 0,
+      "identities": [
+        "business",
+        "urban"
+      ],
+      "belief": "Won the popular vote",
+      "era": 2024,
+      "effects": [
+        {
+          "type": "extremist"
+        }
+      ]
+    },
+    {
+      "kind": "candidate",
+      "id": "jd-vance-2024",
+      "name": "JD Vance",
+      "party": "R",
+      "homeState": "OH",
+      "homeStateBonus": 1,
+      "identities": [
+        "veteran",
+        "ivy",
+        "rural"
+      ],
+      "belief": "Hillbilly Elegy",
+      "era": 2024,
+      "effects": [
+        {
+          "type": "extremist"
+        }
+      ]
+    },
+    {
+      "kind": "candidate",
+      "id": "nikki-haley-2024",
+      "name": "Nikki Haley",
+      "party": "R",
+      "homeState": "SC",
+      "homeStateBonus": 1,
+      "identities": [
+        "business",
+        "evangelical"
+      ],
+      "belief": "Ran to the end of the primaries",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "ron-desantis-2024",
+      "name": "Ron DeSantis",
+      "party": "R",
+      "homeState": "FL",
+      "homeStateBonus": 1,
+      "identities": [
+        "veteran",
+        "ivy",
+        "evangelical"
+      ],
+      "belief": "Won Florida by nineteen",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "glenn-youngkin-2024",
+      "name": "Glenn Youngkin",
+      "party": "R",
+      "homeState": "VA",
+      "homeStateBonus": 2,
+      "identities": [
+        "business",
+        "suburban"
+      ],
+      "belief": "Won on schools",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "brian-kemp-2024",
+      "name": "Brian Kemp",
+      "party": "R",
+      "homeState": "GA",
+      "homeStateBonus": 2,
+      "identities": [
+        "rural",
+        "business"
+      ],
+      "belief": "Certified, and survived",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "mike-dewine-2024",
+      "name": "Mike DeWine",
+      "party": "R",
+      "homeState": "OH",
+      "homeStateBonus": 2,
+      "identities": [
+        "catholic",
+        "rural"
+      ],
+      "belief": "Old-guard governor",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "susan-collins-2024",
+      "name": "Susan Collins",
+      "party": "R",
+      "homeState": "ME",
+      "homeStateBonus": 3,
+      "identities": [
+        "business",
+        "suburban"
+      ],
+      "belief": "Still there",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "lisa-murkowski-2024",
+      "name": "Lisa Murkowski",
+      "party": "R",
+      "homeState": "AK",
+      "homeStateBonus": 3,
+      "identities": [
+        "business",
+        "rural"
+      ],
+      "belief": "Still there",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "mitch-mcconnell-2024",
+      "name": "Mitch McConnell",
+      "party": "R",
+      "homeState": "KY",
+      "homeStateBonus": 1,
+      "identities": [
+        "business"
+      ],
+      "belief": "Stepped down as leader",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "ted-cruz-2024",
+      "name": "Ted Cruz",
+      "party": "R",
+      "homeState": "TX",
+      "homeStateBonus": 1,
+      "identities": [
+        "hispanic",
+        "evangelical",
+        "ivy"
+      ],
+      "belief": "Held Texas by nine",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "marjorie-taylor-greene-2024",
+      "name": "Marjorie Taylor Greene",
+      "party": "R",
+      "homeState": "GA",
+      "homeStateBonus": 1,
+      "identities": [
+        "rural",
+        "evangelical"
+      ],
+      "belief": "Safe seat, national profile",
+      "era": 2024,
+      "effects": [
+        {
+          "type": "extremist"
+        }
+      ]
+    },
+    {
+      "kind": "candidate",
+      "id": "mike-johnson-2024",
+      "name": "Mike Johnson",
+      "party": "R",
+      "homeState": "LA",
+      "homeStateBonus": 1,
+      "identities": [
+        "evangelical",
+        "rural"
+      ],
+      "belief": "Speaker by exhaustion",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "tim-scott-2024",
+      "name": "Tim Scott",
+      "party": "R",
+      "homeState": "SC",
+      "homeStateBonus": 1,
+      "identities": [
+        "black",
+        "evangelical",
+        "business"
+      ],
+      "belief": "Appointed, then elected",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "larry-hogan-2024",
+      "name": "Larry Hogan",
+      "party": "R",
+      "homeState": "MD",
+      "homeStateBonus": 2,
+      "identities": [
+        "business",
+        "suburban"
+      ],
+      "belief": "Lost by eleven running twenty ahead of the ticket",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "phil-scott-2024",
+      "name": "Phil Scott",
+      "party": "R",
+      "homeState": "VT",
+      "homeStateBonus": 3,
+      "identities": [
+        "business",
+        "rural"
+      ],
+      "belief": "Won by forty in a state that voted blue by thirty",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "chris-sununu-2024",
+      "name": "Chris Sununu",
+      "party": "R",
+      "homeState": "NH",
+      "homeStateBonus": 2,
+      "identities": [
+        "business",
+        "ivy"
+      ],
+      "belief": "Four terms in a purple state",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "bernie-moreno-2024",
+      "name": "Bernie Moreno",
+      "party": "R",
+      "homeState": "OH",
+      "homeStateBonus": 1,
+      "identities": [
+        "hispanic",
+        "business"
+      ],
+      "belief": "Beat Sherrod Brown",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "kari-lake-2024",
+      "name": "Kari Lake",
+      "party": "R",
+      "homeState": "AZ",
+      "homeStateBonus": 1,
+      "identities": [
+        "business",
+        "suburban"
+      ],
+      "belief": "Lost twice",
+      "era": 2024,
+      "effects": [
+        {
+          "type": "extremist"
+        }
+      ]
+    },
+    {
+      "kind": "candidate",
+      "id": "sarah-huckabee-sanders-2024",
+      "name": "Sarah Huckabee Sanders",
+      "party": "R",
+      "homeState": "AR",
+      "homeStateBonus": 2,
+      "identities": [
+        "evangelical",
+        "business"
+      ],
+      "belief": "Won by twenty-eight",
+      "era": 2024,
+      "effects": []
+    },
+    {
+      "kind": "district",
+      "id": "PA-7-2024",
+      "state": "PA",
+      "number": 7,
+      "era": 2024,
+      "demographics": [
+        "suburban",
+        "union"
+      ],
+      "synergy": 3,
+      "note": "Lehigh Valley, decided by a point"
+    },
+    {
+      "kind": "district",
+      "id": "PA-8-2024",
+      "state": "PA",
+      "number": 8,
+      "era": 2024,
+      "demographics": [
+        "union",
+        "rural"
+      ],
+      "synergy": 3,
+      "note": "Scranton"
+    },
+    {
+      "kind": "district",
+      "id": "MI-7-2024",
+      "state": "MI",
+      "number": 7,
+      "era": 2024,
+      "demographics": [
+        "suburban",
+        "academic"
+      ],
+      "synergy": 3,
+      "note": "Lansing"
+    },
+    {
+      "kind": "district",
+      "id": "MI-13-2024",
+      "state": "MI",
+      "number": 13,
+      "era": 2024,
+      "demographics": [
+        "black",
+        "urban"
+      ],
+      "synergy": 2,
+      "note": "Detroit"
+    },
+    {
+      "kind": "district",
+      "id": "WI-3-2024",
+      "state": "WI",
+      "number": 3,
+      "era": 2024,
+      "demographics": [
+        "rural",
+        "farm",
+        "union"
+      ],
+      "synergy": 3,
+      "note": "Driftless, gone red"
+    },
+    {
+      "kind": "district",
+      "id": "AZ-6-2024",
+      "state": "AZ",
+      "number": 6,
+      "era": 2024,
+      "demographics": [
+        "suburban",
+        "hispanic"
+      ],
+      "synergy": 3,
+      "note": "Tucson suburbs"
+    },
+    {
+      "kind": "district",
+      "id": "NV-3-2024",
+      "state": "NV",
+      "number": 3,
+      "era": 2024,
+      "demographics": [
+        "hispanic",
+        "suburban"
+      ],
+      "synergy": 3,
+      "note": "Henderson"
+    },
+    {
+      "kind": "district",
+      "id": "GA-7-2024",
+      "state": "GA",
+      "number": 7,
+      "era": 2024,
+      "demographics": [
+        "suburban",
+        "black",
+        "hispanic"
+      ],
+      "synergy": 3,
+      "note": "Gwinnett"
+    },
+    {
+      "kind": "district",
+      "id": "NC-1-2024",
+      "state": "NC",
+      "number": 1,
+      "era": 2024,
+      "demographics": [
+        "black",
+        "rural"
+      ],
+      "synergy": 3,
+      "note": "The northeast, redrawn"
+    },
+    {
+      "kind": "district",
+      "id": "TX-34-2024",
+      "state": "TX",
+      "number": 34,
+      "era": 2024,
+      "demographics": [
+        "hispanic",
+        "rural"
+      ],
+      "synergy": 3,
+      "note": "The Valley, moving right"
+    },
+    {
+      "kind": "district",
+      "id": "TX-15-2024",
+      "state": "TX",
+      "number": 15,
+      "era": 2024,
+      "demographics": [
+        "hispanic",
+        "rural"
+      ],
+      "synergy": 3,
+      "note": "McAllen, flipped"
+    },
+    {
+      "kind": "district",
+      "id": "CA-13-2024",
+      "state": "CA",
+      "number": 13,
+      "era": 2024,
+      "demographics": [
+        "hispanic",
+        "farm"
+      ],
+      "synergy": 3,
+      "note": "Central Valley"
+    },
+    {
+      "kind": "district",
+      "id": "CA-22-2024",
+      "state": "CA",
+      "number": 22,
+      "era": 2024,
+      "demographics": [
+        "hispanic",
+        "farm"
+      ],
+      "synergy": 3,
+      "note": "Bakersfield"
+    },
+    {
+      "kind": "district",
+      "id": "NY-17-2024",
+      "state": "NY",
+      "number": 17,
+      "era": 2024,
+      "demographics": [
+        "suburban",
+        "business"
+      ],
+      "synergy": 3,
+      "note": "Hudson Valley"
+    },
+    {
+      "kind": "district",
+      "id": "NY-4-2024",
+      "state": "NY",
+      "number": 4,
+      "era": 2024,
+      "demographics": [
+        "suburban",
+        "jewish"
+      ],
+      "synergy": 3,
+      "note": "Nassau County, flipped"
+    },
+    {
+      "kind": "district",
+      "id": "FL-27-2024",
+      "state": "FL",
+      "number": 27,
+      "era": 2024,
+      "demographics": [
+        "cuban",
+        "urban"
+      ],
+      "synergy": 3,
+      "note": "Miami, gone red"
+    },
+    {
+      "kind": "district",
+      "id": "OH-9-2024",
+      "state": "OH",
+      "number": 9,
+      "era": 2024,
+      "demographics": [
+        "union",
+        "rural"
+      ],
+      "synergy": 3,
+      "note": "Toledo"
+    },
+    {
+      "kind": "district",
+      "id": "VA-7-2024",
+      "state": "VA",
+      "number": 7,
+      "era": 2024,
+      "demographics": [
+        "suburban",
+        "veteran"
+      ],
+      "synergy": 2,
+      "note": "Fredericksburg"
+    },
+    {
+      "kind": "district",
+      "id": "CO-8-2024",
+      "state": "CO",
+      "number": 8,
+      "era": 2024,
+      "demographics": [
+        "hispanic",
+        "suburban"
+      ],
+      "synergy": 3,
+      "note": "Adams County, the closest in the country"
+    },
+    {
+      "kind": "district",
+      "id": "IA-3-2024",
+      "state": "IA",
+      "number": 3,
+      "era": 2024,
+      "demographics": [
+        "suburban",
+        "farm"
+      ],
+      "synergy": 3,
+      "note": "Des Moines"
+    },
+    {
+      "kind": "district",
+      "id": "ME-2-2024",
+      "state": "ME",
+      "number": 2,
+      "era": 2024,
+      "demographics": [
+        "rural",
+        "union",
+        "veteran"
+      ],
+      "synergy": 3,
+      "note": "The Second, red for a decade"
+    },
+    {
+      "kind": "district",
+      "id": "AK-1-2024",
+      "state": "AK",
+      "number": 1,
+      "era": 2024,
+      "demographics": [
+        "rural",
+        "veteran"
+      ],
+      "synergy": 2,
+      "note": "At-large"
+    },
+    {
+      "kind": "district",
+      "id": "MN-8-2024",
+      "state": "MN",
+      "number": 8,
+      "era": 2024,
+      "demographics": [
+        "rural",
+        "union",
+        "farm"
+      ],
+      "synergy": 3,
+      "note": "The Iron Range"
+    },
+    {
+      "kind": "district",
+      "id": "WV-1-2024",
+      "state": "WV",
+      "number": 1,
+      "era": 2024,
+      "demographics": [
+        "union",
+        "rural"
+      ],
+      "synergy": 2,
+      "note": "Gone entirely"
+    },
+    {
+      "kind": "district",
+      "id": "KY-6-2024",
+      "state": "KY",
+      "number": 6,
+      "era": 2024,
+      "demographics": [
+        "suburban",
+        "farm"
+      ],
+      "synergy": 2,
+      "note": "Lexington"
+    },
+    {
+      "kind": "district",
+      "id": "MT-1-2024",
+      "state": "MT",
+      "number": 1,
+      "era": 2024,
+      "demographics": [
+        "rural",
+        "farm"
+      ],
+      "synergy": 2,
+      "note": "Western Montana"
+    },
+    {
+      "kind": "district",
+      "id": "NM-2-2024",
+      "state": "NM",
+      "number": 2,
+      "era": 2024,
+      "demographics": [
+        "hispanic",
+        "rural"
+      ],
+      "synergy": 3,
+      "note": "Southern New Mexico"
+    },
+    {
+      "kind": "district",
+      "id": "OR-5-2024",
+      "state": "OR",
+      "number": 5,
+      "era": 2024,
+      "demographics": [
+        "suburban",
+        "farm"
+      ],
+      "synergy": 3,
+      "note": "Bend to Salem"
+    },
+    {
+      "kind": "district",
+      "id": "WA-3-2024",
+      "state": "WA",
+      "number": 3,
+      "era": 2024,
+      "demographics": [
+        "rural",
+        "union"
+      ],
+      "synergy": 3,
+      "note": "Southwest Washington, flipped"
+    },
+    {
+      "kind": "district",
+      "id": "NJ-7-2024",
+      "state": "NJ",
+      "number": 7,
+      "era": 2024,
+      "demographics": [
+        "suburban",
+        "business"
+      ],
+      "synergy": 3,
+      "note": "Somerset"
+    }
+  ]
+}

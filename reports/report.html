@@ -1,0 +1,400 @@
+<title>American Cycle Findings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;600;700&family=Public+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --paper:#E8E6E1; --paper-2:#DEDBD4; --card:#F2F0EC; --ink:#16181A; --ink-2:#4A4E54;
+  --rule:#C4BFB6; --brass:#8A6D22; --dem:#2F5C8A; --gop:#A63A2E;
+  --good:#3E6B4F; --bad:#A63A2E; --chyron-bg:#16181A; --chyron-fg:#E8E6E1;
+  --display:"Archivo Narrow",ui-sans-serif,system-ui,sans-serif;
+  --body:"Public Sans",ui-sans-serif,system-ui,-apple-system,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#14161A; --paper-2:#1B1E23; --card:#20242A; --ink:#E6E3DC; --ink-2:#9AA0A8;
+  --rule:#33373D; --brass:#C9A44C; --dem:#6E9CC9; --gop:#D2705F;
+  --good:#6FA07E; --bad:#D2705F; --chyron-bg:#0C0E11; --chyron-fg:#E6E3DC;
+}}
+:root[data-theme="dark"]{
+  --paper:#14161A; --paper-2:#1B1E23; --card:#20242A; --ink:#E6E3DC; --ink-2:#9AA0A8;
+  --rule:#33373D; --brass:#C9A44C; --dem:#6E9CC9; --gop:#D2705F;
+  --good:#6FA07E; --bad:#D2705F; --chyron-bg:#0C0E11; --chyron-fg:#E6E3DC;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);
+  font-size:16px;line-height:1.62;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--display);font-weight:600;margin:0;text-wrap:balance;letter-spacing:.005em;line-height:1.16}
+a{color:var(--brass)}
+.mono,td.n{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-family:var(--display);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2)}
+header#top{background:var(--chyron-bg);color:var(--chyron-fg);border-bottom:2px solid var(--brass);padding:34px 20px 30px}
+header#top .in{max-width:760px;margin:0 auto}
+header#top h1{font-size:clamp(30px,5vw,46px);letter-spacing:-.01em}
+header#top .sub{font-family:var(--mono);font-size:13px;opacity:.72;margin-top:10px}
+main{max-width:760px;margin:0 auto;padding:0 20px 80px}
+section{padding:38px 0;border-bottom:1px solid var(--rule)}
+section:last-child{border-bottom:none}
+h2{font-size:26px;margin-bottom:6px}
+h3{font-size:18px;margin:26px 0 6px}
+p{margin:12px 0}
+.lede{font-size:18px;color:var(--ink-2)}
+.callout{background:var(--card);border:1px solid var(--rule);border-left:3px solid var(--brass);
+  border-radius:2px;padding:16px 18px;margin:22px 0}
+.callout.win{border-left-color:var(--good)}
+.callout.bad{border-left-color:var(--bad)}
+.tw{overflow-x:auto;margin:18px 0}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:min(100%,420px)}
+th,td{text-align:left;padding:7px 16px 7px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+th:last-child,td:last-child{padding-right:0}
+th{font-family:var(--display);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);white-space:nowrap}
+/* A right-aligned numeric cell sits flush against whatever follows it unless
+   it carries its own left padding -- every cell's left padding is zero. */
+td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;padding-left:20px}
+tr.hi td{background:var(--paper-2);font-weight:600}
+.chip{display:inline-block;font-family:var(--mono);font-size:10px;padding:2px 6px;border:1px solid var(--rule);
+  border-radius:2px;letter-spacing:.04em;white-space:nowrap}
+.chip.f{border-color:var(--good);color:var(--good)}
+.chip.o{border-color:var(--bad);color:var(--bad)}
+.chip.s{border-color:var(--brass);color:var(--brass)}
+ol.changes{list-style:none;counter-reset:c;padding:0}
+ol.changes>li{counter-increment:c;position:relative;padding:18px 0 18px 52px;border-top:1px solid var(--rule)}
+ol.changes>li::before{content:counter(c);position:absolute;left:0;top:18px;font-family:var(--display);
+  font-size:26px;font-weight:700;color:var(--brass);line-height:1}
+ol.changes h3{margin-top:0}
+.meta{font-family:var(--mono);font-size:12px;color:var(--ink-2);margin-top:6px}
+footer{max-width:760px;margin:0 auto;padding:30px 20px 60px;font-size:13px;color:var(--ink-2)}
+</style>
+
+<header id="top"><div class="in">
+  <div class="eyebrow" style="color:var(--brass)">Overnight simulation report · 31 August 2026</div>
+  <h1>American Cycle</h1>
+  <div class="sub">604 cards · 7 eras · 12 agents · 37 findings · every figure reproducible from its seed</div>
+</div></header>
+
+<main>
+<section>
+  <h2>The headline</h2>
+  <p class="lede">The design's central thesis is not implemented — and the fix is an
+  answer to a question the design never asked.</p>
+  <p>§1 argues that realignment is <em>"the accumulated residue of individual races won by
+  individual candidates."</em> Played across 1932→1992, with real cards for both ends of the
+  largest realignment in American history, <strong>nothing moves.</strong></p>
+  <div class="tw"><table>
+    <tr><th>Region, mean final lean</th><th class="n">Simulated</th><th>Reality 1932→1992</th></tr>
+    <tr><td>South</td><td class="n">−0.14</td><td>solid D → solid R</td></tr>
+    <tr><td>Northeast</td><td class="n">−0.08</td><td>solid R → solid D</td></tr>
+    <tr><td>Elsewhere</td><td class="n">−0.01</td><td>—</td></tr>
+  </table></div>
+  <p>Over 45,000 state-election-cycles, lean moves away from zero <span class="mono">44.6%</span>
+  of the time and toward zero <span class="mono">45.5%</span>. Push and decay cancel to within a
+  percentage point: <strong>the map is a driftless random walk.</strong></p>
+  <div class="callout">
+    <strong>The one-line fix.</strong> §10 scales a lean push by how decisively a race was won,
+    and never says what an <em>uncontested</em> win does — a walkover has no margin. Reading it
+    as worth one pip changes everything:
+    <div class="tw"><table>
+      <tr><th>Walkover pushes</th><th class="n">Mean |lean|</th><th class="n">States realigned / game</th></tr>
+      <tr><td>0 — current</td><td class="n">0.13</td><td class="n">0.2</td></tr>
+      <tr class="hi"><td>1</td><td class="n">1.44</td><td class="n">7.4</td></tr>
+    </table></div>
+    It is also the thematically right answer. The game already encodes a safe seat as an
+    uncontested race, and in reality a state has realigned exactly when the other party stops
+    fielding anybody. <strong>The walkover is the evidence.</strong> Shipped as the
+    <span class="mono">realigning</span> config, deliberately not applied to the baseline —
+    that is §10's call.
+  </div>
+</section>
+
+<section>
+  <h2>The five changes</h2>
+  <ol class="changes">
+    <li><h3>Decay is a pair with the push table <span class="chip s">applied, then beaten</span></h3>
+      <p><strong>At §10's printed push table of 0/1/2</strong>, annual decay removes 2 pips a
+      cycle against a maximum push of 2, so a party winning a state by twelve points every cycle
+      for a decade ends pinned at 2. §16 calls this the question that decides whether realignment
+      is possible at all and asks for simulation. It needs none — it is arithmetic, and it is now
+      a passing test. Biennial decay was applied on that reading.</p>
+      <p><strong>The conclusion was conditional on the push table, and the condition was not
+      stated the first time.</strong> Raise the table +2, to 2/3/4, and an annual decay has
+      something it can outrun — so §7's literal reading, annual bill and annual decay, beats the
+      shipped baseline on every measure taken:</p>
+      <div class="tw"><table>
+        <tr><th>Per game</th><th class="n">Baseline · biennial, 0/1/2</th><th class="n">as-written-plus · annual, 2/3/4</th></tr>
+        <tr><td>states realigned</td><td class="n">5.8</td><td class="n">13.8</td></tr>
+        <tr><td>states pinned at the ±8 cap</td><td class="n">3.5</td><td class="n">none</td></tr>
+        <tr class="hi"><td>bills passed</td><td class="n">3.1</td><td class="n">7.3</td></tr>
+      </table></div>
+      <p>Biennial decay was never the fix; it was a workaround for a push table too small to
+      outrun an annual −2, and it costs half the legislative layer and saturates the map. The 3d6
+      design does not limit any of this — the dice fix how <em>often</em> each push tier fires,
+      not what a tier is worth. Shipped as <span class="mono">as-written-plus.json</span>.</p>
+      <div class="meta">confidence: certain on the arithmetic · high on the replacement, which is a live predicate</div></li>
+    <li><h3>Cut district supply — one cause behind four failing metrics</h3>
+      <p>Contest rate is cards-per-player over eligible-races-per-player, and the design's own
+      numbers put it near 1:5. So 37% of race-slots are contested against a 60% target, a
+      player faces <strong>39 legal races per turn</strong> against a 4–25 band, realignment
+      barely occurs because uncontested races push nothing, and 4.4% of turns have no legal
+      move at all. Two-player is structurally broken at every setting tested.</p>
+      <div class="meta">confidence: high on mechanism</div></li>
+    <li><h3>A safe seat cannot exist — the pip scale has a ceiling</h3>
+      <p>Against 9,555 real House races, simulated margins are a unimodal blob: median 8 points
+      against a real 32.5, and safe seats are <strong>0.0% of simulated races against 37.5% of
+      real ones.</strong> A large realistic stack is +8 pips — 16 points — so a 40-point margin
+      needs +20 pips and the vocabulary cannot express it at any setting. Fixing the map does
+      not fix this; they are independent problems.</p>
+      <div class="meta">confidence: certain on the ceiling · open on the remedy</div></li>
+    <li><h3>The leader runs away, and the only brake is social</h3>
+      <p>Determination lands at 50% of the way through against a healthy 75–85%; the comeback
+      rate is 1%; the leader's margin over second place doubles across the second half; and
+      <strong>100% of player-scores never decrease.</strong> Every suspect §16 names was tested
+      by switching it off — hand size, endorsements, capture are all innocent. Of the three
+      brakes it names, the midterm penalty does not bind, recession hits the president's party
+      rather than the leader, and the third is players ganging up.</p>
+      <p><strong>The design's only effective brake is table politics, which this simulator
+      cannot test.</strong> Recommend a human playtest before adding any catch-up mechanic.</p>
+      <div class="meta">confidence: high on the runaway · the remedy is a table question</div></li>
+    <li><h3>SenateFlood is dominant, and the filibuster stalls the bill</h3>
+      <p><strong>Nothing is dominant any more.</strong> SenateFlood's 51.7% was an artefact of
+      the seat-order bug and now reads 31.7%; the leader is EconomyChicken at 37.8%, touching
+      the 40% line without crossing it. The Senate still pays more ways than anything else —
+      points, a six-year term, hand size, the midterm lean push from §10's priority, and
+      governor appointments as a fifth route in.</p>
+      <p><strong>For the bill, change nothing.</strong> The threshold sweep moved passage
+      63/16/0 across 50/60/67 — but holding the threshold at 60% and varying only who is at the
+      table moves it <strong>14% to 100%</strong>, a wider range than the sweep produced. The
+      16% figure is a property of the agent pool, and §12's intent — that the filibuster makes
+      cooperation structurally necessary — is working exactly as written. What the simulator
+      cannot supply is the cooperation.</p>
+      <div class="meta">confidence: high on the Senate · the bill needs a table, not a parameter</div></li>
+  </ol>
+</section>
+
+<section>
+  <h2 style="color:var(--good)">What already works</h2>
+  <p>Most of this report is problems, so the successes deserve naming. <strong>The resolution
+  machinery is sound; the problems are scale and structure.</strong></p>
+  <div class="tw"><table>
+    <tr><th>Claim</th><th class="n">Measured</th><th class="n">Target</th></tr>
+    <tr><td>Dice match the corrected odds table</td><td class="n">32.1% upsets</td><td class="n">34.6% predicted</td></tr>
+    <tr><td>The 1976 electoral college, replayed from a seeded map</td><td class="n">Carter 294</td><td class="n">297 real</td></tr>
+    <tr><td>District gating kills wide-and-empty</td><td class="n">0% win rate</td><td class="n">should be dead</td></tr>
+    <tr><td>Single-token economy holds</td><td class="n">151 peak</td><td class="n">&lt;200</td></tr>
+    <tr><td>Mental arithmetic really is mental</td><td class="n">2.43 modifiers</td><td class="n">&lt;7</td></tr>
+    <tr><td>Localism declines from pack rotation alone<br><span class="meta">mean printed <span class="mono">homeStateBonus</span>, all seven packs: 4.45 / 4.13 / 2.94 / 1.88 / 1.87 / 1.63 / 1.50</span></td><td class="n">4.45 → 1.50</td><td class="n">§5's claim</td></tr>
+  </table></div>
+  <p>Localism spans 1932 to 2024 across seven packs, with no rule involved — exactly what §5 says
+  should happen. And 1976 is the closest thing to an end-to-end validation available: nothing is
+  tuned, the board is seeded with the real pre-election lean, and §9's resolution runs exactly as
+  it would in a game. <strong>Three electoral votes.</strong> The per-state agreement is the
+  interesting part — 79.3% on states the board leans 3+ pips, 52.8% on states carrying no lean at
+  all. A model whose confidence matches its information, which is not a given.</p>
+  <p><strong>+1 incumbency is no longer on this list.</strong> It was, on a 93% figure that turned
+  out to be pooled across offices and compared against a House-only benchmark; measured on House
+  races alone it is 98.8% against a real 94.1%. See the corrections below.</p>
+</section>
+
+<section>
+  <h2 style="color:var(--good)">A robustness check on all of it</h2>
+  <p>Every headline number was re-measured across six agent pools, from four identical Randoms
+  to a mix of specialists, because one figure turned out to be an artefact of who was playing.</p>
+  <div class="tw"><table>
+    <tr><th>Metric</th><th class="n">Range across pools</th><th>Verdict</th></tr>
+    <tr class="hi"><td>median House margin</td><td class="n">8, 8, 8, 8, 8, 8 pts</td><td>invariant</td></tr>
+    <tr><td>uncontested share</td><td class="n">85–97%</td><td>robust</td></tr>
+    <tr><td>incumbent reelection</td><td class="n">91–97%</td><td>robust</td></tr>
+    <tr><td>contested race-slots</td><td class="n">21–42%</td><td>robust</td></tr>
+    <tr><td>states realigned per game</td><td class="n">0.00–0.33</td><td>robust</td></tr>
+    <tr><td>comeback rate</td><td class="n">0–2%</td><td>robust</td></tr>
+    <tr><td>determination point</td><td class="n">38–75%</td><td>agent-dependent</td></tr>
+  </table></div>
+  <p>The median margin is <em>identical</em> in all six, which is the strongest available
+  evidence that the scale ceiling is arithmetic rather than behavioural. Only the determination
+  point moves materially, and its top end is four Random agents — where nothing locks in because
+  nothing accumulates, not because the design brakes anything. Among competent pools it is
+  38–63%, all below the healthy band.</p>
+</section>
+
+<section>
+  <h2>The rules that measured dead</h2>
+  <p>Three coverage sweeps were run late and should have been run first: instrument every named
+  entry in §9's modifier stack, then the seven enumerated effect types, then §7's ten
+  year-sequence steps, and see which never appear. Each one turned up a rule that had never
+  fired — and a fourth thing measured dead that no sweep could have caught.</p>
+  <div class="tw"><table>
+    <tr><th>Mechanic</th><th class="n">Before</th><th class="n">After</th></tr>
+    <tr><td>§12's card counters — the bill's electoral consequence</td><td class="n">never recorded</td><td class="n">15.0 &amp; 14.2 / 1000 races</td></tr>
+    <tr><td>Printed card text on 346 candidates</td><td class="n">decorative</td><td class="n">fires in 4.12% of races</td></tr>
+    <tr class="hi"><td>The veto</td><td class="n">0.00 a game</td><td class="n">0.30 a game</td></tr>
+  </table></div>
+  <p><strong>The omnibill had no electoral consequence whatsoever.</strong> §12 says a vote places
+  a counter on the card and the accumulated counters are read off at resolution;
+  <span class="mono">reactionGood</span> was computed on every passing bill and discarded, and
+  <span class="mono">Declaration.crossBenched</span> was read by the modifier builder and never
+  set by anything. A player could vote for anything, forever, and never answer for it. Implemented
+  — and still unmeasurable, because across 120 games <em>zero</em> contested generals featured a
+  candidate carrying a bill record. On a 92%-walkover board two rare things almost never coincide.</p>
+  <p><strong>Every card's belief text was decoration.</strong> The brief asks what share of printed
+  abilities ever change an outcome; the honest answer was all of it. Hooks are now written for the
+  cases the design names by hand. The bug caught on the way in matters more than the feature: the
+  <span class="mono">conditional</span> handler checked state, round and office and
+  <strong>ignored its own <span class="mono">identity</span> condition</strong>, so an effect
+  written as "a bonus in Catholic districts" fired in <em>every</em> race — 61 times per 1000
+  before the fix, 9.75 after. Effects that ignore their own conditions are worse than no effects.</p>
+  <p><strong>The veto had never been exercised</strong>, because every agent's
+  <span class="mono">veto()</span> returned false. The brief lists it as a cut candidate on the
+  theory that it is only rational in split-government years, which may be rare. Implemented to
+  §12's stated case it fires 0.30 times a game, and split government is 23% of games.
+  <strong>The prior is right and the rule survives.</strong></p>
+  <p><strong>And one office measured dead without being unimplemented at all.</strong> Winners and
+  losers held governorships at 1.02× — exactly neutral — so it was written up as an office nobody
+  should plan around. That was measured against a field in which nobody sought the line the office
+  exists for. §11 says governors "carry incumbency into Senate and presidential runs"; an agent
+  built around that — take governorships, then run those same cards for Senate — changes the
+  picture completely.</p>
+  <div class="tw"><table>
+    <tr><th>Field</th><th class="n">Governor advantage</th><th class="n">Senate advantage</th></tr>
+    <tr><td>Lookahead + Greedy + HouseFarm + Random</td><td class="n">1.07×</td><td class="n">3.55×</td></tr>
+    <tr class="hi"><td><span class="mono">Launchpad</span> + Greedy + SenateFlood + Heterodox</td><td class="n">2.39×</td><td class="n">1.59×</td></tr>
+  </table></div>
+  <p>Same engine, same rules. The step-up converts a cheap office into an expensive one, and the
+  Senate's advantage falls correspondingly. <span class="mono">Launchpad</span> wins
+  <strong>68–73%</strong> of four-player games against a 25% fair share, and 26.7% of a six-way
+  round robin against stronger opposition — strong but not dominant, which is a healthy shape for
+  a strategic line. Odd-year governorships are not the source: KY, LA, MS, NJ and VA had never
+  had a race run at all, because <span class="mono">openRaces()</span> computed them and
+  <span class="mono">tick()</span> only held elections in even years — 1,039 governor races in even
+  years, <strong>0 in odd</strong> — and turning them on makes Launchpad win <em>less</em> (68.3%
+  against 72.8%). The step-up is the whole line.</p>
+  <div class="callout"><strong>A "dead" measurement is a claim about the agents, not about the
+  design.</strong> The governorship joins incumbency, the presidency, the veto, the bill counters
+  and the card text on the list of things that measured dead — with the difference that those five
+  were <em>unimplemented</em> and this one was merely <em>unplayed</em>. A simulator can only find
+  the strategies its agents already know.</div>
+  <div class="callout bad"><strong>And one sweep result was false.</strong> The same pass reported
+  the Fed firing 0.00 times a game. It fires in about five:
+  <span class="mono">interactiveTick</span> logged the Fed tightening and the headless
+  <span class="mono">tick</span> did not, so the sweep was reading an instrument only one of two
+  code paths wrote to. Trusted, it would have put a confident false claim that §13's entire Fed
+  mechanism was dead into the section whose whole purpose is finding dead rules. A coverage sweep
+  is only as good as the instrument it reads, and a log written by one code path and not its twin
+  is not an instrument.</div>
+</section>
+
+<section>
+  <h2>A caution about this report</h2>
+  <p>Eight of my own claims had to be corrected during the run, most of them because a
+  convenient proxy had been measured instead of the metric the brief specifies. <strong>Several
+  inverted the conclusion, not merely the number.</strong></p>
+  <div class="tw"><table>
+    <tr><th>Claimed</th><th>Actually</th><th>Cause</th></tr>
+    <tr><td>Turns are automatic (median 2)</td><td><strong>Analysis paralysis (39)</strong></td><td>counted declarations made, not legal moves available</td></tr>
+    <tr><td>Runaway acquitted</td><td><strong>Runaway is real</strong></td><td>per-game proxy, not a cross-game curve</td></tr>
+    <tr><td>Independents win 60%</td><td>39% contested-only</td><td>walkovers counted</td></tr>
+    <tr><td>25pp seat bias</td><td>1.7–4.1pp after three fixes</td><td>ties, refill order, and open-race order</td></tr>
+    <tr><td>The runaway is the deal</td><td>No mechanical brake exists</td><td>refuted by building the draft</td></tr>
+    <tr><td>+1 incumbency is calibrated</td><td><strong>It overshoots by 4.7 pts</strong></td><td>compared a pooled rate to a House benchmark</td></tr>
+    <tr><td>Governors do not matter</td><td><strong>2.39&times; once played for</strong></td><td>measured against agents that never tried</td></tr>
+    <tr><td>The filibuster stalls the bill</td><td>The table does</td><td>swept one variable, not two</td></tr>
+  </table></div>
+  <p>The brief's own instruction — <em>"assume the instrumentation is wrong before assuming the
+  design is right"</em> — was correct eight times out of eight. The corrections are kept visible in
+  <span class="mono">FINDINGS.md</span> rather than quietly overwritten.</p>
+</section>
+
+<section>
+  <h2>The findings are executable, and they expire</h2>
+  <p>Prose does not know when it has stopped being true — establishing that took eight
+  corrections. The load-bearing findings are now <strong>predicates</strong> under
+  <span class="mono">findings/</span>, one module each: the design-doc question it answers, a
+  <span class="mono">predicate()</span> that re-derives its claims from scratch with no cached
+  numbers, a <span class="mono">verdict()</span> evaluated fresh on those claims, and a prose
+  headline that is explicitly a stamped snapshot — true as of its
+  <span class="mono">stampedAt</span>, on the engine in <span class="mono">stampedOn</span>, and
+  no later. <span class="mono">node sim/findings.ts</span> re-runs every one and grades it.</p>
+  <div class="tw"><table>
+    <tr><th>Grade</th><th>Meaning</th></tr>
+    <tr><td><span class="chip f">HOLDS</span></td><td>the predicate still returns what the headline claims</td></tr>
+    <tr><td><span class="chip s">STALE</span></td><td>the engine moved. The headline is now historical and the predicate is the current truth — information, not an error</td></tr>
+    <tr><td><span class="chip o">BROKEN</span></td><td>the predicate could not run at all</td></tr>
+  </table></div>
+  <p><span class="mono">--restamp</span> rewrites the stamped values and the date in place, and is
+  the only sanctioned way for a headline to change. <strong>One rule beyond that:</strong> a
+  finding that recommends a shipped config must declare it and <em>check</em> it, reading the file
+  from disk as a zero-tolerance claim — <span class="mono">findings/well-formed.test.ts</span>
+  fails any finding that names a dependency it does not read back. So
+  <span class="mono">decay-push-tradeoff.ts</span> asserts that
+  <span class="mono">as-written-plus.json</span> still ships the 2/3/4 push table and the annual
+  decay it selects, and the config cannot outlive its evidence.</p>
+  <div class="callout win">This is what caught the incumbency error. Converting the prose to a
+  predicate forced it to name which population it measured, and naming it exposed that the prose
+  never had. <strong>A sentence can hold two incompatible numbers for six findings; a function
+  cannot.</strong></div>
+</section>
+
+<section>
+  <h2>All findings</h2>
+  <div class="tw"><table>
+    <tr><th>#</th><th>Finding</th><th>State</th></tr>
+    <tr><td class="n">F1</td><td>§3's odds table was wrong; +4 is 82%, not 75%</td><td><span class="chip f">fixed</span></td></tr>
+    <tr><td class="n">F2</td><td>Only biennial decay permits realignment — <em>at §10's printed 0/1/2 push table</em></td><td><span class="chip s">conditional</span></td></tr>
+    <tr><td class="n">F3</td><td>The presidency was never contested — 0% of 2,750 races</td><td><span class="chip f">fixed</span></td></tr>
+    <tr><td class="n">F4</td><td>Down-ballot play is solitaire in parallel</td><td><span class="chip o">open</span></td></tr>
+    <tr><td class="n">F5</td><td>An uncontested win pushes no lean</td><td><span class="chip s">→ F24</span></td></tr>
+    <tr><td class="n">F6</td><td>Contest rate is a ratio, at 1:5 by the design's own numbers</td><td><span class="chip o">open</span></td></tr>
+    <tr><td class="n">F7</td><td>Office hand bonuses cannot be per seat</td><td><span class="chip f">fixed</span></td></tr>
+    <tr><td class="n">F8</td><td>Safe seats are 0% simulated against 37.5% real</td><td><span class="chip o">open</span></td></tr>
+    <tr><td class="n">F9</td><td>Incumbency had never fired in any race</td><td><span class="chip f">fixed</span></td></tr>
+    <tr><td class="n">F10</td><td>District cards never applied to presidential races</td><td><span class="chip f">fixed</span></td></tr>
+    <tr><td class="n">F11</td><td>SenateFlood dominant once the presidency worked</td><td><span class="chip o">open</span></td></tr>
+    <tr><td class="n">F12</td><td>Impeachment unreachable, so the VP backstab is inert</td><td><span class="chip s">playtest</span></td></tr>
+    <tr><td class="n">F13</td><td>Endorsements, independents, appointments — all now fire</td><td><span class="chip f">fixed</span></td></tr>
+    <tr><td class="n">F14</td><td>The sweeps — and both headline readings were later overturned</td><td><span class="chip s">→ F27, F37</span></td></tr>
+    <tr><td class="n">F15</td><td>The game had no ending; deck-out is unreachable</td><td><span class="chip f">fixed</span></td></tr>
+    <tr><td class="n">F16</td><td>None of §14's victory conditions both ends and balances</td><td><span class="chip o">open</span></td></tr>
+    <tr><td class="n">F17</td><td>Harness CLI silently ran on one era pack</td><td><span class="chip f">fixed</span></td></tr>
+    <tr><td class="n">F18</td><td>The runaway is real; F14's acquittal was measured wrong</td><td><span class="chip o">open</span></td></tr>
+    <tr><td class="n">F19</td><td>Decision density is paralysis, not automation</td><td><span class="chip o">open</span></td></tr>
+    <tr><td class="n">F20</td><td>Token economy and dice both confirmed sound</td><td><span class="chip f">success</span></td></tr>
+    <tr><td class="n">F21</td><td>Districts are ballast, not presence</td><td><span class="chip o">open</span></td></tr>
+    <tr><td class="n">F22</td><td>No mechanical brake on a leader — only table politics</td><td><span class="chip s">playtest</span></td></tr>
+    <tr><td class="n">F23</td><td>The central thesis is not implemented</td><td><span class="chip o">open</span></td></tr>
+    <tr><td class="n">F24</td><td>Uncontested wins should push lean</td><td><span class="chip s">shipped as variant</span></td></tr>
+    <tr><td class="n">F25</td><td>Seat bias was open-race order read through capture</td><td><span class="chip f">fixed</span></td></tr>
+    <tr><td class="n">F26</td><td>SenateFlood's dominance was that same bug; nothing dominant now</td><td><span class="chip f">resolved</span></td></tr>
+    <tr><td class="n">F27</td><td>Bill passage is set by who is at the table, not the threshold</td><td><span class="chip s">playtest</span></td></tr>
+    <tr><td class="n">F28</td><td>Robustness audit across six agent pools</td><td><span class="chip f">holds</span></td></tr>
+    <tr><td class="n">F29</td><td>The 1976 electoral college reproduced within three votes</td><td><span class="chip f">success</span></td></tr>
+    <tr><td class="n">F30</td><td>The skill floor is punishing, and the default table made it worse</td><td><span class="chip f">fixed</span></td></tr>
+    <tr><td class="n">F31</td><td>What wins: the Senate and the presidency; House seats lose</td><td><span class="chip f">measured</span></td></tr>
+    <tr><td class="n">F32</td><td>The governorship is the one office nobody should plan around</td><td><span class="chip s">→ F36</span></td></tr>
+    <tr><td class="n">F33</td><td>§12's card counters were never recorded; the bill had no consequence</td><td><span class="chip f">fixed</span></td></tr>
+    <tr><td class="n">F34</td><td>Card text was decorative, and <span class="mono">conditional</span> ignored its own condition</td><td><span class="chip f">fixed</span></td></tr>
+    <tr><td class="n">F35</td><td>The veto had never been exercised; the sweep nearly called the Fed dead</td><td><span class="chip f">fixed</span></td></tr>
+    <tr><td class="n">F36</td><td>F32 was wrong — the governorship is strong, and no agent played it</td><td><span class="chip f">fixed</span></td></tr>
+    <tr><td class="n">F37</td><td>+1 incumbency is NOT calibrated; F14 compared the wrong populations</td><td><span class="chip o">open</span></td></tr>
+  </table></div>
+</section>
+
+<section>
+  <h2>What could not be tested</h2>
+  <p>Everything social, and the brief says so itself. Negotiation before the bill, VP
+  horse-trading, coalition-building for impeachment, table politics against a runaway leader.
+  Three findings turn on it directly:</p>
+  <p><strong>The bill's 16% pass rate</strong> is measured against agents that cannot negotiate,
+  and §12's whole design intent is that they would. <strong>Impeachment's 0% rate</strong> is
+  measured against agents that vote the party line, when removal is precisely a
+  cross-party coalition. And <strong>the runaway</strong> has no mechanical brake, so the
+  design is relying on players ganging up — which may well be enough, and cannot be shown here.</p>
+  <div class="callout bad"><strong>Do not lower the filibuster threshold, and do not add a
+  catch-up mechanic, on this evidence.</strong> Play them with people first.</div>
+</section>
+</main>
+
+<footer>
+  <p>Engine, simulator, card data and full working: <span class="mono">hf7y/american-cycle</span>,
+  pull request #7. The playable board is a separate artifact. Every figure here is reproducible
+  from its seed; the full 37 findings with methods are in <span class="mono">FINDINGS.md</span>,
+  and the seven-section brief response in
+  <span class="mono">reports/overnight-2026-08-31.md</span>.</p>
+</footer>

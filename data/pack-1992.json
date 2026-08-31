@@ -1,0 +1,1457 @@
+{
+  "name": "1992",
+  "era": 1992,
+  "note": "The parties begin to sort. Home-state bonuses shrink to 1-3, heterodox cards remain common, and the Voting Rights Act redraw puts a wave of majority-minority districts on the map -- often the only path into a Southern state for a Democrat.",
+  "cards": [
+    {
+      "kind": "candidate",
+      "id": "bill-clinton-1992",
+      "name": "Bill Clinton",
+      "party": "D",
+      "homeState": "AR",
+      "homeStateBonus": 2,
+      "identities": [
+        "evangelical",
+        "rural",
+        "ivy"
+      ],
+      "belief": "Tough on crime, ends welfare as we know it",
+      "era": 1992,
+      "effects": [
+        {
+          "type": "conditional",
+          "pips": 2,
+          "when": {
+            "identity": "suburban"
+          },
+          "note": "tough on crime: suburban bonus"
+        }
+      ]
+    },
+    {
+      "kind": "candidate",
+      "id": "al-gore-1992",
+      "name": "Al Gore",
+      "party": "D",
+      "homeState": "TN",
+      "homeStateBonus": 2,
+      "identities": [
+        "ivy",
+        "rural"
+      ],
+      "belief": "Environment before it polled",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "paul-tsongas-1992",
+      "name": "Paul Tsongas",
+      "party": "D",
+      "homeState": "MA",
+      "homeStateBonus": 2,
+      "identities": [
+        "catholic",
+        "business"
+      ],
+      "belief": "Pro-business Democrat",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "jerry-brown-1992",
+      "name": "Jerry Brown",
+      "party": "D",
+      "homeState": "CA",
+      "homeStateBonus": 1,
+      "identities": [
+        "catholic"
+      ],
+      "belief": "Flat tax insurgent",
+      "era": 1992,
+      "effects": [
+        {
+          "type": "extremist"
+        }
+      ]
+    },
+    {
+      "kind": "candidate",
+      "id": "tom-harkin-1992",
+      "name": "Tom Harkin",
+      "party": "D",
+      "homeState": "IA",
+      "homeStateBonus": 2,
+      "identities": [
+        "farm",
+        "rural",
+        "union"
+      ],
+      "belief": "Prairie populist",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "bob-kerrey-1992",
+      "name": "Bob Kerrey",
+      "party": "D",
+      "homeState": "NE",
+      "homeStateBonus": 2,
+      "identities": [
+        "veteran",
+        "rural"
+      ],
+      "belief": "Medal of Honor",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "mario-cuomo-1992",
+      "name": "Mario Cuomo",
+      "party": "D",
+      "homeState": "NY",
+      "homeStateBonus": 2,
+      "identities": [
+        "catholic",
+        "urban",
+        "ivy"
+      ],
+      "belief": "A tale of two cities",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "ann-richards-1992",
+      "name": "Ann Richards",
+      "party": "D",
+      "homeState": "TX",
+      "homeStateBonus": 2,
+      "identities": [
+        "rural"
+      ],
+      "belief": "Born with a silver foot",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "sam-nunn-1992",
+      "name": "Sam Nunn",
+      "party": "D",
+      "homeState": "GA",
+      "homeStateBonus": 2,
+      "identities": [
+        "veteran",
+        "rural"
+      ],
+      "belief": "Defense conservative",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "zell-miller-1992",
+      "name": "Zell Miller",
+      "party": "D",
+      "homeState": "GA",
+      "homeStateBonus": 2,
+      "identities": [
+        "rural",
+        "veteran",
+        "evangelical"
+      ],
+      "belief": "HOPE scholarships",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "barbara-boxer-1992",
+      "name": "Barbara Boxer",
+      "party": "D",
+      "homeState": "CA",
+      "homeStateBonus": 1,
+      "identities": [
+        "jewish",
+        "urban"
+      ],
+      "belief": "Year of the Woman",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "dianne-feinstein-1992",
+      "name": "Dianne Feinstein",
+      "party": "D",
+      "homeState": "CA",
+      "homeStateBonus": 1,
+      "identities": [
+        "jewish",
+        "urban",
+        "business"
+      ],
+      "belief": "Mayor during the assassinations",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "carol-moseley-braun-1992",
+      "name": "Carol Moseley Braun",
+      "party": "D",
+      "homeState": "IL",
+      "homeStateBonus": 1,
+      "identities": [
+        "black",
+        "urban"
+      ],
+      "belief": "First Black woman senator",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "paul-wellstone-1992",
+      "name": "Paul Wellstone",
+      "party": "D",
+      "homeState": "MN",
+      "homeStateBonus": 2,
+      "identities": [
+        "academic",
+        "union"
+      ],
+      "belief": "The democratic wing of the Democratic Party",
+      "era": 1992,
+      "effects": [
+        {
+          "type": "extremist"
+        }
+      ]
+    },
+    {
+      "kind": "candidate",
+      "id": "byron-dorgan-1992",
+      "name": "Byron Dorgan",
+      "party": "D",
+      "homeState": "ND",
+      "homeStateBonus": 3,
+      "identities": [
+        "farm",
+        "rural"
+      ],
+      "belief": "Against the trade deals",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "bob-casey-1992",
+      "name": "Bob Casey",
+      "party": "D",
+      "homeState": "PA",
+      "homeStateBonus": 2,
+      "identities": [
+        "catholic",
+        "union"
+      ],
+      "belief": "Pro-life Democrat",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "john-breaux-1992",
+      "name": "John Breaux",
+      "party": "D",
+      "homeState": "LA",
+      "homeStateBonus": 2,
+      "identities": [
+        "rural",
+        "catholic",
+        "business"
+      ],
+      "belief": "My vote cannot be bought but it can be rented",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "richard-shelby-1992",
+      "name": "Richard Shelby",
+      "party": "D",
+      "homeState": "AL",
+      "homeStateBonus": 2,
+      "identities": [
+        "rural",
+        "business"
+      ],
+      "belief": "Switched parties in 1994",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "charles-rangel-1992",
+      "name": "Charles Rangel",
+      "party": "D",
+      "homeState": "NY",
+      "homeStateBonus": 1,
+      "identities": [
+        "black",
+        "urban",
+        "veteran"
+      ],
+      "belief": "Harlem's chairman",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "john-lewis-1992",
+      "name": "John Lewis",
+      "party": "D",
+      "homeState": "GA",
+      "homeStateBonus": 1,
+      "identities": [
+        "black",
+        "urban",
+        "evangelical"
+      ],
+      "belief": "Good trouble",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "nancy-pelosi-1992",
+      "name": "Nancy Pelosi",
+      "party": "D",
+      "homeState": "CA",
+      "homeStateBonus": 1,
+      "identities": [
+        "catholic",
+        "urban"
+      ],
+      "belief": "San Francisco fundraiser",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "dick-gephardt-1992",
+      "name": "Dick Gephardt",
+      "party": "D",
+      "homeState": "MO",
+      "homeStateBonus": 2,
+      "identities": [
+        "union",
+        "catholic"
+      ],
+      "belief": "Fair trade",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "joseph-r-biden-1992",
+      "name": "Joseph R. Biden",
+      "party": "D",
+      "homeState": "DE",
+      "homeStateBonus": 2,
+      "identities": [
+        "catholic"
+      ],
+      "belief": "Crime bill author",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "patrick-moynihan-1992",
+      "name": "Patrick Moynihan",
+      "party": "D",
+      "homeState": "NY",
+      "homeStateBonus": 1,
+      "identities": [
+        "catholic",
+        "ivy",
+        "academic"
+      ],
+      "belief": "Defining deviancy down",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "bill-bradley-1992",
+      "name": "Bill Bradley",
+      "party": "D",
+      "homeState": "NJ",
+      "homeStateBonus": 2,
+      "identities": [
+        "ivy",
+        "business"
+      ],
+      "belief": "Tax reform and basketball",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "ron-wyden-1992",
+      "name": "Ron Wyden",
+      "party": "D",
+      "homeState": "OR",
+      "homeStateBonus": 2,
+      "identities": [
+        "jewish"
+      ],
+      "belief": "Health care markets",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "ben-nighthorse-campbell-1992",
+      "name": "Ben Nighthorse Campbell",
+      "party": "D",
+      "homeState": "CO",
+      "homeStateBonus": 2,
+      "identities": [
+        "veteran",
+        "rural"
+      ],
+      "belief": "Switched to the GOP in 1995",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "harris-wofford-1992",
+      "name": "Harris Wofford",
+      "party": "D",
+      "homeState": "PA",
+      "homeStateBonus": 2,
+      "identities": [
+        "academic",
+        "ivy"
+      ],
+      "belief": "Health care as a right",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "george-h-w-bush-1992",
+      "name": "George H. W. Bush",
+      "party": "R",
+      "homeState": "TX",
+      "homeStateBonus": 2,
+      "identities": [
+        "veteran",
+        "business",
+        "ivy"
+      ],
+      "belief": "Read my lips",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "pat-buchanan-1992",
+      "name": "Pat Buchanan",
+      "party": "R",
+      "homeState": "VA",
+      "homeStateBonus": 1,
+      "identities": [
+        "catholic",
+        "urban"
+      ],
+      "belief": "Culture war at the convention",
+      "era": 1992,
+      "effects": [
+        {
+          "type": "extremist"
+        }
+      ]
+    },
+    {
+      "kind": "candidate",
+      "id": "bob-dole-1992",
+      "name": "Bob Dole",
+      "party": "R",
+      "homeState": "KS",
+      "homeStateBonus": 2,
+      "identities": [
+        "veteran",
+        "rural",
+        "farm"
+      ],
+      "belief": "The deficit hawk",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "newt-gingrich-1992",
+      "name": "Newt Gingrich",
+      "party": "R",
+      "homeState": "GA",
+      "homeStateBonus": 2,
+      "identities": [
+        "academic",
+        "business"
+      ],
+      "belief": "Contract with America",
+      "era": 1992,
+      "effects": [
+        {
+          "type": "extremist"
+        }
+      ]
+    },
+    {
+      "kind": "candidate",
+      "id": "phil-gramm-1992",
+      "name": "Phil Gramm",
+      "party": "R",
+      "homeState": "TX",
+      "homeStateBonus": 2,
+      "identities": [
+        "academic",
+        "business"
+      ],
+      "belief": "Gramm-Rudman",
+      "era": 1992,
+      "effects": [
+        {
+          "type": "extremist"
+        }
+      ]
+    },
+    {
+      "kind": "candidate",
+      "id": "jack-kemp-1992",
+      "name": "Jack Kemp",
+      "party": "R",
+      "homeState": "NY",
+      "homeStateBonus": 1,
+      "identities": [
+        "veteran",
+        "urban"
+      ],
+      "belief": "Bleeding-heart conservative",
+      "era": 1992,
+      "effects": [
+        {
+          "type": "conditional",
+          "pips": 2,
+          "when": {
+            "identity": "urban"
+          },
+          "note": "bleeding-heart conservative: urban bonus"
+        }
+      ]
+    },
+    {
+      "kind": "candidate",
+      "id": "arlen-specter-1992",
+      "name": "Arlen Specter",
+      "party": "R",
+      "homeState": "PA",
+      "homeStateBonus": 2,
+      "identities": [
+        "jewish",
+        "urban"
+      ],
+      "belief": "Single bullet, and later a switch",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "john-mccain-1992",
+      "name": "John McCain",
+      "party": "R",
+      "homeState": "AZ",
+      "homeStateBonus": 2,
+      "identities": [
+        "veteran",
+        "business"
+      ],
+      "belief": "Keating Five survivor",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "alfonse-damato-1992",
+      "name": "Alfonse D'Amato",
+      "party": "R",
+      "homeState": "NY",
+      "homeStateBonus": 1,
+      "identities": [
+        "catholic",
+        "urban"
+      ],
+      "belief": "Senator Pothole",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "orrin-hatch-1992",
+      "name": "Orrin Hatch",
+      "party": "R",
+      "homeState": "UT",
+      "homeStateBonus": 2,
+      "identities": [
+        "evangelical",
+        "business"
+      ],
+      "belief": "Worked with Kennedy",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "nancy-kassebaum-1992",
+      "name": "Nancy Kassebaum",
+      "party": "R",
+      "homeState": "KS",
+      "homeStateBonus": 2,
+      "identities": [
+        "rural",
+        "farm"
+      ],
+      "belief": "Landon's daughter",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "christine-todd-whitman-1992",
+      "name": "Christine Todd Whitman",
+      "party": "R",
+      "homeState": "NJ",
+      "homeStateBonus": 2,
+      "identities": [
+        "business",
+        "ivy"
+      ],
+      "belief": "Cut taxes thirty percent",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "william-weld-1992",
+      "name": "William Weld",
+      "party": "R",
+      "homeState": "MA",
+      "homeStateBonus": 2,
+      "identities": [
+        "ivy",
+        "business"
+      ],
+      "belief": "Fiscally conservative, socially liberal",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "pete-wilson-1992",
+      "name": "Pete Wilson",
+      "party": "R",
+      "homeState": "CA",
+      "homeStateBonus": 1,
+      "identities": [
+        "veteran",
+        "business"
+      ],
+      "belief": "Proposition 187",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "richard-lugar-1992",
+      "name": "Richard Lugar",
+      "party": "R",
+      "homeState": "IN",
+      "homeStateBonus": 2,
+      "identities": [
+        "business",
+        "ivy"
+      ],
+      "belief": "Nunn-Lugar",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "alan-simpson-1992",
+      "name": "Alan Simpson",
+      "party": "R",
+      "homeState": "WY",
+      "homeStateBonus": 3,
+      "identities": [
+        "rural",
+        "veteran"
+      ],
+      "belief": "Wyoming humor",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "trent-lott-1992",
+      "name": "Trent Lott",
+      "party": "R",
+      "homeState": "MS",
+      "homeStateBonus": 2,
+      "identities": [
+        "rural",
+        "evangelical"
+      ],
+      "belief": "The whip",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "jesse-helms-1992",
+      "name": "Jesse Helms",
+      "party": "R",
+      "homeState": "NC",
+      "homeStateBonus": 3,
+      "identities": [
+        "evangelical",
+        "rural"
+      ],
+      "belief": "Senator No",
+      "era": 1992,
+      "effects": [
+        {
+          "type": "extremist"
+        }
+      ]
+    },
+    {
+      "kind": "candidate",
+      "id": "strom-thurmond-1992",
+      "name": "Strom Thurmond",
+      "party": "R",
+      "homeState": "SC",
+      "homeStateBonus": 3,
+      "identities": [
+        "rural",
+        "veteran",
+        "evangelical"
+      ],
+      "belief": "Still there",
+      "era": 1992,
+      "effects": [
+        {
+          "type": "extremist"
+        }
+      ]
+    },
+    {
+      "kind": "candidate",
+      "id": "kay-bailey-hutchison-1992",
+      "name": "Kay Bailey Hutchison",
+      "party": "R",
+      "homeState": "TX",
+      "homeStateBonus": 2,
+      "identities": [
+        "business"
+      ],
+      "belief": "Texas treasurer",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "john-chafee-1992",
+      "name": "John Chafee",
+      "party": "R",
+      "homeState": "RI",
+      "homeStateBonus": 2,
+      "identities": [
+        "ivy",
+        "veteran"
+      ],
+      "belief": "Environmental Republican",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "james-jeffords-1992",
+      "name": "James Jeffords",
+      "party": "R",
+      "homeState": "VT",
+      "homeStateBonus": 2,
+      "identities": [
+        "rural",
+        "ivy"
+      ],
+      "belief": "Left the party in 2001",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "olympia-snowe-1992",
+      "name": "Olympia Snowe",
+      "party": "R",
+      "homeState": "ME",
+      "homeStateBonus": 2,
+      "identities": [
+        "business"
+      ],
+      "belief": "Centrist dealmaker",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "tommy-thompson-1992",
+      "name": "Tommy Thompson",
+      "party": "R",
+      "homeState": "WI",
+      "homeStateBonus": 2,
+      "identities": [
+        "rural",
+        "business"
+      ],
+      "belief": "Welfare reform laboratory",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "john-engler-1992",
+      "name": "John Engler",
+      "party": "R",
+      "homeState": "MI",
+      "homeStateBonus": 2,
+      "identities": [
+        "rural",
+        "business"
+      ],
+      "belief": "Cut the income tax",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "george-voinovich-1992",
+      "name": "George Voinovich",
+      "party": "R",
+      "homeState": "OH",
+      "homeStateBonus": 2,
+      "identities": [
+        "catholic",
+        "urban"
+      ],
+      "belief": "Mayor of Cleveland",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "district",
+      "id": "NY-12-1992",
+      "state": "NY",
+      "number": 12,
+      "era": 1992,
+      "demographics": [
+        "urban",
+        "hispanic"
+      ],
+      "synergy": 2,
+      "note": "Brooklyn, redrawn"
+    },
+    {
+      "kind": "district",
+      "id": "NY-15-1992",
+      "state": "NY",
+      "number": 15,
+      "era": 1992,
+      "demographics": [
+        "black",
+        "urban"
+      ],
+      "synergy": 2,
+      "note": "Harlem"
+    },
+    {
+      "kind": "district",
+      "id": "CA-8-1992",
+      "state": "CA",
+      "number": 8,
+      "era": 1992,
+      "demographics": [
+        "urban",
+        "catholic"
+      ],
+      "synergy": 2,
+      "note": "San Francisco"
+    },
+    {
+      "kind": "district",
+      "id": "CA-33-1992",
+      "state": "CA",
+      "number": 33,
+      "era": 1992,
+      "demographics": [
+        "hispanic",
+        "urban"
+      ],
+      "synergy": 3,
+      "note": "East LA, majority-minority"
+    },
+    {
+      "kind": "district",
+      "id": "CA-22-1992",
+      "state": "CA",
+      "number": 22,
+      "era": 1992,
+      "demographics": [
+        "suburban",
+        "business"
+      ],
+      "synergy": 1,
+      "note": "Central Coast"
+    },
+    {
+      "kind": "district",
+      "id": "TX-30-1992",
+      "state": "TX",
+      "number": 30,
+      "era": 1992,
+      "demographics": [
+        "black",
+        "urban"
+      ],
+      "synergy": 3,
+      "note": "Dallas, new majority-minority"
+    },
+    {
+      "kind": "district",
+      "id": "TX-18-1992",
+      "state": "TX",
+      "number": 18,
+      "era": 1992,
+      "demographics": [
+        "black",
+        "urban"
+      ],
+      "synergy": 2,
+      "note": "Houston"
+    },
+    {
+      "kind": "district",
+      "id": "TX-6-1992",
+      "state": "TX",
+      "number": 6,
+      "era": 1992,
+      "demographics": [
+        "suburban",
+        "evangelical"
+      ],
+      "synergy": 1,
+      "note": "Fort Worth suburbs"
+    },
+    {
+      "kind": "district",
+      "id": "FL-23-1992",
+      "state": "FL",
+      "number": 23,
+      "era": 1992,
+      "demographics": [
+        "black",
+        "urban"
+      ],
+      "synergy": 3,
+      "note": "Drawn under the Voting Rights Act"
+    },
+    {
+      "kind": "district",
+      "id": "FL-21-1992",
+      "state": "FL",
+      "number": 21,
+      "era": 1992,
+      "demographics": [
+        "cuban",
+        "suburban"
+      ],
+      "synergy": 3,
+      "note": "Miami-Dade"
+    },
+    {
+      "kind": "district",
+      "id": "GA-11-1992",
+      "state": "GA",
+      "number": 11,
+      "era": 1992,
+      "demographics": [
+        "black",
+        "rural"
+      ],
+      "synergy": 3,
+      "note": "The first majority-Black district since Reconstruction"
+    },
+    {
+      "kind": "district",
+      "id": "GA-6-1992",
+      "state": "GA",
+      "number": 6,
+      "era": 1992,
+      "demographics": [
+        "suburban",
+        "business",
+        "evangelical"
+      ],
+      "synergy": 2,
+      "note": "Gingrich's Cobb County"
+    },
+    {
+      "kind": "district",
+      "id": "NC-12-1992",
+      "state": "NC",
+      "number": 12,
+      "era": 1992,
+      "demographics": [
+        "black",
+        "urban"
+      ],
+      "synergy": 3,
+      "note": "I-85 district"
+    },
+    {
+      "kind": "district",
+      "id": "IL-4-1992",
+      "state": "IL",
+      "number": 4,
+      "era": 1992,
+      "demographics": [
+        "hispanic",
+        "urban"
+      ],
+      "synergy": 3,
+      "note": "Earmuff district"
+    },
+    {
+      "kind": "district",
+      "id": "IL-1-1992",
+      "state": "IL",
+      "number": 1,
+      "era": 1992,
+      "demographics": [
+        "black",
+        "urban"
+      ],
+      "synergy": 2,
+      "note": "South Side"
+    },
+    {
+      "kind": "district",
+      "id": "MI-13-1992",
+      "state": "MI",
+      "number": 13,
+      "era": 1992,
+      "demographics": [
+        "black",
+        "urban",
+        "union"
+      ],
+      "synergy": 2,
+      "note": "Detroit"
+    },
+    {
+      "kind": "district",
+      "id": "OH-11-1992",
+      "state": "OH",
+      "number": 11,
+      "era": 1992,
+      "demographics": [
+        "black",
+        "urban",
+        "union"
+      ],
+      "synergy": 2,
+      "note": "Cleveland"
+    },
+    {
+      "kind": "district",
+      "id": "PA-2-1992",
+      "state": "PA",
+      "number": 2,
+      "era": 1992,
+      "demographics": [
+        "black",
+        "urban"
+      ],
+      "synergy": 2,
+      "note": "West Philadelphia"
+    },
+    {
+      "kind": "district",
+      "id": "PA-12-1992",
+      "state": "PA",
+      "number": 12,
+      "era": 1992,
+      "demographics": [
+        "union",
+        "rural",
+        "catholic"
+      ],
+      "synergy": 2,
+      "note": "Murtha's district"
+    },
+    {
+      "kind": "district",
+      "id": "AL-7-1992",
+      "state": "AL",
+      "number": 7,
+      "era": 1992,
+      "demographics": [
+        "black",
+        "rural"
+      ],
+      "synergy": 3,
+      "note": "Black Belt"
+    },
+    {
+      "kind": "district",
+      "id": "MS-2-1992",
+      "state": "MS",
+      "number": 2,
+      "era": 1992,
+      "demographics": [
+        "black",
+        "rural"
+      ],
+      "synergy": 3,
+      "note": "Delta"
+    },
+    {
+      "kind": "district",
+      "id": "LA-2-1992",
+      "state": "LA",
+      "number": 2,
+      "era": 1992,
+      "demographics": [
+        "black",
+        "urban",
+        "catholic"
+      ],
+      "synergy": 2,
+      "note": "New Orleans"
+    },
+    {
+      "kind": "district",
+      "id": "SC-6-1992",
+      "state": "SC",
+      "number": 6,
+      "era": 1992,
+      "demographics": [
+        "black",
+        "rural"
+      ],
+      "synergy": 3,
+      "note": "Lowcountry"
+    },
+    {
+      "kind": "district",
+      "id": "VA-3-1992",
+      "state": "VA",
+      "number": 3,
+      "era": 1992,
+      "demographics": [
+        "black",
+        "urban"
+      ],
+      "synergy": 3,
+      "note": "Richmond to Norfolk"
+    },
+    {
+      "kind": "district",
+      "id": "MD-7-1992",
+      "state": "MD",
+      "number": 7,
+      "era": 1992,
+      "demographics": [
+        "black",
+        "urban"
+      ],
+      "synergy": 2,
+      "note": "Baltimore"
+    },
+    {
+      "kind": "district",
+      "id": "TN-9-1992",
+      "state": "TN",
+      "number": 9,
+      "era": 1992,
+      "demographics": [
+        "black",
+        "urban"
+      ],
+      "synergy": 2,
+      "note": "Memphis"
+    },
+    {
+      "kind": "district",
+      "id": "MO-5-1992",
+      "state": "MO",
+      "number": 5,
+      "era": 1992,
+      "demographics": [
+        "black",
+        "urban",
+        "union"
+      ],
+      "synergy": 2,
+      "note": "Kansas City"
+    },
+    {
+      "kind": "district",
+      "id": "WA-7-1992",
+      "state": "WA",
+      "number": 7,
+      "era": 1992,
+      "demographics": [
+        "urban",
+        "academic"
+      ],
+      "synergy": 2,
+      "note": "Seattle"
+    },
+    {
+      "kind": "district",
+      "id": "OR-3-1992",
+      "state": "OR",
+      "number": 3,
+      "era": 1992,
+      "demographics": [
+        "urban",
+        "academic"
+      ],
+      "synergy": 2,
+      "note": "Portland"
+    },
+    {
+      "kind": "district",
+      "id": "CO-1-1992",
+      "state": "CO",
+      "number": 1,
+      "era": 1992,
+      "demographics": [
+        "urban",
+        "hispanic"
+      ],
+      "synergy": 2,
+      "note": "Denver"
+    },
+    {
+      "kind": "district",
+      "id": "AZ-2-1992",
+      "state": "AZ",
+      "number": 2,
+      "era": 1992,
+      "demographics": [
+        "hispanic",
+        "rural"
+      ],
+      "synergy": 2,
+      "note": "South Tucson"
+    },
+    {
+      "kind": "district",
+      "id": "NM-3-1992",
+      "state": "NM",
+      "number": 3,
+      "era": 1992,
+      "demographics": [
+        "hispanic",
+        "rural"
+      ],
+      "synergy": 2,
+      "note": "Northern New Mexico"
+    },
+    {
+      "kind": "district",
+      "id": "MN-5-1992",
+      "state": "MN",
+      "number": 5,
+      "era": 1992,
+      "demographics": [
+        "urban",
+        "union"
+      ],
+      "synergy": 2,
+      "note": "Minneapolis"
+    },
+    {
+      "kind": "district",
+      "id": "WI-5-1992",
+      "state": "WI",
+      "number": 5,
+      "era": 1992,
+      "demographics": [
+        "urban",
+        "union",
+        "catholic"
+      ],
+      "synergy": 2,
+      "note": "Milwaukee"
+    },
+    {
+      "kind": "district",
+      "id": "IA-5-1992",
+      "state": "IA",
+      "number": 5,
+      "era": 1992,
+      "demographics": [
+        "farm",
+        "rural"
+      ],
+      "synergy": 2,
+      "note": "Western Iowa"
+    },
+    {
+      "kind": "district",
+      "id": "KS-1-1992",
+      "state": "KS",
+      "number": 1,
+      "era": 1992,
+      "demographics": [
+        "farm",
+        "rural"
+      ],
+      "synergy": 2,
+      "note": "Big First"
+    },
+    {
+      "kind": "district",
+      "id": "NE-3-1992",
+      "state": "NE",
+      "number": 3,
+      "era": 1992,
+      "demographics": [
+        "farm",
+        "rural"
+      ],
+      "synergy": 2,
+      "note": "The Third"
+    },
+    {
+      "kind": "district",
+      "id": "KY-5-1992",
+      "state": "KY",
+      "number": 5,
+      "era": 1992,
+      "demographics": [
+        "rural",
+        "evangelical"
+      ],
+      "synergy": 2,
+      "note": "Eastern Kentucky"
+    },
+    {
+      "kind": "district",
+      "id": "WV-3-1992",
+      "state": "WV",
+      "number": 3,
+      "era": 1992,
+      "demographics": [
+        "union",
+        "rural"
+      ],
+      "synergy": 2,
+      "note": "Coalfields"
+    },
+    {
+      "kind": "district",
+      "id": "NJ-10-1992",
+      "state": "NJ",
+      "number": 10,
+      "era": 1992,
+      "demographics": [
+        "black",
+        "urban"
+      ],
+      "synergy": 2,
+      "note": "Newark"
+    },
+    {
+      "kind": "district",
+      "id": "MA-8-1992",
+      "state": "MA",
+      "number": 8,
+      "era": 1992,
+      "demographics": [
+        "urban",
+        "catholic",
+        "union"
+      ],
+      "synergy": 2,
+      "note": "Boston"
+    },
+    {
+      "kind": "district",
+      "id": "CT-1-1992",
+      "state": "CT",
+      "number": 1,
+      "era": 1992,
+      "demographics": [
+        "urban",
+        "catholic"
+      ],
+      "synergy": 1,
+      "note": "Hartford"
+    },
+    {
+      "kind": "candidate",
+      "id": "lowell-weicker-1992",
+      "name": "Lowell Weicker",
+      "party": "I",
+      "homeState": "CT",
+      "homeStateBonus": 3,
+      "identities": [
+        "ivy",
+        "business"
+      ],
+      "belief": "Won the governorship as A Connecticut Party",
+      "era": 1992,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "ross-perot-1992",
+      "name": "Ross Perot",
+      "party": "I",
+      "homeState": "TX",
+      "homeStateBonus": 2,
+      "identities": [
+        "business",
+        "veteran"
+      ],
+      "belief": "Nineteen percent and no electoral votes",
+      "era": 1992,
+      "effects": [
+        {
+          "type": "extremist"
+        }
+      ]
+    }
+  ]
+}
