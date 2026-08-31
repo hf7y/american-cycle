@@ -40,11 +40,27 @@ The mechanism the design chose is sound; it is calibrated to roughly zero net
 drift. Three measured facts hold it there — 93% of races are uncontested and so
 push nothing, contested margins run a median of 8 points against a decay of 1
 pip a cycle, and the winning party in a state alternates too often for pushes to
-share a sign. Fixing the contest rate (change 2 below) is the most promising
-single lever, because it is upstream of all three.
+share a sign.
 
-Everything else in this report is detail next to this. Full working in
-`FINDINGS.md` F23.
+**And there is a one-line fix, to a rule the design never decided.** §10 scales
+a push by how decisively a race was won and never says what an *uncontested*
+win does. Reading a walkover as worth one pip takes the map from a driftless
+walk to a genuinely realigning board:
+
+| walkover pushes | mean \|lean\| | states at 4+ per game |
+|---|---|---|
+| 0 (current) | 0.13 | 0.2 |
+| **1** | **1.44** | **7.4** |
+
+It is also the thematically right answer. The game already encodes a safe seat
+as an uncontested race rather than a lopsided one, and in reality a state is
+understood to have realigned exactly when the other party stops fielding
+anybody. The walkover *is* the evidence, and scoring it at zero throws away the
+game's own best signal about which states have moved.
+
+Shipped as the `realigning` config so it can be played against `tuned` rather
+than argued about. **Not applied to the baseline** — it is §10's decision to
+make. Full working in `FINDINGS.md` F23 and F24.
 
 ---
 

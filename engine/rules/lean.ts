@@ -13,6 +13,11 @@ export interface LeanConfig {
   governorPushes: 'never' | 'with-lean';
   honeymoonCounter: number;
   maxLean: number;
+  /** §10 scales the push "by how decisively the race was won" and never says
+   *  what a walkover does -- a race nobody contested has no margin at all.
+   *  0 reads it as "a race nobody tested tells you nothing"; 1 reads running
+   *  unopposed as itself decisive. The gap is real either way (F5). */
+  uncontestedPush?: number;
 }
 
 export function sign(p: Party): number { return p === 'R' ? 1 : p === 'D' ? -1 : 0; }

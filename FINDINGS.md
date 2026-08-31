@@ -863,3 +863,47 @@ contests cannot be evidence about anything.
 **This is the finding to act on first.** Not because it is the worst number in
 the report, but because it is the only one that measures whether the game does
 what it is for.
+
+---
+
+## F24. One undecided rule is the difference. Uncontested wins should push lean.
+
+F23 showed the map is a driftless random walk and the central thesis
+unimplemented. Sweeping the levers finds the fix, and it is **not** a
+recalibration of anything the design decided — it is an answer to something the
+design never decided at all.
+
+§10 scales a lean push "by how decisively the race was won" and **never says
+what an uncontested win does**. A walkover has no margin. F5 flagged the gap;
+this is its resolution.
+
+Played 1932→1992, 40 games, seven era packs:
+
+| setting | mean \|lean\| | states at 4+ per game | South mean \|lean\| |
+|---|---|---|---|
+| baseline — walkover pushes 0 | 0.13 | 0.2 | 0.21 |
+| **walkover pushes 1** | **1.44** | **7.4** | **2.69** |
+| bigger pushes for blowouts (0/2/3) | 0.31 | 1.3 | 0.42 |
+| both together | 3.62 | 21.9 | 5.53 |
+
+**One pip for a walkover turns a dead map into a realigning one.** Bigger
+blowout pushes barely help by comparison — the problem was never the size of
+the pushes that happened, it was that 93% of races pushed nothing at all.
+Doing both is too much: 22 states a game reaching a durable lean is a map that
+realigns constantly, which is its own kind of wrong.
+
+**And it is the thematically right answer**, which is the part worth arguing.
+The game already encodes a safe seat as an *uncontested race* rather than a
+lopsided one (F8). In reality a state is understood to have realigned precisely
+when the other party stops being able to field anybody — the walkover *is* the
+evidence. Reading it as worth nothing throws away the game's own best signal
+about which states have moved.
+
+Shipped as `realigning.json` so the difference is playable side by side with
+`tuned`. **Not applied to the baseline**: this is a design decision, it is
+§10's to make, and the sweep gives the shape rather than the ruling.
+
+*A discarded row.* The sweep also tried "decay once per presidential cycle",
+which returned mean |lean| 0.02. That number is void — `quadrennial` is not a
+value `decay()` recognises, so it fell through to annual decay, which F2 already
+showed pins the map. Reported as discarded rather than as a finding.

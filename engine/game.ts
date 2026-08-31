@@ -670,7 +670,8 @@ export class Game {
       const st = r.ev.state;
       if (st === 'US') continue;
       if (!byState.has(st)) byState.set(st, []);
-      byState.get(st)!.push({ office: r.ev.office, party: r.won.card.party, margin: r.ev.margin });
+      byState.get(st)!.push({ office: r.ev.office, party: r.won.card.party,
+        margin: r.ev.uncontested ? (this.cfg.lean.uncontestedPush ?? 0) * 2 : r.ev.margin });
     }
     for (const [st, races] of byState) {
       const top = lean.nationalizedRace(races);
