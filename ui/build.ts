@@ -54,7 +54,10 @@ const engine = ORDER.map((f) => `// ---- ${f} ----\n${flatten(read(f))}`).join('
 
 const packs: Record<string, unknown> = {};
 for (const f of readdirSync(new URL('data/', root))) {
-  if (f.endsWith('.json')) packs[f.replace(/^pack-|\.json$/g, '')] = JSON.parse(read(`data/${f}`));
+  // pack-*.json ONLY. Globbing every .json here swallowed portraits.json as if
+  // it were a pack and inlined half a megabyte of faces a second time.
+  if (!f.startsWith('pack-') || !f.endsWith('.json')) continue;
+  packs[f.replace(/^pack-|\.json$/g, '')] = JSON.parse(read(`data/${f}`));
 }
 let portraits = '{}';
 try { portraits = read('data/portraits.json'); } catch { /* portraits are optional */ }
