@@ -5,11 +5,12 @@ The headless generator tests exercise the engine; this exercises the page --
 event wiring, modal flow, rendering. A console error here is a bug a player
 would hit on the first click.
 """
-import pathlib, sys
+import os, pathlib, sys
 from playwright.sync_api import sync_playwright
 
 HTML = pathlib.Path(__file__).resolve().parent.parent / "ui" / "index.html"
-SHOT = pathlib.Path("/tmp/claude-1000/-home-zach-Documents-Projects-realisateur/3d386c7e-5690-4b17-b66e-d3f9663ff34a/scratchpad")
+SHOT = pathlib.Path(os.environ.get("SHOT_DIR", "/tmp/american-cycle-shots"))
+SHOT.mkdir(parents=True, exist_ok=True)
 errors, logs = [], []
 
 with sync_playwright() as pw:

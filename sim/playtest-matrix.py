@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Exercise the paths one playthrough misses: both themes, both widths, every
 rule set, every start era. Each is a code path nobody has run."""
-import pathlib, sys, json
+import os, pathlib, sys, json
 from playwright.sync_api import sync_playwright
 
 HTML = pathlib.Path(__file__).resolve().parent.parent / "ui" / "index.html"
-SHOT = pathlib.Path("/tmp/claude-1000/-home-zach-Documents-Projects-realisateur/3d386c7e-5690-4b17-b66e-d3f9663ff34a/scratchpad")
+SHOT = pathlib.Path(os.environ.get("SHOT_DIR", "/tmp/american-cycle-shots"))
+SHOT.mkdir(parents=True, exist_ok=True)
 fails = []
 
 def check(pg, label):
