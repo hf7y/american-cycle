@@ -21,8 +21,36 @@ data), and the SIM-BRIEF report.
 - `sim/` — 11 agents, harness, all ten sweeps, round robin, feel metrics,
   browser playtests.
 - `ui/` — one self-contained HTML file, no build step, no network.
-- `FINDINGS.md` — 28 findings. `reports/` — the seven-section brief response
-  and the published page.
+- `FINDINGS.md` — 37 findings, prose. `findings/` — nine of them as executable
+  predicates. `reports/` — the seven-section brief response and the published
+  page.
+
+## The rule that governs this repo's prose
+
+**A headline is a stamped snapshot. The predicate is the value.** Every prose
+claim that a re-run could invalidate lives in `findings/` as a module that
+re-derives it, and grades itself HOLDS / STALE / BROKEN against the stamp. A
+headline is allowed to go stale — it is *not* allowed to go stale silently.
+
+Two obligations fall out, and both are enforced by a test rather than by
+discipline:
+
+- **A finding declares what its conclusion rests on** (`dependsOn`).
+- **Declaring a config creates an obligation to check it.** If a finding
+  recommends a shipped setting, it must read that setting back off disk as a
+  zero-tolerance claim. A recommendation nobody re-checks is how a config and
+  the reason for it drift apart.
+
+`findings/well-formed.test.ts` rejects malformed findings — a missing question,
+a headline too short to be a claim, an unparseable stamp, a non-finite measured
+value, or a declared config with no claim checking it.
+
+## The board ships §7's literal reading
+
+`as-written-plus.json` — annual decay, annual bill, and the push table at
+2/3/4 — is the default. The literal text of §7 does work; it needed one config
+change, not a rules change. Under it 13.8 states realign per game. Under the
+old default the end screen read *"no state moved four pips or more."*
 
 ## Open — all four are design decisions, none is a defect
 
@@ -35,6 +63,14 @@ data), and the SIM-BRIEF report.
 
 Each carries the measurement, both readings, and a `DEFAULT-AFTER`. Three ship
 a playable variant so the choice can be felt rather than argued.
+
+## Superseded — do not cite the earlier number
+
+- **F32 → F36.** The governorship is strong. F32 called it weak because no
+  agent was using it.
+- **F14 → F37.** +1 incumbency is *not* calibrated. F14 compared a figure
+  pooled across offices to a House-only benchmark. Corrected for walkovers, +1
+  is too weak, not too strong.
 
 ## Needs a human table, not a parameter
 
@@ -53,12 +89,15 @@ Three findings turn on the social layer and SIM-BRIEF says so itself:
 - **Measure what SIM-BRIEF specifies, not a convenient proxy.** Six corrections
   came from this and two inverted a conclusion. Decision density is legal moves
   AVAILABLE. Determination is a cross-game curve. Comeback means last at halfway.
+- **Name the population before quoting a rate.** F37's error was arithmetically
+  fine and compared the wrong two things.
 - **Sweep more than one variable.** The filibuster claim was right about the
   threshold and wrong about the cause, because the agent pool was held fixed.
 - **A balance number is only valid against the engine that produced it.** Three
   round robins here are void; the report shows them to make that visible.
 - **A rule firing at 0% is usually unimplemented, not dead.** Five mechanics
-  looked dead and every one was a missing clause upstream.
+  looked dead and every one was a missing clause upstream. One nearly reported
+  a false death because the two tick paths logged differently.
 - **Report contested-only on a walkover board.** At 92% uncontested, walkovers
   dominate any raw win rate.
 - Node strip-only mode bans parameter properties and `enum`. Fractional
