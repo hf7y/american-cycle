@@ -43,7 +43,16 @@ export interface Config {
            *  the three stacking feedback loops. Hand size is cleared (F18);
            *  this switches the other two off so each can be isolated. Not a
            *  rules option -- both default on. */
-          captureEnabled?: boolean };
+          captureEnabled?: boolean;
+          /** §7 puts every election in an even year, but §2 asks the board to
+           *  carry a real per-state gubernatorial table -- and KY, LA, MS, NJ
+           *  and VA elect in odd years. As written those races are computed and
+           *  never run: 1,039 governor races resolved in even years and 0 in
+           *  odd. Enabling this runs them, which also opens a strategic line
+           *  §11 implies but §7 forecloses: win a governorship in a year with
+           *  no other race competing for your declarations, then carry
+           *  incumbency upward into the next even-year Senate run. */
+          oddYearGovernors?: boolean };
 }
 
 export interface PlayerState {
@@ -298,6 +307,14 @@ export class Game {
   private openRaces(): OpenRace[] {
     const out: OpenRace[] = [];
     const y = this.year;
+    // An odd year carries governorships and nothing else -- no Senate class is
+    // up, no House term expires, and there is no presidential year.
+    if (y % 2 !== 0) {
+      for (const s of STATES) {
+        if (governorUp(s, y)) out.push({ office: 'governor', state: s.code, incumbent: this.seatFor('governor', s.code) });
+      }
+      return out;
+    }
     if (y % 4 === 0) out.push({ office: 'president', state: 'US' });
     for (const s of STATES) {
       for (const cls of senateUp(s, y)) {
@@ -462,7 +479,10 @@ export class Game {
     const pending: PendingPeg[] = [];
     // §8: sequential around the table, and the order rotates each cycle so
     // going last is not a permanent tax.
-    const order = this.players.map((_, i) => (i + (this.year / 2)) % this.players.length);
+    // Math.floor matters: in an ODD year `year / 2` is fractional, so the
+    // rotation produced a fractional agent index and crashed the moment
+    // odd-year governor races were allowed to run.
+    const order = this.players.map((_, i) => (i + Math.floor(this.year / 2)) % this.players.length);
     for (const i of order) {
       const mine = this.agents[i].declare(this.view(i), open, pending);
       this.stats.decisions.push(mine.length);
@@ -868,7 +888,10 @@ export class Game {
     const open = this.openRaces();
     const decls: Declaration[] = [];
     const pending: PendingPeg[] = [];
-    const order = this.players.map((_, i) => (i + (this.year / 2)) % this.players.length);
+    // Math.floor matters: in an ODD year `year / 2` is fractional, so the
+    // rotation produced a fractional agent index and crashed the moment
+    // odd-year governor races were allowed to run.
+    const order = this.players.map((_, i) => (i + Math.floor(this.year / 2)) % this.players.length);
     for (const i of order) {
       const mine = i === human ? this.humanDeclarations : this.agents[i].declare(this.view(i), open, pending);
       this.stats.decisions.push(mine.length);
@@ -909,7 +932,7 @@ export class Game {
    *  §5: "presence is scarce and must be purchased in the draft", so hand size
    *  caps TOTAL cards held; a district you keep is a candidate you do not. */
   private refill(): void {
-    const start = (this.year / 2) % this.players.length;
+    const start = Math.floor(this.year / 2) % this.players.length;
     for (let k = 0; k < this.players.length; k++) {
       const p = this.players[(start + k) % this.players.length];
       const want = this.handSize(p) - p.hand.length - p.districts.length;
@@ -960,7 +983,9 @@ export class Game {
     econ.walk(this.economy, this.cfg.economy, this.rng);
     lean.decay(this.leanMap, this.cfg.lean, this.year, this.rng);  // 5.
 
-    if (this.year % 2 === 0) {
+    const oddGovYear = this.cfg.game.oddYearGovernors === true && this.year % 2 !== 0
+      && STATES.some((st) => governorUp(st, this.year));
+    if (this.year % 2 === 0 || oddGovYear) {
       this.elections();                                  // 6-9.
       this.refill();
     }

@@ -1258,7 +1258,7 @@ about why Lookahead wins, and the second is what winners actually hold.
 
 ---
 
-## F32. The governorship is the one office nobody should plan around.
+## F32. The governorship is the one office nobody should plan around. ~~SUPERSEDED by F36.~~
 
 F31 measured governors at exactly neutral — 1.02× between winners and losers.
 Before reporting that as a design fact I checked whether the office's abilities
@@ -1435,3 +1435,52 @@ measurement of the same thing.
 **Both paths now log it.** And the standing caution gains a line: *a coverage
 sweep is only as good as the instrument it reads, and a log written by one code
 path and not its twin is not an instrument.*
+
+---
+
+## F36. F32 was wrong: the governorship is strong, and no agent was using it.
+
+**Correcting F32**, which concluded the governorship "does everything §11
+promises and still does not matter" from a measured 1.02× advantage. That was
+measured against a field in which **nobody sought the line the office exists
+for**.
+
+§11: *"Governors ... carry incumbency into Senate and presidential runs."* An
+agent built around that — take governorships, then run those same cards for
+Senate — changes the picture completely:
+
+| field | governor advantage | Senate advantage |
+|---|---|---|
+| Lookahead + Greedy + HouseFarm + Random | **1.07×** | 3.55× |
+| **Launchpad** + Greedy + SenateFlood + Heterodox | **2.39×** | 1.59× |
+
+Same engine, same rules. **Governors go from neutral to a 2.39× advantage the
+moment one player plays for them**, and the Senate's advantage falls
+correspondingly — the step-up converts a cheap office into an expensive one.
+
+The `Launchpad` agent wins **68–73%** of four-player games against a 25% fair
+share, and 26.7% in a six-way round robin against stronger opposition — strong
+but not dominant, which is a healthy shape for a strategic line.
+
+**Two things follow, and the second is the general one.**
+
+**Odd-year governorships are not the source.** KY, LA, MS, NJ and VA elect in
+odd years and those races had never run at all — `openRaces()` computed them
+and `tick()` only held elections in even years, so 1,039 governor races
+resolved in even years and **0 in odd**. Implemented behind
+`game.oddYearGovernors`, they raise governorships held by 45%. But Launchpad
+wins *more* with them **off** (72.8% vs 68.3%). The uncontested odd-year
+declaration is a distraction; the step-up is the whole line.
+
+**A "dead" measurement is a claim about the agents, not the design.** F32
+joined incumbency, the presidency, the veto, the bill counters and the card
+text on the list of things that measured dead because nothing exercised them.
+The difference is that those five were unimplemented and this one was
+*unplayed*. **A simulator can only find the strategies its agents already know**,
+and the correct response to "this office does nothing" is to write an agent
+that tries to make it do something before believing the number.
+
+*Implementing odd-year elections also surfaced a latent crash: three places
+computed a rotation index as `year / 2`, which is fractional in an odd year, so
+the agent index was 988.5. Even-year-only play had hidden it since the first
+commit.*

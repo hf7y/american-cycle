@@ -276,6 +276,30 @@ export class EconomyChicken extends Base {
   voteBill(v: GameView, g: number): boolean { return g > 0 ? v.economy.accumulatedG < 8 : true; }
 }
 
+/** Zach's line, made explicit so it can be measured rather than assumed: take
+ *  the governorships nobody is competing for -- KY, LA, MS, NJ and VA elect in
+ *  ODD years, when no Senate class is up and no House term expires, so a
+ *  declaration there is uncontested by construction -- then run those same
+ *  cards for Senate, where §11 says a governor carries incumbency upward.
+ *
+ *  Whether the line pays is an empirical question. Every other agent leaves it
+ *  on the table: enabling odd-year races raised governorships held by 45% and
+ *  moved Senate races carrying an incumbent by nothing at all. */
+export class Launchpad extends Base {
+  declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[] {
+    const held = new Set(v.seats.filter((s) => s.office === 'governor' && s.holder?.player === v.me)
+      .map((s) => s.holder!.cardId));
+    const o = counterDeclare(options(v, open, this.cfg), pending, v.me, 2).map((x) => {
+      // an odd year carries governorships alone: cheap ground
+      if (x.office === 'governor') return { ...x, edge: x.edge + (v.year % 2 !== 0 ? 8 : 3) };
+      // and step a sitting governor up, which is where the incumbency lands
+      if (x.office === 'senator' && held.has(x.d.card.id)) return { ...x, edge: x.edge + 6 };
+      return x;
+    });
+    return pickDistinct(o.sort(byEdge), this.budget(v));
+  }
+}
+
 export const AGENTS: Record<string, new (cfg: Config, rng: RNG) => Agent> = {
   Random: class extends RandomAgent { constructor(c: Config, r: RNG) { super('Random', c, r); } },
   Greedy: class extends GreedyAgent { constructor(c: Config, r: RNG) { super('Greedy', c, r); } },
@@ -287,5 +311,6 @@ export const AGENTS: Record<string, new (cfg: Config, rng: RNG) => Agent> = {
   BillMaximizer: class extends BillMaximizer { constructor(c: Config, r: RNG) { super('BillMaximizer', c, r); } },
   Impeacher: class extends Impeacher { constructor(c: Config, r: RNG) { super('Impeacher', c, r); } },
   VPBackstab: class extends VPBackstab { constructor(c: Config, r: RNG) { super('VPBackstab', c, r); } },
+  Launchpad: class extends Launchpad { constructor(c: Config, r: RNG) { super('Launchpad', c, r); } },
   EconomyChicken: class extends EconomyChicken { constructor(c: Config, r: RNG) { super('EconomyChicken', c, r); } },
 };
