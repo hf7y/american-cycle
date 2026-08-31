@@ -1,12 +1,18 @@
 # american-cycle — handover
 
-**v0.1 — landed and CI-green.** PR hf7y/american-cycle#7, branch
-`phase1-engine`. Nothing is in flight.
+**v0.1 is the tag `v0.1` (a253943), not a mood.** It was called landed once
+before it was, and then landed into — so it is now pinned. PR
+hf7y/american-cycle#7, branch `phase1-engine`, CI green on both jobs.
 
-## v0.2 — decided, deliberately not in v0.1
+**v0.2 is the working line.** Anything below is fair game; the tag is not.
 
-Each of these is measured and argued; none is shipped, because each moves every
-baseline and the nine findings are stamped against these configs.
+## v0.2 — measured, argued, deliberately outside the tag
+
+Each of these moves every baseline and re-stamps findings, which is what the
+tag exists to keep out. Ordered by what to do first.
+
+**1. Turn on `resignToRun`.** **2. Cut `heterodox`** — a removal, but it
+repricess 114 of 346 cards and wants a round robin before it is believed.
 
 | | |
 |---|---|
