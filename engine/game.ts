@@ -17,7 +17,7 @@ import * as lean from './rules/lean.ts';
 import * as econ from './rules/economy.ts';
 import * as leg from './rules/legislature.ts';
 import {
-  buildModifiers, eligible, runRace,
+  buildModifiers, eligible, runRace, withdrawalView,
   type Declaration, type RaceContext, type WithdrawalView,
 } from './rules/elections.ts';
 import { STATES, BY_CODE, senateUp, governorUp, electors, type StateDef } from './states.ts';
@@ -73,6 +73,18 @@ export interface Agent {
   voteBill(v: GameView, g: number, seat: Seat): boolean;
   veto(v: GameView, g: number): boolean;
 }
+
+export type UiRequest =
+  | { kind: 'declare'; year: number; open: OpenRace[] }
+  | { kind: 'withdraw'; year: number; round: 'primary' | 'general';
+      view: WithdrawalView; race: { office: Office; state: string; slot?: number; cardName: string } }
+  | { kind: 'bill'; year: number; isAuthor: boolean; votes: boolean };
+
+export interface UiAnswer { declarations?: Declaration[]; withdraw?: boolean; g?: number; yes?: boolean }
+
+const raceKeyOf = (d: { office: Office; state: string; slot?: number }) => `${d.office}|${d.state}|${d.slot ?? ''}`;
+const sameRace = (a: { office: Office; state: string; slot?: number }, b: { office: Office; state: string; slot?: number }) =>
+  raceKeyOf(a) === raceKeyOf(b);
 
 export interface OpenRace { office: Office; state: string; slot?: number; incumbent?: Seat }
 /** A peg on the board: the race is contested, the card is not visible. */
@@ -209,16 +221,19 @@ export class Game {
   }
 
   // ---- §7 step 2-3: the omnibill -------------------------------------------
-  private omnibill(): void {
+  private omnibill(human = -1, humanG?: number, humanYes?: boolean): void {
     const authorId = leg.author(this.seats);
     if (authorId === undefined) return;
     this.stats.billsAttempted++;
-    const g = clampInt(this.agents[authorId].proposeG(this.view(authorId)), this.cfg.economy.gMin, this.cfg.economy.gMax);
+    const proposed = authorId === human && humanG !== undefined
+      ? humanG : this.agents[authorId].proposeG(this.view(authorId));
+    const g = clampInt(proposed, this.cfg.economy.gMin, this.cfg.economy.gMax);
 
     const votes: leg.Vote[] = [];
     for (const s of this.seats) {
       if (!s.holder || (s.office !== 'senator' && s.office !== 'representative')) continue;
-      const yes = this.agents[s.holder.player].voteBill(this.view(s.holder.player), g, s);
+      const yes = s.holder.player === human && humanYes !== undefined
+        ? humanYes : this.agents[s.holder.player].voteBill(this.view(s.holder.player), g, s);
       votes.push({ player: s.holder.player, party: s.holder.party, office: s.office, yes });
     }
 
@@ -249,8 +264,7 @@ export class Game {
     const decls: Declaration[] = [];
     const pending: PendingPeg[] = [];
     // §8: sequential around the table, and the order rotates each cycle so
-    // going last is not a permanent tax (SIM-BRIEF flags seat bias as a fix
-    // candidate; rotating is the obvious one).
+    // going last is not a permanent tax.
     const order = this.players.map((_, i) => (i + (this.year / 2)) % this.players.length);
     for (const i of order) {
       const mine = this.agents[i].declare(this.view(i), open, pending);
@@ -259,43 +273,47 @@ export class Game {
         const p = this.players[i];
         if (!p.hand.some((c) => c.kind === 'candidate' && c.id === d.card.id)) continue;
         if (d.office !== 'president' && !eligible(d.card, d.state, p.districts)) continue;
-        decls.push(d);
+        decls.push({ ...d, player: i });
         pending.push({ player: i, office: d.office, state: d.state, slot: d.slot, party: d.card.party });
       }
     }
+    this.resolveDeclared(decls, wave, -1);
+  }
 
-    // §11: the presidency resolves first, nationally, so coattails downstream
-    // can read off the result.
+  /** Everything after declaration: primaries, generals, seating, capture and
+   *  the lean pushes. Shared by the headless tick and the interactive one so
+   *  the rules exist exactly once. */
+  private resolveDeclared(decls: Declaration[], wave: Wave, human: number): void {
     const presidential = decls.filter((d) => d.office === 'president');
-    const presidentialWinner = presidential.length ? this.presidentialRace(presidential, wave) : undefined;
+    const presidentialWinner = presidential.length ? this.presidentialRace(presidential, wave, human) : undefined;
 
     const byRace = new Map<string, Declaration[]>();
     for (const d of decls) {
       if (d.office === 'president') continue;
-      const k = `${d.office}|${d.state}|${d.slot ?? ''}`;
+      const k = raceKeyOf(d);
       if (!byRace.has(k)) byRace.set(k, []);
       byRace.get(k)!.push(d);
     }
-
-    const results: { ev: RaceEvent; won: Declaration }[] = [];
     for (const [, group] of byRace) {
       this.stats.raceSlots++;
       if (new Set(group.map((d) => d.player)).size > 1) this.stats.contestedSlots++;
     }
+
+    const results: { ev: RaceEvent; won: Declaration }[] = [];
     for (const [key, group] of byRace) {
       const [office, state, slotStr] = key.split('|');
       const slot = slotStr ? Number(slotStr) : undefined;
       const incumbent = this.seatFor(office as Office, state, slot);
       const ctx = this.raceContext(office as Office, state, slot, presidentialWinner);
 
-      const nominees = this.runPrimaries(group, ctx, wave);
+      const nominees = this.runPrimaries(group, ctx, wave, human);
       if (!nominees.length) continue;
       for (const d of nominees) d.incumbent = !!incumbent && incumbent.holder!.cardId === d.card.id;
 
       const out = runRace({
         ctx, round: 'general', declarations: nominees, wave, rng: this.rng,
         res: this.cfg.resolution, nat: this.cfg.national, pg: this.cfg.primaryGeneral,
-        decide: (p, v) => this.agents[p].withdraw(v),
+        decide: (p, v) => this.decideWithdraw(p, v, nominees, human),
       });
       for (const w of out.withdrawnCards) this.returnToHand(w);
       if (!out.event) continue;
@@ -309,6 +327,17 @@ export class Game {
     }
 
     this.pushLean(results);
+  }
+
+  /** The human's withdrawal answers were collected before any die was drawn;
+   *  everyone else asks their agent. */
+  private decideWithdraw(p: number, v: WithdrawalView, group: Declaration[], human: number): boolean {
+    if (p === human) {
+      const mine = group.find((d) => d.player === human);
+      if (mine) return this.humanWithdrawals.get(raceKeyOf(mine) + '|' + mine.card.id) ?? false;
+      return false;
+    }
+    return this.agents[p].withdraw(v);
   }
 
   private raceContext(office: Office, state: string, slot: number | undefined, presidentialWinner?: Party): RaceContext {
@@ -327,9 +356,9 @@ export class Game {
    *  regardless of table size. The general then runs state by state -- which is
    *  what produces the states carried that the honeymoon counter needs, and
    *  what makes the map worth holding. */
-  private presidentialRace(declarations: Declaration[], wave: Wave): Party | undefined {
+  private presidentialRace(declarations: Declaration[], wave: Wave, human = -1): Party | undefined {
     const natCtx = this.raceContext('president', 'US', undefined);
-    const nominees = this.runPrimaries(declarations, natCtx, wave);
+    const nominees = this.runPrimaries(declarations, natCtx, wave, human);
     if (!nominees.length) return undefined;
 
     const tally = new Map<number, number>();
@@ -365,7 +394,7 @@ export class Game {
     return winner.card.party;
   }
 
-  private runPrimaries(group: Declaration[], ctx: RaceContext, wave: Wave): Declaration[] {
+  private runPrimaries(group: Declaration[], ctx: RaceContext, wave: Wave, human = -1): Declaration[] {
     const byParty = new Map<Party, Declaration[]>();
     for (const d of group) {
       if (!byParty.has(d.card.party)) byParty.set(d.card.party, []);
@@ -378,7 +407,7 @@ export class Game {
       const out = runRace({
         ctx, round: 'primary', declarations: cands, wave, rng: this.rng,
         res: this.cfg.resolution, nat: this.cfg.national, pg: this.cfg.primaryGeneral,
-        decide: (p, v) => this.agents[p].withdraw(v),
+        decide: (p, v) => this.decideWithdraw(p, v, cands, human),
       });
       for (const w of out.withdrawnCards) this.returnToHand(w);
       if (!out.event) continue;
@@ -438,6 +467,90 @@ export class Game {
     const p = this.players[d.player];
     p.hand = p.hand.filter((c) => !(c.kind === 'candidate' && c.id === d.card.id));
     this.discard.push({ kind: 'candidate', ...d.card });
+  }
+
+  /** The interactive tick. Identical rules to `tick()`, but it yields at the
+   *  two moments a human must act: choosing declarations, and the withdrawal
+   *  window. Written as a generator so the UI can drive the engine without the
+   *  engine knowing a UI exists, and without a second copy of the rules.
+   *
+   *  The withdrawal yield happens BEFORE any die is drawn -- the same ordering
+   *  `runRace` enforces for the agents (§8). */
+  *interactiveTick(human: number): Generator<UiRequest, void, UiAnswer> {
+    for (const p of this.players) p.tapped.clear();
+    this.omnibillInteractive(human, yield* this.askBill(human));
+    const fed = econ.fedCheck(this.economy, this.cfg.economy, this.rng);
+    if (fed.rateRise) { this.stats.rateRises++; this.log.push(`${this.year}: the Fed tightens`); }
+    econ.walk(this.economy, this.cfg.economy, this.rng);
+    lean.decay(this.leanMap, this.cfg.lean, this.year);
+
+    if (this.year % 2 === 0) {
+      const open = this.openRaces();
+      const answer = yield { kind: 'declare', year: this.year, open };
+      this.humanDeclarations = answer.declarations ?? [];
+      yield* this.electionsInteractive(human);
+      for (const p of this.players) {
+        const want = this.handSize(p) - p.hand.length - p.districts.length;
+        if (want > 0) this.draw(p, want);
+      }
+    }
+    this.scoreHistory.push(this.players.map((p) => p.score));
+    this.year++;
+  }
+
+  private humanDeclarations: Declaration[] = [];
+  private humanWithdrawals = new Map<string, boolean>();
+
+  private *askBill(human: number): Generator<UiRequest, { g?: number; yes?: boolean }, UiAnswer> {
+    const authorId = leg.author(this.seats);
+    if (authorId === undefined) return {};
+    const holdsSeat = this.seats.some((s) => s.holder?.player === human && (s.office === 'senator' || s.office === 'representative'));
+    if (authorId !== human && !holdsSeat) return {};
+    const a = yield { kind: 'bill', year: this.year, isAuthor: authorId === human, votes: holdsSeat };
+    return { g: a.g, yes: a.yes };
+  }
+
+  private omnibillInteractive(human: number, a: { g?: number; yes?: boolean }): void {
+    this.omnibill(human, a.g, a.yes);
+  }
+
+  private *electionsInteractive(human: number): Generator<UiRequest, void, UiAnswer> {
+    // Collect every declaration first, so the human can see the pegs go down.
+    const wave = new Wave(this.rng);
+    const open = this.openRaces();
+    const decls: Declaration[] = [];
+    const pending: PendingPeg[] = [];
+    const order = this.players.map((_, i) => (i + (this.year / 2)) % this.players.length);
+    for (const i of order) {
+      const mine = i === human ? this.humanDeclarations : this.agents[i].declare(this.view(i), open, pending);
+      this.stats.decisions.push(mine.length);
+      for (const d of mine) {
+        const p = this.players[i];
+        if (!p.hand.some((c) => c.kind === 'candidate' && c.id === d.card.id)) continue;
+        if (d.office !== 'president' && !eligible(d.card, d.state, p.districts)) continue;
+        decls.push({ ...d, player: i });
+        pending.push({ player: i, office: d.office, state: d.state, slot: d.slot, party: d.card.party });
+      }
+    }
+
+    // The withdrawal window, before any die is drawn.
+    this.humanWithdrawals.clear();
+    const mineContested = decls.filter((d) => d.player === human)
+      .map((d) => ({ d, others: decls.filter((o) => o !== d && sameRace(o, d)) }))
+      .filter((x) => x.others.length > 0);
+    for (const { d, others } of mineContested) {
+      const ctx = this.raceContext(d.office, d.state, d.slot);
+      const round = others.some((o) => o.card.party === d.card.party) ? 'primary' : 'general';
+      const mods = buildModifiers(d, ctx, round, this.cfg.resolution, this.cfg.national, this.cfg.primaryGeneral);
+      const a = yield {
+        kind: 'withdraw', year: this.year, round,
+        view: withdrawalView(d, mods, round, ctx, others),
+        race: { office: d.office, state: d.state, slot: d.slot, cardName: d.card.name },
+      };
+      this.humanWithdrawals.set(raceKeyOf(d) + '|' + d.card.id, !!a.withdraw);
+    }
+
+    this.resolveDeclared(decls, wave, human);
   }
 
   /** One annual tick — §7. */

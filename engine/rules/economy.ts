@@ -24,7 +24,7 @@ export function newEconomy(cfg: EconomyConfig): Economy {
 export function walk(e: Economy, cfg: EconomyConfig, rng: RNG): number {
   const step = rng.d6() <= 3 ? -1 : 1;
   const before = e.level;
-  e.level = clamp(e.level + step + cfg.walkDrift, cfg.min, cfg.max);
+  e.level = clampEcon(e.level + step + cfg.walkDrift, cfg.min, cfg.max);
   return e.level - before;
 }
 
@@ -32,7 +32,7 @@ export function walk(e: Economy, cfg: EconomyConfig, rng: RNG): number {
 export function spend(e: Economy, cfg: EconomyConfig, g: number): void {
   e.accumulatedG = Math.max(0, e.accumulatedG + g);
   // Austerity (negative G) cools directly; spending warms.
-  e.level = clamp(e.level + Math.sign(g) * (Math.abs(g) >= 4 ? 2 : 1), cfg.min, cfg.max);
+  e.level = clampEcon(e.level + Math.sign(g) * (Math.abs(g) >= 4 ? 2 : 1), cfg.min, cfg.max);
 }
 
 /** §13: 2d6 roll-under against the accumulation. G12 is a certainty; the
@@ -44,7 +44,7 @@ export function fedCheck(e: Economy, cfg: EconomyConfig, rng: RNG): { roll: numb
   const rateRise = roll <= e.accumulatedG;
   if (rateRise) {
     e.accumulatedG = Math.max(0, e.accumulatedG - cfg.rateRiseSpendDown);
-    e.level = clamp(e.level + cfg.rateRiseEconomyHit, cfg.min, cfg.max);
+    e.level = clampEcon(e.level + cfg.rateRiseEconomyHit, cfg.min, cfg.max);
   }
   return { roll, rateRise };
 }
@@ -70,4 +70,4 @@ export function economyModifier(e: Economy, cfg: EconomyConfig, strong: number, 
   return 0;
 }
 
-function clamp(v: number, lo: number, hi: number): number { return Math.max(lo, Math.min(hi, v)); }
+function clampEcon(v: number, lo: number, hi: number): number { return Math.max(lo, Math.min(hi, v)); }

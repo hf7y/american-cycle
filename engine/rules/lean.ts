@@ -47,7 +47,7 @@ export function applyPush(
   }
   const push = pushForMargin(cfg, marginPips) * sign(winner);
   const before = lean[state] ?? 0;
-  lean[state] = clamp(before + push, cfg.maxLean);
+  lean[state] = clampLean(before + push, cfg.maxLean);
   return lean[state] - before;
 }
 
@@ -67,7 +67,7 @@ export function decay(lean: Lean, cfg: LeanConfig, year: number): void {
  *  carried. Removed at the next decay, so the incoming party enters the midterm
  *  with a fleeting map advantage immediately before the -2 lands on them. */
 export function honeymoon(lean: Lean, cfg: LeanConfig, carried: string[], party: Party): void {
-  for (const st of carried) lean[st] = clamp((lean[st] ?? 0) + cfg.honeymoonCounter * sign(party), cfg.maxLean);
+  for (const st of carried) lean[st] = clampLean((lean[st] ?? 0) + cfg.honeymoonCounter * sign(party), cfg.maxLean);
 }
 
-function clamp(v: number, max: number): number { return Math.max(-max, Math.min(max, v)); }
+function clampLean(v: number, max: number): number { return Math.max(-max, Math.min(max, v)); }

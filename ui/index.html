@@ -1,0 +1,2102 @@
+<title>American Cycle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;600;700&family=Public+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --paper:#E8E6E1; --paper-2:#DEDBD4; --card:#F2F0EC; --ink:#16181A; --ink-2:#4A4E54;
+  --rule:#C4BFB6; --brass:#8A6D22; --dem:#2F5C8A; --gop:#A63A2E;
+  --dem-soft:#D6DFE9; --gop-soft:#EBD6D1; --good:#3E6B4F; --warn:#8A6D22; --bad:#A63A2E;
+  --shadow:0 1px 0 rgba(22,24,26,.06),0 2px 8px rgba(22,24,26,.07);
+  --chyron-bg:#16181A; --chyron-fg:#E8E6E1;
+  --display:"Archivo Narrow",ui-sans-serif,system-ui,sans-serif;
+  --body:"Public Sans",ui-sans-serif,system-ui,-apple-system,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#14161A; --paper-2:#1B1E23; --card:#20242A; --ink:#E6E3DC; --ink-2:#9AA0A8;
+  --rule:#33373D; --brass:#C9A44C; --dem:#6E9CC9; --gop:#D2705F;
+  --dem-soft:#22303D; --gop-soft:#3A2622; --good:#6FA07E; --warn:#C9A44C; --bad:#D2705F;
+  --shadow:0 1px 0 rgba(0,0,0,.4),0 2px 10px rgba(0,0,0,.5);
+  --chyron-bg:#0C0E11; --chyron-fg:#E6E3DC;
+}}
+:root[data-theme="dark"]{
+  --paper:#14161A; --paper-2:#1B1E23; --card:#20242A; --ink:#E6E3DC; --ink-2:#9AA0A8;
+  --rule:#33373D; --brass:#C9A44C; --dem:#6E9CC9; --gop:#D2705F;
+  --dem-soft:#22303D; --gop-soft:#3A2622; --good:#6FA07E; --warn:#C9A44C; --bad:#D2705F;
+  --shadow:0 1px 0 rgba(0,0,0,.4),0 2px 10px rgba(0,0,0,.5);
+  --chyron-bg:#0C0E11; --chyron-fg:#E6E3DC;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);
+  font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--display);font-weight:600;margin:0;text-wrap:balance;letter-spacing:.01em}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-family:var(--display);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+
+/* chyron ------------------------------------------------------------------ */
+#chyron{position:sticky;top:0;z-index:20;display:flex;align-items:stretch;gap:0;
+  background:var(--chyron-bg);color:var(--chyron-fg);border-bottom:2px solid var(--brass)}
+.chy{padding:8px 14px;border-right:1px solid rgba(255,255,255,.14);display:flex;
+  flex-direction:column;justify-content:center;min-width:0}
+.chy .k{font-family:var(--display);font-size:10px;letter-spacing:.14em;text-transform:uppercase;opacity:.6}
+.chy .v{font-family:var(--mono);font-size:15px;font-weight:600;white-space:nowrap}
+.chy.grow{flex:1;border-right:none;overflow:hidden}
+#ticker{font-family:var(--mono);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* layout ------------------------------------------------------------------ */
+#wrap{max-width:1180px;margin:0 auto;padding:16px;display:grid;
+  grid-template-columns:minmax(0,1fr) 320px;gap:16px;align-items:start}
+@media (max-width:900px){#wrap{grid-template-columns:1fr}}
+.panel{background:var(--card);border:1px solid var(--rule);border-radius:2px;box-shadow:var(--shadow)}
+.panel>header{display:flex;justify-content:space-between;align-items:baseline;gap:8px;
+  padding:10px 12px;border-bottom:1px solid var(--rule)}
+.panel>.body{padding:12px}
+
+/* map --------------------------------------------------------------------- */
+#map{display:grid;grid-template-columns:repeat(11,1fr);gap:3px}
+.st{position:relative;aspect-ratio:1;border:1px solid var(--rule);border-radius:1px;
+  background:var(--paper-2);display:flex;flex-direction:column;align-items:center;
+  justify-content:center;font-family:var(--mono);font-size:10px;font-weight:600;
+  transition:transform .12s ease,box-shadow .12s ease}
+.st.act{cursor:pointer}
+.st.act:hover{transform:translateY(-2px);box-shadow:0 3px 10px rgba(0,0,0,.18);z-index:2}
+.st.sel{outline:2px solid var(--brass);outline-offset:1px}
+.st .pips{display:flex;gap:1px;height:4px;margin-top:2px}
+.st .pip{width:3px;height:3px;border-radius:50%}
+.st .peg{position:absolute;top:2px;right:2px;width:6px;height:6px;border-radius:50%;border:1px solid var(--card)}
+.st.race::after{content:"";position:absolute;inset:0;border:2px solid var(--brass);border-radius:1px;pointer-events:none}
+
+/* cards ------------------------------------------------------------------- */
+#hand{display:flex;gap:8px;overflow-x:auto;padding:4px 0 8px}
+.cc{flex:0 0 152px;background:var(--card);border:1px solid var(--rule);border-top:3px solid var(--rule);
+  border-radius:2px;padding:8px;font-size:12px;cursor:pointer;transition:transform .12s ease}
+.cc:hover{transform:translateY(-3px)}
+.cc.sel{outline:2px solid var(--brass);outline-offset:1px}
+.cc.D{border-top-color:var(--dem)} .cc.R{border-top-color:var(--gop)}
+.cc .nm{font-family:var(--display);font-size:14px;font-weight:600;line-height:1.15}
+.cc .mt{color:var(--ink-2);font-size:10px;font-family:var(--mono);margin-top:2px}
+.cc .bel{font-size:11px;font-style:italic;color:var(--ink-2);margin-top:5px;line-height:1.3}
+.tag{display:inline-block;font-family:var(--mono);font-size:9px;padding:1px 4px;border:1px solid var(--rule);
+  border-radius:1px;margin:3px 3px 0 0;text-transform:uppercase;letter-spacing:.04em}
+.tag.het{border-color:var(--brass);color:var(--brass)}
+.tag.ext{border-color:var(--gop);color:var(--gop)}
+
+/* log --------------------------------------------------------------------- */
+#log{max-height:460px;overflow-y:auto;font-size:13px;display:flex;flex-direction:column;gap:0}
+.le{padding:7px 12px;border-bottom:1px solid var(--rule);line-height:1.4}
+.le:last-child{border-bottom:none}
+.le .yr{font-family:var(--mono);font-size:10px;color:var(--ink-2);letter-spacing:.05em}
+.le.big{background:var(--paper-2)}
+.le b{font-weight:600}
+
+/* dice -------------------------------------------------------------------- */
+.dice{display:flex;gap:6px;margin-top:6px}
+.die{flex:1;text-align:center;border:1px solid var(--rule);border-radius:2px;padding:4px 2px;background:var(--paper-2)}
+.die .n{font-family:var(--mono);font-size:19px;font-weight:600;line-height:1}
+.die .l{font-family:var(--display);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+@keyframes tumble{0%{transform:translateY(-6px) rotate(-8deg);opacity:0}60%{transform:none;opacity:1}100%{transform:none}}
+.die.roll{animation:tumble .34s cubic-bezier(.2,.9,.3,1.2) both}
+@media (prefers-reduced-motion:reduce){.die.roll{animation:none}.st,.cc{transition:none}}
+
+/* stack ------------------------------------------------------------------- */
+.stack{font-family:var(--mono);font-size:12px;border-collapse:collapse;width:100%}
+.stack td{padding:2px 0;border-bottom:1px dotted var(--rule)}
+.stack td:last-child{text-align:right;font-weight:600}
+.stack tr.tot td{border-top:1px solid var(--ink);border-bottom:none;padding-top:5px;font-weight:600}
+.pos{color:var(--good)} .neg{color:var(--bad)}
+
+/* controls ---------------------------------------------------------------- */
+.btn{background:var(--ink);color:var(--paper);border:1px solid var(--ink);border-radius:2px;
+  padding:8px 16px;font-family:var(--display);font-size:13px;font-weight:600;letter-spacing:.06em;
+  text-transform:uppercase}
+.btn:hover{background:var(--brass);border-color:var(--brass);color:#14161A}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.ghost:hover{background:var(--paper-2);color:var(--ink)}
+.btn[disabled]{opacity:.4;cursor:not-allowed}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+select,input[type=number]{font:inherit;font-family:var(--mono);font-size:13px;padding:6px 8px;
+  background:var(--card);color:var(--ink);border:1px solid var(--rule);border-radius:2px}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:12px}
+
+/* modal ------------------------------------------------------------------- */
+#modal{position:fixed;inset:0;background:rgba(10,12,14,.62);display:none;place-items:center;z-index:40;padding:16px}
+#modal.on{display:grid}
+#modalBox{background:var(--card);border:1px solid var(--rule);border-top:3px solid var(--brass);
+  border-radius:2px;max-width:560px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 12px 40px rgba(0,0,0,.4)}
+#modalBox>div{padding:18px}
+.scores{display:flex;gap:6px;flex-wrap:wrap}
+.sc{font-family:var(--mono);font-size:12px;padding:3px 8px;border:1px solid var(--rule);border-radius:2px;background:var(--paper-2)}
+.sc.me{border-color:var(--brass);font-weight:600}
+.note{font-size:12px;color:var(--ink-2);line-height:1.45}
+.setup-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:520px){.setup-grid{grid-template-columns:1fr}}
+</style>
+
+<div id="chyron">
+  <div class="chy"><span class="k">Year</span><span class="v" id="cYear">—</span></div>
+  <div class="chy"><span class="k">Economy</span><span class="v" id="cEcon">—</span></div>
+  <div class="chy"><span class="k">Spending</span><span class="v" id="cG">—</span></div>
+  <div class="chy"><span class="k">President</span><span class="v" id="cPres">vacant</span></div>
+  <div class="chy grow"><span class="k">Wire</span><span class="v" id="ticker">Set the table to begin.</span></div>
+</div>
+
+<div id="wrap">
+  <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+    <section class="panel">
+      <header><h2 style="font-size:15px">The map</h2><span class="eyebrow" id="mapHint">deviation from each state's own baseline</span></header>
+      <div class="body"><div id="map"></div></div>
+    </section>
+    <section class="panel">
+      <header><h2 style="font-size:15px">Your hand</h2><span class="eyebrow" id="handHint">—</span></header>
+      <div class="body"><div id="hand"></div><div class="row" style="margin-top:10px" id="controls"></div></div>
+    </section>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+    <section class="panel">
+      <header><h2 style="font-size:15px">Standings</h2><span class="eyebrow" id="cfgName">—</span></header>
+      <div class="body"><div class="scores" id="scores"></div></div>
+    </section>
+    <section class="panel">
+      <header><h2 style="font-size:15px">Election night</h2><span class="eyebrow">as it comes in</span></header>
+      <div id="log"></div>
+    </section>
+  </div>
+</div>
+
+<div id="modal"><div id="modalBox"><div id="modalBody"></div></div></div>
+
+<script>
+const PACKS = {"1976":{"name":"1976","era":1976,"note":"Real politicians of the 1976 cycle. Home-state bonuses run large (2-4) because friends-and-neighbours voting had not yet decayed -- §5.","cards":[{"kind":"candidate","id":"jimmy-carter","name":"Jimmy Carter","party":"D","homeState":"GA","homeStateBonus":3,"identities":["evangelical","rural","veteran"],"belief":"Born-again peanut farmer; runs as an outsider","era":1976,"effects":[]},{"kind":"candidate","id":"walter-mondale","name":"Walter Mondale","party":"D","homeState":"MN","homeStateBonus":3,"identities":["union"],"belief":"Labor liberal","era":1976,"effects":[]},{"kind":"candidate","id":"hubert-humphrey","name":"Hubert Humphrey","party":"D","homeState":"MN","homeStateBonus":3,"identities":["union","academic"],"belief":"The Happy Warrior","era":1976,"effects":[]},{"kind":"candidate","id":"henry-m-jackson","name":"Henry M. Jackson","party":"D","homeState":"WA","homeStateBonus":3,"identities":["union","veteran","business"],"belief":"Hawk abroad, liberal at home","era":1976,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"morris-udall","name":"Morris Udall","party":"D","homeState":"AZ","homeStateBonus":3,"identities":["rural"],"belief":"Western conservationist","era":1976,"effects":[]},{"kind":"candidate","id":"george-wallace","name":"George Wallace","party":"D","homeState":"AL","homeStateBonus":4,"identities":["rural","evangelical"],"belief":"Segregation then populism","era":1976,"effects":[{"type":"extremist"}]},{"kind":"candidate","id":"frank-church","name":"Frank Church","party":"D","homeState":"ID","homeStateBonus":3,"identities":["rural"],"belief":"Ran the intelligence hearings","era":1976,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"birch-bayh","name":"Birch Bayh","party":"D","homeState":"IN","homeStateBonus":3,"identities":["rural","farm"],"belief":"Wrote two amendments","era":1976,"effects":[]},{"kind":"candidate","id":"edmund-muskie","name":"Edmund Muskie","party":"D","homeState":"ME","homeStateBonus":3,"identities":["catholic"],"belief":"Clean air and water","era":1976,"effects":[]},{"kind":"candidate","id":"robert-byrd","name":"Robert Byrd","party":"D","homeState":"WV","homeStateBonus":4,"identities":["rural"],"belief":"Master of the rules","era":1976,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"edward-kennedy","name":"Edward Kennedy","party":"D","homeState":"MA","homeStateBonus":3,"identities":["catholic","ivy"],"belief":"National health insurance","era":1976,"effects":[]},{"kind":"candidate","id":"thomas-p-oneill","name":"Thomas P. O'Neill","party":"D","homeState":"MA","homeStateBonus":3,"identities":["catholic","urban","union"],"belief":"All politics is local","era":1976,"effects":[]},{"kind":"candidate","id":"john-glenn","name":"John Glenn","party":"D","homeState":"OH","homeStateBonus":3,"identities":["veteran"],"belief":"The astronaut","era":1976,"effects":[]},{"kind":"candidate","id":"lloyd-bentsen","name":"Lloyd Bentsen","party":"D","homeState":"TX","homeStateBonus":3,"identities":["business","veteran"],"belief":"Conservative on money","era":1976,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"daniel-patrick-moynihan","name":"Daniel Patrick Moynihan","party":"D","homeState":"NY","homeStateBonus":2,"identities":["catholic","ivy","academic"],"belief":"Social scientist in the Senate","era":1976,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"jerry-brown","name":"Jerry Brown","party":"D","homeState":"CA","homeStateBonus":2,"identities":["catholic"],"belief":"Era of limits","era":1976,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"wendell-ford","name":"Wendell Ford","party":"D","homeState":"KY","homeStateBonus":3,"identities":["rural","business"],"belief":"Tobacco and coal","era":1976,"effects":[]},{"kind":"candidate","id":"dale-bumpers","name":"Dale Bumpers","party":"D","homeState":"AR","homeStateBonus":3,"identities":["rural","veteran"],"belief":"Country lawyer","era":1976,"effects":[]},{"kind":"candidate","id":"sam-nunn","name":"Sam Nunn","party":"D","homeState":"GA","homeStateBonus":3,"identities":["veteran","rural"],"belief":"Defense conservative","era":1976,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"john-c-stennis","name":"John C. Stennis","party":"D","homeState":"MS","homeStateBonus":4,"identities":["rural","veteran"],"belief":"Armed Services chairman","era":1976,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"james-eastland","name":"James Eastland","party":"D","homeState":"MS","homeStateBonus":4,"identities":["rural","farm"],"belief":"Plantation conservatism","era":1976,"effects":[{"type":"extremist"}]},{"kind":"candidate","id":"russell-long","name":"Russell Long","party":"D","homeState":"LA","homeStateBonus":4,"identities":["rural","business"],"belief":"Wrote the tax code","era":1976,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"adlai-stevenson-iii","name":"Adlai Stevenson III","party":"D","homeState":"IL","homeStateBonus":2,"identities":["ivy"],"belief":"Reform liberal","era":1976,"effects":[]},{"kind":"candidate","id":"abraham-ribicoff","name":"Abraham Ribicoff","party":"D","homeState":"CT","homeStateBonus":3,"identities":["jewish"],"belief":"Chicago convention scold","era":1976,"effects":[]},{"kind":"candidate","id":"barbara-jordan","name":"Barbara Jordan","party":"D","homeState":"TX","homeStateBonus":2,"identities":["black","urban","academic"],"belief":"My faith in the Constitution is whole","era":1976,"effects":[]},{"kind":"candidate","id":"andrew-young","name":"Andrew Young","party":"D","homeState":"GA","homeStateBonus":2,"identities":["black","urban","evangelical"],"belief":"From the movement to the House","era":1976,"effects":[]},{"kind":"candidate","id":"ronald-v-dellums","name":"Ronald V. Dellums","party":"D","homeState":"CA","homeStateBonus":2,"identities":["black","urban","veteran"],"belief":"Antiwar left","era":1976,"effects":[{"type":"extremist"}]},{"kind":"candidate","id":"shirley-chisholm","name":"Shirley Chisholm","party":"D","homeState":"NY","homeStateBonus":2,"identities":["black","urban"],"belief":"Unbought and unbossed","era":1976,"effects":[]},{"kind":"candidate","id":"peter-rodino","name":"Peter Rodino","party":"D","homeState":"NJ","homeStateBonus":3,"identities":["catholic","urban"],"belief":"Chaired the impeachment inquiry","era":1976,"effects":[]},{"kind":"candidate","id":"thomas-eagleton","name":"Thomas Eagleton","party":"D","homeState":"MO","homeStateBonus":3,"identities":["catholic","urban"],"belief":"Dropped from a ticket","era":1976,"effects":[]},{"kind":"candidate","id":"gary-hart","name":"Gary Hart","party":"D","homeState":"CO","homeStateBonus":2,"identities":["ivy"],"belief":"New generation of Democrats","era":1976,"effects":[]},{"kind":"candidate","id":"patrick-leahy","name":"Patrick Leahy","party":"D","homeState":"VT","homeStateBonus":3,"identities":["catholic","rural"],"belief":"Prosecutor turned senator","era":1976,"effects":[]},{"kind":"candidate","id":"joseph-r-biden","name":"Joseph R. Biden","party":"D","homeState":"DE","homeStateBonus":3,"identities":["catholic"],"belief":"Rode the train home","era":1976,"effects":[]},{"kind":"candidate","id":"dick-clark","name":"Dick Clark","party":"D","homeState":"IA","homeStateBonus":3,"identities":["farm","rural"],"belief":"Walked the state","era":1976,"effects":[]},{"kind":"candidate","id":"john-culver","name":"John Culver","party":"D","homeState":"IA","homeStateBonus":3,"identities":["farm","rural","ivy"],"belief":"Liberal in a farm state","era":1976,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"alan-cranston","name":"Alan Cranston","party":"D","homeState":"CA","homeStateBonus":2,"identities":["academic"],"belief":"Party organizer","era":1976,"effects":[]},{"kind":"candidate","id":"william-proxmire","name":"William Proxmire","party":"D","homeState":"WI","homeStateBonus":3,"identities":["farm","ivy"],"belief":"The Golden Fleece Award","era":1976,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"ernest-hollings","name":"Ernest Hollings","party":"D","homeState":"SC","homeStateBonus":3,"identities":["rural","veteran"],"belief":"Hunger in America","era":1976,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"lawton-chiles","name":"Lawton Chiles","party":"D","homeState":"FL","homeStateBonus":3,"identities":["rural","veteran"],"belief":"Walkin' Lawton","era":1976,"effects":[]},{"kind":"candidate","id":"gerald-r-ford","name":"Gerald R. Ford","party":"R","homeState":"MI","homeStateBonus":3,"identities":["veteran","business"],"belief":"A Ford, not a Lincoln","era":1976,"effects":[]},{"kind":"candidate","id":"ronald-reagan","name":"Ronald Reagan","party":"R","homeState":"CA","homeStateBonus":3,"identities":["business","evangelical"],"belief":"A time for choosing","era":1976,"effects":[{"type":"extremist"}]},{"kind":"candidate","id":"robert-dole","name":"Robert Dole","party":"R","homeState":"KS","homeStateBonus":3,"identities":["veteran","rural","farm"],"belief":"Prairie conservative","era":1976,"effects":[]},{"kind":"candidate","id":"nelson-rockefeller","name":"Nelson Rockefeller","party":"R","homeState":"NY","homeStateBonus":2,"identities":["business","ivy"],"belief":"Eastern establishment","era":1976,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"howard-baker","name":"Howard Baker","party":"R","homeState":"TN","homeStateBonus":3,"identities":["business"],"belief":"What did the president know","era":1976,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"charles-h-percy","name":"Charles H. Percy","party":"R","homeState":"IL","homeStateBonus":3,"identities":["business","ivy"],"belief":"Corporate moderate","era":1976,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"jacob-javits","name":"Jacob Javits","party":"R","homeState":"NY","homeStateBonus":2,"identities":["jewish","urban","ivy"],"belief":"Liberal Republican","era":1976,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"edward-brooke","name":"Edward Brooke","party":"R","homeState":"MA","homeStateBonus":3,"identities":["black","urban","veteran"],"belief":"First elected since Reconstruction","era":1976,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"barry-goldwater","name":"Barry Goldwater","party":"R","homeState":"AZ","homeStateBonus":4,"identities":["rural","veteran","business"],"belief":"Extremism in defense of liberty","era":1976,"effects":[{"type":"extremist"}]},{"kind":"candidate","id":"john-tower","name":"John Tower","party":"R","homeState":"TX","homeStateBonus":3,"identities":["veteran","business"],"belief":"Built the Texas GOP","era":1976,"effects":[]},{"kind":"candidate","id":"strom-thurmond","name":"Strom Thurmond","party":"R","homeState":"SC","homeStateBonus":4,"identities":["rural","veteran","evangelical"],"belief":"Switched parties and stayed","era":1976,"effects":[{"type":"extremist"}]},{"kind":"candidate","id":"jesse-helms","name":"Jesse Helms","party":"R","homeState":"NC","homeStateBonus":4,"identities":["evangelical","rural"],"belief":"Senator No","era":1976,"effects":[{"type":"extremist"}]},{"kind":"candidate","id":"richard-lugar","name":"Richard Lugar","party":"R","homeState":"IN","homeStateBonus":3,"identities":["business","ivy"],"belief":"Mayor of Indianapolis","era":1976,"effects":[]},{"kind":"candidate","id":"h-john-heinz-iii","name":"H. John Heinz III","party":"R","homeState":"PA","homeStateBonus":3,"identities":["business","ivy"],"belief":"Moderate on labor","era":1976,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"bill-brock","name":"Bill Brock","party":"R","homeState":"TN","homeStateBonus":3,"identities":["business"],"belief":"Rebuilt the party","era":1976,"effects":[]},{"kind":"candidate","id":"bob-packwood","name":"Bob Packwood","party":"R","homeState":"OR","homeStateBonus":3,"identities":["business"],"belief":"Pro-choice Republican","era":1976,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"mark-hatfield","name":"Mark Hatfield","party":"R","homeState":"OR","homeStateBonus":3,"identities":["evangelical","academic"],"belief":"Antiwar Republican","era":1976,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"lowell-weicker","name":"Lowell Weicker","party":"R","homeState":"CT","homeStateBonus":3,"identities":["ivy","business"],"belief":"Watergate committee maverick","era":1976,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"clifford-case","name":"Clifford Case","party":"R","homeState":"NJ","homeStateBonus":3,"identities":["ivy","urban"],"belief":"Liberal on civil rights","era":1976,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"pete-domenici","name":"Pete Domenici","party":"R","homeState":"NM","homeStateBonus":3,"identities":["catholic","hispanic"],"belief":"Budget hawk","era":1976,"effects":[]},{"kind":"candidate","id":"paul-laxalt","name":"Paul Laxalt","party":"R","homeState":"NV","homeStateBonus":3,"identities":["catholic","business"],"belief":"Reagan's best friend","era":1976,"effects":[]},{"kind":"candidate","id":"james-l-buckley","name":"James L. Buckley","party":"R","homeState":"NY","homeStateBonus":2,"identities":["catholic","ivy"],"belief":"Elected on the Conservative line","era":1976,"effects":[{"type":"extremist"}]},{"kind":"candidate","id":"john-danforth","name":"John Danforth","party":"R","homeState":"MO","homeStateBonus":3,"identities":["evangelical","ivy"],"belief":"Ordained priest","era":1976,"effects":[]},{"kind":"candidate","id":"orrin-hatch","name":"Orrin Hatch","party":"R","homeState":"UT","homeStateBonus":3,"identities":["evangelical","business"],"belief":"Labor law opponent","era":1976,"effects":[]},{"kind":"candidate","id":"s-i-hayakawa","name":"S. I. Hayakawa","party":"R","homeState":"CA","homeStateBonus":2,"identities":["academic"],"belief":"Semanticist college president","era":1976,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"elliot-richardson","name":"Elliot Richardson","party":"R","homeState":"MA","homeStateBonus":3,"identities":["ivy","veteran"],"belief":"Resigned rather than fire Cox","era":1976,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"william-roth","name":"William Roth","party":"R","homeState":"DE","homeStateBonus":3,"identities":["business","ivy"],"belief":"Half of Kemp-Roth","era":1976,"effects":[]},{"kind":"candidate","id":"ted-stevens","name":"Ted Stevens","party":"R","homeState":"AK","homeStateBonus":4,"identities":["veteran","business"],"belief":"Alaska's appropriator","era":1976,"effects":[]},{"kind":"candidate","id":"milton-young","name":"Milton Young","party":"R","homeState":"ND","homeStateBonus":4,"identities":["farm","rural"],"belief":"Wheat and the farm bill","era":1976,"effects":[]},{"kind":"candidate","id":"charles-mathias","name":"Charles Mathias","party":"R","homeState":"MD","homeStateBonus":3,"identities":["ivy","urban"],"belief":"Civil rights Republican","era":1976,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"robert-stafford","name":"Robert Stafford","party":"R","homeState":"VT","homeStateBonus":3,"identities":["rural","veteran"],"belief":"Education and the environment","era":1976,"effects":[{"type":"heterodox"}]},{"kind":"district","id":"NY-12","state":"NY","number":12,"era":1976,"demographics":["urban","jewish"],"synergy":2,"note":"Brooklyn"},{"kind":"district","id":"NY-18","state":"NY","number":18,"era":1976,"demographics":["urban","black"],"synergy":2,"note":"Manhattan"},{"kind":"district","id":"NY-39","state":"NY","number":39,"era":1976,"demographics":["rural","catholic"],"synergy":1,"note":"Upstate"},{"kind":"district","id":"MA-8","state":"MA","number":8,"era":1976,"demographics":["urban","catholic","union"],"synergy":2,"note":"Boston"},{"kind":"district","id":"MA-2","state":"MA","number":2,"era":1976,"demographics":["union","catholic"],"synergy":1,"note":"Springfield"},{"kind":"district","id":"IL-1","state":"IL","number":1,"era":1976,"demographics":["urban","black"],"synergy":2,"note":"South Side"},{"kind":"district","id":"IL-11","state":"IL","number":11,"era":1976,"demographics":["urban","union","catholic"],"synergy":2,"note":"Northwest Chicago"},{"kind":"district","id":"IL-21","state":"IL","number":21,"era":1976,"demographics":["rural","farm"],"synergy":1,"note":"Downstate"},{"kind":"district","id":"CA-5","state":"CA","number":5,"era":1976,"demographics":["urban","academic"],"synergy":2,"note":"San Francisco"},{"kind":"district","id":"CA-8","state":"CA","number":8,"era":1976,"demographics":["urban","black","union"],"synergy":2,"note":"Oakland"},{"kind":"district","id":"CA-35","state":"CA","number":35,"era":1976,"demographics":["suburban","business"],"synergy":1,"note":"Orange County"},{"kind":"district","id":"CA-21","state":"CA","number":21,"era":1976,"demographics":["hispanic","urban"],"synergy":2,"note":"East LA"},{"kind":"district","id":"TX-18","state":"TX","number":18,"era":1976,"demographics":["black","urban"],"synergy":2,"note":"Houston"},{"kind":"district","id":"TX-15","state":"TX","number":15,"era":1976,"demographics":["hispanic","rural"],"synergy":2,"note":"Rio Grande Valley"},{"kind":"district","id":"TX-7","state":"TX","number":7,"era":1976,"demographics":["suburban","business"],"synergy":1,"note":"West Houston"},{"kind":"district","id":"MI-13","state":"MI","number":13,"era":1976,"demographics":["urban","black","union"],"synergy":2,"note":"Detroit"},{"kind":"district","id":"MI-5","state":"MI","number":5,"era":1976,"demographics":["union","business"],"synergy":1,"note":"Grand Rapids"},{"kind":"district","id":"PA-1","state":"PA","number":1,"era":1976,"demographics":["urban","black","union"],"synergy":2,"note":"Philadelphia"},{"kind":"district","id":"PA-20","state":"PA","number":20,"era":1976,"demographics":["union","catholic"],"synergy":2,"note":"Pittsburgh"},{"kind":"district","id":"PA-16","state":"PA","number":16,"era":1976,"demographics":["rural","evangelical"],"synergy":1,"note":"Lancaster"},{"kind":"district","id":"OH-21","state":"OH","number":21,"era":1976,"demographics":["urban","black","union"],"synergy":2,"note":"Cleveland"},{"kind":"district","id":"OH-1","state":"OH","number":1,"era":1976,"demographics":["urban","catholic"],"synergy":1,"note":"Cincinnati"},{"kind":"district","id":"OH-18","state":"OH","number":18,"era":1976,"demographics":["rural","union"],"synergy":1,"note":"Appalachian Ohio"},{"kind":"district","id":"GA-5","state":"GA","number":5,"era":1976,"demographics":["black","urban"],"synergy":2,"note":"Atlanta"},{"kind":"district","id":"GA-8","state":"GA","number":8,"era":1976,"demographics":["rural","evangelical","farm"],"synergy":1,"note":"South Georgia"},{"kind":"district","id":"FL-18","state":"FL","number":18,"era":1976,"demographics":["cuban","urban"],"synergy":3,"note":"Miami"},{"kind":"district","id":"FL-9","state":"FL","number":9,"era":1976,"demographics":["suburban","veteran"],"synergy":1,"note":"Tampa"},{"kind":"district","id":"AL-7","state":"AL","number":7,"era":1976,"demographics":["black","rural"],"synergy":2,"note":"Black Belt"},{"kind":"district","id":"MS-2","state":"MS","number":2,"era":1976,"demographics":["black","rural","farm"],"synergy":2,"note":"Delta"},{"kind":"district","id":"LA-2","state":"LA","number":2,"era":1976,"demographics":["black","urban","catholic"],"synergy":2,"note":"New Orleans"},{"kind":"district","id":"MN-5","state":"MN","number":5,"era":1976,"demographics":["urban","union"],"synergy":2,"note":"Minneapolis"},{"kind":"district","id":"MN-7","state":"MN","number":7,"era":1976,"demographics":["farm","rural"],"synergy":2,"note":"Western Minnesota"},{"kind":"district","id":"IA-3","state":"IA","number":3,"era":1976,"demographics":["farm","rural"],"synergy":2,"note":"Des Moines"},{"kind":"district","id":"KS-1","state":"KS","number":1,"era":1976,"demographics":["farm","rural"],"synergy":2,"note":"Big First"},{"kind":"district","id":"WV-3","state":"WV","number":3,"era":1976,"demographics":["union","rural"],"synergy":2,"note":"Coalfields"},{"kind":"district","id":"KY-5","state":"KY","number":5,"era":1976,"demographics":["rural","evangelical"],"synergy":2,"note":"Eastern Kentucky"},{"kind":"district","id":"AZ-2","state":"AZ","number":2,"era":1976,"demographics":["hispanic","rural"],"synergy":1,"note":"Tucson"},{"kind":"district","id":"WA-7","state":"WA","number":7,"era":1976,"demographics":["urban","union"],"synergy":2,"note":"Seattle"},{"kind":"district","id":"NJ-10","state":"NJ","number":10,"era":1976,"demographics":["urban","black"],"synergy":2,"note":"Newark"},{"kind":"district","id":"CT-3","state":"CT","number":3,"era":1976,"demographics":["urban","catholic","union"],"synergy":1,"note":"New Haven"},{"kind":"district","id":"UT-1","state":"UT","number":1,"era":1976,"demographics":["evangelical","rural"],"synergy":2,"note":"Northern Utah"},{"kind":"district","id":"SC-6","state":"SC","number":6,"era":1976,"demographics":["black","rural"],"synergy":2,"note":"Lowcountry"}]},"1992":{"name":"1992","era":1992,"note":"The parties begin to sort. Home-state bonuses shrink to 1-3, heterodox cards remain common, and the Voting Rights Act redraw puts a wave of majority-minority districts on the map -- often the only path into a Southern state for a Democrat.","cards":[{"kind":"candidate","id":"bill-clinton-1992","name":"Bill Clinton","party":"D","homeState":"AR","homeStateBonus":2,"identities":["evangelical","rural","ivy"],"belief":"Tough on crime, ends welfare as we know it","era":1992,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"al-gore-1992","name":"Al Gore","party":"D","homeState":"TN","homeStateBonus":2,"identities":["ivy","rural"],"belief":"Environment before it polled","era":1992,"effects":[]},{"kind":"candidate","id":"paul-tsongas-1992","name":"Paul Tsongas","party":"D","homeState":"MA","homeStateBonus":2,"identities":["catholic","business"],"belief":"Pro-business Democrat","era":1992,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"jerry-brown-1992","name":"Jerry Brown","party":"D","homeState":"CA","homeStateBonus":1,"identities":["catholic"],"belief":"Flat tax insurgent","era":1992,"effects":[{"type":"extremist"}]},{"kind":"candidate","id":"tom-harkin-1992","name":"Tom Harkin","party":"D","homeState":"IA","homeStateBonus":2,"identities":["farm","rural","union"],"belief":"Prairie populist","era":1992,"effects":[]},{"kind":"candidate","id":"bob-kerrey-1992","name":"Bob Kerrey","party":"D","homeState":"NE","homeStateBonus":2,"identities":["veteran","rural"],"belief":"Medal of Honor","era":1992,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"mario-cuomo-1992","name":"Mario Cuomo","party":"D","homeState":"NY","homeStateBonus":2,"identities":["catholic","urban","ivy"],"belief":"A tale of two cities","era":1992,"effects":[]},{"kind":"candidate","id":"ann-richards-1992","name":"Ann Richards","party":"D","homeState":"TX","homeStateBonus":2,"identities":["rural"],"belief":"Born with a silver foot","era":1992,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"sam-nunn-1992","name":"Sam Nunn","party":"D","homeState":"GA","homeStateBonus":2,"identities":["veteran","rural"],"belief":"Defense conservative","era":1992,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"zell-miller-1992","name":"Zell Miller","party":"D","homeState":"GA","homeStateBonus":2,"identities":["rural","veteran","evangelical"],"belief":"HOPE scholarships","era":1992,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"barbara-boxer-1992","name":"Barbara Boxer","party":"D","homeState":"CA","homeStateBonus":1,"identities":["jewish","urban"],"belief":"Year of the Woman","era":1992,"effects":[]},{"kind":"candidate","id":"dianne-feinstein-1992","name":"Dianne Feinstein","party":"D","homeState":"CA","homeStateBonus":1,"identities":["jewish","urban","business"],"belief":"Mayor during the assassinations","era":1992,"effects":[]},{"kind":"candidate","id":"carol-moseley-braun-1992","name":"Carol Moseley Braun","party":"D","homeState":"IL","homeStateBonus":1,"identities":["black","urban"],"belief":"First Black woman senator","era":1992,"effects":[]},{"kind":"candidate","id":"paul-wellstone-1992","name":"Paul Wellstone","party":"D","homeState":"MN","homeStateBonus":2,"identities":["academic","union"],"belief":"The democratic wing of the Democratic Party","era":1992,"effects":[{"type":"extremist"}]},{"kind":"candidate","id":"byron-dorgan-1992","name":"Byron Dorgan","party":"D","homeState":"ND","homeStateBonus":3,"identities":["farm","rural"],"belief":"Against the trade deals","era":1992,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"bob-casey-1992","name":"Bob Casey","party":"D","homeState":"PA","homeStateBonus":2,"identities":["catholic","union"],"belief":"Pro-life Democrat","era":1992,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"john-breaux-1992","name":"John Breaux","party":"D","homeState":"LA","homeStateBonus":2,"identities":["rural","catholic","business"],"belief":"My vote cannot be bought but it can be rented","era":1992,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"richard-shelby-1992","name":"Richard Shelby","party":"D","homeState":"AL","homeStateBonus":2,"identities":["rural","business"],"belief":"Switched parties in 1994","era":1992,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"charles-rangel-1992","name":"Charles Rangel","party":"D","homeState":"NY","homeStateBonus":1,"identities":["black","urban","veteran"],"belief":"Harlem's chairman","era":1992,"effects":[]},{"kind":"candidate","id":"john-lewis-1992","name":"John Lewis","party":"D","homeState":"GA","homeStateBonus":1,"identities":["black","urban","evangelical"],"belief":"Good trouble","era":1992,"effects":[]},{"kind":"candidate","id":"nancy-pelosi-1992","name":"Nancy Pelosi","party":"D","homeState":"CA","homeStateBonus":1,"identities":["catholic","urban"],"belief":"San Francisco fundraiser","era":1992,"effects":[]},{"kind":"candidate","id":"dick-gephardt-1992","name":"Dick Gephardt","party":"D","homeState":"MO","homeStateBonus":2,"identities":["union","catholic"],"belief":"Fair trade","era":1992,"effects":[]},{"kind":"candidate","id":"joseph-r-biden-1992","name":"Joseph R. Biden","party":"D","homeState":"DE","homeStateBonus":2,"identities":["catholic"],"belief":"Crime bill author","era":1992,"effects":[]},{"kind":"candidate","id":"patrick-moynihan-1992","name":"Patrick Moynihan","party":"D","homeState":"NY","homeStateBonus":1,"identities":["catholic","ivy","academic"],"belief":"Defining deviancy down","era":1992,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"bill-bradley-1992","name":"Bill Bradley","party":"D","homeState":"NJ","homeStateBonus":2,"identities":["ivy","business"],"belief":"Tax reform and basketball","era":1992,"effects":[]},{"kind":"candidate","id":"ron-wyden-1992","name":"Ron Wyden","party":"D","homeState":"OR","homeStateBonus":2,"identities":["jewish"],"belief":"Health care markets","era":1992,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"ben-nighthorse-campbell-1992","name":"Ben Nighthorse Campbell","party":"D","homeState":"CO","homeStateBonus":2,"identities":["veteran","rural"],"belief":"Switched to the GOP in 1995","era":1992,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"harris-wofford-1992","name":"Harris Wofford","party":"D","homeState":"PA","homeStateBonus":2,"identities":["academic","ivy"],"belief":"Health care as a right","era":1992,"effects":[]},{"kind":"candidate","id":"george-h-w-bush-1992","name":"George H. W. Bush","party":"R","homeState":"TX","homeStateBonus":2,"identities":["veteran","business","ivy"],"belief":"Read my lips","era":1992,"effects":[]},{"kind":"candidate","id":"pat-buchanan-1992","name":"Pat Buchanan","party":"R","homeState":"VA","homeStateBonus":1,"identities":["catholic","urban"],"belief":"Culture war at the convention","era":1992,"effects":[{"type":"extremist"}]},{"kind":"candidate","id":"bob-dole-1992","name":"Bob Dole","party":"R","homeState":"KS","homeStateBonus":2,"identities":["veteran","rural","farm"],"belief":"The deficit hawk","era":1992,"effects":[]},{"kind":"candidate","id":"newt-gingrich-1992","name":"Newt Gingrich","party":"R","homeState":"GA","homeStateBonus":2,"identities":["academic","business"],"belief":"Contract with America","era":1992,"effects":[{"type":"extremist"}]},{"kind":"candidate","id":"phil-gramm-1992","name":"Phil Gramm","party":"R","homeState":"TX","homeStateBonus":2,"identities":["academic","business"],"belief":"Gramm-Rudman","era":1992,"effects":[{"type":"extremist"}]},{"kind":"candidate","id":"jack-kemp-1992","name":"Jack Kemp","party":"R","homeState":"NY","homeStateBonus":1,"identities":["veteran","urban"],"belief":"Bleeding-heart conservative","era":1992,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"arlen-specter-1992","name":"Arlen Specter","party":"R","homeState":"PA","homeStateBonus":2,"identities":["jewish","urban"],"belief":"Single bullet, and later a switch","era":1992,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"john-mccain-1992","name":"John McCain","party":"R","homeState":"AZ","homeStateBonus":2,"identities":["veteran","business"],"belief":"Keating Five survivor","era":1992,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"alfonse-damato-1992","name":"Alfonse D'Amato","party":"R","homeState":"NY","homeStateBonus":1,"identities":["catholic","urban"],"belief":"Senator Pothole","era":1992,"effects":[]},{"kind":"candidate","id":"orrin-hatch-1992","name":"Orrin Hatch","party":"R","homeState":"UT","homeStateBonus":2,"identities":["evangelical","business"],"belief":"Worked with Kennedy","era":1992,"effects":[]},{"kind":"candidate","id":"nancy-kassebaum-1992","name":"Nancy Kassebaum","party":"R","homeState":"KS","homeStateBonus":2,"identities":["rural","farm"],"belief":"Landon's daughter","era":1992,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"christine-todd-whitman-1992","name":"Christine Todd Whitman","party":"R","homeState":"NJ","homeStateBonus":2,"identities":["business","ivy"],"belief":"Cut taxes thirty percent","era":1992,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"william-weld-1992","name":"William Weld","party":"R","homeState":"MA","homeStateBonus":2,"identities":["ivy","business"],"belief":"Fiscally conservative, socially liberal","era":1992,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"pete-wilson-1992","name":"Pete Wilson","party":"R","homeState":"CA","homeStateBonus":1,"identities":["veteran","business"],"belief":"Proposition 187","era":1992,"effects":[]},{"kind":"candidate","id":"richard-lugar-1992","name":"Richard Lugar","party":"R","homeState":"IN","homeStateBonus":2,"identities":["business","ivy"],"belief":"Nunn-Lugar","era":1992,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"alan-simpson-1992","name":"Alan Simpson","party":"R","homeState":"WY","homeStateBonus":3,"identities":["rural","veteran"],"belief":"Wyoming humor","era":1992,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"trent-lott-1992","name":"Trent Lott","party":"R","homeState":"MS","homeStateBonus":2,"identities":["rural","evangelical"],"belief":"The whip","era":1992,"effects":[]},{"kind":"candidate","id":"jesse-helms-1992","name":"Jesse Helms","party":"R","homeState":"NC","homeStateBonus":3,"identities":["evangelical","rural"],"belief":"Senator No","era":1992,"effects":[{"type":"extremist"}]},{"kind":"candidate","id":"strom-thurmond-1992","name":"Strom Thurmond","party":"R","homeState":"SC","homeStateBonus":3,"identities":["rural","veteran","evangelical"],"belief":"Still there","era":1992,"effects":[{"type":"extremist"}]},{"kind":"candidate","id":"kay-bailey-hutchison-1992","name":"Kay Bailey Hutchison","party":"R","homeState":"TX","homeStateBonus":2,"identities":["business"],"belief":"Texas treasurer","era":1992,"effects":[]},{"kind":"candidate","id":"john-chafee-1992","name":"John Chafee","party":"R","homeState":"RI","homeStateBonus":2,"identities":["ivy","veteran"],"belief":"Environmental Republican","era":1992,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"james-jeffords-1992","name":"James Jeffords","party":"R","homeState":"VT","homeStateBonus":2,"identities":["rural","ivy"],"belief":"Left the party in 2001","era":1992,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"olympia-snowe-1992","name":"Olympia Snowe","party":"R","homeState":"ME","homeStateBonus":2,"identities":["business"],"belief":"Centrist dealmaker","era":1992,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"tommy-thompson-1992","name":"Tommy Thompson","party":"R","homeState":"WI","homeStateBonus":2,"identities":["rural","business"],"belief":"Welfare reform laboratory","era":1992,"effects":[]},{"kind":"candidate","id":"john-engler-1992","name":"John Engler","party":"R","homeState":"MI","homeStateBonus":2,"identities":["rural","business"],"belief":"Cut the income tax","era":1992,"effects":[]},{"kind":"candidate","id":"george-voinovich-1992","name":"George Voinovich","party":"R","homeState":"OH","homeStateBonus":2,"identities":["catholic","urban"],"belief":"Mayor of Cleveland","era":1992,"effects":[]},{"kind":"district","id":"NY-12-1992","state":"NY","number":12,"era":1992,"demographics":["urban","hispanic"],"synergy":2,"note":"Brooklyn, redrawn"},{"kind":"district","id":"NY-15-1992","state":"NY","number":15,"era":1992,"demographics":["black","urban"],"synergy":2,"note":"Harlem"},{"kind":"district","id":"CA-8-1992","state":"CA","number":8,"era":1992,"demographics":["urban","catholic"],"synergy":2,"note":"San Francisco"},{"kind":"district","id":"CA-33-1992","state":"CA","number":33,"era":1992,"demographics":["hispanic","urban"],"synergy":3,"note":"East LA, majority-minority"},{"kind":"district","id":"CA-22-1992","state":"CA","number":22,"era":1992,"demographics":["suburban","business"],"synergy":1,"note":"Central Coast"},{"kind":"district","id":"TX-30-1992","state":"TX","number":30,"era":1992,"demographics":["black","urban"],"synergy":3,"note":"Dallas, new majority-minority"},{"kind":"district","id":"TX-18-1992","state":"TX","number":18,"era":1992,"demographics":["black","urban"],"synergy":2,"note":"Houston"},{"kind":"district","id":"TX-6-1992","state":"TX","number":6,"era":1992,"demographics":["suburban","evangelical"],"synergy":1,"note":"Fort Worth suburbs"},{"kind":"district","id":"FL-23-1992","state":"FL","number":23,"era":1992,"demographics":["black","urban"],"synergy":3,"note":"Drawn under the Voting Rights Act"},{"kind":"district","id":"FL-21-1992","state":"FL","number":21,"era":1992,"demographics":["cuban","suburban"],"synergy":3,"note":"Miami-Dade"},{"kind":"district","id":"GA-11-1992","state":"GA","number":11,"era":1992,"demographics":["black","rural"],"synergy":3,"note":"The first majority-Black district since Reconstruction"},{"kind":"district","id":"GA-6-1992","state":"GA","number":6,"era":1992,"demographics":["suburban","business","evangelical"],"synergy":2,"note":"Gingrich's Cobb County"},{"kind":"district","id":"NC-12-1992","state":"NC","number":12,"era":1992,"demographics":["black","urban"],"synergy":3,"note":"I-85 district"},{"kind":"district","id":"IL-4-1992","state":"IL","number":4,"era":1992,"demographics":["hispanic","urban"],"synergy":3,"note":"Earmuff district"},{"kind":"district","id":"IL-1-1992","state":"IL","number":1,"era":1992,"demographics":["black","urban"],"synergy":2,"note":"South Side"},{"kind":"district","id":"MI-13-1992","state":"MI","number":13,"era":1992,"demographics":["black","urban","union"],"synergy":2,"note":"Detroit"},{"kind":"district","id":"OH-11-1992","state":"OH","number":11,"era":1992,"demographics":["black","urban","union"],"synergy":2,"note":"Cleveland"},{"kind":"district","id":"PA-2-1992","state":"PA","number":2,"era":1992,"demographics":["black","urban"],"synergy":2,"note":"West Philadelphia"},{"kind":"district","id":"PA-12-1992","state":"PA","number":12,"era":1992,"demographics":["union","rural","catholic"],"synergy":2,"note":"Murtha's district"},{"kind":"district","id":"AL-7-1992","state":"AL","number":7,"era":1992,"demographics":["black","rural"],"synergy":3,"note":"Black Belt"},{"kind":"district","id":"MS-2-1992","state":"MS","number":2,"era":1992,"demographics":["black","rural"],"synergy":3,"note":"Delta"},{"kind":"district","id":"LA-2-1992","state":"LA","number":2,"era":1992,"demographics":["black","urban","catholic"],"synergy":2,"note":"New Orleans"},{"kind":"district","id":"SC-6-1992","state":"SC","number":6,"era":1992,"demographics":["black","rural"],"synergy":3,"note":"Lowcountry"},{"kind":"district","id":"VA-3-1992","state":"VA","number":3,"era":1992,"demographics":["black","urban"],"synergy":3,"note":"Richmond to Norfolk"},{"kind":"district","id":"MD-7-1992","state":"MD","number":7,"era":1992,"demographics":["black","urban"],"synergy":2,"note":"Baltimore"},{"kind":"district","id":"TN-9-1992","state":"TN","number":9,"era":1992,"demographics":["black","urban"],"synergy":2,"note":"Memphis"},{"kind":"district","id":"MO-5-1992","state":"MO","number":5,"era":1992,"demographics":["black","urban","union"],"synergy":2,"note":"Kansas City"},{"kind":"district","id":"WA-7-1992","state":"WA","number":7,"era":1992,"demographics":["urban","academic"],"synergy":2,"note":"Seattle"},{"kind":"district","id":"OR-3-1992","state":"OR","number":3,"era":1992,"demographics":["urban","academic"],"synergy":2,"note":"Portland"},{"kind":"district","id":"CO-1-1992","state":"CO","number":1,"era":1992,"demographics":["urban","hispanic"],"synergy":2,"note":"Denver"},{"kind":"district","id":"AZ-2-1992","state":"AZ","number":2,"era":1992,"demographics":["hispanic","rural"],"synergy":2,"note":"South Tucson"},{"kind":"district","id":"NM-3-1992","state":"NM","number":3,"era":1992,"demographics":["hispanic","rural"],"synergy":2,"note":"Northern New Mexico"},{"kind":"district","id":"MN-5-1992","state":"MN","number":5,"era":1992,"demographics":["urban","union"],"synergy":2,"note":"Minneapolis"},{"kind":"district","id":"WI-5-1992","state":"WI","number":5,"era":1992,"demographics":["urban","union","catholic"],"synergy":2,"note":"Milwaukee"},{"kind":"district","id":"IA-5-1992","state":"IA","number":5,"era":1992,"demographics":["farm","rural"],"synergy":2,"note":"Western Iowa"},{"kind":"district","id":"KS-1-1992","state":"KS","number":1,"era":1992,"demographics":["farm","rural"],"synergy":2,"note":"Big First"},{"kind":"district","id":"NE-3-1992","state":"NE","number":3,"era":1992,"demographics":["farm","rural"],"synergy":2,"note":"The Third"},{"kind":"district","id":"KY-5-1992","state":"KY","number":5,"era":1992,"demographics":["rural","evangelical"],"synergy":2,"note":"Eastern Kentucky"},{"kind":"district","id":"WV-3-1992","state":"WV","number":3,"era":1992,"demographics":["union","rural"],"synergy":2,"note":"Coalfields"},{"kind":"district","id":"NJ-10-1992","state":"NJ","number":10,"era":1992,"demographics":["black","urban"],"synergy":2,"note":"Newark"},{"kind":"district","id":"MA-8-1992","state":"MA","number":8,"era":1992,"demographics":["urban","catholic","union"],"synergy":2,"note":"Boston"},{"kind":"district","id":"CT-1-1992","state":"CT","number":1,"era":1992,"demographics":["urban","catholic"],"synergy":1,"note":"Hartford"}]},"2008":{"name":"2008","era":2008,"note":"Nationalisation is well advanced. Home-state bonuses are 1-2, the suburbs have replaced the union hall as the swing terrain, and the surviving heterodox cards are conspicuous and few.","cards":[{"kind":"candidate","id":"barack-obama-2008","name":"Barack Obama","party":"D","homeState":"IL","homeStateBonus":1,"identities":["black","urban","ivy","academic"],"belief":"Hope and change","era":2008,"effects":[]},{"kind":"candidate","id":"hillary-clinton-2008","name":"Hillary Clinton","party":"D","homeState":"NY","homeStateBonus":1,"identities":["ivy","suburban"],"belief":"Ready on day one","era":2008,"effects":[]},{"kind":"candidate","id":"john-edwards-2008","name":"John Edwards","party":"D","homeState":"NC","homeStateBonus":2,"identities":["rural"],"belief":"Two Americas","era":2008,"effects":[]},{"kind":"candidate","id":"joe-biden-2008","name":"Joe Biden","party":"D","homeState":"DE","homeStateBonus":2,"identities":["catholic"],"belief":"Foreign relations chairman","era":2008,"effects":[]},{"kind":"candidate","id":"bill-richardson-2008","name":"Bill Richardson","party":"D","homeState":"NM","homeStateBonus":2,"identities":["hispanic","business"],"belief":"Governor and diplomat","era":2008,"effects":[]},{"kind":"candidate","id":"chris-dodd-2008","name":"Chris Dodd","party":"D","homeState":"CT","homeStateBonus":2,"identities":["catholic","ivy"],"belief":"Banking chairman","era":2008,"effects":[]},{"kind":"candidate","id":"nancy-pelosi-2008","name":"Nancy Pelosi","party":"D","homeState":"CA","homeStateBonus":1,"identities":["catholic","urban"],"belief":"First woman Speaker","era":2008,"effects":[]},{"kind":"candidate","id":"harry-reid-2008","name":"Harry Reid","party":"D","homeState":"NV","homeStateBonus":2,"identities":["evangelical","rural"],"belief":"Pro-life majority leader","era":2008,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"jim-webb-2008","name":"Jim Webb","party":"D","homeState":"VA","homeStateBonus":2,"identities":["veteran","rural"],"belief":"Reagan's Navy Secretary","era":2008,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"jon-tester-2008","name":"Jon Tester","party":"D","homeState":"MT","homeStateBonus":3,"identities":["farm","rural"],"belief":"Flat-top farmer","era":2008,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"claire-mccaskill-2008","name":"Claire McCaskill","party":"D","homeState":"MO","homeStateBonus":2,"identities":["suburban"],"belief":"Prosecutor","era":2008,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"sherrod-brown-2008","name":"Sherrod Brown","party":"D","homeState":"OH","homeStateBonus":2,"identities":["union","academic"],"belief":"Against the trade deals","era":2008,"effects":[]},{"kind":"candidate","id":"bob-casey-jr-2008","name":"Bob Casey Jr.","party":"D","homeState":"PA","homeStateBonus":2,"identities":["catholic","union"],"belief":"Pro-life Democrat","era":2008,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"heath-shuler-2008","name":"Heath Shuler","party":"D","homeState":"NC","homeStateBonus":2,"identities":["evangelical","rural"],"belief":"Blue Dog quarterback","era":2008,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"rahm-emanuel-2008","name":"Rahm Emanuel","party":"D","homeState":"IL","homeStateBonus":1,"identities":["jewish","urban"],"belief":"Recruited the Blue Dogs","era":2008,"effects":[]},{"kind":"candidate","id":"steny-hoyer-2008","name":"Steny Hoyer","party":"D","homeState":"MD","homeStateBonus":1,"identities":["suburban"],"belief":"The majority leader","era":2008,"effects":[]},{"kind":"candidate","id":"charles-rangel-2008","name":"Charles Rangel","party":"D","homeState":"NY","homeStateBonus":1,"identities":["black","urban","veteran"],"belief":"Ways and Means","era":2008,"effects":[]},{"kind":"candidate","id":"barney-frank-2008","name":"Barney Frank","party":"D","homeState":"MA","homeStateBonus":1,"identities":["jewish","urban","ivy"],"belief":"Financial services","era":2008,"effects":[]},{"kind":"candidate","id":"russ-feingold-2008","name":"Russ Feingold","party":"D","homeState":"WI","homeStateBonus":2,"identities":["jewish","academic"],"belief":"The only no vote on the Patriot Act","era":2008,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"amy-klobuchar-2008","name":"Amy Klobuchar","party":"D","homeState":"MN","homeStateBonus":2,"identities":["suburban","ivy"],"belief":"Prosecutor from the Iron Range","era":2008,"effects":[]},{"kind":"candidate","id":"mark-warner-2008","name":"Mark Warner","party":"D","homeState":"VA","homeStateBonus":2,"identities":["business"],"belief":"Governor who won rural Virginia","era":2008,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"kay-hagan-2008","name":"Kay Hagan","party":"D","homeState":"NC","homeStateBonus":2,"identities":["suburban","business"],"belief":"Rode the wave","era":2008,"effects":[]},{"kind":"candidate","id":"al-franken-2008","name":"Al Franken","party":"D","homeState":"MN","homeStateBonus":1,"identities":["jewish","academic"],"belief":"Won by 312 votes","era":2008,"effects":[]},{"kind":"candidate","id":"tim-kaine-2008","name":"Tim Kaine","party":"D","homeState":"VA","homeStateBonus":2,"identities":["catholic","hispanic"],"belief":"Missionary in Honduras","era":2008,"effects":[]},{"kind":"candidate","id":"john-mccain-2008","name":"John McCain","party":"R","homeState":"AZ","homeStateBonus":2,"identities":["veteran","business"],"belief":"Maverick","era":2008,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"sarah-palin-2008","name":"Sarah Palin","party":"R","homeState":"AK","homeStateBonus":3,"identities":["evangelical","rural"],"belief":"Hockey mom","era":2008,"effects":[{"type":"extremist"}]},{"kind":"candidate","id":"mitt-romney-2008","name":"Mitt Romney","party":"R","homeState":"MA","homeStateBonus":1,"identities":["evangelical","business","ivy"],"belief":"Turnaround artist","era":2008,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"mike-huckabee-2008","name":"Mike Huckabee","party":"R","homeState":"AR","homeStateBonus":2,"identities":["evangelical","rural"],"belief":"Preacher governor","era":2008,"effects":[]},{"kind":"candidate","id":"rudy-giuliani-2008","name":"Rudy Giuliani","party":"R","homeState":"NY","homeStateBonus":1,"identities":["catholic","urban"],"belief":"America's mayor","era":2008,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"fred-thompson-2008","name":"Fred Thompson","party":"R","homeState":"TN","homeStateBonus":2,"identities":["business","rural"],"belief":"Actor and senator","era":2008,"effects":[]},{"kind":"candidate","id":"ron-paul-2008","name":"Ron Paul","party":"R","homeState":"TX","homeStateBonus":1,"identities":["business","veteran"],"belief":"End the Fed","era":2008,"effects":[{"type":"extremist"}]},{"kind":"candidate","id":"mitch-mcconnell-2008","name":"Mitch McConnell","party":"R","homeState":"KY","homeStateBonus":2,"identities":["business"],"belief":"The minority leader","era":2008,"effects":[]},{"kind":"candidate","id":"john-boehner-2008","name":"John Boehner","party":"R","homeState":"OH","homeStateBonus":2,"identities":["catholic","business"],"belief":"Country club conservative","era":2008,"effects":[]},{"kind":"candidate","id":"eric-cantor-2008","name":"Eric Cantor","party":"R","homeState":"VA","homeStateBonus":2,"identities":["jewish","suburban","business"],"belief":"Young Gun","era":2008,"effects":[]},{"kind":"candidate","id":"lindsey-graham-2008","name":"Lindsey Graham","party":"R","homeState":"SC","homeStateBonus":2,"identities":["veteran","evangelical"],"belief":"McCain's wingman","era":2008,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"susan-collins-2008","name":"Susan Collins","party":"R","homeState":"ME","homeStateBonus":3,"identities":["business","suburban"],"belief":"The last split ticket","era":2008,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"olympia-snowe-2008","name":"Olympia Snowe","party":"R","homeState":"ME","homeStateBonus":3,"identities":["business"],"belief":"Voted for the stimulus in committee","era":2008,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"arlen-specter-2008","name":"Arlen Specter","party":"R","homeState":"PA","homeStateBonus":2,"identities":["jewish","urban"],"belief":"Switched parties in 2009","era":2008,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"chuck-hagel-2008","name":"Chuck Hagel","party":"R","homeState":"NE","homeStateBonus":2,"identities":["veteran","rural"],"belief":"Republican against the war","era":2008,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"richard-lugar-2008","name":"Richard Lugar","party":"R","homeState":"IN","homeStateBonus":2,"identities":["business","ivy"],"belief":"Nunn-Lugar","era":2008,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"jim-demint-2008","name":"Jim DeMint","party":"R","homeState":"SC","homeStateBonus":2,"identities":["evangelical","business"],"belief":"Ideological validator","era":2008,"effects":[{"type":"extremist"}]},{"kind":"candidate","id":"tom-coburn-2008","name":"Tom Coburn","party":"R","homeState":"OK","homeStateBonus":2,"identities":["evangelical","business"],"belief":"Dr. No","era":2008,"effects":[{"type":"extremist"}]},{"kind":"candidate","id":"sam-brownback-2008","name":"Sam Brownback","party":"R","homeState":"KS","homeStateBonus":2,"identities":["evangelical","farm"],"belief":"Compassionate conservative","era":2008,"effects":[]},{"kind":"candidate","id":"charlie-crist-2008","name":"Charlie Crist","party":"R","homeState":"FL","homeStateBonus":2,"identities":["suburban","business"],"belief":"Hugged the president","era":2008,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"bobby-jindal-2008","name":"Bobby Jindal","party":"R","homeState":"LA","homeStateBonus":2,"identities":["evangelical","ivy"],"belief":"Rhodes scholar governor","era":2008,"effects":[]},{"kind":"candidate","id":"tim-pawlenty-2008","name":"Tim Pawlenty","party":"R","homeState":"MN","homeStateBonus":2,"identities":["evangelical","suburban"],"belief":"Sam's Club Republicans","era":2008,"effects":[]},{"kind":"candidate","id":"haley-barbour-2008","name":"Haley Barbour","party":"R","homeState":"MS","homeStateBonus":2,"identities":["business","rural"],"belief":"The lobbyist governor","era":2008,"effects":[]},{"kind":"candidate","id":"norm-coleman-2008","name":"Norm Coleman","party":"R","homeState":"MN","homeStateBonus":1,"identities":["jewish","urban"],"belief":"Lost the recount","era":2008,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"george-voinovich-2008","name":"George Voinovich","party":"R","homeState":"OH","homeStateBonus":2,"identities":["catholic","urban"],"belief":"Deficit hawk","era":2008,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"john-sununu-2008","name":"John Sununu","party":"R","homeState":"NH","homeStateBonus":2,"identities":["business","ivy"],"belief":"Youngest senator","era":2008,"effects":[]},{"kind":"district","id":"IL-1-2008","state":"IL","number":1,"era":2008,"demographics":["black","urban"],"synergy":2,"note":"South Side"},{"kind":"district","id":"IL-5-2008","state":"IL","number":5,"era":2008,"demographics":["urban","catholic"],"synergy":2,"note":"North Side"},{"kind":"district","id":"NY-15-2008","state":"NY","number":15,"era":2008,"demographics":["black","urban"],"synergy":2,"note":"Harlem"},{"kind":"district","id":"NY-23-2008","state":"NY","number":23,"era":2008,"demographics":["rural","union"],"synergy":1,"note":"North Country"},{"kind":"district","id":"CA-8-2008","state":"CA","number":8,"era":2008,"demographics":["urban","academic"],"synergy":2,"note":"San Francisco"},{"kind":"district","id":"CA-34-2008","state":"CA","number":34,"era":2008,"demographics":["hispanic","urban"],"synergy":3,"note":"Downtown LA"},{"kind":"district","id":"CA-50-2008","state":"CA","number":50,"era":2008,"demographics":["suburban","business"],"synergy":2,"note":"North San Diego County"},{"kind":"district","id":"TX-23-2008","state":"TX","number":23,"era":2008,"demographics":["hispanic","rural"],"synergy":3,"note":"Border district"},{"kind":"district","id":"TX-22-2008","state":"TX","number":22,"era":2008,"demographics":["suburban","business"],"synergy":2,"note":"Sugar Land"},{"kind":"district","id":"FL-25-2008","state":"FL","number":25,"era":2008,"demographics":["cuban","suburban"],"synergy":3,"note":"Miami-Dade"},{"kind":"district","id":"FL-22-2008","state":"FL","number":22,"era":2008,"demographics":["suburban","jewish"],"synergy":2,"note":"Broward-Palm Beach"},{"kind":"district","id":"PA-4-2008","state":"PA","number":4,"era":2008,"demographics":["suburban","union"],"synergy":2,"note":"Pittsburgh suburbs"},{"kind":"district","id":"PA-12-2008","state":"PA","number":12,"era":2008,"demographics":["union","rural","catholic"],"synergy":2,"note":"Murtha country"},{"kind":"district","id":"OH-1-2008","state":"OH","number":1,"era":2008,"demographics":["black","urban"],"synergy":2,"note":"Cincinnati"},{"kind":"district","id":"OH-15-2008","state":"OH","number":15,"era":2008,"demographics":["suburban","academic"],"synergy":2,"note":"Columbus suburbs"},{"kind":"district","id":"VA-11-2008","state":"VA","number":11,"era":2008,"demographics":["suburban","hispanic","business"],"synergy":3,"note":"Northern Virginia"},{"kind":"district","id":"VA-9-2008","state":"VA","number":9,"era":2008,"demographics":["rural","evangelical"],"synergy":2,"note":"Fighting Ninth"},{"kind":"district","id":"NC-8-2008","state":"NC","number":8,"era":2008,"demographics":["black","rural"],"synergy":2,"note":"Charlotte to Fayetteville"},{"kind":"district","id":"NC-11-2008","state":"NC","number":11,"era":2008,"demographics":["rural","evangelical","veteran"],"synergy":2,"note":"Western North Carolina"},{"kind":"district","id":"CO-7-2008","state":"CO","number":7,"era":2008,"demographics":["suburban","hispanic"],"synergy":2,"note":"Denver suburbs"},{"kind":"district","id":"NV-3-2008","state":"NV","number":3,"era":2008,"demographics":["suburban","hispanic"],"synergy":2,"note":"Las Vegas suburbs"},{"kind":"district","id":"AZ-8-2008","state":"AZ","number":8,"era":2008,"demographics":["suburban","hispanic"],"synergy":2,"note":"Tucson"},{"kind":"district","id":"NM-1-2008","state":"NM","number":1,"era":2008,"demographics":["hispanic","urban"],"synergy":2,"note":"Albuquerque"},{"kind":"district","id":"IN-2-2008","state":"IN","number":2,"era":2008,"demographics":["union","rural","catholic"],"synergy":2,"note":"South Bend"},{"kind":"district","id":"MI-9-2008","state":"MI","number":9,"era":2008,"demographics":["suburban","jewish"],"synergy":2,"note":"Oakland County"},{"kind":"district","id":"WI-8-2008","state":"WI","number":8,"era":2008,"demographics":["rural","union","catholic"],"synergy":2,"note":"Green Bay"},{"kind":"district","id":"MN-6-2008","state":"MN","number":6,"era":2008,"demographics":["suburban","evangelical"],"synergy":2,"note":"The Sixth"},{"kind":"district","id":"IA-3-2008","state":"IA","number":3,"era":2008,"demographics":["farm","suburban"],"synergy":2,"note":"Des Moines"},{"kind":"district","id":"MO-6-2008","state":"MO","number":6,"era":2008,"demographics":["farm","rural","evangelical"],"synergy":2,"note":"Northern Missouri"},{"kind":"district","id":"KS-2-2008","state":"KS","number":2,"era":2008,"demographics":["farm","rural","veteran"],"synergy":2,"note":"Eastern Kansas"},{"kind":"district","id":"GA-4-2008","state":"GA","number":4,"era":2008,"demographics":["black","suburban"],"synergy":2,"note":"DeKalb County"},{"kind":"district","id":"AL-2-2008","state":"AL","number":2,"era":2008,"demographics":["rural","evangelical","veteran"],"synergy":2,"note":"Montgomery"},{"kind":"district","id":"MS-1-2008","state":"MS","number":1,"era":2008,"demographics":["rural","farm","evangelical"],"synergy":2,"note":"North Mississippi"},{"kind":"district","id":"LA-6-2008","state":"LA","number":6,"era":2008,"demographics":["suburban","evangelical"],"synergy":2,"note":"Baton Rouge"},{"kind":"district","id":"SC-1-2008","state":"SC","number":1,"era":2008,"demographics":["suburban","business","veteran"],"synergy":2,"note":"Lowcountry"},{"kind":"district","id":"KY-3-2008","state":"KY","number":3,"era":2008,"demographics":["urban","union"],"synergy":2,"note":"Louisville"},{"kind":"district","id":"WV-1-2008","state":"WV","number":1,"era":2008,"demographics":["union","rural"],"synergy":2,"note":"Northern West Virginia"},{"kind":"district","id":"NH-1-2008","state":"NH","number":1,"era":2008,"demographics":["suburban","rural"],"synergy":2,"note":"Manchester"},{"kind":"district","id":"MD-1-2008","state":"MD","number":1,"era":2008,"demographics":["rural","suburban","business"],"synergy":2,"note":"Eastern Shore"},{"kind":"district","id":"NJ-7-2008","state":"NJ","number":7,"era":2008,"demographics":["suburban","business"],"synergy":2,"note":"Central Jersey"},{"kind":"district","id":"CT-4-2008","state":"CT","number":4,"era":2008,"demographics":["suburban","business"],"synergy":2,"note":"Fairfield County"},{"kind":"district","id":"WA-8-2008","state":"WA","number":8,"era":2008,"demographics":["suburban","academic"],"synergy":2,"note":"Eastside"}]},"2016":{"name":"2016","era":2016,"note":"Fully nationalised. Home-state bonuses are 0-1 for national figures, and the surviving heterodox cards -- Manchin, Collins, Baker, Hogan, Edwards -- are the rarest and most valuable in the game. District cards carry the realignment: the Iron Range and Appalachia have gone red, the suburbs blue.","cards":[{"kind":"candidate","id":"hillary-clinton-2016","name":"Hillary Clinton","party":"D","homeState":"NY","homeStateBonus":0,"identities":["ivy","suburban"],"belief":"Stronger together","era":2016,"effects":[]},{"kind":"candidate","id":"bernie-sanders-2016","name":"Bernie Sanders","party":"D","homeState":"VT","homeStateBonus":2,"identities":["jewish","academic"],"belief":"Political revolution","era":2016,"effects":[{"type":"extremist"}]},{"kind":"candidate","id":"tim-kaine-2016","name":"Tim Kaine","party":"D","homeState":"VA","homeStateBonus":1,"identities":["catholic","hispanic"],"belief":"Spanish on the trail","era":2016,"effects":[]},{"kind":"candidate","id":"elizabeth-warren-2016","name":"Elizabeth Warren","party":"D","homeState":"MA","homeStateBonus":1,"identities":["academic","ivy"],"belief":"The consumer bureau","era":2016,"effects":[{"type":"extremist"}]},{"kind":"candidate","id":"cory-booker-2016","name":"Cory Booker","party":"D","homeState":"NJ","homeStateBonus":1,"identities":["black","urban","ivy"],"belief":"Newark mayor","era":2016,"effects":[]},{"kind":"candidate","id":"kamala-harris-2016","name":"Kamala Harris","party":"D","homeState":"CA","homeStateBonus":1,"identities":["black","hispanic","urban"],"belief":"Attorney general","era":2016,"effects":[]},{"kind":"candidate","id":"joe-manchin-2016","name":"Joe Manchin","party":"D","homeState":"WV","homeStateBonus":3,"identities":["rural","business"],"belief":"Shot the cap-and-trade bill","era":2016,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"jon-tester-2016","name":"Jon Tester","party":"D","homeState":"MT","homeStateBonus":3,"identities":["farm","rural"],"belief":"Still farming","era":2016,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"heidi-heitkamp-2016","name":"Heidi Heitkamp","party":"D","homeState":"ND","homeStateBonus":3,"identities":["farm","rural"],"belief":"Energy state Democrat","era":2016,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"claire-mccaskill-2016","name":"Claire McCaskill","party":"D","homeState":"MO","homeStateBonus":2,"identities":["suburban"],"belief":"Ran against the wave","era":2016,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"sherrod-brown-2016","name":"Sherrod Brown","party":"D","homeState":"OH","homeStateBonus":2,"identities":["union","academic"],"belief":"The last statewide Democrat","era":2016,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"bob-casey-jr-2016","name":"Bob Casey Jr.","party":"D","homeState":"PA","homeStateBonus":1,"identities":["catholic","union"],"belief":"Held Pennsylvania","era":2016,"effects":[]},{"kind":"candidate","id":"amy-klobuchar-2016","name":"Amy Klobuchar","party":"D","homeState":"MN","homeStateBonus":1,"identities":["suburban","ivy"],"belief":"Won every county once","era":2016,"effects":[]},{"kind":"candidate","id":"john-bel-edwards-2016","name":"John Bel Edwards","party":"D","homeState":"LA","homeStateBonus":3,"identities":["catholic","rural","veteran"],"belief":"Pro-life, pro-Medicaid","era":2016,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"roy-cooper-2016","name":"Roy Cooper","party":"D","homeState":"NC","homeStateBonus":2,"identities":["rural","suburban"],"belief":"Attorney general turned governor","era":2016,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"steve-bullock-2016","name":"Steve Bullock","party":"D","homeState":"MT","homeStateBonus":3,"identities":["rural","business"],"belief":"Won as Trump carried the state","era":2016,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"nancy-pelosi-2016","name":"Nancy Pelosi","party":"D","homeState":"CA","homeStateBonus":0,"identities":["catholic","urban"],"belief":"The Speaker again","era":2016,"effects":[]},{"kind":"candidate","id":"chuck-schumer-2016","name":"Chuck Schumer","party":"D","homeState":"NY","homeStateBonus":0,"identities":["jewish","urban","ivy"],"belief":"The leader","era":2016,"effects":[]},{"kind":"candidate","id":"tammy-baldwin-2016","name":"Tammy Baldwin","party":"D","homeState":"WI","homeStateBonus":1,"identities":["academic","urban"],"belief":"Held Wisconsin","era":2016,"effects":[]},{"kind":"candidate","id":"catherine-cortez-masto-2016","name":"Catherine Cortez Masto","party":"D","homeState":"NV","homeStateBonus":1,"identities":["hispanic","urban"],"belief":"First Latina senator","era":2016,"effects":[]},{"kind":"candidate","id":"conor-lamb-2016","name":"Conor Lamb","party":"D","homeState":"PA","homeStateBonus":2,"identities":["catholic","veteran","union"],"belief":"Won a Trump district","era":2016,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"doug-jones-2016","name":"Doug Jones","party":"D","homeState":"AL","homeStateBonus":2,"identities":["rural","evangelical"],"belief":"Prosecuted the church bombing","era":2016,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"donald-trump-2016","name":"Donald Trump","party":"R","homeState":"NY","homeStateBonus":0,"identities":["business","urban"],"belief":"Make America great again","era":2016,"effects":[{"type":"extremist"}]},{"kind":"candidate","id":"ted-cruz-2016","name":"Ted Cruz","party":"R","homeState":"TX","homeStateBonus":1,"identities":["hispanic","evangelical","ivy"],"belief":"The shutdown","era":2016,"effects":[{"type":"extremist"}]},{"kind":"candidate","id":"marco-rubio-2016","name":"Marco Rubio","party":"R","homeState":"FL","homeStateBonus":1,"identities":["cuban","evangelical"],"belief":"Son of a bartender","era":2016,"effects":[]},{"kind":"candidate","id":"john-kasich-2016","name":"John Kasich","party":"R","homeState":"OH","homeStateBonus":2,"identities":["catholic","business"],"belief":"Expanded Medicaid","era":2016,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"jeb-bush-2016","name":"Jeb Bush","party":"R","homeState":"FL","homeStateBonus":1,"identities":["evangelical","business","hispanic"],"belief":"Please clap","era":2016,"effects":[]},{"kind":"candidate","id":"mike-pence-2016","name":"Mike Pence","party":"R","homeState":"IN","homeStateBonus":1,"identities":["evangelical","business"],"belief":"Christian, conservative, Republican","era":2016,"effects":[]},{"kind":"candidate","id":"paul-ryan-2016","name":"Paul Ryan","party":"R","homeState":"WI","homeStateBonus":2,"identities":["catholic","business"],"belief":"The budget","era":2016,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"mitch-mcconnell-2016","name":"Mitch McConnell","party":"R","homeState":"KY","homeStateBonus":1,"identities":["business"],"belief":"Held the seat open","era":2016,"effects":[]},{"kind":"candidate","id":"susan-collins-2016","name":"Susan Collins","party":"R","homeState":"ME","homeStateBonus":3,"identities":["business","suburban"],"belief":"The only split ticket in 2020","era":2016,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"lisa-murkowski-2016","name":"Lisa Murkowski","party":"R","homeState":"AK","homeStateBonus":3,"identities":["business","rural"],"belief":"Won on a write-in","era":2016,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"charlie-baker-2016","name":"Charlie Baker","party":"R","homeState":"MA","homeStateBonus":3,"identities":["business","ivy"],"belief":"Most popular governor in America","era":2016,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"larry-hogan-2016","name":"Larry Hogan","party":"R","homeState":"MD","homeStateBonus":3,"identities":["business","suburban"],"belief":"Won Maryland twice","era":2016,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"phil-scott-2016","name":"Phil Scott","party":"R","homeState":"VT","homeStateBonus":3,"identities":["business","rural"],"belief":"Won Vermont as it voted Democratic","era":2016,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"ben-sasse-2016","name":"Ben Sasse","party":"R","homeState":"NE","homeStateBonus":2,"identities":["evangelical","academic","ivy"],"belief":"Never Trump, mostly","era":2016,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"jeff-flake-2016","name":"Jeff Flake","party":"R","homeState":"AZ","homeStateBonus":2,"identities":["evangelical","business"],"belief":"Conscience of a conservative","era":2016,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"rand-paul-2016","name":"Rand Paul","party":"R","homeState":"KY","homeStateBonus":1,"identities":["business","evangelical"],"belief":"Libertarian caucus of one","era":2016,"effects":[{"type":"extremist"}]},{"kind":"candidate","id":"tom-cotton-2016","name":"Tom Cotton","party":"R","homeState":"AR","homeStateBonus":2,"identities":["veteran","ivy","evangelical"],"belief":"Harvard and the infantry","era":2016,"effects":[{"type":"extremist"}]},{"kind":"candidate","id":"josh-hawley-2016","name":"Josh Hawley","party":"R","homeState":"MO","homeStateBonus":2,"identities":["evangelical","ivy"],"belief":"Big tech populist","era":2016,"effects":[{"type":"extremist"}]},{"kind":"candidate","id":"nikki-haley-2016","name":"Nikki Haley","party":"R","homeState":"SC","homeStateBonus":2,"identities":["business","evangelical"],"belief":"Took down the flag","era":2016,"effects":[]},{"kind":"candidate","id":"greg-abbott-2016","name":"Greg Abbott","party":"R","homeState":"TX","homeStateBonus":1,"identities":["business","hispanic"],"belief":"Governor of Texas","era":2016,"effects":[]},{"kind":"candidate","id":"ron-desantis-2016","name":"Ron DeSantis","party":"R","homeState":"FL","homeStateBonus":1,"identities":["veteran","ivy","evangelical"],"belief":"Won by 32,000 votes","era":2016,"effects":[]},{"kind":"candidate","id":"brian-kemp-2016","name":"Brian Kemp","party":"R","homeState":"GA","homeStateBonus":2,"identities":["rural","business"],"belief":"Certified the count","era":2016,"effects":[]},{"kind":"candidate","id":"rob-portman-2016","name":"Rob Portman","party":"R","homeState":"OH","homeStateBonus":1,"identities":["business","ivy"],"belief":"Trade negotiator","era":2016,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"pat-toomey-2016","name":"Pat Toomey","party":"R","homeState":"PA","homeStateBonus":1,"identities":["business","catholic"],"belief":"Voted to convict","era":2016,"effects":[{"type":"heterodox"}]},{"kind":"candidate","id":"kevin-mccarthy-2016","name":"Kevin McCarthy","party":"R","homeState":"CA","homeStateBonus":1,"identities":["business","suburban"],"belief":"The leader","era":2016,"effects":[]},{"kind":"candidate","id":"elise-stefanik-2016","name":"Elise Stefanik","party":"R","homeState":"NY","homeStateBonus":1,"identities":["ivy","rural","suburban"],"belief":"Moderate turned loyalist","era":2016,"effects":[]},{"kind":"candidate","id":"marsha-blackburn-2016","name":"Marsha Blackburn","party":"R","homeState":"TN","homeStateBonus":2,"identities":["evangelical","suburban"],"belief":"Hard right in a red state","era":2016,"effects":[{"type":"extremist"}]},{"kind":"candidate","id":"dan-crenshaw-2016","name":"Dan Crenshaw","party":"R","homeState":"TX","homeStateBonus":1,"identities":["veteran","suburban"],"belief":"The eyepatch","era":2016,"effects":[]},{"kind":"district","id":"PA-17-2016","state":"PA","number":17,"era":2016,"demographics":["union","rural","catholic"],"synergy":3,"note":"Conor Lamb's Trump district"},{"kind":"district","id":"PA-6-2016","state":"PA","number":6,"era":2016,"demographics":["suburban","business"],"synergy":2,"note":"Chester County"},{"kind":"district","id":"MI-11-2016","state":"MI","number":11,"era":2016,"demographics":["suburban","business"],"synergy":2,"note":"Oakland County"},{"kind":"district","id":"MI-13-2016","state":"MI","number":13,"era":2016,"demographics":["black","urban"],"synergy":2,"note":"Detroit"},{"kind":"district","id":"WI-3-2016","state":"WI","number":3,"era":2016,"demographics":["rural","union","farm"],"synergy":3,"note":"Driftless, swung 20 points"},{"kind":"district","id":"WI-4-2016","state":"WI","number":4,"era":2016,"demographics":["black","urban"],"synergy":2,"note":"Milwaukee"},{"kind":"district","id":"MN-8-2016","state":"MN","number":8,"era":2016,"demographics":["rural","union","farm"],"synergy":3,"note":"The Iron Range, gone red"},{"kind":"district","id":"MN-3-2016","state":"MN","number":3,"era":2016,"demographics":["suburban","academic","business"],"synergy":3,"note":"Twin Cities suburbs, gone blue"},{"kind":"district","id":"OH-6-2016","state":"OH","number":6,"era":2016,"demographics":["rural","union"],"synergy":3,"note":"Appalachian Ohio, swung 30 points"},{"kind":"district","id":"OH-12-2016","state":"OH","number":12,"era":2016,"demographics":["suburban","business"],"synergy":2,"note":"Columbus suburbs"},{"kind":"district","id":"IA-2-2016","state":"IA","number":2,"era":2016,"demographics":["farm","rural"],"synergy":3,"note":"Eastern Iowa, swung hard"},{"kind":"district","id":"NY-22-2016","state":"NY","number":22,"era":2016,"demographics":["rural","union"],"synergy":2,"note":"Upstate"},{"kind":"district","id":"NY-14-2016","state":"NY","number":14,"era":2016,"demographics":["hispanic","urban"],"synergy":3,"note":"The Bronx and Queens"},{"kind":"district","id":"TX-7-2016","state":"TX","number":7,"era":2016,"demographics":["suburban","business","ivy"],"synergy":3,"note":"Houston, Bush to Clinton"},{"kind":"district","id":"TX-28-2016","state":"TX","number":28,"era":2016,"demographics":["hispanic","rural"],"synergy":3,"note":"Laredo, moving right"},{"kind":"district","id":"TX-32-2016","state":"TX","number":32,"era":2016,"demographics":["suburban","business"],"synergy":2,"note":"Dallas suburbs"},{"kind":"district","id":"CA-45-2016","state":"CA","number":45,"era":2016,"demographics":["suburban","business"],"synergy":3,"note":"Orange County, flipped"},{"kind":"district","id":"CA-21-2016","state":"CA","number":21,"era":2016,"demographics":["hispanic","farm"],"synergy":3,"note":"Central Valley"},{"kind":"district","id":"FL-26-2016","state":"FL","number":26,"era":2016,"demographics":["cuban","hispanic","suburban"],"synergy":3,"note":"South Florida, moving right"},{"kind":"district","id":"FL-27-2016","state":"FL","number":27,"era":2016,"demographics":["cuban","urban"],"synergy":3,"note":"Miami"},{"kind":"district","id":"GA-6-2016","state":"GA","number":6,"era":2016,"demographics":["suburban","business","ivy"],"synergy":3,"note":"Gingrich's old seat, flipped"},{"kind":"district","id":"GA-14-2016","state":"GA","number":14,"era":2016,"demographics":["rural","evangelical"],"synergy":2,"note":"Northwest Georgia"},{"kind":"district","id":"AZ-6-2016","state":"AZ","number":6,"era":2016,"demographics":["suburban","business"],"synergy":3,"note":"Scottsdale"},{"kind":"district","id":"AZ-7-2016","state":"AZ","number":7,"era":2016,"demographics":["hispanic","urban"],"synergy":2,"note":"Phoenix"},{"kind":"district","id":"NC-9-2016","state":"NC","number":9,"era":2016,"demographics":["suburban","black"],"synergy":2,"note":"Charlotte"},{"kind":"district","id":"VA-7-2016","state":"VA","number":7,"era":2016,"demographics":["suburban","business"],"synergy":3,"note":"Richmond suburbs"},{"kind":"district","id":"VA-9-2016","state":"VA","number":9,"era":2016,"demographics":["rural","evangelical","veteran"],"synergy":2,"note":"Southwest Virginia"},{"kind":"district","id":"CO-6-2016","state":"CO","number":6,"era":2016,"demographics":["suburban","hispanic","business"],"synergy":3,"note":"Aurora"},{"kind":"district","id":"NV-4-2016","state":"NV","number":4,"era":2016,"demographics":["hispanic","suburban"],"synergy":2,"note":"North Las Vegas"},{"kind":"district","id":"NJ-7-2016","state":"NJ","number":7,"era":2016,"demographics":["suburban","business","ivy"],"synergy":3,"note":"Somerset County"},{"kind":"district","id":"IL-6-2016","state":"IL","number":6,"era":2016,"demographics":["suburban","business"],"synergy":3,"note":"DuPage County"},{"kind":"district","id":"IL-12-2016","state":"IL","number":12,"era":2016,"demographics":["rural","union"],"synergy":2,"note":"Southern Illinois"},{"kind":"district","id":"KS-3-2016","state":"KS","number":3,"era":2016,"demographics":["suburban","business"],"synergy":3,"note":"Johnson County"},{"kind":"district","id":"OK-5-2016","state":"OK","number":5,"era":2016,"demographics":["suburban","urban"],"synergy":2,"note":"Oklahoma City"},{"kind":"district","id":"SC-1-2016","state":"SC","number":1,"era":2016,"demographics":["suburban","business","veteran"],"synergy":2,"note":"Charleston"},{"kind":"district","id":"UT-4-2016","state":"UT","number":4,"era":2016,"demographics":["suburban","evangelical"],"synergy":2,"note":"Salt Lake suburbs"},{"kind":"district","id":"ME-2-2016","state":"ME","number":2,"era":2016,"demographics":["rural","union","veteran"],"synergy":3,"note":"The Second, gone red"},{"kind":"district","id":"NH-1-2016","state":"NH","number":1,"era":2016,"demographics":["suburban","rural"],"synergy":2,"note":"Manchester"},{"kind":"district","id":"WV-3-2016","state":"WV","number":3,"era":2016,"demographics":["union","rural"],"synergy":3,"note":"Coalfields, gone red"},{"kind":"district","id":"KY-6-2016","state":"KY","number":6,"era":2016,"demographics":["suburban","farm"],"synergy":2,"note":"Lexington"},{"kind":"district","id":"MO-2-2016","state":"MO","number":2,"era":2016,"demographics":["suburban","business"],"synergy":2,"note":"St. Louis suburbs"},{"kind":"district","id":"WA-8-2016","state":"WA","number":8,"era":2016,"demographics":["suburban","academic"],"synergy":3,"note":"Eastside, flipped"}]}};
+const CONFIGS = {"as-written":{"name":"as-written","note":"The design doc exactly as v0.2 specifies it, including annual decay. Kept as the contrast that shows why the baseline changed: the map cannot realign here at any margin (F2).","hand":{"base":12,"bonusPresident":2,"bonusSenator":1,"bonusGovernor":0,"bonusRepresentative":0},"resolution":{"incumbency":1,"identityBonus":1,"tieBreak":"even"},"national":{"strongEconomy":1,"recession":-2,"midtermPenalty":-2,"coattailsWith":1,"coattailsAgainst":-1},"endorsements":{"president":3,"governorInState":2,"senator":0},"primaryGeneral":{"extremistPrimary":2,"extremistGeneral":-2,"heterodoxPrimaryPenalty":-2,"crossBenchPrimaryPenalty":-1},"lean":{"pushByMargin":[{"maxPips":1,"push":0},{"maxPips":3,"push":1},{"maxPips":99,"push":2}],"decayPerTick":1,"decayFrequency":"annual","governorPushes":"never","honeymoonCounter":1,"maxLean":8},"economy":{"start":0,"min":-4,"max":4,"strongAt":2,"recessionAt":-2,"gMin":-3,"gMax":6,"fedDice":2,"rateRiseSpendDown":4,"rateRiseEconomyHit":-2,"walkDrift":0},"legislature":{"houseMajority":0.5,"senatePassage":0.6,"vetoOverride":0.6666666666666666,"impeachThreshold":0.6666666666666666,"scorePerYesVote":1,"majorityMultiplier":2,"reactionGoodOnRollAtLeast":4},"draft":{"packSize":15,"districtsPerPack":5,"refillToHandSize":true},"game":{"startYear":1976,"maxYears":16,"victory":"points","deckOutEnds":true},"placeholders":{"resolution.tieBreak":"§9 says only 'higher total wins'. Even break is what makes edge 0 exactly 50%; a table needs a real rule.","primaryGeneral.extremistPrimary":"§9 says extremism is a primary bonus and general penalty but prints no magnitude.","primaryGeneral.extremistGeneral":"as above.","primaryGeneral.heterodoxPrimaryPenalty":"§9 says heterodoxy is a primary penalty; no magnitude printed.","primaryGeneral.crossBenchPrimaryPenalty":"§9 lists cross-benching as a primary penalty; no magnitude printed.","lean.decayFrequency":"§16 open question 1 -- SETTLED 2026-08-31 by arithmetic, not simulation. Annual decay is -2 per cycle against a maximum push of +2, so sustained blowouts net zero and lean pins at 2 forever: realignment is impossible. Biennial (-1) against margin-based pushes accumulates. See engine/rules/lean.test.ts and reports/FINDINGS.md.","lean.governorPushes":"§16 open question; 'never' falls out of the priority rule, 'with-lean' is the alternative under test.","lean.maxLean":"No cap is stated. Without one, lean is unbounded.","draft.districtsPerPack":"§16 open: district-to-candidate ratio sets map fill rate and turn density.","game.victory":"§16 open: bills passed vs two consecutive terms vs three terms vs parallel conditions.","economy.*":"§13 describes the shape (random walk with memory, 2d6 roll-under on accumulated G) but prints no bounds or step sizes.","legislature.reactionGoodOnRollAtLeast":"§7/§12 say a reaction is rolled immediately on passage but do not say on what.","hand.bonus*":"§6 and §11 print these without saying per-seat or per-office. Read per seat they are a runaway: a player holding 20 Senate seats draws 32 cards a cycle. The doc's own 'base 12 with president +2 is a 17% edge' is 2/12, which only parses as per-office. Implemented per office held."}},"baseline":{"name":"baseline","note":"Every tunable number in the design doc, as a named field. Fields listed in `placeholders` are NOT in the design doc -- they are §16 open questions or gaps, and the value here is a stand-in, not a decision.","hand":{"base":12,"bonusPresident":2,"bonusSenator":1,"bonusGovernor":0,"bonusRepresentative":0},"resolution":{"incumbency":1,"identityBonus":1,"tieBreak":"even"},"national":{"strongEconomy":1,"recession":-2,"midtermPenalty":-2,"coattailsWith":1,"coattailsAgainst":-1},"endorsements":{"president":3,"governorInState":2,"senator":0},"primaryGeneral":{"extremistPrimary":2,"extremistGeneral":-2,"heterodoxPrimaryPenalty":-2,"crossBenchPrimaryPenalty":-1},"lean":{"pushByMargin":[{"maxPips":1,"push":0},{"maxPips":3,"push":1},{"maxPips":99,"push":2}],"decayPerTick":1,"decayFrequency":"biennial","governorPushes":"never","honeymoonCounter":1,"maxLean":8},"economy":{"start":0,"min":-4,"max":4,"strongAt":2,"recessionAt":-2,"gMin":-3,"gMax":6,"fedDice":2,"rateRiseSpendDown":4,"rateRiseEconomyHit":-2,"walkDrift":0},"legislature":{"houseMajority":0.5,"senatePassage":0.6,"vetoOverride":0.6666666666666666,"impeachThreshold":0.6666666666666666,"scorePerYesVote":1,"majorityMultiplier":2,"reactionGoodOnRollAtLeast":4},"draft":{"packSize":15,"districtsPerPack":5,"refillToHandSize":true},"game":{"startYear":1976,"maxYears":24,"victory":"points","deckOutEnds":true},"placeholders":{"resolution.tieBreak":"§9 says only 'higher total wins'. Even break is what makes edge 0 exactly 50%; a table needs a real rule.","primaryGeneral.extremistPrimary":"§9 says extremism is a primary bonus and general penalty but prints no magnitude.","primaryGeneral.extremistGeneral":"as above.","primaryGeneral.heterodoxPrimaryPenalty":"§9 says heterodoxy is a primary penalty; no magnitude printed.","primaryGeneral.crossBenchPrimaryPenalty":"§9 lists cross-benching as a primary penalty; no magnitude printed.","lean.decayFrequency":"§16 open question 1 -- SETTLED 2026-08-31 by arithmetic, not simulation. Annual decay is -2 per cycle against a maximum push of +2, so sustained blowouts net zero and lean pins at 2 forever: realignment is impossible. Biennial (-1) against margin-based pushes accumulates. See engine/rules/lean.test.ts and reports/FINDINGS.md.","lean.governorPushes":"§16 open question; 'never' falls out of the priority rule, 'with-lean' is the alternative under test.","lean.maxLean":"No cap is stated. Without one, lean is unbounded.","draft.districtsPerPack":"§16 open: district-to-candidate ratio sets map fill rate and turn density.","game.victory":"§16 open: bills passed vs two consecutive terms vs three terms vs parallel conditions.","economy.*":"§13 describes the shape (random walk with memory, 2d6 roll-under on accumulated G) but prints no bounds or step sizes.","legislature.reactionGoodOnRollAtLeast":"§7/§12 say a reaction is rolled immediately on passage but do not say on what.","hand.bonus*":"§6 and §11 print these without saying per-seat or per-office. Read per seat they are a runaway: a player holding 20 Senate seats draws 32 cards a cycle. The doc's own 'base 12 with president +2 is a 17% edge' is 2/12, which only parses as per-office. Implemented per office held."}},"brutal":{"name":"brutal","note":"Risk-brutal: bigger office bonuses, so the leader's advantage compounds hard. §16 calls hand size against office bonuses the single biggest tuning knob.","hand":{"base":12,"bonusPresident":4,"bonusSenator":2,"bonusGovernor":0,"bonusRepresentative":0},"resolution":{"incumbency":1,"identityBonus":1,"tieBreak":"even"},"national":{"strongEconomy":1,"recession":-2,"midtermPenalty":-2,"coattailsWith":1,"coattailsAgainst":-1},"endorsements":{"president":3,"governorInState":2,"senator":0},"primaryGeneral":{"extremistPrimary":2,"extremistGeneral":-2,"heterodoxPrimaryPenalty":-2,"crossBenchPrimaryPenalty":-1},"lean":{"pushByMargin":[{"maxPips":1,"push":0},{"maxPips":3,"push":1},{"maxPips":99,"push":2}],"decayPerTick":1,"decayFrequency":"biennial","governorPushes":"never","honeymoonCounter":1,"maxLean":8},"economy":{"start":0,"min":-4,"max":4,"strongAt":2,"recessionAt":-2,"gMin":-3,"gMax":6,"fedDice":2,"rateRiseSpendDown":4,"rateRiseEconomyHit":-2,"walkDrift":0},"legislature":{"houseMajority":0.5,"senatePassage":0.6,"vetoOverride":0.6666666666666666,"impeachThreshold":0.6666666666666666,"scorePerYesVote":1,"majorityMultiplier":2,"reactionGoodOnRollAtLeast":4},"draft":{"packSize":15,"districtsPerPack":5,"refillToHandSize":true},"game":{"startYear":1976,"maxYears":16,"victory":"points","deckOutEnds":true},"placeholders":{"resolution.tieBreak":"§9 says only 'higher total wins'. Even break is what makes edge 0 exactly 50%; a table needs a real rule.","primaryGeneral.extremistPrimary":"§9 says extremism is a primary bonus and general penalty but prints no magnitude.","primaryGeneral.extremistGeneral":"as above.","primaryGeneral.heterodoxPrimaryPenalty":"§9 says heterodoxy is a primary penalty; no magnitude printed.","primaryGeneral.crossBenchPrimaryPenalty":"§9 lists cross-benching as a primary penalty; no magnitude printed.","lean.decayFrequency":"§16 open question 1 -- SETTLED 2026-08-31 by arithmetic, not simulation. Annual decay is -2 per cycle against a maximum push of +2, so sustained blowouts net zero and lean pins at 2 forever: realignment is impossible. Biennial (-1) against margin-based pushes accumulates. See engine/rules/lean.test.ts and reports/FINDINGS.md.","lean.governorPushes":"§16 open question; 'never' falls out of the priority rule, 'with-lean' is the alternative under test.","lean.maxLean":"No cap is stated. Without one, lean is unbounded.","draft.districtsPerPack":"§16 open: district-to-candidate ratio sets map fill rate and turn density.","game.victory":"§16 open: bills passed vs two consecutive terms vs three terms vs parallel conditions.","economy.*":"§13 describes the shape (random walk with memory, 2d6 roll-under on accumulated G) but prints no bounds or step sizes.","legislature.reactionGoodOnRollAtLeast":"§7/§12 say a reaction is rolled immediately on passage but do not say on what.","hand.bonus*":"§6 and §11 print these without saying per-seat or per-office. Read per seat they are a runaway: a player holding 20 Senate seats draws 32 cards a cycle. The doc's own 'base 12 with president +2 is a 17% edge' is 2/12, which only parses as per-office. Implemented per office held."}},"flat-push":{"name":"flat-push","note":"Flat +1 lean pushes, the rule DECISIONS.md records as cut. Kept playable so the pathology is visible rather than asserted: a party can win a state every cycle for a decade and move the map nowhere.","hand":{"base":16,"bonusPresident":2,"bonusSenator":1,"bonusGovernor":0,"bonusRepresentative":0},"resolution":{"incumbency":1,"identityBonus":1,"tieBreak":"even"},"national":{"strongEconomy":1,"recession":-2,"midtermPenalty":-2,"coattailsWith":1,"coattailsAgainst":-1},"endorsements":{"president":3,"governorInState":2,"senator":0},"primaryGeneral":{"extremistPrimary":2,"extremistGeneral":-2,"heterodoxPrimaryPenalty":-2,"crossBenchPrimaryPenalty":-1},"lean":{"pushByMargin":[{"maxPips":99,"push":1}],"decayPerTick":1,"decayFrequency":"biennial","governorPushes":"never","honeymoonCounter":1,"maxLean":8},"economy":{"start":0,"min":-4,"max":4,"strongAt":2,"recessionAt":-2,"gMin":-3,"gMax":6,"fedDice":2,"rateRiseSpendDown":4,"rateRiseEconomyHit":-2,"walkDrift":0},"legislature":{"houseMajority":0.5,"senatePassage":0.6,"vetoOverride":0.6666666666666666,"impeachThreshold":0.6666666666666666,"scorePerYesVote":1,"majorityMultiplier":2,"reactionGoodOnRollAtLeast":4},"draft":{"packSize":15,"districtsPerPack":5,"refillToHandSize":true},"game":{"startYear":1976,"maxYears":16,"victory":"points","deckOutEnds":true},"placeholders":{"resolution.tieBreak":"§9 says only 'higher total wins'. Even break is what makes edge 0 exactly 50%; a table needs a real rule.","primaryGeneral.extremistPrimary":"§9 says extremism is a primary bonus and general penalty but prints no magnitude.","primaryGeneral.extremistGeneral":"as above.","primaryGeneral.heterodoxPrimaryPenalty":"§9 says heterodoxy is a primary penalty; no magnitude printed.","primaryGeneral.crossBenchPrimaryPenalty":"§9 lists cross-benching as a primary penalty; no magnitude printed.","lean.decayFrequency":"§16 open question 1 -- SETTLED 2026-08-31 by arithmetic, not simulation. Annual decay is -2 per cycle against a maximum push of +2, so sustained blowouts net zero and lean pins at 2 forever: realignment is impossible. Biennial (-1) against margin-based pushes accumulates. See engine/rules/lean.test.ts and reports/FINDINGS.md.","lean.governorPushes":"§16 open question; 'never' falls out of the priority rule, 'with-lean' is the alternative under test.","lean.maxLean":"No cap is stated. Without one, lean is unbounded.","draft.districtsPerPack":"§16 open: district-to-candidate ratio sets map fill rate and turn density.","game.victory":"§16 open: bills passed vs two consecutive terms vs three terms vs parallel conditions.","economy.*":"§13 describes the shape (random walk with memory, 2d6 roll-under on accumulated G) but prints no bounds or step sizes.","legislature.reactionGoodOnRollAtLeast":"§7/§12 say a reaction is rolled immediately on passage but do not say on what.","hand.bonus*":"§6 and §11 print these without saying per-seat or per-office. Read per seat they are a runaway: a player holding 20 Senate seats draws 32 cards a cycle. The doc's own 'base 12 with president +2 is a 17% edge' is 2/12, which only parses as per-office. Implemented per office held."}},"governors-push":{"name":"governors-push","note":"§10's alternative under test: a governor pushes lean only when winning WITH the state's existing lean, never against it. Baker in Massachusetts still means nothing; a Republican winning Wyoming now counts.","hand":{"base":16,"bonusPresident":2,"bonusSenator":1,"bonusGovernor":0,"bonusRepresentative":0},"resolution":{"incumbency":1,"identityBonus":1,"tieBreak":"even"},"national":{"strongEconomy":1,"recession":-2,"midtermPenalty":-2,"coattailsWith":1,"coattailsAgainst":-1},"endorsements":{"president":3,"governorInState":2,"senator":0},"primaryGeneral":{"extremistPrimary":2,"extremistGeneral":-2,"heterodoxPrimaryPenalty":-2,"crossBenchPrimaryPenalty":-1},"lean":{"pushByMargin":[{"maxPips":1,"push":0},{"maxPips":3,"push":1},{"maxPips":99,"push":2}],"decayPerTick":1,"decayFrequency":"biennial","governorPushes":"with-lean","honeymoonCounter":1,"maxLean":8},"economy":{"start":0,"min":-4,"max":4,"strongAt":2,"recessionAt":-2,"gMin":-3,"gMax":6,"fedDice":2,"rateRiseSpendDown":4,"rateRiseEconomyHit":-2,"walkDrift":0},"legislature":{"houseMajority":0.5,"senatePassage":0.6,"vetoOverride":0.6666666666666666,"impeachThreshold":0.6666666666666666,"scorePerYesVote":1,"majorityMultiplier":2,"reactionGoodOnRollAtLeast":4},"draft":{"packSize":15,"districtsPerPack":5,"refillToHandSize":true},"game":{"startYear":1976,"maxYears":16,"victory":"points","deckOutEnds":true},"placeholders":{"resolution.tieBreak":"§9 says only 'higher total wins'. Even break is what makes edge 0 exactly 50%; a table needs a real rule.","primaryGeneral.extremistPrimary":"§9 says extremism is a primary bonus and general penalty but prints no magnitude.","primaryGeneral.extremistGeneral":"as above.","primaryGeneral.heterodoxPrimaryPenalty":"§9 says heterodoxy is a primary penalty; no magnitude printed.","primaryGeneral.crossBenchPrimaryPenalty":"§9 lists cross-benching as a primary penalty; no magnitude printed.","lean.decayFrequency":"§16 open question 1 -- SETTLED 2026-08-31 by arithmetic, not simulation. Annual decay is -2 per cycle against a maximum push of +2, so sustained blowouts net zero and lean pins at 2 forever: realignment is impossible. Biennial (-1) against margin-based pushes accumulates. See engine/rules/lean.test.ts and reports/FINDINGS.md.","lean.governorPushes":"§16 open question; 'never' falls out of the priority rule, 'with-lean' is the alternative under test.","lean.maxLean":"No cap is stated. Without one, lean is unbounded.","draft.districtsPerPack":"§16 open: district-to-candidate ratio sets map fill rate and turn density.","game.victory":"§16 open: bills passed vs two consecutive terms vs three terms vs parallel conditions.","economy.*":"§13 describes the shape (random walk with memory, 2d6 roll-under on accumulated G) but prints no bounds or step sizes.","legislature.reactionGoodOnRollAtLeast":"§7/§12 say a reaction is rolled immediately on passage but do not say on what.","hand.bonus*":"§6 and §11 print these without saying per-seat or per-office. Read per seat they are a runaway: a player holding 20 Senate seats draws 32 cards a cycle. The doc's own 'base 12 with president +2 is a 17% edge' is 2/12, which only parses as per-office. Implemented per office held."}},"tuned":{"name":"tuned","note":"The playable tuning. Larger hand and a thinner district supply than the doc's baseline, because contest rate is governed by cards-per-player over eligible-races-per-player and the design's own numbers put that near 1:5. See FINDINGS.md F6.","hand":{"base":16,"bonusPresident":2,"bonusSenator":1,"bonusGovernor":0,"bonusRepresentative":0},"resolution":{"incumbency":1,"identityBonus":1,"tieBreak":"even"},"national":{"strongEconomy":1,"recession":-2,"midtermPenalty":-2,"coattailsWith":1,"coattailsAgainst":-1},"endorsements":{"president":3,"governorInState":2,"senator":0},"primaryGeneral":{"extremistPrimary":2,"extremistGeneral":-2,"heterodoxPrimaryPenalty":-2,"crossBenchPrimaryPenalty":-1},"lean":{"pushByMargin":[{"maxPips":1,"push":0},{"maxPips":3,"push":1},{"maxPips":99,"push":2}],"decayPerTick":1,"decayFrequency":"biennial","governorPushes":"never","honeymoonCounter":1,"maxLean":8},"economy":{"start":0,"min":-4,"max":4,"strongAt":2,"recessionAt":-2,"gMin":-3,"gMax":6,"fedDice":2,"rateRiseSpendDown":4,"rateRiseEconomyHit":-2,"walkDrift":0},"legislature":{"houseMajority":0.5,"senatePassage":0.6,"vetoOverride":0.6666666666666666,"impeachThreshold":0.6666666666666666,"scorePerYesVote":1,"majorityMultiplier":2,"reactionGoodOnRollAtLeast":4},"draft":{"packSize":15,"districtsPerPack":3,"refillToHandSize":true},"game":{"startYear":1976,"maxYears":16,"victory":"points","deckOutEnds":true},"placeholders":{"resolution.tieBreak":"§9 says only 'higher total wins'. Even break is what makes edge 0 exactly 50%; a table needs a real rule.","primaryGeneral.extremistPrimary":"§9 says extremism is a primary bonus and general penalty but prints no magnitude.","primaryGeneral.extremistGeneral":"as above.","primaryGeneral.heterodoxPrimaryPenalty":"§9 says heterodoxy is a primary penalty; no magnitude printed.","primaryGeneral.crossBenchPrimaryPenalty":"§9 lists cross-benching as a primary penalty; no magnitude printed.","lean.decayFrequency":"§16 open question 1 -- SETTLED 2026-08-31 by arithmetic, not simulation. Annual decay is -2 per cycle against a maximum push of +2, so sustained blowouts net zero and lean pins at 2 forever: realignment is impossible. Biennial (-1) against margin-based pushes accumulates. See engine/rules/lean.test.ts and reports/FINDINGS.md.","lean.governorPushes":"§16 open question; 'never' falls out of the priority rule, 'with-lean' is the alternative under test.","lean.maxLean":"No cap is stated. Without one, lean is unbounded.","draft.districtsPerPack":"§16 open: district-to-candidate ratio sets map fill rate and turn density.","game.victory":"§16 open: bills passed vs two consecutive terms vs three terms vs parallel conditions.","economy.*":"§13 describes the shape (random walk with memory, 2d6 roll-under on accumulated G) but prints no bounds or step sizes.","legislature.reactionGoodOnRollAtLeast":"§7/§12 say a reaction is rolled immediately on passage but do not say on what.","hand.bonus*":"§6 and §11 print these without saying per-seat or per-office. Read per seat they are a runaway: a player holding 20 Senate seats draws 32 cards a cycle. The doc's own 'base 12 with president +2 is a 17% edge' is 2/12, which only parses as per-office. Implemented per office held."}}};
+</script>
+<script>
+// ---- engine/states.ts ----
+/** The board: states, their Senate classes, and their gubernatorial schedules.
+ *  Design doc §2 — "a per-state table of gubernatorial election years". */
+
+                               
+
+                           
+                  
+               
+                                                                                      
+                                        
+                                                                            
+                 
+                                                                                     
+                    
+                                                                                
+                                
+ 
+
+/** Class 3 elects in 2022/2016, class 1 in 2024/2018, class 2 in 2026/2020. */
+const SENATE_CLASS_YEAR                            = { 1: 2024, 2: 2026, 3: 2022 };
+
+function senateUp(s          , year        )                {
+  return s.senateClasses.filter((c) => (year - SENATE_CLASS_YEAR[c]) % 6 === 0);
+}
+
+function governorUp(s          , year        )          {
+  const d = year - s.govAnchor;
+  return d % s.govTerm === 0;
+}
+
+/** seats for the apportionment in force in `year` */
+function seatsIn(s          , year        )         {
+  const censuses = Object.keys(s.seats).map(Number).sort((a, b) => a - b);
+  let n = s.seats[censuses[0]];
+  for (const c of censuses) if (year >= c + 2) n = s.seats[c];
+  return n;
+}
+
+// seats: 1970 census (in force 1972-1982) and 2010 census (2012-2022).
+const S = (code        , name        , sc                , govTerm       , govAnchor        , s70        , s10        )           =>
+  ({ code, name, senateClasses: sc, govTerm, govAnchor, seats: { 1970: s70, 2010: s10 } });
+
+const STATES             = [
+  S('AL', 'Alabama', [2, 3], 4, 2022, 7, 7),
+  S('AK', 'Alaska', [2, 3], 4, 2022, 1, 1),
+  S('AZ', 'Arizona', [1, 3], 4, 2022, 4, 9),
+  S('AR', 'Arkansas', [2, 3], 4, 2022, 4, 4),
+  S('CA', 'California', [1, 3], 4, 2022, 43, 53),
+  S('CO', 'Colorado', [2, 3], 4, 2022, 5, 7),
+  S('CT', 'Connecticut', [1, 3], 4, 2022, 6, 5),
+  S('DE', 'Delaware', [1, 2], 4, 2024, 1, 1),
+  S('FL', 'Florida', [1, 3], 4, 2022, 15, 27),
+  S('GA', 'Georgia', [2, 3], 4, 2022, 10, 14),
+  S('HI', 'Hawaii', [1, 3], 4, 2022, 2, 2),
+  S('ID', 'Idaho', [2, 3], 4, 2022, 2, 2),
+  S('IL', 'Illinois', [2, 3], 4, 2022, 24, 18),
+  S('IN', 'Indiana', [1, 3], 4, 2024, 11, 9),
+  S('IA', 'Iowa', [2, 3], 4, 2022, 6, 4),
+  S('KS', 'Kansas', [2, 3], 4, 2022, 5, 4),
+  S('KY', 'Kentucky', [2, 3], 4, 2023, 7, 6),
+  S('LA', 'Louisiana', [2, 3], 4, 2023, 8, 6),
+  S('ME', 'Maine', [1, 2], 4, 2022, 2, 2),
+  S('MD', 'Maryland', [1, 3], 4, 2022, 8, 8),
+  S('MA', 'Massachusetts', [1, 2], 4, 2022, 12, 9),
+  S('MI', 'Michigan', [1, 2], 4, 2022, 19, 14),
+  S('MN', 'Minnesota', [1, 2], 4, 2022, 8, 8),
+  S('MS', 'Mississippi', [1, 2], 4, 2023, 5, 4),
+  S('MO', 'Missouri', [1, 3], 4, 2024, 10, 8),
+  S('MT', 'Montana', [1, 2], 4, 2024, 2, 1),
+  S('NE', 'Nebraska', [1, 2], 4, 2022, 3, 3),
+  S('NV', 'Nevada', [1, 3], 4, 2022, 1, 4),
+  S('NH', 'New Hampshire', [2, 3], 2, 2022, 2, 2),
+  S('NJ', 'New Jersey', [1, 2], 4, 2025, 15, 12),
+  S('NM', 'New Mexico', [1, 2], 4, 2022, 2, 3),
+  S('NY', 'New York', [1, 3], 4, 2022, 39, 27),
+  S('NC', 'North Carolina', [2, 3], 4, 2024, 11, 13),
+  S('ND', 'North Dakota', [1, 3], 4, 2024, 1, 1),
+  S('OH', 'Ohio', [1, 3], 4, 2022, 23, 16),
+  S('OK', 'Oklahoma', [2, 3], 4, 2022, 6, 5),
+  S('OR', 'Oregon', [2, 3], 4, 2022, 4, 5),
+  S('PA', 'Pennsylvania', [1, 3], 4, 2022, 25, 18),
+  S('RI', 'Rhode Island', [1, 2], 4, 2022, 2, 2),
+  S('SC', 'South Carolina', [2, 3], 4, 2022, 6, 7),
+  S('SD', 'South Dakota', [2, 3], 4, 2022, 2, 1),
+  S('TN', 'Tennessee', [1, 2], 4, 2022, 8, 9),
+  S('TX', 'Texas', [1, 2], 4, 2022, 24, 36),
+  S('UT', 'Utah', [1, 3], 4, 2024, 2, 4),
+  S('VT', 'Vermont', [1, 3], 2, 2022, 1, 1),
+  S('VA', 'Virginia', [1, 2], 4, 2025, 10, 11),
+  S('WA', 'Washington', [1, 3], 4, 2024, 7, 10),
+  S('WV', 'West Virginia', [1, 2], 4, 2024, 4, 3),
+  S('WI', 'Wisconsin', [1, 3], 4, 2022, 9, 8),
+  S('WY', 'Wyoming', [1, 2], 4, 2022, 1, 1),
+];
+
+const BY_CODE                              = Object.fromEntries(STATES.map((s) => [s.code, s]));
+
+/** Electoral votes = delegation + 2. DC's three are added as a flat constant. */
+const DC_ELECTORS = 3;
+function electors(s          , year        )         { return seatsIn(s, year) + 2; }
+function totalElectors(year        )         {
+  return STATES.reduce((n, s) => n + electors(s, year), 0) + DC_ELECTORS;
+}
+
+
+// ---- engine/rules/rng.ts ----
+/** Seeded RNG. BUILD-BRIEF: every game runs from a seed so a bug is reproducible. */
+class RNG {
+          s        ;
+  constructor(seed        ) { this.s = (seed >>> 0) || 1; }
+  /** mulberry32 — small, fast, good enough for dice */
+  next()         {
+    this.s = (this.s + 0x6d2b79f5) >>> 0;
+    let t = this.s;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  }
+  d6()         { return 1 + Math.floor(this.next() * 6); }
+  int(n        )         { return Math.floor(this.next() * n); }
+  pick   (xs     )    { return xs[this.int(xs.length)]; }
+  shuffle   (xs     )      {
+    for (let i = xs.length - 1; i > 0; i--) { const j = this.int(i + 1); [xs[i], xs[j]] = [xs[j], xs[i]]; }
+    return xs;
+  }
+  bool()          { return this.next() < 0.5; }
+}
+
+
+// ---- engine/rules/resolution.ts ----
+/** Election resolution — design doc §9, with the three labeled dice of §4.
+ *
+ *  HOW THE DICE ARE WIRED, and why. §3 fixes the spread: "the difference
+ *  between two 3d6 rolls has a standard deviation of 4.18 pips", and Zach
+ *  confirmed the dice are correct. That only holds if each SIDE rolls its own
+ *  three dice — six in a race. §4's "same value for every race in the cycle"
+ *  is therefore per PARTY, not per race: a party rolls one national die for
+ *  the cycle and reuses it across all its races, and one state die per state.
+ *  Within a race the two sides hold different values so nothing cancels;
+ *  across races a party's results are correlated, which is exactly what a wave
+ *  is. Rolling one shared national die per race would cancel it out entirely
+ *  and collapse the spread to 2.42 pips, breaking the odds table.
+ */
+                                                                                             
+                                    
+
+                       
+                 
+                 
+               
+                        
+                                                                            
+                                                                            
+                      
+ 
+
+/** A cycle's dice, drawn once and reused so waves correlate across races. */
+class Wave {
+          national = new Map               ();
+          state = new Map                ();
+          rng     ;
+  /** Counts dice actually drawn. The withdrawal-window test asserts this is
+   *  still zero when the window closes -- BUILD-BRIEF calls that the single
+   *  most important rule in the game and the easiest to implement wrong. */
+  rolls = 0;
+  constructor(rng     ) { this.rng = rng; }
+  nationalDie(p       )         {
+    if (!this.national.has(p)) { this.national.set(p, this.rng.d6()); this.rolls++; }
+    return this.national.get(p) ;
+  }
+  stateDie(p       , st        )         {
+    const k = `${p}:${st}`;
+    if (!this.state.has(k)) { this.state.set(k, this.rng.d6()); this.rolls++; }
+    return this.state.get(k) ;
+  }
+  roll(p       , st        , rng     )           {
+    const n = this.nationalDie(p), st2 = this.stateDie(p, st);
+    this.rolls++;
+    return { national: n, state: st2, candidate: rng.d6() };
+  }
+}
+
+function effectiveModifiers(s      )             {
+  return s.heterodox ? s.modifiers.filter((m) => !m.national) : s.modifiers;
+}
+
+function modifierTotal(s      )         {
+  return effectiveModifiers(s).reduce((n, m) => n + m.pips, 0);
+}
+
+                              
+                                                                           
+                                      
+ 
+
+function resolveRace(a             )            {
+  const scored = a.sides.map((s) => {
+    const dice = a.wave.roll(s.party, a.state, a.rng);
+    const mt = modifierTotal(s);
+    return {
+      player: s.player, cardId: s.cardId, party: s.party, dice,
+      modifiers: effectiveModifiers(s), modifierTotal: mt,
+      total: dice.national + dice.state + dice.candidate + mt,
+    };
+  });
+
+  const uncontested = scored.length === 1;
+  // §8: a player who fields nobody loses; uncontested is an auto-win.
+  const ranked = [...scored].sort((x, y) => y.total - x.total);
+  let winner = ranked[0].player;
+  // Ties: the doc says only "higher total wins". Placeholder = even break,
+  // which is what makes edge 0 exactly 50%. Flagged in DECISIONS.md as open.
+  if (ranked.length > 1 && ranked[0].total === ranked[1].total) {
+    winner = a.rng.bool() ? ranked[0].player : ranked[1].player;
+  }
+  const margin = ranked.length > 1 ? ranked[0].total - ranked[1].total : 0;
+
+  const byMods = [...scored].sort((x, y) => y.modifierTotal - x.modifierTotal);
+  const zeroDiceWinner = byMods[0].player;
+
+  return {
+    year: a.year, round: a.round, office: a.office, state: a.state, slot: a.slot,
+    sides: scored, winner, margin,
+    zeroDiceWinner,
+    upset: !uncontested && winner !== zeroDiceWinner,
+    uncontested,
+  };
+}
+
+/** Exact win probability at a given pip edge, 3d6 vs 3d6, ties broken evenly.
+ *  This is the table in §3 and the foundation test asserts against it. */
+function oddsAtEdge(edge        )         {
+  const d3           = new Array(19).fill(0);
+  for (let i = 1; i <= 6; i++) for (let j = 1; j <= 6; j++) for (let k = 1; k <= 6; k++) d3[i + j + k]++;
+  let win = 0, tie = 0;
+  for (let a = 3; a <= 18; a++) {
+    for (let b = 3; b <= 18; b++) {
+      const w = d3[a] * d3[b];
+      if (a + edge > b) win += w; else if (a + edge === b) tie += w;
+    }
+  }
+  return (win + tie / 2) / (216 * 216);
+}
+
+
+// ---- engine/rules/lean.ts ----
+/** State lean — design doc §10. Signed pips: positive = R, negative = D,
+ *  counters cancelling on placement, which is what a signed integer is.
+ *  Neutral is the state's own baseline, not purple: the board tracks
+ *  deviation only, exactly as Cook PVI does. */
+                                                       
+
+                                          
+
+                             
+                                                    
+                       
+                                        
+                                        
+                           
+                  
+ 
+
+function sign(p       )         { return p === 'R' ? 1 : p === 'D' ? -1 : 0; }
+
+function pushForMargin(cfg            , marginPips        )         {
+  for (const row of cfg.pushByMargin) if (marginPips <= row.maxPips) return row.push;
+  return cfg.pushByMargin[cfg.pushByMargin.length - 1].push;
+}
+
+/** §10: the most nationalized race on the ballot pushes. Governors never reach
+ *  the top of this ordering in an election year, which is why they never push
+ *  -- the exclusion falls out of the priority rule rather than being asserted. */
+const PRIORITY           = ['president', 'senator', 'representative', 'governor'];
+
+function nationalizedRace                              (races     )                {
+  for (const office of PRIORITY) {
+    const hit = races.filter((r) => r.office === office);
+    if (hit.length) return hit[0];
+  }
+  return undefined;
+}
+
+function applyPush(
+  lean      , cfg            , state        , winner       , office        , marginPips        ,
+)         {
+  if (office === 'governor') {
+    if (cfg.governorPushes === 'never') return 0;
+    // 'with-lean': a governor pushes only when winning WITH the existing lean,
+    // never against it (§10, "the alternative under test").
+    const cur = lean[state] ?? 0;
+    if (cur === 0 || Math.sign(cur) !== sign(winner)) return 0;
+  }
+  const push = pushForMargin(cfg, marginPips) * sign(winner);
+  const before = lean[state] ?? 0;
+  lean[state] = clampLean(before + push, cfg.maxLean);
+  return lean[state] - before;
+}
+
+/** Decay removes one counter from every state, toward zero. §10: it happens at
+ *  the top of the year, so the board players see when they declare is already
+ *  decayed -- and pushes land later, on election night. */
+function decay(lean      , cfg            , year        )       {
+  if (cfg.decayFrequency === 'biennial' && year % 2 !== 0) return;
+  for (const st of Object.keys(lean)) {
+    const v = lean[st];
+    if (v === 0) continue;
+    lean[st] = v > 0 ? Math.max(0, v - cfg.decayPerTick) : Math.min(0, v + cfg.decayPerTick);
+  }
+}
+
+/** The honeymoon: a newly elected president places one counter in every state
+ *  carried. Removed at the next decay, so the incoming party enters the midterm
+ *  with a fleeting map advantage immediately before the -2 lands on them. */
+function honeymoon(lean      , cfg            , carried          , party       )       {
+  for (const st of carried) lean[st] = clampLean((lean[st] ?? 0) + cfg.honeymoonCounter * sign(party), cfg.maxLean);
+}
+
+function clampLean(v        , max        )         { return Math.max(-max, Math.min(max, v)); }
+
+
+// ---- engine/rules/economy.ts ----
+/** The macro layer — design doc §13. One number for how the country is doing,
+ *  one accumulated-spending track, and a 2d6 roll-under that decides when the
+ *  Fed tightens. There is deliberately no second ideological axis. */
+                                    
+
+                                
+                                          
+                                        
+                             
+                  
+                            
+                             
+                    
+ 
+
+                                                                                        
+
+function newEconomy(cfg               )          {
+  return { level: cfg.start, accumulatedG: 0 };
+}
+
+/** §13: "the economy random-walks with memory". The walk is small relative to
+ *  spending and tightening, so policy is legible against the noise. */
+function walk(e         , cfg               , rng     )         {
+  const step = rng.d6() <= 3 ? -1 : 1;
+  const before = e.level;
+  e.level = clampEcon(e.level + step + cfg.walkDrift, cfg.min, cfg.max);
+  return e.level - before;
+}
+
+/** Spending pushes the economy up and loads the track that the Fed reads. */
+function spend(e         , cfg               , g        )       {
+  e.accumulatedG = Math.max(0, e.accumulatedG + g);
+  // Austerity (negative G) cools directly; spending warms.
+  e.level = clampEcon(e.level + Math.sign(g) * (Math.abs(g) >= 4 ? 2 : 1), cfg.min, cfg.max);
+}
+
+/** §13: 2d6 roll-under against the accumulation. G12 is a certainty; the
+ *  interesting range is 6 to 8, where the curve is steepest -- which is
+ *  exactly where a player trying to run hot will hover. */
+function fedCheck(e         , cfg               , rng     )                                      {
+  let roll = 0;
+  for (let i = 0; i < cfg.fedDice; i++) roll += rng.d6();
+  const rateRise = roll <= e.accumulatedG;
+  if (rateRise) {
+    e.accumulatedG = Math.max(0, e.accumulatedG - cfg.rateRiseSpendDown);
+    e.level = clampEcon(e.level + cfg.rateRiseEconomyHit, cfg.min, cfg.max);
+  }
+  return { roll, rateRise };
+}
+
+/** Exact probability the Fed tightens at a given accumulation, 2d6 roll-under. */
+function rateRiseOdds(accumulatedG        , dice = 2)         {
+  let ways = 0, total = 0;
+  const counts = new Map                ();
+  const rec = (d        , sum        ) => {
+    if (d === 0) { counts.set(sum, (counts.get(sum) ?? 0) + 1); return; }
+    for (let f = 1; f <= 6; f++) rec(d - 1, sum + f);
+  };
+  rec(dice, 0);
+  for (const [sum, n] of counts) { total += n; if (sum <= accumulatedG) ways += n; }
+  return ways / total;
+}
+
+/** §9's national modifier from the economy, applied to the president's party.
+ *  Asymmetric on purpose: voters punish downturns harder than they reward booms. */
+function economyModifier(e         , cfg               , strong        , recession        )         {
+  if (e.level >= cfg.strongAt) return strong;
+  if (e.level <= cfg.recessionAt) return recession;
+  return 0;
+}
+
+function clampEcon(v        , lo        , hi        )         { return Math.max(lo, Math.min(hi, v)); }
+
+
+// ---- engine/rules/legislature.ts ----
+/** The omnibill — design doc §12. One bill a year, a single number G, a House
+ *  majority and 60% of the Senate, a veto, and an impeachment that replaces the
+ *  bill outright. Scoring is by yes-vote, doubled for the majority party, which
+ *  is what makes this a cooperation game with a defection option. */
+                                                     
+                                    
+
+/** Thresholds are fractions, and two-thirds of nine is not representable.
+ *  Every threshold comparison goes through this so a chamber that exactly
+ *  meets a bar is never rejected by floating point. */
+const EPS = 1e-9;
+const atLeast = (part        , whole        , frac        ) => whole > 0 && part / whole >= frac - EPS;
+const moreThan = (part        , whole        , frac        ) => whole > 0 && part / whole > frac + EPS;
+
+                                    
+                        
+                        
+                       
+                           
+                          
+                             
+                                    
+ 
+
+                                                                                                           
+
+                              
+            
+                  
+                  
+                      
+                                       
+                                         
+                    
+                         
+                                 
+                       
+ 
+
+function chambers(seats        ) {
+  const house = seats.filter((s) => s.office === 'representative' && s.holder);
+  const senate = seats.filter((s) => s.office === 'senator' && s.holder);
+  return { house, senate };
+}
+
+function majorityParty(seats        , office                              )                    {
+  const held = seats.filter((s) => s.office === office && s.holder);
+  const tally = new Map               ();
+  for (const s of held) tally.set(s.holder .party, (tally.get(s.holder .party) ?? 0) + 1);
+  let best                   , n = 0;
+  for (const [p, c] of tally) if (c > n) { n = c; best = p; }
+  return best;
+}
+
+/** §12: authorship goes to the player holding the largest bloc of the majority
+ *  party in the House. */
+function author(seats        )                     {
+  const maj = majorityParty(seats, 'representative');
+  if (!maj) return undefined;
+  const tally = new Map                ();
+  for (const s of seats) {
+    if (s.office !== 'representative' || !s.holder || s.holder.party !== maj) continue;
+    tally.set(s.holder.player, (tally.get(s.holder.player) ?? 0) + 1);
+  }
+  let best                    , n = 0;
+  for (const [p, c] of tally) if (c > n) { n = c; best = p; }
+  return best;
+}
+
+function tallyBill(
+  cfg                   , seats        , votes        , g        ,
+  president                                              ,
+  vetoes         , overrideVotes                                               ,
+  rng     ,
+)              {
+  const { house, senate } = chambers(seats);
+  const houseYes = votes.filter((v) => v.office === 'representative' && v.yes).length;
+  const senateYes = votes.filter((v) => v.office === 'senator' && v.yes).length;
+
+  const carriedHouse = moreThan(houseYes, house.length, cfg.houseMajority);
+  // The 60% Senate threshold is what makes cross-benching structurally
+  // necessary rather than optional (§12).
+  const carriedSenate = atLeast(senateYes, senate.length, cfg.senatePassage);
+  let passed = carriedHouse && carriedSenate;
+
+  let overridden = false;
+  const vetoed = passed && vetoes;
+  if (vetoed) {
+    passed = false;
+    if (overrideVotes && house.length && senate.length) {
+      overridden = atLeast(overrideVotes.house, house.length, cfg.vetoOverride)
+        && atLeast(overrideVotes.senate, senate.length, cfg.vetoOverride);
+      if (overridden) passed = true;
+    }
+  }
+
+  const scores                         = {};
+  let reaction                    , reactionGood                     ;
+  if (passed) {
+    // §7: the reaction rolls immediately on passage, long before the national die.
+    reaction = rng.d6();
+    reactionGood = reaction >= cfg.reactionGoodOnRollAtLeast;
+    const majH = majorityParty(seats, 'representative');
+    const majS = majorityParty(seats, 'senator');
+    for (const v of votes) {
+      if (!v.yes) continue;
+      const maj = v.office === 'representative' ? majH : majS;
+      const mult = v.party === maj ? cfg.majorityMultiplier : 1;
+      scores[v.player] = (scores[v.player] ?? 0) + cfg.scorePerYesVote * mult;
+    }
+  }
+
+  const majH = majorityParty(seats, 'representative');
+  const majS = majorityParty(seats, 'senator');
+  const crossBenched = votes.filter((v) => {
+    const maj = v.office === 'representative' ? majH : majS;
+    return v.yes && v.party !== maj;
+  }).length;
+
+  return {
+    g, passed, vetoed, overridden,
+    houseYes, houseTotal: house.length, senateYes, senateTotal: senate.length,
+    reaction, reactionGood, scores, crossBenched,
+  };
+}
+
+/** §12: impeachment replaces the omnibill for the year. Two-thirds of the
+ *  Senate, and an impeached president leaves the game entirely -- the only
+ *  permanent removal in the design. */
+function impeach(cfg                   , seats        , yesVotes        )          {
+  const { senate } = chambers(seats);
+  return atLeast(yesVotes, senate.length, cfg.impeachThreshold);
+}
+
+
+// ---- engine/rules/elections.ts ----
+/** Declaration, withdrawal, and the modifier stack — design doc §8 and §9.
+ *
+ *  §8 is the heart of the card economy. Withdrawal comes BEFORE reveal in the
+ *  primary and BEFORE the national die in the general, so you pull out on
+ *  incomplete information; by the time the arithmetic is knowable it is too
+ *  late to run. That ordering is enforced structurally here: the withdrawal
+ *  window is handed a `WithdrawalView`, which has no field that could carry a
+ *  die, and the Wave counts its own rolls so a test can prove none were drawn.
+ */
+             
+                                                                    
+                           
+                                    
+
+                                                                                                  
+                                 
+                                                                   
+                                                  
+ 
+                                       
+                                                     
+                                                                    
+ 
+
+                              
+               
+                 
+                
+                
+                                            
+               
+                     
+                              
+                         
+                     
+                                                                                  
+                             
+ 
+
+                              
+                 
+                      
+                          
+                 
+                
+                
+                                                                               
+                        
+                      
+                         
+ 
+
+/** §5: district cards gate all races. You may run only where you hold a
+ *  district card, or where your candidate is a native. This is the brake on
+ *  wide-and-empty play. */
+function eligible(card               , state        , districts                )          {
+  return card.homeState === state || districts.some((d) => d.state === state);
+}
+
+function hasEffect(card               , t                           )          {
+  return card.effects.some((e) => e.type === t);
+}
+
+function buildModifiers(
+  d             , ctx             , round       ,
+  res                  , nat                , pg                      ,
+)             {
+  const m             = [];
+  const partySign = d.card.party === 'R' ? 1 : d.card.party === 'D' ? -1 : 0;
+
+  // §10: the lean applies once, to the party it favours -- one counter is one
+  // pip. Giving the other side the negative would double the scale.
+  if (ctx.lean !== 0 && partySign !== 0 && Math.sign(ctx.lean) === partySign) {
+    m.push({ source: 'state lean', pips: Math.abs(ctx.lean) });
+  }
+
+  if (d.card.homeState === ctx.state && d.card.homeStateBonus) {
+    m.push({ source: 'home state', pips: d.card.homeStateBonus });
+  }
+
+  if (d.district && d.district.state === ctx.state) {
+    m.push({ source: `district ${d.district.id}`, pips: d.district.synergy });
+    const shared = d.card.identities.filter((i) => d.district .demographics.includes(i));
+    if (shared.length) {
+      m.push({ source: `identity: ${shared.join(', ')}`, pips: res.identityBonus * shared.length });
+    }
+  }
+
+  if (d.incumbent) m.push({ source: 'incumbency', pips: res.incumbency });
+
+  if (round === 'primary') {
+    if (d.endorsements) m.push({ source: 'endorsements', pips: d.endorsements });
+    if (hasEffect(d.card, 'extremist')) m.push({ source: 'extremist (primary)', pips: pg.extremistPrimary });
+    if (hasEffect(d.card, 'heterodox')) m.push({ source: 'heterodox (primary)', pips: pg.heterodoxPrimaryPenalty });
+    if (d.crossBenched) m.push({ source: 'cross-benched', pips: pg.crossBenchPrimaryPenalty });
+  } else {
+    if (hasEffect(d.card, 'extremist')) m.push({ source: 'extremist (general)', pips: pg.extremistGeneral });
+
+    // National modifiers. `national: true` is precisely the set a heterodox
+    // candidate ignores (§9) -- the tide, never the noise.
+    if (ctx.presidentParty === d.card.party) {
+      if (ctx.isMidterm) m.push({ source: 'midterm', pips: nat.midtermPenalty, national: true });
+      if (ctx.economyMod) m.push({ source: 'economy', pips: ctx.economyMod, national: true });
+    }
+    if (ctx.isPresidentialYear && ctx.presidentialWinner && d.office !== 'president' && partySign !== 0) {
+      // Turnout coattails: +1 down-ballot in states leaning your way, -1
+      // against. Reverse coattails fall out for free.
+      const leaningWith = Math.sign(ctx.lean) === partySign;
+      if (d.card.party === ctx.presidentialWinner) {
+        m.push({ source: 'coattails', pips: leaningWith ? nat.coattailsWith : nat.coattailsAgainst, national: true });
+      }
+    }
+  }
+
+  for (const e of d.card.effects) {
+    if (e.type === 'conditional' && e.pips) {
+      const w = e.when ?? {};
+      if ((w.state && w.state !== ctx.state) || (w.round && w.round !== round) || (w.office && w.office !== d.office)) continue;
+      m.push({ source: e.note ?? 'card text', pips: e.pips });
+    }
+  }
+
+  return m;
+}
+
+function toSide(d             , modifiers            )       {
+  return {
+    player: d.player, cardId: d.card.id, party: d.card.party,
+    modifiers, heterodox: hasEffect(d.card, 'heterodox'),
+  };
+}
+
+/** What a player may look at when deciding to withdraw. Deliberately narrow:
+ *  no dice, and in the primary not even the opponent's card. §8. */
+                                 
+               
+                 
+                
+               
+                                                                                
+                     
+                                                                       
+                          
+                          
+                                                   
+                                                     
+ 
+
+                                                                
+
+function withdrawalView(
+  d             , modifiers            , round       , ctx             ,
+  others               ,
+)                 {
+  return {
+    round, office: ctx.office, state: ctx.state, year: ctx.year,
+    contenders: others.length,
+    myModifiers: modifiers,
+    myModifierTotal: modifiers.reduce((n, x) => n + x.pips, 0),
+    opponentCards: round === 'general'
+      ? others.map((o) => ({ cardId: o.card.id, party: o.card.party }))
+      : undefined,
+  };
+}
+
+                              
+                   
+               
+                              
+                                                         
+                                                                       
+             
+           
+ 
+
+/** The ordering §8 depends on: build stacks, open the withdrawal window,
+ *  close it, and only then touch the dice. Nothing between `decide` and
+ *  `resolveRace` may consult the wave. */
+function runRace(a             ) {
+  const stacks = a.declarations.map((d) => buildModifiers(d, a.ctx, a.round, a.res, a.nat, a.pg));
+
+  const withdrawn = new Set        ();
+  a.declarations.forEach((d, i) => {
+    const others = a.declarations.filter((_, j) => j !== i);
+    const v = withdrawalView(d, stacks[i], a.round, a.ctx, others);
+    if (a.decide(d.player, v)) withdrawn.add(i);
+  });
+
+  const running = a.declarations.map((d, i) => ({ d, i })).filter(({ i }) => !withdrawn.has(i));
+  const withdrawnCards = [...withdrawn].map((i) => a.declarations[i]);
+
+  if (running.length === 0) return { event: undefined, withdrawnCards, walkover: undefined };
+
+  const event = resolveRace({
+    year: a.ctx.year, round: a.round, office: a.ctx.office, state: a.ctx.state, slot: a.ctx.slot,
+    sides: running.map(({ d, i }) => toSide(d, stacks[i])),
+    wave: a.wave, rng: a.rng,
+  });
+  return { event, withdrawnCards, walkover: running.length === 1 ? running[0].d : undefined };
+}
+
+
+
+// ---- engine/game.ts ----
+/** The game — design doc §7's annual tick, wired to the rule modules.
+ *
+ *  Players are not parties. A player is a faction holding cards of both
+ *  parties (§13: "a skilled player runs one party hot and pivots to the other
+ *  in the recession year"), so score is per player and party is per card.
+ *
+ *  The board starts empty and fills as seats are won. Chamber majorities are
+ *  computed over HELD seats only, which is what makes a legislature possible
+ *  at all when a table of four holds thirty seats between them.
+ */
+             
+                                                                    
+                          
+
+                         
+               
+                                                                                                                           
+                                                                              
+                                                                                                                                  
+                                                                                
+                                                                                                                                            
+                        
+                              
+                                     
+                                                                                   
+                                                                                       
+ 
+
+                              
+             
+               
+               
+                            
+                
+                                                                      
+                      
+ 
+
+                           
+               
+                          
+                     
+                              
+                        
+                  
+                
+                         
+             
+                         
+ 
+
+                        
+               
+                                                                              
+                                                                             
+                                                                     
+                                       
+                                                                               
+                                                               
+                                       
+                                                                   
+                                
+                                                        
+                                        
+ 
+
+                       
+                                                       
+                                                                   
+                                                                                                      
+                                                                      
+
+                                                                                                         
+
+const raceKeyOf = (d                                                  ) => `${d.office}|${d.state}|${d.slot ?? ''}`;
+const sameRace = (a                                                  , b                                                  ) =>
+  raceKeyOf(a) === raceKeyOf(b);
+
+                                                                                            
+/** A peg on the board: the race is contested, the card is not visible. */
+                                                                                                           
+
+                             
+               
+                 
+                
+                   
+                 
+                      
+                                                                          
+                            
+                      
+                      
+                         
+                          
+                       
+                    
+                       
+                           
+                                                                             
+                             
+                           
+                                        
+ 
+
+class Game {
+  cfg        ; rng     ; players               ; seats         = [];
+  leanMap            = {}; economy              ;
+  year        ; talon         = []; discard         = []; eraQueue           = [];
+  president                                                                  ;
+  events              = [];
+  log           = [];
+  stats = { billsPassed: 0, billsAttempted: 0, crossBench: 0, impeachments: 0, rateRises: 0,
+            decisions: []            ,
+            /** race-slots offered, and those drawing declarations from >1 player.
+             *  Counting "uncontested generals" instead undercounts badly: a race
+             *  several players crowd in one party resolves as a contested PRIMARY
+             *  and a one-candidate general. */
+            raceSlots: 0, contestedSlots: 0 };
+          agents         ;
+          scoreHistory             = [];
+
+  constructor(agents         , cards        , cfg        , seed        ) {
+    this.cfg = cfg; this.rng = new RNG(seed); this.agents = agents;
+    this.year = cfg.game.startYear;
+    this.economy = econ.newEconomy(cfg.economy);
+    this.players = agents.map((a, i) => ({ id: i, name: a.name, hand: [], districts: [], score: 0, tapped: new Set() }));
+    for (const s of STATES) this.leanMap[s.code] = 0;
+    // §14: "refill packs draw from later years", so a game beginning in 1976
+    // is playing 2010s cards by year ten. The talon is therefore era-ordered,
+    // not shuffled together: each era is shuffled within itself and they are
+    // consumed oldest first. This also concentrates presence early, when the
+    // pool is one era's ~24 states rather than four eras' fifty.
+    const eras = [...new Set(cards.map((c) => c.era))].sort((a, b) => a - b);
+    this.eraQueue = eras.map((e) => this.rng.shuffle(cards.filter((c) => c.era === e)));
+    this.talon = this.eraQueue.shift() ?? [];
+    this.deal();
+  }
+
+  /** §6/§11: the office bonuses are per OFFICE HELD, not per seat. The doc's
+   *  own arithmetic fixes this -- "base 12 with president +2 is a 17% edge"
+   *  is 2/12, a one-off. Read per seat, a player holding twenty Senate seats
+   *  draws thirty-two cards a cycle, which both runs away and exhausts the
+   *  talon: game length collapsed from 24 years to 7 before this was fixed. */
+          handSize(p             )         {
+    const h = this.cfg.hand;
+    const holds = (o        ) => this.seats.some((s) => s.holder?.player === p.id && s.office === o);
+    return h.base
+      + (holds('president') ? h.bonusPresident : 0)
+      + (holds('senator') ? h.bonusSenator : 0)
+      + (holds('governor') ? h.bonusGovernor : 0)
+      + (holds('representative') ? h.bonusRepresentative : 0);
+  }
+
+          draw(p             , n        )       {
+    for (let i = 0; i < n; i++) {
+      if (!this.talon.length) {
+        // The next era enters play before the discard is recycled -- that is
+        // what puts 2010s districts under 1970s politicians (§14).
+        if (this.eraQueue.length) this.talon = this.eraQueue.shift() ;
+        else if (this.discard.length) { this.talon = this.rng.shuffle(this.discard); this.discard = []; }
+        else return;                                 // §14: the deck-out ending
+      }
+      const c = this.talon.pop() ;
+      if (c.kind === 'district') p.districts.push(c); else p.hand.push(c);
+    }
+  }
+
+          deal()       { for (const p of this.players) this.draw(p, this.handSize(p)); }
+
+  /** total cards held: candidates in hand plus districts in play */
+  held(p             )         { return p.hand.length + p.districts.length; }
+
+          openRaces()             {
+    const out             = [];
+    const y = this.year;
+    if (y % 4 === 0) out.push({ office: 'president', state: 'US' });
+    for (const s of STATES) {
+      for (const cls of senateUp(s, y)) {
+        out.push({ office: 'senator', state: s.code, slot: cls, incumbent: this.seatFor('senator', s.code, cls) });
+      }
+      if (governorUp(s, y)) out.push({ office: 'governor', state: s.code, incumbent: this.seatFor('governor', s.code) });
+    }
+    // §2: the board prints no districts. A House race therefore exists only
+    // where a district CARD is in play -- the House map IS the set of drafted
+    // districts, which is also what makes §15's capture coherent (you take the
+    // seat by taking the card). Opening all 435 seats instead leaves the map so
+    // sparse that players never meet, and the game becomes solitaire.
+    const inPlay = new Map                                           ();
+    for (const p of this.players) for (const d of p.districts) inPlay.set(d.id, d);
+    for (const d of inPlay.values()) {
+      out.push({ office: 'representative', state: d.state, slot: d.number,
+                 incumbent: this.seatFor('representative', d.state, d.number) });
+    }
+    return out;
+  }
+
+          seatFor(office        , state        , slot         )                   {
+    return this.seats.find((s) => s.office === office && s.state === state && s.slot === slot && s.holder);
+  }
+
+          view(me        )           {
+    return {
+      year: this.year,
+      isElectionYear: this.year % 2 === 0,
+      isMidterm: this.year % 4 === 2,
+      isPresidentialYear: this.year % 4 === 0,
+      economy: this.economy, lean: this.leanMap, seats: this.seats,
+      players: this.players, me, presidentParty: this.president?.party,
+    };
+  }
+
+  // ---- §7 step 2-3: the omnibill -------------------------------------------
+          omnibill(human = -1, humanG         , humanYes          )       {
+    const authorId = leg.author(this.seats);
+    if (authorId === undefined) return;
+    this.stats.billsAttempted++;
+    const proposed = authorId === human && humanG !== undefined
+      ? humanG : this.agents[authorId].proposeG(this.view(authorId));
+    const g = clampInt(proposed, this.cfg.economy.gMin, this.cfg.economy.gMax);
+
+    const votes             = [];
+    for (const s of this.seats) {
+      if (!s.holder || (s.office !== 'senator' && s.office !== 'representative')) continue;
+      const yes = s.holder.player === human && humanYes !== undefined
+        ? humanYes : this.agents[s.holder.player].voteBill(this.view(s.holder.player), g, s);
+      votes.push({ player: s.holder.player, party: s.holder.party, office: s.office, yes });
+    }
+
+    const pres = this.president;
+    const wouldPass = leg.tallyBill(this.cfg.legislature, this.seats, votes, g, pres, false, undefined, this.rng);
+    const vetoes = !!pres && wouldPass.passed && this.agents[pres.player].veto(this.view(pres.player), g);
+    const override = vetoes
+      ? { house: votes.filter((v) => v.office === 'representative' && v.yes).length,
+          senate: votes.filter((v) => v.office === 'senator' && v.yes).length }
+      : undefined;
+
+    const out = leg.tallyBill(this.cfg.legislature, this.seats, votes, g, pres, vetoes, override, this.rng);
+    this.stats.crossBench += out.crossBenched;
+    if (out.passed) {
+      this.stats.billsPassed++;
+      for (const [p, n] of Object.entries(out.scores)) this.players[Number(p)].score += n;
+      econ.spend(this.economy, this.cfg.economy, g);
+      this.log.push(`${this.year}: omnibill G${g} passed ${out.houseYes}/${out.houseTotal} H, ${out.senateYes}/${out.senateTotal} S`);
+    } else {
+      this.log.push(`${this.year}: omnibill G${g} ${out.vetoed ? 'vetoed' : 'failed'}`);
+    }
+  }
+
+  // ---- §7 steps 6-9: the elections -----------------------------------------
+          elections()       {
+    const wave = new Wave(this.rng);
+    const open = this.openRaces();
+    const decls                = [];
+    const pending               = [];
+    // §8: sequential around the table, and the order rotates each cycle so
+    // going last is not a permanent tax.
+    const order = this.players.map((_, i) => (i + (this.year / 2)) % this.players.length);
+    for (const i of order) {
+      const mine = this.agents[i].declare(this.view(i), open, pending);
+      this.stats.decisions.push(mine.length);
+      for (const d of mine) {
+        const p = this.players[i];
+        if (!p.hand.some((c) => c.kind === 'candidate' && c.id === d.card.id)) continue;
+        if (d.office !== 'president' && !eligible(d.card, d.state, p.districts)) continue;
+        decls.push({ ...d, player: i });
+        pending.push({ player: i, office: d.office, state: d.state, slot: d.slot, party: d.card.party });
+      }
+    }
+    this.resolveDeclared(decls, wave, -1);
+  }
+
+  /** Everything after declaration: primaries, generals, seating, capture and
+   *  the lean pushes. Shared by the headless tick and the interactive one so
+   *  the rules exist exactly once. */
+          resolveDeclared(decls               , wave      , human        )       {
+    const presidential = decls.filter((d) => d.office === 'president');
+    const presidentialWinner = presidential.length ? this.presidentialRace(presidential, wave, human) : undefined;
+
+    const byRace = new Map                       ();
+    for (const d of decls) {
+      if (d.office === 'president') continue;
+      const k = raceKeyOf(d);
+      if (!byRace.has(k)) byRace.set(k, []);
+      byRace.get(k) .push(d);
+    }
+    for (const [, group] of byRace) {
+      this.stats.raceSlots++;
+      if (new Set(group.map((d) => d.player)).size > 1) this.stats.contestedSlots++;
+    }
+
+    const results                                        = [];
+    for (const [key, group] of byRace) {
+      const [office, state, slotStr] = key.split('|');
+      const slot = slotStr ? Number(slotStr) : undefined;
+      const incumbent = this.seatFor(office          , state, slot);
+      const ctx = this.raceContext(office          , state, slot, presidentialWinner);
+
+      const nominees = this.runPrimaries(group, ctx, wave, human);
+      if (!nominees.length) continue;
+      for (const d of nominees) d.incumbent = !!incumbent && incumbent.holder .cardId === d.card.id;
+
+      const out = runRace({
+        ctx, round: 'general', declarations: nominees, wave, rng: this.rng,
+        res: this.cfg.resolution, nat: this.cfg.national, pg: this.cfg.primaryGeneral,
+        decide: (p, v) => this.decideWithdraw(p, v, nominees, human),
+      });
+      for (const w of out.withdrawnCards) this.returnToHand(w);
+      if (!out.event) continue;
+      this.events.push(out.event);
+
+      const won = nominees.find((d) => d.player === out.event .winner) ;
+      results.push({ ev: out.event, won });
+      for (const d of nominees) if (d.player !== out.event.winner) this.discardCard(d);
+      this.seat(office          , state, slot, won);
+      if (office === 'representative') this.capture(won, state);
+    }
+
+    this.pushLean(results);
+  }
+
+  /** The human's withdrawal answers were collected before any die was drawn;
+   *  everyone else asks their agent. */
+          decideWithdraw(p        , v                , group               , human        )          {
+    if (p === human) {
+      const mine = group.find((d) => d.player === human);
+      if (mine) return this.humanWithdrawals.get(raceKeyOf(mine) + '|' + mine.card.id) ?? false;
+      return false;
+    }
+    return this.agents[p].withdraw(v);
+  }
+
+          raceContext(office        , state        , slot                    , presidentialWinner        )              {
+    return {
+      year: this.year, office, state, slot,
+      lean: this.leanMap[state] ?? 0,
+      isMidterm: this.year % 4 === 2,
+      isPresidentialYear: this.year % 4 === 0,
+      presidentParty: this.president?.party,
+      economyMod: econ.economyModifier(this.economy, this.cfg.economy, this.cfg.national.strongEconomy, this.cfg.national.recession),
+      presidentialWinner,
+    };
+  }
+
+  /** §11: nomination is a national primary, so only two cards reach the general
+   *  regardless of table size. The general then runs state by state -- which is
+   *  what produces the states carried that the honeymoon counter needs, and
+   *  what makes the map worth holding. */
+          presidentialRace(declarations               , wave      , human = -1)                    {
+    const natCtx = this.raceContext('president', 'US', undefined);
+    const nominees = this.runPrimaries(declarations, natCtx, wave, human);
+    if (!nominees.length) return undefined;
+
+    const tally = new Map                ();
+    const carried = new Map                 ();
+    for (const st of STATES) {
+      const ctx = this.raceContext('president', st.code, undefined);
+      const out = runRace({
+        ctx, round: 'general', declarations: nominees, wave, rng: this.rng,
+        res: this.cfg.resolution, nat: this.cfg.national, pg: this.cfg.primaryGeneral,
+        decide: () => false,   // the ticket is committed; you cannot withdraw a state at a time
+      });
+      if (!out.event) continue;
+      this.events.push(out.event);
+      const won = nominees.find((d) => d.player === out.event .winner) ;
+      tally.set(won.player, (tally.get(won.player) ?? 0) + electors(st, this.year));
+      const list = carried.get(won.card.party) ?? [];
+      list.push(st.code);
+      carried.set(won.card.party, list);
+    }
+    if (!tally.size) return undefined;
+
+    let best = -1, bestEV = -1;
+    for (const [player, ev] of tally) if (ev > bestEV) { bestEV = ev; best = player; }
+    const winner = nominees.find((d) => d.player === best) ;
+    for (const d of nominees) if (d.player !== best) this.discardCard(d);
+    this.seat('president', 'US', undefined, winner);
+    this.log.push(`${this.year}: ${winner.card.name} (${winner.card.party}) wins with ${bestEV} electoral votes`);
+
+    // §10: the honeymoon. One counter in every state carried, removed at the
+    // next decay -- so the incoming party enters the midterm with a fleeting
+    // map advantage immediately before the -2 lands on them.
+    lean.honeymoon(this.leanMap, this.cfg.lean, carried.get(winner.card.party) ?? [], winner.card.party);
+    return winner.card.party;
+  }
+
+          runPrimaries(group               , ctx             , wave      , human = -1)                {
+    const byParty = new Map                      ();
+    for (const d of group) {
+      if (!byParty.has(d.card.party)) byParty.set(d.card.party, []);
+      byParty.get(d.card.party) .push(d);
+    }
+    const winners                = [];
+    for (const [party, cands] of byParty) {
+      if (party === 'I') { winners.push(...cands); continue; }  // §9: independents skip the primary
+      if (cands.length === 1) { winners.push(cands[0]); continue; }
+      const out = runRace({
+        ctx, round: 'primary', declarations: cands, wave, rng: this.rng,
+        res: this.cfg.resolution, nat: this.cfg.national, pg: this.cfg.primaryGeneral,
+        decide: (p, v) => this.decideWithdraw(p, v, cands, human),
+      });
+      for (const w of out.withdrawnCards) this.returnToHand(w);
+      if (!out.event) continue;
+      this.events.push(out.event);
+      const w = cands.find((d) => d.player === out.event .winner);
+      if (w) winners.push(w);
+      // §8: primary loss returns the card to hand. Cheap to enter; the cost is
+      // that you revealed it.
+      for (const d of cands) if (d.player !== out.event .winner) this.returnToHand(d);
+    }
+    return winners;
+  }
+
+          pushLean(results                                       )       {
+    const byState = new Map                                                            ();
+    for (const r of results) {
+      const st = r.ev.state;
+      if (st === 'US') continue;
+      if (!byState.has(st)) byState.set(st, []);
+      byState.get(st) .push({ office: r.ev.office, party: r.won.card.party, margin: r.ev.margin });
+    }
+    for (const [st, races] of byState) {
+      const top = lean.nationalizedRace(races);
+      if (!top) continue;
+      lean.applyPush(this.leanMap, this.cfg.lean, st, top.party, top.office, top.margin);
+    }
+  }
+
+          seat(office        , state        , slot                    , d             )       {
+    const existing = this.seats.find((s) => s.office === office && s.state === state && s.slot === slot);
+    const holder = { cardId: d.card.id, player: d.player, party: d.card.party, since: this.year };
+    if (existing) existing.holder = holder;
+    else this.seats.push({ office, state, slot, senateClass: office === 'senator' ? (slot             ) : undefined, holder });
+    if (office === 'president') this.president = { ...holder };
+    const p = this.players[d.player];
+    p.hand = p.hand.filter((c) => !(c.kind === 'candidate' && c.id === d.card.id));
+    p.score += office === 'president' ? 5 : office === 'senator' ? 3 : office === 'governor' ? 2 : 1;
+  }
+
+  /** §15: winning a House seat transfers the district card to the winner. */
+          capture(won             , state        )       {
+    for (const p of this.players) {
+      if (p.id === won.player) continue;
+      const i = p.districts.findIndex((d) => d.state === state);
+      if (i >= 0) { this.players[won.player].districts.push(p.districts.splice(i, 1)[0]); return; }
+    }
+  }
+
+          returnToHand(d             )       {
+    const p = this.players[d.player];
+    if (!p.hand.some((c) => c.kind === 'candidate' && c.id === d.card.id)) {
+      p.hand.push({ kind: 'candidate', ...d.card });
+    }
+  }
+
+          discardCard(d             )       {
+    const p = this.players[d.player];
+    p.hand = p.hand.filter((c) => !(c.kind === 'candidate' && c.id === d.card.id));
+    this.discard.push({ kind: 'candidate', ...d.card });
+  }
+
+  /** The interactive tick. Identical rules to `tick()`, but it yields at the
+   *  two moments a human must act: choosing declarations, and the withdrawal
+   *  window. Written as a generator so the UI can drive the engine without the
+   *  engine knowing a UI exists, and without a second copy of the rules.
+   *
+   *  The withdrawal yield happens BEFORE any die is drawn -- the same ordering
+   *  `runRace` enforces for the agents (§8). */
+  *interactiveTick(human        )                                       {
+    for (const p of this.players) p.tapped.clear();
+    this.omnibillInteractive(human, yield* this.askBill(human));
+    const fed = econ.fedCheck(this.economy, this.cfg.economy, this.rng);
+    if (fed.rateRise) { this.stats.rateRises++; this.log.push(`${this.year}: the Fed tightens`); }
+    econ.walk(this.economy, this.cfg.economy, this.rng);
+    lean.decay(this.leanMap, this.cfg.lean, this.year);
+
+    if (this.year % 2 === 0) {
+      const open = this.openRaces();
+      const answer = yield { kind: 'declare', year: this.year, open };
+      this.humanDeclarations = answer.declarations ?? [];
+      yield* this.electionsInteractive(human);
+      for (const p of this.players) {
+        const want = this.handSize(p) - p.hand.length - p.districts.length;
+        if (want > 0) this.draw(p, want);
+      }
+    }
+    this.scoreHistory.push(this.players.map((p) => p.score));
+    this.year++;
+  }
+
+          humanDeclarations                = [];
+          humanWithdrawals = new Map                 ();
+
+  ;       *askBill(human        )                                                                {
+    const authorId = leg.author(this.seats);
+    if (authorId === undefined) return {};
+    const holdsSeat = this.seats.some((s) => s.holder?.player === human && (s.office === 'senator' || s.office === 'representative'));
+    if (authorId !== human && !holdsSeat) return {};
+    const a = yield { kind: 'bill', year: this.year, isAuthor: authorId === human, votes: holdsSeat };
+    return { g: a.g, yes: a.yes };
+  }
+
+          omnibillInteractive(human        , a                               )       {
+    this.omnibill(human, a.g, a.yes);
+  }
+
+  ;       *electionsInteractive(human        )                                       {
+    // Collect every declaration first, so the human can see the pegs go down.
+    const wave = new Wave(this.rng);
+    const open = this.openRaces();
+    const decls                = [];
+    const pending               = [];
+    const order = this.players.map((_, i) => (i + (this.year / 2)) % this.players.length);
+    for (const i of order) {
+      const mine = i === human ? this.humanDeclarations : this.agents[i].declare(this.view(i), open, pending);
+      this.stats.decisions.push(mine.length);
+      for (const d of mine) {
+        const p = this.players[i];
+        if (!p.hand.some((c) => c.kind === 'candidate' && c.id === d.card.id)) continue;
+        if (d.office !== 'president' && !eligible(d.card, d.state, p.districts)) continue;
+        decls.push({ ...d, player: i });
+        pending.push({ player: i, office: d.office, state: d.state, slot: d.slot, party: d.card.party });
+      }
+    }
+
+    // The withdrawal window, before any die is drawn.
+    this.humanWithdrawals.clear();
+    const mineContested = decls.filter((d) => d.player === human)
+      .map((d) => ({ d, others: decls.filter((o) => o !== d && sameRace(o, d)) }))
+      .filter((x) => x.others.length > 0);
+    for (const { d, others } of mineContested) {
+      const ctx = this.raceContext(d.office, d.state, d.slot);
+      const round = others.some((o) => o.card.party === d.card.party) ? 'primary' : 'general';
+      const mods = buildModifiers(d, ctx, round, this.cfg.resolution, this.cfg.national, this.cfg.primaryGeneral);
+      const a = yield {
+        kind: 'withdraw', year: this.year, round,
+        view: withdrawalView(d, mods, round, ctx, others),
+        race: { office: d.office, state: d.state, slot: d.slot, cardName: d.card.name },
+      };
+      this.humanWithdrawals.set(raceKeyOf(d) + '|' + d.card.id, !!a.withdraw);
+    }
+
+    this.resolveDeclared(decls, wave, human);
+  }
+
+  /** One annual tick — §7. */
+  tick()       {
+    for (const p of this.players) p.tapped.clear();      // 1. action phase
+    this.omnibill();                                     // 2-3. bill and reaction
+    const fed = econ.fedCheck(this.economy, this.cfg.economy, this.rng);  // 4.
+    if (fed.rateRise) this.stats.rateRises++;
+    econ.walk(this.economy, this.cfg.economy, this.rng);
+    lean.decay(this.leanMap, this.cfg.lean, this.year);  // 5.
+
+    if (this.year % 2 === 0) {
+      this.elections();                                  // 6-9.
+      for (const p of this.players) {                    // 10. refill
+        // §5: "presence is scarce and must be purchased in the draft." A
+        // district you keep is a candidate you do not hold, so hand size caps
+        // TOTAL cards. Refilling on candidates alone makes presence free, and
+        // free presence puts five times more races on the board than there are
+        // declarations to fill them -- which is what turns the game solitaire.
+        const want = this.handSize(p) - p.hand.length - p.districts.length;
+        if (want > 0) this.draw(p, want);
+      }
+    }
+    this.scoreHistory.push(this.players.map((p) => p.score));
+    this.year++;
+  }
+
+  run()             {
+    const end = this.cfg.game.startYear + this.cfg.game.maxYears;
+    while (this.year < end) {
+      this.tick();
+      if (this.cfg.game.deckOutEnds && !this.talon.length && !this.discard.length && !this.eraQueue.length) break;
+    }
+    return this.result();
+  }
+
+          result()             {
+    const scores = this.players.map((p) => p.score);
+    const winner = scores.indexOf(Math.max(...scores));
+    let leadChanges = 0, prev = -1, determination = 0;
+    this.scoreHistory.forEach((row, i) => {
+      const lead = row.indexOf(Math.max(...row));
+      if (prev !== -1 && lead !== prev) leadChanges++;
+      if (lead !== winner) determination = i + 1;
+      prev = lead;
+    });
+    const seatsByOffice = { president: 0, senator: 0, governor: 0, representative: 0 }                          ;
+    for (const s of this.seats) if (s.holder) seatsByOffice[s.office]++;
+    const uncontested = this.events.filter((e) => e.uncontested).length;
+    return {
+      seed: 0, config: this.cfg.name, years: this.year - this.cfg.game.startYear,
+      scores, winner, leadChanges,
+      determinationYear: determination,
+      events: this.events,
+      billsPassed: this.stats.billsPassed, billsAttempted: this.stats.billsAttempted,
+      crossBenchVotes: this.stats.crossBench, impeachments: this.stats.impeachments,
+      rateRises: this.stats.rateRises, finalLean: this.leanMap,
+      uncontestedShare: this.events.length ? uncontested / this.events.length : 0,
+      contestedSlotShare: this.stats.raceSlots ? this.stats.contestedSlots / this.stats.raceSlots : 0,
+      decisionCounts: this.stats.decisions, seatsByOffice,
+    };
+  }
+}
+
+function clampInt(v        , lo        , hi        )         { return Math.max(lo, Math.min(hi, Math.round(v))); }
+
+
+// ---- sim/agents.ts ----
+/** Scripted agents. The first three measure skill signal; the rest are the
+ *  strategies SIM-BRIEF §2 asks to be tested for dominance. Each also doubles
+ *  as an opponent personality in the app. */
+                                                                                       
+                                                                                
+                                                                            
+
+                                                   
+
+                                                                 
+
+/** Every legal declaration this player could make, with its modifier edge.
+ *  Agents differ only in how they score and cap this list. */
+function options(v          , open            , cfg        )           {
+  const me = v.players[v.me];
+  const cands = me.hand.filter((c) => c.kind === 'candidate')                                             ;
+  const out           = [];
+  for (const r of open) {
+    for (const card of cands) {
+      if (r.office !== 'president' && !eligible(card, r.state, me.districts)) continue;
+      const district = me.districts.find((d) => d.state === r.state);
+      const d              = { player: v.me, card, district, office: r.office, state: r.state, slot: r.slot,
+        incumbent: r.incumbent?.holder?.cardId === card.id };
+      const ctx = {
+        year: v.year, office: r.office, state: r.state, slot: r.slot,
+        lean: v.lean[r.state] ?? 0, isMidterm: v.isMidterm, isPresidentialYear: v.isPresidentialYear,
+        presidentParty: v.presidentParty,
+        economyMod: 0,
+      };
+      const mods = buildModifiers(d, ctx, 'general', cfg.resolution, cfg.national, cfg.primaryGeneral);
+      out.push({ d, office: r.office, edge: mods.reduce((n, m) => n + m.pips, 0) });
+    }
+  }
+  return out;
+}
+
+const raceKey = (r                                                  ) => `${r.office}|${r.state}|${r.slot ?? ''}`;
+
+/** §8: denial. Contesting a race someone else has declared costs a real card
+ *  against someone who may have spent nothing -- which is the asymmetry that
+ *  makes district gating necessary. An agent that never does this plays
+ *  solitaire. */
+function counterDeclare(
+  opts          , pending              , me        , appetite        ,
+)           {
+  const contested = new Set(pending.filter((p) => p.player !== me).map(raceKey));
+  return opts.map((o) => contested.has(raceKey(o.d)) ? { ...o, edge: o.edge + appetite } : o);
+}
+
+/** One card can only run once; one race is worth entering once. */
+function pickDistinct(opts          , limit        )                {
+  const usedCards = new Set        (), usedRaces = new Set        ();
+  const out                = [];
+  for (const o of opts) {
+    const rk = `${o.d.office}|${o.d.state}|${o.d.slot ?? ''}`;
+    if (usedCards.has(o.d.card.id) || usedRaces.has(rk)) continue;
+    usedCards.add(o.d.card.id); usedRaces.add(rk);
+    out.push(o.d);
+    if (out.length >= limit) break;
+  }
+  return out;
+}
+
+const byEdge = (a        , b        ) => b.edge - a.edge;
+
+         class Base                  {
+  name        ; cfg        ; rng     ;
+  constructor(name        , cfg        , rng     ) { this.name = name; this.cfg = cfg; this.rng = rng; }
+                                                                                        
+  /** Default: pull out only when the visible arithmetic is clearly against you.
+   *  The dice are unknowable here by construction (§8). */
+  withdraw(v                )          {
+    return v.contenders > 0 && v.myModifierTotal <= -4;
+  }
+  proposeG(_v          )         { return 3; }
+  voteBill(v          , _g        , seat      )          {
+    return seat.holder?.party === this.majority(v);
+  }
+  veto(_v          , _g        )          { return false; }
+            majority(v          )                     {
+    const t = new Map                ();
+    for (const s of v.seats) if (s.holder) t.set(s.holder.party, (t.get(s.holder.party) ?? 0) + 1);
+    let best                    , n = 0;
+    for (const [p, c] of t) if (c > n) { n = c; best = p; }
+    return best;
+  }
+            budget(v          )         { return v.players[v.me].hand.length; }
+}
+
+class RandomAgent extends Base {
+  declare(v          , open            , _pending              )                {
+    const o = options(v, open, this.cfg);
+    return pickDistinct(this.rng.shuffle(o), this.budget(v));
+  }
+  withdraw()          { return false; }
+  proposeG()         { return 1 + this.rng.int(6); }
+  voteBill()          { return this.rng.bool(); }
+}
+
+/** SIM-BRIEF's headline number: greedy takes the highest-edge race available. */
+class GreedyAgent extends Base {
+  declare(v          , open            , pending              )                {
+    const o = counterDeclare(options(v, open, this.cfg), pending, v.me, 2);
+    return pickDistinct(o.sort(byEdge), this.budget(v));
+  }
+}
+
+/** Values a seat by what it pays over the terms it will be held, not just this
+ *  cycle -- which is what "planning" means when terms are staggered. */
+class LookaheadAgent extends Base {
+  declare(v          , open            , pending              )                {
+    const term                         = { president: 4, senator: 6, governor: 4, representative: 2 };
+    const hand                         = {
+      president: this.cfg.hand.bonusPresident, senator: this.cfg.hand.bonusSenator,
+      governor: this.cfg.hand.bonusGovernor, representative: this.cfg.hand.bonusRepresentative,
+    };
+    const scored = counterDeclare(options(v, open, this.cfg), pending, v.me, 2).map((o) => {
+      const pts = o.office === 'president' ? 5 : o.office === 'senator' ? 3 : o.office === 'governor' ? 2 : 1;
+      // future value = points and hand size over the term, discounted by the
+      // chance of actually winning it
+      const win = 0.5 + 0.045 * o.edge;
+      const value = win * (pts + term[o.office] * (hand[o.office] + (o.office === 'representative' ? 0.5 : 0)));
+      return { ...o, edge: value };
+    });
+    return pickDistinct(scored.sort(byEdge), this.budget(v));
+  }
+}
+
+/** Declare everywhere cheap, contest nothing. District gating is supposed to
+ *  have killed this; SIM-BRIEF asks to confirm it stays dead. */
+class WideAndEmpty extends Base {
+  declare(v          , open            , pending              )                {
+    const o = options(v, open, this.cfg).filter((x) => x.office === 'representative');
+    void pending;   // WideAndEmpty contests nothing, by definition
+    return pickDistinct(o.sort((a, b) => a.edge - b.edge), v.players[v.me].hand.length);
+  }
+  withdraw(v                )          { return v.contenders > 0; }
+}
+
+class SenateFlood extends Base {
+  declare(v          , open            , pending              )                {
+    const o = counterDeclare(options(v, open, this.cfg), pending, v.me, 2);
+    const sen = o.filter((x) => x.office === 'senator').sort(byEdge);
+    return pickDistinct([...sen, ...o.filter((x) => x.office !== 'senator').sort(byEdge)], this.budget(v));
+  }
+}
+
+class HouseFarm extends Base {
+  declare(v          , open            , pending              )                {
+    const o = counterDeclare(options(v, open, this.cfg), pending, v.me, 3);
+    const house = o.filter((x) => x.office === 'representative').sort(byEdge);
+    return pickDistinct([...house, ...o.filter((x) => x.office !== 'representative').sort(byEdge)], this.budget(v) + 2);
+  }
+}
+
+/** Draft only off-brand candidates for hostile states. */
+class HeterodoxSpecialist extends Base {
+  declare(v          , open            , pending              )                {
+    const o = counterDeclare(options(v, open, this.cfg), pending, v.me, 2).map((x) => {
+      const het = x.d.card.effects.some((e) => e.type === 'heterodox');
+      const hostile = Math.sign(v.lean[x.d.state] ?? 0) === (x.d.card.party === 'R' ? -1 : 1);
+      return { ...x, edge: x.edge + (het && hostile ? 6 : het ? 2 : 0) };
+    });
+    return pickDistinct(o.sort(byEdge), this.budget(v));
+  }
+}
+
+class BillMaximizer extends Base {
+  declare(v          , open            , pending              )                {
+    const o = counterDeclare(options(v, open, this.cfg), pending, v.me, 2).map((x) => ({
+      ...x, edge: x.edge + (x.office === 'representative' || x.office === 'senator' ? 4 : 0),
+    }));
+    return pickDistinct(o.sort(byEdge), this.budget(v));
+  }
+  voteBill()          { return true; }         // every yes-vote scores
+  proposeG()         { return 4; }
+}
+
+class Impeacher extends Base {
+  declare(v          , open            , pending              )                {
+    const o = counterDeclare(options(v, open, this.cfg), pending, v.me, 2).map((x) => ({ ...x, edge: x.edge + (x.office === 'senator' ? 6 : 0) }));
+    return pickDistinct(o.sort(byEdge), this.budget(v));
+  }
+}
+
+/** Spend hot, get your candidate into position, be out of the way before the
+ *  reckoning (§13). */
+class EconomyChicken extends Base {
+  declare(v          , open            , pending              )                {
+    return pickDistinct(counterDeclare(options(v, open, this.cfg), pending, v.me, 2).sort(byEdge), this.budget(v));
+  }
+  proposeG(v          )         {
+    return v.economy.accumulatedG >= 7 ? this.cfg.economy.gMin : this.cfg.economy.gMax;
+  }
+  voteBill(v          , g        )          { return g > 0 ? v.economy.accumulatedG < 8 : true; }
+}
+
+const AGENTS                                                       = {
+  Random: class extends RandomAgent { constructor(c        , r     ) { super('Random', c, r); } },
+  Greedy: class extends GreedyAgent { constructor(c        , r     ) { super('Greedy', c, r); } },
+  Lookahead: class extends LookaheadAgent { constructor(c        , r     ) { super('Lookahead', c, r); } },
+  WideAndEmpty: class extends WideAndEmpty { constructor(c        , r     ) { super('WideAndEmpty', c, r); } },
+  SenateFlood: class extends SenateFlood { constructor(c        , r     ) { super('SenateFlood', c, r); } },
+  HouseFarm: class extends HouseFarm { constructor(c        , r     ) { super('HouseFarm', c, r); } },
+  HeterodoxSpecialist: class extends HeterodoxSpecialist { constructor(c        , r     ) { super('HeterodoxSpecialist', c, r); } },
+  BillMaximizer: class extends BillMaximizer { constructor(c        , r     ) { super('BillMaximizer', c, r); } },
+  Impeacher: class extends Impeacher { constructor(c        , r     ) { super('Impeacher', c, r); } },
+  EconomyChicken: class extends EconomyChicken { constructor(c        , r     ) { super('EconomyChicken', c, r); } },
+};
+
+</script>
+<script>
+'use strict';
+// American Cycle — hot-seat against the machine. Drives engine/game.ts's
+// interactive generator; every rule lives in the engine, nothing is duplicated.
+
+const TILES = {
+  AK:[0,0],ME:[10,0], VT:[9,1],NH:[10,1],
+  WA:[0,2],ID:[1,2],MT:[2,2],ND:[3,2],MN:[4,2],IL:[5,2],WI:[6,2],MI:[7,2],NY:[8,2],RI:[9,2],MA:[10,2],
+  OR:[0,3],NV:[1,3],WY:[2,3],SD:[3,3],IA:[4,3],IN:[5,3],OH:[6,3],PA:[7,3],NJ:[8,3],CT:[9,3],
+  CA:[0,4],UT:[1,4],CO:[2,4],NE:[3,4],MO:[4,4],KY:[5,4],WV:[6,4],VA:[7,4],MD:[8,4],DE:[9,4],
+  AZ:[1,5],NM:[2,5],KS:[3,5],AR:[4,5],TN:[5,5],NC:[6,5],SC:[7,5],
+  OK:[3,6],LA:[4,6],MS:[5,6],AL:[6,6],GA:[7,6],
+  HI:[0,7],TX:[3,7],FL:[8,7],
+};
+const OFFICE_LABEL = {president:'President',senator:'Senate',governor:'Governor',representative:'House'};
+const PLAYER_COLORS = ['#8A6D22','#2F5C8A','#A63A2E','#3E6B4F','#6B4E8A','#8A5A2F'];
+
+const $ = (id) => document.getElementById(id);
+const el = (t, cls, txt) => { const n = document.createElement(t); if (cls) n.className = cls; if (txt != null) n.textContent = txt; return n; };
+
+let G = null, gen = null, pending = null, S = {
+  sel: null, picks: [], human: 0, opponents: [], cfgName: 'tuned', seed: 1, over: false,
+};
+
+// ---- setup ------------------------------------------------------------------
+const OPPONENT_BLURB = {
+  Greedy:'Takes the best race on the board, every time. No plan beyond this cycle.',
+  Lookahead:'Values a seat by what it pays over its whole term. Plans two cycles out.',
+  Random:'Declares anywhere. Useful as a floor, not as a rival.',
+  HouseFarm:'Builds district presence and promotes upward. Fights you for the map.',
+  SenateFlood:'Runs everything for Senate early, for the six-year terms and the hand size.',
+  HeterodoxSpecialist:'Drafts off-brand candidates and runs them in hostile states.',
+  BillMaximizer:'Chases yes-votes and majority status. Votes for everything.',
+  Impeacher:'Builds a Senate bloc large enough to remove a president.',
+  EconomyChicken:'Spends hot, then pivots before the Fed tightens.',
+  WideAndEmpty:'Declares everywhere cheap and contests nothing. Should be a losing strategy.',
+};
+const CONFIG_BLURB = {
+  tuned:'The playable tuning. Bigger hand, thinner district supply — the settings that actually produce a contested board.',
+  baseline:'The design doc as corrected: biennial decay, margin-based pushes, hand 12.',
+  'as-written':'v0.2 exactly, with annual decay. The map cannot realign here at any margin — that is the point of including it.',
+  'flat-push':'Flat +1 lean pushes, the rule that was cut. Win a state every cycle for a decade and move the map nowhere.',
+  'governors-push':'Governors push lean when they win with the grain of the state, never against it.',
+  brutal:'Large office bonuses. The leader compounds hard.',
+};
+
+function setup() {
+  const opts = Object.keys(AGENTS).map((k) => `<option value="${k}">${k}</option>`).join('');
+  const cfgs = Object.keys(CONFIGS).map((k) => `<option value="${k}"${k === 'tuned' ? ' selected' : ''}>${k}</option>`).join('');
+  modal(`
+    <h1 style="font-size:26px;letter-spacing:-.01em">American Cycle</h1>
+    <p class="note" style="margin:6px 0 16px">Draft real politicians, run them across a decade of elections, and try to
+      leave the map different from how you found it. You are one faction among several — you hold cards of
+      both parties, and so does everyone else.</p>
+    <div class="setup-grid">
+      <label class="f">Opponent<select id="s1">${opts}</select><span class="note" id="b1"></span></label>
+      <label class="f">Second opponent<select id="s2">${opts}</select><span class="note" id="b2"></span></label>
+      <label class="f">Third opponent<select id="s3"><option value="">— none —</option>${opts}</select><span class="note" id="b3"></span></label>
+      <label class="f">Rules<select id="scfg">${cfgs}</select><span class="note" id="bcfg"></span></label>
+    </div>
+    <div class="row" style="margin-top:14px">
+      <label class="f">Seed<input type="number" id="sseed" value="${(Math.random()*9999)|0}" style="width:110px"></label>
+    </div>
+    <div class="row" style="margin-top:18px"><button class="btn" id="go">Open the cycle</button></div>
+  `);
+  $('s1').value = 'Lookahead'; $('s2').value = 'HouseFarm'; $('s3').value = 'Greedy';
+  const sync = () => {
+    for (const [sel, out] of [['s1','b1'],['s2','b2'],['s3','b3']]) {
+      $(out).textContent = $(sel).value ? (OPPONENT_BLURB[$(sel).value] || '') : '';
+    }
+    $('bcfg').textContent = CONFIG_BLURB[$('scfg').value] || '';
+  };
+  for (const id of ['s1','s2','s3','scfg']) $(id).onchange = sync;
+  sync();
+  $('go').onclick = () => {
+    S.opponents = ['s1','s2','s3'].map((i) => $(i).value).filter(Boolean);
+    S.cfgName = $('scfg').value;
+    S.seed = Number($('sseed').value) || 1;
+    closeModal(); start();
+  };
+}
+
+function start() {
+  const cfg = JSON.parse(JSON.stringify(CONFIGS[S.cfgName]));
+  const cards = [];
+  for (const k of ['1976','1992','2008','2016']) cards.push(...PACKS[k].cards);
+  const rng = new RNG(S.seed);
+  const you = { name:'You', declare:()=>[], withdraw:()=>false, proposeG:()=>3, voteBill:()=>true, veto:()=>false };
+  const agents = [you, ...S.opponents.map((n) => new AGENTS[n](cfg, rng))];
+  S.human = 0; S.over = false;
+  G = new Game(agents, cards, cfg, S.seed);
+  $('cfgName').textContent = S.cfgName;
+  gen = G.interactiveTick(S.human);
+  logLine(G.year, `<b>${S.opponents.length + 1} factions take the table.</b> Rules: ${S.cfgName}. Seed ${S.seed}.`, true);
+  advance();
+}
+
+// ---- driving the engine generator -------------------------------------------
+function advance(answer) {
+  if (S.over) return;
+  let r;
+  try { r = gen.next(answer); } catch (e) { console.error(e); ticker('The cycle failed: ' + e.message); return; }
+  if (r.done) {
+    drainLog();
+    const end = G.cfg.game.startYear + G.cfg.game.maxYears;
+    const dead = !G.talon.length && !G.discard.length && !G.eraQueue.length;
+    if (G.year >= end || dead) return gameOver(dead);
+    gen = G.interactiveTick(S.human);
+    return advance();
+  }
+  pending = r.value;
+  drainLog();
+  render();
+  if (pending.kind === 'declare') phaseDeclare();
+  else if (pending.kind === 'withdraw') phaseWithdraw();
+  else if (pending.kind === 'bill') phaseBill();
+}
+
+// ---- declaration ------------------------------------------------------------
+function phaseDeclare() {
+  S.picks = []; S.sel = null;
+  const open = pending.open;
+  const me = G.players[S.human];
+  const eligibleFor = (card) => open.filter((r) =>
+    r.office === 'president' || eligible(card, r.state, me.districts));
+  S.eligibleFor = eligibleFor;
+  $('handHint').textContent = `${G.year} — pick a card, then a state`;
+  ticker(`${G.year}: declarations are open.`);
+  render();
+}
+
+function racesInState(state) {
+  if (!S.eligibleFor || !S.sel) return [];
+  return S.eligibleFor(S.sel).filter((r) => r.state === state);
+}
+
+function pickRace(state) {
+  if (!S.sel) { ticker('Choose a candidate first.'); return; }
+  const rs = racesInState(state);
+  if (!rs.length) return;
+  const card = S.sel;
+  const choose = (r) => {
+    const me = G.players[S.human];
+    S.picks.push({ player:S.human, card, district: me.districts.find((d)=>d.state===r.state),
+                   office:r.office, state:r.state, slot:r.slot });
+    S.sel = null; closeModal(); render();
+  };
+  if (rs.length === 1) return choose(rs[0]);
+  modal(`<h2>${state} — which race?</h2><div class="row" style="margin-top:12px" id="rr"></div>`);
+  for (const r of rs) {
+    const b = el('button','btn ghost', `${OFFICE_LABEL[r.office]}${r.slot && r.office==='representative' ? ' '+r.slot : ''}`);
+    b.onclick = () => choose(r);
+    $('rr').appendChild(b);
+  }
+}
+
+// ---- withdrawal window ------------------------------------------------------
+function phaseWithdraw() {
+  const { view, race, round } = pending;
+  const rows = view.myModifiers.map((m) =>
+    `<tr><td>${m.source}${m.national ? ' <span class="note">(national)</span>' : ''}</td>
+      <td class="${m.pips>=0?'pos':'neg'}">${m.pips>=0?'+':''}${m.pips}</td></tr>`).join('');
+  const opp = view.opponentCards
+    ? `<p class="note">Revealed against you: ${view.opponentCards.map((o)=>`<b>${o.party}</b>`).join(', ')}.</p>`
+    : `<p class="note">This is a primary. The other cards are face down — you decide without seeing them.</p>`;
+  modal(`
+    <span class="eyebrow">${round} · ${race.state} ${OFFICE_LABEL[race.office]}</span>
+    <h2 style="font-size:21px;margin-top:4px">Withdraw ${race.cardName}?</h2>
+    <p class="note" style="margin:8px 0 12px">${view.contenders} other ${view.contenders===1?'peg is':'pegs are'} on this race.
+      The dice have not been rolled and will not be until this window closes.</p>
+    ${opp}
+    <table class="stack" style="margin:12px 0">${rows || '<tr><td>no modifiers</td><td>0</td></tr>'}
+      <tr class="tot"><td>your stack</td><td>${view.myModifierTotal>=0?'+':''}${view.myModifierTotal}</td></tr></table>
+    <p class="note">Withdrawing returns the card to your hand and hands them the seat. Standing risks the card:
+      a primary loss returns it, a general loss discards it.</p>
+    <div class="row" style="margin-top:16px">
+      <button class="btn" id="stand">Stand</button>
+      <button class="btn ghost" id="pull">Withdraw</button>
+    </div>`);
+  $('stand').onclick = () => { closeModal(); advance({ withdraw:false }); };
+  $('pull').onclick  = () => { closeModal(); advance({ withdraw:true  }); };
+}
+
+// ---- the omnibill -----------------------------------------------------------
+function phaseBill() {
+  const { isAuthor, votes } = pending;
+  const maj = majorityOf(G.seats,'representative');
+  modal(`
+    <span class="eyebrow">${G.year} · the omnibill</span>
+    <h2 style="font-size:21px;margin-top:4px">${isAuthor ? 'You hold the pen' : 'The bill comes to a vote'}</h2>
+    <p class="note" style="margin:8px 0 12px">One number, G, for spending and taxation together. Every yes-vote scores,
+      doubled for the majority party (${maj || 'none'}). Passage needs a House majority and 60% of the Senate —
+      so it cannot pass on party lines alone. Spending warms the economy and loads the Fed.</p>
+    <p class="note">Accumulated spending: <b class="mono">${G.economy.accumulatedG}</b> —
+      chance the Fed tightens next year: <b class="mono">${(100*rateRiseOdds(G.economy.accumulatedG)).toFixed(0)}%</b>.</p>
+    ${isAuthor ? `<label class="f" style="margin-top:12px">Propose G
+      <input type="number" id="gv" value="3" min="${G.cfg.economy.gMin}" max="${G.cfg.economy.gMax}" style="width:110px"></label>
+      <p class="note">Negative G is austerity: it cools the economy and reduces the Fed threat.</p>` : ''}
+    <div class="row" style="margin-top:16px">
+      ${votes ? '<button class="btn" id="yes">Vote yes</button><button class="btn ghost" id="no">Vote no</button>'
+              : '<button class="btn" id="yes">Send it</button>'}
+    </div>`);
+  const send = (yes) => { const g = $('gv') ? Number($('gv').value) : undefined; closeModal(); advance({ g, yes }); };
+  $('yes').onclick = () => send(true);
+  if ($('no')) $('no').onclick = () => send(false);
+}
+
+function majorityOf(seats, office) {
+  const t = {};
+  for (const s of seats) if (s.holder && s.office === office) t[s.holder.party] = (t[s.holder.party]||0)+1;
+  return Object.entries(t).sort((a,b)=>b[1]-a[1])[0]?.[0];
+}
+
+// ---- rendering --------------------------------------------------------------
+function render() {
+  if (!G) return;
+  $('cYear').textContent = G.year;
+  const e = G.economy;
+  $('cEcon').textContent = e.level > 1 ? `+${e.level} boom` : e.level < -1 ? `${e.level} slump` : `${e.level>=0?'+':''}${e.level} flat`;
+  $('cG').textContent = `G${e.accumulatedG} · ${(100*rateRiseOdds(e.accumulatedG)).toFixed(0)}% tighten`;
+  const pres = G.president;
+  $('cPres').textContent = pres ? `${pres.party} · ${G.players[pres.player].name}` : 'vacant';
+
+  $('scores').replaceChildren(...G.players.map((p,i) => {
+    const n = el('span','sc'+(i===S.human?' me':''), `${p.name} ${p.score}`);
+    n.style.borderLeft = `3px solid ${PLAYER_COLORS[i]}`;
+    return n;
+  }));
+
+  drawMap();
+  drawHand();
+  drawControls();
+}
+
+function drawMap() {
+  const m = $('map'); m.replaceChildren();
+  const declaredHere = new Set(S.picks.map((p)=>p.state));
+  const openStates = new Set();
+  if (pending && pending.kind === 'declare' && S.sel) for (const r of racesInState_all(S.sel)) openStates.add(r.state);
+  for (const [code,[c,r]] of Object.entries(TILES)) {
+    const t = el('div','st');
+    t.style.gridColumn = c+1; t.style.gridRow = r+1;
+    const lean = G.leanMap[code] || 0;
+    if (lean) t.style.background = lean>0
+      ? `color-mix(in srgb, var(--gop-soft) ${Math.min(100,45+12*Math.abs(lean))}%, var(--paper-2))`
+      : `color-mix(in srgb, var(--dem-soft) ${Math.min(100,45+12*Math.abs(lean))}%, var(--paper-2))`;
+    t.appendChild(el('span',null,code));
+    const pips = el('div','pips');
+    for (let i=0;i<Math.min(4,Math.abs(lean));i++){
+      const d = el('div','pip'); d.style.background = lean>0?'var(--gop)':'var(--dem)'; pips.appendChild(d);
+    }
+    t.appendChild(pips);
+    const held = G.seats.find((s)=>s.state===code && s.holder && (s.office==='senator'||s.office==='governor'));
+    if (held){ const pg = el('div','peg'); pg.style.background = PLAYER_COLORS[held.holder.player]; t.appendChild(pg); }
+    if (openStates.has(code)) { t.classList.add('act'); t.onclick = () => pickRace(code); }
+    if (declaredHere.has(code)) t.classList.add('race');
+    t.title = `${code} — lean ${lean>0?'R+':lean<0?'D+':''}${Math.abs(lean)||'even'}`;
+    m.appendChild(t);
+  }
+}
+function racesInState_all(card){
+  const me = G.players[S.human];
+  return (pending.open||[]).filter((r)=> r.office==='president' || eligible(card, r.state, me.districts));
+}
+
+function drawHand() {
+  const h = $('hand'); h.replaceChildren();
+  const me = G.players[S.human];
+  const used = new Set(S.picks.map((p)=>p.card.id));
+  const cands = me.hand.filter((c)=>c.kind==='candidate');
+  if (!cands.length) h.appendChild(el('p','note','No candidates in hand.'));
+  for (const c of cands) {
+    if (used.has(c.id)) continue;
+    const n = el('div','cc '+c.party+(S.sel && S.sel.id===c.id?' sel':''));
+    n.appendChild(el('div','nm',c.name));
+    n.appendChild(el('div','mt',`${c.party} · ${c.homeState}${c.homeStateBonus?' +'+c.homeStateBonus:''} · ${c.era}`));
+    if (c.belief) n.appendChild(el('div','bel','"'+c.belief+'"'));
+    const tw = el('div');
+    for (const f of c.effects) tw.appendChild(el('span','tag '+(f.type==='heterodox'?'het':f.type==='extremist'?'ext':''), f.type));
+    for (const i of c.identities.slice(0,3)) tw.appendChild(el('span','tag',i));
+    n.appendChild(tw);
+    n.onclick = () => { if (pending && pending.kind==='declare'){ S.sel = S.sel===c?null:c; render(); } };
+    h.appendChild(n);
+  }
+  const me2 = G.players[S.human];
+  $('handHint').textContent = pending && pending.kind==='declare'
+    ? `${cands.length - used.size} cards · ${me2.districts.length} districts · ${S.picks.length} declared`
+    : `${cands.length} cards · ${me2.districts.length} districts`;
+}
+
+function drawControls() {
+  const c = $('controls'); c.replaceChildren();
+  if (S.over) { const b = el('button','btn','New game'); b.onclick = setup; c.appendChild(b); return; }
+  if (!pending || pending.kind !== 'declare') return;
+  const go = el('button','btn', S.picks.length ? `Run ${S.picks.length} race${S.picks.length>1?'s':''}` : 'Sit this cycle out');
+  go.onclick = () => { const p = S.picks; S.picks = []; S.sel = null; advance({ declarations: p }); };
+  c.appendChild(go);
+  if (S.picks.length) {
+    const u = el('button','btn ghost','Undo last');
+    u.onclick = () => { S.picks.pop(); render(); };
+    c.appendChild(u);
+    c.appendChild(el('span','note', S.picks.map((p)=>`${p.card.name} → ${p.state} ${OFFICE_LABEL[p.office]}`).join(' · ')));
+  } else if (S.sel) {
+    c.appendChild(el('span','note',`${S.sel.name} — click a highlighted state.`));
+  } else {
+    c.appendChild(el('span','note','Click a card to see where it can run.'));
+  }
+}
+
+// ---- the wire ---------------------------------------------------------------
+let logSeen = 0, eventSeen = 0;
+function logLine(year, html, big) {
+  const n = el('div','le'+(big?' big':''));
+  n.innerHTML = `<span class="yr">${year}</span> ${html}`;
+  $('log').prepend(n);
+}
+function ticker(t){ $('ticker').textContent = t; }
+
+function drainLog() {
+  if (!G) return;
+  for (; eventSeen < G.events.length; eventSeen++) {
+    const ev = G.events[eventSeen];
+    if (ev.uncontested || ev.office === 'president') continue;
+    const w = ev.sides.find((s)=>s.player===ev.winner);
+    const l = ev.sides.find((s)=>s.player!==ev.winner);
+    if (!w || !l) continue;
+    const dice = `<div class="dice">
+      ${die('national', w.dice.national)}${die('state', w.dice.state)}${die('candidate', w.dice.candidate)}</div>`;
+    const who = G.players[ev.winner].name;
+    const upset = ev.upset ? ' <b>Upset</b> — the favourite lost.' : '';
+    logLine(ev.year,
+      `${ev.state} ${OFFICE_LABEL[ev.office]} <b>${ev.round}</b> — ${who} takes it by ${ev.margin}.${upset}${dice}`);
+  }
+  for (; logSeen < G.log.length; logSeen++) {
+    logLine(G.year, `<b>${G.log[logSeen]}</b>`, true);
+    ticker(G.log[logSeen]);
+  }
+}
+const die = (label, n) => `<div class="die roll"><div class="n">${n}</div><div class="l">${label}</div></div>`;
+
+// ---- end --------------------------------------------------------------------
+function gameOver(deckOut) {
+  S.over = true;
+  const rank = G.players.map((p,i)=>({p,i})).sort((a,b)=>b.p.score-a.p.score);
+  const you = rank.findIndex((r)=>r.i===S.human)+1;
+  const realigned = Object.entries(G.leanMap).filter(([,v])=>Math.abs(v)>=4);
+  modal(`
+    <span class="eyebrow">${G.cfg.game.startYear}–${G.year}</span>
+    <h2 style="font-size:24px;margin-top:4px">${you===1?'You finished first.':`You finished ${you}${['','st','nd','rd'][you]||'th'}.`}</h2>
+    <p class="note" style="margin:8px 0 14px">${deckOut ? 'The talon ran dry — the deck-out ending.' : 'The cycle ran its course.'}</p>
+    <table class="stack">${rank.map((r)=>`<tr><td>${r.p.name}</td><td>${r.p.score}</td></tr>`).join('')}</table>
+    <p class="note" style="margin-top:14px">${realigned.length
+      ? `<b>Realigned:</b> ${realigned.map(([s,v])=>`${s} ${v>0?'R':'D'}+${Math.abs(v)}`).join(', ')}. Those states moved because someone kept winning them decisively.`
+      : 'No state moved four pips or more. Nothing realigned — which is itself the finding: squeakers hold seats and change nothing.'}</p>
+    <div class="row" style="margin-top:18px"><button class="btn" id="again">New game</button></div>`);
+  $('again').onclick = setup;
+  render();
+}
+
+// ---- modal ------------------------------------------------------------------
+function modal(html){ $('modalBody').innerHTML = html; $('modal').classList.add('on'); }
+function closeModal(){ $('modal').classList.remove('on'); }
+
+setup();
+
+</script>

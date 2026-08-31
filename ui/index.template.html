@@ -1,0 +1,180 @@
+<title>American Cycle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;600;700&family=Public+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --paper:#E8E6E1; --paper-2:#DEDBD4; --card:#F2F0EC; --ink:#16181A; --ink-2:#4A4E54;
+  --rule:#C4BFB6; --brass:#8A6D22; --dem:#2F5C8A; --gop:#A63A2E;
+  --dem-soft:#D6DFE9; --gop-soft:#EBD6D1; --good:#3E6B4F; --warn:#8A6D22; --bad:#A63A2E;
+  --shadow:0 1px 0 rgba(22,24,26,.06),0 2px 8px rgba(22,24,26,.07);
+  --chyron-bg:#16181A; --chyron-fg:#E8E6E1;
+  --display:"Archivo Narrow",ui-sans-serif,system-ui,sans-serif;
+  --body:"Public Sans",ui-sans-serif,system-ui,-apple-system,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#14161A; --paper-2:#1B1E23; --card:#20242A; --ink:#E6E3DC; --ink-2:#9AA0A8;
+  --rule:#33373D; --brass:#C9A44C; --dem:#6E9CC9; --gop:#D2705F;
+  --dem-soft:#22303D; --gop-soft:#3A2622; --good:#6FA07E; --warn:#C9A44C; --bad:#D2705F;
+  --shadow:0 1px 0 rgba(0,0,0,.4),0 2px 10px rgba(0,0,0,.5);
+  --chyron-bg:#0C0E11; --chyron-fg:#E6E3DC;
+}}
+:root[data-theme="dark"]{
+  --paper:#14161A; --paper-2:#1B1E23; --card:#20242A; --ink:#E6E3DC; --ink-2:#9AA0A8;
+  --rule:#33373D; --brass:#C9A44C; --dem:#6E9CC9; --gop:#D2705F;
+  --dem-soft:#22303D; --gop-soft:#3A2622; --good:#6FA07E; --warn:#C9A44C; --bad:#D2705F;
+  --shadow:0 1px 0 rgba(0,0,0,.4),0 2px 10px rgba(0,0,0,.5);
+  --chyron-bg:#0C0E11; --chyron-fg:#E6E3DC;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);
+  font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--display);font-weight:600;margin:0;text-wrap:balance;letter-spacing:.01em}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-family:var(--display);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+
+/* chyron ------------------------------------------------------------------ */
+#chyron{position:sticky;top:0;z-index:20;display:flex;align-items:stretch;gap:0;
+  background:var(--chyron-bg);color:var(--chyron-fg);border-bottom:2px solid var(--brass)}
+.chy{padding:8px 14px;border-right:1px solid rgba(255,255,255,.14);display:flex;
+  flex-direction:column;justify-content:center;min-width:0}
+.chy .k{font-family:var(--display);font-size:10px;letter-spacing:.14em;text-transform:uppercase;opacity:.6}
+.chy .v{font-family:var(--mono);font-size:15px;font-weight:600;white-space:nowrap}
+.chy.grow{flex:1;border-right:none;overflow:hidden}
+#ticker{font-family:var(--mono);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* layout ------------------------------------------------------------------ */
+#wrap{max-width:1180px;margin:0 auto;padding:16px;display:grid;
+  grid-template-columns:minmax(0,1fr) 320px;gap:16px;align-items:start}
+@media (max-width:900px){#wrap{grid-template-columns:1fr}}
+.panel{background:var(--card);border:1px solid var(--rule);border-radius:2px;box-shadow:var(--shadow)}
+.panel>header{display:flex;justify-content:space-between;align-items:baseline;gap:8px;
+  padding:10px 12px;border-bottom:1px solid var(--rule)}
+.panel>.body{padding:12px}
+
+/* map --------------------------------------------------------------------- */
+#map{display:grid;grid-template-columns:repeat(11,1fr);gap:3px}
+.st{position:relative;aspect-ratio:1;border:1px solid var(--rule);border-radius:1px;
+  background:var(--paper-2);display:flex;flex-direction:column;align-items:center;
+  justify-content:center;font-family:var(--mono);font-size:10px;font-weight:600;
+  transition:transform .12s ease,box-shadow .12s ease}
+.st.act{cursor:pointer}
+.st.act:hover{transform:translateY(-2px);box-shadow:0 3px 10px rgba(0,0,0,.18);z-index:2}
+.st.sel{outline:2px solid var(--brass);outline-offset:1px}
+.st .pips{display:flex;gap:1px;height:4px;margin-top:2px}
+.st .pip{width:3px;height:3px;border-radius:50%}
+.st .peg{position:absolute;top:2px;right:2px;width:6px;height:6px;border-radius:50%;border:1px solid var(--card)}
+.st.race::after{content:"";position:absolute;inset:0;border:2px solid var(--brass);border-radius:1px;pointer-events:none}
+
+/* cards ------------------------------------------------------------------- */
+#hand{display:flex;gap:8px;overflow-x:auto;padding:4px 0 8px}
+.cc{flex:0 0 152px;background:var(--card);border:1px solid var(--rule);border-top:3px solid var(--rule);
+  border-radius:2px;padding:8px;font-size:12px;cursor:pointer;transition:transform .12s ease}
+.cc:hover{transform:translateY(-3px)}
+.cc.sel{outline:2px solid var(--brass);outline-offset:1px}
+.cc.D{border-top-color:var(--dem)} .cc.R{border-top-color:var(--gop)}
+.cc .nm{font-family:var(--display);font-size:14px;font-weight:600;line-height:1.15}
+.cc .mt{color:var(--ink-2);font-size:10px;font-family:var(--mono);margin-top:2px}
+.cc .bel{font-size:11px;font-style:italic;color:var(--ink-2);margin-top:5px;line-height:1.3}
+.tag{display:inline-block;font-family:var(--mono);font-size:9px;padding:1px 4px;border:1px solid var(--rule);
+  border-radius:1px;margin:3px 3px 0 0;text-transform:uppercase;letter-spacing:.04em}
+.tag.het{border-color:var(--brass);color:var(--brass)}
+.tag.ext{border-color:var(--gop);color:var(--gop)}
+
+/* log --------------------------------------------------------------------- */
+#log{max-height:460px;overflow-y:auto;font-size:13px;display:flex;flex-direction:column;gap:0}
+.le{padding:7px 12px;border-bottom:1px solid var(--rule);line-height:1.4}
+.le:last-child{border-bottom:none}
+.le .yr{font-family:var(--mono);font-size:10px;color:var(--ink-2);letter-spacing:.05em}
+.le.big{background:var(--paper-2)}
+.le b{font-weight:600}
+
+/* dice -------------------------------------------------------------------- */
+.dice{display:flex;gap:6px;margin-top:6px}
+.die{flex:1;text-align:center;border:1px solid var(--rule);border-radius:2px;padding:4px 2px;background:var(--paper-2)}
+.die .n{font-family:var(--mono);font-size:19px;font-weight:600;line-height:1}
+.die .l{font-family:var(--display);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+@keyframes tumble{0%{transform:translateY(-6px) rotate(-8deg);opacity:0}60%{transform:none;opacity:1}100%{transform:none}}
+.die.roll{animation:tumble .34s cubic-bezier(.2,.9,.3,1.2) both}
+@media (prefers-reduced-motion:reduce){.die.roll{animation:none}.st,.cc{transition:none}}
+
+/* stack ------------------------------------------------------------------- */
+.stack{font-family:var(--mono);font-size:12px;border-collapse:collapse;width:100%}
+.stack td{padding:2px 0;border-bottom:1px dotted var(--rule)}
+.stack td:last-child{text-align:right;font-weight:600}
+.stack tr.tot td{border-top:1px solid var(--ink);border-bottom:none;padding-top:5px;font-weight:600}
+.pos{color:var(--good)} .neg{color:var(--bad)}
+
+/* controls ---------------------------------------------------------------- */
+.btn{background:var(--ink);color:var(--paper);border:1px solid var(--ink);border-radius:2px;
+  padding:8px 16px;font-family:var(--display);font-size:13px;font-weight:600;letter-spacing:.06em;
+  text-transform:uppercase}
+.btn:hover{background:var(--brass);border-color:var(--brass);color:#14161A}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.ghost:hover{background:var(--paper-2);color:var(--ink)}
+.btn[disabled]{opacity:.4;cursor:not-allowed}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+select,input[type=number]{font:inherit;font-family:var(--mono);font-size:13px;padding:6px 8px;
+  background:var(--card);color:var(--ink);border:1px solid var(--rule);border-radius:2px}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:12px}
+
+/* modal ------------------------------------------------------------------- */
+#modal{position:fixed;inset:0;background:rgba(10,12,14,.62);display:none;place-items:center;z-index:40;padding:16px}
+#modal.on{display:grid}
+#modalBox{background:var(--card);border:1px solid var(--rule);border-top:3px solid var(--brass);
+  border-radius:2px;max-width:560px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 12px 40px rgba(0,0,0,.4)}
+#modalBox>div{padding:18px}
+.scores{display:flex;gap:6px;flex-wrap:wrap}
+.sc{font-family:var(--mono);font-size:12px;padding:3px 8px;border:1px solid var(--rule);border-radius:2px;background:var(--paper-2)}
+.sc.me{border-color:var(--brass);font-weight:600}
+.note{font-size:12px;color:var(--ink-2);line-height:1.45}
+.setup-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:520px){.setup-grid{grid-template-columns:1fr}}
+</style>
+
+<div id="chyron">
+  <div class="chy"><span class="k">Year</span><span class="v" id="cYear">—</span></div>
+  <div class="chy"><span class="k">Economy</span><span class="v" id="cEcon">—</span></div>
+  <div class="chy"><span class="k">Spending</span><span class="v" id="cG">—</span></div>
+  <div class="chy"><span class="k">President</span><span class="v" id="cPres">vacant</span></div>
+  <div class="chy grow"><span class="k">Wire</span><span class="v" id="ticker">Set the table to begin.</span></div>
+</div>
+
+<div id="wrap">
+  <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+    <section class="panel">
+      <header><h2 style="font-size:15px">The map</h2><span class="eyebrow" id="mapHint">deviation from each state's own baseline</span></header>
+      <div class="body"><div id="map"></div></div>
+    </section>
+    <section class="panel">
+      <header><h2 style="font-size:15px">Your hand</h2><span class="eyebrow" id="handHint">—</span></header>
+      <div class="body"><div id="hand"></div><div class="row" style="margin-top:10px" id="controls"></div></div>
+    </section>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+    <section class="panel">
+      <header><h2 style="font-size:15px">Standings</h2><span class="eyebrow" id="cfgName">—</span></header>
+      <div class="body"><div class="scores" id="scores"></div></div>
+    </section>
+    <section class="panel">
+      <header><h2 style="font-size:15px">Election night</h2><span class="eyebrow">as it comes in</span></header>
+      <div id="log"></div>
+    </section>
+  </div>
+</div>
+
+<div id="modal"><div id="modalBox"><div id="modalBody"></div></div></div>
+
+<script>
+/*__PACKS__*/
+/*__CONFIGS__*/
+</script>
+<script>
+/*__ENGINE__*/
+</script>
+<script>
+/*__APP__*/
+</script>

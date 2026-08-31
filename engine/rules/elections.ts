@@ -58,7 +58,7 @@ export function eligible(card: CandidateCard, state: string, districts: District
   return card.homeState === state || districts.some((d) => d.state === state);
 }
 
-function has(card: CandidateCard, t: 'heterodox' | 'extremist'): boolean {
+function hasEffect(card: CandidateCard, t: 'heterodox' | 'extremist'): boolean {
   return card.effects.some((e) => e.type === t);
 }
 
@@ -91,11 +91,11 @@ export function buildModifiers(
 
   if (round === 'primary') {
     if (d.endorsements) m.push({ source: 'endorsements', pips: d.endorsements });
-    if (has(d.card, 'extremist')) m.push({ source: 'extremist (primary)', pips: pg.extremistPrimary });
-    if (has(d.card, 'heterodox')) m.push({ source: 'heterodox (primary)', pips: pg.heterodoxPrimaryPenalty });
+    if (hasEffect(d.card, 'extremist')) m.push({ source: 'extremist (primary)', pips: pg.extremistPrimary });
+    if (hasEffect(d.card, 'heterodox')) m.push({ source: 'heterodox (primary)', pips: pg.heterodoxPrimaryPenalty });
     if (d.crossBenched) m.push({ source: 'cross-benched', pips: pg.crossBenchPrimaryPenalty });
   } else {
-    if (has(d.card, 'extremist')) m.push({ source: 'extremist (general)', pips: pg.extremistGeneral });
+    if (hasEffect(d.card, 'extremist')) m.push({ source: 'extremist (general)', pips: pg.extremistGeneral });
 
     // National modifiers. `national: true` is precisely the set a heterodox
     // candidate ignores (§9) -- the tide, never the noise.
@@ -127,7 +127,7 @@ export function buildModifiers(
 export function toSide(d: Declaration, modifiers: Modifier[]): Side {
   return {
     player: d.player, cardId: d.card.id, party: d.card.party,
-    modifiers, heterodox: has(d.card, 'heterodox'),
+    modifiers, heterodox: hasEffect(d.card, 'heterodox'),
   };
 }
 
