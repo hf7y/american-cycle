@@ -13,7 +13,17 @@ import type {
 import { resolveRace, type Side, type Wave } from './resolution.ts';
 import type { RNG } from './rng.ts';
 
-export interface ResolutionConfig { incumbency: number; identityBonus: number; tieBreak: string; }
+export interface ResolutionConfig {
+  incumbency: number; identityBonus: number; tieBreak: string;
+  /** Whose demographics a STATEWIDE candidate is judged against. `district`
+   *  lets the one district card they hold speak for the whole state, so an
+   *  Atlanta card makes a candidate a perfect fit for Georgia. `board` reads
+   *  §10 literally and dilutes the fit by how much of the state's district
+   *  presence actually shares it -- Atlanta alone IS Georgia, Atlanta beside
+   *  three rural districts is a quarter of it. House races are unaffected: a
+   *  representative's own district speaks for itself. */
+  statewideIdentity: 'district' | 'board';
+}
 export interface NationalConfig {
   strongEconomy: number; recession: number; midtermPenalty: number;
   coattailsWith: number; coattailsAgainst: number;
@@ -42,6 +52,11 @@ export interface RaceContext {
   economyMod: number;
   /** set once the presidential general has resolved, for down-ballot coattails */
   presidentialWinner?: Party;
+  /** §10: "the baseline lives implicitly in which politicians and district
+   *  cards exist for that state." Every district card in play in this state,
+   *  held by anyone -- the state's demographic character is a property of the
+   *  BOARD, not of one player's holdings and not printed on the state. */
+  stateDistricts?: DistrictCard[];
 }
 
 export interface Declaration {
@@ -93,10 +108,39 @@ export function buildModifiers(
   }
 
   if (d.district && d.district.state === ctx.state) {
+    // Synergy is the district's machine and stays whole. §10's named case is
+    // "Joe Manchin wins most of the time, because his card is good and his
+    // district synergy is real" -- diluting that would delete the example.
     m.push({ source: `district ${d.district.id}`, pips: d.district.synergy });
+
     const shared = d.card.identities.filter((i) => d.district!.demographics.includes(i));
     if (shared.length) {
-      m.push({ source: `identity: ${shared.join(', ')}`, pips: res.identityBonus * shared.length });
+      // §10: a state has no printed demographics; its character is whichever
+      // district cards happen to be on the board. Statewide, one district must
+      // not speak for all of them -- an urban card in a southern state is a
+      // real but partial claim on it, and how partial depends on what else
+      // came out. On average the districts in play track the state; in any one
+      // game Georgia can be unusually liberal because Atlanta came out and
+      // Macon never did.
+      const statewide = ctx.office !== 'representative';
+      const board = statewide && res.statewideIdentity === 'board' ? ctx.stateDistricts : undefined;
+      let pips = res.identityBonus * shared.length;
+      let src = `identity: ${shared.join(', ')}`;
+      if (board && board.length) {
+        // Per TAG, not per district: the question is whether THIS trait
+        // speaks for the state, not whether the candidate has anything at all
+        // in common with it. An urban candidate in a state showing Atlanta and
+        // three rural districts is a quarter urban, however much else matches.
+        let sum = 0; const parts: string[] = [];
+        for (const tag of shared) {
+          const carry = board.filter((x) => x.demographics.includes(tag)).length;
+          sum += res.identityBonus * (carry / board.length);
+          parts.push(`${tag} ${carry}/${board.length}`);
+        }
+        pips = Math.round(sum);
+        src = `identity: ${parts.join(', ')}`;
+      }
+      if (pips) m.push({ source: src, pips });
     }
   }
 

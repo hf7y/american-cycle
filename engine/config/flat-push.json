@@ -11,7 +11,8 @@
   "resolution": {
     "incumbency": 1,
     "identityBonus": 1,
-    "tieBreak": "even"
+    "tieBreak": "even",
+    "statewideIdentity": "district"
   },
   "national": {
     "strongEconomy": 1,

@@ -20,7 +20,12 @@ export function options(v: GameView, open: OpenRace[], cfg: Config): Option[] {
   for (const r of open) {
     for (const card of cands) {
       if (r.office !== 'president' && !eligible(card, r.state, me.districts)) continue;
-      const district = me.districts.find((d) => d.state === r.state);
+      // §15 identifies a district BY ITS NUMBER. Matching on state alone let
+      // whichever card `find` reached first supply the synergy and the
+      // demographics for a House race in a different district entirely.
+      const district = r.office === 'representative'
+        ? me.districts.find((d) => d.state === r.state && d.number === r.slot)
+        : me.districts.find((d) => d.state === r.state);
       const d: Declaration = { player: v.me, card, district, office: r.office, state: r.state, slot: r.slot,
         incumbent: r.incumbent?.holder?.cardId === card.id };
       const ctx = {

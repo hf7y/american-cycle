@@ -25,7 +25,7 @@ import { STATES, BY_CODE, senateUp, governorUp, electors, DC_ELECTORS, type Stat
 export interface Config {
   name: string;
   hand: { base: number; bonusPresident: number; bonusSenator: number; bonusGovernor: number; bonusRepresentative: number };
-  resolution: { incumbency: number; identityBonus: number; tieBreak: string };
+  resolution: { incumbency: number; identityBonus: number; tieBreak: string; statewideIdentity: 'district' | 'board' };
   national: { strongEconomy: number; recession: number; midtermPenalty: number; coattailsWith: number; coattailsAgainst: number };
   endorsements: { president: number; governorInState: number; senator: number };
   primaryGeneral: { extremistPrimary: number; extremistGeneral: number; heterodoxPrimaryPenalty: number; crossBenchPrimaryPenalty: number; billCounterPips: number; crossBenchGeneral: number };
@@ -629,6 +629,7 @@ export class Game {
       presidentParty: this.president?.party,
       economyMod: econ.economyModifier(this.economy, this.cfg.economy, this.cfg.national.strongEconomy, this.cfg.national.recession),
       presidentialWinner,
+      stateDistricts: this.players.flatMap((p) => p.districts.filter((x) => x.state === state)),
     };
   }
 
