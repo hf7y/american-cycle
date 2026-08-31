@@ -1,8 +1,9 @@
 # American Cycle — overnight simulation report
 
 **2026-08-31.** Engine at `phase1-engine`, 31 tests green, clean typecheck.
-Four era packs (1976/1992/2008/2016): 224 real candidates, 168 real districts.
-Ten scripted agents. Every figure below is reproducible from its seed.
+Four era packs (1976/1992/2008/2016): 232 real candidates, 168 real districts.
+Eleven scripted agents, §6's pack-pass draft, and every mechanic in the design
+doc implemented. Every figure below is reproducible from its seed.
 
 A caution up front, in the brief's own spirit: this run found the design's
 problems faster than it found its numbers. Several sweeps that were supposed to
@@ -48,7 +49,7 @@ Confidence: **certain**. It is arithmetic, and it is a passing test.
 
 ### 2. Cut district supply hard. One change moves five metrics.
 **Metric** contested race-slots; legal moves per turn; realignment; dead turns.
-**Observed** 35% contested (target >60%), **39 legal races per player-turn**
+**Observed** 34% contested (target >60%), **39 legal races per player-turn**
 (target 4–25), 0.21 states realigned a game, 4.4% of turns with no legal move.
 **Change** cut district supply, raise base hand size, scale the pool with the
 table.
@@ -82,21 +83,40 @@ to roughly 46% against 93.5% "effectively safe". It narrows; it does not close.
 
 Confidence: **certain** on the ceiling, **open** on which way to resolve it.
 
-### 4. The leader runs away, and hand size is not why.
+### 4. The leader runs away, and the only brake in the design is social.
 **Metric** SIM-BRIEF's determination point and comeback rate.
-**Observed** determination **38–50%** of the way through (healthy 75–85%);
-comeback rate **1%**; in year one the eventual winner already leads 54% of the
-time, against 25% for a four-player coin flip.
-**Change** unknown — and that is the finding. §16 names three suspects: hand
-size, endorsements, capture. **Hand size is innocent** (determination does not
-trend across presidency bonus 0→4, and the Senate bonus is flat). Endorsements
-and capture are unexamined and are where to look next.
+**Observed** determination **50%** of the way through (healthy 75–85%); comeback
+rate **0–1%**; the leader's margin over second place **doubles** across the
+second half, from 26 to 51; and **100% of player-scores never decrease**.
+**Change** none proposed — and that is the finding.
 
-Confidence: **high** on the runaway, **none** on the cause.
+§16 names three suspects and three brakes. Every suspect was tested by
+switching it off: **hand size, endorsements and capture are all innocent**
+(determination stays at 50% without them, and *worse* without hand bonuses,
+which since F7 cap at +3 and act as catch-up). §6's pack-pass draft was
+implemented specifically to test whether the opening deal was the cause; it cuts
+the deal's predictive grip by a third and moves determination not at all.
+
+What locks the game in is that **nothing in the design can take points away**.
+Scores are monotonic, accrual is steady, and the leader pulls further ahead.
+Of the three intended brakes, the midterm penalty does not bind, recession hits
+the president's party rather than the leader, and the third is *"other players
+ganging up"* — the social layer.
+
+**The design's only effective brake on a runaway leader is table politics, and
+that is exactly what this simulator cannot test.** Recommend a human playtest
+before adding any catch-up mechanic. The design may well be right that ganging
+up suffices; it should be a deliberate choice that the brake is social, because
+there is no mechanical fallback if a table fails to coordinate.
+
+Confidence: **high** on the runaway and on the absence of a mechanical brake;
+the remedy is a table question, not a parameter.
 
 ### 5. SenateFlood is dominant at 51.7%, and the filibuster stalls the bill.
 **Metric** six-way round robin; bill pass rate.
-**Observed** SenateFlood 51.7% against SIM-BRIEF's 40% dominance line. Bills
+**Observed** SenateFlood 40.8% against SIM-BRIEF's 40% dominance line — down
+from 51.7% once §6's draft let opponents compete for Senate-capable cards, and
+still on the line. Bills
 pass **20%** at the current 60% Senate threshold, against a 20% stall line —
 and 63% at a 50% threshold, 0% at 67%.
 **Change** for the Senate: it pays four ways at once — points, a six-year term,
