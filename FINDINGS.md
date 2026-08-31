@@ -137,3 +137,61 @@ possible — points the opposite way and would move the map a great deal.
 
 This finding is downstream of F4. Fix the contest rate and this may resolve
 itself; it is recorded separately because the rule gap is real either way.
+
+---
+
+## F6. Contest rate is a ratio, and the design's own numbers put it at 1:5. CONFIRMED.
+
+This is the most important finding of the night and it supersedes F4's framing.
+
+**The mechanism.** A player contests a race only when they choose it *and* an
+opponent does. Each player picks `hand` races out of `eligible` ones, so the
+expected overlap — and therefore the contest rate — is governed by
+
+> **cards per player ÷ eligible races per player**
+
+Measured at year 6 of a four-player game: each player had **~60 eligible races
+and 4–10 cards.** Overlap was not the constraint; 66% of races were eligible to
+more than one player. There is simply five times more board than there are
+cards to put on it, so everyone farms their own territory.
+
+**Measured surface** (8 seeds each, share of race-slots drawing declarations
+from more than one player; SIM-BRIEF wants this above 60%):
+
+| players | hand | district supply | contested | states realigned | years |
+|---|---|---|---|---|---|
+| 2 | 12 | 0.15 | 10% | 0.0 | 24 |
+| 2 | 20 | 0.06 | 20% | 0.1 | 15 |
+| 4 | 12 | 0.15 | 23% | 0.1 | 14 |
+| 4 | 20 | 0.06 | 44% | 1.1 | 7 |
+| 6 | 12 | 0.15 | 40% | 0.9 | 9 |
+| 6 | 20 | 0.06 | **63%** | 1.5 | 5 |
+
+**Three things fall out of this table.**
+
+1. **Two-player is structurally broken.** At 10–20% contest it is two solitaires
+   sharing a scoreboard. The design says 2–6 players; 2 does not work at any
+   setting tested.
+2. **Contest and game length trade off directly.** Everything that makes players
+   fight also burns cards, and the talon empties. The 63% row lasts five years.
+3. **Realignment only appears once players fight.** Every row with a realigned
+   state is a row above 40% contest. F2 proved realignment was *reachable*;
+   this shows what actually reaches it. The two theses the design argues —
+   earned realignment, and valuable heterodoxy — both depend on a contest rate
+   the current numbers do not produce.
+
+**Proposed change, in order of confidence.** Cut district supply hard (it is
+§16's open question and the doc already says it "sets the tempo of the whole
+game"); raise base hand size above 12; and scale the card pool with the table,
+since a six-player game at hand 20 holds 120 cards before a single refill.
+
+## F7. Office hand bonuses cannot be per seat. CONFIRMED, fixed.
+
+§6 and §11 print "Senate +1, presidency +2" without saying whether that is per
+seat held or per office held. Read per seat it is a runaway: players were
+holding 28 seats each, drawing 40 cards a cycle, and exhausting the talon —
+game length collapsed from 24 years to 7.
+
+The doc's own arithmetic settles it. §16 says "base 12 with president +2 is a
+17% edge", and 2/12 is 17% only if the +2 is a one-off. Implemented per office
+held, and flagged in the config placeholders.

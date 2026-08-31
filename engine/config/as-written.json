@@ -1,6 +1,6 @@
 {
-  "name": "baseline",
-  "note": "Every tunable number in the design doc, as a named field. Fields listed in `placeholders` are NOT in the design doc -- they are \u00a716 open questions or gaps, and the value here is a stand-in, not a decision.",
+  "name": "as-written",
+  "note": "The design doc exactly as v0.2 specifies it, including annual decay. Kept as the contrast that shows why the baseline changed: the map cannot realign here at any margin (F2).",
   "hand": {
     "base": 12,
     "bonusPresident": 2,
@@ -47,7 +47,7 @@
       }
     ],
     "decayPerTick": 1,
-    "decayFrequency": "biennial",
+    "decayFrequency": "annual",
     "governorPushes": "never",
     "honeymoonCounter": 1,
     "maxLean": 8
@@ -81,7 +81,7 @@
   },
   "game": {
     "startYear": 1976,
-    "maxYears": 24,
+    "maxYears": 16,
     "victory": "points",
     "deckOutEnds": true
   },

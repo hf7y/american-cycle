@@ -95,6 +95,8 @@ export interface GameResult {
   rateRises: number;
   finalLean: lean.Lean;
   uncontestedShare: number;
+  /** share of race-slots that drew declarations from more than one player */
+  contestedSlotShare: number;
   decisionCounts: number[];
   seatsByOffice: Record<Office, number>;
 }
@@ -102,11 +104,17 @@ export interface GameResult {
 export class Game {
   cfg: Config; rng: RNG; players: PlayerState[]; seats: Seat[] = [];
   leanMap: lean.Lean = {}; economy: econ.Economy;
-  year: number; talon: Card[] = []; discard: Card[] = [];
+  year: number; talon: Card[] = []; discard: Card[] = []; eraQueue: Card[][] = [];
   president?: { player: number; cardId: string; party: Party; since: number };
   events: RaceEvent[] = [];
   log: string[] = [];
-  stats = { billsPassed: 0, billsAttempted: 0, crossBench: 0, impeachments: 0, rateRises: 0, decisions: [] as number[] };
+  stats = { billsPassed: 0, billsAttempted: 0, crossBench: 0, impeachments: 0, rateRises: 0,
+            decisions: [] as number[],
+            /** race-slots offered, and those drawing declarations from >1 player.
+             *  Counting "uncontested generals" instead undercounts badly: a race
+             *  several players crowd in one party resolves as a contested PRIMARY
+             *  and a one-candidate general. */
+            raceSlots: 0, contestedSlots: 0 };
   private agents: Agent[];
   private scoreHistory: number[][] = [];
 
@@ -116,28 +124,40 @@ export class Game {
     this.economy = econ.newEconomy(cfg.economy);
     this.players = agents.map((a, i) => ({ id: i, name: a.name, hand: [], districts: [], score: 0, tapped: new Set() }));
     for (const s of STATES) this.leanMap[s.code] = 0;
-    this.talon = this.rng.shuffle([...cards]);
+    // §14: "refill packs draw from later years", so a game beginning in 1976
+    // is playing 2010s cards by year ten. The talon is therefore era-ordered,
+    // not shuffled together: each era is shuffled within itself and they are
+    // consumed oldest first. This also concentrates presence early, when the
+    // pool is one era's ~24 states rather than four eras' fifty.
+    const eras = [...new Set(cards.map((c) => c.era))].sort((a, b) => a - b);
+    this.eraQueue = eras.map((e) => this.rng.shuffle(cards.filter((c) => c.era === e)));
+    this.talon = this.eraQueue.shift() ?? [];
     this.deal();
   }
 
+  /** §6/§11: the office bonuses are per OFFICE HELD, not per seat. The doc's
+   *  own arithmetic fixes this -- "base 12 with president +2 is a 17% edge"
+   *  is 2/12, a one-off. Read per seat, a player holding twenty Senate seats
+   *  draws thirty-two cards a cycle, which both runs away and exhausts the
+   *  talon: game length collapsed from 24 years to 7 before this was fixed. */
   private handSize(p: PlayerState): number {
     const h = this.cfg.hand;
-    let n = h.base;
-    for (const s of this.seats) {
-      if (!s.holder || s.holder.player !== p.id) continue;
-      if (s.office === 'president') n += h.bonusPresident;
-      else if (s.office === 'senator') n += h.bonusSenator;
-      else if (s.office === 'governor') n += h.bonusGovernor;
-      else n += h.bonusRepresentative;
-    }
-    return n;
+    const holds = (o: Office) => this.seats.some((s) => s.holder?.player === p.id && s.office === o);
+    return h.base
+      + (holds('president') ? h.bonusPresident : 0)
+      + (holds('senator') ? h.bonusSenator : 0)
+      + (holds('governor') ? h.bonusGovernor : 0)
+      + (holds('representative') ? h.bonusRepresentative : 0);
   }
 
   private draw(p: PlayerState, n: number): void {
     for (let i = 0; i < n; i++) {
       if (!this.talon.length) {
-        if (!this.discard.length) return;           // §14: the deck-out ending
-        this.talon = this.rng.shuffle(this.discard); this.discard = [];
+        // The next era enters play before the discard is recycled -- that is
+        // what puts 2010s districts under 1970s politicians (§14).
+        if (this.eraQueue.length) this.talon = this.eraQueue.shift()!;
+        else if (this.discard.length) { this.talon = this.rng.shuffle(this.discard); this.discard = []; }
+        else return;                                 // §14: the deck-out ending
       }
       const c = this.talon.pop()!;
       if (c.kind === 'district') p.districts.push(c); else p.hand.push(c);
@@ -258,6 +278,10 @@ export class Game {
     }
 
     const results: { ev: RaceEvent; won: Declaration }[] = [];
+    for (const [, group] of byRace) {
+      this.stats.raceSlots++;
+      if (new Set(group.map((d) => d.player)).size > 1) this.stats.contestedSlots++;
+    }
     for (const [key, group] of byRace) {
       const [office, state, slotStr] = key.split('|');
       const slot = slotStr ? Number(slotStr) : undefined;
@@ -445,7 +469,7 @@ export class Game {
     const end = this.cfg.game.startYear + this.cfg.game.maxYears;
     while (this.year < end) {
       this.tick();
-      if (this.cfg.game.deckOutEnds && !this.talon.length && !this.discard.length) break;
+      if (this.cfg.game.deckOutEnds && !this.talon.length && !this.discard.length && !this.eraQueue.length) break;
     }
     return this.result();
   }
@@ -472,6 +496,7 @@ export class Game {
       crossBenchVotes: this.stats.crossBench, impeachments: this.stats.impeachments,
       rateRises: this.stats.rateRises, finalLean: this.leanMap,
       uncontestedShare: this.events.length ? uncontested / this.events.length : 0,
+      contestedSlotShare: this.stats.raceSlots ? this.stats.contestedSlots / this.stats.raceSlots : 0,
       decisionCounts: this.stats.decisions, seatsByOffice,
     };
   }

@@ -1,8 +1,8 @@
 {
-  "name": "baseline",
-  "note": "Every tunable number in the design doc, as a named field. Fields listed in `placeholders` are NOT in the design doc -- they are \u00a716 open questions or gaps, and the value here is a stand-in, not a decision.",
+  "name": "flat-push",
+  "note": "Flat +1 lean pushes, the rule DECISIONS.md records as cut. Kept playable so the pathology is visible rather than asserted: a party can win a state every cycle for a decade and move the map nowhere.",
   "hand": {
-    "base": 12,
+    "base": 16,
     "bonusPresident": 2,
     "bonusSenator": 1,
     "bonusGovernor": 0,
@@ -34,16 +34,8 @@
   "lean": {
     "pushByMargin": [
       {
-        "maxPips": 1,
-        "push": 0
-      },
-      {
-        "maxPips": 3,
-        "push": 1
-      },
-      {
         "maxPips": 99,
-        "push": 2
+        "push": 1
       }
     ],
     "decayPerTick": 1,
@@ -81,7 +73,7 @@
   },
   "game": {
     "startYear": 1976,
-    "maxYears": 24,
+    "maxYears": 16,
     "victory": "points",
     "deckOutEnds": true
   },

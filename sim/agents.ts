@@ -86,7 +86,7 @@ abstract class Base implements Agent {
     for (const [p, c] of t) if (c > n) { n = c; best = p; }
     return best;
   }
-  protected budget(v: GameView): number { return Math.max(3, Math.floor(v.players[v.me].hand.length / 2)); }
+  protected budget(v: GameView): number { return v.players[v.me].hand.length; }
 }
 
 export class RandomAgent extends Base {
