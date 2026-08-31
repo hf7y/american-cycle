@@ -20,7 +20,7 @@ import {
   buildModifiers, eligible, runRace, withdrawalView,
   type Declaration, type RaceContext, type WithdrawalView,
 } from './rules/elections.ts';
-import { STATES, BY_CODE, senateUp, governorUp, electors, type StateDef } from './states.ts';
+import { STATES, BY_CODE, senateUp, governorUp, electors, DC_ELECTORS, type StateDef } from './states.ts';
 
 export interface Config {
   name: string;
@@ -611,6 +611,11 @@ export class Game {
       this.events.push(out.event);
       const won = nominees.find((d) => d.player === out.event!.winner)!;
       tally.set(won.player, (tally.get(won.player) ?? 0) + electors(st, this.year));
+      // DC has no seats and never appears in STATES, but its three electors are
+      // in the 538 total. Award them with Maryland, which is where they were
+      // measured against before the 23rd Amendment and is close enough for a
+      // board that prints no District of Columbia.
+      if (st.code === 'MD') tally.set(won.player, (tally.get(won.player) ?? 0) + DC_ELECTORS);
       const list = carried.get(won.card.party) ?? [];
       list.push(st.code);
       carried.set(won.card.party, list);

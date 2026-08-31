@@ -141,9 +141,14 @@ function phaseDeclare() {
   render();
 }
 
+const uiRaceKey = (r) => `${r.office}|${r.state}|${r.slot ?? ''}`;
+
 function racesInState(state) {
   if (!S.eligibleFor || !S.sel) return [];
-  return S.eligibleFor(S.sel).filter((r) => r.state === state);
+  // §8: one peg per race per player. You may not stack three of your own
+  // candidates into a single Senate seat.
+  const taken = new Set(S.picks.map(uiRaceKey));
+  return S.eligibleFor(S.sel).filter((r) => r.state === state && !taken.has(uiRaceKey(r)));
 }
 
 function pickRace(state) {
@@ -272,7 +277,9 @@ function drawMap() {
 }
 function racesInState_all(card){
   const me = G.players[S.human];
-  return (pending.open||[]).filter((r)=> r.office==='president' || eligible(card, r.state, me.districts));
+  const taken = new Set(S.picks.map(uiRaceKey));
+  return (pending.open||[]).filter((r)=>
+    (r.office==='president' || eligible(card, r.state, me.districts)) && !taken.has(uiRaceKey(r)));
 }
 
 function drawHand() {
