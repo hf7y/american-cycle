@@ -364,6 +364,19 @@
    "effects": [
     {
      "type": "extremist"
+    },
+    {
+     "type": "may_endorse",
+     "pips": 2,
+     "note": "an ideological validator with a national following (\u00a79)"
+    },
+    {
+     "type": "conditional",
+     "pips": 2,
+     "when": {
+      "identity": "rural"
+     },
+     "note": "an unstable basket: fires only in the rural West"
     }
    ]
   },
@@ -459,6 +472,14 @@
    "effects": [
     {
      "type": "heterodox"
+    },
+    {
+     "type": "conditional",
+     "pips": 2,
+     "when": {
+      "identity": "veteran"
+     },
+     "note": "Declaration of Conscience"
     }
    ]
   },

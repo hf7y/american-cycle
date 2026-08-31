@@ -121,7 +121,14 @@ export function buildModifiers(
   for (const e of d.card.effects) {
     if (e.type === 'conditional' && e.pips) {
       const w = e.when ?? {};
-      if ((w.state && w.state !== ctx.state) || (w.round && w.round !== round) || (w.office && w.office !== d.office)) continue;
+      if (w.state && w.state !== ctx.state) continue;
+      if (w.round && w.round !== round) continue;
+      if (w.office && w.office !== d.office) continue;
+      // §5: "John Bel Edwards is pro-life, which reads as a bonus in Catholic
+      // districts." An identity condition is a claim about the DISTRICT being
+      // run in, not about the candidate -- without this the effect fires in
+      // every race and the condition is decorative.
+      if (w.identity && !d.district?.demographics.includes(w.identity)) continue;
       m.push({ source: e.note ?? 'card text', pips: e.pips });
     }
   }

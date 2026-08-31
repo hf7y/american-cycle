@@ -20,6 +20,14 @@
    "effects": [
     {
      "type": "heterodox"
+    },
+    {
+     "type": "conditional",
+     "pips": 2,
+     "when": {
+      "identity": "suburban"
+     },
+     "note": "tough on crime: suburban bonus"
     }
    ]
   },
@@ -578,7 +586,16 @@
    ],
    "belief": "Bleeding-heart conservative",
    "era": 1992,
-   "effects": []
+   "effects": [
+    {
+     "type": "conditional",
+     "pips": 2,
+     "when": {
+      "identity": "urban"
+     },
+     "note": "bleeding-heart conservative: urban bonus"
+    }
+   ]
   },
   {
    "kind": "candidate",

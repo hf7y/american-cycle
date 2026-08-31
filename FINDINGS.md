@@ -1340,3 +1340,53 @@ midterm penalty, heterodoxy, and realignment.
 *Sixth unimplemented clause, and the first found by systematic sweep rather
 than by noticing a suspicious number. The sweep is cheap and should have been
 run first.*
+
+---
+
+## F34. Card text was entirely decorative, and the `conditional` handler ignored its own condition.
+
+Extending the coverage sweep from §9's modifier stack to BUILD-BRIEF's seven
+enumerated effect types:
+
+| effect type | in card data | read by engine |
+|---|---|---|
+| `heterodox` | 114 cards | yes |
+| `extremist` | 44 cards | yes |
+| `identity_bonus` | none | implemented as a card *field* |
+| `home_state` | none | implemented as a card *field* |
+| `district_synergy` | none | implemented as a card *field* |
+| **`conditional`** | **none** | **read, and nothing used it** |
+| **`may_endorse`** | **none** | **neither** |
+
+Three of the seven are implemented as fields rather than effects, which is a
+reasonable choice and works. The other two were dead in different ways.
+
+**Every card's belief text was decoration.** 346 candidates carry a printed
+belief and not one had a mechanical hook. SIM-BRIEF asks directly: *"what share
+of printed abilities ever change an outcome? If half the cards' text is
+decorative, the enumerated effect types are wrong or the magnitudes are too
+small."* The honest answer was **all of it**.
+
+**And senators could not endorse at all.** §9: *"Senators do not endorse as a
+class ... The exceptions are ideological validators with national followings —
+Sanders, DeMint in the Tea Party era, Kennedy in 2008 — and those get printed
+text."* That printed text is `may_endorse`; no card carried it and nothing read
+it.
+
+**Implemented**, using only the cases the doc names by hand — `may_endorse` on
+Sanders, DeMint, Kennedy and Goldwater; `conditional` on Edwards (pro-life,
+Catholic districts), Clinton (tough on crime), Goldwater and Lieberman (the
+unstable baskets §5 names), and a handful more.
+
+**And a bug caught on the way in.** The engine's `conditional` handler checked
+`state`, `round` and `office` and **ignored `identity`** — so an effect written
+as "a bonus in Catholic districts" fired in *every race*. Measured before the
+fix, "the TVA: farm bonus" fired 61 times per 1000 races; after, 9.75. §5 is
+explicit that an identity condition is a claim about the district being run in,
+not about the candidate. **I would have shipped effects that ignore their own
+conditions**, which is worse than having no effects at all.
+
+Printed card text now fires in **4.12% of races**. That is a real answer to
+SIM-BRIEF's question rather than a zero, and it is low — the effect types work,
+but only a dozen cards carry text with a hook. Whether to write hooks for the
+other 334 is a card-authoring decision, not an engine one.

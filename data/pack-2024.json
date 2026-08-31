@@ -282,6 +282,11 @@
    "effects": [
     {
      "type": "extremist"
+    },
+    {
+     "type": "may_endorse",
+     "pips": 2,
+     "note": "an ideological validator with a national following (\u00a79)"
     }
    ]
   },

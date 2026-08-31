@@ -179,7 +179,13 @@
    ],
    "belief": "National health insurance",
    "era": 1976,
-   "effects": []
+   "effects": [
+    {
+     "type": "may_endorse",
+     "pips": 2,
+     "note": "an ideological validator with a national following (\u00a79)"
+    }
+   ]
   },
   {
    "kind": "candidate",

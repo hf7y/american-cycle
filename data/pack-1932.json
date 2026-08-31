@@ -82,6 +82,14 @@
    "effects": [
     {
      "type": "extremist"
+    },
+    {
+     "type": "conditional",
+     "pips": 2,
+     "when": {
+      "identity": "rural"
+     },
+     "note": "every man a king: rural bonus"
     }
    ]
   },
@@ -235,6 +243,14 @@
    "effects": [
     {
      "type": "heterodox"
+    },
+    {
+     "type": "conditional",
+     "pips": 2,
+     "when": {
+      "identity": "union"
+     },
+     "note": "the wages act: union bonus"
     }
    ]
   },
@@ -400,6 +416,14 @@
    "effects": [
     {
      "type": "heterodox"
+    },
+    {
+     "type": "conditional",
+     "pips": 2,
+     "when": {
+      "identity": "farm"
+     },
+     "note": "the TVA: farm bonus"
     }
    ]
   },

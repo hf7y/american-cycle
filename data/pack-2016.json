@@ -34,6 +34,11 @@
    "effects": [
     {
      "type": "extremist"
+    },
+    {
+     "type": "may_endorse",
+     "pips": 2,
+     "note": "an ideological validator with a national following (\u00a79)"
     }
    ]
   },
@@ -187,7 +192,16 @@
    ],
    "belief": "The last statewide Democrat",
    "era": 2016,
-   "effects": []
+   "effects": [
+    {
+     "type": "conditional",
+     "pips": 2,
+     "when": {
+      "identity": "union"
+     },
+     "note": "against the trade deals: union bonus"
+    }
+   ]
   },
   {
    "kind": "candidate",
@@ -236,6 +250,14 @@
    "effects": [
     {
      "type": "heterodox"
+    },
+    {
+     "type": "conditional",
+     "pips": 2,
+     "when": {
+      "identity": "catholic"
+     },
+     "note": "pro-life: a bonus in Catholic districts"
     }
    ]
   },
@@ -344,7 +366,16 @@
    ],
    "belief": "Won a Trump district",
    "era": 2016,
-   "effects": []
+   "effects": [
+    {
+     "type": "conditional",
+     "pips": 2,
+     "when": {
+      "identity": "union"
+     },
+     "note": "a Democrat the union halls still recognise"
+    }
+   ]
   },
   {
    "kind": "candidate",

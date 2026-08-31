@@ -496,6 +496,14 @@ export class Game {
           endorsers.push({ pips: this.cfg.endorsements.president, cardId: seat.holder.cardId });
         } else if (seat.office === 'governor') {
           endorsers.push({ pips: this.cfg.endorsements.governorInState, state: seat.state, cardId: seat.holder.cardId });
+        } else if (seat.office === 'senator') {
+          // §9: "Senators do not endorse as a class, because most senators move
+          // nothing. The exceptions are ideological validators with national
+          // followings ... and those get printed text." That printed text is
+          // the may_endorse effect, which no card carried and nothing read.
+          const card = this.cardById.get(seat.holder.cardId);
+          const e = card?.effects.find((x) => x.type === 'may_endorse');
+          if (e) endorsers.push({ pips: e.pips ?? this.cfg.endorsements.senator, cardId: seat.holder.cardId });
         }
       }
       if (!endorsers.length) continue;
