@@ -1,7 +1,24 @@
 # american-cycle — handover
 
-**State: complete and CI-green.** PR hf7y/american-cycle#7, branch
+**v0.1 — landed and CI-green.** PR hf7y/american-cycle#7, branch
 `phase1-engine`. Nothing is in flight.
+
+## v0.2 — decided, deliberately not in v0.1
+
+Each of these is measured and argued; none is shipped, because each moves every
+baseline and the nine findings are stamped against these configs.
+
+| | |
+|---|---|
+| **`game.resignToRun` on in as-written-plus** | **The one that matters.** Off, an office-holder can reach for a higher office only in the cycle its term expires — close to the complement of real ambition, not an approximation of it. Every sitting senator ever elected president ran mid-term, as did Wilson, Clinton and G.W. Bush; of seven, the gate admits FDR. On, the governor launchpad rises **nineteenfold** (0.46% → 8.85% of presidential sides) and contested presidential races nearly double. Implemented, measured, default false. |
+| era-key `govTerm` in `engine/states.ts` | The table is the 2026 picture applied to 1932, and term length drives the CALENDAR — `governorUp` derives election years from it, and this game keys the midterm penalty, coattails and the honeymoon off which year a race falls in. Every ten states wrong costs ~20% of the gubernatorial calendar. `seats: Record<census, number>` is already era-keyed, so this is the file's own pattern, not a new one. |
+| do NOT encode per-state term limits | Limits do not touch the calendar, and their mechanical job — forcing turnover — is already done by card availability. Redundant here in a way term length is not. |
+| **a printed district party preference, +4 to +5 pips** | Measured on the MEDSL 1976–2018 panel, 9,556 district-years. Stable district partisanship is **56.4% of the variance** in two-party share — and **only 10.6% of it is the state the district is in; 89.4% is within-state.** So the state lean cannot carry it, and §10 prints no state number: if the district card does not carry the baseline, nothing does. +10.9 pips on §3's literal margin scale, +4 to +5 calibrated on win rates; the gap is because §3's dice are ~2x less dispersed than reality (4.18 vs a measured 6.82 contested / 8.62 open). |
+| loyalty vs lean: **real, but not a second field** | WV's House ran 33.9 share points more Democratic than the nation in 1996 while its presidential vote ran 3.6; it lost the presidential edge in 2000 and the House edge in 2010 — a **ten-year lag**, and the same shape in the South (1984→1992) and Appalachia (1988→1994). Outside a realignment the gap never leaves ±2.5, so ~80% of cards would print 0. The mechanism already exists as heterodoxy card text on Byrd/Rahall/Manchin/Edwards; what was missing is its magnitude — **+15 to +30 pips at peak, decaying over a decade** — which answers §16's open question #3, not a new field. |
+| era-price incumbency | It collapses from ~6.5 pips (1982–2010) to **2.88** (2012–18) while district partisanship rises. One scalar cannot be right for seven era packs. |
+| revisit `crossBenchCap` | Capped at 3 on evidence, not principle. §12 says the counters are read off; uncapped they read ~30. |
+
+
 
 - **Play it:** https://claude.ai/code/artifact/258e71c9-7de6-45e0-80e3-d7d7dffbb369
 - **Findings:** https://claude.ai/code/artifact/5d881297-7ea3-49a6-a8f5-846157eed5e3
@@ -21,7 +38,7 @@ data), and the SIM-BRIEF report.
 - `sim/` — 11 agents, harness, all ten sweeps, round robin, feel metrics,
   browser playtests.
 - `ui/` — one self-contained HTML file, no build step, no network.
-- `FINDINGS.md` — 37 findings, prose. `findings/` — nine of them as executable
+- `FINDINGS.md` — 38 findings, prose. `findings/` — ten of them as executable
   predicates. `reports/` — the seven-section brief response and the published
   page.
 
@@ -86,6 +103,13 @@ Three findings turn on the social layer and SIM-BRIEF says so itself:
 
 ## Standing cautions for whoever picks this up
 
+- **A primary is 1d6 vs 1d6, not 3d6 vs 3d6.** `Wave` memoizes the national die
+  by party and the state die by party+state, and every side of a primary is the
+  same party in the same state — so only the candidate die differs. The noise
+  floor is **SD 2.42 in a primary against 4.18 in a general**, and a pip is
+  worth far more there. Judging a primary-only modifier against 4.18
+  understates it by 1.7x, which happened here to the cross-bench penalty.
+  Primaries are 99.7% contested; generals are 83% walkovers.
 - **Measure what SIM-BRIEF specifies, not a convenient proxy.** Six corrections
   came from this and two inverted a conclusion. Decision density is legal moves
   AVAILABLE. Determination is a cross-game curve. Comeback means last at halfway.

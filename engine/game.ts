@@ -28,7 +28,7 @@ export interface Config {
   resolution: { incumbency: number; identityBonus: number; tieBreak: string; statewideIdentity: 'district' | 'board' };
   national: { strongEconomy: number; recession: number; midtermPenalty: number; coattailsWith: number; coattailsAgainst: number };
   endorsements: { president: number; governorInState: number; senator: number };
-  primaryGeneral: { extremistPrimary: number; extremistGeneral: number; heterodoxPrimaryPenalty: number; crossBenchPrimaryPenalty: number; billCounterPips: number; crossBenchGeneral: number;
+  primaryGeneral: { extremistPrimary: number; extremistGeneral: number; heterodoxPrimaryPenalty: number; crossBenchPrimaryPenalty: number; billCounterPips: number; crossBenchGeneral: number; crossBenchCap: number;
     launchpad: Record<'governor' | 'senator' | 'representative', { primary: number; general: number }> };
   lean: lean.LeanConfig;
   economy: econ.EconomyConfig;

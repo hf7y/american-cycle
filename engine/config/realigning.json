@@ -46,7 +46,8 @@
         "primary": 0,
         "general": 0
       }
-    }
+    },
+    "crossBenchCap": 3
   },
   "lean": {
     "pushByMargin": [

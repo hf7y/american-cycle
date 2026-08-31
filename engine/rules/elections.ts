@@ -42,6 +42,12 @@ export interface PrimaryGeneralConfig {
    *  signed by whether the defection ran with the state's drift or against
    *  it. 0 ships the primary-only reading; the term is unmeasured. */
   crossBenchGeneral: number;
+  /** Most counters a cross-bench record can be worth. §12 says the counters
+   *  are read off, and uncapped they read off ~30 -- but §12 also makes
+   *  cross-benching structurally necessary to pass anything at a 60% Senate
+   *  threshold, so an uncapped record makes cooperation career-ending. The cap
+   *  keeps a serial defector distinct from a one-time one without that. */
+  crossBenchCap: number;
 }
 
 export interface RaceContext {
@@ -165,7 +171,8 @@ export function buildModifiers(
     if (hasEffect(d.card, 'extremist')) m.push({ source: 'extremist (primary)', pips: pg.extremistPrimary });
     if (hasEffect(d.card, 'heterodox')) m.push({ source: 'heterodox (primary)', pips: pg.heterodoxPrimaryPenalty });
     if (d.crossBench) {
-      m.push({ source: `cross-benched ×${d.crossBench}`, pips: pg.crossBenchPrimaryPenalty * d.crossBench });
+      const n = Math.min(d.crossBench, pg.crossBenchCap);
+      m.push({ source: `cross-benched ×${n}`, pips: pg.crossBenchPrimaryPenalty * n });
     }
     if (d.billRecord) m.push({ source: 'bill record', pips: d.billRecord * pg.billCounterPips });
   } else {

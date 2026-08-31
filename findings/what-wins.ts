@@ -50,25 +50,29 @@ export const finding: Finding = {
   question: 'Which offices do the players who win actually hold? (§11, and §14 on what scores)',
 
   headline:
-    'The Senate and the presidency; House seats lose. Winners hold 2.5x the Senate seats and 3.1x '
-    + 'the presidencies of everyone else, and 0.32x the House seats — holding House seats is '
+    'The Senate and the presidency; everything else loses. Winners hold 2.4x the Senate seats and '
+    + '3.7x the presidencies of everyone else, and 0.13x the House seats — holding House seats is '
     + 'anti-correlated with winning, not merely a weak play. That follows from what a House seat '
     + 'is: it scores 1, expires every two years, grants no hand size, and arrives attached to a '
-    + 'district card that is itself ballast. Governors sit at 1.2x — positive, but the weakest of '
-    + 'the offices that pay, at a fifth of the Senate edge. §11 gives governors points, Senate '
-    + 'appointments and a launchpad; measured, they are worth taking and not worth planning around.',
-  stampedAt: '2026-08-31T12:00:00Z',
-  stampedOn: 'phase1-engine',
+    + 'district card that is itself ballast. Governorships have now joined it at 0.89x: they were '
+    + 'read as 1.2x while one card could sit in as many as five seats at once, and correcting that '
+    + 'took the whole seat count down and the governorship below parity. §11 gives governors '
+    + 'points, Senate appointments and a launchpad, and measured against this board none of it '
+    + 'pays — which is a claim about the LAUNCHPAD being unreachable, not about the office: only '
+    + '21.9% of gubernatorial elections fall in a presidential year, and a governor could reach '
+    + 'the presidency only in the cycle its term expired until `resignToRun` existed.',
+  stampedAt: '2026-08-31T16:16:11Z',
+  stampedOn: '1fa308e',
 
   predicate(): Claim[] {
     const s = seatsByOutcome();
     return [
-      { name: 'Senate seats: winner vs everyone else', value: s.senator.ratio, stamped: 2.48, tolerance: 0.7, unit: 'x' },
-      { name: 'House seats: winner vs everyone else', value: s.representative.ratio, stamped: 0.32, tolerance: 0.15, unit: 'x' },
-      { name: 'governorships: winner vs everyone else', value: s.governor.ratio, stamped: 1.19, tolerance: 0.5, unit: 'x' },
-      { name: 'the presidency: winner vs everyone else', value: s.president.ratio, stamped: 3.1, tolerance: 1.6, unit: 'x' },
-      { name: 'Senate seats held by the winner', value: s.senator.winner, stamped: 22.98, tolerance: 4 },
-      { name: 'House seats held by the winner', value: s.representative.winner, stamped: 2.37, tolerance: 1.5 },
+      { name: 'Senate seats: winner vs everyone else', value: s.senator.ratio, stamped: 2.42, tolerance: 0.7, unit: 'x' },
+      { name: 'House seats: winner vs everyone else', value: s.representative.ratio, stamped: 0.13, tolerance: 0.15, unit: 'x' },
+      { name: 'governorships: winner vs everyone else', value: s.governor.ratio, stamped: 0.89, tolerance: 0.5, unit: 'x' },
+      { name: 'the presidency: winner vs everyone else', value: s.president.ratio, stamped: 3.67, tolerance: 1.6, unit: 'x' },
+      { name: 'Senate seats held by the winner', value: s.senator.winner, stamped: 22.06, tolerance: 4 },
+      { name: 'House seats held by the winner', value: s.representative.winner, stamped: 0.71, tolerance: 1.5 },
     ];
   },
 
