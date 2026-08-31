@@ -42,6 +42,7 @@ const CONFIG_BLURB = {
   'flat-push':'Flat +1 lean pushes, the rule that was cut. Win a state every cycle for a decade and move the map nowhere.',
   'governors-push':'Governors push lean when they win with the grain of the state, never against it.',
   brutal:'Large office bonuses. The leader compounds hard.',
+  'three-terms':'§14\'s three-term victory. Ends tightly — but collapses the game onto the presidency, and whoever is best at that race takes everything.',
 };
 
 function setup() {

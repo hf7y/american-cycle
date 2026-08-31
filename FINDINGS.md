@@ -477,3 +477,103 @@ away. The tuning worry should move elsewhere.
 Game length is invariant at 16 years across every hand size because `maxYears`
 caps it before deck-out — that question needs the cap lifted. And the district
 sweep's game-length column, reported earlier under F6, has the same defect.
+
+---
+
+## F15. The game had no ending. §14's deck-out is unreachable. CONFIRMED, settled.
+
+Run without a year cap, **every game runs forever**. 200 years, every seed,
+every hand size. §14 names the deck-out as the ending — "if the discard is too
+thin to reshuffle, that is the deck-out ending" — and it cannot happen, because
+the same section has defeated politicians circulate back through the draft.
+Circulation wins:
+
+| year | talon + discard | in hands | on seats |
+|---|---|---|---|
+| +10 | 79 | 72 | 77 |
+| +30 | 98 | 81 | 90 |
+| +60 | 228 | 92 | 99 |
+| +100 | **273** | 95 | 90 |
+
+The circulating pool **grows**, because the discard fills faster than hands and
+seats absorb. Only impeachment removes a card permanently, and impeachment
+fires at 0% (F12). This is the same shape as F2: a rule the design treats as a
+backstop, made unreachable by arithmetic elsewhere in the same section.
+
+**§14's four victory candidates, measured.** None had been implemented; §16
+lists the choice as open and says it "should be settled empirically". It now is:
+
+| condition | median years | p90 | max | games that ended |
+|---|---|---|---|---|
+| points (current) | — | — | — | **0%** |
+| bills passed (8) | 71 | 200 | 200 | 86% |
+| two consecutive terms | 9 | 25 | 41 | 100% |
+| **three terms** | **13** | **17** | **25** | **100%** |
+| parallel (any) | 9 | 25 | 29 | 100% |
+
+**Recommend three terms.** It is the only condition with a tight tail — a
+median of 13 years and a worst case of 25, a ratio under 2. SIM-BRIEF warns
+specifically about this: *"a game that usually runs 90 minutes but sometimes 5
+hours has a variance problem worse than its mean."* Two consecutive terms is
+quicker at the median but tails to 41 years, four and a half times its median.
+Bills-passed leaves one game in seven unfinished.
+
+Applied to every config. `maxYears` stays as a backstop rather than the
+condition, which is what it had silently become.
+
+---
+
+## F16. §14's victory conditions all fail, in two different directions.
+
+**Correcting F15.** F15 recommended three terms on the strength of its length
+distribution — median 13 years, max 25, always terminates. **That
+recommendation was wrong**, and measuring only length is how I got it wrong.
+
+A victory condition is not neutral about *who wins*. Six-way round robin, 90
+games each, identical agent pool throughout:
+
+| condition | winner spread | median years | games that ended |
+|---|---|---|---|
+| three terms | **Lookahead 90%** · 3 · 3 · 2 · 1 · 0 | 13 | 100% |
+| two consecutive terms | **Lookahead 90%** · 4 · 3 · 2 · 0 · 0 | 9 | 100% |
+| bills passed (5) | Bill 33 · Het 28 · Greedy 24 · 12 · 1 · 1 | 34 | 63% |
+| bills passed (8) | Bill 30 · Greedy 29 · Het 28 · 11 · 2 · 0 | 49 | 58% |
+| parallel (either) | **Lookahead 50–66%** | 9 | 100% |
+| points + year cap | Look 28 · Bill 28 · 16 · 16 · 8 · 6 | capped | 0% |
+
+**Everything that ends reliably is won by whoever is best at the presidency;
+everything that stays balanced leaves 40% of games unfinished.** There is no
+setting among §14's candidates that does both.
+
+**And this is the rule, not the agents.** The same pool, unchanged, goes from
+**28% to 90%** for its best agent purely by switching `points` → `three-terms`.
+The presidency is contested in 27–34% of games under *every* condition, so it
+is not that nobody runs — it is that a term-based condition concentrates all
+the value of the game into one race a cycle, and then whoever is marginally
+better at that race takes everything.
+
+**Shipping `points` plus a year cap** as the least-bad playable default, and
+leaving §16's question open rather than closing it badly. A `three-terms.json`
+variant ships alongside so the collapse can be felt at the table instead of
+argued about.
+
+**What would actually solve it** is not on §14's list: a condition that
+terminates on something *many* strategies can pursue. Bills-passed is the only
+candidate with that shape and its tail is too long; a lower target with a term
+backstop is the obvious next thing to try, and it needs a human table, because
+bill passage is a negotiation.
+
+## F17. The harness CLI silently ran on one era pack. Fixed.
+
+`--packs` defaulted to `1976` alone, so any measurement taken from the command
+line used 114 cards instead of 400 — and four-player games end at a median of
+**3 years instead of 13**. A silent factor of four in anything read off the CLI.
+
+Caught by a number that disagreed with itself: the CLI reported 3.5 mean years
+where a direct call on the same config reported 12.2.
+
+Worth keeping as a finding in its own right, because it answers a question §16
+asks: **one era pack is not a viable pool.** Median game length by pool size,
+four players: 114 cards → 3 years, 212 → 13, 400 → 13. Two eras is the minimum,
+which makes §14's "refill packs draw from later years" load-bearing rather than
+flavour.

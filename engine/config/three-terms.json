@@ -1,6 +1,6 @@
 {
-  "name": "governors-push",
-  "note": "\u00a710's alternative under test: a governor pushes lean only when winning WITH the state's existing lean, never against it. Baker in Massachusetts still means nothing; a Republican winning Wyoming now counts.",
+  "name": "three-terms",
+  "note": "\u00a714's three-term victory. Terminates tightly -- median 13 years, max 25 -- and that is its whole appeal. It also collapses the game onto the presidency: the same agents that split 28/28/16 under points go 90/3/3 here. Included so the effect is playable rather than argued about.",
   "hand": {
     "base": 16,
     "bonusPresident": 2,
@@ -48,7 +48,7 @@
     ],
     "decayPerTick": 1,
     "decayFrequency": "biennial",
-    "governorPushes": "with-lean",
+    "governorPushes": "never",
     "honeymoonCounter": 1,
     "maxLean": 8
   },
@@ -76,13 +76,13 @@
   },
   "draft": {
     "packSize": 15,
-    "districtsPerPack": 5,
+    "districtsPerPack": 3,
     "refillToHandSize": true
   },
   "game": {
     "startYear": 1976,
-    "maxYears": 16,
-    "victory": "points",
+    "maxYears": 60,
+    "victory": "three-terms",
     "deckOutEnds": true,
     "billTarget": 8
   },

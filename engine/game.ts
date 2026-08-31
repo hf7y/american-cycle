@@ -33,7 +33,7 @@ export interface Config {
   economy: econ.EconomyConfig;
   legislature: leg.LegislatureConfig;
   draft: { packSize: number; districtsPerPack: number; refillToHandSize: boolean };
-  game: { startYear: number; maxYears: number; victory: string; deckOutEnds: boolean };
+  game: { startYear: number; maxYears: number; victory: string; deckOutEnds: boolean; billTarget?: number };
 }
 
 export interface PlayerState {
@@ -345,6 +345,7 @@ export class Game {
     this.stats.crossBench += out.crossBenched;
     if (out.passed) {
       this.stats.billsPassed++;
+      this.billsBy[authorId] = (this.billsBy[authorId] ?? 0) + 1;
       for (const [p, n] of Object.entries(out.scores)) this.players[Number(p)].score += n;
       econ.spend(this.economy, this.cfg.economy, g);
       this.log.push(`${this.year}: omnibill G${g} passed ${out.houseYes}/${out.houseTotal} H, ${out.senateYes}/${out.senateTotal} S`);
@@ -557,6 +558,11 @@ export class Game {
     const winner = nominees.find((d) => d.player === best)!;
     for (const d of nominees) if (d.player !== best) this.discardCard(d);
     this.seat('president', 'US', undefined, winner);
+    // §14's term counters, for the two- and three-term conditions.
+    this.termsBy[best] = (this.termsBy[best] ?? 0) + 1;
+    for (const p of this.players) {
+      this.consecutiveBy[p.id] = p.id === best ? (this.consecutiveBy[p.id] ?? 0) + 1 : 0;
+    }
     this.log.push(`${this.year}: ${winner.card.name} (${winner.card.party}) wins with ${bestEV} electoral votes`);
 
     // §10: the honeymoon. One counter in every state carried, removed at the
@@ -770,6 +776,34 @@ export class Game {
     }
   }
 
+  /** §14's victory conditions, which the doc lists as "under test" and §16
+   *  leaves open. None were implemented, and the deck-out ending it names as
+   *  the backstop is unreachable: §14 also has defeated politicians circulate
+   *  back through the draft, and circulation wins -- cards in the talon and
+   *  discard GROW from 79 to 273 over a hundred years, because the discard
+   *  fills faster than hands and seats absorb. Without a real condition the
+   *  game does not end at all.
+   *
+   *  Returns the winning player, or undefined to keep playing. */
+  private victor(): number | undefined {
+    const v = this.cfg.game.victory;
+    if (v === 'bills' || v === 'parallel') {
+      const target = this.cfg.game.billTarget ?? 8;
+      for (const p of this.players) if (this.billsBy[p.id] >= target) return p.id;
+    }
+    if (v === 'two-terms' || v === 'three-terms' || v === 'parallel') {
+      const need = v === 'three-terms' ? 3 : 2;
+      for (const p of this.players) {
+        if (v === 'three-terms' ? this.termsBy[p.id] >= need : this.consecutiveBy[p.id] >= need) return p.id;
+      }
+    }
+    return undefined;
+  }
+
+  private billsBy: Record<number, number> = {};
+  private termsBy: Record<number, number> = {};
+  private consecutiveBy: Record<number, number> = {};
+
   /** One annual tick — §7. */
   tick(): void {
     for (const p of this.players) p.tapped.clear();      // 1. action phase
@@ -787,10 +821,15 @@ export class Game {
     this.year++;
   }
 
+  /** Set when a §14 victory condition fires, so the result can say which. */
+  wonBy?: number;
+
   run(): GameResult {
     const end = this.cfg.game.startYear + this.cfg.game.maxYears;
     while (this.year < end) {
       this.tick();
+      const v = this.victor();
+      if (v !== undefined) { this.wonBy = v; break; }
       if (this.cfg.game.deckOutEnds && !this.talon.length && !this.discard.length && !this.eraQueue.length) break;
     }
     return this.result();
@@ -806,7 +845,7 @@ export class Game {
     // there.
     const best = Math.max(...scores);
     const tied = scores.map((s2, i) => ({ s2, i })).filter((x) => x.s2 === best);
-    const winner = tied[this.rng.int(tied.length)].i;
+    const winner = this.wonBy ?? tied[this.rng.int(tied.length)].i;
     let leadChanges = 0, prev = -1, determination = 0;
     this.scoreHistory.forEach((row, i) => {
       const lead = row.indexOf(Math.max(...row));
