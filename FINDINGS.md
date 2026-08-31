@@ -1523,3 +1523,126 @@ measurement of F6.
 predicate had to name which population it measured, and naming it exposed that
 the prose had not. A sentence can hold two incompatible numbers for six
 findings; a function cannot.
+
+---
+
+## F38. Party hardening does not emerge. One rule prices fluidity, and it now overcharges.
+
+Zach's question: *how can party fluidity be the default state and party
+hardening emerge from strategy?* The first half is already true and was true
+before anyone asked. `PlayerState` is `{id, name, hand, districts, score,
+tapped}` — **there is no party field**, and `engine/game.ts` says so at the top:
+*"Players are not parties. A player is a faction holding cards of both parties
+(§13), so score is per player and party is per card."* Players are party-fluid
+by construction.
+
+The second half does not happen. **Nothing in the engine rewards concentrating
+a portfolio in one party**, and the portfolios prove it: mean *excess* party
+concentration is **-0.006** — indistinguishable from what indifference to party
+would produce.
+
+**The measurement that nearly went wrong.** Ranking players by raw Herfindahl
+says concentrating costs **46 points**. It does not. Herfindahl is biased upward
+in small portfolios — four seats are far likelier to be all one party than
+thirty are — so that ranking is a seat-count ranking wearing a disguise, and a
+**6-seat gap** rides along with it. Subtract each portfolio's own expectation,
+`H_board + (1 - H_board)/k`, and **the sign flips**. The apparent penalty for
+party discipline was portfolio size the whole time.
+
+### Why there is no force: the biggest party mechanic is state-scoped
+
+`state lean` is the largest single modifier source in the game at **28.2%** of
+all modifier mass, and the map genuinely hardens — mean lean per general side
+grows **0.34 → 2.21 pips** across the five fifths of a game. But `applyPush`
+writes lean **per state**, and `buildModifiers` grants it only when
+`Math.sign(ctx.lean) === partySign`. The reward is for holding, in each state, a
+card of *that state's* leaning party — and **97.5% of players hold districts
+spanning both lean directions**. The optimal portfolio under §10 is a Democrat
+in the D states and a Republican in the R states. *The engine's strongest
+accumulating mechanic actively pays for a SPLIT portfolio.* The game hardens the
+**map**, not the **players**.
+
+### The one mechanic that prices fluidity, and the round it fires in
+
+§12's cross-bench counter is the only rule that charges for party fluidity as
+such, and its shape is right: permanent, card-scoped, and charged in the
+**primary only**.
+
+That round choice is load-bearing, for a reason that is not obvious. In a
+primary every side is the same party in the same state, so `Wave` memoization
+hands them **the same national and state die** — measured at **100.0%** of
+contested primaries. A primary is a **1d6 vs 1d6** contest, SD **2.42**, not the
+3d6-vs-3d6 SD of **4.18**. A 1-pip edge is worth **65.3%** in a primary against
+**59.2%** in a general.
+
+And the contest lives there. Generals are **83% walkovers**; primaries are
+**99.7% contested**, because a primary only exists when two players crowd the
+same party in the same race.
+
+### The scaled penalty is now too strong
+
+`abdc37d` restored §12's count and colour and fixed a real attribution bug —
+`Vote` carried only `{player, party, office}`, so a player's whole delegation's
+cross-bench votes landed on **one arbitrary card** (counts reached 145; properly
+attributed the median is 2 and the max 30). *Every cross-bench incidence number
+taken before that commit was measuring the bug.*
+
+But scaling the penalty by the count overshoots:
+
+| `crossBenchPrimaryPenalty` | lone cross-bencher wins his primary | mean pips |
+|---|---|---|
+| 0 | **56.7%** | — |
+| **-1 (shipped)** | **33.4%** | 3.5 = **1.45 primary SD** |
+| -2 | 20.9% | 5.5 = 2.29 primary SD |
+
+**3.5 pips is 1.45 standard deviations of the round it fires in.** Benchmarking
+it against 4.18 gives 0.84 and badly understates it — that is the general's
+noise floor, and this modifier never appears in a general. §12 makes
+cross-benching *structurally necessary* (*"bills essentially cannot pass without
+cross-benching"*), so the engine now charges two thirds of a primary for doing
+what the design requires. **It wants a cap**, not a different coefficient.
+
+### The general term works, and fires in the wrong places
+
+`crossBenchGeneral` (new, shipped at 0) prices a defection by whether it ran
+with the state's drift. Its *levels* are confounded — "with the drift" means the
+state is drifting away from the member's own party, so those candidates are
+already losing on lean — so the statistic is the **gap**, which moves
+monotonically:
+
+| `crossBenchGeneral` | 0 | 1 | 2 | 3 |
+|---|---|---|---|---|
+| with-drift **minus** against-drift | **-36.4pp** | -11.6 | -2.9 | **+10.2** |
+
+So the knob does what it was built to do. **But 74% of the races where it would
+fire are in states with |lean| ≤ 3** — because a hardened state's general is a
+walkover 96% of the time. *The term keys on a drift signal precisely where that
+signal is weakest.*
+
+### The walkover asymmetry, which settles the conditioning question
+
+| \|lean\| | contested primary | contested general | ratio P:G |
+|---|---|---|---|
+| 0-1 | 8.0% | 21.3% | **0.37** |
+| 2-3 | 24.4% | 14.0% | 1.74 |
+| 4-5 | 27.5% | 7.1% | 3.87 |
+| 6-8 | 28.2% | 3.8% | **7.45** |
+
+*120 games/arm; the predicate stamps the same two ratios at 50 games, where the hardened bucket reads 6.1.*
+
+**A 20x swing.** In a purple state the general is the real election; in a
+hardened state only the primary is. This is exactly the shape US politics has,
+and it arrives for free from the contest rate. **The primary penalty therefore
+needs no state-lean condition** — the board already conditions it. The same
+mechanism *indicts* the general term, which operates almost only in the purple
+band.
+
+*Canes-Wrone, Brady & Cogan (2002), "Out of Step, Out of Office" (APSR 96:1)
+find incumbents take a **lower** general-election vote share the **more** they
+support their party, and that it holds for safe members as well as marginal
+ones. That supports a general term that rewards defection, and supports leaving
+it unconditioned — but the walkover rate above means an unconditioned term still
+only ever bites in purple states.*
+
+**Predicate:** `findings/cross-bench-pricing.ts` (17 claims). **Sweep:**
+`node sim/cross-bench.ts [games]`.
