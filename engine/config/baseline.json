@@ -1,0 +1,102 @@
+{
+  "name": "baseline",
+  "note": "Every tunable number in the design doc, as a named field. Fields listed in `placeholders` are NOT in the design doc -- they are \u00a716 open questions or gaps, and the value here is a stand-in, not a decision.",
+  "hand": {
+    "base": 12,
+    "bonusPresident": 2,
+    "bonusSenator": 1,
+    "bonusGovernor": 0,
+    "bonusRepresentative": 0
+  },
+  "resolution": {
+    "incumbency": 1,
+    "identityBonus": 1,
+    "tieBreak": "even"
+  },
+  "national": {
+    "strongEconomy": 1,
+    "recession": -2,
+    "midtermPenalty": -2,
+    "coattailsWith": 1,
+    "coattailsAgainst": -1
+  },
+  "endorsements": {
+    "president": 3,
+    "governorInState": 2,
+    "senator": 0
+  },
+  "primaryGeneral": {
+    "extremistPrimary": 2,
+    "extremistGeneral": -2,
+    "heterodoxPrimaryPenalty": -2,
+    "crossBenchPrimaryPenalty": -1
+  },
+  "lean": {
+    "pushByMargin": [
+      {
+        "maxPips": 1,
+        "push": 0
+      },
+      {
+        "maxPips": 3,
+        "push": 1
+      },
+      {
+        "maxPips": 99,
+        "push": 2
+      }
+    ],
+    "decayPerTick": 1,
+    "decayFrequency": "biennial",
+    "governorPushes": "never",
+    "honeymoonCounter": 1,
+    "maxLean": 8
+  },
+  "economy": {
+    "start": 0,
+    "min": -4,
+    "max": 4,
+    "strongAt": 2,
+    "recessionAt": -2,
+    "gMin": -3,
+    "gMax": 6,
+    "fedDice": 2,
+    "rateRiseSpendDown": 4,
+    "rateRiseEconomyHit": -2,
+    "walkDrift": 0
+  },
+  "legislature": {
+    "houseMajority": 0.5,
+    "senatePassage": 0.6,
+    "vetoOverride": 0.6667,
+    "impeachThreshold": 0.6667,
+    "scorePerYesVote": 1,
+    "majorityMultiplier": 2,
+    "reactionGoodOnRollAtLeast": 4
+  },
+  "draft": {
+    "packSize": 15,
+    "districtsPerPack": 5,
+    "refillToHandSize": true
+  },
+  "game": {
+    "startYear": 1976,
+    "maxYears": 24,
+    "victory": "points",
+    "deckOutEnds": true
+  },
+  "placeholders": {
+    "resolution.tieBreak": "\u00a79 says only 'higher total wins'. Even break is what makes edge 0 exactly 50%; a table needs a real rule.",
+    "primaryGeneral.extremistPrimary": "\u00a79 says extremism is a primary bonus and general penalty but prints no magnitude.",
+    "primaryGeneral.extremistGeneral": "as above.",
+    "primaryGeneral.heterodoxPrimaryPenalty": "\u00a79 says heterodoxy is a primary penalty; no magnitude printed.",
+    "primaryGeneral.crossBenchPrimaryPenalty": "\u00a79 lists cross-benching as a primary penalty; no magnitude printed.",
+    "lean.decayFrequency": "\u00a716 open question 1 -- SETTLED 2026-08-31 by arithmetic, not simulation. Annual decay is -2 per cycle against a maximum push of +2, so sustained blowouts net zero and lean pins at 2 forever: realignment is impossible. Biennial (-1) against margin-based pushes accumulates. See engine/rules/lean.test.ts and reports/FINDINGS.md.",
+    "lean.governorPushes": "\u00a716 open question; 'never' falls out of the priority rule, 'with-lean' is the alternative under test.",
+    "lean.maxLean": "No cap is stated. Without one, lean is unbounded.",
+    "draft.districtsPerPack": "\u00a716 open: district-to-candidate ratio sets map fill rate and turn density.",
+    "game.victory": "\u00a716 open: bills passed vs two consecutive terms vs three terms vs parallel conditions.",
+    "economy.*": "\u00a713 describes the shape (random walk with memory, 2d6 roll-under on accumulated G) but prints no bounds or step sizes.",
+    "legislature.reactionGoodOnRollAtLeast": "\u00a77/\u00a712 say a reaction is rolled immediately on passage but do not say on what."
+  }
+}
