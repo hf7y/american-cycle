@@ -90,17 +90,20 @@ test('lean applies once, to the party it favours (§10)', () => {
     'the other side takes no penalty -- that would double the pip scale');
 });
 
-test('heterodoxy sheds the midterm penalty but keeps the district bonus (§9)', () => {
+test('the midterm penalty reaches everyone; a local card outruns it (§9)', () => {
+  // Manchin's insulation was a printed tag and is now the ordinary arithmetic
+  // of a big personal vote: he takes the -2 like anyone else and survives it
+  // on home state plus district synergy.
   const manchin: Declaration = {
     player: 0, state: 'WV', office: 'senator',
     district: dist({ id: 'WV-1', state: 'WV', synergy: 3 }),
-    card: cand({ id: 'manchin', party: 'D', homeState: 'WV', effects: [{ type: 'heterodox' }] }),
+    card: cand({ id: 'manchin', party: 'D', homeState: 'WV', homeStateBonus: 2 }),
   };
   const c = ctx({ state: 'WV', isMidterm: true, presidentParty: 'D' });
   const mods = buildModifiers(manchin, c, 'general', res, nat, pg);
-  assert.ok(mods.some((m) => m.source === 'midterm' && m.national));
-  const side = { player: 0, cardId: 'manchin', party: 'D' as const, modifiers: mods, heterodox: true };
-  assert.equal(resolution.modifierTotal(side), 3, 'the tide is shed, the district is not');
+  assert.ok(mods.some((m) => m.source === 'midterm'), 'the tide is not shed');
+  const side = { player: 0, cardId: 'manchin', party: 'D' as const, modifiers: mods };
+  assert.equal(resolution.modifierTotal(side), 3, 'home state 2 + synergy 3 - midterm 2');
 });
 
 test('coattails run in reverse in hostile states, with no extra rule (§9)', () => {

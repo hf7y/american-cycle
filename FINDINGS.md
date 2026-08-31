@@ -452,8 +452,15 @@ part of the same problem.
 figure pooled across every office below the presidency against a House-only
 benchmark. Measured on House races alone, +1 gives 98.8% against a real 94.1%.
 
-**The filibuster is what stalls the omnibill.** Bills pass 63% at a 50% Senate
-threshold, 16% at the current 60%, and **0% at 67%**. Cross-benching is roughly
+**The filibuster is what stalls the omnibill.** ~~Bills pass 63% at a 50% Senate
+threshold, 16% at the current 60%, and 0% at 67%.~~ **These three figures are
+STALE — `findings/bill-passage-is-the-table.ts` is the value.** The predicate
+re-derives them on the same agent pool (`Greedy, Lookahead, SenateFlood,
+HeterodoxSpecialist` in both `sim/sweeps-full.ts` and the predicate), so this
+is NOT a population mismatch of the kind F37 was: the engine moved underneath
+the prose. F33, F34 and F35 each changed what a bill does — counters were never
+recorded, card text never fired, the veto never ran — and this paragraph was
+measured before all three. Read the current numbers off the predicate. Cross-benching is roughly
 constant across all three, so players are already reaching across — the bar is
 simply too high for the reaching to produce anything. §12's intent that 60%
 "forces cooperation" is half-achieved: it forces the attempt and refuses the

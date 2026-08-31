@@ -19,9 +19,6 @@ export interface Side {
   cardId: string;
   party: Party;
   modifiers: Modifier[];
-  /** heterodox candidates ignore national MODIFIERS, never the national die
-   *  (§9; DECISIONS.md lists this as settled and §4's phrasing is stale) */
-  heterodox?: boolean;
 }
 
 /** A cycle's dice, drawn once and reused so waves correlate across races. */
@@ -50,12 +47,8 @@ export class Wave {
   }
 }
 
-export function effectiveModifiers(s: Side): Modifier[] {
-  return s.heterodox ? s.modifiers.filter((m) => !m.national) : s.modifiers;
-}
-
 export function modifierTotal(s: Side): number {
-  return effectiveModifiers(s).reduce((n, m) => n + m.pips, 0);
+  return s.modifiers.reduce((n, m) => n + m.pips, 0);
 }
 
 export interface ResolveArgs {
@@ -69,7 +62,7 @@ export function resolveRace(a: ResolveArgs): RaceEvent {
     const mt = modifierTotal(s);
     return {
       player: s.player, cardId: s.cardId, party: s.party, dice,
-      modifiers: effectiveModifiers(s), modifierTotal: mt,
+      modifiers: s.modifiers, modifierTotal: mt,
       total: dice.national + dice.state + dice.candidate + mt,
     };
   });

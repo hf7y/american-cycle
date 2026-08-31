@@ -174,8 +174,8 @@ export const withDrift = (o: Obs, i: number) =>
   o.lean !== 0 && o.sides[i].toward !== undefined
   && Math.sign(o.lean) === leanSign(o.sides[i].toward);
 
-function over(base: Config, primary: number, general: number): Config {
-  return { ...base, primaryGeneral: { ...base.primaryGeneral, crossBenchPrimaryPenalty: primary, crossBenchGeneral: general } };
+function over(base: Config, primary: number): Config {
+  return { ...base, primaryGeneral: { ...base.primaryGeneral, crossBenchPrimaryPenalty: primary } };
 }
 
 const pct = (x: number) => `${(100 * x).toFixed(2)}%`;
@@ -186,7 +186,7 @@ function main(): void {
   const shipped = base.primaryGeneral.crossBenchPrimaryPenalty;
 
   console.log(`# cross-bench pricing — ${games} games/arm, ${base.name}, `
-    + `shipped primary ${shipped}, shipped general ${base.primaryGeneral.crossBenchGeneral}\n`);
+    + `shipped primary ${shipped}, cap ${base.primaryGeneral.crossBenchCap}\n`);
   console.log(`noise floor: primary 1d6 SD ${Math.sqrt(2 * 35 / 12).toFixed(2)} pips, `
     + `general 3d6 SD ${Math.sqrt(6 * 35 / 12).toFixed(2)} pips`);
   console.log(`a 1-pip edge is worth ${pct(oddsAtEdge1d6(1))} in a primary vs ${pct(oddsAtEdge(1))} in a general\n`);
@@ -240,28 +240,28 @@ function main(): void {
   console.log('  population: contested primaries with exactly one marked side');
   const primSD = Math.sqrt(2 * 35 / 12);
   for (const p of [0, -1, -2]) {
-    const r = markedWin(record(over(base, p, 0), games).obs, 'primary');
+    const r = markedWin(record(over(base, p), games).obs, 'primary');
     console.log(`  crossBenchPrimaryPenalty ${String(p).padStart(2)}: marked side wins ${pct(r.rate)} `
       + `(n=${r.n}, mean ${r.meanPips.toFixed(2)} pips = ${(r.meanPips / primSD).toFixed(2)} PRIMARY SD `
       + `— benchmarking it against the general's 4.18 understates it by 1.7x)`);
   }
 
-  // --- 3. what should crossBenchGeneral be? ---
-  console.log('\n## 3. what should crossBenchGeneral be?');
+  // --- 3. where WOULD a signed general term fire? ---
+  console.log('\n## 3. where would a signed general term fire?');
   console.log('  population: contested generals with exactly one marked side');
-  // The LEVELS are confounded: "with the drift" means the state is drifting
-  // toward the party the member defected TOWARD, i.e. away from their own, so
-  // those candidates are running in a hostile state and the lean modifier is
-  // already against them. The signed term is meant to widen the with-minus-
-  // against GAP, so the gap is the statistic, not the levels.
-  for (const k of [0, 1, 2, 3]) {
-    const o = record(over(base, shipped, k), games).obs;
+  // `crossBenchGeneral` was built, swept here, and CUT. The sweep found the
+  // term moves the with-minus-against gap monotonically (-36.4 / -11.6 / -2.9
+  // / +10.2 at 0/1/2/3) but fires in the wrong places: a hardened state's
+  // general is a walkover 96% of the time, so it keyed on state drift almost
+  // exclusively in states that have not drifted. The section is kept to show
+  // WHERE it would fire, which is the part that killed it.
+  {
+    const o = record(over(base, shipped), games).obs;
     const all = markedWin(o, 'general');
     const w = markedWin(o, 'general', (x, i) => withDrift(x, i));
     const a = markedWin(o, 'general', (x, i) => x.lean !== 0 && x.sides[i].toward !== undefined && !withDrift(x, i));
-    console.log(`  crossBenchGeneral ${k}: overall ${pct(all.rate)} (n=${all.n}) | `
-      + `with the drift ${pct(w.rate)} (n=${w.n}) | against it ${pct(a.rate)} (n=${a.n}) | `
-      + `GAP ${(100 * (w.rate - a.rate)).toFixed(1)}pp`);
+    console.log(`  unpriced: overall ${pct(all.rate)} (n=${all.n}) | `
+      + `with the drift ${pct(w.rate)} (n=${w.n}) | against it ${pct(a.rate)} (n=${a.n})`);
   }
 
   // --- 4. does the contest rate already differentiate states by lean? ---

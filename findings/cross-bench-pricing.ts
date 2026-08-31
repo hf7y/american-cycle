@@ -8,8 +8,8 @@ const GAMES = 50;
 /** the primary is 1d6 vs 1d6, not 3d6 vs 3d6 — see `sim/cross-bench.ts` */
 const PRIMARY_SD = Math.sqrt(2 * 35 / 12);
 
-function arm(base: Config, primary: number, general: number) {
-  return record({ ...base, primaryGeneral: { ...base.primaryGeneral, crossBenchPrimaryPenalty: primary, crossBenchGeneral: general } }, GAMES);
+function arm(base: Config, primary: number) {
+  return record({ ...base, primaryGeneral: { ...base.primaryGeneral, crossBenchPrimaryPenalty: primary } }, GAMES);
 }
 
 /** mean score of the more-concentrated half minus the less-concentrated half,
@@ -34,9 +34,8 @@ function split(portfolios: Portfolio[], key: (p: Portfolio) => number) {
 
 function measure() {
   const base = loadConfig('as-written-plus.json');
-  const shipped = arm(base, base.primaryGeneral.crossBenchPrimaryPenalty, base.primaryGeneral.crossBenchGeneral);
-  const unpriced = arm(base, 0, 0);
-  const generalOn = arm(base, base.primaryGeneral.crossBenchPrimaryPenalty, 2);
+  const shipped = arm(base, base.primaryGeneral.crossBenchPrimaryPenalty);
+  const unpriced = arm(base, 0);
 
   const contested = (o: (typeof shipped.obs)[number]) => !o.ev.uncontested && o.ev.sides.length > 1;
   const prim = shipped.obs.filter((o) => o.ev.round === 'primary' && contested(o));
@@ -82,12 +81,11 @@ function measure() {
     shippedPrimary: atShipped.rate,
     shippedPips: atShipped.meanPips,
     gapOff: gapAt(shipped),
-    gapOn: gapAt(generalOn),
     purpleShare: purple / live,
     purple: ratio(0, 1),
     hardened: ratio(6, 8),
     penalty: base.primaryGeneral.crossBenchPrimaryPenalty,
-    general: base.primaryGeneral.crossBenchGeneral,
+    cap: base.primaryGeneral.crossBenchCap,
   };
 }
 
@@ -145,9 +143,7 @@ export const finding: Finding = {
       { name: 'lone cross-bencher wins the primary, at the shipped penalty', value: 100 * m.shippedPrimary, stamped: 47.3, tolerance: 7, unit: '%' },
       { name: 'mean pips the primary penalty applies, in PRIMARY SDs', value: m.shippedPips / PRIMARY_SD, stamped: 0.99, tolerance: 0.5 },
 
-      // --- the general term works, but fires in the wrong places ---
-      { name: 'with-drift minus against-drift gap, crossBenchGeneral 0', value: 100 * m.gapOff, stamped: -35.22, tolerance: 18, unit: 'pp' },
-      { name: 'with-drift minus against-drift gap, crossBenchGeneral 2', value: 100 * m.gapOn, stamped: -10.26, tolerance: 18, unit: 'pp' },
+      // --- why a signed general term was measured and then cut ---
       { name: 'races a signed general term would fire in that are |lean| <= 3', value: 100 * m.purpleShare, stamped: 69.85, tolerance: 12, unit: '%' },
 
       // --- the walkover asymmetry that excuses the primary from a lean condition ---
@@ -158,7 +154,6 @@ export const finding: Finding = {
       // checked. If either moves, this finding goes stale rather than quietly
       // misdescribing the game.
       { name: 'as-written-plus.json still ships crossBenchPrimaryPenalty -1', value: m.penalty, stamped: -1, tolerance: 0 },
-      { name: 'as-written-plus.json still ships crossBenchGeneral 0', value: m.general, stamped: 0, tolerance: 0 },
     ];
   },
 
@@ -179,17 +174,13 @@ export const finding: Finding = {
       v('mean pips the primary penalty applies') > 1
         ? `the scaled primary penalty is ${v('mean pips the primary penalty applies').toFixed(2)} primary SDs and moves a defector ${shift.toFixed(1)}pp to ${v('lone cross-bencher wins the primary, at the shipped').toFixed(1)}% — too strong for something §12 makes structurally necessary; cap it`
         : `the scaled primary penalty is ${v('mean pips the primary penalty applies').toFixed(2)} primary SDs and no longer overwhelms the round`,
-      v('with-drift minus against-drift gap, crossBenchGeneral 2') > v('with-drift minus against-drift gap, crossBenchGeneral 0')
-        ? 'the signed general term moves the with/against gap in the intended direction'
-        : 'the signed general term does not move the with/against gap as intended',
       v('races a signed general term would fire in') > 60
-        ? `but ${v('races a signed general term would fire in').toFixed(0)}% of the races it fires in are near-purple, so it keys on drift where drift is weakest`
-        : 'and it now fires mostly in states with a clear drift',
+        ? `a signed GENERAL term was measured and cut: ${v('races a signed general term would fire in').toFixed(0)}% of the races it would fire in are near-purple, so it keyed on drift exactly where drift is weakest`
+        : 'a signed general term was cut; it would now fire mostly in states with a clear drift, so it is worth revisiting',
       v('primary:general contested ratio, hardened') > 3 * v('primary:general contested ratio, purple')
         ? 'the contest rate already differentiates states by lean, so the PRIMARY penalty needs no lean condition'
         : 'the contest rate no longer differentiates states, so a lean condition would now be doing real work',
       v('as-written-plus.json still ships crossBenchPrimaryPenalty') === -1
-        && v('as-written-plus.json still ships crossBenchGeneral') === 0
         ? 'and the shipped config still matches this evidence'
         : 'BUT the shipped config no longer matches this evidence',
     ].join('; ');

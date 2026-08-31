@@ -10,7 +10,7 @@ export type IdentityTag =
 /** BUILD-BRIEF Phase 3: a small enumerated set. Anything else is flavor text. */
 export type EffectType =
   | 'identity_bonus' | 'home_state' | 'district_synergy'
-  | 'heterodox' | 'extremist' | 'may_endorse' | 'conditional';
+  | 'extremist' | 'may_endorse' | 'conditional';
 
 export interface CardEffect {
   type: EffectType;
@@ -57,12 +57,10 @@ export interface Seat {
   holder?: { cardId: string; player: number; party: Party; since: number };
 }
 
-/** One named entry in the modifier stack. `national` entries are what a
- *  heterodox candidate ignores (§9, and DECISIONS.md settles it). */
+/** One named entry in the modifier stack. */
 export interface Modifier {
   source: string;
   pips: number;
-  national?: boolean;
 }
 
 export interface DiceRoll {

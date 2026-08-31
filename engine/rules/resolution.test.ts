@@ -37,15 +37,19 @@ test('simulated dice reproduce the odds table within one point', () => {
   }
 });
 
-test('heterodoxy ignores national modifiers but not the national die', () => {
+test('nobody is insulated: the tide counts and three dice still roll', () => {
+  // Heterodoxy used to let a card shed every `national` modifier. Measured,
+  // that exemption was worth +0.316 pips -- 7.6% of the general's 4.18 SD --
+  // against the -2 the same tag charged in the primary, so it was cut and
+  // `Modifier.national` went with it. The stack is now a plain sum.
   const side = {
-    player: 0, cardId: 'manchin', party: 'D' as const, heterodox: true,
+    player: 0, cardId: 'manchin', party: 'D' as const,
     modifiers: [
-      { source: 'midterm', pips: -2, national: true },
+      { source: 'midterm', pips: -2 },
       { source: 'district synergy', pips: 3 },
     ],
   };
-  assert.equal(modifierTotal(side), 3, 'the -2 midterm penalty is ignored');
+  assert.equal(modifierTotal(side), 1, 'the tide is felt by everyone');
   const rng = new RNG(7);
   const ev = resolveRace({
     year: 1978, round: 'general', office: 'senator', state: 'WV', wave: new Wave(rng), rng,

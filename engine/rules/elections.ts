@@ -23,14 +23,16 @@ export interface ResolutionConfig {
    *  incumbents lose a primary at 1-2% a cycle -- so one scalar cannot serve
    *  both rounds. */
   incumbencyPrimary: number;
-  /** Whose demographics a STATEWIDE candidate is judged against. `district`
-   *  lets the one district card they hold speak for the whole state, so an
-   *  Atlanta card makes a candidate a perfect fit for Georgia. `board` reads
-   *  §10 literally and dilutes the fit by how much of the state's district
-   *  presence actually shares it -- Atlanta alone IS Georgia, Atlanta beside
-   *  three rural districts is a quarter of it. House races are unaffected: a
-   *  representative's own district speaks for itself. */
-  statewideIdentity: 'district' | 'board';
+  /** §11's stepping stone, flat: what a card already holding an office is
+   *  worth running for a DIFFERENT one. One number for every combination,
+   *  because the primary/general asymmetry it would otherwise encode is
+   *  already emergent from the board -- a House member stepping up runs +4.3pp
+   *  above fair share in the primary and -2.7pp below it in the general with
+   *  no term at all -- and the history refutes the split anyway: sitting House
+   *  members won 61% of Senate primaries and 63% of the generals, the same
+   *  number twice. What actually separates them is whether the seat is open,
+   *  80% against 30%, which the board already models as an incumbent. */
+  crossOfficeIncumbency: number;
 }
 export interface NationalConfig {
   strongEconomy: number; recession: number; midtermPenalty: number;
@@ -38,18 +40,8 @@ export interface NationalConfig {
 }
 export interface PrimaryGeneralConfig {
   extremistPrimary: number; extremistGeneral: number;
-  heterodoxPrimaryPenalty: number; crossBenchPrimaryPenalty: number;
+  crossBenchPrimaryPenalty: number;
   billCounterPips: number;
-  /** Pips a presidential run gets from the office the candidate currently
-   *  holds, by round. Senators win nominations and lose generals; governors
-   *  are the reverse. One table, so the asymmetry is a number rather than a
-   *  special case. */
-  launchpad: Record<'governor' | 'senator' | 'representative', { primary: number; general: number }>;
-  /** §12: "Sentiment at election time determines whether that counter is an
-   *  asset or a liability." Pips per cross-bench counter in the GENERAL,
-   *  signed by whether the defection ran with the state's drift or against
-   *  it. 0 ships the primary-only reading; the term is unmeasured. */
-  crossBenchGeneral: number;
   /** Most counters a cross-bench record can be worth. §12 says the counters
    *  are read off, and uncapped they read off ~30 -- but §12 also makes
    *  cross-benching structurally necessary to pass anything at a 60% Senate
@@ -71,11 +63,6 @@ export interface RaceContext {
   economyMod: number;
   /** set once the presidential general has resolved, for down-ballot coattails */
   presidentialWinner?: Party;
-  /** §10: "the baseline lives implicitly in which politicians and district
-   *  cards exist for that state." Every district card in play in this state,
-   *  held by anyone -- the state's demographic character is a property of the
-   *  BOARD, not of one player's holdings and not printed on the state. */
-  stateDistricts?: DistrictCard[];
 }
 
 export interface Declaration {
@@ -93,10 +80,9 @@ export interface Declaration {
    *  a one-time defector. */
   crossBench?: number;
   crossBenchToward?: Party;
-  /** The office this card holds RIGHT NOW, when it is running for president.
-   *  §11's stepping stone: what the last office is worth as a launchpad, which
-   *  history says differs sharply between the nomination and the general. */
-  launchpad?: Office;
+  /** The office this card holds right now, captured before any seat it is
+   *  vacating is cleared. §11's stepping stone. */
+  heldOffice?: Office;
   /** §12: "the card's accumulated counters are simply read off at resolution."
    *  Signed: a good reaction on a yes-vote is an asset, a bad one a liability. */
   billRecord?: number;
@@ -109,7 +95,7 @@ export function eligible(card: CandidateCard, state: string, districts: District
   return card.homeState === state || districts.some((d) => d.state === state);
 }
 
-function hasEffect(card: CandidateCard, t: 'heterodox' | 'extremist'): boolean {
+function hasEffect(card: CandidateCard, t: 'extremist'): boolean {
   return card.effects.some((e) => e.type === t);
 }
 
@@ -138,46 +124,19 @@ export function buildModifiers(
 
     const shared = d.card.identities.filter((i) => d.district!.demographics.includes(i));
     if (shared.length) {
-      // §10: a state has no printed demographics; its character is whichever
-      // district cards happen to be on the board. Statewide, one district must
-      // not speak for all of them -- an urban card in a southern state is a
-      // real but partial claim on it, and how partial depends on what else
-      // came out. On average the districts in play track the state; in any one
-      // game Georgia can be unusually liberal because Atlanta came out and
-      // Macon never did.
-      const statewide = ctx.office !== 'representative';
-      const board = statewide && res.statewideIdentity === 'board' ? ctx.stateDistricts : undefined;
-      let pips = res.identityBonus * shared.length;
-      let src = `identity: ${shared.join(', ')}`;
-      if (board && board.length) {
-        // Per TAG, not per district: the question is whether THIS trait
-        // speaks for the state, not whether the candidate has anything at all
-        // in common with it. An urban candidate in a state showing Atlanta and
-        // three rural districts is a quarter urban, however much else matches.
-        let sum = 0; const parts: string[] = [];
-        for (const tag of shared) {
-          const carry = board.filter((x) => x.demographics.includes(tag)).length;
-          sum += res.identityBonus * (carry / board.length);
-          parts.push(`${tag} ${carry}/${board.length}`);
-        }
-        pips = Math.round(sum);
-        src = `identity: ${parts.join(', ')}`;
-      }
-      if (pips) m.push({ source: src, pips });
+      m.push({ source: `identity: ${shared.join(', ')}`, pips: res.identityBonus * shared.length });
     }
   }
 
   if (d.incumbent) m.push({ source: 'incumbency', pips: round === 'primary' ? res.incumbencyPrimary : res.incumbency });
 
-  if (ctx.office === 'president' && d.launchpad && d.launchpad !== 'president') {
-    const lp = pg.launchpad[d.launchpad]?.[round] ?? 0;
-    if (lp) m.push({ source: `${d.launchpad} launchpad (${round})`, pips: lp });
+  if (d.heldOffice && d.heldOffice !== ctx.office && res.crossOfficeIncumbency) {
+    m.push({ source: `${d.heldOffice} stepping up`, pips: res.crossOfficeIncumbency });
   }
 
   if (round === 'primary') {
     if (d.endorsements) m.push({ source: 'endorsements', pips: d.endorsements });
     if (hasEffect(d.card, 'extremist')) m.push({ source: 'extremist (primary)', pips: pg.extremistPrimary });
-    if (hasEffect(d.card, 'heterodox')) m.push({ source: 'heterodox (primary)', pips: pg.heterodoxPrimaryPenalty });
     if (d.crossBench) {
       const n = Math.min(d.crossBench, pg.crossBenchCap);
       m.push({ source: `cross-benched ×${n}`, pips: pg.crossBenchPrimaryPenalty * n });
@@ -186,32 +145,17 @@ export function buildModifiers(
   } else {
     if (hasEffect(d.card, 'extremist')) m.push({ source: 'extremist (general)', pips: pg.extremistGeneral });
 
-    // §12: a counter is an asset or a liability according to sentiment. A
-    // defection toward the party the state is drifting TOWARD reads as
-    // independence; the same defection against the drift reads as betrayal.
-    // The primary prices cross-benching flat, because a primary electorate is
-    // the party's base everywhere; only the general knows where it is.
-    if (d.crossBench && d.crossBenchToward && pg.crossBenchGeneral && ctx.lean !== 0) {
-      const toward = d.crossBenchToward === 'R' ? 1 : d.crossBenchToward === 'D' ? -1 : 0;
-      if (toward !== 0) {
-        const withDrift = Math.sign(ctx.lean) === toward ? 1 : -1;
-        m.push({ source: `cross-bench ${withDrift > 0 ? 'with' : 'against'} the drift ×${d.crossBench}`,
-                 pips: pg.crossBenchGeneral * d.crossBench * withDrift });
-      }
-    }
-
-    // National modifiers. `national: true` is precisely the set a heterodox
-    // candidate ignores (§9) -- the tide, never the noise.
+    // National modifiers -- the tide, never the noise.
     if (ctx.presidentParty === d.card.party) {
-      if (ctx.isMidterm) m.push({ source: 'midterm', pips: nat.midtermPenalty, national: true });
-      if (ctx.economyMod) m.push({ source: 'economy', pips: ctx.economyMod, national: true });
+      if (ctx.isMidterm) m.push({ source: 'midterm', pips: nat.midtermPenalty });
+      if (ctx.economyMod) m.push({ source: 'economy', pips: ctx.economyMod });
     }
     if (ctx.isPresidentialYear && ctx.presidentialWinner && d.office !== 'president' && partySign !== 0) {
       // Turnout coattails: +1 down-ballot in states leaning your way, -1
       // against. Reverse coattails fall out for free.
       const leaningWith = Math.sign(ctx.lean) === partySign;
       if (d.card.party === ctx.presidentialWinner) {
-        m.push({ source: 'coattails', pips: leaningWith ? nat.coattailsWith : nat.coattailsAgainst, national: true });
+        m.push({ source: 'coattails', pips: leaningWith ? nat.coattailsWith : nat.coattailsAgainst });
       }
     }
   }
@@ -237,7 +181,7 @@ export function buildModifiers(
 export function toSide(d: Declaration, modifiers: Modifier[]): Side {
   return {
     player: d.player, cardId: d.card.id, party: d.card.party,
-    modifiers, heterodox: hasEffect(d.card, 'heterodox'),
+    modifiers,
   };
 }
 

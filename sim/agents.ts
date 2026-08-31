@@ -195,13 +195,24 @@ export class HouseFarm extends Base {
   }
 }
 
-/** Draft only off-brand candidates for hostile states. */
+/** Draft only off-brand candidates for hostile states.
+ *
+ *  Off-brandness used to be a printed `heterodox` tag. It is now DERIVED: a
+ *  candidate is off-brand where their identities match the district they would
+ *  run in while the state's lean points against their party -- which is what
+ *  the tag was labelling, and unlike the tag it is era-dependent. The same
+ *  card reads heterodox in a state that has drifted away from it and perfectly
+ *  orthodox in one that has not. */
 export class HeterodoxSpecialist extends Base {
   declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[] {
     const o = counterDeclare(options(v, open, this.cfg), pending, v.me, 2).map((x) => {
-      const het = x.d.card.effects.some((e) => e.type === 'heterodox');
-      const hostile = Math.sign(v.lean[x.d.state] ?? 0) === (x.d.card.party === 'R' ? -1 : 1);
-      return { ...x, edge: x.edge + (het && hostile ? 6 : het ? 2 : 0) };
+      const lean = v.lean[x.d.state] ?? 0;
+      const against = Math.sign(lean) === (x.d.card.party === 'R' ? -1 : 1);
+      const fit = x.d.district
+        ? x.d.card.identities.filter((i) => x.d.district!.demographics.includes(i)).length
+        : 0;
+      const local = fit > 0 || x.d.card.homeState === x.d.state;
+      return { ...x, edge: x.edge + (local && against ? 6 : local ? 2 : 0) };
     });
     return pickDistinct(o.sort(byEdge), this.budget(v));
   }

@@ -18,7 +18,7 @@ The design doc says what the game *is*. This says what is **settled**, what is *
 | Neutral lean means the state's *home* baseline, not purple | Board tracks deviation only. No state needs a printed number. Same logic as Cook PVI |
 | Districts gate all races | The brake on wide-and-empty play. Presence must be purchased in the draft |
 | District cards are captured on a win, not politicians | Models inheriting the machine; keeps the talon alive; makes the map genuinely contested |
-| Heterodoxy ignores national *modifiers*, not the national die | Nobody is insulated from noise. Manchin was insulated from the tide |
+| ~~Heterodoxy ignores national *modifiers*, not the national die~~ | **CUT 2026-08-31 — see below** |
 | Endorsements are primary-only | The general effect is coattails, already modelled. A general endorsement double-counts |
 | Governors never push lean | Falls out of the nationalization priority rule; Baker/Hogan/Scott are the evidence |
 | Impeachment consumes the omnibill slot | Prices the coup in the currency everyone is accumulating |
@@ -46,6 +46,31 @@ acted on: a primary-only modifier judged against 4.18 is understated by ~1.7x,
 which is how the cross-bench penalty shipped at ~1.5 SD; and `incumbency` was
 split into `incumbencyPrimary` because one scalar cannot serve two
 distributions. Anything primary-only must be priced against 2.42.
+
+### Correction, 2026-08-31: heterodoxy was a net liability, and is cut
+
+The exemption WORKED — 0.00% of 11,611 heterodox general sides carried a
+national modifier against 43.95% of orthodox sides — and was worth **+0.316
+pips** averaged over a heterodox card's generals, 7.6% of the general's 4.18
+SD and below this game's own 1-pip granularity. National modifiers fire only
+when the president's party matches the card's, so 56% of sides never saw one
+and the mean was −0.72 where they did.
+
+The same tag charged **−2** in the primary, which at 1d6 is 0.83 SD. 114 of 346
+cards paid two pips in the round that is 100% contested to save a third of a
+pip in the round that is 83% walkovers. **Nobody would take that tag if they
+were choosing.**
+
+The primary half was already duplicated, EARNED, by §12's cross-bench counter:
+a politician punished for a defection they actually cast on a bill that
+actually passed, rather than for a printed label. `Modifier.national` went with
+the tag — the exemption filter was its only reader.
+
+What the tag was labelling survives as a derivation, and is better for it: a
+candidate is off-brand where their identities match the district while the
+state's lean points against their party, which is era-dependent in a way a
+printed tag cannot be. Manchin reads heterodox in 2018 and perfectly orthodox
+in 1958. `sim/agents.ts`'s `HeterodoxSpecialist` now detects it that way.
 
 ---
 

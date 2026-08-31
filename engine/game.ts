@@ -25,11 +25,10 @@ import { STATES, BY_CODE, senateUp, governorUp, electors, DC_ELECTORS, type Stat
 export interface Config {
   name: string;
   hand: { base: number; bonusPresident: number; bonusSenator: number; bonusGovernor: number; bonusRepresentative: number };
-  resolution: { incumbency: number; identityBonus: number; incumbencyPrimary: number; tieBreak: string; statewideIdentity: 'district' | 'board' };
+  resolution: { incumbency: number; identityBonus: number; incumbencyPrimary: number; crossOfficeIncumbency: number; tieBreak: string };
   national: { strongEconomy: number; recession: number; midtermPenalty: number; coattailsWith: number; coattailsAgainst: number };
   endorsements: { president: number; governorInState: number; senator: number };
-  primaryGeneral: { extremistPrimary: number; extremistGeneral: number; heterodoxPrimaryPenalty: number; crossBenchPrimaryPenalty: number; billCounterPips: number; crossBenchGeneral: number; crossBenchCap: number;
-    launchpad: Record<'governor' | 'senator' | 'representative', { primary: number; general: number }> };
+  primaryGeneral: { extremistPrimary: number; extremistGeneral: number; crossBenchPrimaryPenalty: number; billCounterPips: number; crossBenchCap: number };
   lean: lean.LeanConfig;
   economy: econ.EconomyConfig;
   legislature: leg.LegislatureConfig & {
@@ -325,10 +324,10 @@ export class Game {
       for (const v of this.seats.filter((st) => st.holder?.cardId === d.card.id
         && !(st.office === d.office && st.state === d.state && st.slot === d.slot))) {
         const vo = v.office, vs = v.state, vslot = v.slot;
-        // Record the launchpad BEFORE the seat is cleared. Resigning to run
+        // Record the office BEFORE the seat is cleared. Resigning to run
         // otherwise destroys the very credential §11 is trying to price, and
-        // the table collapsed from 23.2% of presidential sides to 0.8%.
-        if (vo !== 'president') d.launchpad = vo;
+        // the term collapsed from 23.2% of presidential sides to 0.8%.
+        if (vo !== 'president') d.heldOffice = vo;
         v.holder = undefined;
         this.log.push(`${this.year}: ${d.card.name} gives up ${vo === 'representative' ? 'a House seat' : `the ${vo}'s office`} in ${vs} to run`);
         if (vo === 'senator') this.fillVacancy(vs, vslot);
@@ -502,7 +501,8 @@ export class Game {
       // paid exactly what a one-time defector paid.
       if (v.yes && maj) rec.counters[maj] = (rec.counters[maj] ?? 0) + 1;
       // Only PASSAGE carries a consequence: §12 says a symbolic vote on a
-      // failed bill earns heterodoxy credit but no points.
+      // failed bill earns heterodoxy credit but no points. With the heterodox
+      // TAG cut, that credit is no longer a mechanic -- only passage scores.
       if (v.yes && out.passed) rec.record += out.reactionGood ? 1 : -1;
       this.billCounters.set(cardId, rec);
     }
@@ -632,12 +632,16 @@ export class Game {
       for (const d of nominees) {
         this.readCounters(d);
         const holdsThis = !!incumbent && incumbent.holder!.cardId === d.card.id;
-        // Governor -> Senate keeps §11's borrowed incumbency. Governor ->
-        // President is now priced by the launchpad table instead, so the two
-        // do not stack into an unnamed +1.
-        const isGovernor = office === 'senator'
-          && this.seats.some((st) => st.office === 'governor' && st.holder?.cardId === d.card.id);
-        d.incumbent = holdsThis || isGovernor;
+        // §11's stepping stone is priced once, by `crossOfficeIncumbency`, for
+        // every combination of offices. This used to hand governor -> Senate a
+        // BORROWED incumbency pip -- a different quantity wearing the same
+        // name -- while governor -> president went through a table.
+        d.incumbent = holdsThis;
+        if (!d.heldOffice) {
+          const held = this.seats.find((st) => st.holder?.cardId === d.card.id
+            && !(st.office === office && st.state === state && st.slot === slot));
+          d.heldOffice = held?.office;
+        }
       }
 
       const out = runRace({
@@ -679,7 +683,6 @@ export class Game {
       presidentParty: this.president?.party,
       economyMod: econ.economyModifier(this.economy, this.cfg.economy, this.cfg.national.strongEconomy, this.cfg.national.recession),
       presidentialWinner,
-      stateDistricts: this.players.flatMap((p) => p.districts.filter((x) => x.state === state)),
     };
   }
 
@@ -694,10 +697,12 @@ export class Game {
     // rounds. Read off the board, so it needs no card data and no new state.
     for (const d of declarations) {
       // Already set if the card resigned a seat to get here.
-      if (!d.launchpad) {
+      if (!d.heldOffice) {
         const held = this.seats.find((st) => st.office !== 'president' && st.holder?.cardId === d.card.id);
-        d.launchpad = held?.office;
+        d.heldOffice = held?.office;
       }
+      // §11: the presidency never set this, so `incumbency` fired in 0 of
+      // 11,327 presidential sides against 41.7% everywhere else.
       // The presidency never set this, so `incumbency` fired in 0 of 11,327
       // presidential sides against 41.7% everywhere else: the one office the
       // whole game is about was the one office incumbency did not reach.
