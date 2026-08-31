@@ -443,3 +443,37 @@ game**, each worth 3 points and a Senate seat that never faced a voter.
 ways, and appointment is a fifth route into it that skips the electorate
 entirely. Anyone acting on hf7y/american-cycle#8 should weigh appointments as
 part of the same problem.
+
+---
+
+## F14. The sweeps, now that the rules fire. Two clean answers, one acquittal.
+
+**+1 incumbency is correctly calibrated.** §16 calls it "a calibration check on
++1", and it passes within a point: simulated reelection 93% against a real
+94.1% for the House 1976–2016. +2 gives 96%, +3 gives 97%. **Keep +1.** This is
+the design's best single number, chosen before any of it was measured.
+
+**The filibuster is what stalls the omnibill.** Bills pass 63% at a 50% Senate
+threshold, 16% at the current 60%, and **0% at 67%**. Cross-benching is roughly
+constant across all three, so players are already reaching across — the bar is
+simply too high for the reaching to produce anything. §12's intent that 60%
+"forces cooperation" is half-achieved: it forces the attempt and refuses the
+result. *Not to be changed on simulation alone; the bill is a negotiation and
+no agent here can negotiate.*
+
+**The midterm brake does not bind.** The president's party loses 16% of its
+midterm races at the current −2, and 19% at −4 — against a reality of losses in
+19 of the last 21 midterms. Doubling the penalty moves the outcome three
+points, because a modifier cannot punish anyone in a race nobody contests. This
+is F6 downstream again.
+
+**The runaway is acquitted.** §16 worries that hand size, endorsements and
+capture stack into a leader who cannot be caught. Across presidency hand bonus
+0→4, determination sits flat near 30% and the **comeback rate rises** from 67%
+to 87%. The Senate bonus is flat too. At no tested setting does the leader run
+away. The tuning worry should move elsewhere.
+
+**Two sweeps returned nothing usable, and say so rather than dressing it up.**
+Game length is invariant at 16 years across every hand size because `maxYears`
+caps it before deck-out — that question needs the cap lifted. And the district
+sweep's game-length column, reported earlier under F6, has the same defect.

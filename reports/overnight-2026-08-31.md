@@ -269,16 +269,95 @@ survive, because nobody is defending anything.
 
 ## 5. Sweeps
 
-Ten sweeps were specified. **Two were run** — district supply, and the
-decay/push pairing — and both are reported above under changes #1 and #2. The
-remaining eight were not run, because a sweep of hand size or midterm penalty
-measured on a board where 79% of races are uncontested measures noise, not the
-parameter. Running them would have produced eight tables of numbers that look
-like findings and are not.
+All ten now run. Eight were deliberately skipped earlier in the night on the
+grounds that they measured noise on an uncontested board; that was right at the
+time and wrong afterwards, because F10 and F13 turned five dead mechanics back
+on. **Any sweep taken before those fixes was measuring a different game.**
 
-The priority sweep the brief names — margin-based push against flat — was run
-and is finding #1. The pathology exists, and margin-based pushes fix it, but
-**only under biennial decay**, which the brief did not anticipate.
+### Incumbency: +1 is correctly calibrated. Keep it.
+
+§16 calls incumbency "a calibration check on +1". It passes.
+
+| incumbency | simulated reelection | real House 1976–2016 |
+|---|---|---|
+| **+1** | **93%** | **94.1%** |
+| +2 | 96% | |
+| +3 | 97% | |
+
+A one-point match against the real rate, from a modifier chosen before any of
+this was measured. This is the design's best single number.
+
+### The filibuster is what stalls the bill, and the shape is unambiguous.
+
+| Senate threshold | bills pass | cross-bench votes/game |
+|---|---|---|
+| 50% | **63%** | 52 |
+| **60%** (current) | **16%** | 47 |
+| 67% | **0%** | 50 |
+
+SIM-BRIEF's stall line is 20%. The current 60% sits below it; 50% puts passage
+at 63%, comfortably inside a working range. Note that cross-benching is roughly
+constant across all three — **players are already reaching across; the bar is
+simply too high for it to matter.** §12's intent, that 60% "forces cooperation",
+is half-achieved: it forces the attempt and then refuses the result.
+
+**Do not change this on simulation alone.** The bill is a negotiation and no
+agent here can negotiate. The sweep gives the shape; a table gives the answer.
+
+### The midterm brake does not bind, and raising it barely helps.
+
+| midterm penalty | president's party loses |
+|---|---|
+| −1 | 13% |
+| −2 (current) | 16% |
+| −3 | 19% |
+| −4 | 19% |
+
+Reality: the president's party lost House seats in **19 of the last 21**
+midterms. The sim's president loses 16% of his midterm races and doubling the
+penalty moves that by three points. The brake §16 is counting on is not
+braking — and the reason is F6 again, since a modifier cannot punish anyone in
+a race nobody contests.
+
+### Hand size raises contest, and cannot answer game length here.
+
+| base hand | contested | determination | lead changes |
+|---|---|---|---|
+| 8 | 23% | 44% | 2.1 |
+| 12 | 30% | 32% | 1.6 |
+| 16 | 34% | 22% | 1.0 |
+
+Contest rises monotonically with hand size, exactly as F6's ratio predicts.
+**Game length is not measurable from this sweep** — every row returns 16 years
+because `maxYears` caps it, so the deck-out ending never arrives. That question
+needs the cap lifted and is not answered here.
+
+### The runaway the design fears is not there.
+
+| presidency hand bonus | determination | lead changes | comeback rate |
+|---|---|---|---|
+| 0 | 29% | 1.2 | 67% |
+| 2 (current) | 30% | 1.5 | 77% |
+| 4 | 30% | 1.6 | 87% |
+
+§16 asks whether hand size, endorsements and capture stack into a runaway.
+**They do not, at any setting tested.** Determination is flat near 30% — the
+leader at 30% of the way through is not reliably the winner — and comebacks
+become *more* common as the bonus grows, not less. The Senate bonus sweep is
+flat too (determination 26–32% across 0–2).
+
+This is a genuine acquittal of one of the design's stated worries, and it points
+the tuning elsewhere: the presidency bonus can be raised for flavour without
+buying a runaway.
+
+### Fed dice: both playable, 2d6 keeps the chicken live.
+
+2d6 produces 2.0 rate rises a game against 3d6's 1.2. The tighter curve keeps
+the spend-and-pivot decision frequent enough to matter. **Keep 2d6.**
+
+### Already reported above
+
+District supply (finding #2) and the decay/push pairing (finding #1) are in §1.
 
 ---
 
