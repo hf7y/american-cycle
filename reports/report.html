@@ -1,0 +1,238 @@
+<title>American Cycle Findings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;600;700&family=Public+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --paper:#E8E6E1; --paper-2:#DEDBD4; --card:#F2F0EC; --ink:#16181A; --ink-2:#4A4E54;
+  --rule:#C4BFB6; --brass:#8A6D22; --dem:#2F5C8A; --gop:#A63A2E;
+  --good:#3E6B4F; --bad:#A63A2E; --chyron-bg:#16181A; --chyron-fg:#E8E6E1;
+  --display:"Archivo Narrow",ui-sans-serif,system-ui,sans-serif;
+  --body:"Public Sans",ui-sans-serif,system-ui,-apple-system,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#14161A; --paper-2:#1B1E23; --card:#20242A; --ink:#E6E3DC; --ink-2:#9AA0A8;
+  --rule:#33373D; --brass:#C9A44C; --dem:#6E9CC9; --gop:#D2705F;
+  --good:#6FA07E; --bad:#D2705F; --chyron-bg:#0C0E11; --chyron-fg:#E6E3DC;
+}}
+:root[data-theme="dark"]{
+  --paper:#14161A; --paper-2:#1B1E23; --card:#20242A; --ink:#E6E3DC; --ink-2:#9AA0A8;
+  --rule:#33373D; --brass:#C9A44C; --dem:#6E9CC9; --gop:#D2705F;
+  --good:#6FA07E; --bad:#D2705F; --chyron-bg:#0C0E11; --chyron-fg:#E6E3DC;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);
+  font-size:16px;line-height:1.62;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--display);font-weight:600;margin:0;text-wrap:balance;letter-spacing:.005em;line-height:1.16}
+a{color:var(--brass)}
+.mono,td.n{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-family:var(--display);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2)}
+header#top{background:var(--chyron-bg);color:var(--chyron-fg);border-bottom:2px solid var(--brass);padding:34px 20px 30px}
+header#top .in{max-width:760px;margin:0 auto}
+header#top h1{font-size:clamp(30px,5vw,46px);letter-spacing:-.01em}
+header#top .sub{font-family:var(--mono);font-size:13px;opacity:.72;margin-top:10px}
+main{max-width:760px;margin:0 auto;padding:0 20px 80px}
+section{padding:38px 0;border-bottom:1px solid var(--rule)}
+section:last-child{border-bottom:none}
+h2{font-size:26px;margin-bottom:6px}
+h3{font-size:18px;margin:26px 0 6px}
+p{margin:12px 0}
+.lede{font-size:18px;color:var(--ink-2)}
+.callout{background:var(--card);border:1px solid var(--rule);border-left:3px solid var(--brass);
+  border-radius:2px;padding:16px 18px;margin:22px 0}
+.callout.win{border-left-color:var(--good)}
+.callout.bad{border-left-color:var(--bad)}
+.tw{overflow-x:auto;margin:18px 0}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:min(100%,420px)}
+th,td{text-align:left;padding:7px 12px 7px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:var(--display);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);white-space:nowrap}
+td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;padding-right:0}
+tr.hi td{background:var(--paper-2);font-weight:600}
+.chip{display:inline-block;font-family:var(--mono);font-size:10px;padding:2px 6px;border:1px solid var(--rule);
+  border-radius:2px;letter-spacing:.04em;white-space:nowrap}
+.chip.f{border-color:var(--good);color:var(--good)}
+.chip.o{border-color:var(--bad);color:var(--bad)}
+.chip.s{border-color:var(--brass);color:var(--brass)}
+ol.changes{list-style:none;counter-reset:c;padding:0}
+ol.changes>li{counter-increment:c;position:relative;padding:18px 0 18px 52px;border-top:1px solid var(--rule)}
+ol.changes>li::before{content:counter(c);position:absolute;left:0;top:18px;font-family:var(--display);
+  font-size:26px;font-weight:700;color:var(--brass);line-height:1}
+ol.changes h3{margin-top:0}
+.meta{font-family:var(--mono);font-size:12px;color:var(--ink-2);margin-top:6px}
+footer{max-width:760px;margin:0 auto;padding:30px 20px 60px;font-size:13px;color:var(--ink-2)}
+</style>
+
+<header id="top"><div class="in">
+  <div class="eyebrow" style="color:var(--brass)">Overnight simulation report · 31 August 2026</div>
+  <h1>American Cycle</h1>
+  <div class="sub">604 cards · 7 eras · 11 agents · 24 findings · every figure reproducible from its seed</div>
+</div></header>
+
+<main>
+<section>
+  <h2>The headline</h2>
+  <p class="lede">The design's central thesis is not implemented — and the fix is an
+  answer to a question the design never asked.</p>
+  <p>§1 argues that realignment is <em>"the accumulated residue of individual races won by
+  individual candidates."</em> Played across 1932→1992, with real cards for both ends of the
+  largest realignment in American history, <strong>nothing moves.</strong></p>
+  <div class="tw"><table>
+    <tr><th>Region, mean final lean</th><th class="n">Simulated</th><th>Reality 1932→1992</th></tr>
+    <tr><td>South</td><td class="n">−0.14</td><td>solid D → solid R</td></tr>
+    <tr><td>Northeast</td><td class="n">−0.08</td><td>solid R → solid D</td></tr>
+    <tr><td>Elsewhere</td><td class="n">−0.01</td><td>—</td></tr>
+  </table></div>
+  <p>Over 45,000 state-election-cycles, lean moves away from zero <span class="mono">44.6%</span>
+  of the time and toward zero <span class="mono">45.5%</span>. Push and decay cancel to within a
+  percentage point: <strong>the map is a driftless random walk.</strong></p>
+  <div class="callout">
+    <strong>The one-line fix.</strong> §10 scales a lean push by how decisively a race was won,
+    and never says what an <em>uncontested</em> win does — a walkover has no margin. Reading it
+    as worth one pip changes everything:
+    <div class="tw"><table>
+      <tr><th>Walkover pushes</th><th class="n">Mean |lean|</th><th class="n">States realigned / game</th></tr>
+      <tr><td>0 — current</td><td class="n">0.13</td><td class="n">0.2</td></tr>
+      <tr class="hi"><td>1</td><td class="n">1.44</td><td class="n">7.4</td></tr>
+    </table></div>
+    It is also the thematically right answer. The game already encodes a safe seat as an
+    uncontested race, and in reality a state has realigned exactly when the other party stops
+    fielding anybody. <strong>The walkover is the evidence.</strong> Shipped as the
+    <span class="mono">realigning</span> config, deliberately not applied to the baseline —
+    that is §10's call.
+  </div>
+</section>
+
+<section>
+  <h2>The five changes</h2>
+  <ol class="changes">
+    <li><h3>Decay must be biennial <span class="chip s">applied</span></h3>
+      <p>Annual decay removes 2 pips a cycle against a maximum push of 2, so a party winning a
+      state by twelve points every cycle for a decade ends pinned at 2. §16 calls this the
+      question that decides whether realignment is possible at all and asks for simulation.
+      It needs none — it is arithmetic, and it is now a passing test.</p>
+      <div class="meta">confidence: certain</div></li>
+    <li><h3>Cut district supply — one cause behind four failing metrics</h3>
+      <p>Contest rate is cards-per-player over eligible-races-per-player, and the design's own
+      numbers put it near 1:5. So 34% of race-slots are contested against a 60% target, a
+      player faces <strong>39 legal races per turn</strong> against a 4–25 band, realignment
+      barely occurs because uncontested races push nothing, and 4.4% of turns have no legal
+      move at all. Two-player is structurally broken at every setting tested.</p>
+      <div class="meta">confidence: high on mechanism</div></li>
+    <li><h3>A safe seat cannot exist — the pip scale has a ceiling</h3>
+      <p>Against 9,555 real House races, simulated margins are a unimodal blob: median 8 points
+      against a real 32.5, and safe seats are <strong>0.0% of simulated races against 37.5% of
+      real ones.</strong> A large realistic stack is +8 pips — 16 points — so a 40-point margin
+      needs +20 pips and the vocabulary cannot express it at any setting. Fixing the map does
+      not fix this; they are independent problems.</p>
+      <div class="meta">confidence: certain on the ceiling · open on the remedy</div></li>
+    <li><h3>The leader runs away, and the only brake is social</h3>
+      <p>Determination lands at 50% of the way through against a healthy 75–85%; the comeback
+      rate is 1%; the leader's margin over second place doubles across the second half; and
+      <strong>100% of player-scores never decrease.</strong> Every suspect §16 names was tested
+      by switching it off — hand size, endorsements, capture are all innocent. Of the three
+      brakes it names, the midterm penalty does not bind, recession hits the president's party
+      rather than the leader, and the third is players ganging up.</p>
+      <p><strong>The design's only effective brake is table politics, which this simulator
+      cannot test.</strong> Recommend a human playtest before adding any catch-up mechanic.</p>
+      <div class="meta">confidence: high on the runaway · the remedy is a table question</div></li>
+    <li><h3>SenateFlood is dominant, and the filibuster stalls the bill</h3>
+      <p>SenateFlood wins 40.8% in a six-way round robin, on the 40% dominance line. The Senate
+      pays four ways at once — points, a six-year term, hand size, and the midterm lean push it
+      inherits from §10's priority — with governor appointments a fifth route in. Bills pass 20%
+      at the current 60% threshold, 63% at 50%, and 0% at 67%; cross-benching is constant
+      across all three, so players already reach across and the bar is too high for it to
+      matter. <strong>Do not change the threshold on simulation alone</strong> — the omnibill is
+      a negotiation and no agent here can negotiate.</p>
+      <div class="meta">confidence: high on measurement · low on the bill remedy</div></li>
+  </ol>
+</section>
+
+<section>
+  <h2 style="color:var(--good)">What already works</h2>
+  <p>Most of this report is problems, so the successes deserve naming. <strong>The resolution
+  machinery is sound; the problems are scale and structure.</strong></p>
+  <div class="tw"><table>
+    <tr><th>Claim</th><th class="n">Measured</th><th class="n">Target</th></tr>
+    <tr><td>+1 incumbency reproduces reality</td><td class="n">93–94%</td><td class="n">94.1%</td></tr>
+    <tr><td>Dice match the corrected odds table</td><td class="n">32.1% upsets</td><td class="n">34.6% predicted</td></tr>
+    <tr><td>District gating kills wide-and-empty</td><td class="n">0% win rate</td><td class="n">should be dead</td></tr>
+    <tr><td>Single-token economy holds</td><td class="n">151 peak</td><td class="n">&lt;200</td></tr>
+    <tr><td>Mental arithmetic really is mental</td><td class="n">2.43 modifiers</td><td class="n">&lt;7</td></tr>
+    <tr><td>Localism declines from pack rotation alone</td><td class="n">4.45 → 1.50</td><td class="n">§5's claim</td></tr>
+  </table></div>
+  <p>That last one spans 1932 to 2024 across seven packs, with no rule involved — exactly what
+  §5 says should happen.</p>
+</section>
+
+<section>
+  <h2>A caution about this report</h2>
+  <p>Five of my own numbers had to be corrected during the run, each time because a convenient
+  proxy had been measured instead of the metric the brief specifies. <strong>Twice the
+  correction inverted the conclusion.</strong></p>
+  <div class="tw"><table>
+    <tr><th>Claimed</th><th>Actually</th><th>Cause</th></tr>
+    <tr><td>Turns are automatic (median 2)</td><td><strong>Analysis paralysis (39)</strong></td><td>counted declarations made, not legal moves available</td></tr>
+    <tr><td>Runaway acquitted</td><td><strong>Runaway is real</strong></td><td>per-game proxy, not a cross-game curve</td></tr>
+    <tr><td>Independents win 60%</td><td>39% contested-only</td><td>walkovers counted</td></tr>
+    <tr><td>25pp seat bias</td><td>4–11pp</td><td>two harness bugs</td></tr>
+    <tr><td>The runaway is the deal</td><td>No mechanical brake exists</td><td>refuted by building the draft</td></tr>
+  </table></div>
+  <p>The brief's own instruction — <em>"assume the instrumentation is wrong before assuming the
+  design is right"</em> — was correct five times out of five. The corrections are kept visible in
+  <span class="mono">FINDINGS.md</span> rather than quietly overwritten.</p>
+</section>
+
+<section>
+  <h2>All findings</h2>
+  <div class="tw"><table>
+    <tr><th>#</th><th>Finding</th><th>State</th></tr>
+    <tr><td class="n">F1</td><td>§3's odds table was wrong; +4 is 82%, not 75%</td><td><span class="chip f">fixed</span></td></tr>
+    <tr><td class="n">F2</td><td>Only biennial decay with margin pushes permits realignment</td><td><span class="chip f">settled</span></td></tr>
+    <tr><td class="n">F3</td><td>The presidency was never contested — 0% of 2,750 races</td><td><span class="chip f">fixed</span></td></tr>
+    <tr><td class="n">F4</td><td>Down-ballot play is solitaire in parallel</td><td><span class="chip o">open</span></td></tr>
+    <tr><td class="n">F5</td><td>An uncontested win pushes no lean</td><td><span class="chip s">→ F24</span></td></tr>
+    <tr><td class="n">F6</td><td>Contest rate is a ratio, at 1:5 by the design's own numbers</td><td><span class="chip o">open</span></td></tr>
+    <tr><td class="n">F7</td><td>Office hand bonuses cannot be per seat</td><td><span class="chip f">fixed</span></td></tr>
+    <tr><td class="n">F8</td><td>Safe seats are 0% simulated against 37.5% real</td><td><span class="chip o">open</span></td></tr>
+    <tr><td class="n">F9</td><td>Incumbency had never fired in any race</td><td><span class="chip f">fixed</span></td></tr>
+    <tr><td class="n">F10</td><td>District cards never applied to presidential races</td><td><span class="chip f">fixed</span></td></tr>
+    <tr><td class="n">F11</td><td>SenateFlood dominant once the presidency worked</td><td><span class="chip o">open</span></td></tr>
+    <tr><td class="n">F12</td><td>Impeachment unreachable, so the VP backstab is inert</td><td><span class="chip s">playtest</span></td></tr>
+    <tr><td class="n">F13</td><td>Endorsements, independents, appointments — all now fire</td><td><span class="chip f">fixed</span></td></tr>
+    <tr><td class="n">F14</td><td>The sweeps: +1 incumbency correct, filibuster stalls bills</td><td><span class="chip f">measured</span></td></tr>
+    <tr><td class="n">F15</td><td>The game had no ending; deck-out is unreachable</td><td><span class="chip f">fixed</span></td></tr>
+    <tr><td class="n">F16</td><td>None of §14's victory conditions both ends and balances</td><td><span class="chip o">open</span></td></tr>
+    <tr><td class="n">F17</td><td>Harness CLI silently ran on one era pack</td><td><span class="chip f">fixed</span></td></tr>
+    <tr><td class="n">F18</td><td>The runaway is real; F14's acquittal was measured wrong</td><td><span class="chip o">open</span></td></tr>
+    <tr><td class="n">F19</td><td>Decision density is paralysis, not automation</td><td><span class="chip o">open</span></td></tr>
+    <tr><td class="n">F20</td><td>Token economy and dice both confirmed sound</td><td><span class="chip f">success</span></td></tr>
+    <tr><td class="n">F21</td><td>Districts are ballast, not presence</td><td><span class="chip o">open</span></td></tr>
+    <tr><td class="n">F22</td><td>No mechanical brake on a leader — only table politics</td><td><span class="chip s">playtest</span></td></tr>
+    <tr><td class="n">F23</td><td>The central thesis is not implemented</td><td><span class="chip o">open</span></td></tr>
+    <tr><td class="n">F24</td><td>Uncontested wins should push lean</td><td><span class="chip s">shipped as variant</span></td></tr>
+  </table></div>
+</section>
+
+<section>
+  <h2>What could not be tested</h2>
+  <p>Everything social, and the brief says so itself. Negotiation before the bill, VP
+  horse-trading, coalition-building for impeachment, table politics against a runaway leader.
+  Three findings turn on it directly:</p>
+  <p><strong>The bill's 20% pass rate</strong> is measured against agents that cannot negotiate,
+  and §12's whole design intent is that they would. <strong>Impeachment's 0% rate</strong> is
+  measured against agents that vote the party line, when removal is precisely a
+  cross-party coalition. And <strong>the runaway</strong> has no mechanical brake, so the
+  design is relying on players ganging up — which may well be enough, and cannot be shown here.</p>
+  <div class="callout bad"><strong>Do not lower the filibuster threshold, and do not add a
+  catch-up mechanic, on this evidence.</strong> Play them with people first.</div>
+</section>
+</main>
+
+<footer>
+  <p>Engine, simulator, card data and full working: <span class="mono">hf7y/american-cycle</span>,
+  pull request #7. The playable board is a separate artifact. Every figure here is reproducible
+  from its seed; the full 24 findings with methods are in <span class="mono">FINDINGS.md</span>,
+  and the seven-section brief response in
+  <span class="mono">reports/overnight-2026-08-31.md</span>.</p>
+</footer>
