@@ -1289,3 +1289,54 @@ is a real strategic option, it needs to pay more than it does.**
 Filed as a decision rather than changed: it is §11's call whether the office
 should matter, and the sim cannot tell you whether "Baker in Massachusetts" is
 worth having on the board for its own sake.
+
+---
+
+## F33. §12's card counters were never recorded. The bill had no electoral consequence.
+
+Found by a systematic coverage sweep rather than by stumbling on it: instrument
+every named entry in §9's modifier stack and see which never appears. Thirteen
+of fourteen fired. One did not.
+
+**`cross-benched` had never fired once.** Chasing it found a whole §12 mechanic
+missing, not just a modifier:
+
+> **"Voting places a counter on the card**, coloured by the party in power.
+> Cross-bench votes therefore show as the opposite colour. Sentiment at election
+> time determines whether that counter is an asset or a liability, and the
+> card's accumulated counters are simply read off at resolution."
+
+And:
+
+> "A good reaction rewards yes-voters; a bad one penalises them at the next
+> election, **in both the primary and the general**."
+
+Nothing recorded a counter. `reactionGood` was computed on every passing bill
+and discarded, and `Declaration.crossBenched` was read by the modifier builder
+and never set by anything. **So the omnibill — the design's primary scoring
+engine — had no electoral consequence whatsoever.** A player could vote for
+anything, forever, and never answer for it.
+
+**Implemented.** Every vote now places a counter on the voter's card; passage
+with a good reaction is an asset and with a bad one a liability; a yes-vote
+against your own majority marks the card as cross-benched. Counters are read
+off at resolution in both rounds, per §12. Only *passage* carries a
+consequence — §12 is explicit that a symbolic vote on a failed bill earns
+heterodoxy credit but no points.
+
+| modifier | before | after (per 1000 races) |
+|---|---|---|
+| cross-benched | **never** | 15.0 |
+| bill record | did not exist | 14.2 |
+
+**What cannot yet be measured** is whether it changes outcomes: across 120
+games, *zero* contested generals featured a candidate carrying a bill record.
+That is not a fault in the implementation — it is F6 again. On a board where
+92% of races are walkovers, two rare things almost never coincide. **The
+mechanic is live and its effect is unmeasurable until the contest rate is
+fixed**, which is the same sentence this report has now written about the
+midterm penalty, heterodoxy, and realignment.
+
+*Sixth unimplemented clause, and the first found by systematic sweep rather
+than by noticing a suspicious number. The sweep is cheap and should have been
+run first.*

@@ -28,7 +28,7 @@ export interface Config {
   resolution: { incumbency: number; identityBonus: number; tieBreak: string };
   national: { strongEconomy: number; recession: number; midtermPenalty: number; coattailsWith: number; coattailsAgainst: number };
   endorsements: { president: number; governorInState: number; senator: number };
-  primaryGeneral: { extremistPrimary: number; extremistGeneral: number; heterodoxPrimaryPenalty: number; crossBenchPrimaryPenalty: number };
+  primaryGeneral: { extremistPrimary: number; extremistGeneral: number; heterodoxPrimaryPenalty: number; crossBenchPrimaryPenalty: number; billCounterPips: number };
   lean: lean.LeanConfig;
   economy: econ.EconomyConfig;
   legislature: leg.LegislatureConfig;
@@ -417,6 +417,26 @@ export class Game {
 
     const out = leg.tallyBill(this.cfg.legislature, this.seats, votes, g, pres, vetoes, override, this.rng);
     this.stats.crossBench += out.crossBenched;
+    // §12: "Voting places a counter on the card, coloured by the party in
+    // power. Cross-bench votes therefore show as the opposite colour ... the
+    // card's accumulated counters are simply read off at resolution."
+    // Nothing recorded these, so the bill's electoral consequence never
+    // reached a candidate and the cross-bench penalty never fired once.
+    const majH = leg.majorityParty(this.seats, 'representative');
+    const majS = leg.majorityParty(this.seats, 'senator');
+    for (const v of votes) {
+      const seat = this.seats.find((st) => st.holder?.player === v.player && st.office === v.office);
+      const cardId = seat?.holder?.cardId;
+      if (!cardId) continue;
+      const rec = this.billCounters.get(cardId) ?? { record: 0, crossBench: 0 };
+      const maj = v.office === 'representative' ? majH : majS;
+      if (v.yes && v.party !== maj) rec.crossBench++;
+      // Only PASSAGE carries a consequence: §12 says a symbolic vote on a
+      // failed bill earns heterodoxy credit but no points.
+      if (v.yes && out.passed) rec.record += out.reactionGood ? 1 : -1;
+      this.billCounters.set(cardId, rec);
+    }
+
     if (out.passed) {
       this.stats.billsPassed++;
       this.billsBy[authorId] = (this.billsBy[authorId] ?? 0) + 1;
@@ -518,6 +538,11 @@ export class Game {
       const incumbent = this.seatFor(office as Office, state, slot);
       const ctx = this.raceContext(office as Office, state, slot, presidentialWinner);
 
+      for (const d of group) {
+        const rec = this.billCounters.get(d.card.id);
+        d.billRecord = rec?.record ?? 0;
+        d.crossBenched = (rec?.crossBench ?? 0) > 0;
+      }
       const nominees = this.runPrimaries(group, ctx, wave, human);
       if (!nominees.length) continue;
       // §11: "Governors ... carry incumbency into Senate and presidential
@@ -526,6 +551,9 @@ export class Game {
       // office is supposed to be worth, unimplemented. Same shape as the
       // district clause that killed the presidency (F10).
       for (const d of nominees) {
+        const rec = this.billCounters.get(d.card.id);
+        d.billRecord = rec?.record ?? 0;
+        d.crossBenched = (rec?.crossBench ?? 0) > 0;
         const holdsThis = !!incumbent && incumbent.holder!.cardId === d.card.id;
         const isGovernor = (office === 'senator' || office === 'president')
           && this.seats.some((st) => st.office === 'governor' && st.holder?.cardId === d.card.id);
@@ -900,6 +928,8 @@ export class Game {
     return undefined;
   }
 
+  /** §12's card counters, by card id. */
+  private billCounters = new Map<string, { record: number; crossBench: number }>();
   private billsBy: Record<number, number> = {};
   private termsBy: Record<number, number> = {};
   private consecutiveBy: Record<number, number> = {};

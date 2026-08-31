@@ -29,7 +29,8 @@
     "extremistPrimary": 2,
     "extremistGeneral": -2,
     "heterodoxPrimaryPenalty": -2,
-    "crossBenchPrimaryPenalty": -1
+    "crossBenchPrimaryPenalty": -1,
+    "billCounterPips": 1
   },
   "lean": {
     "pushByMargin": [
@@ -103,6 +104,7 @@
     "hand.bonus*": "\u00a76 and \u00a711 print these without saying per-seat or per-office. Read per seat they are a runaway: a player holding 20 Senate seats draws 32 cards a cycle. The doc's own 'base 12 with president +2 is a 17% edge' is 2/12, which only parses as per-office. Implemented per office held.",
     "game.victory (ties)": "\u00a714 leaves the victory condition open and says nothing about ties on final score, which are common. Placeholder is a coin flip. Resolving by lowest seat -- the natural coding accident -- manufactures a 25pp seat bias that does not exist.",
     "game.deckOutEnds": "\u00a714 names deck-out as the ending, but also has defeated politicians circulate back through the draft. Circulation wins: talon+discard GROW from 79 to 273 cards over a hundred years, so deck-out is unreachable and cannot be the backstop the doc treats it as.",
-    "lean.uncontestedPush": "\u00a710 says a push scales with how decisively a race was won and never says what a walkover does -- a race nobody contested has no margin at all. This is the single highest-leverage undecided rule in the design: 0 leaves the map a driftless random walk and the central thesis unimplemented; 1 produces genuine realignment. See FINDINGS.md F23 and F24."
+    "lean.uncontestedPush": "\u00a710 says a push scales with how decisively a race was won and never says what a walkover does -- a race nobody contested has no margin at all. This is the single highest-leverage undecided rule in the design: 0 leaves the map a driftless random walk and the central thesis unimplemented; 1 produces genuine realignment. See FINDINGS.md F23 and F24.",
+    "primaryGeneral.billCounterPips": "\u00a712 says a good reaction rewards yes-voters and a bad one penalises them at the next election, in both rounds, and that the card's accumulated counters are read off at resolution -- but prints no magnitude. One pip a counter is a stand-in."
   }
 }

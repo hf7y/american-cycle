@@ -21,6 +21,7 @@ export interface NationalConfig {
 export interface PrimaryGeneralConfig {
   extremistPrimary: number; extremistGeneral: number;
   heterodoxPrimaryPenalty: number; crossBenchPrimaryPenalty: number;
+  billCounterPips: number;
 }
 
 export interface RaceContext {
@@ -49,6 +50,9 @@ export interface Declaration {
   endorsements?: number;
   incumbent?: boolean;
   crossBenched?: boolean;
+  /** §12: "the card's accumulated counters are simply read off at resolution."
+   *  Signed: a good reaction on a yes-vote is an asset, a bad one a liability. */
+  billRecord?: number;
 }
 
 /** §5: district cards gate all races. You may run only where you hold a
@@ -94,6 +98,7 @@ export function buildModifiers(
     if (hasEffect(d.card, 'extremist')) m.push({ source: 'extremist (primary)', pips: pg.extremistPrimary });
     if (hasEffect(d.card, 'heterodox')) m.push({ source: 'heterodox (primary)', pips: pg.heterodoxPrimaryPenalty });
     if (d.crossBenched) m.push({ source: 'cross-benched', pips: pg.crossBenchPrimaryPenalty });
+    if (d.billRecord) m.push({ source: 'bill record', pips: d.billRecord * pg.billCounterPips });
   } else {
     if (hasEffect(d.card, 'extremist')) m.push({ source: 'extremist (general)', pips: pg.extremistGeneral });
 
