@@ -1,0 +1,14 @@
+{
+  "name": "american-cycle",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test engine/**/*.test.ts sim/**/*.test.ts",
+    "sim": "node sim/harness.ts",
+    "sweep": "node sim/sweeps.ts",
+    "build:ui": "node ui/build.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": { "typescript": "^5.6.0" }
+}
