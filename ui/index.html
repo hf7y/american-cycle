@@ -450,6 +450,10 @@ function oddsAtEdge(edge        )         {
                                                                              
                                                                        
                            
+                                                                            
+                                                                        
+                                                                         
+                      
  
 
 function sign(p       )         { return p === 'R' ? 1 : p === 'D' ? -1 : 0; }
@@ -464,8 +468,8 @@ function pushForMargin(cfg            , marginPips        )         {
  *  -- the exclusion falls out of the priority rule rather than being asserted. */
 const PRIORITY           = ['president', 'senator', 'representative', 'governor'];
 
-function nationalizedRace                              (races     )                {
-  for (const office of PRIORITY) {
+function nationalizedRace                              (races     , order           = PRIORITY)                {
+  for (const office of order) {
     const hit = races.filter((r) => r.office === office);
     if (hit.length) return hit[0];
   }
@@ -1608,7 +1612,7 @@ class Game {
         margin: r.ev.uncontested ? (this.cfg.lean.uncontestedPush ?? 0) * 2 : r.ev.margin });
     }
     for (const [st, races] of byState) {
-      const top = lean.nationalizedRace(races);
+      const top = lean.nationalizedRace(races, this.cfg.lean.priority);
       if (!top) continue;
       lean.applyPush(this.leanMap, this.cfg.lean, st, top.party, top.office, top.margin);
     }
@@ -2211,12 +2215,14 @@ let G = null, gen = null, pending = null, S = {
 };
 
 // ---- setup ------------------------------------------------------------------
+// Strength is measured, not guessed: win rate in the human seat against
+// Greedy + HouseFarm + Random, over 240 games each. Fair share is 25%.
 const OPPONENT_BLURB = {
-  Greedy:'Takes the best race on the board, every time. No plan beyond this cycle.',
-  Lookahead:'Values a seat by what it pays over its whole term. Plans two cycles out.',
-  Random:'Declares anywhere. Useful as a floor, not as a rival.',
-  HouseFarm:'Builds district presence and promotes upward. Fights you for the map.',
-  SenateFlood:'Runs everything for Senate early, for the six-year terms and the hand size.',
+  Greedy:'Fair fight. Takes the best race on the board every time, with no plan beyond this cycle.',
+  Lookahead:'Hardest. Values a seat by what it pays over its whole term — it wins about half of all games it plays.',
+  Random:'Gentlest. Declares anywhere; a floor rather than a rival.',
+  HouseFarm:'Gentle. Builds district presence and promotes upward, but spreads too thin to convert it.',
+  SenateFlood:'Strong. Runs everything for Senate early, for the six-year terms and the hand size.',
   HeterodoxSpecialist:'Drafts off-brand candidates and runs them in hostile states.',
   BillMaximizer:'Chases yes-votes and majority status. Votes for everything.',
   Impeacher:'Builds a Senate bloc large enough to remove a president.',
@@ -2251,13 +2257,20 @@ function setup() {
     </div>
     <div class="row" style="margin-top:14px">
       <label class="f">Seed<input type="number" id="sseed" value="${(Math.random()*9999)|0}" style="width:110px"></label>
+      <p class="note" style="max-width:46ch"><b>If this is your first game:</b> a seat is worth what it pays
+      over its whole term, not what it scores today. Senate seats run six years and grant hand size;
+      House seats are cheap but expire every cycle. Taking the highest-edge race each turn loses about
+      94% of the time against a strong table.</p>
       <label class="f">Start era<select id="sera"></select><span class="note">Play opens here; later packs enter as the talon runs down (§14).</span></label>
     </div>
     <div class="row" style="margin-top:18px"><button class="btn" id="go">Open the cycle</button></div>
   `);
   const eras = Object.keys(PACKS).sort();
   $('sera').innerHTML = eras.map((e) => `<option value="${e}"${e === '1976' ? ' selected' : ''}>${e}</option>`).join('');
-  $('s1').value = 'Lookahead'; $('s2').value = 'HouseFarm'; $('s3').value = 'Greedy';
+  // Measured default: a player of ordinary skill wins 27% here (fair share is
+  // 25%) and a strong one 70%. Against Lookahead + HouseFarm + Greedy the same
+  // ordinary player wins 8%, which is a bad first game.
+  $('s1').value = 'Greedy'; $('s2').value = 'HouseFarm'; $('s3').value = 'Random';
   const sync = () => {
     for (const [sel, out] of [['s1','b1'],['s2','b2'],['s3','b3']]) {
       $(out).textContent = $(sel).value ? (OPPONENT_BLURB[$(sel).value] || '') : '';

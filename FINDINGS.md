@@ -1171,3 +1171,53 @@ high enough. That is F8, measured a third independent way, in a real election.
 correct map into a correct outcome, with calibrated per-state confidence. It
 does *not* show the game can discover the map — that is F23, and the map was
 handed to it here.
+
+---
+
+## F30. The skill floor is punishing, and the board's defaults made it worse.
+
+A playability finding rather than a design one, but it decides whether the
+first game is any fun.
+
+Win rate in the human seat against the board's original default opponents
+(Lookahead + HouseFarm + Greedy), 240 games each:
+
+| if the player plays like | win rate |
+|---|---|
+| Lookahead — values a seat over its whole term | **47.9%** |
+| SenateFlood | 32.1% |
+| EconomyChicken | 21.7% |
+| BillMaximizer | 19.2% |
+| **Greedy — takes the best race each turn** | **6.3%** |
+| Random | 4.6% |
+| HouseFarm / WideAndEmpty | 0.0% |
+
+**A newcomer who plays the obvious way loses 94% of the time.** Taking the
+highest-edge race each turn — which is what the board's own interface invites,
+since it shows you the edge — is close to the worst strategy available. The
+whole game is in valuing a seat over its *term*, and nothing on the board says
+so.
+
+That is a steep but legitimate skill curve. What was not legitimate was
+shipping it with a strong opponent as a default. Measured across opponent sets:
+
+| opponents | ordinary player wins | strong player wins |
+|---|---|---|
+| Lookahead + HouseFarm + Greedy (was default) | **8.0%** | 46.5% |
+| **Greedy + HouseFarm + Random** (now default) | **27.0%** | 70.5% |
+| Greedy + BillMaximizer + HouseFarm | 11.0% | 47.5% |
+
+**Changed** the default table to Greedy + HouseFarm + Random, where an ordinary
+player wins 27% against a 25% fair share, and labelled every opponent with its
+measured strength rather than a guess. Lookahead is still there for anyone who
+wants the hard game.
+
+**Also added one line of first-game guidance**, because the finding above is
+not discoverable by playing: a seat is worth what it pays over its whole term,
+Senate seats run six years and grant hand size, and taking the highest-edge race
+each turn loses 94% of the time.
+
+*This is the only change tonight made for the player rather than the designer,
+and it came from noticing that the automated playtest finished 4th of 4 twice
+and asking whether that was the bot playing badly or the table being unfair. It
+was both.*
