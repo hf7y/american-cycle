@@ -61,9 +61,12 @@ function setup() {
     </div>
     <div class="row" style="margin-top:14px">
       <label class="f">Seed<input type="number" id="sseed" value="${(Math.random()*9999)|0}" style="width:110px"></label>
+      <label class="f">Start era<select id="sera"></select><span class="note">Play opens here; later packs enter as the talon runs down (§14).</span></label>
     </div>
     <div class="row" style="margin-top:18px"><button class="btn" id="go">Open the cycle</button></div>
   `);
+  const eras = Object.keys(PACKS).sort();
+  $('sera').innerHTML = eras.map((e) => `<option value="${e}"${e === '1976' ? ' selected' : ''}>${e}</option>`).join('');
   $('s1').value = 'Lookahead'; $('s2').value = 'HouseFarm'; $('s3').value = 'Greedy';
   const sync = () => {
     for (const [sel, out] of [['s1','b1'],['s2','b2'],['s3','b3']]) {
@@ -77,14 +80,21 @@ function setup() {
     S.opponents = ['s1','s2','s3'].map((i) => $(i).value).filter(Boolean);
     S.cfgName = $('scfg').value;
     S.seed = Number($('sseed').value) || 1;
+    S.startEra = $('sera').value;
     closeModal(); start();
   };
 }
 
 function start() {
   const cfg = JSON.parse(JSON.stringify(CONFIGS[S.cfgName]));
+  // every era in the build, oldest first -- §14 has refill packs draw from
+  // later years, and the engine consumes them in era order
   const cards = [];
-  for (const k of ['1976','1992','2008','2016']) cards.push(...PACKS[k].cards);
+  for (const k of Object.keys(PACKS).sort()) {
+    if (S.startEra && k < S.startEra) continue;      // begin at the chosen era
+    cards.push(...PACKS[k].cards);
+  }
+  cfg.game.startYear = Number(S.startEra) || cfg.game.startYear;
   const rng = new RNG(S.seed);
   const you = { name:'You', declare:()=>[], withdraw:()=>false, proposeG:()=>3, voteBill:()=>true, veto:()=>false };
   const agents = [you, ...S.opponents.map((n) => new AGENTS[n](cfg, rng))];

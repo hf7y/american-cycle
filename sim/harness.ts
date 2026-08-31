@@ -103,7 +103,7 @@ if (import.meta.filename === process.argv[1]) {
   // measurement on 112 cards instead of 400, which ends four-player games at
   // ~3.5 years instead of ~13 -- a silent factor of four in any number taken
   // from the command line.
-  const packs = arg('--packs', '1976,1992,2008,2016').split(',');
+  const packs = arg('--packs', '1932,1964,1976,1992,2008,2016,2024').split(',');
   const csv = arg('--csv', '');
   const cfg = loadConfig(cfgName);
   const cards = loadPacks(packs);

@@ -1,0 +1,1079 @@
+{
+ "name": "1964",
+ "era": 1964,
+ "note": "The civil-rights realignment as it happens. Home-state bonuses are 3-5, still high but past the 1932 peak. Heterodoxy is at its maximum and its most consequential: southern Democrats voting against their president's bill, and northern Republicans delivering the votes that passed it. Thurmond's card is a Republican for the first time. The district cards are the ground the coalitions are fighting over. Heterodoxy peaks here at over half the pack, and that is the history rather than a tagging error: 1964 is the year of maximum intra-party division, with southern Democrats voting against their own president's bill and northern Republicans surviving the Goldwater collapse. Both are insulation from the national tide, which is what \u00a79 means by the tag.",
+ "cards": [
+  {
+   "kind": "candidate",
+   "id": "lyndon-b-johnson-1964",
+   "name": "Lyndon B. Johnson",
+   "party": "D",
+   "homeState": "TX",
+   "homeStateBonus": 4,
+   "identities": [
+    "rural",
+    "business"
+   ],
+   "belief": "We shall overcome",
+   "era": 1964,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "hubert-humphrey-1964",
+   "name": "Hubert Humphrey",
+   "party": "D",
+   "homeState": "MN",
+   "homeStateBonus": 4,
+   "identities": [
+    "union",
+    "academic"
+   ],
+   "belief": "Out of the shadow of states' rights",
+   "era": 1964,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "robert-f-kennedy-1964",
+   "name": "Robert F. Kennedy",
+   "party": "D",
+   "homeState": "NY",
+   "homeStateBonus": 3,
+   "identities": [
+    "catholic",
+    "ivy"
+   ],
+   "belief": "Carpetbagger who won",
+   "era": 1964,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "richard-b-russell-jr-1964",
+   "name": "Richard B. Russell Jr.",
+   "party": "D",
+   "homeState": "GA",
+   "homeStateBonus": 5,
+   "identities": [
+    "rural",
+    "farm"
+   ],
+   "belief": "Led the southern bloc against the bill",
+   "era": 1964,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "mike-mansfield-1964",
+   "name": "Mike Mansfield",
+   "party": "D",
+   "homeState": "MT",
+   "homeStateBonus": 4,
+   "identities": [
+    "catholic",
+    "academic"
+   ],
+   "belief": "Ran the Senate quietly",
+   "era": 1964,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "wayne-morse-1964",
+   "name": "Wayne Morse",
+   "party": "D",
+   "homeState": "OR",
+   "homeStateBonus": 4,
+   "identities": [
+    "academic",
+    "rural"
+   ],
+   "belief": "One of two votes against the Gulf of Tonkin",
+   "era": 1964,
+   "effects": [
+    {
+     "type": "extremist"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "j-william-fulbright-1964",
+   "name": "J. William Fulbright",
+   "party": "D",
+   "homeState": "AR",
+   "homeStateBonus": 4,
+   "identities": [
+    "rural",
+    "ivy",
+    "academic"
+   ],
+   "belief": "Internationalist, segregationist",
+   "era": 1964,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "john-c-stennis-1964",
+   "name": "John C. Stennis",
+   "party": "D",
+   "homeState": "MS",
+   "homeStateBonus": 5,
+   "identities": [
+    "rural",
+    "veteran"
+   ],
+   "belief": "Armed Services",
+   "era": 1964,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "russell-b-long-1964",
+   "name": "Russell B. Long",
+   "party": "D",
+   "homeState": "LA",
+   "homeStateBonus": 5,
+   "identities": [
+    "rural",
+    "business"
+   ],
+   "belief": "Huey's son, and the tax code",
+   "era": 1964,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "eugene-mccarthy-1964",
+   "name": "Eugene McCarthy",
+   "party": "D",
+   "homeState": "MN",
+   "homeStateBonus": 4,
+   "identities": [
+    "catholic",
+    "academic"
+   ],
+   "belief": "Not yet in revolt",
+   "era": 1964,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "george-smathers-1964",
+   "name": "George Smathers",
+   "party": "D",
+   "homeState": "FL",
+   "homeStateBonus": 4,
+   "identities": [
+    "business",
+    "veteran"
+   ],
+   "belief": "Kennedy's friend on the right",
+   "era": 1964,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "sam-ervin-1964",
+   "name": "Sam Ervin",
+   "party": "D",
+   "homeState": "NC",
+   "homeStateBonus": 5,
+   "identities": [
+    "rural",
+    "ivy"
+   ],
+   "belief": "Country lawyer against the bill",
+   "era": 1964,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "albert-gore-sr-1964",
+   "name": "Albert Gore Sr.",
+   "party": "D",
+   "homeState": "TN",
+   "homeStateBonus": 4,
+   "identities": [
+    "rural",
+    "farm"
+   ],
+   "belief": "A southerner who signed nothing",
+   "era": 1964,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "philip-hart-1964",
+   "name": "Philip Hart",
+   "party": "D",
+   "homeState": "MI",
+   "homeStateBonus": 4,
+   "identities": [
+    "catholic",
+    "union"
+   ],
+   "belief": "The conscience of the Senate",
+   "era": 1964,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "john-connally-1964",
+   "name": "John Connally",
+   "party": "D",
+   "homeState": "TX",
+   "homeStateBonus": 4,
+   "identities": [
+    "business",
+    "rural"
+   ],
+   "belief": "Wounded in Dallas",
+   "era": 1964,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "george-wallace-1964",
+   "name": "George Wallace",
+   "party": "D",
+   "homeState": "AL",
+   "homeStateBonus": 5,
+   "identities": [
+    "rural",
+    "evangelical"
+   ],
+   "belief": "Segregation now",
+   "era": 1964,
+   "effects": [
+    {
+     "type": "extremist"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "carl-hayden-1964",
+   "name": "Carl Hayden",
+   "party": "D",
+   "homeState": "AZ",
+   "homeStateBonus": 5,
+   "identities": [
+    "rural",
+    "business"
+   ],
+   "belief": "Fifty-six years in Congress",
+   "era": 1964,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "edmund-muskie-1964",
+   "name": "Edmund Muskie",
+   "party": "D",
+   "homeState": "ME",
+   "homeStateBonus": 4,
+   "identities": [
+    "catholic"
+   ],
+   "belief": "Polish-American from a Yankee state",
+   "era": 1964,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "abraham-ribicoff-1964",
+   "name": "Abraham Ribicoff",
+   "party": "D",
+   "homeState": "CT",
+   "homeStateBonus": 4,
+   "identities": [
+    "jewish",
+    "urban"
+   ],
+   "belief": "Governor, cabinet, Senate",
+   "era": 1964,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "birch-bayh-1964",
+   "name": "Birch Bayh",
+   "party": "D",
+   "homeState": "IN",
+   "homeStateBonus": 4,
+   "identities": [
+    "rural",
+    "farm"
+   ],
+   "belief": "Rewrote presidential succession",
+   "era": 1964,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "barry-goldwater-1964",
+   "name": "Barry Goldwater",
+   "party": "R",
+   "homeState": "AZ",
+   "homeStateBonus": 5,
+   "identities": [
+    "rural",
+    "veteran",
+    "business"
+   ],
+   "belief": "Voted against the Civil Rights Act on principle",
+   "era": 1964,
+   "effects": [
+    {
+     "type": "extremist"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "nelson-rockefeller-1964",
+   "name": "Nelson Rockefeller",
+   "party": "R",
+   "homeState": "NY",
+   "homeStateBonus": 3,
+   "identities": [
+    "business",
+    "ivy"
+   ],
+   "belief": "The eastern establishment loses",
+   "era": 1964,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "william-scranton-1964",
+   "name": "William Scranton",
+   "party": "R",
+   "homeState": "PA",
+   "homeStateBonus": 4,
+   "identities": [
+    "business",
+    "ivy"
+   ],
+   "belief": "The late alternative",
+   "era": 1964,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "george-romney-1964",
+   "name": "George Romney",
+   "party": "R",
+   "homeState": "MI",
+   "homeStateBonus": 4,
+   "identities": [
+    "evangelical",
+    "business"
+   ],
+   "belief": "Walked out of the convention",
+   "era": 1964,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "everett-dirksen-1964",
+   "name": "Everett Dirksen",
+   "party": "R",
+   "homeState": "IL",
+   "homeStateBonus": 4,
+   "identities": [
+    "rural",
+    "business"
+   ],
+   "belief": "Delivered the Republican votes for the bill",
+   "era": 1964,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "margaret-chase-smith-1964",
+   "name": "Margaret Chase Smith",
+   "party": "R",
+   "homeState": "ME",
+   "homeStateBonus": 5,
+   "identities": [
+    "rural",
+    "business"
+   ],
+   "belief": "Declaration of Conscience",
+   "era": 1964,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "jacob-javits-1964",
+   "name": "Jacob Javits",
+   "party": "R",
+   "homeState": "NY",
+   "homeStateBonus": 3,
+   "identities": [
+    "jewish",
+    "urban",
+    "ivy"
+   ],
+   "belief": "Liberal Republican in full",
+   "era": 1964,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "thomas-kuchel-1964",
+   "name": "Thomas Kuchel",
+   "party": "R",
+   "homeState": "CA",
+   "homeStateBonus": 3,
+   "identities": [
+    "business"
+   ],
+   "belief": "Whipped the bill through",
+   "era": 1964,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "clifford-case-1964",
+   "name": "Clifford Case",
+   "party": "R",
+   "homeState": "NJ",
+   "homeStateBonus": 4,
+   "identities": [
+    "ivy",
+    "urban"
+   ],
+   "belief": "Civil rights Republican",
+   "era": 1964,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "john-tower-1964",
+   "name": "John Tower",
+   "party": "R",
+   "homeState": "TX",
+   "homeStateBonus": 4,
+   "identities": [
+    "veteran",
+    "business"
+   ],
+   "belief": "The first of the new southern Republicans",
+   "era": 1964,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "bourke-hickenlooper-1964",
+   "name": "Bourke Hickenlooper",
+   "party": "R",
+   "homeState": "IA",
+   "homeStateBonus": 5,
+   "identities": [
+    "farm",
+    "rural"
+   ],
+   "belief": "Midwestern regular",
+   "era": 1964,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "karl-mundt-1964",
+   "name": "Karl Mundt",
+   "party": "R",
+   "homeState": "SD",
+   "homeStateBonus": 5,
+   "identities": [
+    "rural",
+    "farm"
+   ],
+   "belief": "Half of Mundt-Nixon",
+   "era": 1964,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "richard-nixon-1964",
+   "name": "Richard Nixon",
+   "party": "R",
+   "homeState": "CA",
+   "homeStateBonus": 3,
+   "identities": [
+    "veteran",
+    "business"
+   ],
+   "belief": "Between defeats",
+   "era": 1964,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "henry-cabot-lodge-jr-1964",
+   "name": "Henry Cabot Lodge Jr.",
+   "party": "R",
+   "homeState": "MA",
+   "homeStateBonus": 4,
+   "identities": [
+    "ivy",
+    "veteran"
+   ],
+   "belief": "Won a primary he did not enter",
+   "era": 1964,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "charles-percy-1964",
+   "name": "Charles Percy",
+   "party": "R",
+   "homeState": "IL",
+   "homeStateBonus": 4,
+   "identities": [
+    "business",
+    "ivy"
+   ],
+   "belief": "Corporate moderate",
+   "era": 1964,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "hugh-scott-1964",
+   "name": "Hugh Scott",
+   "party": "R",
+   "homeState": "PA",
+   "homeStateBonus": 4,
+   "identities": [
+    "ivy",
+    "urban"
+   ],
+   "belief": "Eastern moderate leadership",
+   "era": 1964,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "strom-thurmond-1964",
+   "name": "Strom Thurmond",
+   "party": "R",
+   "homeState": "SC",
+   "homeStateBonus": 5,
+   "identities": [
+    "rural",
+    "veteran",
+    "evangelical"
+   ],
+   "belief": "Switched parties over the bill",
+   "era": 1964,
+   "effects": [
+    {
+     "type": "extremist"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "john-lindsay-1964",
+   "name": "John Lindsay",
+   "party": "R",
+   "homeState": "NY",
+   "homeStateBonus": 3,
+   "identities": [
+    "urban",
+    "ivy"
+   ],
+   "belief": "Fun City liberal",
+   "era": 1964,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "district",
+   "id": "MS-2-1964",
+   "state": "MS",
+   "number": 2,
+   "era": 1964,
+   "demographics": [
+    "black",
+    "rural",
+    "farm"
+   ],
+   "synergy": 3,
+   "note": "Freedom Summer"
+  },
+  {
+   "kind": "district",
+   "id": "AL-3-1964",
+   "state": "AL",
+   "number": 3,
+   "era": 1964,
+   "demographics": [
+    "black",
+    "rural"
+   ],
+   "synergy": 3,
+   "note": "Selma to Montgomery"
+  },
+  {
+   "kind": "district",
+   "id": "GA-5-1964",
+   "state": "GA",
+   "number": 5,
+   "era": 1964,
+   "demographics": [
+    "black",
+    "urban"
+   ],
+   "synergy": 3,
+   "note": "Atlanta, the movement's staging ground"
+  },
+  {
+   "kind": "district",
+   "id": "SC-6-1964",
+   "state": "SC",
+   "number": 6,
+   "era": 1964,
+   "demographics": [
+    "black",
+    "rural",
+    "farm"
+   ],
+   "synergy": 3,
+   "note": "The Corridor"
+  },
+  {
+   "kind": "district",
+   "id": "LA-2-1964",
+   "state": "LA",
+   "number": 2,
+   "era": 1964,
+   "demographics": [
+    "black",
+    "urban",
+    "catholic"
+   ],
+   "synergy": 3,
+   "note": "New Orleans"
+  },
+  {
+   "kind": "district",
+   "id": "TX-4-1964",
+   "state": "TX",
+   "number": 4,
+   "era": 1964,
+   "demographics": [
+    "rural",
+    "farm"
+   ],
+   "synergy": 3,
+   "note": "Rayburn's old seat"
+  },
+  {
+   "kind": "district",
+   "id": "TX-20-1964",
+   "state": "TX",
+   "number": 20,
+   "era": 1964,
+   "demographics": [
+    "hispanic",
+    "urban"
+   ],
+   "synergy": 3,
+   "note": "San Antonio west side"
+  },
+  {
+   "kind": "district",
+   "id": "CA-29-1964",
+   "state": "CA",
+   "number": 29,
+   "era": 1964,
+   "demographics": [
+    "black",
+    "urban"
+   ],
+   "synergy": 3,
+   "note": "Watts, a year early"
+  },
+  {
+   "kind": "district",
+   "id": "CA-17-1964",
+   "state": "CA",
+   "number": 17,
+   "era": 1964,
+   "demographics": [
+    "farm",
+    "rural",
+    "hispanic"
+   ],
+   "synergy": 3,
+   "note": "The Central Valley"
+  },
+  {
+   "kind": "district",
+   "id": "NY-18-1964",
+   "state": "NY",
+   "number": 18,
+   "era": 1964,
+   "demographics": [
+    "black",
+    "urban"
+   ],
+   "synergy": 3,
+   "note": "Harlem"
+  },
+  {
+   "kind": "district",
+   "id": "NY-19-1964",
+   "state": "NY",
+   "number": 19,
+   "era": 1964,
+   "demographics": [
+    "urban",
+    "jewish"
+   ],
+   "synergy": 3,
+   "note": "Upper West Side"
+  },
+  {
+   "kind": "district",
+   "id": "IL-1-1964",
+   "state": "IL",
+   "number": 1,
+   "era": 1964,
+   "demographics": [
+    "black",
+    "urban"
+   ],
+   "synergy": 3,
+   "note": "Dawson's ward"
+  },
+  {
+   "kind": "district",
+   "id": "IL-7-1964",
+   "state": "IL",
+   "number": 7,
+   "era": 1964,
+   "demographics": [
+    "urban",
+    "union",
+    "catholic"
+   ],
+   "synergy": 3,
+   "note": "Daley's machine"
+  },
+  {
+   "kind": "district",
+   "id": "MI-1-1964",
+   "state": "MI",
+   "number": 1,
+   "era": 1964,
+   "demographics": [
+    "black",
+    "urban",
+    "union"
+   ],
+   "synergy": 3,
+   "note": "Detroit"
+  },
+  {
+   "kind": "district",
+   "id": "MI-16-1964",
+   "state": "MI",
+   "number": 16,
+   "era": 1964,
+   "demographics": [
+    "union",
+    "catholic"
+   ],
+   "synergy": 3,
+   "note": "Dearborn and the Rouge"
+  },
+  {
+   "kind": "district",
+   "id": "OH-21-1964",
+   "state": "OH",
+   "number": 21,
+   "era": 1964,
+   "demographics": [
+    "black",
+    "urban",
+    "union"
+   ],
+   "synergy": 3,
+   "note": "Cleveland"
+  },
+  {
+   "kind": "district",
+   "id": "PA-2-1964",
+   "state": "PA",
+   "number": 2,
+   "era": 1964,
+   "demographics": [
+    "black",
+    "urban"
+   ],
+   "synergy": 3,
+   "note": "North Philadelphia"
+  },
+  {
+   "kind": "district",
+   "id": "PA-12-1964",
+   "state": "PA",
+   "number": 12,
+   "era": 1964,
+   "demographics": [
+    "union",
+    "rural",
+    "catholic"
+   ],
+   "synergy": 3,
+   "note": "Johnstown"
+  },
+  {
+   "kind": "district",
+   "id": "MA-9-1964",
+   "state": "MA",
+   "number": 9,
+   "era": 1964,
+   "demographics": [
+    "urban",
+    "catholic",
+    "union"
+   ],
+   "synergy": 3,
+   "note": "Boston wards"
+  },
+  {
+   "kind": "district",
+   "id": "MN-1-1964",
+   "state": "MN",
+   "number": 1,
+   "era": 1964,
+   "demographics": [
+    "farm",
+    "rural"
+   ],
+   "synergy": 3,
+   "note": "Southern Minnesota"
+  },
+  {
+   "kind": "district",
+   "id": "IA-4-1964",
+   "state": "IA",
+   "number": 4,
+   "era": 1964,
+   "demographics": [
+    "farm",
+    "rural"
+   ],
+   "synergy": 3,
+   "note": "Corn country"
+  },
+  {
+   "kind": "district",
+   "id": "KS-5-1964",
+   "state": "KS",
+   "number": 5,
+   "era": 1964,
+   "demographics": [
+    "farm",
+    "rural"
+   ],
+   "synergy": 3,
+   "note": "Wheat"
+  },
+  {
+   "kind": "district",
+   "id": "AZ-1-1964",
+   "state": "AZ",
+   "number": 1,
+   "era": 1964,
+   "demographics": [
+    "business",
+    "suburban"
+   ],
+   "synergy": 2,
+   "note": "Phoenix, Goldwater's base"
+  },
+  {
+   "kind": "district",
+   "id": "FL-4-1964",
+   "state": "FL",
+   "number": 4,
+   "era": 1964,
+   "demographics": [
+    "suburban",
+    "veteran"
+   ],
+   "synergy": 2,
+   "note": "Gold Coast retirees"
+  },
+  {
+   "kind": "district",
+   "id": "VA-8-1964",
+   "state": "VA",
+   "number": 8,
+   "era": 1964,
+   "demographics": [
+    "suburban",
+    "business"
+   ],
+   "synergy": 2,
+   "note": "Northern Virginia, newly Republican"
+  },
+  {
+   "kind": "district",
+   "id": "NC-4-1964",
+   "state": "NC",
+   "number": 4,
+   "era": 1964,
+   "demographics": [
+    "academic",
+    "urban"
+   ],
+   "synergy": 2,
+   "note": "The Research Triangle"
+  },
+  {
+   "kind": "district",
+   "id": "TN-2-1964",
+   "state": "TN",
+   "number": 2,
+   "era": 1964,
+   "demographics": [
+    "rural",
+    "evangelical"
+   ],
+   "synergy": 3,
+   "note": "East Tennessee, Republican since the war"
+  },
+  {
+   "kind": "district",
+   "id": "KY-5-1964",
+   "state": "KY",
+   "number": 5,
+   "era": 1964,
+   "demographics": [
+    "rural",
+    "union"
+   ],
+   "synergy": 3,
+   "note": "Appalachia"
+  },
+  {
+   "kind": "district",
+   "id": "WV-3-1964",
+   "state": "WV",
+   "number": 3,
+   "era": 1964,
+   "demographics": [
+    "union",
+    "rural"
+   ],
+   "synergy": 3,
+   "note": "The coalfields"
+  },
+  {
+   "kind": "district",
+   "id": "IN-11-1964",
+   "state": "IN",
+   "number": 11,
+   "era": 1964,
+   "demographics": [
+    "urban",
+    "black",
+    "union"
+   ],
+   "synergy": 2,
+   "note": "Indianapolis"
+  }
+ ]
+}

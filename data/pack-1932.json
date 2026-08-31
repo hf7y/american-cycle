@@ -1,0 +1,1046 @@
+{
+ "name": "1932",
+ "era": 1932,
+ "note": "The New Deal realignment, and the high-water mark of localism: home-state bonuses run 3-5 because a candidate's own county still delivered. The parties are at their least sorted -- progressive Republicans and Southern Bourbon Democrats both abound -- so heterodoxy is common and cheap. District cards carry the coalition being assembled: the coalfields, the machine wards, the Black Belt turning Democratic for the first time.",
+ "cards": [
+  {
+   "kind": "candidate",
+   "id": "franklin-d-roosevelt-1932",
+   "name": "Franklin D. Roosevelt",
+   "party": "D",
+   "homeState": "NY",
+   "homeStateBonus": 4,
+   "identities": [
+    "ivy",
+    "urban"
+   ],
+   "belief": "Bold, persistent experimentation",
+   "era": 1932,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "john-nance-garner-1932",
+   "name": "John Nance Garner",
+   "party": "D",
+   "homeState": "TX",
+   "homeStateBonus": 5,
+   "identities": [
+    "rural",
+    "farm"
+   ],
+   "belief": "Not worth a bucket of warm spit",
+   "era": 1932,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "al-smith-1932",
+   "name": "Al Smith",
+   "party": "D",
+   "homeState": "NY",
+   "homeStateBonus": 5,
+   "identities": [
+    "catholic",
+    "urban"
+   ],
+   "belief": "The Happy Warrior of the sidewalks",
+   "era": 1932,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "cordell-hull-1932",
+   "name": "Cordell Hull",
+   "party": "D",
+   "homeState": "TN",
+   "homeStateBonus": 4,
+   "identities": [
+    "rural"
+   ],
+   "belief": "Free trade above all",
+   "era": 1932,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "huey-long-1932",
+   "name": "Huey Long",
+   "party": "D",
+   "homeState": "LA",
+   "homeStateBonus": 5,
+   "identities": [
+    "rural",
+    "evangelical"
+   ],
+   "belief": "Every man a king",
+   "era": 1932,
+   "effects": [
+    {
+     "type": "extremist"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "robert-f-wagner-1932",
+   "name": "Robert F. Wagner",
+   "party": "D",
+   "homeState": "NY",
+   "homeStateBonus": 4,
+   "identities": [
+    "urban",
+    "union"
+   ],
+   "belief": "Wrote the labor act",
+   "era": 1932,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "carter-glass-1932",
+   "name": "Carter Glass",
+   "party": "D",
+   "homeState": "VA",
+   "homeStateBonus": 5,
+   "identities": [
+    "rural",
+    "business"
+   ],
+   "belief": "Hated the New Deal from the right",
+   "era": 1932,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "pat-harrison-1932",
+   "name": "Pat Harrison",
+   "party": "D",
+   "homeState": "MS",
+   "homeStateBonus": 5,
+   "identities": [
+    "rural",
+    "farm"
+   ],
+   "belief": "Ran Finance for the South",
+   "era": 1932,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "joseph-t-robinson-1932",
+   "name": "Joseph T. Robinson",
+   "party": "D",
+   "homeState": "AR",
+   "homeStateBonus": 5,
+   "identities": [
+    "rural"
+   ],
+   "belief": "Majority leader from a one-party state",
+   "era": 1932,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "sam-rayburn-1932",
+   "name": "Sam Rayburn",
+   "party": "D",
+   "homeState": "TX",
+   "homeStateBonus": 5,
+   "identities": [
+    "rural",
+    "farm"
+   ],
+   "belief": "Rural electrification",
+   "era": 1932,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "harry-f-byrd-1932",
+   "name": "Harry F. Byrd",
+   "party": "D",
+   "homeState": "VA",
+   "homeStateBonus": 5,
+   "identities": [
+    "rural",
+    "business"
+   ],
+   "belief": "Pay-as-you-go conservatism",
+   "era": 1932,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "burton-k-wheeler-1932",
+   "name": "Burton K. Wheeler",
+   "party": "D",
+   "homeState": "MT",
+   "homeStateBonus": 5,
+   "identities": [
+    "rural",
+    "union"
+   ],
+   "belief": "Progressive, then isolationist",
+   "era": 1932,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "alben-barkley-1932",
+   "name": "Alben Barkley",
+   "party": "D",
+   "homeState": "KY",
+   "homeStateBonus": 4,
+   "identities": [
+    "rural"
+   ],
+   "belief": "The Veep in waiting",
+   "era": 1932,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "hugo-black-1932",
+   "name": "Hugo Black",
+   "party": "D",
+   "homeState": "AL",
+   "homeStateBonus": 5,
+   "identities": [
+    "rural",
+    "evangelical"
+   ],
+   "belief": "Klansman turned civil libertarian",
+   "era": 1932,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "theodore-bilbo-1932",
+   "name": "Theodore Bilbo",
+   "party": "D",
+   "homeState": "MS",
+   "homeStateBonus": 5,
+   "identities": [
+    "rural",
+    "farm"
+   ],
+   "belief": "The worst of the Delta",
+   "era": 1932,
+   "effects": [
+    {
+     "type": "extremist"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "james-f-byrnes-1932",
+   "name": "James F. Byrnes",
+   "party": "D",
+   "homeState": "SC",
+   "homeStateBonus": 5,
+   "identities": [
+    "rural"
+   ],
+   "belief": "Assistant president",
+   "era": 1932,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "millard-tydings-1932",
+   "name": "Millard Tydings",
+   "party": "D",
+   "homeState": "MD",
+   "homeStateBonus": 4,
+   "identities": [
+    "business",
+    "veteran"
+   ],
+   "belief": "Roosevelt tried to purge him",
+   "era": 1932,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "james-a-farley-1932",
+   "name": "James A. Farley",
+   "party": "D",
+   "homeState": "NY",
+   "homeStateBonus": 4,
+   "identities": [
+    "catholic",
+    "urban"
+   ],
+   "belief": "Counted every county",
+   "era": 1932,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "frances-perkins-1932",
+   "name": "Frances Perkins",
+   "party": "D",
+   "homeState": "NY",
+   "homeStateBonus": 3,
+   "identities": [
+    "urban",
+    "academic"
+   ],
+   "belief": "First woman in a cabinet",
+   "era": 1932,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "anton-cermak-1932",
+   "name": "Anton Cermak",
+   "party": "D",
+   "homeState": "IL",
+   "homeStateBonus": 5,
+   "identities": [
+    "catholic",
+    "urban",
+    "union"
+   ],
+   "belief": "Built the Chicago machine",
+   "era": 1932,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "herbert-hoover-1932",
+   "name": "Herbert Hoover",
+   "party": "R",
+   "homeState": "CA",
+   "homeStateBonus": 4,
+   "identities": [
+    "business",
+    "academic"
+   ],
+   "belief": "Prosperity is just around the corner",
+   "era": 1932,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "charles-curtis-1932",
+   "name": "Charles Curtis",
+   "party": "R",
+   "homeState": "KS",
+   "homeStateBonus": 5,
+   "identities": [
+    "rural",
+    "farm"
+   ],
+   "belief": "First vice president of Native descent",
+   "era": 1932,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "william-e-borah-1932",
+   "name": "William E. Borah",
+   "party": "R",
+   "homeState": "ID",
+   "homeStateBonus": 5,
+   "identities": [
+    "rural"
+   ],
+   "belief": "The Lion of Idaho, and an isolationist",
+   "era": 1932,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "george-w-norris-1932",
+   "name": "George W. Norris",
+   "party": "R",
+   "homeState": "NE",
+   "homeStateBonus": 5,
+   "identities": [
+    "rural",
+    "farm"
+   ],
+   "belief": "Progressive Republican; wrote the TVA",
+   "era": 1932,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "hiram-johnson-1932",
+   "name": "Hiram Johnson",
+   "party": "R",
+   "homeState": "CA",
+   "homeStateBonus": 4,
+   "identities": [
+    "urban",
+    "business"
+   ],
+   "belief": "Progressive and isolationist",
+   "era": 1932,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "robert-m-la-follette-jr-1932",
+   "name": "Robert M. La Follette Jr.",
+   "party": "R",
+   "homeState": "WI",
+   "homeStateBonus": 5,
+   "identities": [
+    "rural",
+    "academic"
+   ],
+   "belief": "Progressive by inheritance",
+   "era": 1932,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "arthur-vandenberg-1932",
+   "name": "Arthur Vandenberg",
+   "party": "R",
+   "homeState": "MI",
+   "homeStateBonus": 4,
+   "identities": [
+    "business"
+   ],
+   "belief": "Isolationist who converted",
+   "era": 1932,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "charles-l-mcnary-1932",
+   "name": "Charles L. McNary",
+   "party": "R",
+   "homeState": "OR",
+   "homeStateBonus": 5,
+   "identities": [
+    "farm",
+    "rural"
+   ],
+   "belief": "Farm relief twice vetoed",
+   "era": 1932,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "fiorello-la-guardia-1932",
+   "name": "Fiorello La Guardia",
+   "party": "R",
+   "homeState": "NY",
+   "homeStateBonus": 4,
+   "identities": [
+    "catholic",
+    "urban",
+    "union"
+   ],
+   "belief": "The Little Flower",
+   "era": 1932,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "alf-landon-1932",
+   "name": "Alf Landon",
+   "party": "R",
+   "homeState": "KS",
+   "homeStateBonus": 5,
+   "identities": [
+    "farm",
+    "rural",
+    "business"
+   ],
+   "belief": "Carried two states",
+   "era": 1932,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "frank-knox-1932",
+   "name": "Frank Knox",
+   "party": "R",
+   "homeState": "IL",
+   "homeStateBonus": 4,
+   "identities": [
+    "business",
+    "veteran"
+   ],
+   "belief": "Rough Rider turned publisher",
+   "era": 1932,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "reed-smoot-1932",
+   "name": "Reed Smoot",
+   "party": "R",
+   "homeState": "UT",
+   "homeStateBonus": 5,
+   "identities": [
+    "evangelical",
+    "business"
+   ],
+   "belief": "Half of the tariff",
+   "era": 1932,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "david-a-reed-1932",
+   "name": "David A. Reed",
+   "party": "R",
+   "homeState": "PA",
+   "homeStateBonus": 4,
+   "identities": [
+    "business",
+    "ivy"
+   ],
+   "belief": "Immigration restriction",
+   "era": 1932,
+   "effects": [
+    {
+     "type": "extremist"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "simeon-fess-1932",
+   "name": "Simeon Fess",
+   "party": "R",
+   "homeState": "OH",
+   "homeStateBonus": 4,
+   "identities": [
+    "academic",
+    "rural"
+   ],
+   "belief": "Dry to the last",
+   "era": 1932,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "henry-l-stimson-1932",
+   "name": "Henry L. Stimson",
+   "party": "R",
+   "homeState": "NY",
+   "homeStateBonus": 3,
+   "identities": [
+    "ivy",
+    "business"
+   ],
+   "belief": "Secretary to both parties",
+   "era": 1932,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "ogden-mills-1932",
+   "name": "Ogden Mills",
+   "party": "R",
+   "homeState": "NY",
+   "homeStateBonus": 3,
+   "identities": [
+    "business",
+    "ivy"
+   ],
+   "belief": "Hoover's Treasury",
+   "era": 1932,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "james-e-watson-1932",
+   "name": "James E. Watson",
+   "party": "R",
+   "homeState": "IN",
+   "homeStateBonus": 4,
+   "identities": [
+    "rural",
+    "business"
+   ],
+   "belief": "Old guard floor leader",
+   "era": 1932,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "gifford-pinchot-1932",
+   "name": "Gifford Pinchot",
+   "party": "R",
+   "homeState": "PA",
+   "homeStateBonus": 4,
+   "identities": [
+    "academic",
+    "rural"
+   ],
+   "belief": "Conservation Republican",
+   "era": 1932,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "district",
+   "id": "NY-12-1932",
+   "state": "NY",
+   "number": 12,
+   "era": 1932,
+   "demographics": [
+    "urban",
+    "catholic",
+    "union"
+   ],
+   "synergy": 3,
+   "note": "Lower East Side"
+  },
+  {
+   "kind": "district",
+   "id": "NY-20-1932",
+   "state": "NY",
+   "number": 20,
+   "era": 1932,
+   "demographics": [
+    "urban",
+    "jewish"
+   ],
+   "synergy": 3,
+   "note": "Harlem and up"
+  },
+  {
+   "kind": "district",
+   "id": "NY-39-1932",
+   "state": "NY",
+   "number": 39,
+   "era": 1932,
+   "demographics": [
+    "rural",
+    "farm"
+   ],
+   "synergy": 2,
+   "note": "Upstate dairy"
+  },
+  {
+   "kind": "district",
+   "id": "IL-3-1932",
+   "state": "IL",
+   "number": 3,
+   "era": 1932,
+   "demographics": [
+    "urban",
+    "union",
+    "catholic"
+   ],
+   "synergy": 3,
+   "note": "Back of the Yards"
+  },
+  {
+   "kind": "district",
+   "id": "IL-1-1932",
+   "state": "IL",
+   "number": 1,
+   "era": 1932,
+   "demographics": [
+    "urban",
+    "black"
+   ],
+   "synergy": 3,
+   "note": "The Black Belt, newly Democratic"
+  },
+  {
+   "kind": "district",
+   "id": "IL-22-1932",
+   "state": "IL",
+   "number": 22,
+   "era": 1932,
+   "demographics": [
+    "farm",
+    "rural"
+   ],
+   "synergy": 2,
+   "note": "Downstate"
+  },
+  {
+   "kind": "district",
+   "id": "PA-4-1932",
+   "state": "PA",
+   "number": 4,
+   "era": 1932,
+   "demographics": [
+    "urban",
+    "union",
+    "catholic"
+   ],
+   "synergy": 3,
+   "note": "Philadelphia wards"
+  },
+  {
+   "kind": "district",
+   "id": "PA-30-1932",
+   "state": "PA",
+   "number": 30,
+   "era": 1932,
+   "demographics": [
+    "union",
+    "rural"
+   ],
+   "synergy": 3,
+   "note": "Anthracite country"
+  },
+  {
+   "kind": "district",
+   "id": "MA-11-1932",
+   "state": "MA",
+   "number": 11,
+   "era": 1932,
+   "demographics": [
+    "urban",
+    "catholic",
+    "union"
+   ],
+   "synergy": 3,
+   "note": "South Boston"
+  },
+  {
+   "kind": "district",
+   "id": "MI-1-1932",
+   "state": "MI",
+   "number": 1,
+   "era": 1932,
+   "demographics": [
+    "urban",
+    "union"
+   ],
+   "synergy": 3,
+   "note": "Detroit, before the UAW"
+  },
+  {
+   "kind": "district",
+   "id": "OH-21-1932",
+   "state": "OH",
+   "number": 21,
+   "era": 1932,
+   "demographics": [
+    "urban",
+    "union",
+    "black"
+   ],
+   "synergy": 3,
+   "note": "Cleveland"
+  },
+  {
+   "kind": "district",
+   "id": "MO-12-1932",
+   "state": "MO",
+   "number": 12,
+   "era": 1932,
+   "demographics": [
+    "urban",
+    "catholic",
+    "union"
+   ],
+   "synergy": 3,
+   "note": "Pendergast's Kansas City"
+  },
+  {
+   "kind": "district",
+   "id": "TX-4-1932",
+   "state": "TX",
+   "number": 4,
+   "era": 1932,
+   "demographics": [
+    "rural",
+    "farm"
+   ],
+   "synergy": 3,
+   "note": "Rayburn's Fourth"
+  },
+  {
+   "kind": "district",
+   "id": "TX-15-1932",
+   "state": "TX",
+   "number": 15,
+   "era": 1932,
+   "demographics": [
+    "hispanic",
+    "rural",
+    "farm"
+   ],
+   "synergy": 3,
+   "note": "The Valley"
+  },
+  {
+   "kind": "district",
+   "id": "LA-8-1932",
+   "state": "LA",
+   "number": 8,
+   "era": 1932,
+   "demographics": [
+    "rural",
+    "evangelical",
+    "farm"
+   ],
+   "synergy": 3,
+   "note": "Long's parishes"
+  },
+  {
+   "kind": "district",
+   "id": "MS-3-1932",
+   "state": "MS",
+   "number": 3,
+   "era": 1932,
+   "demographics": [
+    "black",
+    "rural",
+    "farm"
+   ],
+   "synergy": 3,
+   "note": "The Delta"
+  },
+  {
+   "kind": "district",
+   "id": "AL-9-1932",
+   "state": "AL",
+   "number": 9,
+   "era": 1932,
+   "demographics": [
+    "rural",
+    "farm"
+   ],
+   "synergy": 3,
+   "note": "North Alabama hill country"
+  },
+  {
+   "kind": "district",
+   "id": "GA-5-1932",
+   "state": "GA",
+   "number": 5,
+   "era": 1932,
+   "demographics": [
+    "urban",
+    "black"
+   ],
+   "synergy": 2,
+   "note": "Atlanta"
+  },
+  {
+   "kind": "district",
+   "id": "VA-7-1932",
+   "state": "VA",
+   "number": 7,
+   "era": 1932,
+   "demographics": [
+    "rural",
+    "farm"
+   ],
+   "synergy": 3,
+   "note": "The Byrd organisation"
+  },
+  {
+   "kind": "district",
+   "id": "TN-3-1932",
+   "state": "TN",
+   "number": 3,
+   "era": 1932,
+   "demographics": [
+    "rural",
+    "union"
+   ],
+   "synergy": 3,
+   "note": "The Tennessee Valley"
+  },
+  {
+   "kind": "district",
+   "id": "KY-5-1932",
+   "state": "KY",
+   "number": 5,
+   "era": 1932,
+   "demographics": [
+    "rural",
+    "union"
+   ],
+   "synergy": 3,
+   "note": "Harlan County"
+  },
+  {
+   "kind": "district",
+   "id": "WV-4-1932",
+   "state": "WV",
+   "number": 4,
+   "era": 1932,
+   "demographics": [
+    "union",
+    "rural"
+   ],
+   "synergy": 3,
+   "note": "The coalfields"
+  },
+  {
+   "kind": "district",
+   "id": "KS-1-1932",
+   "state": "KS",
+   "number": 1,
+   "era": 1932,
+   "demographics": [
+    "farm",
+    "rural"
+   ],
+   "synergy": 3,
+   "note": "Wheat, and dust"
+  },
+  {
+   "kind": "district",
+   "id": "NE-5-1932",
+   "state": "NE",
+   "number": 5,
+   "era": 1932,
+   "demographics": [
+    "farm",
+    "rural"
+   ],
+   "synergy": 3,
+   "note": "The Platte"
+  },
+  {
+   "kind": "district",
+   "id": "IA-8-1932",
+   "state": "IA",
+   "number": 8,
+   "era": 1932,
+   "demographics": [
+    "farm",
+    "rural"
+   ],
+   "synergy": 3,
+   "note": "Farm Holiday country"
+  },
+  {
+   "kind": "district",
+   "id": "MN-7-1932",
+   "state": "MN",
+   "number": 7,
+   "era": 1932,
+   "demographics": [
+    "farm",
+    "rural",
+    "union"
+   ],
+   "synergy": 3,
+   "note": "Farmer-Labor"
+  },
+  {
+   "kind": "district",
+   "id": "WI-7-1932",
+   "state": "WI",
+   "number": 7,
+   "era": 1932,
+   "demographics": [
+    "farm",
+    "rural"
+   ],
+   "synergy": 3,
+   "note": "La Follette's base"
+  },
+  {
+   "kind": "district",
+   "id": "ND-2-1932",
+   "state": "ND",
+   "number": 2,
+   "era": 1932,
+   "demographics": [
+    "farm",
+    "rural"
+   ],
+   "synergy": 3,
+   "note": "Nonpartisan League"
+  },
+  {
+   "kind": "district",
+   "id": "MT-1-1932",
+   "state": "MT",
+   "number": 1,
+   "era": 1932,
+   "demographics": [
+    "union",
+    "rural"
+   ],
+   "synergy": 3,
+   "note": "Butte and the mines"
+  },
+  {
+   "kind": "district",
+   "id": "CA-11-1932",
+   "state": "CA",
+   "number": 11,
+   "era": 1932,
+   "demographics": [
+    "urban",
+    "business"
+   ],
+   "synergy": 2,
+   "note": "Los Angeles"
+  }
+ ]
+}
