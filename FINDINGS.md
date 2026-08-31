@@ -274,3 +274,66 @@ re-declared into the same seat, or run somewhere else. With that in place:
 Both run high, but **this is not yet evidence that +1 is too large.** 93.5% of
 House races are walkovers, and an unopposed incumbent always holds. The +1
 cannot be calibrated until F6 is fixed and incumbents are actually challenged.
+
+---
+
+## F10. District cards never applied to presidential races. CONFIRMED, fixed.
+
+§5 is explicit: *"A district card boosts House, Senate, governor, and
+presidential runs in its state. It is an investment in a state, not just a
+seat."* The presidential clause was unimplemented. The general runs state by
+state, but every nominee entered each state with no district card attached, so
+presence bought nothing at the top of the ticket.
+
+That is the mechanical root of F3. An agent scoring a race by its stack saw the
+presidency at edge **0.0** against a House seat at **+5**, so only an agent
+valuing the *office* rather than the *race* ever ran — one of four. With a
+single nominee, all fifty state races were walkovers, and the presidency was
+0% contested across 2,750 races.
+
+**Fixed**, plus the matching agent correction: the presidency is not run in a
+place, so its edge cannot be read off one board square. Agents now value it by
+the mean edge across the states they actually hold.
+
+| | before | after |
+|---|---|---|
+| presidential generals contested | 0.0% | **20.4%** |
+| presidential primaries | 3 in 10 games | 47 in 60, all contested |
+
+**The dead-rule cascade is resolved.** The five mechanics that fired in zero
+races now fire in every game — midterm penalty 63.5 times a game, coattails
+52.6, economy modifier 51.3. F3's cascade was real and is closed; the veto and
+honeymoon are live for the first time.
+
+## F11. With the presidency alive, SenateFlood is dominant at 51.7%.
+
+SIM-BRIEF: *"Any agent above 40% in a six-way round robin is dominant and the
+design has a hole."*
+
+| strategy | before F10 | after F10 |
+|---|---|---|
+| SenateFlood | 32.5% | **51.7%** |
+| BillMaximizer | 40.0% | 24.2% |
+| EconomyChicken | 26.7% | 19.2% |
+| HeterodoxSpecialist | 0.8% | 5.0% |
+| WideAndEmpty | 0.0% | 0.0% |
+| HouseFarm | 0.0% | 0.0% |
+
+Flooding the Senate now collects four rewards at once: three points a seat, a
+six-year term that holds them, +1 hand size, and — because §10 puts the Senate
+second in the nationalisation priority, behind only the presidency — **the push
+that moves the map in every midterm**. Nothing else on the board pays four
+ways.
+
+This is a genuine hole and it appeared only once the presidency worked, which
+is worth noting on its own: **the earlier round robin was measuring a game with
+five mechanics switched off**, and BillMaximizer's 40% was an artefact of that.
+
+Fixing the presidency also improved the skill signal, from 93% to **85%**
+(Greedy vs Random), and the planning premium from 90% to 83%. Both remain above
+SIM-BRIEF's 65–80% band, but the direction is right and the cause is now the
+contest rate (F6) rather than a switched-off layer.
+
+**Heterodoxy is still near-dead at 5.0%**, up from 0.8%. It remains the finding
+that should worry most, for the reason in F6: on a board where 79% of races go
+uncontested there is no hostile terrain to survive.

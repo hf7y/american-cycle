@@ -394,8 +394,17 @@ export class Game {
     const carried = new Map<Party, string[]>();
     for (const st of STATES) {
       const ctx = this.raceContext('president', st.code, undefined);
+      // §5: "A district card boosts House, Senate, governor, and presidential
+      // runs in its state. It is an investment in a state, not just a seat."
+      // The presidential general runs state by state, so each nominee reads
+      // their own district for THIS state -- without which presence buys
+      // nothing at the top of the ticket and no agent ever wants the office.
+      const local = nominees.map((d) => ({
+        ...d,
+        district: this.players[d.player].districts.find((x) => x.state === st.code),
+      }));
       const out = runRace({
-        ctx, round: 'general', declarations: nominees, wave, rng: this.rng,
+        ctx, round: 'general', declarations: local, wave, rng: this.rng,
         res: this.cfg.resolution, nat: this.cfg.national, pg: this.cfg.primaryGeneral,
         decide: () => false,   // the ticket is committed; you cannot withdraw a state at a time
       });

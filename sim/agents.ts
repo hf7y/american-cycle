@@ -29,8 +29,25 @@ export function options(v: GameView, open: OpenRace[], cfg: Config): Option[] {
         presidentParty: v.presidentParty,
         economyMod: 0,
       };
-      const mods = buildModifiers(d, ctx, 'general', cfg.resolution, cfg.national, cfg.primaryGeneral);
-      out.push({ d, office: r.office, edge: mods.reduce((n, m) => n + m.pips, 0) });
+      let edge: number;
+      if (r.office === 'president') {
+        // The presidency is not run in a place, so its stack cannot be read off
+        // one board square. It is fifty state races, so value it by the mean
+        // edge across the states this player actually holds -- otherwise the
+        // office scores 0 against a House seat's +5 and no agent ever runs.
+        const states = [...new Set(me.districts.map((x) => x.state))];
+        const each = states.map((st) => {
+          const sctx = { ...ctx, state: st, lean: v.lean[st] ?? 0 };
+          const sd = { ...d, state: st, district: me.districts.find((x) => x.state === st) };
+          return buildModifiers(sd, sctx, 'general', cfg.resolution, cfg.national, cfg.primaryGeneral)
+            .reduce((n, m) => n + m.pips, 0);
+        });
+        edge = each.length ? each.reduce((n, x) => n + x, 0) / each.length : 0;
+      } else {
+        edge = buildModifiers(d, ctx, 'general', cfg.resolution, cfg.national, cfg.primaryGeneral)
+          .reduce((n, m) => n + m.pips, 0);
+      }
+      out.push({ d, office: r.office, edge });
     }
   }
   return out;
