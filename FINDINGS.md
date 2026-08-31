@@ -623,3 +623,61 @@ is the same each time: a convenient proxy standing in for the metric that was
 actually specified. The brief warned about exactly this — *"assume the
 instrumentation is wrong before assuming the design is right"* — and it has
 been right every time.
+
+---
+
+## F19. Decision density is analysis paralysis, not automatic turns. Inverts my earlier claim.
+
+**Correcting myself again, and this one flips a recommendation.** I reported
+decision density as "median 2, turns are close to automatic" and put it in the
+report's top five. That measured **declarations made**. SIM-BRIEF asks for
+*"mean legal moves per player-turn"* — the option set, not the choice taken.
+
+Measured as specified, counting distinct races a player could legally enter:
+
+| | value |
+|---|---|
+| median legal races per player-turn | **39** |
+| mean | 37.2 |
+| p90 | 49 |
+| max | 64 |
+
+SIM-BRIEF: *"Under ~4 and turns are automatic; over ~25 and the game is
+analysis paralysis."* At a median of 39 the game is **well into paralysis** —
+the opposite of what I reported. A player at a real table is being asked to
+compare thirty-nine possible races, every cycle.
+
+This is the same root cause as F6 seen from the other side: presence is
+abundant and the board is enormous, so a player has far more places to run than
+cards to run with. **Cutting district supply fixes both.**
+
+**Turns with no legal move at all: 4.4%.** The brief wants that near zero. It
+is a dead-player rate, and it is not zero — one player-turn in twenty-three has
+nothing to do.
+
+## F20. Two design successes, measured and confirmed.
+
+Worth stating plainly, because most of tonight's findings are problems.
+
+**The single-token economy holds.** §2 puts the entire token economy at "player
+pegs for seats, red and blue counters for state lean". Peak simultaneous tokens
+on a four-player board: **median 84, p90 132, peak 151.** SIM-BRIEF's failure
+line is 200 — *"if a mid-game board carries 200 counters, the single-token-type
+economy has failed in practice even though it succeeded on paper."* It has not
+failed. It works.
+
+**The dice behave exactly as the corrected odds table says.** Swinginess —
+the share of contested races where the favourite loses — is **32.1% observed
+against 34.6% predicted** by the odds table, over 5,603 contested races. Within
+2.5 points.
+
+That is a double confirmation: the resolution engine adds no variance the
+design did not intend, *and* the §3 table as corrected in F1 is an accurate
+predictor of play. Had the original 5%-a-pip table been right, the predicted
+figure would have been materially different from what the dice actually do.
+
+Together with §5's district gating killing wide-and-empty (0% win rate), the
++1 incumbency calibration landing within a point of reality, and the modifier
+stack averaging 2.43 entries so the mental arithmetic really is mental — the
+design's core resolution machinery is sound. **Its problems are all in scale
+and structure, not in the dice.**

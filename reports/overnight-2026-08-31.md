@@ -100,13 +100,17 @@ the bills still fail. The threshold binds harder than intended.
 
 Confidence: **high** on the measurement, **medium** on the cause.
 
-### 5. Turns are close to automatic — median 2 legal declarations.
-**Metric** mean legal moves per player-turn.
-**Observed** median 2, mean 3.7, p90 10.
-**Target** SIM-BRIEF: under ~4 and turns are automatic.
-**Change** downstream of #2. More cards per player raises this directly.
+### 5. Turns are analysis paralysis — 39 legal races per player-turn.
+**Metric** mean legal moves per player-turn, per SIM-BRIEF's definition.
+**Observed** median **39**, mean 37.2, p90 49, max 64.
+**Target** the brief's band is 4–25; under 4 is automatic, over 25 is paralysis.
+**Change** downstream of #2. Cutting district supply cuts both the uncontested
+rate and the option set, because they are the same abundance seen twice.
 
-Confidence: **high**.
+*An earlier draft of this section reported the opposite* — "median 2, turns are
+automatic" — from counting declarations **made** rather than legal moves
+**available**. See F19. Also: 4.4% of player-turns have no legal move at all,
+against a target near zero.
 
 ---
 
