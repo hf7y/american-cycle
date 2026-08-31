@@ -1,0 +1,1494 @@
+{
+ "note": "Historical gubernatorial rules for the 1932-2024 window, assembled to answer: how wrong is it to freeze the 2026 rules in engine/states.ts (govTerm, govAnchor) and apply them to every era? Research artefact only -- nothing reads this file.",
+ "sources": {
+  "greenpapers": "Richard E. Berg-Andersson, \"Length of Terms of Office of State Governors throughout American History\", The Green Papers, thegreenpapers.com/Hx/LengthOfTermGovernor.phtml. Gives, per state, the election years bounding each 1-, 2-, 3- and 4-year term era, and notes on transitional terms and calendar moves. Excludes special elections to fill unexpired terms.",
+  "smartpolitics": "Eric Ostermeier, \"A Brief History of Four-Year Gubernatorial Terms\", Smart Politics, Humphrey School of Public Affairs, University of Minnesota, January 20, 2025. Independent list of the year each state adopted four-year terms; agrees with The Green Papers on every state except Maine (see states.ME.source_conflict).",
+  "csg2021": "Council of State Governments, The Book of the States 2021, vol. 53, table 4.9, \"Constitutional and Statutory Provisions for Number of Consecutive Terms of Elected State Officials\", Governor column, pp. 124-125.",
+  "wp-termlimits": "Wikipedia, \"Term limits in the United States\", state executives section.",
+  "wp-gov": "Wikipedia, \"Governor of <state>\".",
+  "wp-list": "Wikipedia, \"List of governors of <state>\".",
+  "wikipedia-years": "Wikipedia, \"<year> United States gubernatorial elections\", used to validate the derived schedule for 1932, 1950, 1964 and 1976."
+ },
+ "era_dates": [
+  1932,
+  1964,
+  1976,
+  1992,
+  2008,
+  2016,
+  2024
+ ],
+ "derived": {
+  "two_year_term_states": {
+   "1932": {
+    "count": 24,
+    "states": [
+     "AR",
+     "AZ",
+     "CO",
+     "CT",
+     "GA",
+     "IA",
+     "ID",
+     "KS",
+     "MA",
+     "ME",
+     "MI",
+     "MN",
+     "ND",
+     "NE",
+     "NH",
+     "NM",
+     "NY",
+     "OH",
+     "RI",
+     "SD",
+     "TN",
+     "TX",
+     "VT",
+     "WI"
+    ],
+    "plus_transitional_two_year_term_that_year": [],
+    "three_year_states": [
+     "NJ"
+    ]
+   },
+   "1964": {
+    "count": 14,
+    "states": [
+     "AR",
+     "AZ",
+     "IA",
+     "KS",
+     "MA",
+     "MI",
+     "NE",
+     "NH",
+     "NM",
+     "RI",
+     "SD",
+     "TX",
+     "VT",
+     "WI"
+    ],
+    "plus_transitional_two_year_term_that_year": [
+     "FL"
+    ],
+    "three_year_states": []
+   },
+   "1976": {
+    "count": 4,
+    "states": [
+     "AR",
+     "NH",
+     "RI",
+     "VT"
+    ],
+    "plus_transitional_two_year_term_that_year": [
+     "IL"
+    ],
+    "three_year_states": []
+   },
+   "1992": {
+    "count": 3,
+    "states": [
+     "NH",
+     "RI",
+     "VT"
+    ],
+    "plus_transitional_two_year_term_that_year": [],
+    "three_year_states": []
+   },
+   "2008": {
+    "count": 2,
+    "states": [
+     "NH",
+     "VT"
+    ],
+    "plus_transitional_two_year_term_that_year": [],
+    "three_year_states": []
+   },
+   "2016": {
+    "count": 2,
+    "states": [
+     "NH",
+     "VT"
+    ],
+    "plus_transitional_two_year_term_that_year": [],
+    "three_year_states": []
+   },
+   "2024": {
+    "count": 2,
+    "states": [
+     "NH",
+     "VT"
+    ],
+    "plus_transitional_two_year_term_that_year": [],
+    "three_year_states": []
+   }
+  },
+  "governorships_by_cycle": {
+   "note": "Counted over the four consecutive years ending at each era date. A two-year state elects in both the presidential and the midterm year, so it is counted in both; the three columns therefore sum to more than the number of states.",
+   "by_date": {
+    "1932": {
+     "presidential_year": 1932,
+     "presidential": 35,
+     "midterm_year": 1930,
+     "midterm": 33,
+     "odd_years": [
+      1929,
+      1931
+     ],
+     "odd": 4,
+     "odd_states": [
+      "KY",
+      "MS",
+      "NJ",
+      "VA"
+     ]
+    },
+    "1964": {
+     "presidential_year": 1964,
+     "presidential": 26,
+     "midterm_year": 1962,
+     "midterm": 35,
+     "odd_years": [
+      1961,
+      1963
+     ],
+     "odd": 4,
+     "odd_states": [
+      "KY",
+      "MS",
+      "NJ",
+      "VA"
+     ]
+    },
+    "1976": {
+     "presidential_year": 1976,
+     "presidential": 14,
+     "midterm_year": 1974,
+     "midterm": 35,
+     "odd_years": [
+      1973,
+      1975
+     ],
+     "odd": 5,
+     "odd_states": [
+      "KY",
+      "LA",
+      "MS",
+      "NJ",
+      "VA"
+     ]
+    },
+    "1992": {
+     "presidential_year": 1992,
+     "presidential": 12,
+     "midterm_year": 1990,
+     "midterm": 36,
+     "odd_years": [
+      1989,
+      1991
+     ],
+     "odd": 5,
+     "odd_states": [
+      "KY",
+      "LA",
+      "MS",
+      "NJ",
+      "VA"
+     ]
+    },
+    "2008": {
+     "presidential_year": 2008,
+     "presidential": 11,
+     "midterm_year": 2006,
+     "midterm": 36,
+     "odd_years": [
+      2005,
+      2007
+     ],
+     "odd": 5,
+     "odd_states": [
+      "KY",
+      "LA",
+      "MS",
+      "NJ",
+      "VA"
+     ]
+    },
+    "2016": {
+     "presidential_year": 2016,
+     "presidential": 11,
+     "midterm_year": 2014,
+     "midterm": 36,
+     "odd_years": [
+      2013,
+      2015
+     ],
+     "odd": 5,
+     "odd_states": [
+      "KY",
+      "LA",
+      "MS",
+      "NJ",
+      "VA"
+     ]
+    },
+    "2024": {
+     "presidential_year": 2024,
+     "presidential": 11,
+     "midterm_year": 2022,
+     "midterm": 36,
+     "odd_years": [
+      2021,
+      2023
+     ],
+     "odd": 5,
+     "odd_states": [
+      "KY",
+      "LA",
+      "MS",
+      "NJ",
+      "VA"
+     ]
+    }
+   }
+  },
+  "frozen_2026_table_error": {
+   "window": "1932-2024",
+   "basis": "AK and HI counted only from statehood (1959)",
+   "real_elections": 1386,
+   "in_the_right_year": 1161,
+   "misplaced": 225,
+   "misplaced_pct": 16.2,
+   "invented_by_the_table": 32,
+   "by_era_pack": {
+    "1932-1963": {
+     "real_elections": 557,
+     "misplaced": 182,
+     "pct": 32.7
+    },
+    "1964-1975": {
+     "real_elections": 185,
+     "misplaced": 34,
+     "pct": 18.4
+    },
+    "1976-1991": {
+     "real_elections": 216,
+     "misplaced": 8,
+     "pct": 3.7
+    },
+    "1992-2007": {
+     "real_elections": 209,
+     "misplaced": 1,
+     "pct": 0.5
+    },
+    "2008-2015": {
+     "real_elections": 104,
+     "misplaced": 0,
+     "pct": 0.0
+    },
+    "2016-2023": {
+     "real_elections": 104,
+     "misplaced": 0,
+     "pct": 0.0
+    },
+    "2024-2024": {
+     "real_elections": 11,
+     "misplaced": 0,
+     "pct": 0.0
+    }
+   },
+   "if_term_length_alone_were_historical": {
+    "misplaced": 35,
+    "misplaced_pct": 2.5,
+    "residual_states": {
+     "IL": 11,
+     "LA": 11,
+     "FL": 8,
+     "NJ": 4,
+     "HI": 1
+    },
+    "note": "Counterfactual: historical govTerm per state per year, 2026 govAnchor kept unchanged. The residue is four calendar moves the anchor cannot express -- Florida presidential to midterm in 1966, Illinois presidential to midterm in 1978, Louisiana even to odd year in 1975, New Jersey three-year to four-year in 1949 -- plus Hawaii's 1959 transitional term."
+   }
+  }
+ },
+ "states": {
+  "AK": {
+   "name": "Alaska",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1958,
+   "term_length_before": null,
+   "term_limit_2026": "2C",
+   "term_limit_adopted": null,
+   "term_limit_note": "Alaska Const. art. III sec. 5. Adoption year not established.",
+   "election_year_segments": [
+    [
+     1958,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "csg2021"
+   ]
+  },
+  "AL": {
+   "name": "Alabama",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1902,
+   "term_length_before": 2,
+   "term_limit_2026": "2C",
+   "term_limit_adopted": 1968,
+   "term_limit_note": "1901 constitution barred a governor from succeeding himself; a 1968 amendment allowed one succession.",
+   "election_year_segments": [
+    [
+     1930,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "wp-list",
+    "csg2021"
+   ]
+  },
+  "AR": {
+   "name": "Arkansas",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1986,
+   "term_length_before": 2,
+   "term_limit_2026": "2T",
+   "term_limit_adopted": 1992,
+   "term_limit_note": "Ark. Const. amend. 73, approved November 1992.",
+   "election_year_segments": [
+    [
+     1930,
+     2,
+     1984
+    ],
+    [
+     1986,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "csg2021"
+   ]
+  },
+  "AZ": {
+   "name": "Arizona",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1970,
+   "term_length_before": 2,
+   "term_limit_2026": "2C",
+   "term_limit_adopted": 1992,
+   "term_limit_note": "No limit under the 1912 constitution; a 1992 amendment allowed one succession only.",
+   "election_year_segments": [
+    [
+     1930,
+     2,
+     1968
+    ],
+    [
+     1970,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "wp-list",
+    "csg2021"
+   ]
+  },
+  "CA": {
+   "name": "California",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1882,
+   "term_length_before": 2,
+   "term_limit_2026": "2T",
+   "term_limit_adopted": 1990,
+   "term_limit_note": "Proposition 140, November 6, 1990; does not count terms served before that date.",
+   "election_year_segments": [
+    [
+     1930,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "wp-gov",
+    "csg2021"
+   ]
+  },
+  "CO": {
+   "name": "Colorado",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1958,
+   "term_length_before": 2,
+   "term_limit_2026": "2C",
+   "term_limit_adopted": 1990,
+   "term_limit_note": "No limit originally; a 1990 amendment allowed one succession only.",
+   "election_year_segments": [
+    [
+     1930,
+     2,
+     1956
+    ],
+    [
+     1958,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "wp-list",
+    "csg2021"
+   ]
+  },
+  "CT": {
+   "name": "Connecticut",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1950,
+   "term_length_before": 1,
+   "term_limit_2026": "none",
+   "term_limit_adopted": null,
+   "term_limit_note": "No limit.",
+   "election_year_segments": [
+    [
+     1930,
+     2,
+     1948
+    ],
+    [
+     1950,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "csg2021"
+   ]
+  },
+  "DE": {
+   "name": "Delaware",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1832,
+   "term_length_before": 3,
+   "term_limit_2026": "2T",
+   "term_limit_adopted": null,
+   "term_limit_note": "Del. Const. art. III sec. 5. Adoption year not established.",
+   "election_year_segments": [
+    [
+     1932,
+     4,
+     2024
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "csg2021"
+   ]
+  },
+  "FL": {
+   "name": "Florida",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1848,
+   "term_length_before": 3,
+   "term_limit_2026": "2C",
+   "term_limit_adopted": null,
+   "term_limit_note": "Succession was barred before the 1968 constitution; the year of the change is not established here.",
+   "election_year_segments": [
+    [
+     1932,
+     4,
+     1960
+    ],
+    [
+     1964,
+     2,
+     1964
+    ],
+    [
+     1966,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "csg2021"
+   ],
+   "calendar_move": "Elected governors in presidential years until 1960, then a one-off two-year transitional term in 1964, then midterms."
+  },
+  "GA": {
+   "name": "Georgia",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1942,
+   "term_length_before": 2,
+   "term_limit_2026": "2C",
+   "term_limit_adopted": null,
+   "term_limit_note": "1877 constitution: two-year term, four years out after two terms. 1945 constitution: four-year term, four years out before running again. Year succession was allowed is not established here (commonly given as 1976 -- unverified).",
+   "election_year_segments": [
+    [
+     1930,
+     2,
+     1940
+    ],
+    [
+     1942,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "wp-list",
+    "csg2021"
+   ]
+  },
+  "HI": {
+   "name": "Hawaii",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1962,
+   "term_length_before": 3,
+   "term_limit_2026": "2C",
+   "term_limit_adopted": 1978,
+   "term_limit_note": "Established by the 1978 constitutional convention.",
+   "election_year_segments": [
+    [
+     1959,
+     3,
+     1959
+    ],
+    [
+     1962,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "wp-list",
+    "csg2021"
+   ]
+  },
+  "IA": {
+   "name": "Iowa",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1974,
+   "term_length_before": 2,
+   "term_limit_2026": "none",
+   "term_limit_adopted": null,
+   "term_limit_note": "No limit.",
+   "election_year_segments": [
+    [
+     1930,
+     2,
+     1972
+    ],
+    [
+     1974,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "csg2021"
+   ]
+  },
+  "ID": {
+   "name": "Idaho",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1946,
+   "term_length_before": 2,
+   "term_limit_2026": "none",
+   "term_limit_adopted": null,
+   "term_limit_note": "No limit.",
+   "election_year_segments": [
+    [
+     1930,
+     2,
+     1944
+    ],
+    [
+     1946,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "csg2021"
+   ]
+  },
+  "IL": {
+   "name": "Illinois",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1848,
+   "term_length_before": 4,
+   "term_limit_2026": "none",
+   "term_limit_adopted": null,
+   "term_limit_note": "No limit.",
+   "election_year_segments": [
+    [
+     1932,
+     4,
+     1972
+    ],
+    [
+     1976,
+     2,
+     1976
+    ],
+    [
+     1978,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "csg2021"
+   ],
+   "calendar_move": "Elected governors in presidential years until 1972, then a one-off two-year transitional term in 1976, then midterms."
+  },
+  "IN": {
+   "name": "Indiana",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1852,
+   "term_length_before": 3,
+   "term_limit_2026": "8 of 12 years",
+   "term_limit_adopted": 1972,
+   "term_limit_note": "1851 constitution barred consecutive terms; a 1972 amendment allowed two consecutive.",
+   "election_year_segments": [
+    [
+     1932,
+     4,
+     2024
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "wp-gov",
+    "csg2021"
+   ]
+  },
+  "KS": {
+   "name": "Kansas",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1974,
+   "term_length_before": 2,
+   "term_limit_2026": "2C",
+   "term_limit_adopted": null,
+   "term_limit_note": "Kan. Const. art. 1 sec. 1. Adoption year not established.",
+   "election_year_segments": [
+    [
+     1930,
+     2,
+     1972
+    ],
+    [
+     1974,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "csg2021"
+   ]
+  },
+  "KY": {
+   "name": "Kentucky",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1851,
+   "term_length_before": 4,
+   "term_limit_2026": "2C",
+   "term_limit_adopted": 1992,
+   "term_limit_note": "No-succession rule repealed in 1992.",
+   "election_year_segments": [
+    [
+     1931,
+     4,
+     2023
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "wp-termlimits",
+    "csg2021"
+   ]
+  },
+  "LA": {
+   "name": "Louisiana",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1855,
+   "term_length_before": 3,
+   "term_limit_2026": "2C",
+   "term_limit_adopted": 1966,
+   "term_limit_note": "Succession barred from the 1898 constitution; a 1966 amendment allowed one succession.",
+   "election_year_segments": [
+    [
+     1932,
+     4,
+     1972
+    ],
+    [
+     1975,
+     4,
+     2023
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "wp-list",
+    "csg2021"
+   ],
+   "calendar_move": "State elections were held in even years through 1972 -- in April of presidential years from 1879 to 1960, then in the winter of 1964, 1968 and 1972 -- and moved to the fall of odd years from December 1975. Wikipedia's per-year gubernatorial election pages omit these off-November contests."
+  },
+  "MA": {
+   "name": "Massachusetts",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1966,
+   "term_length_before": 2,
+   "term_limit_2026": "none",
+   "term_limit_adopted": null,
+   "term_limit_note": "No limit.",
+   "election_year_segments": [
+    [
+     1930,
+     2,
+     1964
+    ],
+    [
+     1966,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "csg2021"
+   ]
+  },
+  "MD": {
+   "name": "Maryland",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1926,
+   "term_length_before": 3,
+   "term_limit_2026": "2C",
+   "term_limit_adopted": 1948,
+   "term_limit_note": "1851 constitution removed the earlier limit; a two-consecutive-term limit began in 1948.",
+   "election_year_segments": [
+    [
+     1930,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "wp-list",
+    "csg2021"
+   ]
+  },
+  "ME": {
+   "name": "Maine",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1958,
+   "term_length_before": 2,
+   "term_limit_2026": "2C",
+   "term_limit_adopted": null,
+   "term_limit_note": "Me. Const. art. V pt. 1 sec. 2. Adoption year not established.",
+   "election_year_segments": [
+    [
+     1930,
+     2,
+     1956
+    ],
+    [
+     1958,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "csg2021"
+   ],
+   "source_conflict": "The Green Papers puts Maine's first four-year term at the 1958 election; Smart Politics says 1962. Both are consistent with the record if the 1960 Maine election is read as a special election to fill the unexpired term of Clinton Clauson, who died in 1959. 1958 is used here."
+  },
+  "MI": {
+   "name": "Michigan",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1966,
+   "term_length_before": 2,
+   "term_limit_2026": "2T",
+   "term_limit_adopted": 1992,
+   "term_limit_note": "No limit until a 1992 constitutional amendment imposed a lifetime limit of two terms.",
+   "election_year_segments": [
+    [
+     1930,
+     2,
+     1964
+    ],
+    [
+     1966,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "wp-list",
+    "csg2021"
+   ]
+  },
+  "MN": {
+   "name": "Minnesota",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1962,
+   "term_length_before": 2,
+   "term_limit_2026": "none",
+   "term_limit_adopted": null,
+   "term_limit_note": "No limit.",
+   "election_year_segments": [
+    [
+     1930,
+     2,
+     1960
+    ],
+    [
+     1962,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "csg2021"
+   ]
+  },
+  "MO": {
+   "name": "Missouri",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1820,
+   "term_length_before": null,
+   "term_limit_2026": "2T",
+   "term_limit_adopted": null,
+   "term_limit_note": "Mo. Const. art. IV sec. 17. Adoption year not established.",
+   "election_year_segments": [
+    [
+     1932,
+     4,
+     2024
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "csg2021"
+   ]
+  },
+  "MS": {
+   "name": "Mississippi",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1869,
+   "term_length_before": 2,
+   "term_limit_2026": "2T",
+   "term_limit_adopted": 1986,
+   "term_limit_note": "Succession barred until voters approved a 1986 amendment.",
+   "election_year_segments": [
+    [
+     1931,
+     4,
+     2023
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "wp-gov",
+    "csg2021"
+   ]
+  },
+  "MT": {
+   "name": "Montana",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1892,
+   "term_length_before": 3,
+   "term_limit_2026": "8 of 16 years",
+   "term_limit_adopted": null,
+   "term_limit_note": "Mont. Const. art. IV sec. 8. Adoption year not established.",
+   "election_year_segments": [
+    [
+     1932,
+     4,
+     2024
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "csg2021"
+   ]
+  },
+  "NC": {
+   "name": "North Carolina",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1868,
+   "term_length_before": 2,
+   "term_limit_2026": "2C",
+   "term_limit_adopted": 1977,
+   "term_limit_note": "1868 constitution barred succession; changed in 1977 to allow one succession.",
+   "election_year_segments": [
+    [
+     1932,
+     4,
+     2024
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "wp-list",
+    "csg2021"
+   ]
+  },
+  "ND": {
+   "name": "North Dakota",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1964,
+   "term_length_before": 2,
+   "term_limit_2026": "2T",
+   "term_limit_adopted": 2022,
+   "term_limit_note": "No limit until the constitutional amendment approved November 2022, applying to those elected after 2023.",
+   "election_year_segments": [
+    [
+     1930,
+     2,
+     1962
+    ],
+    [
+     1964,
+     4,
+     2024
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "wp-gov",
+    "csg2021"
+   ]
+  },
+  "NE": {
+   "name": "Nebraska",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1966,
+   "term_length_before": 2,
+   "term_limit_2026": "2C",
+   "term_limit_adopted": null,
+   "term_limit_note": "Neb. Const. art. IV sec. 1. Adoption year not established.",
+   "election_year_segments": [
+    [
+     1930,
+     2,
+     1964
+    ],
+    [
+     1966,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "csg2021"
+   ]
+  },
+  "NH": {
+   "name": "New Hampshire",
+   "gov_term_2026": 2,
+   "four_year_terms_from": null,
+   "term_length_before": 2,
+   "term_limit_2026": "none",
+   "term_limit_adopted": null,
+   "term_limit_note": "There have never been any term limits for the office.",
+   "election_year_segments": [
+    [
+     1930,
+     2,
+     2024
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "wp-list",
+    "csg2021"
+   ]
+  },
+  "NJ": {
+   "name": "New Jersey",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1949,
+   "term_length_before": 3,
+   "term_limit_2026": "2C",
+   "term_limit_adopted": 1947,
+   "term_limit_note": "N.J. Const. (1947) art. V sec. I para. 5. The 1844 constitution it replaced barred succession.",
+   "election_year_segments": [
+    [
+     1931,
+     3,
+     1946
+    ],
+    [
+     1949,
+     4,
+     2025
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "csg2021"
+   ],
+   "calendar_move": "Three-year terms in odd years from 1844 to 1946; four-year terms from 1949. A three-year term cannot be expressed by govTerm: 2 | 4."
+  },
+  "NM": {
+   "name": "New Mexico",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1970,
+   "term_length_before": 2,
+   "term_limit_2026": "2C",
+   "term_limit_adopted": null,
+   "term_limit_note": "N.M. Const. art. V sec. 1. Adoption year not established.",
+   "election_year_segments": [
+    [
+     1930,
+     2,
+     1968
+    ],
+    [
+     1970,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "csg2021"
+   ]
+  },
+  "NV": {
+   "name": "Nevada",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1866,
+   "term_length_before": 2,
+   "term_limit_2026": "2T",
+   "term_limit_adopted": 1970,
+   "term_limit_note": "A 1970 amendment limited the governor to two terms, consecutive or not.",
+   "election_year_segments": [
+    [
+     1930,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "wp-list",
+    "csg2021"
+   ]
+  },
+  "NY": {
+   "name": "New York",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1938,
+   "term_length_before": 2,
+   "term_limit_2026": "none",
+   "term_limit_adopted": null,
+   "term_limit_note": "No limit.",
+   "election_year_segments": [
+    [
+     1930,
+     2,
+     1936
+    ],
+    [
+     1938,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "csg2021"
+   ]
+  },
+  "OH": {
+   "name": "Ohio",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1958,
+   "term_length_before": 2,
+   "term_limit_2026": "2C",
+   "term_limit_adopted": null,
+   "term_limit_note": "Ohio Const. art. III sec. 2. Adoption year not established.",
+   "election_year_segments": [
+    [
+     1930,
+     2,
+     1956
+    ],
+    [
+     1958,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "csg2021"
+   ]
+  },
+  "OK": {
+   "name": "Oklahoma",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1910,
+   "term_length_before": 3,
+   "term_limit_2026": "2T",
+   "term_limit_adopted": 2010,
+   "term_limit_note": "1907 constitution barred immediate succession; 1966 amendment allowed two consecutive terms; a November 2, 2010 initiative made it eight years in a lifetime.",
+   "election_year_segments": [
+    [
+     1930,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "wp-gov",
+    "csg2021"
+   ]
+  },
+  "OR": {
+   "name": "Oregon",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1858,
+   "term_length_before": null,
+   "term_limit_2026": "8 of 12 years",
+   "term_limit_adopted": null,
+   "term_limit_note": "Or. Const. art. V sec. 1. Adoption year not established.",
+   "election_year_segments": [
+    [
+     1930,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "csg2021"
+   ]
+  },
+  "PA": {
+   "name": "Pennsylvania",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1878,
+   "term_length_before": 3,
+   "term_limit_2026": "2C",
+   "term_limit_adopted": 1968,
+   "term_limit_note": "1874 constitution barred succession; the 1968 constitution allowed two consecutive terms.",
+   "election_year_segments": [
+    [
+     1930,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "wp-list",
+    "csg2021"
+   ]
+  },
+  "RI": {
+   "name": "Rhode Island",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1994,
+   "term_length_before": 2,
+   "term_limit_2026": "2C",
+   "term_limit_adopted": null,
+   "term_limit_note": "R.I. Const. art. IV sec. 1. Adoption year not established.",
+   "election_year_segments": [
+    [
+     1930,
+     2,
+     1992
+    ],
+    [
+     1994,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "csg2021"
+   ]
+  },
+  "SC": {
+   "name": "South Carolina",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1926,
+   "term_length_before": 2,
+   "term_limit_2026": "2C",
+   "term_limit_adopted": null,
+   "term_limit_note": "S.C. Const. art. IV sec. 3. Adoption year not established.",
+   "election_year_segments": [
+    [
+     1930,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "csg2021"
+   ]
+  },
+  "SD": {
+   "name": "South Dakota",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1974,
+   "term_length_before": 2,
+   "term_limit_2026": "2C",
+   "term_limit_adopted": 1972,
+   "term_limit_note": "A 1947 statute barred parties from renominating a two-term governor; a 1972 amendment made the limit constitutional alongside the four-year term.",
+   "election_year_segments": [
+    [
+     1930,
+     2,
+     1972
+    ],
+    [
+     1974,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "wp-list",
+    "csg2021"
+   ]
+  },
+  "TN": {
+   "name": "Tennessee",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1954,
+   "term_length_before": 2,
+   "term_limit_2026": "2C",
+   "term_limit_adopted": 1978,
+   "term_limit_note": "1796 constitution: six years in any eight. 1953 amendments: four-year term, no consecutive terms. 1978 amendment: two consecutive terms.",
+   "election_year_segments": [
+    [
+     1930,
+     2,
+     1952
+    ],
+    [
+     1954,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "wp-list",
+    "csg2021"
+   ]
+  },
+  "TX": {
+   "name": "Texas",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1974,
+   "term_length_before": 2,
+   "term_limit_2026": "none",
+   "term_limit_adopted": null,
+   "term_limit_note": "The 1845 constitution allowed four years in any six; the 1869 constitution removed the limit and none has applied since.",
+   "election_year_segments": [
+    [
+     1930,
+     2,
+     1972
+    ],
+    [
+     1974,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "wp-gov",
+    "csg2021"
+   ]
+  },
+  "UT": {
+   "name": "Utah",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1896,
+   "term_length_before": null,
+   "term_limit_2026": "none",
+   "term_limit_adopted": null,
+   "term_limit_note": "No limit. A statutory three-term limit was enacted in 1994 and repealed in 2003.",
+   "election_year_segments": [
+    [
+     1932,
+     4,
+     2024
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "wp-termlimits",
+    "csg2021"
+   ]
+  },
+  "VA": {
+   "name": "Virginia",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1869,
+   "term_length_before": null,
+   "term_limit_2026": "1C",
+   "term_limit_adopted": 1776,
+   "term_limit_note": "The ban on consecutive terms was in the original 1776 constitution and has never been repealed; it has applied to the popularly elected four-year governor since 1851.",
+   "election_year_segments": [
+    [
+     1929,
+     4,
+     2025
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "wp-termlimits",
+    "csg2021"
+   ]
+  },
+  "VT": {
+   "name": "Vermont",
+   "gov_term_2026": 2,
+   "four_year_terms_from": null,
+   "term_length_before": 2,
+   "term_limit_2026": "none",
+   "term_limit_adopted": null,
+   "term_limit_note": "No limit.",
+   "election_year_segments": [
+    [
+     1930,
+     2,
+     2024
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "csg2021"
+   ]
+  },
+  "WA": {
+   "name": "Washington",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1892,
+   "term_length_before": 3,
+   "term_limit_2026": "none",
+   "term_limit_adopted": null,
+   "term_limit_note": "No limit.",
+   "election_year_segments": [
+    [
+     1932,
+     4,
+     2024
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "csg2021"
+   ]
+  },
+  "WI": {
+   "name": "Wisconsin",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1970,
+   "term_length_before": 2,
+   "term_limit_2026": "none",
+   "term_limit_adopted": null,
+   "term_limit_note": "No limit.",
+   "election_year_segments": [
+    [
+     1930,
+     2,
+     1968
+    ],
+    [
+     1970,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "csg2021"
+   ]
+  },
+  "WV": {
+   "name": "West Virginia",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1872,
+   "term_length_before": 2,
+   "term_limit_2026": "2C",
+   "term_limit_adopted": 1968,
+   "term_limit_note": "Since 1968 a governor may be re-elected any number of times but not more than twice in a row.",
+   "election_year_segments": [
+    [
+     1932,
+     4,
+     2024
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "wp-list",
+    "csg2021"
+   ]
+  },
+  "WY": {
+   "name": "Wyoming",
+   "gov_term_2026": 4,
+   "four_year_terms_from": 1890,
+   "term_length_before": null,
+   "term_limit_2026": "8 of 16 years",
+   "term_limit_adopted": null,
+   "term_limit_note": "Wyo. Stat. sec. 22-5-103; the only gubernatorial limit set by statute rather than constitution. Adoption year not established.",
+   "election_year_segments": [
+    [
+     1930,
+     4,
+     2022
+    ]
+   ],
+   "source": [
+    "greenpapers",
+    "csg2021"
+   ]
+  }
+ }
+}
