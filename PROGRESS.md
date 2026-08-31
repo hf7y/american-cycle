@@ -32,11 +32,13 @@ Branch: `phase1-engine`. Land as a PR; never commit to main.
 - [ ] data/ — real card packs across eras (1976, 1992, 2008, 2016)
 - [x] sim/agents.ts — Random, Greedy, Lookahead + the eight from SIM-BRIEF §2
 - [x] sim/harness.ts — `node sim/harness.ts --games N --config baseline.json` → CSV
-- [ ] sim/sweeps.ts — the ten sweeps in SIM-BRIEF Part 4
-- [ ] Run sweeps; pick tuned baseline + 3-4 contrast variants
-- [ ] reports/overnight-2026-08-31.md — SIM-BRIEF deliverable, 7 sections
+- [x] sim/sweeps.ts — the ten sweeps in SIM-BRIEF Part 4
+- [x] Run sweeps; pick tuned baseline + 3-4 contrast variants
+- [x] reports/overnight-2026-08-31.md — SIM-BRIEF deliverable, 7 sections
 - [ ] ui/ — self-contained HTML, play vs computer, pick opponent + variant
-- [ ] Publish as Artifact; open PR
+- [x] Publish as Artifact (done)
+- [ ] Open PR
+- [ ] Portraits from Wikipedia; historical baseline from MIT Election Lab
 
 ## Where the build stands
 

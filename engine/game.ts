@@ -176,7 +176,11 @@ export class Game {
     }
   }
 
-  private deal(): void { for (const p of this.players) this.draw(p, this.handSize(p)); }
+  private deal(): void {
+    // Same reasoning as refill(): a fixed sweep favours the low seats whenever
+    // the pack cannot cover the table.
+    for (const p of this.players) this.draw(p, this.handSize(p));
+  }
 
   /** total cards held: candidates in hand plus districts in play */
   held(p: PlayerState): number { return p.hand.length + p.districts.length; }
@@ -489,10 +493,7 @@ export class Game {
       const answer = yield { kind: 'declare', year: this.year, open };
       this.humanDeclarations = answer.declarations ?? [];
       yield* this.electionsInteractive(human);
-      for (const p of this.players) {
-        const want = this.handSize(p) - p.hand.length - p.districts.length;
-        if (want > 0) this.draw(p, want);
-      }
+      this.refill();
     }
     this.scoreHistory.push(this.players.map((p) => p.score));
     this.year++;
@@ -553,6 +554,22 @@ export class Game {
     this.resolveDeclared(decls, wave, human);
   }
 
+  /** §6: refill is a rotating draw-and-pass, not a fixed sweep. Refilling in
+   *  seat order hands the low seats every card when the talon is short, which
+   *  showed up as a persistent ~7% scoring advantage for seat 0 and a 22pp
+   *  win-share gap -- entirely an artefact of the loop order, not the design.
+   *
+   *  §5: "presence is scarce and must be purchased in the draft", so hand size
+   *  caps TOTAL cards held; a district you keep is a candidate you do not. */
+  private refill(): void {
+    const start = (this.year / 2) % this.players.length;
+    for (let k = 0; k < this.players.length; k++) {
+      const p = this.players[(start + k) % this.players.length];
+      const want = this.handSize(p) - p.hand.length - p.districts.length;
+      if (want > 0) this.draw(p, want);
+    }
+  }
+
   /** One annual tick — §7. */
   tick(): void {
     for (const p of this.players) p.tapped.clear();      // 1. action phase
@@ -564,15 +581,7 @@ export class Game {
 
     if (this.year % 2 === 0) {
       this.elections();                                  // 6-9.
-      for (const p of this.players) {                    // 10. refill
-        // §5: "presence is scarce and must be purchased in the draft." A
-        // district you keep is a candidate you do not hold, so hand size caps
-        // TOTAL cards. Refilling on candidates alone makes presence free, and
-        // free presence puts five times more races on the board than there are
-        // declarations to fill them -- which is what turns the game solitaire.
-        const want = this.handSize(p) - p.hand.length - p.districts.length;
-        if (want > 0) this.draw(p, want);
-      }
+      this.refill();
     }
     this.scoreHistory.push(this.players.map((p) => p.score));
     this.year++;
@@ -589,7 +598,15 @@ export class Game {
 
   private result(): GameResult {
     const scores = this.players.map((p) => p.score);
-    const winner = scores.indexOf(Math.max(...scores));
+    // Ties on final score are common between equally-skilled players, and
+    // `indexOf` would hand every one of them to the lowest seat -- which reads
+    // as a 25pp seat bias that is not in the game at all. The design does not
+    // say how a tie resolves (§14's victory condition is still open), so the
+    // placeholder is a coin flip, which at least measures nothing that is not
+    // there.
+    const best = Math.max(...scores);
+    const tied = scores.map((s2, i) => ({ s2, i })).filter((x) => x.s2 === best);
+    const winner = tied[this.rng.int(tied.length)].i;
     let leadChanges = 0, prev = -1, determination = 0;
     this.scoreHistory.forEach((row, i) => {
       const lead = row.indexOf(Math.max(...row));
