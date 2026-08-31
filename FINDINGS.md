@@ -1031,3 +1031,48 @@ on the board — points, a six-year term, hand size, the midterm push, and
 governor appointments as a fifth route in. It is no longer *dominant*, but it
 is still the best thing to do, and EconomyChicken's rise to 37.8% is a new
 question rather than an answer.
+
+---
+
+## F27. Bill passage is set by who is at the table, not by the threshold.
+
+**Correcting the strength of F14's filibuster claim.** F14 reported that the
+60% Senate threshold "is what stalls the omnibill", on a sweep that moved
+passage 63% → 16% → 0% across thresholds of 50/60/67. That sweep was run at a
+*fixed agent mix*. Holding the threshold fixed at 60% and varying the mix
+instead:
+
+| agents at the table | bills pass | cross-bench votes/game |
+|---|---|---|
+| Greedy + Lookahead + SenateFlood + Heterodox | **15%** | 66 |
+| Greedy + Lookahead + Greedy + Lookahead | **14%** | 57 |
+| BillMaximizer + SenateFlood + Greedy + Heterodox | **67%** | 127 |
+| BillMaximizer + EconomyChicken + SenateFlood + Heterodox | **88%** | 163 |
+| four BillMaximizers | **100%** | 309 |
+
+**The 60% threshold is identical in every row.** Passage runs from 14% to 100%
+on nothing but the willingness of the players to vote yes — a wider range than
+the entire threshold sweep produced.
+
+**So the 20% figure in this report is a property of my agent pool, not of the
+design.** The honest statement is not "the filibuster stalls the bill" but "the
+filibuster makes the bill depend on whether anyone will cross the aisle", which
+is *precisely what §12 says it is for*: "the filibuster threshold means bills
+essentially cannot pass without cross-benching, which makes cooperation
+structurally necessary rather than optional."
+
+**The mechanism is working as designed.** What the simulator cannot supply is
+the cooperation, because no agent here can negotiate, offer anything, or
+remember a favour. SIM-BRIEF says this outright and it is now demonstrated
+rather than asserted: *"trust the simulator on arithmetic, distributions, dead
+rules, and runaway detection. Do not trust it on whether the bill negotiation
+is the best part of the evening."*
+
+**Do not touch the filibuster threshold.** Not "not on this evidence" — the
+evidence now points the other way. A table of humans who will trade votes looks
+like the bottom rows, not the top ones.
+
+*This is the sixth correction to my own work tonight, and the first that is
+about the strength of a claim rather than a wrong number. The measurement in
+F14 was correct; the conclusion drawn from it was over-confident because only
+one variable was swept.*

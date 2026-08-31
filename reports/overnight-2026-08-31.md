@@ -165,13 +165,22 @@ from 51.7% once §6's draft let opponents compete for Senate-capable cards, and
 still on the line. Bills
 pass **20%** at the current 60% Senate threshold, against a 20% stall line —
 and 63% at a 50% threshold, 0% at 67%.
-**Change** for the Senate: it pays four ways at once — points, a six-year term,
-hand size, and the midterm lean push it inherits from §10's priority ordering.
-Governor appointments are a fifth route in. For the bill: the threshold shape
-is unambiguous, but **do not change it on this evidence** — the omnibill is a
-negotiation and no agent here can negotiate.
+**Change** for the Senate: it pays more ways than anything else on the board —
+points, a six-year term, hand size, the midterm lean push from §10's priority,
+and governor appointments as a fifth route in. It is no longer *dominant* (the
+51.7% was an artefact of the seat-order bug, F26) but it is still the best thing
+to do.
 
-Confidence: **high** on both measurements, **low** on the bill remedy.
+**For the bill: change nothing.** The threshold sweep moved passage 63/16/0
+across 50/60/67 — but holding the threshold at 60% and varying only who is at
+the table moves it **14% to 100%**, a wider range than the sweep produced. The
+20% figure is a property of my agent pool, not of the design, and §12's stated
+intent — that the filibuster makes cooperation structurally necessary — is
+working exactly as written. What the simulator cannot supply is the
+cooperation. See `FINDINGS.md` F27.
+
+Confidence: **high** on the Senate, and the bill needs a human table rather
+than a parameter.
 
 ---
 
@@ -321,31 +330,41 @@ Fixed by sorting open races by state and district number. Three of four table
 sizes now sit at or under the brief's 3pp bar, and the monotonic score gradient
 is gone at every size. Full working in `FINDINGS.md` F25.
 
-**Six-way round robin** (120 games; >40% is dominant):
+**Six-way round robin** (n=360; >40% is dominant, 2σ = 3.9pp):
 
-| strategy | before the presidency fix | after |
-|---|---|---|
-| SenateFlood | 32.5% | **51.7% — DOMINANT** |
-| BillMaximizer | 40.0% | 24.2% |
-| EconomyChicken | 26.7% | 19.2% |
-| HeterodoxSpecialist | 0.8% | 5.0% |
-| WideAndEmpty | 0.0% | 0.0% |
-| HouseFarm | 0.0% | 0.0% |
+| strategy | before the presidency fix | before the seat-order fix | now |
+|---|---|---|---|
+| EconomyChicken | 26.7% | 19.2% | **37.8%** |
+| SenateFlood | 32.5% | **51.7%** | 31.7% |
+| BillMaximizer | **40.0%** | 24.2% | 25.6% |
+| HeterodoxSpecialist | 0.8% | 5.0% | 4.2% |
+| HouseFarm | 0.0% | 0.0% | 0.6% |
+| WideAndEmpty | 0.0% | 0.0% | 0.3% |
 
-**SenateFlood is a genuine hole.** The Senate pays four ways at once: three
-points a seat, a six-year term that holds them, +1 hand size, and — because §10
-puts the Senate second in the nationalisation priority, behind only the
-presidency — the push that moves the map in every midterm. Nothing else on the
-board pays four ways. Filed as hf7y/american-cycle#8.
+**Nothing is dominant.** The leader sits at 37.8% against a 40% line with a
+3.9pp band — it touches without crossing.
 
-Note what the "before" column means: **BillMaximizer's 40% was an artefact of
-five switched-off mechanics.** Any balance number taken before F10 is void.
+**Read the three columns as a warning, not a history.** Each earlier column was
+measured on a board with a bug in it: the first before the presidency worked
+(five national mechanics switched off), the second before open races stopped
+being listed in seat order. Every strategy's apparent standing moved by 15–20
+points across those fixes, and **BillMaximizer's 40% and SenateFlood's 51.7%
+were both artefacts.** Two ablations confirm the current position is not the
+Senate's doing: zeroing its hand bonus moves SenateFlood 34.0%→31.3%, and
+demoting it below the House in §10's priority moves it to 30.7%.
 
-**HeterodoxSpecialist at 5.0% is still the finding that should worry you most.**
+The general lesson for anyone tuning from this report: **a balance number is
+only valid against the engine that produced it.** Three round robins here are
+void and are shown only to make that visible.
+
+**HeterodoxSpecialist at 4.2% remains the finding that should worry you most.**
 Heterodoxy is one of the design's two theses — "the most valuable and most
-fragile card in the game" — and it is the second-worst strategy on the board.
-On a map where 79% of races go uncontested there is no hostile terrain to
-survive, because nobody is defending anything.
+fragile card in the game" — and it is second-worst on the board across every
+engine version tested. On a map where 92% of races go uncontested there is no
+hostile terrain to survive, because nobody is defending anything.
+
+**EconomyChicken's rise to 37.8% is unexamined.** It is new since the seat-order
+fix and no ablation has been run against it.
 
 ---
 
