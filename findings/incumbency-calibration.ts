@@ -50,6 +50,7 @@ function reelection(incumbency: number, seeds = 60) {
 
 export const finding: Finding = {
   id: 'incumbency-calibration',
+  dependsOn: [],
   question: 'Is +1 the right incumbency modifier? §16 calls it "a calibration check on +1".',
 
   headline:

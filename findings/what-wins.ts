@@ -45,6 +45,7 @@ function seatsByOutcome() {
 
 export const finding: Finding = {
   id: 'what-wins',
+  dependsOn: [],
   question: 'Which offices do the players who win actually hold? (§11, and §14 on what scores)',
 
   headline:

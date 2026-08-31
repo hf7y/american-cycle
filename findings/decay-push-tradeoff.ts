@@ -36,6 +36,7 @@ function measure(over: Record<string, unknown>, seeds = 50) {
 
 export const finding: Finding = {
   id: 'decay-push-tradeoff',
+  dependsOn: ['as-written-plus.json'],
   question:
     'Can annual decay be balanced by raising push values, or is that limited by the 3d6 design? '
     + '(§7, §10, §16 open question 1)',

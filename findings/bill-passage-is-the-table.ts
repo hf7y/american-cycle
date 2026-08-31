@@ -22,6 +22,7 @@ const ALL_IN = ['BillMaximizer', 'BillMaximizer', 'BillMaximizer', 'BillMaximize
 
 export const finding: Finding = {
   id: 'bill-passage-is-the-table',
+  dependsOn: [],
   question:
     'Does the 60% Senate threshold stall the omnibill? §12 says the filibuster "means bills '
     + 'essentially cannot pass without cross-benching, which makes cooperation structurally '

@@ -51,6 +51,7 @@ function simMargins(seeds = 60) {
 
 export const finding: Finding = {
   id: 'margin-ceiling',
+  dependsOn: [],
   question:
     'Does the margin distribution reproduce the real bimodal one, or the unimodal blob SIM-BRIEF '
     + 'names as the falsification of the "1 pip = 2 points" calibration? (§3, SIM-BRIEF Part 5)',

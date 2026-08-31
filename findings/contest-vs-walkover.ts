@@ -24,6 +24,7 @@ function measure(players: number, hand: number, frac: number, uncontestedPush: n
 
 export const finding: Finding = {
   id: 'contest-vs-walkover',
+  dependsOn: [],
   question:
     'Is scaling cards and races until states are actually contested an alternative to deciding what '
     + 'an uncontested win pushes? (§10, and §16 on district-to-candidate ratio)',

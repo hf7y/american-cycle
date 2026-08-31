@@ -30,6 +30,7 @@ function contested(hand: number, districtFraction: number, seeds = 40): number {
 
 export const finding: Finding = {
   id: 'contest-ratio',
+  dependsOn: [],
   question:
     'What actually sets the contest rate, and does the shipped tuning reach the level SIM-BRIEF '
     + 'asks for? (§10, and §16 on the district-to-candidate ratio)',

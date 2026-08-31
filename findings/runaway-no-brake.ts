@@ -38,6 +38,7 @@ function monotonicShare(cards: Card[], cfg: Config): number {
 
 export const finding: Finding = {
   id: 'runaway-no-brake',
+  dependsOn: [],
   question:
     'Whether the leader runs away. Hand size, endorsements and capture are three stacking '
     + 'positive-feedback loops; the intended brakes are the midterm penalty, recession and other '

@@ -18,7 +18,7 @@ const $ = (id) => document.getElementById(id);
 const el = (t, cls, txt) => { const n = document.createElement(t); if (cls) n.className = cls; if (txt != null) n.textContent = txt; return n; };
 
 let G = null, gen = null, pending = null, S = {
-  sel: null, picks: [], human: 0, opponents: [], cfgName: 'tuned', seed: 1, over: false,
+  sel: null, picks: [], human: 0, opponents: [], cfgName: 'as-written-plus', seed: 1, over: false,
 };
 
 // ---- setup ------------------------------------------------------------------
@@ -44,13 +44,14 @@ const CONFIG_BLURB = {
   'flat-push':'Flat +1 lean pushes, the rule that was cut. Win a state every cycle for a decade and move the map nowhere.',
   'governors-push':'Governors push lean when they win with the grain of the state, never against it.',
   brutal:'Large office bonuses. The leader compounds hard.',
+  'as-written-plus':'§7 exactly as written — a bill every year, decay every year — with the push table raised to 2/3/4, which is what makes annual decay work. Best-measured settings: most realignment, no saturation, twice the legislating.',
   realigning:'The one rule change that makes the map actually realign: a walkover counts as one pip of evidence about a state. Play it against "tuned" to feel the difference.',
   'three-terms':'§14\'s three-term victory. Ends tightly — but collapses the game onto the presidency, and whoever is best at that race takes everything.',
 };
 
 function setup() {
   const opts = Object.keys(AGENTS).map((k) => `<option value="${k}">${k}</option>`).join('');
-  const cfgs = Object.keys(CONFIGS).map((k) => `<option value="${k}"${k === 'tuned' ? ' selected' : ''}>${k}</option>`).join('');
+  const cfgs = Object.keys(CONFIGS).map((k) => `<option value="${k}"${k === 'as-written-plus' ? ' selected' : ''}>${k}</option>`).join('');
   modal(`
     <h1 style="font-size:26px;letter-spacing:-.01em">American Cycle</h1>
     <p class="note" style="margin:6px 0 16px">Draft real politicians, run them across a decade of elections, and try to

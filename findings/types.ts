@@ -30,6 +30,12 @@ export interface Claim {
 
 export interface Finding {
   id: string;
+  /** Every config file whose contents this finding's conclusion depends on,
+   *  by filename — e.g. `['as-written-plus.json']`. Declaring one obliges the
+   *  finding to CHECK it: `findings/well-formed.test.ts` rejects any finding
+   *  that names a dependency without a zero-tolerance claim reading it back.
+   *  Empty is legal and means "this finding recommends no shipped setting". */
+  dependsOn: string[];
   /** the design-doc question this answers, verbatim where possible */
   question: string;
   /** prose, true as of `stampedAt` and no later */

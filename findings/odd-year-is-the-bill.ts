@@ -51,6 +51,7 @@ function measure(
 
 export const finding: Finding = {
   id: 'odd-year-is-the-bill',
+  dependsOn: [],
   question:
     'Should the game run on two-year cycles rather than annual ticks — i.e. what is left in the odd '
     + 'year, and what happens if the omnibill is biennial too? (§7)',
