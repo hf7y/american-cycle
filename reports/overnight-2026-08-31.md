@@ -298,12 +298,19 @@ distribution is not, and it produced the single most decisive finding of the
 night (F8, a scale ceiling no tuning can reach). **Deferring it was the wrong
 call and the earlier draft of this section said so too confidently.**
 
-**Not implemented, so not measurable:**
-- **Impeachment** — `impeach()` exists and is tested, but is not wired into the
-  year loop as an omnibill replacement.
-- **The vice presidency** entirely: succession, tie-breaking, the home-state
-  bonus, and therefore **VPBackstab**, which the brief explicitly asked to test
-  rather than trust. It remains untested.
+**Now implemented and measured** (they were listed here as gaps earlier in the
+night and have since been built):
+- **Impeachment** is wired as an omnibill replacement, and **the vice
+  presidency** exists — second card, not consumed on a loss, home-state bonus
+  in the general, succession with the supplier's player scoring. `VPBackstab`
+  is now a real agent. The result is F12: the backstab sets itself up in 100%
+  of games and can never be cashed, because two-thirds of the Senate is
+  arithmetically out of reach. **This is the finding most in need of a human
+  playtest**, and the threshold should not be lowered on agent evidence.
+- **Incumbency**, which had never fired in any race at all (F9).
+- **The presidency and its five downstream mechanics** (F10).
+
+**Still not implemented, so still not measurable:**
 - **Governor Senate appointments.**
 - **Independent candidacies** — the card schema supports party `I` and the
   engine skips their primary, but no pack contains one.

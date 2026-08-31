@@ -33,6 +33,7 @@ const OPPONENT_BLURB = {
   Impeacher:'Builds a Senate bloc large enough to remove a president.',
   EconomyChicken:'Spends hot, then pivots before the Fed tightens.',
   WideAndEmpty:'Declares everywhere cheap and contests nothing. Should be a losing strategy.',
+  VPBackstab:'Puts its own running mate on your ticket, then builds a Senate bloc to remove you. Currently cannot cash it.',
 };
 const CONFIG_BLURB = {
   tuned:'The playable tuning. Bigger hand, thinner district supply — the settings that actually produce a contested board.',
