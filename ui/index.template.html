@@ -37,13 +37,19 @@ button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--brass);out
 .eyebrow{font-family:var(--display);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
 
 /* chyron ------------------------------------------------------------------ */
-#chyron{position:sticky;top:0;z-index:20;display:flex;align-items:stretch;gap:0;
+#chyron{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;align-items:stretch;gap:0;
   background:var(--chyron-bg);color:var(--chyron-fg);border-bottom:2px solid var(--brass)}
 .chy{padding:8px 14px;border-right:1px solid rgba(255,255,255,.14);display:flex;
   flex-direction:column;justify-content:center;min-width:0}
 .chy .k{font-family:var(--display);font-size:10px;letter-spacing:.14em;text-transform:uppercase;opacity:.6}
 .chy .v{font-family:var(--mono);font-size:15px;font-weight:600;white-space:nowrap}
-.chy.grow{flex:1;border-right:none;overflow:hidden}
+.chy.grow{flex:1 1 100%;border-right:none;overflow:hidden;min-width:0}
+/* On a phone the four fixed readouts fill the row, so the wire -- the most
+   useful thing on the bar -- wraps to its own full-width line rather than
+   being clipped off the right edge. */
+@media (min-width:760px){.chy.grow{flex:1 1 0;border-top:none}}
+@media (max-width:759px){.chy.grow{border-top:1px solid rgba(255,255,255,.14)}
+  .chy{flex:1 1 auto;min-width:0}.chy .v{font-size:13px;overflow:hidden;text-overflow:ellipsis}}
 #ticker{font-family:var(--mono);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 /* layout ------------------------------------------------------------------ */
