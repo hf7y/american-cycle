@@ -1,60 +1,42 @@
 # Overnight build state — american-cycle
 
 Goal (Zach, 2026-08-31): a playable web app, human vs computer, several
-opponent types, tuned by simulation. Plus variant configs so the effect of
-individual mechanics is visible. Docs at root are source of truth:
-`design-doc.md` (rules), `DECISIONS.md` (settled/cut/open), `BUILD-BRIEF.md`
-(build order), `SIM-BRIEF.md` (what the sim must answer).
+opponent types, tuned by simulation, plus variant configs so the effect of
+individual mechanics is visible. Docs at root are source of truth.
 
-Branch: `phase1-engine`. Land as a PR; never commit to main.
+Branch `phase1-engine`, PR hf7y/american-cycle#7. Board published at
+https://claude.ai/code/artifact/258e71c9-7de6-45e0-80e3-d7d7dffbb369
 
-## Steps
+## Done
 
-- [x] Scaffold: package.json, tsconfig, node-native TS (no build step, no deps
-      but typescript). Removed the superseded Python toy.
-- [x] design-doc.md §3 odds table corrected — dice right, table wrong (Zach
-      confirmed). True 3d6 values now in the doc.
-- [x] engine/states.ts — 50 states, gubernatorial schedule, delegation sizes
-- [x] engine/types, engine/config/baseline.json (every constant named;
-      §16 open questions flagged as placeholders, never silently invented)
-- [x] engine/rules/rng.ts — seeded, reproducible from a seed
-- [x] engine/rules/resolution.ts — 3 labeled dice, modifier stack, event log
-      with the zero-dice counterfactual (SIM-BRIEF ground rule)
-- [x] engine/rules/lean.ts — margin push, decay; governors never push
-- [x] engine/rules/economy.ts — economy walk, accumulated G, 2d6 Fed roll-under
-- [x] engine/rules/legislature.ts — omnibill, 60% Senate, veto, impeachment
-- [x] engine/rules/elections.ts — declaration, withdrawal-before-reveal,
-      primaries, generals, coattails, seating, capture
-- [x] engine/rules/year.ts + engine/game.ts — §7 sequence
-- [x] Tests (BUILD-BRIEF names these four as the correctness targets):
-      odds table; withdrawal closes before deciding info; decay before push;
-      governors never push
-- [ ] data/ — real card packs across eras (1976, 1992, 2008, 2016)
-- [x] sim/agents.ts — Random, Greedy, Lookahead + the eight from SIM-BRIEF §2
-- [x] sim/harness.ts — `node sim/harness.ts --games N --config baseline.json` → CSV
-- [x] sim/sweeps.ts — the ten sweeps in SIM-BRIEF Part 4
-- [x] Run sweeps; pick tuned baseline + 3-4 contrast variants
-- [x] reports/overnight-2026-08-31.md — SIM-BRIEF deliverable, 7 sections
-- [ ] ui/ — self-contained HTML, play vs computer, pick opponent + variant
-- [x] Publish as Artifact (done)
-- [ ] Open PR
-- [ ] Portraits from Wikipedia; historical baseline from MIT Election Lab
+- [x] Engine: full §7 tick — resolution, three labelled dice, lean, economy and
+      Fed, omnibill, impeachment, vice presidency, endorsements, capture,
+      governor appointments, independents. 31 tests, clean typecheck.
+- [x] BUILD-BRIEF's four named correctness targets all assert.
+- [x] Card data: 232 real candidates, 168 real districts, four eras, portraits.
+- [x] Historical baseline committed (MIT Election Lab + Vital Statistics).
+- [x] Eleven agents; harness, all ten sweeps, round robin, feel metrics.
+- [x] Self-contained board, published, republished on every engine change.
+- [x] reports/overnight-2026-08-31.md — all seven SIM-BRIEF sections.
+- [x] FINDINGS.md — twenty findings, four of them corrections to my own numbers.
+- [x] PR open and body current.
 
-## Where the build stands
+## Open, filed as issues
 
-Engine complete and green (31 tests, clean typecheck). Four real era packs.
-Ten agents. Harness runs. Findings F1-F5 in FINDINGS.md; F4 (79% of races
-uncontested, vs SIM-BRIEF's 40% bar) is the live problem and the next sweep
-targets it. Branch pushed.
+- #5 seat bias at 5–6 players (9–11pp, cause not isolated)
+- #8 SenateFlood dominance 51.7%; also the runaway's real cause, and §16's
+      victory condition
 
-## Notes / decisions taken while unattended
+## Standing cautions for whoever picks this up
 
-- Node strip-only mode bans `constructor(private x)` parameter properties and
-  `enum`. Engine avoids both throughout.
-- Fractional thresholds (2/3 of 9) need an epsilon compare; `legislature.ts`
-  routes every threshold through `atLeast`/`moreThan`.
-- §16 Q1 (decay frequency) is SETTLED by arithmetic, not simulation -- biennial
-  is the only setting under which realignment is possible. See FINDINGS.md F2.
-- Tie on equal totals: design doc does not specify. Placeholder = even break
-  (coin flip), which is what makes edge 0 exactly 50%. Flagged for DECISIONS.md
-  open list, not silently invented.
+- **Measure what SIM-BRIEF specifies, not a convenient proxy.** Four numbers
+  had to be corrected this way and two inversions came out of it. Decision
+  density is legal moves AVAILABLE, not declarations made. Determination is a
+  cross-game curve, not a per-game summary. Comeback means last at halfway.
+- **Uncontested races poison any raw win rate.** On a board that is 93%
+  walkovers, always report contested-only.
+- **A rule firing at 0% is usually unimplemented, not dead.** Five separate
+  mechanics looked dead and every one was a missing clause upstream.
+- Node strip-only mode bans parameter properties and `enum`.
+- Fractional thresholds need an epsilon compare; two-thirds of nine is not
+  representable.
