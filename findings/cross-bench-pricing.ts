@@ -123,17 +123,17 @@ export const finding: Finding = {
     + 'walkover asymmetry is real and large — the primary-to-general contested ratio runs 0.38 in '
     + 'purple states and 6.1 in hardened ones — so it does excuse the PRIMARY penalty from needing '
     + 'a lean condition, and it indicts the general one.',
-  stampedAt: '2026-08-31T12:00:00Z',
-  stampedOn: 'abdc37d',
+  stampedAt: '2026-08-31T16:31:37Z',
+  stampedOn: 'ea6ad71',
 
   predicate(): Claim[] {
     const m = measure();
     return [
       // --- the null: nothing rewards a one-party PORTFOLIO ---
-      { name: 'mean excess party concentration of a portfolio', value: m.excessMean, stamped: -0.006, tolerance: 0.02 },
+      { name: 'mean excess party concentration of a portfolio', value: m.excessMean, stamped: -0.01, tolerance: 0.02 },
       { name: 'score gap by EXCESS concentration (median split)', value: m.excessGap, stamped: 21.72, tolerance: 40 },
       { name: 'score gap by RAW Herfindahl (the confound)', value: m.rawSplit.gap, stamped: -46.12, tolerance: 40 },
-      { name: 'seats riding along with the raw split', value: m.rawSplit.seatGap, stamped: -6.04, tolerance: 6 },
+      { name: 'seats riding along with the raw split', value: m.rawSplit.seatGap, stamped: -3.23, tolerance: 6 },
 
       // --- why the primary is where a pip bites ---
       { name: 'contested primaries sharing the national AND state die', value: 100 * m.sharedDice, stamped: 100, tolerance: 0, unit: '%' },
@@ -141,14 +141,14 @@ export const finding: Finding = {
       { name: 'a 1-pip edge in a general (3d6)', value: 100 * oddsAtEdge(1), stamped: 59.17, tolerance: 0.01, unit: '%' },
 
       // --- the scaled primary penalty is too strong ---
-      { name: 'lone cross-bencher wins the primary, unpriced', value: 100 * m.unpricedPrimary, stamped: 56.66, tolerance: 7, unit: '%' },
-      { name: 'lone cross-bencher wins the primary, at the shipped penalty', value: 100 * m.shippedPrimary, stamped: 33.37, tolerance: 7, unit: '%' },
-      { name: 'mean pips the primary penalty applies, in PRIMARY SDs', value: m.shippedPips / PRIMARY_SD, stamped: 1.45, tolerance: 0.5 },
+      { name: 'lone cross-bencher wins the primary, unpriced', value: 100 * m.unpricedPrimary, stamped: 62.14, tolerance: 7, unit: '%' },
+      { name: 'lone cross-bencher wins the primary, at the shipped penalty', value: 100 * m.shippedPrimary, stamped: 47.3, tolerance: 7, unit: '%' },
+      { name: 'mean pips the primary penalty applies, in PRIMARY SDs', value: m.shippedPips / PRIMARY_SD, stamped: 0.99, tolerance: 0.5 },
 
       // --- the general term works, but fires in the wrong places ---
-      { name: 'with-drift minus against-drift gap, crossBenchGeneral 0', value: 100 * m.gapOff, stamped: -36.31, tolerance: 18, unit: 'pp' },
-      { name: 'with-drift minus against-drift gap, crossBenchGeneral 2', value: 100 * m.gapOn, stamped: -9.86, tolerance: 18, unit: 'pp' },
-      { name: 'races a signed general term would fire in that are |lean| <= 3', value: 100 * m.purpleShare, stamped: 73.70, tolerance: 12, unit: '%' },
+      { name: 'with-drift minus against-drift gap, crossBenchGeneral 0', value: 100 * m.gapOff, stamped: -35.22, tolerance: 18, unit: 'pp' },
+      { name: 'with-drift minus against-drift gap, crossBenchGeneral 2', value: 100 * m.gapOn, stamped: -10.26, tolerance: 18, unit: 'pp' },
+      { name: 'races a signed general term would fire in that are |lean| <= 3', value: 100 * m.purpleShare, stamped: 69.85, tolerance: 12, unit: '%' },
 
       // --- the walkover asymmetry that excuses the primary from a lean condition ---
       { name: 'primary:general contested ratio, purple states (|lean| 0-1)', value: m.purple, stamped: 0.38, tolerance: 0.25 },

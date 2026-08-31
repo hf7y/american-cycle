@@ -15,6 +15,14 @@ import type { RNG } from './rng.ts';
 
 export interface ResolutionConfig {
   incumbency: number; identityBonus: number; tieBreak: string;
+  /** Incumbency in a PRIMARY, which is a different contest: every side is the
+   *  same party in the same state, so `Wave` hands them the same national and
+   *  state die and only the candidate die differs. A primary is 1d6 vs 1d6,
+   *  SD 2.42 against the general's 4.18, and §3's odds table does not describe
+   *  it. Renomination is also the safer half of reelection in reality -- House
+   *  incumbents lose a primary at 1-2% a cycle -- so one scalar cannot serve
+   *  both rounds. */
+  incumbencyPrimary: number;
   /** Whose demographics a STATEWIDE candidate is judged against. `district`
    *  lets the one district card they hold speak for the whole state, so an
    *  Atlanta card makes a candidate a perfect fit for Georgia. `board` reads
@@ -159,7 +167,7 @@ export function buildModifiers(
     }
   }
 
-  if (d.incumbent) m.push({ source: 'incumbency', pips: res.incumbency });
+  if (d.incumbent) m.push({ source: 'incumbency', pips: round === 'primary' ? res.incumbencyPrimary : res.incumbency });
 
   if (ctx.office === 'president' && d.launchpad && d.launchpad !== 'president') {
     const lp = pg.launchpad[d.launchpad]?.[round] ?? 0;

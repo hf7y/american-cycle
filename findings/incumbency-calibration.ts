@@ -64,8 +64,8 @@ export const finding: Finding = {
     + 'Strip the walkovers and contested incumbents hold 78%, so the 98.8% is measuring how few '
     + 'incumbents are challenged rather than what +1 is worth, and the calibration check §16 asks '
     + 'for cannot be run until the contest rate is fixed.',
-  stampedAt: '2026-08-31T14:48:37Z',
-  stampedOn: '75de16c',
+  stampedAt: '2026-08-31T16:32:27Z',
+  stampedOn: 'ea6ad71',
 
   predicate(): Claim[] {
     const one = reelection(1);

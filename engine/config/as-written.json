@@ -12,7 +12,8 @@
     "incumbency": 1,
     "identityBonus": 1,
     "tieBreak": "even",
-    "statewideIdentity": "district"
+    "statewideIdentity": "district",
+    "incumbencyPrimary": 4
   },
   "national": {
     "strongEconomy": 1,

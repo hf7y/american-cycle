@@ -11,7 +11,7 @@ The design doc says what the game *is*. This says what is **settled**, what is *
 | Decision | Why |
 |---|---|
 | 1 pip = 2 points of margin | Anchors every number to real political science; makes the odds table mentally computable |
-| 3d6, split national / state / candidate | Same distribution as undifferentiated 3d6, but each die names its source of error and generates narrative for free |
+| 3d6, split national / state / candidate | Each die names its source of error and generates narrative for free. **The "same distribution as undifferentiated 3d6" half of this is false in a primary** — see below |
 | Dice are error, modifiers are the point estimate | Lets a player say "I'm up 8, that's 75%." A dice-heavy alternative makes cards feel like noise |
 | Withdrawal closes before the deciding information | The only thing making cards actually die. Break this and the bench never depletes |
 | Primary loss to hand, general loss to discard | Primaries cheap to enter, cost is card reveal. Generals are where attrition happens |
@@ -23,6 +23,29 @@ The design doc says what the game *is*. This says what is **settled**, what is *
 | Governors never push lean | Falls out of the nationalization priority rule; Baker/Hogan/Scott are the evidence |
 | Impeachment consumes the omnibill slot | Prices the coup in the currency everyone is accumulating |
 | One macro number, not two | "How the country is doing" is honest. A separate ideological axis was double-counting |
+
+### Correction, 2026-08-31: the split is NOT distribution-neutral
+
+`Wave` memoizes the national die by party and the state die by party+state, so
+two sides of a **general** draw independently and it really is 3d6 vs 3d6. But
+every side of a **primary** is the same party in the same state, so both are
+shared and only the candidate die differs. **A primary is 1d6 vs 1d6, SD 2.42
+against the general's 4.18.** §3's odds table — the one `resolution.test.ts`
+guards as "the foundation the rest of the game sits on" — describes the general
+only:
+
+| edge | general 3d6 | primary 1d6 |
+|---|---|---|
+| +1 | 59.2% | 65.3% |
+| +2 | 67.9% | 77.8% |
+| +4 | 82.5% | 94.4% |
+| +6 | 92.1% | **100.0%** |
+
+At +6 a primary is decided before the dice leave the hand. Consequences already
+acted on: a primary-only modifier judged against 4.18 is understated by ~1.7x,
+which is how the cross-bench penalty shipped at ~1.5 SD; and `incumbency` was
+split into `incumbencyPrimary` because one scalar cannot serve two
+distributions. Anything primary-only must be priced against 2.42.
 
 ---
 
