@@ -22,7 +22,10 @@ export interface LegislatureConfig {
   reactionGoodOnRollAtLeast: number;
 }
 
-export interface Vote { player: number; party: Party; office: 'senator' | 'representative'; yes: boolean; }
+/** §12's counter goes on the CARD, so a vote must name the card that cast it.
+ *  Carrying only the player made every vote of a delegation attributable to
+ *  whichever of its seats `find` happened to return first. */
+export interface Vote { player: number; party: Party; office: 'senator' | 'representative'; yes: boolean; cardId: string; }
 
 export interface BillOutcome {
   g: number;

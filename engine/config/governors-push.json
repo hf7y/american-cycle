@@ -30,7 +30,8 @@
     "extremistGeneral": -2,
     "heterodoxPrimaryPenalty": -2,
     "crossBenchPrimaryPenalty": -1,
-    "billCounterPips": 1
+    "billCounterPips": 1,
+    "crossBenchGeneral": 0
   },
   "lean": {
     "pushByMargin": [

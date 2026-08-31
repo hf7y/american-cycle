@@ -28,7 +28,7 @@ export interface Config {
   resolution: { incumbency: number; identityBonus: number; tieBreak: string };
   national: { strongEconomy: number; recession: number; midtermPenalty: number; coattailsWith: number; coattailsAgainst: number };
   endorsements: { president: number; governorInState: number; senator: number };
-  primaryGeneral: { extremistPrimary: number; extremistGeneral: number; heterodoxPrimaryPenalty: number; crossBenchPrimaryPenalty: number; billCounterPips: number };
+  primaryGeneral: { extremistPrimary: number; extremistGeneral: number; heterodoxPrimaryPenalty: number; crossBenchPrimaryPenalty: number; billCounterPips: number; crossBenchGeneral: number };
   lean: lean.LeanConfig;
   economy: econ.EconomyConfig;
   legislature: leg.LegislatureConfig & {
@@ -426,7 +426,7 @@ export class Game {
       if (!s.holder || (s.office !== 'senator' && s.office !== 'representative')) continue;
       const yes = s.holder.player === human && humanYes !== undefined
         ? humanYes : this.agents[s.holder.player].voteBill(this.view(s.holder.player), g, s);
-      votes.push({ player: s.holder.player, party: s.holder.party, office: s.office, yes });
+      votes.push({ player: s.holder.player, party: s.holder.party, office: s.office, yes, cardId: s.holder.cardId });
     }
 
     const pres = this.president;
@@ -447,12 +447,15 @@ export class Game {
     const majH = leg.majorityParty(this.seats, 'representative');
     const majS = leg.majorityParty(this.seats, 'senator');
     for (const v of votes) {
-      const seat = this.seats.find((st) => st.holder?.player === v.player && st.office === v.office);
-      const cardId = seat?.holder?.cardId;
-      if (!cardId) continue;
-      const rec = this.billCounters.get(cardId) ?? { record: 0, crossBench: 0 };
+      const cardId = v.cardId;
+      const rec = this.billCounters.get(cardId) ?? { record: 0, counters: {} };
       const maj = v.office === 'representative' ? majH : majS;
-      if (v.yes && v.party !== maj) rec.crossBench++;
+      // §12: "Voting places a counter on the card, coloured by the party in
+      // power. Cross-bench votes therefore show as the opposite colour." The
+      // colour was dropped and the count flattened to a boolean, so the
+      // direction of a defection was unrecoverable and a serial cross-bencher
+      // paid exactly what a one-time defector paid.
+      if (v.yes && maj) rec.counters[maj] = (rec.counters[maj] ?? 0) + 1;
       // Only PASSAGE carries a consequence: §12 says a symbolic vote on a
       // failed bill earns heterodoxy credit but no points.
       if (v.yes && out.passed) rec.record += out.reactionGood ? 1 : -1;
@@ -571,11 +574,7 @@ export class Game {
       const incumbent = this.seatFor(office as Office, state, slot);
       const ctx = this.raceContext(office as Office, state, slot, presidentialWinner);
 
-      for (const d of group) {
-        const rec = this.billCounters.get(d.card.id);
-        d.billRecord = rec?.record ?? 0;
-        d.crossBenched = (rec?.crossBench ?? 0) > 0;
-      }
+      for (const d of group) this.readCounters(d);
       const nominees = this.runPrimaries(group, ctx, wave, human);
       if (!nominees.length) continue;
       // §11: "Governors ... carry incumbency into Senate and presidential
@@ -584,9 +583,7 @@ export class Game {
       // office is supposed to be worth, unimplemented. Same shape as the
       // district clause that killed the presidency (F10).
       for (const d of nominees) {
-        const rec = this.billCounters.get(d.card.id);
-        d.billRecord = rec?.record ?? 0;
-        d.crossBenched = (rec?.crossBench ?? 0) > 0;
+        this.readCounters(d);
         const holdsThis = !!incumbent && incumbent.holder!.cardId === d.card.id;
         const isGovernor = (office === 'senator' || office === 'president')
           && this.seats.some((st) => st.office === 'governor' && st.holder?.cardId === d.card.id);
@@ -964,8 +961,26 @@ export class Game {
     return undefined;
   }
 
+  /** §12: "the card's accumulated counters are simply read off at
+   *  resolution." Counters carry the colour of the party that was in power
+   *  when the vote was cast, so a card's cross-bench counters are the ones
+   *  whose colour is not its own party -- and which party they DO carry is
+   *  the direction of the defection. */
+  private readCounters(d: Declaration): void {
+    const rec = this.billCounters.get(d.card.id);
+    d.billRecord = rec?.record ?? 0;
+    let cross = 0, toward: Party | undefined, most = 0;
+    for (const [colour, n] of Object.entries(rec?.counters ?? {}) as [Party, number][]) {
+      if (colour === d.card.party) continue;
+      cross += n;
+      if (n > most) { most = n; toward = colour; }
+    }
+    d.crossBench = cross;
+    d.crossBenchToward = toward;
+  }
+
   /** §12's card counters, by card id. */
-  private billCounters = new Map<string, { record: number; crossBench: number }>();
+  private billCounters = new Map<string, { record: number; counters: Partial<Record<Party, number>> }>();
   private billsBy: Record<number, number> = {};
   private termsBy: Record<number, number> = {};
   private consecutiveBy: Record<number, number> = {};

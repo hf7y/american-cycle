@@ -22,6 +22,11 @@ export interface PrimaryGeneralConfig {
   extremistPrimary: number; extremistGeneral: number;
   heterodoxPrimaryPenalty: number; crossBenchPrimaryPenalty: number;
   billCounterPips: number;
+  /** §12: "Sentiment at election time determines whether that counter is an
+   *  asset or a liability." Pips per cross-bench counter in the GENERAL,
+   *  signed by whether the defection ran with the state's drift or against
+   *  it. 0 ships the primary-only reading; the term is unmeasured. */
+  crossBenchGeneral: number;
 }
 
 export interface RaceContext {
@@ -49,7 +54,11 @@ export interface Declaration {
   /** pips of endorsement bought in the primary; §9 makes these primary-only */
   endorsements?: number;
   incumbent?: boolean;
-  crossBenched?: boolean;
+  /** §12: how many counters this card carries in the OTHER party's colour,
+   *  and which colour that is. Not a boolean -- a serial cross-bencher is not
+   *  a one-time defector. */
+  crossBench?: number;
+  crossBenchToward?: Party;
   /** §12: "the card's accumulated counters are simply read off at resolution."
    *  Signed: a good reaction on a yes-vote is an asset, a bad one a liability. */
   billRecord?: number;
@@ -97,10 +106,26 @@ export function buildModifiers(
     if (d.endorsements) m.push({ source: 'endorsements', pips: d.endorsements });
     if (hasEffect(d.card, 'extremist')) m.push({ source: 'extremist (primary)', pips: pg.extremistPrimary });
     if (hasEffect(d.card, 'heterodox')) m.push({ source: 'heterodox (primary)', pips: pg.heterodoxPrimaryPenalty });
-    if (d.crossBenched) m.push({ source: 'cross-benched', pips: pg.crossBenchPrimaryPenalty });
+    if (d.crossBench) {
+      m.push({ source: `cross-benched ×${d.crossBench}`, pips: pg.crossBenchPrimaryPenalty * d.crossBench });
+    }
     if (d.billRecord) m.push({ source: 'bill record', pips: d.billRecord * pg.billCounterPips });
   } else {
     if (hasEffect(d.card, 'extremist')) m.push({ source: 'extremist (general)', pips: pg.extremistGeneral });
+
+    // §12: a counter is an asset or a liability according to sentiment. A
+    // defection toward the party the state is drifting TOWARD reads as
+    // independence; the same defection against the drift reads as betrayal.
+    // The primary prices cross-benching flat, because a primary electorate is
+    // the party's base everywhere; only the general knows where it is.
+    if (d.crossBench && d.crossBenchToward && pg.crossBenchGeneral && ctx.lean !== 0) {
+      const toward = d.crossBenchToward === 'R' ? 1 : d.crossBenchToward === 'D' ? -1 : 0;
+      if (toward !== 0) {
+        const withDrift = Math.sign(ctx.lean) === toward ? 1 : -1;
+        m.push({ source: `cross-bench ${withDrift > 0 ? 'with' : 'against'} the drift ×${d.crossBench}`,
+                 pips: pg.crossBenchGeneral * d.crossBench * withDrift });
+      }
+    }
 
     // National modifiers. `national: true` is precisely the set a heterodox
     // candidate ignores (§9) -- the tide, never the noise.

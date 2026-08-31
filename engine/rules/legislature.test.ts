@@ -20,6 +20,7 @@ const votes = (seats: Seat[], yes: (s: Seat) => boolean): Vote[] =>
   seats.filter((s) => s.holder).map((s) => ({
     player: s.holder!.player, party: s.holder!.party,
     office: s.office as 'senator' | 'representative', yes: yes(s),
+    cardId: s.holder!.cardId,
   }));
 
 test('a bare majority cannot pass the Senate — 60% forces cross-benching (§12)', () => {
