@@ -271,8 +271,14 @@ function drawHand() {
   for (const c of cands) {
     if (used.has(c.id)) continue;
     const n = el('div','cc '+c.party+(S.sel && S.sel.id===c.id?' sel':''));
-    n.appendChild(el('div','nm',c.name));
-    n.appendChild(el('div','mt',`${c.party} · ${c.homeState}${c.homeStateBonus?' +'+c.homeStateBonus:''} · ${c.era}`));
+    const hd = el('div','hd');
+    const src = (typeof PORTRAITS !== 'undefined') && PORTRAITS[c.id];
+    if (src) { const img = el('img','pt'); img.src = src; img.alt = ''; hd.appendChild(img); }
+    const txt = el('div');
+    txt.appendChild(el('div','nm',c.name));
+    txt.appendChild(el('div','mt',`${c.party} · ${c.homeState}${c.homeStateBonus?' +'+c.homeStateBonus:''} · ${c.era}`));
+    hd.appendChild(txt);
+    n.appendChild(hd);
     if (c.belief) n.appendChild(el('div','bel','"'+c.belief+'"'));
     const tw = el('div');
     for (const f of c.effects) tw.appendChild(el('span','tag '+(f.type==='heterodox'?'het':f.type==='extremist'?'ext':''), f.type));

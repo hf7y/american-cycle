@@ -56,6 +56,9 @@ const packs: Record<string, unknown> = {};
 for (const f of readdirSync(new URL('data/', root))) {
   if (f.endsWith('.json')) packs[f.replace(/^pack-|\.json$/g, '')] = JSON.parse(read(`data/${f}`));
 }
+let portraits = '{}';
+try { portraits = read('data/portraits.json'); } catch { /* portraits are optional */ }
+
 const configs: Record<string, unknown> = {};
 for (const f of readdirSync(new URL('engine/config/', root))) {
   if (f.endsWith('.json')) configs[f.replace(/\.json$/, '')] = JSON.parse(read(`engine/config/${f}`));
@@ -64,7 +67,7 @@ for (const f of readdirSync(new URL('engine/config/', root))) {
 const html = read('ui/index.template.html')
   .replace('/*__ENGINE__*/', engine)
   .replace('/*__PACKS__*/', `const PACKS = ${JSON.stringify(packs)};`)
-  .replace('/*__CONFIGS__*/', `const CONFIGS = ${JSON.stringify(configs)};`)
+  .replace('/*__CONFIGS__*/', `const CONFIGS = ${JSON.stringify(configs)};\nconst PORTRAITS = ${portraits};`)
   .replace('/*__APP__*/', read('ui/app.js'));
 
 writeFileSync(new URL('ui/index.html', root), html);

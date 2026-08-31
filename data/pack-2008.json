@@ -310,11 +310,7 @@
    ],
    "belief": "The only no vote on the Patriot Act",
    "era": 2008,
-   "effects": [
-    {
-     "type": "heterodox"
-    }
-   ]
+   "effects": []
   },
   {
    "kind": "candidate",
@@ -446,11 +442,7 @@
    ],
    "belief": "Turnaround artist",
    "era": 2008,
-   "effects": [
-    {
-     "type": "heterodox"
-    }
-   ]
+   "effects": []
   },
   {
    "kind": "candidate",
@@ -480,11 +472,7 @@
    ],
    "belief": "America's mayor",
    "era": 2008,
-   "effects": [
-    {
-     "type": "heterodox"
-    }
-   ]
+   "effects": []
   },
   {
    "kind": "candidate",
@@ -578,11 +566,7 @@
    ],
    "belief": "McCain's wingman",
    "era": 2008,
-   "effects": [
-    {
-     "type": "heterodox"
-    }
-   ]
+   "effects": []
   },
   {
    "kind": "candidate",
@@ -672,11 +656,7 @@
    ],
    "belief": "Nunn-Lugar",
    "era": 2008,
-   "effects": [
-    {
-     "type": "heterodox"
-    }
-   ]
+   "effects": []
   },
   {
    "kind": "candidate",
@@ -808,11 +788,7 @@
    ],
    "belief": "Lost the recount",
    "era": 2008,
-   "effects": [
-    {
-     "type": "heterodox"
-    }
-   ]
+   "effects": []
   },
   {
    "kind": "candidate",
@@ -827,11 +803,7 @@
    ],
    "belief": "Deficit hawk",
    "era": 2008,
-   "effects": [
-    {
-     "type": "heterodox"
-    }
-   ]
+   "effects": []
   },
   {
    "kind": "candidate",
