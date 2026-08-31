@@ -1221,3 +1221,37 @@ each turn loses 94% of the time.
 and it came from noticing that the automated playtest finished 4th of 4 twice
 and asking whether that was the bot playing badly or the table being unfair. It
 was both.*
+
+---
+
+## F31. What actually wins: the Senate and the presidency. House seats lose.
+
+F30 shipped first-game guidance inferred from how I wrote the Lookahead agent
+rather than from measurement. Checking it — 200 games, four mixed agents,
+seats held at game end:
+
+| | Senate | House | Governor | President |
+|---|---|---|---|---|
+| winners | **24.4** | 4.7 | 3.6 | 0.5 |
+| everyone else | 7.0 | **11.9** | 3.5 | 0.2 |
+| **winner advantage** | **3.47×** | **0.39×** | **1.02×** | **3.52×** |
+
+The advice was right about the Senate and **understated the House**. Winners
+do not merely under-invest in House seats — they hold **a third as many** as
+the players who lose. Holding House seats is *anti-correlated with winning*.
+
+That follows from three things already measured: a House seat scores 1, expires
+every two years, grants no hand size, and arrives attached to a district card
+that is itself ballast (F21). `HouseFarm` wins 0% of round robins, which is the
+same fact from the other end.
+
+**Governors are exactly neutral — 1.02×.** §11 gives them points, Senate
+appointments and a launchpad, and describes them as having "no effect on the
+map". Measured, they have no effect on *winning* either. That is not
+necessarily wrong — a card that is worth taking but never decisive is a fine
+thing for a board to contain — but it is worth the designer knowing that the
+office currently does nothing a player should plan around.
+
+**The in-app guidance now quotes these numbers** rather than my reasoning about
+my own agent. The distinction matters: the first version was a plausible story
+about why Lookahead wins, and the second is what winners actually hold.
