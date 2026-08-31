@@ -1,4 +1,5 @@
 import { loadConfig, loadPacks, playOne } from '../sim/harness.ts';
+import { seeds as sample } from './sample.ts';
 import type { Claim, Finding } from './types.ts';
 
 /** The SHIPPED setting, read from disk rather than restated here. A config that
@@ -13,7 +14,7 @@ const P = (a: number, b: number, c: number) =>
   [{ maxPips: 1, push: a }, { maxPips: 3, push: b }, { maxPips: 99, push: c }];
 
 /** mean |lean| and durable-realignment count for one decay/push pairing */
-function measure(over: Record<string, unknown>, seeds = 50) {
+function measure(over: Record<string, unknown>, seeds = sample(50)) {
   const base = loadConfig('tuned.json');
   const cards = loadPacks(['1932', '1964', '1976', '1992', '2008', '2016', '2024']);
   const cfg = {

@@ -7,41 +7,46 @@
  *
  *  Everything else here is shape: a finding without a question, a headline, a
  *  stamp or a verdict is prose wearing a module's clothes.
+ *
+ *  The shape checks read the module and cost nothing. The two below them run
+ *  every predicate, which plays hundreds of games apiece and takes minutes, so
+ *  they only run under FINDINGS_DEEP=1. `FINDINGS_SEEDS` (see `sample.ts`)
+ *  cuts the game counts if you want the deep pass cheaply.
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readdirSync, existsSync } from 'node:fs';
-import type { Finding } from './types.ts';
+import type { Claim, Finding } from './types.ts';
 
 const dir = new URL('./', import.meta.url);
-const files = readdirSync(dir).filter((f) => f.endsWith('.ts') && f !== 'types.ts' && !f.endsWith('.test.ts'));
+const files = readdirSync(dir).filter((f) =>
+  f.endsWith('.ts') && f !== 'types.ts' && f !== 'sample.ts' && !f.endsWith('.test.ts'));
+
+/** Importing a finding module is cheap: the measuring happens in `predicate`. */
+const loaded = new Map<string, Finding>();
+for (const f of files) {
+  const mod = await import(new URL(f, dir).href) as { finding?: Finding };
+  if (mod.finding) loaded.set(f, mod.finding);
+}
 
 /** Predicates play hundreds of games each. Run every one ONCE and share the
  *  result, or this file costs as much as the whole findings suite per test. */
-const loaded = new Map<string, Finding>();
-const claimsOf = new Map<string, Awaited<ReturnType<Finding['predicate']>>>();
-
-async function all() {
-  if (loaded.size) return;
-  for (const f of files) {
-    const mod = await import(new URL(f, dir).href) as { finding?: Finding };
-    if (!mod.finding) continue;
-    loaded.set(f, mod.finding);
-    claimsOf.set(f, await mod.finding.predicate());
-  }
+const claimsOf = new Map<string, Claim[]>();
+async function runPredicates() {
+  if (claimsOf.size) return;
+  for (const [f, finding] of loaded) claimsOf.set(f, await finding.predicate());
 }
 
-test('every finding module exports a finding', async () => {
+const skip = process.env.FINDINGS_DEEP === '1'
+  ? false
+  : 'needs every predicate to run — set FINDINGS_DEEP=1 (and FINDINGS_SEEDS to cut the game counts)';
+
+test('every finding module exports a finding', () => {
   assert.ok(files.length > 0, 'no findings found at all');
-  for (const f of files) {
-    const mod = await import(new URL(f, dir).href) as { finding?: Finding };
-    assert.ok(mod.finding, `${f} exports no \`finding\``);
-  }
-  await all();
+  for (const f of files) assert.ok(loaded.has(f), `${f} exports no \`finding\``);
 });
 
-test('every finding is well formed', async () => {
-  await all();
+test('every finding is well formed', () => {
   for (const [f, finding] of loaded) {
     const where = `${f} (${finding.id})`;
     assert.match(finding.id, /^[a-z0-9-]+$/, `${where}: id must be kebab-case`);
@@ -55,8 +60,8 @@ test('every finding is well formed', async () => {
   }
 });
 
-test('a declared config dependency exists and is checked by a zero-tolerance claim', async () => {
-  await all();
+test('a declared config dependency exists and is checked by a zero-tolerance claim', { skip }, async () => {
+  await runPredicates();
   for (const [f, finding] of loaded) {
     if (!finding.dependsOn.length) continue;
     const where = `${f} (${finding.id})`;
@@ -72,8 +77,8 @@ test('a declared config dependency exists and is checked by a zero-tolerance cla
   }
 });
 
-test('claims are measurable: finite values and a sane tolerance', async () => {
-  await all();
+test('claims are measurable: finite values and a sane tolerance', { skip }, async () => {
+  await runPredicates();
   for (const [f] of loaded) {
     const claims = claimsOf.get(f)!;
     assert.ok(claims.length > 0, `${f}: predicate returned no claims`);

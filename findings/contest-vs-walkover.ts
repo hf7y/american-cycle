@@ -1,8 +1,9 @@
 import { loadConfig, loadPacks, playOne } from '../sim/harness.ts';
 import { withDistrictFraction } from '../sim/sweeps.ts';
+import { seeds as sample } from './sample.ts';
 import type { Claim, Finding } from './types.ts';
 
-function measure(players: number, hand: number, frac: number, uncontestedPush: number, seeds = 40) {
+function measure(players: number, hand: number, frac: number, uncontestedPush: number, seeds = sample(40)) {
   const base = loadConfig('tuned.json');
   const all = loadPacks(['1932', '1964', '1976', '1992', '2008', '2016', '2024']);
   const cards = withDistrictFraction(all, frac, 3);

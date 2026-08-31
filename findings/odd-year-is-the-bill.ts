@@ -2,6 +2,7 @@ import { loadConfig, loadPacks } from '../sim/harness.ts';
 import { Game } from '../engine/game.ts';
 import { AGENTS } from '../sim/agents.ts';
 import { RNG } from '../engine/rules/rng.ts';
+import { seeds as sample } from './sample.ts';
 import type { Claim, Finding } from './types.ts';
 
 /** What actually happens in an odd year, versus an even one.
@@ -13,7 +14,7 @@ import type { Claim, Finding } from './types.ts';
 function measure(
   billFrequency: 'annual' | 'biennial',
   decayFrequency: 'annual' | 'biennial',
-  seeds = 40,
+  seeds = sample(40),
 ) {
   const base = loadConfig('tuned.json');
   const cards = loadPacks(['1932', '1964', '1976', '1992', '2008', '2016', '2024']);

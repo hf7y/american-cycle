@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { loadConfig, loadPacks, playOne } from '../sim/harness.ts';
+import { seeds as sample } from './sample.ts';
 import type { Claim, Finding } from './types.ts';
 
 /** The real distribution is DATA, not a number retyped into prose: 9,555 House
@@ -30,7 +31,7 @@ function real() {
  *  Config is `tuned` as shipped, including its 16-year cap; only the start year
  *  moves, because the talon is era-ordered oldest-first and a seven-pack pool
  *  deals 1932 cards whatever the calendar says. */
-function simMargins(seeds = 60) {
+function simMargins(seeds = sample(60)) {
   const base = loadConfig('tuned.json');
   const cards = loadPacks(['1932', '1964', '1976', '1992', '2008', '2016', '2024']);
   const cfg = { ...base, game: { ...base.game, startYear: 1932 } };

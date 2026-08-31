@@ -2,6 +2,7 @@ import { loadConfig, loadPacks, playOne } from '../sim/harness.ts';
 import { runawayMetrics } from '../sim/roundrobin.ts';
 import type { Config } from '../engine/game.ts';
 import type { Card } from '../engine/types/index.ts';
+import { seeds as sample } from './sample.ts';
 import type { Claim, Finding } from './types.ts';
 
 const AGENTS = ['Greedy', 'Lookahead', 'SenateFlood', 'HeterodoxSpecialist'];
@@ -11,7 +12,7 @@ const AGENTS = ['Greedy', 'Lookahead', 'SenateFlood', 'HeterodoxSpecialist'];
  *  seed blocks it moved between 0.50 and 0.63 with the engine held still. The
  *  tolerances below are +/-0.2 — three years — which is wider than that jitter
  *  and still narrower than the gap to the healthy band. */
-const SEEDS = Array.from({ length: 120 }, (_, i) => 1030400 + i);
+const SEEDS = Array.from({ length: sample(120) }, (_, i) => 1030400 + i);
 
 /** Share of player-score series that never fall over a whole game.
  *

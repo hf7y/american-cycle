@@ -1,9 +1,10 @@
 import { loadConfig, loadPacks, playOne } from '../sim/harness.ts';
 import type { Config } from '../engine/game.ts';
 import type { Card } from '../engine/types/index.ts';
+import { seeds as sample } from './sample.ts';
 import type { Claim, Finding } from './types.ts';
 
-const SEEDS = 120;
+const SEEDS = sample(120);
 
 /** Passage rate and cross-bench volume for one table at one threshold. */
 function measure(agents: string[], senatePassage: number, cards: Card[], base: Config) {

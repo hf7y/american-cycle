@@ -1,5 +1,6 @@
 import { loadConfig, loadPacks, playOne } from '../sim/harness.ts';
 import { withDistrictFraction } from '../sim/sweeps.ts';
+import { seeds as sample } from './sample.ts';
 import type { Claim, Finding } from './types.ts';
 
 /** SIM-BRIEF Part 5: "If it's over about 40%, players aren't fighting each
@@ -16,7 +17,7 @@ const TARGET = 60;
  *
  *  Config is `tuned` as shipped, including its 16-year cap; only the start year
  *  moves, to keep the era-ordered seven-pack talon in step with the calendar. */
-function contested(hand: number, districtFraction: number, seeds = 40): number {
+function contested(hand: number, districtFraction: number, seeds = sample(40)): number {
   const base = loadConfig('tuned.json');
   const cards = withDistrictFraction(
     loadPacks(['1932', '1964', '1976', '1992', '2008', '2016', '2024']), districtFraction, 3);

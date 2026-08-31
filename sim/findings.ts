@@ -7,6 +7,10 @@
  *
  *  `--restamp` rewrites the stamped values and dates in place, which is the
  *  only sanctioned way for a headline to change.
+ *
+ *  `FINDINGS_SEEDS=12` cuts every predicate's game count. That proves they
+ *  all still RUN in a fraction of the time; it says nothing about whether a
+ *  headline holds, because the stamps were taken at the full counts.
  */
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { execSync } from 'node:child_process';
@@ -14,7 +18,8 @@ import type { Finding } from '../findings/types.ts';
 
 const dir = new URL('../findings/', import.meta.url);
 const restamp = process.argv.includes('--restamp');
-const files = readdirSync(dir).filter((f) => f.endsWith('.ts') && f !== 'types.ts');
+const files = readdirSync(dir).filter((f) =>
+  f.endsWith('.ts') && f !== 'types.ts' && f !== 'sample.ts' && !f.endsWith('.test.ts'));
 
 const sha = (() => {
   try { return execSync('git rev-parse --short HEAD', { encoding: 'utf8' }).trim(); } catch { return 'unknown'; }

@@ -3,6 +3,7 @@ import { AGENTS } from '../sim/agents.ts';
 import { Game } from '../engine/game.ts';
 import { RNG } from '../engine/rules/rng.ts';
 import type { Office } from '../engine/types/index.ts';
+import { seeds as sample } from './sample.ts';
 import type { Claim, Finding } from './types.ts';
 
 /** A House specialist has to be at the table or the question cannot be asked:
@@ -10,7 +11,7 @@ import type { Claim, Finding } from './types.ts';
  *  and the ratio measures noise rather than whether the office pays. */
 const POOL = ['Greedy', 'Lookahead', 'SenateFlood', 'HouseFarm'];
 const OFFICES: Office[] = ['senator', 'representative', 'governor', 'president'];
-const GAMES = 120;
+const GAMES = sample(120);
 
 /** Seats held at game end, split by whether the holder won.
  *

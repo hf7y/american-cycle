@@ -15,12 +15,20 @@ jobs:
       - run: npm ci || npm install
       - name: typecheck
         run: npx tsc --noEmit
-      - name: engine tests
-        run: node --test 'engine/**/*.test.ts'
+      # The findings half of this is the shape checks only. Their expensive
+      # half re-runs every predicate, which is exactly what the step below
+      # does, and running both cost this job four minutes twice over.
+      - name: tests
+        run: npm test
       # Findings are predicates, not prose. A stale headline is information
       # rather than a failure, so this reports drift and only fails on BROKEN.
+      # At a cut sample size, so this asks "does every predicate still run",
+      # not "does every headline still hold" — that is a full-N question and
+      # the answer moves, so it is asked by hand: `node sim/findings.ts`.
       - name: findings still re-derive
         run: node sim/findings.ts
+        env:
+          FINDINGS_SEEDS: 12
 
   board:
     runs-on: ubuntu-latest

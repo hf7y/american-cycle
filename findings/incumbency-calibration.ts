@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { loadConfig, loadPacks, playOne } from '../sim/harness.ts';
+import { seeds as sample } from './sample.ts';
 import type { Claim, Finding } from './types.ts';
 
 /** Real House incumbent reelection, 1976-2016, re-read from the data set
@@ -24,7 +25,7 @@ function realHouseReelection(): number {
  *
  *  Config is `tuned` as shipped, including its 16-year cap; only the start year
  *  moves, to keep the era-ordered seven-pack talon in step with the calendar. */
-function reelection(incumbency: number, seeds = 60) {
+function reelection(incumbency: number, seeds = sample(60)) {
   const base = loadConfig('tuned.json');
   const cards = loadPacks(['1932', '1964', '1976', '1992', '2008', '2016', '2024']);
   const cfg = {
