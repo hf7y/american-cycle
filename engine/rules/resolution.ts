@@ -29,18 +29,24 @@ export class Wave {
   private national = new Map<Party, number>();
   private state = new Map<string, number>();
   private rng: RNG;
+  /** Counts dice actually drawn. The withdrawal-window test asserts this is
+   *  still zero when the window closes -- BUILD-BRIEF calls that the single
+   *  most important rule in the game and the easiest to implement wrong. */
+  rolls = 0;
   constructor(rng: RNG) { this.rng = rng; }
   nationalDie(p: Party): number {
-    if (!this.national.has(p)) this.national.set(p, this.rng.d6());
+    if (!this.national.has(p)) { this.national.set(p, this.rng.d6()); this.rolls++; }
     return this.national.get(p)!;
   }
   stateDie(p: Party, st: string): number {
     const k = `${p}:${st}`;
-    if (!this.state.has(k)) this.state.set(k, this.rng.d6());
+    if (!this.state.has(k)) { this.state.set(k, this.rng.d6()); this.rolls++; }
     return this.state.get(k)!;
   }
   roll(p: Party, st: string, rng: RNG): DiceRoll {
-    return { national: this.nationalDie(p), state: this.stateDie(p, st), candidate: rng.d6() };
+    const n = this.nationalDie(p), st2 = this.stateDie(p, st);
+    this.rolls++;
+    return { national: n, state: st2, candidate: rng.d6() };
   }
 }
 

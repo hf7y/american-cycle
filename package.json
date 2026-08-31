@@ -10,5 +10,8 @@
     "build:ui": "node ui/build.ts",
     "typecheck": "tsc --noEmit"
   },
-  "devDependencies": { "typescript": "^5.6.0" }
+  "devDependencies": {
+    "@types/node": "^26.4.0",
+    "typescript": "^5.6.0"
+  }
 }
