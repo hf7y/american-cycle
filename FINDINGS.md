@@ -448,10 +448,9 @@ part of the same problem.
 
 ## F14. The sweeps, now that the rules fire. Two clean answers, one acquittal.
 
-**+1 incumbency is correctly calibrated.** §16 calls it "a calibration check on
-+1", and it passes within a point: simulated reelection 93% against a real
-94.1% for the House 1976–2016. +2 gives 96%, +3 gives 97%. **Keep +1.** This is
-the design's best single number, chosen before any of it was measured.
+**~~+1 incumbency is correctly calibrated.~~ WRONG — see F37.** This compared a
+figure pooled across every office below the presidency against a House-only
+benchmark. Measured on House races alone, +1 gives 98.8% against a real 94.1%.
 
 **The filibuster is what stalls the omnibill.** Bills pass 63% at a 50% Senate
 threshold, 16% at the current 60%, and **0% at 67%**. Cross-benching is roughly
@@ -1484,3 +1483,43 @@ that tries to make it do something before believing the number.
 computed a rotation index as `year / 2`, which is fractional in an odd year, so
 the agent index was 988.5. Even-year-only play had hidden it since the first
 commit.*
+
+---
+
+## F37. +1 incumbency is NOT calibrated. F14 compared the wrong populations.
+
+**Correcting F14**, which called +1 "the design's best single number" and
+reported simulated reelection at 93% against a real 94.1%. Measured properly,
+by a predicate that reports all three populations side by side rather than one:
+
+| population | value |
+|---|---|
+| House reelection at +1 | **98.84%** |
+| House at +2 | 99.37% |
+| House at +3 | 99.66% |
+| **real House 1976–2016** | **94.10%** |
+| +1, **contested** House races only | **78.18%** |
+| +1, pooled over every office below the presidency | 94.05% |
+
+**F14's 93% was the pooled figure** — Senate (~92%) and governorships averaged
+in with the House — **compared against a House-only benchmark.**
+`sim/sweeps-full.ts` computes the pooled rate and the finding read it as a House
+rate. **F9 already had the correct number**, reporting "representative 98.2%",
+so `FINDINGS.md` contradicted itself for six findings and I quoted the wrong
+half of my own file.
+
+**+1 overshoots by 4.7 points, and raising it makes that worse**, so the sweep's
+direction was right and its conclusion was not: there is no setting of this
+modifier that lands on reality, because the modifier is not what sets the rate.
+
+**What actually sets it is the contest rate.** Strip walkovers and contested
+incumbents hold **78%**. An unopposed incumbent always holds, so at 92%
+walkovers the reelection rate measures how rarely anyone is challenged. §16
+calls incumbency "a calibration check on +1"; the check cannot run until races
+are contested, and every number this report has quoted for it has really been a
+measurement of F6.
+
+**Method note.** This was caught by converting the prose to a predicate: the
+predicate had to name which population it measured, and naming it exposed that
+the prose had not. A sentence can hold two incompatible numbers for six
+findings; a function cannot.

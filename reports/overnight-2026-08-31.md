@@ -199,7 +199,7 @@ nothing locks in because nothing accumulates. Full table in `FINDINGS.md` F28.
 
 Most of this report is problems, so the successes are worth naming: district
 gating kills wide-and-empty stone dead (0% win rate, 100% loss head-to-head);
-**+1 incumbency reproduces reality within a point** (93–94% against 94.1%); the
+**+1 incumbency does NOT reproduce reality** — 98.8% against 94.1% on House races (F37; the earlier 93% compared a pooled figure to a House benchmark); the
 single-token economy holds at a peak of 151 against a 200 failure line; the
 modifier stack averages 2.43 entries so the mental arithmetic really is mental;
 and the dice do exactly what the corrected odds table predicts (32.1% observed

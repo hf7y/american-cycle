@@ -17,6 +17,10 @@ jobs:
         run: npx tsc --noEmit
       - name: engine tests
         run: node --test 'engine/**/*.test.ts'
+      # Findings are predicates, not prose. A stale headline is information
+      # rather than a failure, so this reports drift and only fails on BROKEN.
+      - name: findings still re-derive
+        run: node sim/findings.ts
 
   board:
     runs-on: ubuntu-latest

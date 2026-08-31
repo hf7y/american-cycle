@@ -9,5 +9,10 @@
     "resolveJsonModule": true,
     "skipLibCheck": true
   },
-  "include": ["engine", "sim", "ui"]
+  "include": [
+    "engine",
+    "sim",
+    "ui",
+    "findings"
+  ]
 }
