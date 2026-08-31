@@ -95,7 +95,19 @@ abstract class Base implements Agent {
   voteBill(v: GameView, _g: number, seat: Seat): boolean {
     return seat.holder?.party === this.majority(v);
   }
-  veto(_v: GameView, _g: number): boolean { return false; }
+  /** §12: "Vetoing makes most sense when a midterm has handed the opposition
+   *  the majority" -- the president chooses between everyone gaining, rivals
+   *  gaining more, and nobody gaining while he owns the stagnation. Every agent
+   *  returned false, so the veto had never been exercised once. */
+  veto(v: GameView, _g: number): boolean {
+    const pres = v.seats.find((s) => s.office === 'president' && s.holder);
+    if (pres?.holder?.player !== v.me) return false;
+    // Refuse when the chamber that scores from this is not yours: yes-voters
+    // score doubled for the majority party, so a bill under split government
+    // pays your rivals more than it pays you.
+    const maj = this.majority(v);
+    return !!maj && maj !== pres.holder.party;
+  }
   protected majority(v: GameView): string | undefined {
     const t = new Map<string, number>();
     for (const s of v.seats) if (s.holder) t.set(s.holder.party, (t.get(s.holder.party) ?? 0) + 1);

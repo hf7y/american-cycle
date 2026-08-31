@@ -1390,3 +1390,48 @@ Printed card text now fires in **4.12% of races**. That is a real answer to
 SIM-BRIEF's question rather than a zero, and it is low — the effect types work,
 but only a dozen cards carry text with a hook. Whether to write hooks for the
 other 334 is a card-authoring decision, not an engine one.
+
+---
+
+## F35. The veto had never been exercised. And the sweep nearly reported a false dead rule.
+
+Third coverage sweep, this time over §7's ten year-sequence steps. Two results,
+one about the design and one about my own harness.
+
+**The veto fired 0.00 times per game.** Not rarely — never. Every agent's
+`veto()` returned `false`, so §12's rule had never been exercised in any run in
+this report. SIM-BRIEF lists the veto as a cut candidate — *"only rational in
+split-government years, which may be rare"* — and that could not be assessed
+against agents structurally incapable of using it.
+
+**Implemented §12's stated case:** *"Vetoing makes most sense when a midterm
+has handed the opposition the majority."* A president now refuses a bill when
+the chamber majority is not his own party, because yes-voters score doubled for
+the majority and a bill under split government pays his rivals more than it
+pays him.
+
+| | before | after |
+|---|---|---|
+| vetoes per game | **0.00** | **0.30** |
+| games ending under split government | — | 23% |
+
+**So the brief's prior is right and the rule survives.** The veto is rare
+because split government is rare — 23% of games — not because it is badly
+priced. A rule that fires in roughly a third of games, in exactly the situation
+the design says it should, is doing its job. **Keep it.**
+
+### The harness error, which matters more
+
+The same sweep reported **the Fed as firing 0.00 times per game**. It fires in
+about five. The sweep read the game log, and `interactiveTick` logged the Fed
+tightening while the headless `tick` did not — two code paths writing different
+logs for the same event.
+
+Had I trusted it, this report would carry a confident false finding that §13's
+entire Fed mechanism was dead, in a section whose whole purpose is identifying
+dead rules. It was caught only because the number contradicted an earlier
+measurement of the same thing.
+
+**Both paths now log it.** And the standing caution gains a line: *a coverage
+sweep is only as good as the instrument it reads, and a log written by one code
+path and not its twin is not an instrument.*

@@ -947,7 +947,10 @@ export class Game {
     for (const p of this.players) p.tapped.clear();      // 1. action phase
     if (!this.impeachment()) this.omnibill();            // 2-3. bill, or a removal instead
     const fed = econ.fedCheck(this.economy, this.cfg.economy, this.rng);  // 4.
-    if (fed.rateRise) this.stats.rateRises++;
+    // Logged in BOTH paths. The interactive tick logged this and the headless
+    // one did not, so a coverage sweep that reads the log reported the Fed as
+    // a dead rule when it fires in 44% of games.
+    if (fed.rateRise) { this.stats.rateRises++; this.log.push(`${this.year}: the Fed tightens`); }
     econ.walk(this.economy, this.cfg.economy, this.rng);
     lean.decay(this.leanMap, this.cfg.lean, this.year);  // 5.
 

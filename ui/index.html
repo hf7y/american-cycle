@@ -1882,7 +1882,10 @@ class Game {
     for (const p of this.players) p.tapped.clear();      // 1. action phase
     if (!this.impeachment()) this.omnibill();            // 2-3. bill, or a removal instead
     const fed = econ.fedCheck(this.economy, this.cfg.economy, this.rng);  // 4.
-    if (fed.rateRise) this.stats.rateRises++;
+    // Logged in BOTH paths. The interactive tick logged this and the headless
+    // one did not, so a coverage sweep that reads the log reported the Fed as
+    // a dead rule when it fires in 44% of games.
+    if (fed.rateRise) { this.stats.rateRises++; this.log.push(`${this.year}: the Fed tightens`); }
     econ.walk(this.economy, this.cfg.economy, this.rng);
     lean.decay(this.leanMap, this.cfg.lean, this.year);  // 5.
 
@@ -2060,7 +2063,19 @@ const byEdge = (a        , b        ) => b.edge - a.edge;
   voteBill(v          , _g        , seat      )          {
     return seat.holder?.party === this.majority(v);
   }
-  veto(_v          , _g        )          { return false; }
+  /** §12: "Vetoing makes most sense when a midterm has handed the opposition
+   *  the majority" -- the president chooses between everyone gaining, rivals
+   *  gaining more, and nobody gaining while he owns the stagnation. Every agent
+   *  returned false, so the veto had never been exercised once. */
+  veto(v          , _g        )          {
+    const pres = v.seats.find((s) => s.office === 'president' && s.holder);
+    if (pres?.holder?.player !== v.me) return false;
+    // Refuse when the chamber that scores from this is not yours: yes-voters
+    // score doubled for the majority party, so a bill under split government
+    // pays your rivals more than it pays you.
+    const maj = this.majority(v);
+    return !!maj && maj !== pres.holder.party;
+  }
             majority(v          )                     {
     const t = new Map                ();
     for (const s of v.seats) if (s.holder) t.set(s.holder.party, (t.get(s.holder.party) ?? 0) + 1);
