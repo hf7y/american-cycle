@@ -53,7 +53,10 @@ export interface Config {
            *  §11 implies but §7 forecloses: win a governorship in a year with
            *  no other race competing for your declarations, then carry
            *  incumbency upward into the next even-year Senate run. */
-          oddYearGovernors?: boolean };
+          oddYearGovernors?: boolean;
+          /** may an office-holder stand for a different seat mid-term, vacating
+           *  the one it holds the moment it declares? */
+          resignToRun?: boolean };
 }
 
 export interface PlayerState {
@@ -292,6 +295,47 @@ export class Game {
    *  fired in exactly zero races -- which silently voided §16's "incumbency is
    *  a calibration check on +1". A member whose term is up returns to their
    *  player's hand and may be re-declared into the same seat, or run elsewhere. */
+  /** §11's stepping stone only reaches cards that are IN HAND, and winning
+   *  takes a card out of it. So an office-holder could reach for a higher one
+   *  only in the single cycle its term was expiring -- which is close to the
+   *  complement of real ambition, not an approximation of it: every sitting
+   *  senator ever elected president ran mid-term, as did Wilson, Clinton and
+   *  G.W. Bush. With `resignToRun`, a holder may stand for a different seat at
+   *  any time, and vacates the one it holds the moment it declares. Losing
+   *  costs the old seat too, which is the whole gamble. */
+  private releaseHolders(): void {
+    if (!this.cfg.game.resignToRun) return;
+    for (const s of this.seats) {
+      if (!s.holder || s.office === 'president') continue;
+      const card = this.cardById.get(s.holder.cardId);
+      if (!card) continue;
+      const p = this.players[s.holder.player];
+      if (!p.hand.some((c) => c.kind === 'candidate' && c.id === card.id)) {
+        p.hand.push({ kind: 'candidate', ...card });
+      }
+    }
+  }
+
+  /** Declaring from a seat you hold vacates it NOW, before the primary. A
+   *  member who gives up a safe seat and loses the nomination is simply out,
+   *  which is the historical case and the reason the choice has teeth. */
+  private vacateForRunners(decls: Declaration[]): void {
+    if (!this.cfg.game.resignToRun) return;
+    for (const d of decls) {
+      for (const v of this.seats.filter((st) => st.holder?.cardId === d.card.id
+        && !(st.office === d.office && st.state === d.state && st.slot === d.slot))) {
+        const vo = v.office, vs = v.state, vslot = v.slot;
+        // Record the launchpad BEFORE the seat is cleared. Resigning to run
+        // otherwise destroys the very credential §11 is trying to price, and
+        // the table collapsed from 23.2% of presidential sides to 0.8%.
+        if (vo !== 'president') d.launchpad = vo;
+        v.holder = undefined;
+        this.log.push(`${this.year}: ${d.card.name} gives up ${vo === 'representative' ? 'a House seat' : `the ${vo}'s office`} in ${vs} to run`);
+        if (vo === 'senator') this.fillVacancy(vs, vslot);
+      }
+    }
+  }
+
   private releaseExpiringTerms(open: OpenRace[]): void {
     for (const r of open) {
       const seat = this.seatFor(r.office, r.state, r.slot);
@@ -479,6 +523,7 @@ export class Game {
     const wave = new Wave(this.rng);
     const open = this.openRaces();
     this.releaseExpiringTerms(open);
+    this.releaseHolders();
     const decls: Declaration[] = [];
     const pending: PendingPeg[] = [];
     // §8: sequential around the table, and the order rotates each cycle so
@@ -498,6 +543,7 @@ export class Game {
         pending.push({ player: i, office: d.office, state: d.state, slot: d.slot, party: d.card.party });
       }
     }
+    this.vacateForRunners(decls);
     this.resolveDeclared(decls, wave, -1);
   }
 
@@ -647,8 +693,15 @@ export class Game {
     // presidency is worth something, and worth different amounts in the two
     // rounds. Read off the board, so it needs no card data and no new state.
     for (const d of declarations) {
-      const held = this.seats.find((st) => st.office !== 'president' && st.holder?.cardId === d.card.id);
-      d.launchpad = held?.office;
+      // Already set if the card resigned a seat to get here.
+      if (!d.launchpad) {
+        const held = this.seats.find((st) => st.office !== 'president' && st.holder?.cardId === d.card.id);
+        d.launchpad = held?.office;
+      }
+      // The presidency never set this, so `incumbency` fired in 0 of 11,327
+      // presidential sides against 41.7% everywhere else: the one office the
+      // whole game is about was the one office incumbency did not reach.
+      d.incumbent = !!this.president && this.president.cardId === d.card.id;
     }
     const nominees = this.runPrimaries(declarations, natCtx, wave, human);
     if (!nominees.length) return undefined;
@@ -784,7 +837,10 @@ export class Game {
     const gov = this.seats.find((s) => s.office === 'governor' && s.state === state && s.holder);
     if (!gov) return;
     const p = this.players[gov.holder!.player];
-    const pick = p.hand.find((c) => c.kind === 'candidate') as (CandidateCard & { kind: 'candidate' }) | undefined;
+    // With `resignToRun` a seat-holder sits in hand, and appointing one would
+    // seat the same card twice.
+    const pick = p.hand.find((c) => c.kind === 'candidate'
+      && !this.seats.some((st) => st.holder?.cardId === c.id)) as (CandidateCard & { kind: 'candidate' }) | undefined;
     if (!pick) return;
     const seat = this.seats.find((s) => s.office === 'senator' && s.state === state && s.slot === slot);
     if (!seat) return;
@@ -801,13 +857,16 @@ export class Game {
     else this.seats.push({ office, state, slot, senateClass: office === 'senator' ? (slot as 1 | 2 | 3) : undefined, holder });
     if (office === 'president') this.president = { ...holder };
 
-    // A sitting senator who wins something else leaves a vacancy behind.
-    const vacated = this.seats.find((s) => s.office === 'senator' && s.holder?.cardId === d.card.id
-      && !(s.state === state && s.slot === slot));
-    if (vacated) {
-      const vs = vacated.state, vslot = vacated.slot;
-      vacated.holder = undefined;
-      this.fillVacancy(vs, vslot);
+    // Winning something else leaves EVERY other seat behind. This looked only
+    // for a senate seat, so one card could sit in as many as five at once.
+    // §11 gives the governor an appointment for a Senate vacancy and nothing
+    // for the others; a governorship or a House seat simply stands empty until
+    // its next election, which is what the board can express.
+    for (const v of this.seats.filter((st) => st.holder?.cardId === d.card.id
+      && !(st.office === office && st.state === state && st.slot === slot))) {
+      const vo = v.office, vs = v.state, vslot = v.slot;
+      v.holder = undefined;
+      if (vo === 'senator') this.fillVacancy(vs, vslot);
     }
 
     const p = this.players[d.player];

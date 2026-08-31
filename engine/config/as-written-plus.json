@@ -103,7 +103,8 @@
     "maxYears": 24,
     "victory": "points",
     "deckOutEnds": true,
-    "billTarget": 8
+    "billTarget": 8,
+    "resignToRun": false
   },
   "placeholders": {
     "resolution.tieBreak": "\u00a79 says only 'higher total wins'. Even break is what makes edge 0 exactly 50%; a table needs a real rule.",
