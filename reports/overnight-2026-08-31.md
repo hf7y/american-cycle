@@ -130,13 +130,23 @@ walkovers, so **five national mechanics fired in zero races**.
 | honeymoon | never (no president) | live |
 | Fed rate rise | 44% of games | unchanged, load-bearing |
 | incumbency | **never, in any race** (F9) | live, House 98.2% |
+| endorsements | never spent | 32% of primaries, 72% win |
+| independent candidacies | no pack held one | 39% of contested generals |
+| governor appointments | never | ~12 a game |
+| impeachment | unwired | wired, and still 0% — see F12 |
 
 Two of those — incumbency and the whole national layer — had been silently
 returning nothing while earlier sections of this very report drew conclusions
 from them. **A rule that never fires because something upstream is broken is
 not a dead rule, and cutting it would have been the worst possible outcome of
-this run.** Impeachment (0%) remains the one genuinely unmeasured rule, and it
-is unmeasured because it is unwired, not because it is unwanted.
+this run.**
+
+Impeachment is the one rule that is now correctly implemented and *still* fires
+at 0%, and F12 explains why: two-thirds of the Senate is arithmetically out of
+reach when the president's party holds the chamber by having won the
+presidency. Even that is not a cut recommendation — it is a request for a human
+playtest, because impeachment is a negotiation and every agent here votes the
+party line.
 
 ## 3. Historical validation
 
@@ -310,12 +320,16 @@ night and have since been built):
 - **Incumbency**, which had never fired in any race at all (F9).
 - **The presidency and its five downstream mechanics** (F10).
 
-**Still not implemented, so still not measurable:**
-- **Governor Senate appointments.**
-- **Independent candidacies** — the card schema supports party `I` and the
-  engine skips their primary, but no pack contains one.
-- **Endorsement tapping** — endorsements are scored, but no agent spends one,
-  so the +3 presidential endorsement has never been measured.
+**Also since built and measured** (F13): endorsement tapping, independent
+candidacies, and governor Senate appointments. All three were on the brief's
+dead-rule list and all three were firing at 0% because they were unimplemented.
+Endorsements now appear in 32% of primaries and the endorsed candidate wins
+72%; independents win 39% of *contested* generals; governors make roughly
+twelve appointments a game.
+
+**Nothing on this run's evidence should be cut.** Every rule that looked dead
+was dead upstream, and the audit's real finding is about the harness rather
+than the design.
 
 **Blocked by agent sophistication:** the brief asks whether lookahead beats
 greedy by more than a few points as a measure of strategic depth. It beats it
