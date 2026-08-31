@@ -23,20 +23,27 @@ Branch: `phase1-engine`. Land as a PR; never commit to main.
 - [x] engine/rules/lean.ts — margin push, decay; governors never push
 - [x] engine/rules/economy.ts — economy walk, accumulated G, 2d6 Fed roll-under
 - [x] engine/rules/legislature.ts — omnibill, 60% Senate, veto, impeachment
-- [ ] engine/rules/elections.ts — declaration, withdrawal-before-reveal,
+- [x] engine/rules/elections.ts — declaration, withdrawal-before-reveal,
       primaries, generals, coattails, seating, capture
-- [ ] engine/rules/year.ts + engine/game.ts — §7 sequence
-- [ ] Tests (BUILD-BRIEF names these four as the correctness targets):
+- [x] engine/rules/year.ts + engine/game.ts — §7 sequence
+- [x] Tests (BUILD-BRIEF names these four as the correctness targets):
       odds table; withdrawal closes before deciding info; decay before push;
       governors never push
 - [ ] data/ — real card packs across eras (1976, 1992, 2008, 2016)
-- [ ] sim/agents.ts — Random, Greedy, Lookahead + the eight from SIM-BRIEF §2
-- [ ] sim/harness.ts — `node sim/harness.ts --games N --config baseline.json` → CSV
+- [x] sim/agents.ts — Random, Greedy, Lookahead + the eight from SIM-BRIEF §2
+- [x] sim/harness.ts — `node sim/harness.ts --games N --config baseline.json` → CSV
 - [ ] sim/sweeps.ts — the ten sweeps in SIM-BRIEF Part 4
 - [ ] Run sweeps; pick tuned baseline + 3-4 contrast variants
 - [ ] reports/overnight-2026-08-31.md — SIM-BRIEF deliverable, 7 sections
 - [ ] ui/ — self-contained HTML, play vs computer, pick opponent + variant
 - [ ] Publish as Artifact; open PR
+
+## Where the build stands
+
+Engine complete and green (31 tests, clean typecheck). Four real era packs.
+Ten agents. Harness runs. Findings F1-F5 in FINDINGS.md; F4 (79% of races
+uncontested, vs SIM-BRIEF's 40% bar) is the live problem and the next sweep
+targets it. Branch pushed.
 
 ## Notes / decisions taken while unattended
 
