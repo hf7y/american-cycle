@@ -61,22 +61,29 @@ cards, and the 63% row lasts five years.
 Confidence: **high**. The direction is unambiguous and monotone; the exact
 numbers depend on the card pool.
 
-### 3. The presidency is never contested, and takes five mechanics down with it.
-**Metric** contested share of presidential races.
-**Observed** 0% across 2,750 presidential state races; 3 nominations in 10 games.
-**Target** the presidency should be the most fought-over prize on the board.
-**Change** let accumulated presence convert into a presidential edge — run the
-national primary across the states you hold — or the office is priced wrong.
+### 3. Safe seats cannot exist — the pip scale has a ceiling.
+**Metric** distribution of House margins, sim against 9,555 real races 1976–2018.
+**Observed** median 8 points against a real 32.5; safe seats (40+ pts) are
+**0.0% of simulated races and 37.5% of real ones**.
+**Target** the real distribution is bimodal — a thin competitive middle and a
+large safe mass. SIM-BRIEF calls this the deepest test.
+**Change** decide what a safe seat *is* in this game, then make the scale match.
 
-An edge-ranking agent scores a race by its modifier stack. The presidency is
-run in states where the candidate holds no district and is not native, so its
-edge is ~0 while a House seat with synergy and a home-state bonus scores +4.
-Rational play never runs for it. Because the presidency is the sole source of
-the midterm penalty, coattails, the honeymoon, the veto and the economy
-modifier, **five national mechanics never fire at all** — a dead-rule cascade
-from one unattractive race.
+This is arithmetic, not tuning. A margin is the modifier difference plus
+3d6 − 3d6. Mean stack depth is 2.43 entries of 1–3 pips, so a large realistic
+stack is +8 pips — a 16-point margin at §3's rate. **A 40-point margin needs
++20 pips and the game's entire vocabulary cannot express it at any setting.**
 
-Confidence: **high** on the mechanism, **medium** on the fix.
+One qualification in the design's favour: the game encodes a safe seat as an
+*uncontested* race, where reality encodes it as a contested race won by forty
+points. Adjusting for that narrows the gap from 37.5%-vs-0% to roughly
+46%-vs-93.5% "effectively safe". It narrows and does not close. Either accept
+that a safe seat *is* a walkover and stop comparing margins to reality, or
+widen the scale so a locked district can print a modifier that locks it.
+
+Confidence: **certain** on the ceiling, **open** on which way to resolve it.
+
+**(The presidency finding that stood here has been fixed — see §2 and F10.)**
 
 ### 4. The omnibill is stalled — 16% pass rate.
 **Metric** share of proposed bills that pass.
@@ -105,23 +112,31 @@ Confidence: **high**.
 
 ## 2. Rules recommended for cutting
 
-Only one rule was measured firing rarely enough to be a cut candidate, and the
-honest answer for most of the brief's list is that they are **not implemented**,
-not that they are dead. See §7.
+**Nothing should be cut**, and the reason is worth more than the list.
 
-| rule | fires in | verdict |
+Every rule that looked dead on the first pass was dead *downstream of a bug*,
+not on its own merits. §5 says a district card boosts House, Senate, governor
+and presidential runs in its state; the presidential clause was unimplemented.
+That single omission made the office score edge 0.0 against a House seat's +5,
+so no edge-ranking agent ever ran for it, so all fifty state races were
+walkovers, so **five national mechanics fired in zero races**.
+
+| rule | before the fix | after |
 |---|---|---|
-| Fed rate rise | 44% of games | **alive and load-bearing** — keep |
-| Austerity (negative G) | agents propose it only under EconomyChicken | **untested**, needs an agent that wants it |
-| Veto | never, because a president is never seated | blocked by finding #3, not dead |
-| Impeachment | 0% | **not wired into the year loop** — untested |
-| Extremist / heterodox text | fires on every card carrying it | alive |
+| midterm penalty | never | 63.5 times a game |
+| coattails | never | 52.6 times a game |
+| economy modifier | never | 51.3 times a game |
+| veto | never (no president) | live |
+| honeymoon | never (no president) | live |
+| Fed rate rise | 44% of games | unchanged, load-bearing |
+| incumbency | **never, in any race** (F9) | live, House 98.2% |
 
-**Nothing should be cut on this run's evidence.** A rule that never fires
-because the office feeding it is never filled is not a dead rule; it is a rule
-downstream of a broken one.
-
----
+Two of those — incumbency and the whole national layer — had been silently
+returning nothing while earlier sections of this very report drew conclusions
+from them. **A rule that never fires because something upstream is broken is
+not a dead rule, and cutting it would have been the worst possible outcome of
+this run.** Impeachment (0%) remains the one genuinely unmeasured rule, and it
+is unmeasured because it is unwired, not because it is unwanted.
 
 ## 3. Historical validation
 
@@ -179,24 +194,22 @@ heterodoxy's value upward. Filed as hf7y/american-cycle#6.
 
 ## 4. Balance dashboard
 
-**Skill signal** (40 games each, seats alternated, `tuned`):
+**Skill signal** (40 games each, seats alternated, `tuned`). Both figures moved
+once the presidency worked, because the earlier run was measuring a game with
+five mechanics switched off:
 
-| matchup | result | target | verdict |
-|---|---|---|---|
-| Greedy vs Random | **93%** | 65–80% | **fails high** |
-| Lookahead vs Greedy | **90%** | a few points | planning pays enormously |
-| Greedy vs WideAndEmpty | **100%** | should be dead | **district gating works** |
+| matchup | before | after | target | verdict |
+|---|---|---|---|---|
+| Greedy vs Random | 93% | **85%** | 65–80% | still high |
+| Lookahead vs Greedy | 90% | **83%** | a few points | planning pays enormously |
+| Greedy vs WideAndEmpty | 100% | **100%** | should be dead | **gating works** |
 
-93% is past SIM-BRIEF's "above 90% and there are no interesting decisions" bar.
-Combined with Lookahead beating Greedy 90%, the picture is a game where
-competence dominates and the dice are close to decoration — the opposite of the
-failure the design feared. Note this is measured on a board where almost
-nothing is contested, so it may be an artefact of finding #2 rather than a
-property of the design; it should be re-measured once players actually meet.
+85% is still past SIM-BRIEF's band, but the direction is right and the cause is
+now the contest rate (F6) rather than a switched-off layer.
 
-**Wide-and-empty is confirmed dead.** It wins 0% in the round robin and loses
-100% head-to-head. District gating does the job §5 claims for it. This is the
-design's clearest success in the whole run.
+**Wide-and-empty is confirmed dead** under both measurements — 0% in the round
+robin, 0% head-to-head. District gating does exactly the job §5 claims for it.
+This is the design's clearest success in the whole run.
 
 **Seat bias** (all Greedy, n=300–400, `tuned`, 16 years):
 
@@ -218,26 +231,29 @@ each cycle was tried and made it **worse** at every table size.
 
 **Six-way round robin** (120 games; >40% is dominant):
 
-| strategy | win rate |
-|---|---|
-| BillMaximizer | 40.0% |
-| SenateFlood | 32.5% |
-| EconomyChicken | 26.7% |
-| HeterodoxSpecialist | 0.8% |
-| WideAndEmpty | 0.0% |
-| HouseFarm | 0.0% |
+| strategy | before the presidency fix | after |
+|---|---|---|
+| SenateFlood | 32.5% | **51.7% — DOMINANT** |
+| BillMaximizer | 40.0% | 24.2% |
+| EconomyChicken | 26.7% | 19.2% |
+| HeterodoxSpecialist | 0.8% | 5.0% |
+| WideAndEmpty | 0.0% | 0.0% |
+| HouseFarm | 0.0% | 0.0% |
 
-BillMaximizer sits exactly on the dominance line. It wins by chasing bodies in
-both chambers and voting yes on everything — which is rational when yes-votes
-are the scoring engine and the minority scores nothing.
+**SenateFlood is a genuine hole.** The Senate pays four ways at once: three
+points a seat, a six-year term that holds them, +1 hand size, and — because §10
+puts the Senate second in the nationalisation priority, behind only the
+presidency — the push that moves the map in every midterm. Nothing else on the
+board pays four ways. Filed as hf7y/american-cycle#8.
 
-**HeterodoxSpecialist at 0.8% is the finding that should worry you most.**
-Heterodoxy is one of the design's two theses — "the heterodox candidate who
-survives a hostile state is the most valuable and most fragile card in the
-game." It is currently the second-worst strategy on the board. On an
-uncontested map there is no hostile terrain to survive, because nobody is
-defending anything; insulation from a tide buys nothing when no tide is
-opposing you. Like the skill signal, this should be re-measured after #2.
+Note what the "before" column means: **BillMaximizer's 40% was an artefact of
+five switched-off mechanics.** Any balance number taken before F10 is void.
+
+**HeterodoxSpecialist at 5.0% is still the finding that should worry you most.**
+Heterodoxy is one of the design's two theses — "the most valuable and most
+fragile card in the game" — and it is the second-worst strategy on the board.
+On a map where 79% of races go uncontested there is no hostile terrain to
+survive, because nobody is defending anything.
 
 ---
 

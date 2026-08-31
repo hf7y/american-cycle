@@ -1302,8 +1302,17 @@ class Game {
     const carried = new Map                 ();
     for (const st of STATES) {
       const ctx = this.raceContext('president', st.code, undefined);
+      // §5: "A district card boosts House, Senate, governor, and presidential
+      // runs in its state. It is an investment in a state, not just a seat."
+      // The presidential general runs state by state, so each nominee reads
+      // their own district for THIS state -- without which presence buys
+      // nothing at the top of the ticket and no agent ever wants the office.
+      const local = nominees.map((d) => ({
+        ...d,
+        district: this.players[d.player].districts.find((x) => x.state === st.code),
+      }));
       const out = runRace({
-        ctx, round: 'general', declarations: nominees, wave, rng: this.rng,
+        ctx, round: 'general', declarations: local, wave, rng: this.rng,
         res: this.cfg.resolution, nat: this.cfg.national, pg: this.cfg.primaryGeneral,
         decide: () => false,   // the ticket is committed; you cannot withdraw a state at a time
       });
@@ -1599,8 +1608,25 @@ function options(v          , open            , cfg        )           {
         presidentParty: v.presidentParty,
         economyMod: 0,
       };
-      const mods = buildModifiers(d, ctx, 'general', cfg.resolution, cfg.national, cfg.primaryGeneral);
-      out.push({ d, office: r.office, edge: mods.reduce((n, m) => n + m.pips, 0) });
+      let edge        ;
+      if (r.office === 'president') {
+        // The presidency is not run in a place, so its stack cannot be read off
+        // one board square. It is fifty state races, so value it by the mean
+        // edge across the states this player actually holds -- otherwise the
+        // office scores 0 against a House seat's +5 and no agent ever runs.
+        const states = [...new Set(me.districts.map((x) => x.state))];
+        const each = states.map((st) => {
+          const sctx = { ...ctx, state: st, lean: v.lean[st] ?? 0 };
+          const sd = { ...d, state: st, district: me.districts.find((x) => x.state === st) };
+          return buildModifiers(sd, sctx, 'general', cfg.resolution, cfg.national, cfg.primaryGeneral)
+            .reduce((n, m) => n + m.pips, 0);
+        });
+        edge = each.length ? each.reduce((n, x) => n + x, 0) / each.length : 0;
+      } else {
+        edge = buildModifiers(d, ctx, 'general', cfg.resolution, cfg.national, cfg.primaryGeneral)
+          .reduce((n, m) => n + m.pips, 0);
+      }
+      out.push({ d, office: r.office, edge });
     }
   }
   return out;
