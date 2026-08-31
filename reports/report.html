@@ -45,9 +45,12 @@ p{margin:12px 0}
 .callout.bad{border-left-color:var(--bad)}
 .tw{overflow-x:auto;margin:18px 0}
 table{border-collapse:collapse;width:100%;font-size:14px;min-width:min(100%,420px)}
-th,td{text-align:left;padding:7px 12px 7px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+th,td{text-align:left;padding:7px 16px 7px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+th:last-child,td:last-child{padding-right:0}
 th{font-family:var(--display);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);white-space:nowrap}
-td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;padding-right:0}
+/* A right-aligned numeric cell sits flush against whatever follows it unless
+   it carries its own left padding -- every cell's left padding is zero. */
+td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;padding-left:20px}
 tr.hi td{background:var(--paper-2);font-weight:600}
 .chip{display:inline-block;font-family:var(--mono);font-size:10px;padding:2px 6px;border:1px solid var(--rule);
   border-radius:2px;letter-spacing:.04em;white-space:nowrap}
