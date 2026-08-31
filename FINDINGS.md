@@ -195,3 +195,82 @@ game length collapsed from 24 years to 7.
 The doc's own arithmetic settles it. §16 says "base 12 with president +2 is a
 17% edge", and 2/12 is 17% only if the +2 is a one-off. Implemented per office
 held, and flagged in the config placeholders.
+
+---
+
+## F8. The margin distribution is the falsification the brief predicted. CONFIRMED.
+
+SIM-BRIEF calls this "the deepest test", and names the failure in advance: *"If
+the sim produces a unimodal blob centered near zero, then district gating and
+lean counters are not doing the work the design claims, and the whole '1 pip =
+2 points' calibration is decorative."*
+
+That is what it produces. Real data is 9,555 House general elections 1976–2018
+(MIT Election Lab); sim is 120 four-player games on `tuned`, margins converted
+at §3's rate of 1 pip = 2 points.
+
+| \|margin\| | sim | real |
+|---|---|---|
+| 0–4 | 35.2% | 6.8% |
+| 5–9 | 24.8% | 6.6% |
+| 10–19 | 32.6% | 15.0% |
+| 20–29 | 7.4% | 17.0% |
+| 30–39 | **0.0%** | 16.9% |
+| 40–49 | **0.0%** | 12.9% |
+| 50–59 | **0.0%** | 6.4% |
+| 60–79 | **0.0%** | 6.5% |
+| 80–100 | **0.0%** | 11.7% |
+
+Median simulated margin **8 points against a real 32.5**. Competitive races
+(under 10 points) are 60% of the sim and 13.5% of reality. **Safe seats — 37.5%
+of real races — are 0.0% of simulated ones.**
+
+**The cause is a scale ceiling, and it is arithmetic.** A margin is the
+modifier difference plus 3d6 − 3d6. Mean stack depth is 2.43 entries worth 1–3
+pips each, so a large realistic stack is +8 pips. At 1 pip = 2 points that is a
+16-point margin. **A 40-point margin needs +20 pips of modifier, and the game's
+entire vocabulary cannot express it.** No tuning of the existing numbers
+reaches the real distribution, because the numbers do not go that high.
+
+**One honest qualification, in the sim's favour.** The game encodes a safe seat
+as an *uncontested* race, where reality encodes it as a contested race won by
+forty points — a hopeless challenger still files. So the sim's 93.5% uncontested
+pile and reality's 37.5% safe mass are partly the same phenomenon wearing
+different clothes. Combining reality's uncontested (13.6%) with its safe-but-
+contested share gives roughly 46% "effectively safe", against the sim's 93.5%.
+The gap narrows and does not close.
+
+**What to do.** Either accept that the design models only the competitive
+tail and that a safe seat *is* a walkover — in which case the pip scale is fine
+and the margin distribution should never be compared to reality — or widen the
+scale so a locked-down district can print a modifier that actually locks it
+down. The current position is the worst of both: §3 claims a calibration to
+"the real dispersion of district results", and the sim's dispersion is a
+quarter of it.
+
+## F9. Incumbency had never fired. In any race. CONFIRMED, fixed.
+
+Measured incumbent reelection over 120 games: **0 races**. Not a low rate — no
+race in the entire corpus had an incumbent.
+
+**Cause.** Winning a seat removes the card from the holder's hand, and nothing
+ever put it back, so no politician could stand for re-election. §11 says seats
+are held for their real terms and the member may then run again; that second
+half was unimplemented.
+
+This silently voided §16's *"incumbency is a calibration check on +1"*, and
+every earlier run in this report that touches incumbency was measuring a
+modifier that never applied.
+
+**Fixed:** a member whose term is up returns to their player's hand and may be
+re-declared into the same seat, or run somewhere else. With that in place:
+
+| office | sim | real 1976–2016 |
+|---|---|---|
+| representative | 98.2% | 94.1% |
+| senator | 91.8% | 83.2% |
+| governor | 96.1% | — |
+
+Both run high, but **this is not yet evidence that +1 is too large.** 93.5% of
+House races are walkovers, and an unopposed incumbent always holds. The +1
+cannot be calibrated until F6 is fixed and incumbents are actually challenged.

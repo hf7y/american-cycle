@@ -125,30 +125,57 @@ downstream of a broken one.
 
 ## 3. Historical validation
 
-**Not run.** See §7 — this is the section I could not deliver, and the reason
-is not a shortage of time.
+**Run.** Real data: 9,555 House general elections 1976–2018 from the MIT
+Election Lab constituency returns, and incumbent reelection rates 1946–2016
+from *Vital Statistics on Congress* tables 2-7 and 2-8. Both are committed at
+`data/historical/baseline.json` so the comparison is reproducible and does not
+depend on my recollection — or on the brief's.
 
-One thing was validated, and it is the design's own claim about pack rotation:
+| target | real | sim | verdict |
+|---|---|---|---|
+| House incumbent reelection | **94.1%** (1976–2016) | 98.2% | high, but see below |
+| Senate incumbent reelection | **83.2%** | 91.8% | high |
+| Uncontested House seats | **13.6%** | 93.5% | **fails badly** |
+| Median House margin | **32.5 pts** | 8 pts | **fails badly** |
+| Safe seats (40+ pts) | **37.5%** | **0.0%** | **cannot occur** |
 
-| pack | mean home-state bonus |
-|---|---|
-| 1976 | 2.96 |
-| 1992 | 1.85 |
-| 2008 | 1.84 |
-| 2016 | 1.62 |
+The brief's recollection table checks out where it can be checked: it guessed
+~90–95% for the House (actual 94.1%), ~80–90% for the Senate (actual 83.2%,
+and far more variable — 55.2% in 1980), and ~10% uncontested (actual 13.6%).
 
-§5 says to "print larger home-state bonuses on mid-century cards and smaller
-ones on modern ones, and the decline of localism falls out of pack rotation
-with no rule at all." It does. That is a real, if small, historical validation.
+**The margin distribution is the deepest test and the sim fails it in exactly
+the way the brief predicted.** Full table in `FINDINGS.md` F8. The short version:
+simulated margins are a unimodal blob crushed against zero, real ones are
+bimodal with a large safe mass. The cause is a **scale ceiling**. A realistic
+modifier stack is about +8 pips; at §3's rate of 1 pip = 2 points that is a
+16-point margin, so a 40-point margin would need +20 pips and **the game's
+modifier vocabulary cannot express it at any setting**. This is not a tuning
+failure — no value of any existing constant reaches the real distribution.
+
+One qualification in the design's favour: the game encodes a safe seat as an
+*uncontested* race, where reality encodes it as a contested race won by forty
+points. The two are partly the same phenomenon in different clothes, and
+adjusting for it narrows the gap from 37.5%-vs-0% to roughly 46%-vs-93.5%
+"effectively safe". It narrows; it does not close.
+
+**Incumbency could not be measured at all until tonight** — see F9. Over 120
+games, *zero* races had an incumbent, because winning a seat removed the card
+from hand and nothing returned it, so no politician could ever stand for
+re-election. §16 calls incumbency "a calibration check on +1"; that check had
+been silently returning nothing. Fixed, and the rates above are the first real
+measurement. They still cannot calibrate +1, because 93.5% of House races are
+walkovers and an unopposed incumbent always holds.
+
+**Validated, and worth saying plainly:** §5's claim that the decline of
+localism falls out of pack rotation with no rule at all. Mean home-state bonus
+across my packs runs 2.96 → 1.85 → 1.84 → 1.62 for 1976 → 1992 → 2008 → 2016.
 
 **A defect in my own card data:** heterodoxy does *not* decline across the packs
 (37% → 44% → 40% → 42%) when it should collapse toward the handful of modern
 survivors. The 1976 figure is defensible — liberal Republicans and conservative
 Democrats genuinely existed — but the 2016 pack is over-tagged. This is an
 authoring error, not a design finding, and it biases anything measuring
-heterodoxy's value upward.
-
----
+heterodoxy's value upward. Filed as hf7y/american-cycle#6.
 
 ## 4. Balance dashboard
 
@@ -247,13 +274,13 @@ roll counter, decay-before-push on every state, and governors never pushing.
 
 ## 7. What I could not test, and why
 
-**Historical validation (Part 1) — the largest gap.** Sourcing real MIT
-Election Lab returns was permitted and possible. I did not run it, because
-validating simulated incumbent-reelection rates against reality is meaningless
-while the presidency is never contested, 79% of races are walkovers, and no
-state ever realigns. The sim would have been graded on a board that does not
-resemble an election. **The real-world baseline is worth building regardless** —
-it does not depend on the rules — and is the obvious next task.
+**Historical validation is now run** — see §3. It was deferred earlier in this
+report on the grounds that grading a sim against reality is meaningless while
+the board is uncontested. That reasoning was half right: the incumbency
+comparison is indeed uninterpretable until races are contested, but the margin
+distribution is not, and it produced the single most decisive finding of the
+night (F8, a scale ceiling no tuning can reach). **Deferring it was the wrong
+call and the earlier draft of this section said so too confidently.**
 
 **Not implemented, so not measurable:**
 - **Impeachment** — `impeach()` exists and is tested, but is not wired into the

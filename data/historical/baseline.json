@@ -1,0 +1,73 @@
+{
+ "source": {
+  "returns": "MIT Election Data and Science Lab, constituency returns 1976-2018 (github.com/MEDSL/constituency-returns)",
+  "incumbency": "Vital Statistics on Congress, tables 2-7 and 2-8 (Brookings), sourced from FEC and CQ Almanac"
+ },
+ "house_incumbent_reelection_pct": {
+  "1976": 95.8,
+  "1978": 93.7,
+  "1980": 90.7,
+  "1982": 90.1,
+  "1984": 95.4,
+  "1986": 97.7,
+  "1988": 98.3,
+  "1990": 96.1,
+  "1992": 88.3,
+  "1994": 90.2,
+  "1996": 94.0,
+  "1998": 98.3,
+  "2000": 97.8,
+  "2002": 96.2,
+  "2004": 97.8,
+  "2006": 94.0,
+  "2008": 94.3,
+  "2010": 85.4,
+  "2012": 89.8,
+  "2014": 95.4,
+  "2016": 96.9
+ },
+ "senate_incumbent_reelection_pct": {
+  "1976": 64.0,
+  "1978": 60.0,
+  "1980": 55.2,
+  "1982": 93.3,
+  "1984": 89.7,
+  "1986": 75.0,
+  "1988": 85.2,
+  "1990": 96.9,
+  "1992": 82.1,
+  "1994": 92.3,
+  "1996": 90.5,
+  "1998": 89.7,
+  "2000": 79.3,
+  "2002": 88.9,
+  "2004": 96.2,
+  "2006": 78.6,
+  "2008": 83.3,
+  "2010": 84.0,
+  "2012": 91.3,
+  "2014": 79.3,
+  "2016": 93.1
+ },
+ "derived": {
+  "house_mean_1976_2016": 94.1,
+  "senate_mean_1976_2016": 83.2,
+  "house_races_1976_2018": 9555,
+  "house_uncontested_pct": 13.6,
+  "house_median_abs_margin_pts": 32.5,
+  "house_mean_abs_margin_pts": 38.1,
+  "house_competitive_under10_pct": 13.5,
+  "house_safe_40plus_pct": 37.5,
+  "house_margin_histogram_pct": {
+   "0-4": 6.8,
+   "5-9": 6.6,
+   "10-19": 15.0,
+   "20-29": 17.0,
+   "30-39": 16.9,
+   "40-49": 12.9,
+   "50-59": 6.4,
+   "60-79": 6.5,
+   "80-100": 11.7
+  }
+ }
+}

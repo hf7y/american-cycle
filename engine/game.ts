@@ -130,6 +130,10 @@ export class Game {
   private agents: Agent[];
   private scoreHistory: number[][] = [];
 
+  /** Every candidate by id, so a seated member can be handed back to their
+   *  player when the term runs out. Seats store a cardId, not the card. */
+  private cardById = new Map<string, CandidateCard>();
+
   constructor(agents: Agent[], cards: Card[], cfg: Config, seed: number) {
     this.cfg = cfg; this.rng = new RNG(seed); this.agents = agents;
     this.year = cfg.game.startYear;
@@ -144,6 +148,7 @@ export class Game {
     const eras = [...new Set(cards.map((c) => c.era))].sort((a, b) => a - b);
     this.eraQueue = eras.map((e) => this.rng.shuffle(cards.filter((c) => c.era === e)));
     this.talon = this.eraQueue.shift() ?? [];
+    for (const c of cards) if (c.kind === 'candidate') this.cardById.set(c.id, c);
     this.deal();
   }
 
@@ -184,6 +189,25 @@ export class Game {
 
   /** total cards held: candidates in hand plus districts in play */
   held(p: PlayerState): number { return p.hand.length + p.districts.length; }
+
+  /** §11: seats are held for their real terms, and then the member may run
+   *  again. Winning removed the card from hand and nothing put it back, so no
+   *  politician had ever stood for re-election and the +1 incumbency modifier
+   *  fired in exactly zero races -- which silently voided §16's "incumbency is
+   *  a calibration check on +1". A member whose term is up returns to their
+   *  player's hand and may be re-declared into the same seat, or run elsewhere. */
+  private releaseExpiringTerms(open: OpenRace[]): void {
+    for (const r of open) {
+      const seat = this.seatFor(r.office, r.state, r.slot);
+      if (!seat || !seat.holder) continue;
+      const card = this.cardById.get(seat.holder.cardId);
+      if (!card) continue;
+      const p = this.players[seat.holder.player];
+      if (!p.hand.some((c) => c.kind === 'candidate' && c.id === card.id)) {
+        p.hand.push({ kind: 'candidate', ...card });
+      }
+    }
+  }
 
   private openRaces(): OpenRace[] {
     const out: OpenRace[] = [];
@@ -265,6 +289,7 @@ export class Game {
   private elections(): void {
     const wave = new Wave(this.rng);
     const open = this.openRaces();
+    this.releaseExpiringTerms(open);
     const decls: Declaration[] = [];
     const pending: PendingPeg[] = [];
     // §8: sequential around the table, and the order rotates each cycle so
@@ -490,6 +515,7 @@ export class Game {
 
     if (this.year % 2 === 0) {
       const open = this.openRaces();
+      this.releaseExpiringTerms(open);
       const answer = yield { kind: 'declare', year: this.year, open };
       this.humanDeclarations = answer.declarations ?? [];
       yield* this.electionsInteractive(human);
