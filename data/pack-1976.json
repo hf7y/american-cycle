@@ -1,0 +1,1746 @@
+{
+ "name": "1976",
+ "era": 1976,
+ "note": "Real politicians of the 1976 cycle. Home-state bonuses run large (2-4) because friends-and-neighbours voting had not yet decayed -- \u00a75.",
+ "cards": [
+  {
+   "kind": "candidate",
+   "id": "jimmy-carter",
+   "name": "Jimmy Carter",
+   "party": "D",
+   "homeState": "GA",
+   "homeStateBonus": 3,
+   "identities": [
+    "evangelical",
+    "rural",
+    "veteran"
+   ],
+   "belief": "Born-again peanut farmer; runs as an outsider",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "walter-mondale",
+   "name": "Walter Mondale",
+   "party": "D",
+   "homeState": "MN",
+   "homeStateBonus": 3,
+   "identities": [
+    "union"
+   ],
+   "belief": "Labor liberal",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "hubert-humphrey",
+   "name": "Hubert Humphrey",
+   "party": "D",
+   "homeState": "MN",
+   "homeStateBonus": 3,
+   "identities": [
+    "union",
+    "academic"
+   ],
+   "belief": "The Happy Warrior",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "henry-m-jackson",
+   "name": "Henry M. Jackson",
+   "party": "D",
+   "homeState": "WA",
+   "homeStateBonus": 3,
+   "identities": [
+    "union",
+    "veteran",
+    "business"
+   ],
+   "belief": "Hawk abroad, liberal at home",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "morris-udall",
+   "name": "Morris Udall",
+   "party": "D",
+   "homeState": "AZ",
+   "homeStateBonus": 3,
+   "identities": [
+    "rural"
+   ],
+   "belief": "Western conservationist",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "george-wallace",
+   "name": "George Wallace",
+   "party": "D",
+   "homeState": "AL",
+   "homeStateBonus": 4,
+   "identities": [
+    "rural",
+    "evangelical"
+   ],
+   "belief": "Segregation then populism",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "extremist"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "frank-church",
+   "name": "Frank Church",
+   "party": "D",
+   "homeState": "ID",
+   "homeStateBonus": 3,
+   "identities": [
+    "rural"
+   ],
+   "belief": "Ran the intelligence hearings",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "birch-bayh",
+   "name": "Birch Bayh",
+   "party": "D",
+   "homeState": "IN",
+   "homeStateBonus": 3,
+   "identities": [
+    "rural",
+    "farm"
+   ],
+   "belief": "Wrote two amendments",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "edmund-muskie",
+   "name": "Edmund Muskie",
+   "party": "D",
+   "homeState": "ME",
+   "homeStateBonus": 3,
+   "identities": [
+    "catholic"
+   ],
+   "belief": "Clean air and water",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "robert-byrd",
+   "name": "Robert Byrd",
+   "party": "D",
+   "homeState": "WV",
+   "homeStateBonus": 4,
+   "identities": [
+    "rural"
+   ],
+   "belief": "Master of the rules",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "edward-kennedy",
+   "name": "Edward Kennedy",
+   "party": "D",
+   "homeState": "MA",
+   "homeStateBonus": 3,
+   "identities": [
+    "catholic",
+    "ivy"
+   ],
+   "belief": "National health insurance",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "thomas-p-oneill",
+   "name": "Thomas P. O'Neill",
+   "party": "D",
+   "homeState": "MA",
+   "homeStateBonus": 3,
+   "identities": [
+    "catholic",
+    "urban",
+    "union"
+   ],
+   "belief": "All politics is local",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "john-glenn",
+   "name": "John Glenn",
+   "party": "D",
+   "homeState": "OH",
+   "homeStateBonus": 3,
+   "identities": [
+    "veteran"
+   ],
+   "belief": "The astronaut",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "lloyd-bentsen",
+   "name": "Lloyd Bentsen",
+   "party": "D",
+   "homeState": "TX",
+   "homeStateBonus": 3,
+   "identities": [
+    "business",
+    "veteran"
+   ],
+   "belief": "Conservative on money",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "daniel-patrick-moynihan",
+   "name": "Daniel Patrick Moynihan",
+   "party": "D",
+   "homeState": "NY",
+   "homeStateBonus": 2,
+   "identities": [
+    "catholic",
+    "ivy",
+    "academic"
+   ],
+   "belief": "Social scientist in the Senate",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "jerry-brown",
+   "name": "Jerry Brown",
+   "party": "D",
+   "homeState": "CA",
+   "homeStateBonus": 2,
+   "identities": [
+    "catholic"
+   ],
+   "belief": "Era of limits",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "wendell-ford",
+   "name": "Wendell Ford",
+   "party": "D",
+   "homeState": "KY",
+   "homeStateBonus": 3,
+   "identities": [
+    "rural",
+    "business"
+   ],
+   "belief": "Tobacco and coal",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "dale-bumpers",
+   "name": "Dale Bumpers",
+   "party": "D",
+   "homeState": "AR",
+   "homeStateBonus": 3,
+   "identities": [
+    "rural",
+    "veteran"
+   ],
+   "belief": "Country lawyer",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "sam-nunn",
+   "name": "Sam Nunn",
+   "party": "D",
+   "homeState": "GA",
+   "homeStateBonus": 3,
+   "identities": [
+    "veteran",
+    "rural"
+   ],
+   "belief": "Defense conservative",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "john-c-stennis",
+   "name": "John C. Stennis",
+   "party": "D",
+   "homeState": "MS",
+   "homeStateBonus": 4,
+   "identities": [
+    "rural",
+    "veteran"
+   ],
+   "belief": "Armed Services chairman",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "james-eastland",
+   "name": "James Eastland",
+   "party": "D",
+   "homeState": "MS",
+   "homeStateBonus": 4,
+   "identities": [
+    "rural",
+    "farm"
+   ],
+   "belief": "Plantation conservatism",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "extremist"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "russell-long",
+   "name": "Russell Long",
+   "party": "D",
+   "homeState": "LA",
+   "homeStateBonus": 4,
+   "identities": [
+    "rural",
+    "business"
+   ],
+   "belief": "Wrote the tax code",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "adlai-stevenson-iii",
+   "name": "Adlai Stevenson III",
+   "party": "D",
+   "homeState": "IL",
+   "homeStateBonus": 2,
+   "identities": [
+    "ivy"
+   ],
+   "belief": "Reform liberal",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "abraham-ribicoff",
+   "name": "Abraham Ribicoff",
+   "party": "D",
+   "homeState": "CT",
+   "homeStateBonus": 3,
+   "identities": [
+    "jewish"
+   ],
+   "belief": "Chicago convention scold",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "barbara-jordan",
+   "name": "Barbara Jordan",
+   "party": "D",
+   "homeState": "TX",
+   "homeStateBonus": 2,
+   "identities": [
+    "black",
+    "urban",
+    "academic"
+   ],
+   "belief": "My faith in the Constitution is whole",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "andrew-young",
+   "name": "Andrew Young",
+   "party": "D",
+   "homeState": "GA",
+   "homeStateBonus": 2,
+   "identities": [
+    "black",
+    "urban",
+    "evangelical"
+   ],
+   "belief": "From the movement to the House",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "ronald-v-dellums",
+   "name": "Ronald V. Dellums",
+   "party": "D",
+   "homeState": "CA",
+   "homeStateBonus": 2,
+   "identities": [
+    "black",
+    "urban",
+    "veteran"
+   ],
+   "belief": "Antiwar left",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "extremist"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "shirley-chisholm",
+   "name": "Shirley Chisholm",
+   "party": "D",
+   "homeState": "NY",
+   "homeStateBonus": 2,
+   "identities": [
+    "black",
+    "urban"
+   ],
+   "belief": "Unbought and unbossed",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "peter-rodino",
+   "name": "Peter Rodino",
+   "party": "D",
+   "homeState": "NJ",
+   "homeStateBonus": 3,
+   "identities": [
+    "catholic",
+    "urban"
+   ],
+   "belief": "Chaired the impeachment inquiry",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "thomas-eagleton",
+   "name": "Thomas Eagleton",
+   "party": "D",
+   "homeState": "MO",
+   "homeStateBonus": 3,
+   "identities": [
+    "catholic",
+    "urban"
+   ],
+   "belief": "Dropped from a ticket",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "gary-hart",
+   "name": "Gary Hart",
+   "party": "D",
+   "homeState": "CO",
+   "homeStateBonus": 2,
+   "identities": [
+    "ivy"
+   ],
+   "belief": "New generation of Democrats",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "patrick-leahy",
+   "name": "Patrick Leahy",
+   "party": "D",
+   "homeState": "VT",
+   "homeStateBonus": 3,
+   "identities": [
+    "catholic",
+    "rural"
+   ],
+   "belief": "Prosecutor turned senator",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "joseph-r-biden",
+   "name": "Joseph R. Biden",
+   "party": "D",
+   "homeState": "DE",
+   "homeStateBonus": 3,
+   "identities": [
+    "catholic"
+   ],
+   "belief": "Rode the train home",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "dick-clark",
+   "name": "Dick Clark",
+   "party": "D",
+   "homeState": "IA",
+   "homeStateBonus": 3,
+   "identities": [
+    "farm",
+    "rural"
+   ],
+   "belief": "Walked the state",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "john-culver",
+   "name": "John Culver",
+   "party": "D",
+   "homeState": "IA",
+   "homeStateBonus": 3,
+   "identities": [
+    "farm",
+    "rural",
+    "ivy"
+   ],
+   "belief": "Liberal in a farm state",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "alan-cranston",
+   "name": "Alan Cranston",
+   "party": "D",
+   "homeState": "CA",
+   "homeStateBonus": 2,
+   "identities": [
+    "academic"
+   ],
+   "belief": "Party organizer",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "william-proxmire",
+   "name": "William Proxmire",
+   "party": "D",
+   "homeState": "WI",
+   "homeStateBonus": 3,
+   "identities": [
+    "farm",
+    "ivy"
+   ],
+   "belief": "The Golden Fleece Award",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "ernest-hollings",
+   "name": "Ernest Hollings",
+   "party": "D",
+   "homeState": "SC",
+   "homeStateBonus": 3,
+   "identities": [
+    "rural",
+    "veteran"
+   ],
+   "belief": "Hunger in America",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "lawton-chiles",
+   "name": "Lawton Chiles",
+   "party": "D",
+   "homeState": "FL",
+   "homeStateBonus": 3,
+   "identities": [
+    "rural",
+    "veteran"
+   ],
+   "belief": "Walkin' Lawton",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "gerald-r-ford",
+   "name": "Gerald R. Ford",
+   "party": "R",
+   "homeState": "MI",
+   "homeStateBonus": 3,
+   "identities": [
+    "veteran",
+    "business"
+   ],
+   "belief": "A Ford, not a Lincoln",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "ronald-reagan",
+   "name": "Ronald Reagan",
+   "party": "R",
+   "homeState": "CA",
+   "homeStateBonus": 3,
+   "identities": [
+    "business",
+    "evangelical"
+   ],
+   "belief": "A time for choosing",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "extremist"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "robert-dole",
+   "name": "Robert Dole",
+   "party": "R",
+   "homeState": "KS",
+   "homeStateBonus": 3,
+   "identities": [
+    "veteran",
+    "rural",
+    "farm"
+   ],
+   "belief": "Prairie conservative",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "nelson-rockefeller",
+   "name": "Nelson Rockefeller",
+   "party": "R",
+   "homeState": "NY",
+   "homeStateBonus": 2,
+   "identities": [
+    "business",
+    "ivy"
+   ],
+   "belief": "Eastern establishment",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "howard-baker",
+   "name": "Howard Baker",
+   "party": "R",
+   "homeState": "TN",
+   "homeStateBonus": 3,
+   "identities": [
+    "business"
+   ],
+   "belief": "What did the president know",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "charles-h-percy",
+   "name": "Charles H. Percy",
+   "party": "R",
+   "homeState": "IL",
+   "homeStateBonus": 3,
+   "identities": [
+    "business",
+    "ivy"
+   ],
+   "belief": "Corporate moderate",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "jacob-javits",
+   "name": "Jacob Javits",
+   "party": "R",
+   "homeState": "NY",
+   "homeStateBonus": 2,
+   "identities": [
+    "jewish",
+    "urban",
+    "ivy"
+   ],
+   "belief": "Liberal Republican",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "edward-brooke",
+   "name": "Edward Brooke",
+   "party": "R",
+   "homeState": "MA",
+   "homeStateBonus": 3,
+   "identities": [
+    "black",
+    "urban",
+    "veteran"
+   ],
+   "belief": "First elected since Reconstruction",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "barry-goldwater",
+   "name": "Barry Goldwater",
+   "party": "R",
+   "homeState": "AZ",
+   "homeStateBonus": 4,
+   "identities": [
+    "rural",
+    "veteran",
+    "business"
+   ],
+   "belief": "Extremism in defense of liberty",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "extremist"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "john-tower",
+   "name": "John Tower",
+   "party": "R",
+   "homeState": "TX",
+   "homeStateBonus": 3,
+   "identities": [
+    "veteran",
+    "business"
+   ],
+   "belief": "Built the Texas GOP",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "strom-thurmond",
+   "name": "Strom Thurmond",
+   "party": "R",
+   "homeState": "SC",
+   "homeStateBonus": 4,
+   "identities": [
+    "rural",
+    "veteran",
+    "evangelical"
+   ],
+   "belief": "Switched parties and stayed",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "extremist"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "jesse-helms",
+   "name": "Jesse Helms",
+   "party": "R",
+   "homeState": "NC",
+   "homeStateBonus": 4,
+   "identities": [
+    "evangelical",
+    "rural"
+   ],
+   "belief": "Senator No",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "extremist"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "richard-lugar",
+   "name": "Richard Lugar",
+   "party": "R",
+   "homeState": "IN",
+   "homeStateBonus": 3,
+   "identities": [
+    "business",
+    "ivy"
+   ],
+   "belief": "Mayor of Indianapolis",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "h-john-heinz-iii",
+   "name": "H. John Heinz III",
+   "party": "R",
+   "homeState": "PA",
+   "homeStateBonus": 3,
+   "identities": [
+    "business",
+    "ivy"
+   ],
+   "belief": "Moderate on labor",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "bill-brock",
+   "name": "Bill Brock",
+   "party": "R",
+   "homeState": "TN",
+   "homeStateBonus": 3,
+   "identities": [
+    "business"
+   ],
+   "belief": "Rebuilt the party",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "bob-packwood",
+   "name": "Bob Packwood",
+   "party": "R",
+   "homeState": "OR",
+   "homeStateBonus": 3,
+   "identities": [
+    "business"
+   ],
+   "belief": "Pro-choice Republican",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "mark-hatfield",
+   "name": "Mark Hatfield",
+   "party": "R",
+   "homeState": "OR",
+   "homeStateBonus": 3,
+   "identities": [
+    "evangelical",
+    "academic"
+   ],
+   "belief": "Antiwar Republican",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "lowell-weicker",
+   "name": "Lowell Weicker",
+   "party": "R",
+   "homeState": "CT",
+   "homeStateBonus": 3,
+   "identities": [
+    "ivy",
+    "business"
+   ],
+   "belief": "Watergate committee maverick",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "clifford-case",
+   "name": "Clifford Case",
+   "party": "R",
+   "homeState": "NJ",
+   "homeStateBonus": 3,
+   "identities": [
+    "ivy",
+    "urban"
+   ],
+   "belief": "Liberal on civil rights",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "pete-domenici",
+   "name": "Pete Domenici",
+   "party": "R",
+   "homeState": "NM",
+   "homeStateBonus": 3,
+   "identities": [
+    "catholic",
+    "hispanic"
+   ],
+   "belief": "Budget hawk",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "paul-laxalt",
+   "name": "Paul Laxalt",
+   "party": "R",
+   "homeState": "NV",
+   "homeStateBonus": 3,
+   "identities": [
+    "catholic",
+    "business"
+   ],
+   "belief": "Reagan's best friend",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "james-l-buckley",
+   "name": "James L. Buckley",
+   "party": "R",
+   "homeState": "NY",
+   "homeStateBonus": 2,
+   "identities": [
+    "catholic",
+    "ivy"
+   ],
+   "belief": "Elected on the Conservative line",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "extremist"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "john-danforth",
+   "name": "John Danforth",
+   "party": "R",
+   "homeState": "MO",
+   "homeStateBonus": 3,
+   "identities": [
+    "evangelical",
+    "ivy"
+   ],
+   "belief": "Ordained priest",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "orrin-hatch",
+   "name": "Orrin Hatch",
+   "party": "R",
+   "homeState": "UT",
+   "homeStateBonus": 3,
+   "identities": [
+    "evangelical",
+    "business"
+   ],
+   "belief": "Labor law opponent",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "s-i-hayakawa",
+   "name": "S. I. Hayakawa",
+   "party": "R",
+   "homeState": "CA",
+   "homeStateBonus": 2,
+   "identities": [
+    "academic"
+   ],
+   "belief": "Semanticist college president",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "elliot-richardson",
+   "name": "Elliot Richardson",
+   "party": "R",
+   "homeState": "MA",
+   "homeStateBonus": 3,
+   "identities": [
+    "ivy",
+    "veteran"
+   ],
+   "belief": "Resigned rather than fire Cox",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "william-roth",
+   "name": "William Roth",
+   "party": "R",
+   "homeState": "DE",
+   "homeStateBonus": 3,
+   "identities": [
+    "business",
+    "ivy"
+   ],
+   "belief": "Half of Kemp-Roth",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "ted-stevens",
+   "name": "Ted Stevens",
+   "party": "R",
+   "homeState": "AK",
+   "homeStateBonus": 4,
+   "identities": [
+    "veteran",
+    "business"
+   ],
+   "belief": "Alaska's appropriator",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "milton-young",
+   "name": "Milton Young",
+   "party": "R",
+   "homeState": "ND",
+   "homeStateBonus": 4,
+   "identities": [
+    "farm",
+    "rural"
+   ],
+   "belief": "Wheat and the farm bill",
+   "era": 1976,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "charles-mathias",
+   "name": "Charles Mathias",
+   "party": "R",
+   "homeState": "MD",
+   "homeStateBonus": 3,
+   "identities": [
+    "ivy",
+    "urban"
+   ],
+   "belief": "Civil rights Republican",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "robert-stafford",
+   "name": "Robert Stafford",
+   "party": "R",
+   "homeState": "VT",
+   "homeStateBonus": 3,
+   "identities": [
+    "rural",
+    "veteran"
+   ],
+   "belief": "Education and the environment",
+   "era": 1976,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "district",
+   "id": "NY-12",
+   "state": "NY",
+   "number": 12,
+   "era": 1976,
+   "demographics": [
+    "urban",
+    "jewish"
+   ],
+   "synergy": 2,
+   "note": "Brooklyn"
+  },
+  {
+   "kind": "district",
+   "id": "NY-18",
+   "state": "NY",
+   "number": 18,
+   "era": 1976,
+   "demographics": [
+    "urban",
+    "black"
+   ],
+   "synergy": 2,
+   "note": "Manhattan"
+  },
+  {
+   "kind": "district",
+   "id": "NY-39",
+   "state": "NY",
+   "number": 39,
+   "era": 1976,
+   "demographics": [
+    "rural",
+    "catholic"
+   ],
+   "synergy": 1,
+   "note": "Upstate"
+  },
+  {
+   "kind": "district",
+   "id": "MA-8",
+   "state": "MA",
+   "number": 8,
+   "era": 1976,
+   "demographics": [
+    "urban",
+    "catholic",
+    "union"
+   ],
+   "synergy": 2,
+   "note": "Boston"
+  },
+  {
+   "kind": "district",
+   "id": "MA-2",
+   "state": "MA",
+   "number": 2,
+   "era": 1976,
+   "demographics": [
+    "union",
+    "catholic"
+   ],
+   "synergy": 1,
+   "note": "Springfield"
+  },
+  {
+   "kind": "district",
+   "id": "IL-1",
+   "state": "IL",
+   "number": 1,
+   "era": 1976,
+   "demographics": [
+    "urban",
+    "black"
+   ],
+   "synergy": 2,
+   "note": "South Side"
+  },
+  {
+   "kind": "district",
+   "id": "IL-11",
+   "state": "IL",
+   "number": 11,
+   "era": 1976,
+   "demographics": [
+    "urban",
+    "union",
+    "catholic"
+   ],
+   "synergy": 2,
+   "note": "Northwest Chicago"
+  },
+  {
+   "kind": "district",
+   "id": "IL-21",
+   "state": "IL",
+   "number": 21,
+   "era": 1976,
+   "demographics": [
+    "rural",
+    "farm"
+   ],
+   "synergy": 1,
+   "note": "Downstate"
+  },
+  {
+   "kind": "district",
+   "id": "CA-5",
+   "state": "CA",
+   "number": 5,
+   "era": 1976,
+   "demographics": [
+    "urban",
+    "academic"
+   ],
+   "synergy": 2,
+   "note": "San Francisco"
+  },
+  {
+   "kind": "district",
+   "id": "CA-8",
+   "state": "CA",
+   "number": 8,
+   "era": 1976,
+   "demographics": [
+    "urban",
+    "black",
+    "union"
+   ],
+   "synergy": 2,
+   "note": "Oakland"
+  },
+  {
+   "kind": "district",
+   "id": "CA-35",
+   "state": "CA",
+   "number": 35,
+   "era": 1976,
+   "demographics": [
+    "suburban",
+    "business"
+   ],
+   "synergy": 1,
+   "note": "Orange County"
+  },
+  {
+   "kind": "district",
+   "id": "CA-21",
+   "state": "CA",
+   "number": 21,
+   "era": 1976,
+   "demographics": [
+    "hispanic",
+    "urban"
+   ],
+   "synergy": 2,
+   "note": "East LA"
+  },
+  {
+   "kind": "district",
+   "id": "TX-18",
+   "state": "TX",
+   "number": 18,
+   "era": 1976,
+   "demographics": [
+    "black",
+    "urban"
+   ],
+   "synergy": 2,
+   "note": "Houston"
+  },
+  {
+   "kind": "district",
+   "id": "TX-15",
+   "state": "TX",
+   "number": 15,
+   "era": 1976,
+   "demographics": [
+    "hispanic",
+    "rural"
+   ],
+   "synergy": 2,
+   "note": "Rio Grande Valley"
+  },
+  {
+   "kind": "district",
+   "id": "TX-7",
+   "state": "TX",
+   "number": 7,
+   "era": 1976,
+   "demographics": [
+    "suburban",
+    "business"
+   ],
+   "synergy": 1,
+   "note": "West Houston"
+  },
+  {
+   "kind": "district",
+   "id": "MI-13",
+   "state": "MI",
+   "number": 13,
+   "era": 1976,
+   "demographics": [
+    "urban",
+    "black",
+    "union"
+   ],
+   "synergy": 2,
+   "note": "Detroit"
+  },
+  {
+   "kind": "district",
+   "id": "MI-5",
+   "state": "MI",
+   "number": 5,
+   "era": 1976,
+   "demographics": [
+    "union",
+    "business"
+   ],
+   "synergy": 1,
+   "note": "Grand Rapids"
+  },
+  {
+   "kind": "district",
+   "id": "PA-1",
+   "state": "PA",
+   "number": 1,
+   "era": 1976,
+   "demographics": [
+    "urban",
+    "black",
+    "union"
+   ],
+   "synergy": 2,
+   "note": "Philadelphia"
+  },
+  {
+   "kind": "district",
+   "id": "PA-20",
+   "state": "PA",
+   "number": 20,
+   "era": 1976,
+   "demographics": [
+    "union",
+    "catholic"
+   ],
+   "synergy": 2,
+   "note": "Pittsburgh"
+  },
+  {
+   "kind": "district",
+   "id": "PA-16",
+   "state": "PA",
+   "number": 16,
+   "era": 1976,
+   "demographics": [
+    "rural",
+    "evangelical"
+   ],
+   "synergy": 1,
+   "note": "Lancaster"
+  },
+  {
+   "kind": "district",
+   "id": "OH-21",
+   "state": "OH",
+   "number": 21,
+   "era": 1976,
+   "demographics": [
+    "urban",
+    "black",
+    "union"
+   ],
+   "synergy": 2,
+   "note": "Cleveland"
+  },
+  {
+   "kind": "district",
+   "id": "OH-1",
+   "state": "OH",
+   "number": 1,
+   "era": 1976,
+   "demographics": [
+    "urban",
+    "catholic"
+   ],
+   "synergy": 1,
+   "note": "Cincinnati"
+  },
+  {
+   "kind": "district",
+   "id": "OH-18",
+   "state": "OH",
+   "number": 18,
+   "era": 1976,
+   "demographics": [
+    "rural",
+    "union"
+   ],
+   "synergy": 1,
+   "note": "Appalachian Ohio"
+  },
+  {
+   "kind": "district",
+   "id": "GA-5",
+   "state": "GA",
+   "number": 5,
+   "era": 1976,
+   "demographics": [
+    "black",
+    "urban"
+   ],
+   "synergy": 2,
+   "note": "Atlanta"
+  },
+  {
+   "kind": "district",
+   "id": "GA-8",
+   "state": "GA",
+   "number": 8,
+   "era": 1976,
+   "demographics": [
+    "rural",
+    "evangelical",
+    "farm"
+   ],
+   "synergy": 1,
+   "note": "South Georgia"
+  },
+  {
+   "kind": "district",
+   "id": "FL-18",
+   "state": "FL",
+   "number": 18,
+   "era": 1976,
+   "demographics": [
+    "cuban",
+    "urban"
+   ],
+   "synergy": 3,
+   "note": "Miami"
+  },
+  {
+   "kind": "district",
+   "id": "FL-9",
+   "state": "FL",
+   "number": 9,
+   "era": 1976,
+   "demographics": [
+    "suburban",
+    "veteran"
+   ],
+   "synergy": 1,
+   "note": "Tampa"
+  },
+  {
+   "kind": "district",
+   "id": "AL-7",
+   "state": "AL",
+   "number": 7,
+   "era": 1976,
+   "demographics": [
+    "black",
+    "rural"
+   ],
+   "synergy": 2,
+   "note": "Black Belt"
+  },
+  {
+   "kind": "district",
+   "id": "MS-2",
+   "state": "MS",
+   "number": 2,
+   "era": 1976,
+   "demographics": [
+    "black",
+    "rural",
+    "farm"
+   ],
+   "synergy": 2,
+   "note": "Delta"
+  },
+  {
+   "kind": "district",
+   "id": "LA-2",
+   "state": "LA",
+   "number": 2,
+   "era": 1976,
+   "demographics": [
+    "black",
+    "urban",
+    "catholic"
+   ],
+   "synergy": 2,
+   "note": "New Orleans"
+  },
+  {
+   "kind": "district",
+   "id": "MN-5",
+   "state": "MN",
+   "number": 5,
+   "era": 1976,
+   "demographics": [
+    "urban",
+    "union"
+   ],
+   "synergy": 2,
+   "note": "Minneapolis"
+  },
+  {
+   "kind": "district",
+   "id": "MN-7",
+   "state": "MN",
+   "number": 7,
+   "era": 1976,
+   "demographics": [
+    "farm",
+    "rural"
+   ],
+   "synergy": 2,
+   "note": "Western Minnesota"
+  },
+  {
+   "kind": "district",
+   "id": "IA-3",
+   "state": "IA",
+   "number": 3,
+   "era": 1976,
+   "demographics": [
+    "farm",
+    "rural"
+   ],
+   "synergy": 2,
+   "note": "Des Moines"
+  },
+  {
+   "kind": "district",
+   "id": "KS-1",
+   "state": "KS",
+   "number": 1,
+   "era": 1976,
+   "demographics": [
+    "farm",
+    "rural"
+   ],
+   "synergy": 2,
+   "note": "Big First"
+  },
+  {
+   "kind": "district",
+   "id": "WV-3",
+   "state": "WV",
+   "number": 3,
+   "era": 1976,
+   "demographics": [
+    "union",
+    "rural"
+   ],
+   "synergy": 2,
+   "note": "Coalfields"
+  },
+  {
+   "kind": "district",
+   "id": "KY-5",
+   "state": "KY",
+   "number": 5,
+   "era": 1976,
+   "demographics": [
+    "rural",
+    "evangelical"
+   ],
+   "synergy": 2,
+   "note": "Eastern Kentucky"
+  },
+  {
+   "kind": "district",
+   "id": "AZ-2",
+   "state": "AZ",
+   "number": 2,
+   "era": 1976,
+   "demographics": [
+    "hispanic",
+    "rural"
+   ],
+   "synergy": 1,
+   "note": "Tucson"
+  },
+  {
+   "kind": "district",
+   "id": "WA-7",
+   "state": "WA",
+   "number": 7,
+   "era": 1976,
+   "demographics": [
+    "urban",
+    "union"
+   ],
+   "synergy": 2,
+   "note": "Seattle"
+  },
+  {
+   "kind": "district",
+   "id": "NJ-10",
+   "state": "NJ",
+   "number": 10,
+   "era": 1976,
+   "demographics": [
+    "urban",
+    "black"
+   ],
+   "synergy": 2,
+   "note": "Newark"
+  },
+  {
+   "kind": "district",
+   "id": "CT-3",
+   "state": "CT",
+   "number": 3,
+   "era": 1976,
+   "demographics": [
+    "urban",
+    "catholic",
+    "union"
+   ],
+   "synergy": 1,
+   "note": "New Haven"
+  },
+  {
+   "kind": "district",
+   "id": "UT-1",
+   "state": "UT",
+   "number": 1,
+   "era": 1976,
+   "demographics": [
+    "evangelical",
+    "rural"
+   ],
+   "synergy": 2,
+   "note": "Northern Utah"
+  },
+  {
+   "kind": "district",
+   "id": "SC-6",
+   "state": "SC",
+   "number": 6,
+   "era": 1976,
+   "demographics": [
+    "black",
+    "rural"
+   ],
+   "synergy": 2,
+   "note": "Lowcountry"
+  }
+ ]
+}

@@ -1,0 +1,1440 @@
+{
+ "name": "2016",
+ "era": 2016,
+ "note": "Fully nationalised. Home-state bonuses are 0-1 for national figures, and the surviving heterodox cards -- Manchin, Collins, Baker, Hogan, Edwards -- are the rarest and most valuable in the game. District cards carry the realignment: the Iron Range and Appalachia have gone red, the suburbs blue.",
+ "cards": [
+  {
+   "kind": "candidate",
+   "id": "hillary-clinton-2016",
+   "name": "Hillary Clinton",
+   "party": "D",
+   "homeState": "NY",
+   "homeStateBonus": 0,
+   "identities": [
+    "ivy",
+    "suburban"
+   ],
+   "belief": "Stronger together",
+   "era": 2016,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "bernie-sanders-2016",
+   "name": "Bernie Sanders",
+   "party": "D",
+   "homeState": "VT",
+   "homeStateBonus": 2,
+   "identities": [
+    "jewish",
+    "academic"
+   ],
+   "belief": "Political revolution",
+   "era": 2016,
+   "effects": [
+    {
+     "type": "extremist"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "tim-kaine-2016",
+   "name": "Tim Kaine",
+   "party": "D",
+   "homeState": "VA",
+   "homeStateBonus": 1,
+   "identities": [
+    "catholic",
+    "hispanic"
+   ],
+   "belief": "Spanish on the trail",
+   "era": 2016,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "elizabeth-warren-2016",
+   "name": "Elizabeth Warren",
+   "party": "D",
+   "homeState": "MA",
+   "homeStateBonus": 1,
+   "identities": [
+    "academic",
+    "ivy"
+   ],
+   "belief": "The consumer bureau",
+   "era": 2016,
+   "effects": [
+    {
+     "type": "extremist"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "cory-booker-2016",
+   "name": "Cory Booker",
+   "party": "D",
+   "homeState": "NJ",
+   "homeStateBonus": 1,
+   "identities": [
+    "black",
+    "urban",
+    "ivy"
+   ],
+   "belief": "Newark mayor",
+   "era": 2016,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "kamala-harris-2016",
+   "name": "Kamala Harris",
+   "party": "D",
+   "homeState": "CA",
+   "homeStateBonus": 1,
+   "identities": [
+    "black",
+    "hispanic",
+    "urban"
+   ],
+   "belief": "Attorney general",
+   "era": 2016,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "joe-manchin-2016",
+   "name": "Joe Manchin",
+   "party": "D",
+   "homeState": "WV",
+   "homeStateBonus": 3,
+   "identities": [
+    "rural",
+    "business"
+   ],
+   "belief": "Shot the cap-and-trade bill",
+   "era": 2016,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "jon-tester-2016",
+   "name": "Jon Tester",
+   "party": "D",
+   "homeState": "MT",
+   "homeStateBonus": 3,
+   "identities": [
+    "farm",
+    "rural"
+   ],
+   "belief": "Still farming",
+   "era": 2016,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "heidi-heitkamp-2016",
+   "name": "Heidi Heitkamp",
+   "party": "D",
+   "homeState": "ND",
+   "homeStateBonus": 3,
+   "identities": [
+    "farm",
+    "rural"
+   ],
+   "belief": "Energy state Democrat",
+   "era": 2016,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "claire-mccaskill-2016",
+   "name": "Claire McCaskill",
+   "party": "D",
+   "homeState": "MO",
+   "homeStateBonus": 2,
+   "identities": [
+    "suburban"
+   ],
+   "belief": "Ran against the wave",
+   "era": 2016,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "sherrod-brown-2016",
+   "name": "Sherrod Brown",
+   "party": "D",
+   "homeState": "OH",
+   "homeStateBonus": 2,
+   "identities": [
+    "union",
+    "academic"
+   ],
+   "belief": "The last statewide Democrat",
+   "era": 2016,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "bob-casey-jr-2016",
+   "name": "Bob Casey Jr.",
+   "party": "D",
+   "homeState": "PA",
+   "homeStateBonus": 1,
+   "identities": [
+    "catholic",
+    "union"
+   ],
+   "belief": "Held Pennsylvania",
+   "era": 2016,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "amy-klobuchar-2016",
+   "name": "Amy Klobuchar",
+   "party": "D",
+   "homeState": "MN",
+   "homeStateBonus": 1,
+   "identities": [
+    "suburban",
+    "ivy"
+   ],
+   "belief": "Won every county once",
+   "era": 2016,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "john-bel-edwards-2016",
+   "name": "John Bel Edwards",
+   "party": "D",
+   "homeState": "LA",
+   "homeStateBonus": 3,
+   "identities": [
+    "catholic",
+    "rural",
+    "veteran"
+   ],
+   "belief": "Pro-life, pro-Medicaid",
+   "era": 2016,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "roy-cooper-2016",
+   "name": "Roy Cooper",
+   "party": "D",
+   "homeState": "NC",
+   "homeStateBonus": 2,
+   "identities": [
+    "rural",
+    "suburban"
+   ],
+   "belief": "Attorney general turned governor",
+   "era": 2016,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "steve-bullock-2016",
+   "name": "Steve Bullock",
+   "party": "D",
+   "homeState": "MT",
+   "homeStateBonus": 3,
+   "identities": [
+    "rural",
+    "business"
+   ],
+   "belief": "Won as Trump carried the state",
+   "era": 2016,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "nancy-pelosi-2016",
+   "name": "Nancy Pelosi",
+   "party": "D",
+   "homeState": "CA",
+   "homeStateBonus": 0,
+   "identities": [
+    "catholic",
+    "urban"
+   ],
+   "belief": "The Speaker again",
+   "era": 2016,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "chuck-schumer-2016",
+   "name": "Chuck Schumer",
+   "party": "D",
+   "homeState": "NY",
+   "homeStateBonus": 0,
+   "identities": [
+    "jewish",
+    "urban",
+    "ivy"
+   ],
+   "belief": "The leader",
+   "era": 2016,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "tammy-baldwin-2016",
+   "name": "Tammy Baldwin",
+   "party": "D",
+   "homeState": "WI",
+   "homeStateBonus": 1,
+   "identities": [
+    "academic",
+    "urban"
+   ],
+   "belief": "Held Wisconsin",
+   "era": 2016,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "catherine-cortez-masto-2016",
+   "name": "Catherine Cortez Masto",
+   "party": "D",
+   "homeState": "NV",
+   "homeStateBonus": 1,
+   "identities": [
+    "hispanic",
+    "urban"
+   ],
+   "belief": "First Latina senator",
+   "era": 2016,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "conor-lamb-2016",
+   "name": "Conor Lamb",
+   "party": "D",
+   "homeState": "PA",
+   "homeStateBonus": 2,
+   "identities": [
+    "catholic",
+    "veteran",
+    "union"
+   ],
+   "belief": "Won a Trump district",
+   "era": 2016,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "doug-jones-2016",
+   "name": "Doug Jones",
+   "party": "D",
+   "homeState": "AL",
+   "homeStateBonus": 2,
+   "identities": [
+    "rural",
+    "evangelical"
+   ],
+   "belief": "Prosecuted the church bombing",
+   "era": 2016,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "donald-trump-2016",
+   "name": "Donald Trump",
+   "party": "R",
+   "homeState": "NY",
+   "homeStateBonus": 0,
+   "identities": [
+    "business",
+    "urban"
+   ],
+   "belief": "Make America great again",
+   "era": 2016,
+   "effects": [
+    {
+     "type": "extremist"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "ted-cruz-2016",
+   "name": "Ted Cruz",
+   "party": "R",
+   "homeState": "TX",
+   "homeStateBonus": 1,
+   "identities": [
+    "hispanic",
+    "evangelical",
+    "ivy"
+   ],
+   "belief": "The shutdown",
+   "era": 2016,
+   "effects": [
+    {
+     "type": "extremist"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "marco-rubio-2016",
+   "name": "Marco Rubio",
+   "party": "R",
+   "homeState": "FL",
+   "homeStateBonus": 1,
+   "identities": [
+    "cuban",
+    "evangelical"
+   ],
+   "belief": "Son of a bartender",
+   "era": 2016,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "john-kasich-2016",
+   "name": "John Kasich",
+   "party": "R",
+   "homeState": "OH",
+   "homeStateBonus": 2,
+   "identities": [
+    "catholic",
+    "business"
+   ],
+   "belief": "Expanded Medicaid",
+   "era": 2016,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "jeb-bush-2016",
+   "name": "Jeb Bush",
+   "party": "R",
+   "homeState": "FL",
+   "homeStateBonus": 1,
+   "identities": [
+    "evangelical",
+    "business",
+    "hispanic"
+   ],
+   "belief": "Please clap",
+   "era": 2016,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "mike-pence-2016",
+   "name": "Mike Pence",
+   "party": "R",
+   "homeState": "IN",
+   "homeStateBonus": 1,
+   "identities": [
+    "evangelical",
+    "business"
+   ],
+   "belief": "Christian, conservative, Republican",
+   "era": 2016,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "paul-ryan-2016",
+   "name": "Paul Ryan",
+   "party": "R",
+   "homeState": "WI",
+   "homeStateBonus": 2,
+   "identities": [
+    "catholic",
+    "business"
+   ],
+   "belief": "The budget",
+   "era": 2016,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "mitch-mcconnell-2016",
+   "name": "Mitch McConnell",
+   "party": "R",
+   "homeState": "KY",
+   "homeStateBonus": 1,
+   "identities": [
+    "business"
+   ],
+   "belief": "Held the seat open",
+   "era": 2016,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "susan-collins-2016",
+   "name": "Susan Collins",
+   "party": "R",
+   "homeState": "ME",
+   "homeStateBonus": 3,
+   "identities": [
+    "business",
+    "suburban"
+   ],
+   "belief": "The only split ticket in 2020",
+   "era": 2016,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "lisa-murkowski-2016",
+   "name": "Lisa Murkowski",
+   "party": "R",
+   "homeState": "AK",
+   "homeStateBonus": 3,
+   "identities": [
+    "business",
+    "rural"
+   ],
+   "belief": "Won on a write-in",
+   "era": 2016,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "charlie-baker-2016",
+   "name": "Charlie Baker",
+   "party": "R",
+   "homeState": "MA",
+   "homeStateBonus": 3,
+   "identities": [
+    "business",
+    "ivy"
+   ],
+   "belief": "Most popular governor in America",
+   "era": 2016,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "larry-hogan-2016",
+   "name": "Larry Hogan",
+   "party": "R",
+   "homeState": "MD",
+   "homeStateBonus": 3,
+   "identities": [
+    "business",
+    "suburban"
+   ],
+   "belief": "Won Maryland twice",
+   "era": 2016,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "phil-scott-2016",
+   "name": "Phil Scott",
+   "party": "R",
+   "homeState": "VT",
+   "homeStateBonus": 3,
+   "identities": [
+    "business",
+    "rural"
+   ],
+   "belief": "Won Vermont as it voted Democratic",
+   "era": 2016,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "ben-sasse-2016",
+   "name": "Ben Sasse",
+   "party": "R",
+   "homeState": "NE",
+   "homeStateBonus": 2,
+   "identities": [
+    "evangelical",
+    "academic",
+    "ivy"
+   ],
+   "belief": "Never Trump, mostly",
+   "era": 2016,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "jeff-flake-2016",
+   "name": "Jeff Flake",
+   "party": "R",
+   "homeState": "AZ",
+   "homeStateBonus": 2,
+   "identities": [
+    "evangelical",
+    "business"
+   ],
+   "belief": "Conscience of a conservative",
+   "era": 2016,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "rand-paul-2016",
+   "name": "Rand Paul",
+   "party": "R",
+   "homeState": "KY",
+   "homeStateBonus": 1,
+   "identities": [
+    "business",
+    "evangelical"
+   ],
+   "belief": "Libertarian caucus of one",
+   "era": 2016,
+   "effects": [
+    {
+     "type": "extremist"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "tom-cotton-2016",
+   "name": "Tom Cotton",
+   "party": "R",
+   "homeState": "AR",
+   "homeStateBonus": 2,
+   "identities": [
+    "veteran",
+    "ivy",
+    "evangelical"
+   ],
+   "belief": "Harvard and the infantry",
+   "era": 2016,
+   "effects": [
+    {
+     "type": "extremist"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "josh-hawley-2016",
+   "name": "Josh Hawley",
+   "party": "R",
+   "homeState": "MO",
+   "homeStateBonus": 2,
+   "identities": [
+    "evangelical",
+    "ivy"
+   ],
+   "belief": "Big tech populist",
+   "era": 2016,
+   "effects": [
+    {
+     "type": "extremist"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "nikki-haley-2016",
+   "name": "Nikki Haley",
+   "party": "R",
+   "homeState": "SC",
+   "homeStateBonus": 2,
+   "identities": [
+    "business",
+    "evangelical"
+   ],
+   "belief": "Took down the flag",
+   "era": 2016,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "greg-abbott-2016",
+   "name": "Greg Abbott",
+   "party": "R",
+   "homeState": "TX",
+   "homeStateBonus": 1,
+   "identities": [
+    "business",
+    "hispanic"
+   ],
+   "belief": "Governor of Texas",
+   "era": 2016,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "ron-desantis-2016",
+   "name": "Ron DeSantis",
+   "party": "R",
+   "homeState": "FL",
+   "homeStateBonus": 1,
+   "identities": [
+    "veteran",
+    "ivy",
+    "evangelical"
+   ],
+   "belief": "Won by 32,000 votes",
+   "era": 2016,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "brian-kemp-2016",
+   "name": "Brian Kemp",
+   "party": "R",
+   "homeState": "GA",
+   "homeStateBonus": 2,
+   "identities": [
+    "rural",
+    "business"
+   ],
+   "belief": "Certified the count",
+   "era": 2016,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "rob-portman-2016",
+   "name": "Rob Portman",
+   "party": "R",
+   "homeState": "OH",
+   "homeStateBonus": 1,
+   "identities": [
+    "business",
+    "ivy"
+   ],
+   "belief": "Trade negotiator",
+   "era": 2016,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "pat-toomey-2016",
+   "name": "Pat Toomey",
+   "party": "R",
+   "homeState": "PA",
+   "homeStateBonus": 1,
+   "identities": [
+    "business",
+    "catholic"
+   ],
+   "belief": "Voted to convict",
+   "era": 2016,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "kevin-mccarthy-2016",
+   "name": "Kevin McCarthy",
+   "party": "R",
+   "homeState": "CA",
+   "homeStateBonus": 1,
+   "identities": [
+    "business",
+    "suburban"
+   ],
+   "belief": "The leader",
+   "era": 2016,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "elise-stefanik-2016",
+   "name": "Elise Stefanik",
+   "party": "R",
+   "homeState": "NY",
+   "homeStateBonus": 1,
+   "identities": [
+    "ivy",
+    "rural",
+    "suburban"
+   ],
+   "belief": "Moderate turned loyalist",
+   "era": 2016,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "marsha-blackburn-2016",
+   "name": "Marsha Blackburn",
+   "party": "R",
+   "homeState": "TN",
+   "homeStateBonus": 2,
+   "identities": [
+    "evangelical",
+    "suburban"
+   ],
+   "belief": "Hard right in a red state",
+   "era": 2016,
+   "effects": [
+    {
+     "type": "extremist"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "dan-crenshaw-2016",
+   "name": "Dan Crenshaw",
+   "party": "R",
+   "homeState": "TX",
+   "homeStateBonus": 1,
+   "identities": [
+    "veteran",
+    "suburban"
+   ],
+   "belief": "The eyepatch",
+   "era": 2016,
+   "effects": []
+  },
+  {
+   "kind": "district",
+   "id": "PA-17-2016",
+   "state": "PA",
+   "number": 17,
+   "era": 2016,
+   "demographics": [
+    "union",
+    "rural",
+    "catholic"
+   ],
+   "synergy": 3,
+   "note": "Conor Lamb's Trump district"
+  },
+  {
+   "kind": "district",
+   "id": "PA-6-2016",
+   "state": "PA",
+   "number": 6,
+   "era": 2016,
+   "demographics": [
+    "suburban",
+    "business"
+   ],
+   "synergy": 2,
+   "note": "Chester County"
+  },
+  {
+   "kind": "district",
+   "id": "MI-11-2016",
+   "state": "MI",
+   "number": 11,
+   "era": 2016,
+   "demographics": [
+    "suburban",
+    "business"
+   ],
+   "synergy": 2,
+   "note": "Oakland County"
+  },
+  {
+   "kind": "district",
+   "id": "MI-13-2016",
+   "state": "MI",
+   "number": 13,
+   "era": 2016,
+   "demographics": [
+    "black",
+    "urban"
+   ],
+   "synergy": 2,
+   "note": "Detroit"
+  },
+  {
+   "kind": "district",
+   "id": "WI-3-2016",
+   "state": "WI",
+   "number": 3,
+   "era": 2016,
+   "demographics": [
+    "rural",
+    "union",
+    "farm"
+   ],
+   "synergy": 3,
+   "note": "Driftless, swung 20 points"
+  },
+  {
+   "kind": "district",
+   "id": "WI-4-2016",
+   "state": "WI",
+   "number": 4,
+   "era": 2016,
+   "demographics": [
+    "black",
+    "urban"
+   ],
+   "synergy": 2,
+   "note": "Milwaukee"
+  },
+  {
+   "kind": "district",
+   "id": "MN-8-2016",
+   "state": "MN",
+   "number": 8,
+   "era": 2016,
+   "demographics": [
+    "rural",
+    "union",
+    "farm"
+   ],
+   "synergy": 3,
+   "note": "The Iron Range, gone red"
+  },
+  {
+   "kind": "district",
+   "id": "MN-3-2016",
+   "state": "MN",
+   "number": 3,
+   "era": 2016,
+   "demographics": [
+    "suburban",
+    "academic",
+    "business"
+   ],
+   "synergy": 3,
+   "note": "Twin Cities suburbs, gone blue"
+  },
+  {
+   "kind": "district",
+   "id": "OH-6-2016",
+   "state": "OH",
+   "number": 6,
+   "era": 2016,
+   "demographics": [
+    "rural",
+    "union"
+   ],
+   "synergy": 3,
+   "note": "Appalachian Ohio, swung 30 points"
+  },
+  {
+   "kind": "district",
+   "id": "OH-12-2016",
+   "state": "OH",
+   "number": 12,
+   "era": 2016,
+   "demographics": [
+    "suburban",
+    "business"
+   ],
+   "synergy": 2,
+   "note": "Columbus suburbs"
+  },
+  {
+   "kind": "district",
+   "id": "IA-2-2016",
+   "state": "IA",
+   "number": 2,
+   "era": 2016,
+   "demographics": [
+    "farm",
+    "rural"
+   ],
+   "synergy": 3,
+   "note": "Eastern Iowa, swung hard"
+  },
+  {
+   "kind": "district",
+   "id": "NY-22-2016",
+   "state": "NY",
+   "number": 22,
+   "era": 2016,
+   "demographics": [
+    "rural",
+    "union"
+   ],
+   "synergy": 2,
+   "note": "Upstate"
+  },
+  {
+   "kind": "district",
+   "id": "NY-14-2016",
+   "state": "NY",
+   "number": 14,
+   "era": 2016,
+   "demographics": [
+    "hispanic",
+    "urban"
+   ],
+   "synergy": 3,
+   "note": "The Bronx and Queens"
+  },
+  {
+   "kind": "district",
+   "id": "TX-7-2016",
+   "state": "TX",
+   "number": 7,
+   "era": 2016,
+   "demographics": [
+    "suburban",
+    "business",
+    "ivy"
+   ],
+   "synergy": 3,
+   "note": "Houston, Bush to Clinton"
+  },
+  {
+   "kind": "district",
+   "id": "TX-28-2016",
+   "state": "TX",
+   "number": 28,
+   "era": 2016,
+   "demographics": [
+    "hispanic",
+    "rural"
+   ],
+   "synergy": 3,
+   "note": "Laredo, moving right"
+  },
+  {
+   "kind": "district",
+   "id": "TX-32-2016",
+   "state": "TX",
+   "number": 32,
+   "era": 2016,
+   "demographics": [
+    "suburban",
+    "business"
+   ],
+   "synergy": 2,
+   "note": "Dallas suburbs"
+  },
+  {
+   "kind": "district",
+   "id": "CA-45-2016",
+   "state": "CA",
+   "number": 45,
+   "era": 2016,
+   "demographics": [
+    "suburban",
+    "business"
+   ],
+   "synergy": 3,
+   "note": "Orange County, flipped"
+  },
+  {
+   "kind": "district",
+   "id": "CA-21-2016",
+   "state": "CA",
+   "number": 21,
+   "era": 2016,
+   "demographics": [
+    "hispanic",
+    "farm"
+   ],
+   "synergy": 3,
+   "note": "Central Valley"
+  },
+  {
+   "kind": "district",
+   "id": "FL-26-2016",
+   "state": "FL",
+   "number": 26,
+   "era": 2016,
+   "demographics": [
+    "cuban",
+    "hispanic",
+    "suburban"
+   ],
+   "synergy": 3,
+   "note": "South Florida, moving right"
+  },
+  {
+   "kind": "district",
+   "id": "FL-27-2016",
+   "state": "FL",
+   "number": 27,
+   "era": 2016,
+   "demographics": [
+    "cuban",
+    "urban"
+   ],
+   "synergy": 3,
+   "note": "Miami"
+  },
+  {
+   "kind": "district",
+   "id": "GA-6-2016",
+   "state": "GA",
+   "number": 6,
+   "era": 2016,
+   "demographics": [
+    "suburban",
+    "business",
+    "ivy"
+   ],
+   "synergy": 3,
+   "note": "Gingrich's old seat, flipped"
+  },
+  {
+   "kind": "district",
+   "id": "GA-14-2016",
+   "state": "GA",
+   "number": 14,
+   "era": 2016,
+   "demographics": [
+    "rural",
+    "evangelical"
+   ],
+   "synergy": 2,
+   "note": "Northwest Georgia"
+  },
+  {
+   "kind": "district",
+   "id": "AZ-6-2016",
+   "state": "AZ",
+   "number": 6,
+   "era": 2016,
+   "demographics": [
+    "suburban",
+    "business"
+   ],
+   "synergy": 3,
+   "note": "Scottsdale"
+  },
+  {
+   "kind": "district",
+   "id": "AZ-7-2016",
+   "state": "AZ",
+   "number": 7,
+   "era": 2016,
+   "demographics": [
+    "hispanic",
+    "urban"
+   ],
+   "synergy": 2,
+   "note": "Phoenix"
+  },
+  {
+   "kind": "district",
+   "id": "NC-9-2016",
+   "state": "NC",
+   "number": 9,
+   "era": 2016,
+   "demographics": [
+    "suburban",
+    "black"
+   ],
+   "synergy": 2,
+   "note": "Charlotte"
+  },
+  {
+   "kind": "district",
+   "id": "VA-7-2016",
+   "state": "VA",
+   "number": 7,
+   "era": 2016,
+   "demographics": [
+    "suburban",
+    "business"
+   ],
+   "synergy": 3,
+   "note": "Richmond suburbs"
+  },
+  {
+   "kind": "district",
+   "id": "VA-9-2016",
+   "state": "VA",
+   "number": 9,
+   "era": 2016,
+   "demographics": [
+    "rural",
+    "evangelical",
+    "veteran"
+   ],
+   "synergy": 2,
+   "note": "Southwest Virginia"
+  },
+  {
+   "kind": "district",
+   "id": "CO-6-2016",
+   "state": "CO",
+   "number": 6,
+   "era": 2016,
+   "demographics": [
+    "suburban",
+    "hispanic",
+    "business"
+   ],
+   "synergy": 3,
+   "note": "Aurora"
+  },
+  {
+   "kind": "district",
+   "id": "NV-4-2016",
+   "state": "NV",
+   "number": 4,
+   "era": 2016,
+   "demographics": [
+    "hispanic",
+    "suburban"
+   ],
+   "synergy": 2,
+   "note": "North Las Vegas"
+  },
+  {
+   "kind": "district",
+   "id": "NJ-7-2016",
+   "state": "NJ",
+   "number": 7,
+   "era": 2016,
+   "demographics": [
+    "suburban",
+    "business",
+    "ivy"
+   ],
+   "synergy": 3,
+   "note": "Somerset County"
+  },
+  {
+   "kind": "district",
+   "id": "IL-6-2016",
+   "state": "IL",
+   "number": 6,
+   "era": 2016,
+   "demographics": [
+    "suburban",
+    "business"
+   ],
+   "synergy": 3,
+   "note": "DuPage County"
+  },
+  {
+   "kind": "district",
+   "id": "IL-12-2016",
+   "state": "IL",
+   "number": 12,
+   "era": 2016,
+   "demographics": [
+    "rural",
+    "union"
+   ],
+   "synergy": 2,
+   "note": "Southern Illinois"
+  },
+  {
+   "kind": "district",
+   "id": "KS-3-2016",
+   "state": "KS",
+   "number": 3,
+   "era": 2016,
+   "demographics": [
+    "suburban",
+    "business"
+   ],
+   "synergy": 3,
+   "note": "Johnson County"
+  },
+  {
+   "kind": "district",
+   "id": "OK-5-2016",
+   "state": "OK",
+   "number": 5,
+   "era": 2016,
+   "demographics": [
+    "suburban",
+    "urban"
+   ],
+   "synergy": 2,
+   "note": "Oklahoma City"
+  },
+  {
+   "kind": "district",
+   "id": "SC-1-2016",
+   "state": "SC",
+   "number": 1,
+   "era": 2016,
+   "demographics": [
+    "suburban",
+    "business",
+    "veteran"
+   ],
+   "synergy": 2,
+   "note": "Charleston"
+  },
+  {
+   "kind": "district",
+   "id": "UT-4-2016",
+   "state": "UT",
+   "number": 4,
+   "era": 2016,
+   "demographics": [
+    "suburban",
+    "evangelical"
+   ],
+   "synergy": 2,
+   "note": "Salt Lake suburbs"
+  },
+  {
+   "kind": "district",
+   "id": "ME-2-2016",
+   "state": "ME",
+   "number": 2,
+   "era": 2016,
+   "demographics": [
+    "rural",
+    "union",
+    "veteran"
+   ],
+   "synergy": 3,
+   "note": "The Second, gone red"
+  },
+  {
+   "kind": "district",
+   "id": "NH-1-2016",
+   "state": "NH",
+   "number": 1,
+   "era": 2016,
+   "demographics": [
+    "suburban",
+    "rural"
+   ],
+   "synergy": 2,
+   "note": "Manchester"
+  },
+  {
+   "kind": "district",
+   "id": "WV-3-2016",
+   "state": "WV",
+   "number": 3,
+   "era": 2016,
+   "demographics": [
+    "union",
+    "rural"
+   ],
+   "synergy": 3,
+   "note": "Coalfields, gone red"
+  },
+  {
+   "kind": "district",
+   "id": "KY-6-2016",
+   "state": "KY",
+   "number": 6,
+   "era": 2016,
+   "demographics": [
+    "suburban",
+    "farm"
+   ],
+   "synergy": 2,
+   "note": "Lexington"
+  },
+  {
+   "kind": "district",
+   "id": "MO-2-2016",
+   "state": "MO",
+   "number": 2,
+   "era": 2016,
+   "demographics": [
+    "suburban",
+    "business"
+   ],
+   "synergy": 2,
+   "note": "St. Louis suburbs"
+  },
+  {
+   "kind": "district",
+   "id": "WA-8-2016",
+   "state": "WA",
+   "number": 8,
+   "era": 2016,
+   "demographics": [
+    "suburban",
+    "academic"
+   ],
+   "synergy": 3,
+   "note": "Eastside, flipped"
+  }
+ ]
+}

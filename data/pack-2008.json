@@ -1,0 +1,1409 @@
+{
+ "name": "2008",
+ "era": 2008,
+ "note": "Nationalisation is well advanced. Home-state bonuses are 1-2, the suburbs have replaced the union hall as the swing terrain, and the surviving heterodox cards are conspicuous and few.",
+ "cards": [
+  {
+   "kind": "candidate",
+   "id": "barack-obama-2008",
+   "name": "Barack Obama",
+   "party": "D",
+   "homeState": "IL",
+   "homeStateBonus": 1,
+   "identities": [
+    "black",
+    "urban",
+    "ivy",
+    "academic"
+   ],
+   "belief": "Hope and change",
+   "era": 2008,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "hillary-clinton-2008",
+   "name": "Hillary Clinton",
+   "party": "D",
+   "homeState": "NY",
+   "homeStateBonus": 1,
+   "identities": [
+    "ivy",
+    "suburban"
+   ],
+   "belief": "Ready on day one",
+   "era": 2008,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "john-edwards-2008",
+   "name": "John Edwards",
+   "party": "D",
+   "homeState": "NC",
+   "homeStateBonus": 2,
+   "identities": [
+    "rural"
+   ],
+   "belief": "Two Americas",
+   "era": 2008,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "joe-biden-2008",
+   "name": "Joe Biden",
+   "party": "D",
+   "homeState": "DE",
+   "homeStateBonus": 2,
+   "identities": [
+    "catholic"
+   ],
+   "belief": "Foreign relations chairman",
+   "era": 2008,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "bill-richardson-2008",
+   "name": "Bill Richardson",
+   "party": "D",
+   "homeState": "NM",
+   "homeStateBonus": 2,
+   "identities": [
+    "hispanic",
+    "business"
+   ],
+   "belief": "Governor and diplomat",
+   "era": 2008,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "chris-dodd-2008",
+   "name": "Chris Dodd",
+   "party": "D",
+   "homeState": "CT",
+   "homeStateBonus": 2,
+   "identities": [
+    "catholic",
+    "ivy"
+   ],
+   "belief": "Banking chairman",
+   "era": 2008,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "nancy-pelosi-2008",
+   "name": "Nancy Pelosi",
+   "party": "D",
+   "homeState": "CA",
+   "homeStateBonus": 1,
+   "identities": [
+    "catholic",
+    "urban"
+   ],
+   "belief": "First woman Speaker",
+   "era": 2008,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "harry-reid-2008",
+   "name": "Harry Reid",
+   "party": "D",
+   "homeState": "NV",
+   "homeStateBonus": 2,
+   "identities": [
+    "evangelical",
+    "rural"
+   ],
+   "belief": "Pro-life majority leader",
+   "era": 2008,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "jim-webb-2008",
+   "name": "Jim Webb",
+   "party": "D",
+   "homeState": "VA",
+   "homeStateBonus": 2,
+   "identities": [
+    "veteran",
+    "rural"
+   ],
+   "belief": "Reagan's Navy Secretary",
+   "era": 2008,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "jon-tester-2008",
+   "name": "Jon Tester",
+   "party": "D",
+   "homeState": "MT",
+   "homeStateBonus": 3,
+   "identities": [
+    "farm",
+    "rural"
+   ],
+   "belief": "Flat-top farmer",
+   "era": 2008,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "claire-mccaskill-2008",
+   "name": "Claire McCaskill",
+   "party": "D",
+   "homeState": "MO",
+   "homeStateBonus": 2,
+   "identities": [
+    "suburban"
+   ],
+   "belief": "Prosecutor",
+   "era": 2008,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "sherrod-brown-2008",
+   "name": "Sherrod Brown",
+   "party": "D",
+   "homeState": "OH",
+   "homeStateBonus": 2,
+   "identities": [
+    "union",
+    "academic"
+   ],
+   "belief": "Against the trade deals",
+   "era": 2008,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "bob-casey-jr-2008",
+   "name": "Bob Casey Jr.",
+   "party": "D",
+   "homeState": "PA",
+   "homeStateBonus": 2,
+   "identities": [
+    "catholic",
+    "union"
+   ],
+   "belief": "Pro-life Democrat",
+   "era": 2008,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "heath-shuler-2008",
+   "name": "Heath Shuler",
+   "party": "D",
+   "homeState": "NC",
+   "homeStateBonus": 2,
+   "identities": [
+    "evangelical",
+    "rural"
+   ],
+   "belief": "Blue Dog quarterback",
+   "era": 2008,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "rahm-emanuel-2008",
+   "name": "Rahm Emanuel",
+   "party": "D",
+   "homeState": "IL",
+   "homeStateBonus": 1,
+   "identities": [
+    "jewish",
+    "urban"
+   ],
+   "belief": "Recruited the Blue Dogs",
+   "era": 2008,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "steny-hoyer-2008",
+   "name": "Steny Hoyer",
+   "party": "D",
+   "homeState": "MD",
+   "homeStateBonus": 1,
+   "identities": [
+    "suburban"
+   ],
+   "belief": "The majority leader",
+   "era": 2008,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "charles-rangel-2008",
+   "name": "Charles Rangel",
+   "party": "D",
+   "homeState": "NY",
+   "homeStateBonus": 1,
+   "identities": [
+    "black",
+    "urban",
+    "veteran"
+   ],
+   "belief": "Ways and Means",
+   "era": 2008,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "barney-frank-2008",
+   "name": "Barney Frank",
+   "party": "D",
+   "homeState": "MA",
+   "homeStateBonus": 1,
+   "identities": [
+    "jewish",
+    "urban",
+    "ivy"
+   ],
+   "belief": "Financial services",
+   "era": 2008,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "russ-feingold-2008",
+   "name": "Russ Feingold",
+   "party": "D",
+   "homeState": "WI",
+   "homeStateBonus": 2,
+   "identities": [
+    "jewish",
+    "academic"
+   ],
+   "belief": "The only no vote on the Patriot Act",
+   "era": 2008,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "amy-klobuchar-2008",
+   "name": "Amy Klobuchar",
+   "party": "D",
+   "homeState": "MN",
+   "homeStateBonus": 2,
+   "identities": [
+    "suburban",
+    "ivy"
+   ],
+   "belief": "Prosecutor from the Iron Range",
+   "era": 2008,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "mark-warner-2008",
+   "name": "Mark Warner",
+   "party": "D",
+   "homeState": "VA",
+   "homeStateBonus": 2,
+   "identities": [
+    "business"
+   ],
+   "belief": "Governor who won rural Virginia",
+   "era": 2008,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "kay-hagan-2008",
+   "name": "Kay Hagan",
+   "party": "D",
+   "homeState": "NC",
+   "homeStateBonus": 2,
+   "identities": [
+    "suburban",
+    "business"
+   ],
+   "belief": "Rode the wave",
+   "era": 2008,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "al-franken-2008",
+   "name": "Al Franken",
+   "party": "D",
+   "homeState": "MN",
+   "homeStateBonus": 1,
+   "identities": [
+    "jewish",
+    "academic"
+   ],
+   "belief": "Won by 312 votes",
+   "era": 2008,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "tim-kaine-2008",
+   "name": "Tim Kaine",
+   "party": "D",
+   "homeState": "VA",
+   "homeStateBonus": 2,
+   "identities": [
+    "catholic",
+    "hispanic"
+   ],
+   "belief": "Missionary in Honduras",
+   "era": 2008,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "john-mccain-2008",
+   "name": "John McCain",
+   "party": "R",
+   "homeState": "AZ",
+   "homeStateBonus": 2,
+   "identities": [
+    "veteran",
+    "business"
+   ],
+   "belief": "Maverick",
+   "era": 2008,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "sarah-palin-2008",
+   "name": "Sarah Palin",
+   "party": "R",
+   "homeState": "AK",
+   "homeStateBonus": 3,
+   "identities": [
+    "evangelical",
+    "rural"
+   ],
+   "belief": "Hockey mom",
+   "era": 2008,
+   "effects": [
+    {
+     "type": "extremist"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "mitt-romney-2008",
+   "name": "Mitt Romney",
+   "party": "R",
+   "homeState": "MA",
+   "homeStateBonus": 1,
+   "identities": [
+    "evangelical",
+    "business",
+    "ivy"
+   ],
+   "belief": "Turnaround artist",
+   "era": 2008,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "mike-huckabee-2008",
+   "name": "Mike Huckabee",
+   "party": "R",
+   "homeState": "AR",
+   "homeStateBonus": 2,
+   "identities": [
+    "evangelical",
+    "rural"
+   ],
+   "belief": "Preacher governor",
+   "era": 2008,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "rudy-giuliani-2008",
+   "name": "Rudy Giuliani",
+   "party": "R",
+   "homeState": "NY",
+   "homeStateBonus": 1,
+   "identities": [
+    "catholic",
+    "urban"
+   ],
+   "belief": "America's mayor",
+   "era": 2008,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "fred-thompson-2008",
+   "name": "Fred Thompson",
+   "party": "R",
+   "homeState": "TN",
+   "homeStateBonus": 2,
+   "identities": [
+    "business",
+    "rural"
+   ],
+   "belief": "Actor and senator",
+   "era": 2008,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "ron-paul-2008",
+   "name": "Ron Paul",
+   "party": "R",
+   "homeState": "TX",
+   "homeStateBonus": 1,
+   "identities": [
+    "business",
+    "veteran"
+   ],
+   "belief": "End the Fed",
+   "era": 2008,
+   "effects": [
+    {
+     "type": "extremist"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "mitch-mcconnell-2008",
+   "name": "Mitch McConnell",
+   "party": "R",
+   "homeState": "KY",
+   "homeStateBonus": 2,
+   "identities": [
+    "business"
+   ],
+   "belief": "The minority leader",
+   "era": 2008,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "john-boehner-2008",
+   "name": "John Boehner",
+   "party": "R",
+   "homeState": "OH",
+   "homeStateBonus": 2,
+   "identities": [
+    "catholic",
+    "business"
+   ],
+   "belief": "Country club conservative",
+   "era": 2008,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "eric-cantor-2008",
+   "name": "Eric Cantor",
+   "party": "R",
+   "homeState": "VA",
+   "homeStateBonus": 2,
+   "identities": [
+    "jewish",
+    "suburban",
+    "business"
+   ],
+   "belief": "Young Gun",
+   "era": 2008,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "lindsey-graham-2008",
+   "name": "Lindsey Graham",
+   "party": "R",
+   "homeState": "SC",
+   "homeStateBonus": 2,
+   "identities": [
+    "veteran",
+    "evangelical"
+   ],
+   "belief": "McCain's wingman",
+   "era": 2008,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "susan-collins-2008",
+   "name": "Susan Collins",
+   "party": "R",
+   "homeState": "ME",
+   "homeStateBonus": 3,
+   "identities": [
+    "business",
+    "suburban"
+   ],
+   "belief": "The last split ticket",
+   "era": 2008,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "olympia-snowe-2008",
+   "name": "Olympia Snowe",
+   "party": "R",
+   "homeState": "ME",
+   "homeStateBonus": 3,
+   "identities": [
+    "business"
+   ],
+   "belief": "Voted for the stimulus in committee",
+   "era": 2008,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "arlen-specter-2008",
+   "name": "Arlen Specter",
+   "party": "R",
+   "homeState": "PA",
+   "homeStateBonus": 2,
+   "identities": [
+    "jewish",
+    "urban"
+   ],
+   "belief": "Switched parties in 2009",
+   "era": 2008,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "chuck-hagel-2008",
+   "name": "Chuck Hagel",
+   "party": "R",
+   "homeState": "NE",
+   "homeStateBonus": 2,
+   "identities": [
+    "veteran",
+    "rural"
+   ],
+   "belief": "Republican against the war",
+   "era": 2008,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "richard-lugar-2008",
+   "name": "Richard Lugar",
+   "party": "R",
+   "homeState": "IN",
+   "homeStateBonus": 2,
+   "identities": [
+    "business",
+    "ivy"
+   ],
+   "belief": "Nunn-Lugar",
+   "era": 2008,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "jim-demint-2008",
+   "name": "Jim DeMint",
+   "party": "R",
+   "homeState": "SC",
+   "homeStateBonus": 2,
+   "identities": [
+    "evangelical",
+    "business"
+   ],
+   "belief": "Ideological validator",
+   "era": 2008,
+   "effects": [
+    {
+     "type": "extremist"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "tom-coburn-2008",
+   "name": "Tom Coburn",
+   "party": "R",
+   "homeState": "OK",
+   "homeStateBonus": 2,
+   "identities": [
+    "evangelical",
+    "business"
+   ],
+   "belief": "Dr. No",
+   "era": 2008,
+   "effects": [
+    {
+     "type": "extremist"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "sam-brownback-2008",
+   "name": "Sam Brownback",
+   "party": "R",
+   "homeState": "KS",
+   "homeStateBonus": 2,
+   "identities": [
+    "evangelical",
+    "farm"
+   ],
+   "belief": "Compassionate conservative",
+   "era": 2008,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "charlie-crist-2008",
+   "name": "Charlie Crist",
+   "party": "R",
+   "homeState": "FL",
+   "homeStateBonus": 2,
+   "identities": [
+    "suburban",
+    "business"
+   ],
+   "belief": "Hugged the president",
+   "era": 2008,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "bobby-jindal-2008",
+   "name": "Bobby Jindal",
+   "party": "R",
+   "homeState": "LA",
+   "homeStateBonus": 2,
+   "identities": [
+    "evangelical",
+    "ivy"
+   ],
+   "belief": "Rhodes scholar governor",
+   "era": 2008,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "tim-pawlenty-2008",
+   "name": "Tim Pawlenty",
+   "party": "R",
+   "homeState": "MN",
+   "homeStateBonus": 2,
+   "identities": [
+    "evangelical",
+    "suburban"
+   ],
+   "belief": "Sam's Club Republicans",
+   "era": 2008,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "haley-barbour-2008",
+   "name": "Haley Barbour",
+   "party": "R",
+   "homeState": "MS",
+   "homeStateBonus": 2,
+   "identities": [
+    "business",
+    "rural"
+   ],
+   "belief": "The lobbyist governor",
+   "era": 2008,
+   "effects": []
+  },
+  {
+   "kind": "candidate",
+   "id": "norm-coleman-2008",
+   "name": "Norm Coleman",
+   "party": "R",
+   "homeState": "MN",
+   "homeStateBonus": 1,
+   "identities": [
+    "jewish",
+    "urban"
+   ],
+   "belief": "Lost the recount",
+   "era": 2008,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "george-voinovich-2008",
+   "name": "George Voinovich",
+   "party": "R",
+   "homeState": "OH",
+   "homeStateBonus": 2,
+   "identities": [
+    "catholic",
+    "urban"
+   ],
+   "belief": "Deficit hawk",
+   "era": 2008,
+   "effects": [
+    {
+     "type": "heterodox"
+    }
+   ]
+  },
+  {
+   "kind": "candidate",
+   "id": "john-sununu-2008",
+   "name": "John Sununu",
+   "party": "R",
+   "homeState": "NH",
+   "homeStateBonus": 2,
+   "identities": [
+    "business",
+    "ivy"
+   ],
+   "belief": "Youngest senator",
+   "era": 2008,
+   "effects": []
+  },
+  {
+   "kind": "district",
+   "id": "IL-1-2008",
+   "state": "IL",
+   "number": 1,
+   "era": 2008,
+   "demographics": [
+    "black",
+    "urban"
+   ],
+   "synergy": 2,
+   "note": "South Side"
+  },
+  {
+   "kind": "district",
+   "id": "IL-5-2008",
+   "state": "IL",
+   "number": 5,
+   "era": 2008,
+   "demographics": [
+    "urban",
+    "catholic"
+   ],
+   "synergy": 2,
+   "note": "North Side"
+  },
+  {
+   "kind": "district",
+   "id": "NY-15-2008",
+   "state": "NY",
+   "number": 15,
+   "era": 2008,
+   "demographics": [
+    "black",
+    "urban"
+   ],
+   "synergy": 2,
+   "note": "Harlem"
+  },
+  {
+   "kind": "district",
+   "id": "NY-23-2008",
+   "state": "NY",
+   "number": 23,
+   "era": 2008,
+   "demographics": [
+    "rural",
+    "union"
+   ],
+   "synergy": 1,
+   "note": "North Country"
+  },
+  {
+   "kind": "district",
+   "id": "CA-8-2008",
+   "state": "CA",
+   "number": 8,
+   "era": 2008,
+   "demographics": [
+    "urban",
+    "academic"
+   ],
+   "synergy": 2,
+   "note": "San Francisco"
+  },
+  {
+   "kind": "district",
+   "id": "CA-34-2008",
+   "state": "CA",
+   "number": 34,
+   "era": 2008,
+   "demographics": [
+    "hispanic",
+    "urban"
+   ],
+   "synergy": 3,
+   "note": "Downtown LA"
+  },
+  {
+   "kind": "district",
+   "id": "CA-50-2008",
+   "state": "CA",
+   "number": 50,
+   "era": 2008,
+   "demographics": [
+    "suburban",
+    "business"
+   ],
+   "synergy": 2,
+   "note": "North San Diego County"
+  },
+  {
+   "kind": "district",
+   "id": "TX-23-2008",
+   "state": "TX",
+   "number": 23,
+   "era": 2008,
+   "demographics": [
+    "hispanic",
+    "rural"
+   ],
+   "synergy": 3,
+   "note": "Border district"
+  },
+  {
+   "kind": "district",
+   "id": "TX-22-2008",
+   "state": "TX",
+   "number": 22,
+   "era": 2008,
+   "demographics": [
+    "suburban",
+    "business"
+   ],
+   "synergy": 2,
+   "note": "Sugar Land"
+  },
+  {
+   "kind": "district",
+   "id": "FL-25-2008",
+   "state": "FL",
+   "number": 25,
+   "era": 2008,
+   "demographics": [
+    "cuban",
+    "suburban"
+   ],
+   "synergy": 3,
+   "note": "Miami-Dade"
+  },
+  {
+   "kind": "district",
+   "id": "FL-22-2008",
+   "state": "FL",
+   "number": 22,
+   "era": 2008,
+   "demographics": [
+    "suburban",
+    "jewish"
+   ],
+   "synergy": 2,
+   "note": "Broward-Palm Beach"
+  },
+  {
+   "kind": "district",
+   "id": "PA-4-2008",
+   "state": "PA",
+   "number": 4,
+   "era": 2008,
+   "demographics": [
+    "suburban",
+    "union"
+   ],
+   "synergy": 2,
+   "note": "Pittsburgh suburbs"
+  },
+  {
+   "kind": "district",
+   "id": "PA-12-2008",
+   "state": "PA",
+   "number": 12,
+   "era": 2008,
+   "demographics": [
+    "union",
+    "rural",
+    "catholic"
+   ],
+   "synergy": 2,
+   "note": "Murtha country"
+  },
+  {
+   "kind": "district",
+   "id": "OH-1-2008",
+   "state": "OH",
+   "number": 1,
+   "era": 2008,
+   "demographics": [
+    "black",
+    "urban"
+   ],
+   "synergy": 2,
+   "note": "Cincinnati"
+  },
+  {
+   "kind": "district",
+   "id": "OH-15-2008",
+   "state": "OH",
+   "number": 15,
+   "era": 2008,
+   "demographics": [
+    "suburban",
+    "academic"
+   ],
+   "synergy": 2,
+   "note": "Columbus suburbs"
+  },
+  {
+   "kind": "district",
+   "id": "VA-11-2008",
+   "state": "VA",
+   "number": 11,
+   "era": 2008,
+   "demographics": [
+    "suburban",
+    "hispanic",
+    "business"
+   ],
+   "synergy": 3,
+   "note": "Northern Virginia"
+  },
+  {
+   "kind": "district",
+   "id": "VA-9-2008",
+   "state": "VA",
+   "number": 9,
+   "era": 2008,
+   "demographics": [
+    "rural",
+    "evangelical"
+   ],
+   "synergy": 2,
+   "note": "Fighting Ninth"
+  },
+  {
+   "kind": "district",
+   "id": "NC-8-2008",
+   "state": "NC",
+   "number": 8,
+   "era": 2008,
+   "demographics": [
+    "black",
+    "rural"
+   ],
+   "synergy": 2,
+   "note": "Charlotte to Fayetteville"
+  },
+  {
+   "kind": "district",
+   "id": "NC-11-2008",
+   "state": "NC",
+   "number": 11,
+   "era": 2008,
+   "demographics": [
+    "rural",
+    "evangelical",
+    "veteran"
+   ],
+   "synergy": 2,
+   "note": "Western North Carolina"
+  },
+  {
+   "kind": "district",
+   "id": "CO-7-2008",
+   "state": "CO",
+   "number": 7,
+   "era": 2008,
+   "demographics": [
+    "suburban",
+    "hispanic"
+   ],
+   "synergy": 2,
+   "note": "Denver suburbs"
+  },
+  {
+   "kind": "district",
+   "id": "NV-3-2008",
+   "state": "NV",
+   "number": 3,
+   "era": 2008,
+   "demographics": [
+    "suburban",
+    "hispanic"
+   ],
+   "synergy": 2,
+   "note": "Las Vegas suburbs"
+  },
+  {
+   "kind": "district",
+   "id": "AZ-8-2008",
+   "state": "AZ",
+   "number": 8,
+   "era": 2008,
+   "demographics": [
+    "suburban",
+    "hispanic"
+   ],
+   "synergy": 2,
+   "note": "Tucson"
+  },
+  {
+   "kind": "district",
+   "id": "NM-1-2008",
+   "state": "NM",
+   "number": 1,
+   "era": 2008,
+   "demographics": [
+    "hispanic",
+    "urban"
+   ],
+   "synergy": 2,
+   "note": "Albuquerque"
+  },
+  {
+   "kind": "district",
+   "id": "IN-2-2008",
+   "state": "IN",
+   "number": 2,
+   "era": 2008,
+   "demographics": [
+    "union",
+    "rural",
+    "catholic"
+   ],
+   "synergy": 2,
+   "note": "South Bend"
+  },
+  {
+   "kind": "district",
+   "id": "MI-9-2008",
+   "state": "MI",
+   "number": 9,
+   "era": 2008,
+   "demographics": [
+    "suburban",
+    "jewish"
+   ],
+   "synergy": 2,
+   "note": "Oakland County"
+  },
+  {
+   "kind": "district",
+   "id": "WI-8-2008",
+   "state": "WI",
+   "number": 8,
+   "era": 2008,
+   "demographics": [
+    "rural",
+    "union",
+    "catholic"
+   ],
+   "synergy": 2,
+   "note": "Green Bay"
+  },
+  {
+   "kind": "district",
+   "id": "MN-6-2008",
+   "state": "MN",
+   "number": 6,
+   "era": 2008,
+   "demographics": [
+    "suburban",
+    "evangelical"
+   ],
+   "synergy": 2,
+   "note": "The Sixth"
+  },
+  {
+   "kind": "district",
+   "id": "IA-3-2008",
+   "state": "IA",
+   "number": 3,
+   "era": 2008,
+   "demographics": [
+    "farm",
+    "suburban"
+   ],
+   "synergy": 2,
+   "note": "Des Moines"
+  },
+  {
+   "kind": "district",
+   "id": "MO-6-2008",
+   "state": "MO",
+   "number": 6,
+   "era": 2008,
+   "demographics": [
+    "farm",
+    "rural",
+    "evangelical"
+   ],
+   "synergy": 2,
+   "note": "Northern Missouri"
+  },
+  {
+   "kind": "district",
+   "id": "KS-2-2008",
+   "state": "KS",
+   "number": 2,
+   "era": 2008,
+   "demographics": [
+    "farm",
+    "rural",
+    "veteran"
+   ],
+   "synergy": 2,
+   "note": "Eastern Kansas"
+  },
+  {
+   "kind": "district",
+   "id": "GA-4-2008",
+   "state": "GA",
+   "number": 4,
+   "era": 2008,
+   "demographics": [
+    "black",
+    "suburban"
+   ],
+   "synergy": 2,
+   "note": "DeKalb County"
+  },
+  {
+   "kind": "district",
+   "id": "AL-2-2008",
+   "state": "AL",
+   "number": 2,
+   "era": 2008,
+   "demographics": [
+    "rural",
+    "evangelical",
+    "veteran"
+   ],
+   "synergy": 2,
+   "note": "Montgomery"
+  },
+  {
+   "kind": "district",
+   "id": "MS-1-2008",
+   "state": "MS",
+   "number": 1,
+   "era": 2008,
+   "demographics": [
+    "rural",
+    "farm",
+    "evangelical"
+   ],
+   "synergy": 2,
+   "note": "North Mississippi"
+  },
+  {
+   "kind": "district",
+   "id": "LA-6-2008",
+   "state": "LA",
+   "number": 6,
+   "era": 2008,
+   "demographics": [
+    "suburban",
+    "evangelical"
+   ],
+   "synergy": 2,
+   "note": "Baton Rouge"
+  },
+  {
+   "kind": "district",
+   "id": "SC-1-2008",
+   "state": "SC",
+   "number": 1,
+   "era": 2008,
+   "demographics": [
+    "suburban",
+    "business",
+    "veteran"
+   ],
+   "synergy": 2,
+   "note": "Lowcountry"
+  },
+  {
+   "kind": "district",
+   "id": "KY-3-2008",
+   "state": "KY",
+   "number": 3,
+   "era": 2008,
+   "demographics": [
+    "urban",
+    "union"
+   ],
+   "synergy": 2,
+   "note": "Louisville"
+  },
+  {
+   "kind": "district",
+   "id": "WV-1-2008",
+   "state": "WV",
+   "number": 1,
+   "era": 2008,
+   "demographics": [
+    "union",
+    "rural"
+   ],
+   "synergy": 2,
+   "note": "Northern West Virginia"
+  },
+  {
+   "kind": "district",
+   "id": "NH-1-2008",
+   "state": "NH",
+   "number": 1,
+   "era": 2008,
+   "demographics": [
+    "suburban",
+    "rural"
+   ],
+   "synergy": 2,
+   "note": "Manchester"
+  },
+  {
+   "kind": "district",
+   "id": "MD-1-2008",
+   "state": "MD",
+   "number": 1,
+   "era": 2008,
+   "demographics": [
+    "rural",
+    "suburban",
+    "business"
+   ],
+   "synergy": 2,
+   "note": "Eastern Shore"
+  },
+  {
+   "kind": "district",
+   "id": "NJ-7-2008",
+   "state": "NJ",
+   "number": 7,
+   "era": 2008,
+   "demographics": [
+    "suburban",
+    "business"
+   ],
+   "synergy": 2,
+   "note": "Central Jersey"
+  },
+  {
+   "kind": "district",
+   "id": "CT-4-2008",
+   "state": "CT",
+   "number": 4,
+   "era": 2008,
+   "demographics": [
+    "suburban",
+    "business"
+   ],
+   "synergy": 2,
+   "note": "Fairfield County"
+  },
+  {
+   "kind": "district",
+   "id": "WA-8-2008",
+   "state": "WA",
+   "number": 8,
+   "era": 2008,
+   "demographics": [
+    "suburban",
+    "academic"
+   ],
+   "synergy": 2,
+   "note": "Eastside"
+  }
+ ]
+}
