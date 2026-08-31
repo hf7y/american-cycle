@@ -95,7 +95,6 @@
     "resolution.tieBreak": "\u00a79 says only 'higher total wins'. Even break is what makes edge 0 exactly 50%; a table needs a real rule.",
     "primaryGeneral.extremistPrimary": "\u00a79 says extremism is a primary bonus and general penalty but prints no magnitude.",
     "primaryGeneral.extremistGeneral": "as above.",
-    "primaryGeneral.heterodoxPrimaryPenalty": "\u00a79 says heterodoxy is a primary penalty; no magnitude printed.",
     "primaryGeneral.crossBenchPrimaryPenalty": "\u00a79 lists cross-benching as a primary penalty; no magnitude printed.",
     "lean.decayFrequency": "\u00a716 open question 1 -- SETTLED 2026-08-31 by arithmetic, not simulation. Annual decay is -2 per cycle against a maximum push of +2, so sustained blowouts net zero and lean pins at 2 forever: realignment is impossible. Biennial (-1) against margin-based pushes accumulates. See engine/rules/lean.test.ts and reports/FINDINGS.md.",
     "lean.governorPushes": "\u00a716 open question; 'never' falls out of the priority rule, 'with-lean' is the alternative under test.",
@@ -108,6 +107,9 @@
     "game.victory (ties)": "\u00a714 leaves the victory condition open and says nothing about ties on final score, which are common. Placeholder is a coin flip. Resolving by lowest seat -- the natural coding accident -- manufactures a 25pp seat bias that does not exist.",
     "game.deckOutEnds": "\u00a714 names deck-out as the ending, but also has defeated politicians circulate back through the draft. Circulation wins: talon+discard GROW from 79 to 273 cards over a hundred years, so deck-out is unreachable and cannot be the backstop the doc treats it as.",
     "lean.uncontestedPush": "\u00a710 says a push scales with how decisively a race was won and never says what a walkover does -- a race nobody contested has no margin at all. This is the single highest-leverage undecided rule in the design: 0 leaves the map a driftless random walk and the central thesis unimplemented; 1 produces genuine realignment. See FINDINGS.md F23 and F24.",
-    "primaryGeneral.billCounterPips": "\u00a712 says a good reaction rewards yes-voters and a bad one penalises them at the next election, in both rounds, and that the card's accumulated counters are read off at resolution -- but prints no magnitude. One pip a counter is a stand-in."
+    "primaryGeneral.billCounterPips": "\u00a712 says a good reaction rewards yes-voters and a bad one penalises them at the next election, in both rounds, and that the card's accumulated counters are read off at resolution -- but prints no magnitude. One pip a counter is a stand-in.",
+    "resolution.incumbencyPrimary": "\u00a716 calls incumbency \"a calibration check on +1\", but a primary is 1d6 vs 1d6 (SD 2.42) against a general's 3d6 (SD 4.18), so one scalar cannot serve both rounds. 4 puts contested primary incumbent survival at 91.2%. NOTE the benchmark population: the ~98% renomination rate quoted for real House incumbents is over ALL primaries including unopposed ones, so it is not the matching figure. Real CONTESTED survival is unverified.",
+    "resolution.crossOfficeIncumbency": "\u00a711's stepping stone, flat. One number for every pair of offices: the primary/general asymmetry a table would encode is already emergent from the board, and the history refutes it (sitting House members won 61% of Senate primaries and 63% of the generals).",
+    "primaryGeneral.crossBenchCap": "\u00a712 says the accumulated counters are simply read off, and uncapped they read ~30. But \u00a712 also makes cross-benching structurally necessary to pass anything at a 60% Senate threshold, so an uncapped record makes cooperation career-ending. 3 puts the mean at 2.35 pips, 0.97 of the primary's 2.42 SD."
   }
 }
