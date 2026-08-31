@@ -1076,3 +1076,49 @@ like the bottom rows, not the top ones.
 about the strength of a claim rather than a wrong number. The measurement in
 F14 was correct; the conclusion drawn from it was over-confident because only
 one variable was swept.*
+
+---
+
+## F28. Robustness audit: which findings survive a change of agent pool.
+
+F27 showed one headline number (bill passage) was an artefact of who was at the
+table. That is a reason to check the others rather than to assume them. Six
+agent pools, from four identical Randoms to a mix of specialists:
+
+| metric | range across pools | verdict |
+|---|---|---|
+| **median House margin** | **8, 8, 8, 8, 8, 8 pts** | **invariant** |
+| uncontested share | 85–97% | robust |
+| incumbent reelection | 91–97% (real 94.1%) | robust |
+| contested race-slots | 21–42% (target >60%) | robust |
+| states realigned per game | 0.00–0.33 | robust |
+| comeback rate | 0–2% | robust |
+| **determination point** | **38–75%** | **agent-dependent** |
+
+**The core findings hold.** The median margin is *literally identical* in every
+pool — 8 points against a real 32.5 — which is the strongest possible evidence
+for F8's claim that the ceiling is arithmetic rather than behavioural. No
+pool produces safe seats, none realigns the map, none contests enough races,
+and incumbency lands within a few points of reality regardless of who plays.
+
+**One finding needs qualifying: the determination point.** It runs 38% with
+mixed specialists, 50% with four Greedys, 63% with four Lookaheads or four
+HouseFarms, and **75% with four Randoms** — which is inside SIM-BRIEF's healthy
+75–85% band.
+
+That last row is not good news, and it is worth saying why. Random play
+prevents early lock-in because nothing accumulates skill advantage, not because
+the design has a brake. The meaningful range is **38–63% among competent
+agents**, all of it below the healthy band. So F18's runaway stands for the
+players a designer cares about, and the single "50%" figure quoted elsewhere in
+this report should be read as the middle of a range.
+
+**The comeback rate is the robust half of the runaway finding**: 0–2% in every
+pool tested, including the random one. Whatever the determination point says,
+a player who falls behind does not come back, and that does not depend on who
+is playing.
+
+**Method note.** This audit exists because F27 caught me generalising from a
+single-variable sweep. Every headline number in this report has now been
+checked against a change in the one variable a simulator most easily holds
+fixed by accident — the players.

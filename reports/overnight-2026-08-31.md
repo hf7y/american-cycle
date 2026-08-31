@@ -131,9 +131,10 @@ Confidence: **certain** on the ceiling, **open** on which way to resolve it.
 
 ### 4. The leader runs away, and the only brake in the design is social.
 **Metric** SIM-BRIEF's determination point and comeback rate.
-**Observed** determination **50%** of the way through (healthy 75–85%); comeback
-rate **0–1%**; the leader's margin over second place **doubles** across the
-second half, from 26 to 51; and **100% of player-scores never decrease**.
+**Observed** determination **38–63% across competent agent pools** (healthy is
+75–85%); comeback rate **0–2% in every pool tested**, including random play;
+the leader's margin over second place **doubles** across the second half, from
+26 to 51; and **100% of player-scores never decrease**.
 **Change** none proposed — and that is the finding.
 
 §16 names three suspects and three brakes. Every suspect was tested by
@@ -183,6 +184,16 @@ Confidence: **high** on the Senate, and the bill needs a human table rather
 than a parameter.
 
 ---
+
+### A robustness check on all of it
+
+Every headline number above was re-measured across six agent pools, from four
+identical Randoms to a mix of specialists, because F27 caught one figure that
+was an artefact of who was playing. **The median House margin is identical —
+8 points — in all six.** Uncontested share, incumbent reelection, contest rate,
+realignment and comeback rate all hold their range. Only the determination
+point moves materially (38–75%), and its top end is four Random agents, where
+nothing locks in because nothing accumulates. Full table in `FINDINGS.md` F28.
 
 ### What is already working
 
