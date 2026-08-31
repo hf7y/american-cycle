@@ -907,3 +907,32 @@ Shipped as `realigning.json` so the difference is playable side by side with
 which returned mean |lean| 0.02. That number is void — `quadrennial` is not a
 value `decay()` recognises, so it fell through to annual decay, which F2 already
 showed pins the map. Reported as discarded rather than as a finding.
+
+### F24 addendum: realignment and the margin ceiling are independent problems.
+
+I predicted that fixing the map (F24) would narrow the margin gap (F8): if lean
+accumulates to 4–8 pips, leaning states should start producing lopsided races,
+which is the safe-seat mass F8 says is missing. **It does not.**
+
+| | tuned | realigning | real |
+|---|---|---|---|
+| median margin | 8 pts | **10 pts** | 32.5 |
+| competitive (<10) | 51.3% | 45.6% | 13.5% |
+| safe (40+ pts) | 0.2% | **0.7%** | 37.5% |
+
+Realignment moves the median by two points and leaves the safe-seat mass at
+essentially zero. The arithmetic says why: lean caps at ±8 pips, so even a
+*completely* realigned state contributes 16 points of margin — and the rest of
+a typical stack is 2.43 entries worth 1–3 pips each. A 40-point margin needs a
+near-maximal stack on every axis at once, which is why 0.7% of races reach it.
+
+**So F8 and F23 are separate problems with separate fixes**, and my hypothesis
+that one implied the other was wrong. The map can be made to realign without
+the margin distribution ever resembling reality; the pip scale would have to
+change for that, and that is a much larger decision than one undecided rule.
+
+One thing got slightly *worse*: uncontested share rose from 97.4% to 98.3%.
+That is not caused by the rule change — it is the seven-era pool, which puts
+258 districts and therefore far more open races on the board than the four-era
+pool that produced the 93% figure. It is F6 again, and it is the argument for
+cutting district supply stated a third way.

@@ -62,6 +62,12 @@ Shipped as the `realigning` config so it can be played against `tuned` rather
 than argued about. **Not applied to the baseline** — it is §10's decision to
 make. Full working in `FINDINGS.md` F23 and F24.
 
+**It does not fix change 3.** I expected an accumulating map to produce
+lopsided races and close the margin gap; it moves the median from 8 points to
+10 and leaves safe seats at 0.7% against a real 37.5%. Lean caps at ±8 pips, so
+even a completely realigned state contributes 16 points. **Realignment and the
+margin ceiling are independent problems with independent fixes.**
+
 ---
 
 ## 1. Top five design changes
