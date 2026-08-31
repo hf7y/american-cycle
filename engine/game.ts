@@ -70,6 +70,14 @@ export interface Agent {
   withdraw(v: WithdrawalView): boolean;
   /** the omnibill's single number, 1..6, negative for austerity */
   proposeG(v: GameView): number;
+  /** §12: impeachment replaces the omnibill for the year, so wanting it is a
+   *  decision taken instead of legislating, not alongside it. */
+  moveImpeach?(v: GameView): boolean;
+  voteImpeach?(v: GameView, seat: Seat): boolean;
+  /** §11: the VP's real function is as a bargaining chip during the
+   *  nomination. Any player may offer a card to any ticket. */
+  offerVP?(v: GameView, nominee: { player: number; party: Party }): CandidateCard | undefined;
+  pickVP?(v: GameView, offers: VPOffer[]): VPOffer | undefined;
   voteBill(v: GameView, g: number, seat: Seat): boolean;
   veto(v: GameView, g: number): boolean;
 }
@@ -85,6 +93,12 @@ export interface UiAnswer { declarations?: Declaration[]; withdraw?: boolean; g?
 const raceKeyOf = (d: { office: Office; state: string; slot?: number }) => `${d.office}|${d.state}|${d.slot ?? ''}`;
 const sameRace = (a: { office: Office; state: string; slot?: number }, b: { office: Office; state: string; slot?: number }) =>
   raceKeyOf(a) === raceKeyOf(b);
+
+export interface VPOffer { from: number; card: CandidateCard }
+/** §11: a second card on the ticket. It does not score and is not consumed on
+ *  a loss. `from` is who supplied it -- on succession THAT player scores, which
+ *  is the whole of the VP backstab. */
+export interface VicePresident { cardId: string; card: CandidateCard; from: number }
 
 export interface OpenRace { office: Office; state: string; slot?: number; incumbent?: Seat }
 /** A peg on the board: the race is contested, the card is not visible. */
@@ -118,6 +132,9 @@ export class Game {
   leanMap: lean.Lean = {}; economy: econ.Economy;
   year: number; talon: Card[] = []; discard: Card[] = []; eraQueue: Card[][] = [];
   president?: { player: number; cardId: string; party: Party; since: number };
+  vicePresident?: VicePresident;
+  /** §12: impeached presidents leave the game entirely -- the only permanent removal. */
+  expelled = new Set<string>();
   events: RaceEvent[] = [];
   log: string[] = [];
   stats = { billsPassed: 0, billsAttempted: 0, crossBench: 0, impeachments: 0, rateRises: 0,
@@ -246,6 +263,57 @@ export class Game {
       economy: this.economy, lean: this.leanMap, seats: this.seats,
       players: this.players, me, presidentParty: this.president?.party,
     };
+  }
+
+  /** §12: "Impeachment replaces the omnibill for that year. The same coalition
+   *  capable of passing a bill can remove a president, but doing so costs the
+   *  year's scoring." Two-thirds of the Senate. An impeached president leaves
+   *  the game entirely -- not to the discard, out.
+   *
+   *  Returns true when the year's legislating was spent on this instead. */
+  private impeachment(): boolean {
+    const pres = this.president;
+    if (!pres) return false;
+    const movers = this.players.filter((_, i) => this.agents[i].moveImpeach?.(this.view(i)));
+    if (!movers.length) return false;
+
+    let yes = 0;
+    const senate = this.seats.filter((s) => s.office === 'senator' && s.holder);
+    for (const s of senate) {
+      if (this.agents[s.holder!.player].voteImpeach?.(this.view(s.holder!.player), s)) yes++;
+    }
+    if (!leg.impeach(this.cfg.legislature, this.seats, yes)) {
+      this.log.push(`${this.year}: impeachment fails, ${yes} of ${senate.length} in the Senate`);
+      return true;                            // the year's slot is spent either way
+    }
+
+    this.stats.impeachments++;
+    this.expelled.add(pres.cardId);
+    const seat = this.seats.find((s) => s.office === 'president');
+    const removedParty = pres.party;
+    this.log.push(`${this.year}: the president is removed, ${yes} of ${senate.length}`);
+
+    // §11: the VP succeeds, and the VP's ORIGINAL player scores -- which is
+    // the entire point of putting your card on a rival's ticket.
+    const vp = this.vicePresident;
+    if (vp) {
+      const holder = { cardId: vp.cardId, player: vp.from, party: vp.card.party, since: this.year };
+      if (seat) seat.holder = holder;
+      this.president = { ...holder };
+      this.players[vp.from].score += 5;
+      this.vicePresident = undefined;
+      this.log.push(`${this.year}: ${vp.card.name} succeeds to the presidency`);
+    } else {
+      if (seat) seat.holder = undefined;
+      this.president = undefined;
+    }
+
+    // §12: the pain goes to the party. The coalition that installed him is hit,
+    // which is the brake the design bets on against the backstab.
+    for (const s of this.seats) {
+      if (s.holder?.party === removedParty) this.players[s.holder.player].score -= 1;
+    }
+    return true;
   }
 
   // ---- §7 step 2-3: the omnibill -------------------------------------------
@@ -390,6 +458,24 @@ export class Game {
     const nominees = this.runPrimaries(declarations, natCtx, wave, human);
     if (!nominees.length) return undefined;
 
+    // §11: the ticket is chosen before the general. Any player may offer a
+    // card; the nominee decides. A card placed here is not consumed on a loss.
+    const tickets = new Map<number, VicePresident>();
+    for (const nom of nominees) {
+      const offers: VPOffer[] = [];
+      for (let i = 0; i < this.players.length; i++) {
+        const card = this.agents[i].offerVP?.(this.view(i), { player: nom.player, party: nom.card.party });
+        if (card && this.players[i].hand.some((c) => c.kind === 'candidate' && c.id === card.id)) {
+          offers.push({ from: i, card });
+        }
+      }
+      if (!offers.length) continue;
+      const chosen = this.agents[nom.player].pickVP?.(this.view(nom.player), offers) ?? offers[0];
+      tickets.set(nom.player, { cardId: chosen.card.id, card: chosen.card, from: chosen.from });
+      const supplier = this.players[chosen.from];
+      supplier.hand = supplier.hand.filter((c) => !(c.kind === 'candidate' && c.id === chosen.card.id));
+    }
+
     const tally = new Map<number, number>();
     const carried = new Map<Party, string[]>();
     for (const st of STATES) {
@@ -399,10 +485,18 @@ export class Game {
       // The presidential general runs state by state, so each nominee reads
       // their own district for THIS state -- without which presence buys
       // nothing at the top of the ticket and no agent ever wants the office.
-      const local = nominees.map((d) => ({
-        ...d,
-        district: this.players[d.player].districts.find((x) => x.state === st.code),
-      }));
+      const local = nominees.map((d) => {
+        const vp = tickets.get(d.player);
+        // §11: the VP "adds a home-state bonus in the general".
+        const vpBonus = vp && vp.card.homeState === st.code
+          ? [{ type: 'conditional' as const, pips: vp.card.homeStateBonus, note: `VP ${vp.card.name}` }]
+          : [];
+        return {
+          ...d,
+          card: vpBonus.length ? { ...d.card, effects: [...d.card.effects, ...vpBonus] } : d.card,
+          district: this.players[d.player].districts.find((x) => x.state === st.code),
+        };
+      });
       const out = runRace({
         ctx, round: 'general', declarations: local, wave, rng: this.rng,
         res: this.cfg.resolution, nat: this.cfg.national, pg: this.cfg.primaryGeneral,
@@ -429,6 +523,7 @@ export class Game {
     // next decay -- so the incoming party enters the midterm with a fleeting
     // map advantage immediately before the -2 lands on them.
     lean.honeymoon(this.leanMap, this.cfg.lean, carried.get(winner.card.party) ?? [], winner.card.party);
+    this.vicePresident = tickets.get(best);
     return winner.card.party;
   }
 
@@ -495,6 +590,7 @@ export class Game {
   }
 
   private returnToHand(d: Declaration): void {
+    if (this.expelled.has(d.card.id)) return;      // §12: out, not discarded
     const p = this.players[d.player];
     if (!p.hand.some((c) => c.kind === 'candidate' && c.id === d.card.id)) {
       p.hand.push({ kind: 'candidate', ...d.card });
@@ -516,7 +612,7 @@ export class Game {
    *  `runRace` enforces for the agents (§8). */
   *interactiveTick(human: number): Generator<UiRequest, void, UiAnswer> {
     for (const p of this.players) p.tapped.clear();
-    this.omnibillInteractive(human, yield* this.askBill(human));
+    if (!this.impeachment()) this.omnibillInteractive(human, yield* this.askBill(human));
     const fed = econ.fedCheck(this.economy, this.cfg.economy, this.rng);
     if (fed.rateRise) { this.stats.rateRises++; this.log.push(`${this.year}: the Fed tightens`); }
     econ.walk(this.economy, this.cfg.economy, this.rng);
@@ -608,7 +704,7 @@ export class Game {
   /** One annual tick — §7. */
   tick(): void {
     for (const p of this.players) p.tapped.clear();      // 1. action phase
-    this.omnibill();                                     // 2-3. bill and reaction
+    if (!this.impeachment()) this.omnibill();            // 2-3. bill, or a removal instead
     const fed = econ.fedCheck(this.economy, this.cfg.economy, this.rng);  // 4.
     if (fed.rateRise) this.stats.rateRises++;
     econ.walk(this.economy, this.cfg.economy, this.rng);

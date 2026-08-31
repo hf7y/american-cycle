@@ -1,10 +1,10 @@
 /** Scripted agents. The first three measure skill signal; the rest are the
  *  strategies SIM-BRIEF §2 asks to be tested for dominance. Each also doubles
  *  as an opponent personality in the app. */
-import type { Agent, GameView, OpenRace, PendingPeg, Config } from '../engine/game.ts';
+import type { Agent, GameView, OpenRace, PendingPeg, Config, VPOffer } from '../engine/game.ts';
 import type { Declaration, WithdrawalView } from '../engine/rules/elections.ts';
 import { buildModifiers, eligible } from '../engine/rules/elections.ts';
-import type { CandidateCard, Office, Seat } from '../engine/types/index.ts';
+import type { CandidateCard, Office, Party, Seat } from '../engine/types/index.ts';
 import { RNG } from '../engine/rules/rng.ts';
 
 export interface AgentCtx { cfg: Config; rng: RNG }
@@ -104,6 +104,12 @@ abstract class Base implements Agent {
     return best;
   }
   protected budget(v: GameView): number { return v.players[v.me].hand.length; }
+  /** A VP costs nothing and adds a home-state bonus, so a ticket takes the
+   *  best one offered. Whether accepting a RIVAL's card is wise is exactly
+   *  what VPBackstab exists to find out. */
+  pickVP(_v: GameView, offers: VPOffer[]): VPOffer | undefined {
+    return offers.reduce((b, o) => (o.card.homeStateBonus > b.card.homeStateBonus ? o : b), offers[0]);
+  }
 }
 
 export class RandomAgent extends Base {
@@ -195,11 +201,55 @@ export class BillMaximizer extends Base {
   proposeG(): number { return 4; }
 }
 
+/** Builds a Senate bloc and moves to remove whoever holds the presidency.
+ *  §12 prices the coup in the currency everyone is accumulating: it costs the
+ *  year's scoring. Whether that is a sufficient brake is what this measures. */
 export class Impeacher extends Base {
   declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[] {
     const o = counterDeclare(options(v, open, this.cfg), pending, v.me, 2).map((x) => ({ ...x, edge: x.edge + (x.office === 'senator' ? 6 : 0) }));
     return pickDistinct(o.sort(byEdge), this.budget(v));
   }
+  moveImpeach(v: GameView): boolean {
+    const pres = v.seats.find((s) => s.office === 'president' && s.holder);
+    // never move against your own, and only when the arithmetic is there
+    if (!pres || pres.holder!.player === v.me) return false;
+    const senate = v.seats.filter((s) => s.office === 'senator' && s.holder);
+    const against = senate.filter((s) => s.holder!.party !== pres.holder!.party).length;
+    return senate.length > 0 && against / senate.length >= 0.5;
+  }
+  voteImpeach(v: GameView, seat: Seat): boolean {
+    const pres = v.seats.find((s) => s.office === 'president' && s.holder);
+    return !!pres && seat.holder?.party !== pres.holder!.party;
+  }
+}
+
+/** SIM-BRIEF names this one explicitly: place your VP on a rival's ticket, then
+ *  join a coalition to impeach him, and the presidency falls to you. The design
+ *  accepted it on the theory that impeachment's party penalty is a sufficient
+ *  brake; the brief asks that the theory be tested rather than trusted. */
+export class VPBackstab extends Base {
+  declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[] {
+    const o = counterDeclare(options(v, open, this.cfg), pending, v.me, 2)
+      .map((x) => ({ ...x, edge: x.edge + (x.office === 'senator' ? 5 : 0) }));
+    return pickDistinct(o.sort(byEdge), this.budget(v));
+  }
+  /** Offer to anyone but yourself, and offer your best card: it is not consumed
+   *  on a loss, so the only cost is the tempo. */
+  offerVP(v: GameView, nominee: { player: number; party: Party }): CandidateCard | undefined {
+    if (nominee.player === v.me) return undefined;
+    const hand = v.players[v.me].hand.filter((c) => c.kind === 'candidate') as CandidateCard[];
+    if (!hand.length) return undefined;
+    return hand.reduce((best, c) => (c.homeStateBonus > best.homeStateBonus ? c : best), hand[0]);
+  }
+  pickVP(_v: GameView, offers: VPOffer[]): VPOffer | undefined { return offers[0]; }
+  moveImpeach(v: GameView): boolean {
+    const pres = v.seats.find((s) => s.office === 'president' && s.holder);
+    if (!pres || pres.holder!.player === v.me) return false;
+    const senate = v.seats.filter((s) => s.office === 'senator' && s.holder);
+    return senate.length > 0
+      && senate.filter((s) => s.holder!.player === v.me).length / senate.length >= 0.25;
+  }
+  voteImpeach(): boolean { return true; }
 }
 
 /** Spend hot, get your candidate into position, be out of the way before the
@@ -224,5 +274,6 @@ export const AGENTS: Record<string, new (cfg: Config, rng: RNG) => Agent> = {
   HeterodoxSpecialist: class extends HeterodoxSpecialist { constructor(c: Config, r: RNG) { super('HeterodoxSpecialist', c, r); } },
   BillMaximizer: class extends BillMaximizer { constructor(c: Config, r: RNG) { super('BillMaximizer', c, r); } },
   Impeacher: class extends Impeacher { constructor(c: Config, r: RNG) { super('Impeacher', c, r); } },
+  VPBackstab: class extends VPBackstab { constructor(c: Config, r: RNG) { super('VPBackstab', c, r); } },
   EconomyChicken: class extends EconomyChicken { constructor(c: Config, r: RNG) { super('EconomyChicken', c, r); } },
 };

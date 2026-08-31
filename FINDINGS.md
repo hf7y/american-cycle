@@ -337,3 +337,55 @@ contest rate (F6) rather than a switched-off layer.
 **Heterodoxy is still near-dead at 5.0%**, up from 0.8%. It remains the finding
 that should worry most, for the reason in F6: on a board where 79% of races go
 uncontested there is no hostile terrain to survive.
+
+---
+
+## F12. Impeachment is unreachable, so the VP backstab is inert. CONFIRMED.
+
+SIM-BRIEF asks for this one by name: *"The design accepted it on the theory
+that impeachment's party penalty is a sufficient brake. Test that theory rather
+than trusting it."*
+
+**The theory is untested, because a stronger brake sits in front of it.**
+
+Both mechanics are now implemented — §12's impeachment (two-thirds of the
+Senate, replaces the omnibill, the president leaves the game entirely) and
+§11's vice presidency (a second card, not consumed on a loss, succeeding on a
+vacancy with the *supplier's* player scoring). Measured over 80 games with a
+`VPBackstab` agent and an `Impeacher` agent at the table:
+
+| measure | value |
+|---|---|
+| games where a VP was seated on a ticket | **100%** |
+| median opposition share of the Senate | 47% |
+| p90 opposition share | 58% |
+| maximum ever observed | 73% |
+| games where the opposition ever reached two-thirds | **9%** |
+| impeachments that actually occurred | **0** |
+
+The backstab sets itself up perfectly and can never be cashed. A president's
+party holds the Senate roughly half the time *because* they won the presidency,
+so removal requires most of his own party to defect — and §12 says plainly that
+for impeachment "cross-benching is not incentivized the same way". The design
+removed the incentive to cross, and the two-thirds bar then makes the coup
+arithmetically unreachable.
+
+**So the party-wide penalty is not doing the work the design credits it with.**
+It has never once been applied. If the backstab is ever to be a real threat,
+the bar has to come down or defection has to pay; if it is not meant to be a
+real threat, then the VP's bargaining role — which §11 calls "its real
+function" — has nothing to bargain over.
+
+**This is the finding most in need of a human playtest, and the brief says so.**
+Everything here was measured against agents that vote the party line. §12's
+impeachment is a negotiation — a coalition assembled at the table, against a
+president people are actually annoyed with. A table might well produce the
+cross-party defections no scripted agent will. **Do not lower the two-thirds
+threshold on this evidence.** Play it with people first.
+
+**Round-robin note, so the numbers are not misread.** Swapping `VPBackstab`
+and `Impeacher` into the six-way round robin flattens it — top strategy 20.0%,
+bottom 9.2%, nothing dominant. That is **not** evidence that SenateFlood's
+51.7% dominance was resolved: the agent set changed, and the two strategies
+removed (`WideAndEmpty`, `HouseFarm`) were both winning 0% and functioning as
+free wins for everyone else. The two round robins are not comparable.
