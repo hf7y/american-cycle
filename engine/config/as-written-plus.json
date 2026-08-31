@@ -1,0 +1,112 @@
+{
+  "name": "as-written-plus",
+  "note": "\u00a77 EXACTLY as written -- the omnibill every year, decay every year -- with the one change that makes it work: the push table raised +2 to 2/3/4. Measured against the shipped baseline it realigns 13.8 states a game against 5.8, pins nothing at the cap against 3.5, and passes 7.3 bills against 3.1. Biennial decay was never the fix; it was a workaround for a push table too small to outrun an annual -2, and it costs half the legislative layer and saturates the map. See findings/decay-push-tradeoff.ts.",
+  "hand": {
+    "base": 16,
+    "bonusPresident": 2,
+    "bonusSenator": 1,
+    "bonusGovernor": 0,
+    "bonusRepresentative": 0
+  },
+  "resolution": {
+    "incumbency": 1,
+    "identityBonus": 1,
+    "tieBreak": "even"
+  },
+  "national": {
+    "strongEconomy": 1,
+    "recession": -2,
+    "midtermPenalty": -2,
+    "coattailsWith": 1,
+    "coattailsAgainst": -1
+  },
+  "endorsements": {
+    "president": 3,
+    "governorInState": 2,
+    "senator": 0
+  },
+  "primaryGeneral": {
+    "extremistPrimary": 2,
+    "extremistGeneral": -2,
+    "heterodoxPrimaryPenalty": -2,
+    "crossBenchPrimaryPenalty": -1,
+    "billCounterPips": 1
+  },
+  "lean": {
+    "pushByMargin": [
+      {
+        "maxPips": 1,
+        "push": 2
+      },
+      {
+        "maxPips": 3,
+        "push": 3
+      },
+      {
+        "maxPips": 99,
+        "push": 4
+      }
+    ],
+    "decayPerTick": 1,
+    "decayFrequency": "annual",
+    "governorPushes": "never",
+    "honeymoonCounter": 1,
+    "maxLean": 8,
+    "uncontestedPush": 1
+  },
+  "economy": {
+    "start": 0,
+    "min": -4,
+    "max": 4,
+    "strongAt": 2,
+    "recessionAt": -2,
+    "gMin": -3,
+    "gMax": 6,
+    "fedDice": 2,
+    "rateRiseSpendDown": 4,
+    "rateRiseEconomyHit": -2,
+    "walkDrift": 0
+  },
+  "legislature": {
+    "houseMajority": 0.5,
+    "senatePassage": 0.6,
+    "vetoOverride": 0.6666666666666666,
+    "impeachThreshold": 0.6666666666666666,
+    "scorePerYesVote": 1,
+    "majorityMultiplier": 2,
+    "reactionGoodOnRollAtLeast": 4,
+    "billFrequency": "annual"
+  },
+  "draft": {
+    "packSize": 15,
+    "districtsPerPack": 3,
+    "refillToHandSize": true
+  },
+  "game": {
+    "startYear": 1976,
+    "maxYears": 24,
+    "victory": "points",
+    "deckOutEnds": true,
+    "billTarget": 8
+  },
+  "placeholders": {
+    "resolution.tieBreak": "\u00a79 says only 'higher total wins'. Even break is what makes edge 0 exactly 50%; a table needs a real rule.",
+    "primaryGeneral.extremistPrimary": "\u00a79 says extremism is a primary bonus and general penalty but prints no magnitude.",
+    "primaryGeneral.extremistGeneral": "as above.",
+    "primaryGeneral.heterodoxPrimaryPenalty": "\u00a79 says heterodoxy is a primary penalty; no magnitude printed.",
+    "primaryGeneral.crossBenchPrimaryPenalty": "\u00a79 lists cross-benching as a primary penalty; no magnitude printed.",
+    "lean.decayFrequency": "\u00a716 open question 1 -- SETTLED 2026-08-31 by arithmetic, not simulation. Annual decay is -2 per cycle against a maximum push of +2, so sustained blowouts net zero and lean pins at 2 forever: realignment is impossible. Biennial (-1) against margin-based pushes accumulates. See engine/rules/lean.test.ts and reports/FINDINGS.md.",
+    "lean.governorPushes": "\u00a716 open question; 'never' falls out of the priority rule, 'with-lean' is the alternative under test.",
+    "lean.maxLean": "No cap is stated. Without one, lean is unbounded.",
+    "draft.districtsPerPack": "\u00a716 open: district-to-candidate ratio sets map fill rate and turn density.",
+    "game.victory": "\u00a716 open question -- STILL OPEN, and now with evidence that none of \u00a714's candidates works. Term-based conditions (two/three terms) terminate tightly but concentrate all value in one race: the SAME agent pool goes from 28% to 90% purely by switching points -> three-terms. Bills-passed keeps the field balanced (top 33%) but leaves 37-42% of games unfinished and runs to a median 34-49 years. Shipping points + a year cap as the least-bad playable default. See FINDINGS.md F16.",
+    "economy.*": "\u00a713 describes the shape (random walk with memory, 2d6 roll-under on accumulated G) but prints no bounds or step sizes.",
+    "legislature.reactionGoodOnRollAtLeast": "\u00a77/\u00a712 say a reaction is rolled immediately on passage but do not say on what.",
+    "hand.bonus*": "\u00a76 and \u00a711 print these without saying per-seat or per-office. Read per seat they are a runaway: a player holding 20 Senate seats draws 32 cards a cycle. The doc's own 'base 12 with president +2 is a 17% edge' is 2/12, which only parses as per-office. Implemented per office held.",
+    "game.victory (ties)": "\u00a714 leaves the victory condition open and says nothing about ties on final score, which are common. Placeholder is a coin flip. Resolving by lowest seat -- the natural coding accident -- manufactures a 25pp seat bias that does not exist.",
+    "game.deckOutEnds": "\u00a714 names deck-out as the ending, but also has defeated politicians circulate back through the draft. Circulation wins: talon+discard GROW from 79 to 273 cards over a hundred years, so deck-out is unreachable and cannot be the backstop the doc treats it as.",
+    "lean.uncontestedPush": "\u00a710 says a push scales with how decisively a race was won and never says what a walkover does -- a race nobody contested has no margin at all. This is the single highest-leverage undecided rule in the design: 0 leaves the map a driftless random walk and the central thesis unimplemented; 1 produces genuine realignment. See FINDINGS.md F23 and F24.",
+    "primaryGeneral.billCounterPips": "\u00a712 says a good reaction rewards yes-voters and a bad one penalises them at the next election, in both rounds, and that the card's accumulated counters are read off at resolution -- but prints no magnitude. One pip a counter is a stand-in.",
+    "lean.pushByMargin": "\u00a710 prints 0/1/2. Raised to 2/3/4 here, which is what lets \u00a77's literal annual decay work: an annual -2 needs a push that can outrun it. Not a deviation from the doc so much as the number the doc's own sequence requires."
+  }
+}

@@ -1,6 +1,14 @@
 import { loadConfig, loadPacks, playOne } from '../sim/harness.ts';
 import type { Claim, Finding } from './types.ts';
 
+/** The SHIPPED setting, read from disk rather than restated here. A config that
+ *  a finding recommends must be checked by that finding, or the two drift and
+ *  the config becomes a hardcoded opinion with no predicate behind it. */
+function shippedPushTable(): number[] {
+  const cfg = loadConfig('as-written-plus.json');
+  return cfg.lean.pushByMargin.map((r) => r.push);
+}
+
 const P = (a: number, b: number, c: number) =>
   [{ maxPips: 1, push: a }, { maxPips: 3, push: b }, { maxPips: 99, push: c }];
 
@@ -33,11 +41,14 @@ export const finding: Finding = {
     + '(§7, §10, §16 open question 1)',
 
   headline:
-    'Yes, and annual decay with pushes raised +2 produces a BETTER map than biennial: more states '
-    + 'realign (14.0 vs 6.7 a game) and none pins at the ±8 cap (0.0 vs 3.7), because annual decay '
-    + 'keeps pulling back so a state must keep being won to stay realigned. The 3d6 design does not '
-    + 'limit this — the dice fix how OFTEN each push tier fires, not what a tier is worth.',
-  stampedAt: '2026-08-31T09:40:00Z',
+    'Yes, and it makes §7\'s LITERAL reading the best configuration measured. Annual decay with the '
+    + 'push table raised +2 to 2/3/4 realigns 13.8 states a game against the shipped baseline\'s 5.8, '
+    + 'pins nothing at the ±8 cap against 3.5, and — because §7 also runs the omnibill every year — '
+    + 'passes 7.3 bills a game against 3.1. Biennial decay was never the fix; it was a workaround for '
+    + 'a push table too small to outrun an annual −2, and it costs half the legislative layer and '
+    + 'saturates the map. The 3d6 design does not limit any of this: the dice fix how OFTEN each push '
+    + 'tier fires, not what a tier is worth. Shipped as as-written-plus.json.',
+  stampedAt: '2026-08-31T10:30:00Z',
   stampedOn: 'phase1-engine',
 
   predicate(): Claim[] {
@@ -50,6 +61,13 @@ export const finding: Finding = {
       { name: 'annual 0/1/2: states realigned per game', value: annual.fourPerGame, stamped: 0.0, tolerance: 0.5 },
       { name: 'annual 2/3/4: states realigned per game', value: plus2.fourPerGame, stamped: 14.0, tolerance: 4.0 },
       { name: 'annual 2/3/4: states pinned at the cap', value: plus2.cappedPerGame, stamped: 0.0, tolerance: 0.5 },
+      { name: 'annual 2/3/4: mean absolute lean', value: plus2.meanAbs, stamped: 2.18, tolerance: 0.7 },
+      { name: 'biennial 0/1/2: mean absolute lean', value: biennial.meanAbs, stamped: 1.17, tolerance: 0.5 },
+      // The shipped config must still BE the setting this finding recommends.
+      // If as-written-plus.json is edited away from 2/3/4 the finding goes
+      // stale, which is the point: the config cannot outlive its evidence.
+      { name: 'as-written-plus.json still ships the recommended push table', value: shippedPushTable().reduce((a, b) => a + b, 0), stamped: 9, tolerance: 0 },
+      { name: 'as-written-plus.json still ships annual decay', value: loadConfig('as-written-plus.json').lean.decayFrequency === 'annual' ? 1 : 0, stamped: 1, tolerance: 0 },
     ];
   },
 
@@ -62,6 +80,12 @@ export const finding: Finding = {
       rescued ? 'raising pushes rescues annual decay' : 'raising pushes does NOT rescue annual decay',
       beatsBiennial ? 'and realigns more than biennial' : 'but realigns less than biennial',
       noSaturation ? 'without saturating the cap' : 'and saturates the cap as biennial does',
+      by('annual 2/3/4: mean absolute') > by('biennial 0/1/2: mean absolute')
+        ? "so §7's literal annual decay is the better setting, not the broken one"
+        : 'though biennial still moves the map further',
+      by('as-written-plus.json still ships the recommended') === 9
+        ? 'and the shipped config still matches this evidence'
+        : 'BUT the shipped config no longer matches this evidence',
     ].join('; ');
   },
 };

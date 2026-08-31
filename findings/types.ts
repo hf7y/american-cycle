@@ -8,6 +8,13 @@
  *
  *  `npm run findings` re-runs every predicate, compares against the stamp, and
  *  reports HOLDS / STALE / BROKEN. `--restamp` writes the new values back.
+ *
+ *  ONE RULE BEYOND THAT: if a finding recommends a shipped config, the finding
+ *  must CHECK that config — read it from disk as a claim with zero tolerance.
+ *  Otherwise the config is a hardcoded opinion sitting next to its evidence
+ *  rather than being held to it, and the two drift apart silently. See
+ *  `decay-push-tradeoff.ts`, which asserts that `as-written-plus.json` still
+ *  ships the push table the predicate selects.
  */
 export interface Claim {
   /** what is being asserted, in the form a check can evaluate */
