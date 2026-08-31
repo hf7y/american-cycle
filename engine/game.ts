@@ -28,7 +28,8 @@ export interface Config {
   resolution: { incumbency: number; identityBonus: number; tieBreak: string; statewideIdentity: 'district' | 'board' };
   national: { strongEconomy: number; recession: number; midtermPenalty: number; coattailsWith: number; coattailsAgainst: number };
   endorsements: { president: number; governorInState: number; senator: number };
-  primaryGeneral: { extremistPrimary: number; extremistGeneral: number; heterodoxPrimaryPenalty: number; crossBenchPrimaryPenalty: number; billCounterPips: number; crossBenchGeneral: number };
+  primaryGeneral: { extremistPrimary: number; extremistGeneral: number; heterodoxPrimaryPenalty: number; crossBenchPrimaryPenalty: number; billCounterPips: number; crossBenchGeneral: number;
+    launchpad: Record<'governor' | 'senator' | 'representative', { primary: number; general: number }> };
   lean: lean.LeanConfig;
   economy: econ.EconomyConfig;
   legislature: leg.LegislatureConfig & {
@@ -585,7 +586,10 @@ export class Game {
       for (const d of nominees) {
         this.readCounters(d);
         const holdsThis = !!incumbent && incumbent.holder!.cardId === d.card.id;
-        const isGovernor = (office === 'senator' || office === 'president')
+        // Governor -> Senate keeps §11's borrowed incumbency. Governor ->
+        // President is now priced by the launchpad table instead, so the two
+        // do not stack into an unnamed +1.
+        const isGovernor = office === 'senator'
           && this.seats.some((st) => st.office === 'governor' && st.holder?.cardId === d.card.id);
         d.incumbent = holdsThis || isGovernor;
       }
@@ -639,6 +643,13 @@ export class Game {
    *  what makes the map worth holding. */
   private presidentialRace(declarations: Declaration[], wave: Wave, human = -1): Party | undefined {
     const natCtx = this.raceContext('president', 'US', undefined);
+    // §11's stepping stone. The office a card holds when it reaches for the
+    // presidency is worth something, and worth different amounts in the two
+    // rounds. Read off the board, so it needs no card data and no new state.
+    for (const d of declarations) {
+      const held = this.seats.find((st) => st.office !== 'president' && st.holder?.cardId === d.card.id);
+      d.launchpad = held?.office;
+    }
     const nominees = this.runPrimaries(declarations, natCtx, wave, human);
     if (!nominees.length) return undefined;
 

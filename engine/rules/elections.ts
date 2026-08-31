@@ -32,6 +32,11 @@ export interface PrimaryGeneralConfig {
   extremistPrimary: number; extremistGeneral: number;
   heterodoxPrimaryPenalty: number; crossBenchPrimaryPenalty: number;
   billCounterPips: number;
+  /** Pips a presidential run gets from the office the candidate currently
+   *  holds, by round. Senators win nominations and lose generals; governors
+   *  are the reverse. One table, so the asymmetry is a number rather than a
+   *  special case. */
+  launchpad: Record<'governor' | 'senator' | 'representative', { primary: number; general: number }>;
   /** §12: "Sentiment at election time determines whether that counter is an
    *  asset or a liability." Pips per cross-bench counter in the GENERAL,
    *  signed by whether the defection ran with the state's drift or against
@@ -74,6 +79,10 @@ export interface Declaration {
    *  a one-time defector. */
   crossBench?: number;
   crossBenchToward?: Party;
+  /** The office this card holds RIGHT NOW, when it is running for president.
+   *  §11's stepping stone: what the last office is worth as a launchpad, which
+   *  history says differs sharply between the nomination and the general. */
+  launchpad?: Office;
   /** §12: "the card's accumulated counters are simply read off at resolution."
    *  Signed: a good reaction on a yes-vote is an asset, a bad one a liability. */
   billRecord?: number;
@@ -145,6 +154,11 @@ export function buildModifiers(
   }
 
   if (d.incumbent) m.push({ source: 'incumbency', pips: res.incumbency });
+
+  if (ctx.office === 'president' && d.launchpad && d.launchpad !== 'president') {
+    const lp = pg.launchpad[d.launchpad]?.[round] ?? 0;
+    if (lp) m.push({ source: `${d.launchpad} launchpad (${round})`, pips: lp });
+  }
 
   if (round === 'primary') {
     if (d.endorsements) m.push({ source: 'endorsements', pips: d.endorsements });

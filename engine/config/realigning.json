@@ -32,7 +32,21 @@
     "heterodoxPrimaryPenalty": -2,
     "crossBenchPrimaryPenalty": -1,
     "billCounterPips": 1,
-    "crossBenchGeneral": 0
+    "crossBenchGeneral": 0,
+    "launchpad": {
+      "governor": {
+        "primary": 0,
+        "general": 1
+      },
+      "senator": {
+        "primary": 0,
+        "general": 0
+      },
+      "representative": {
+        "primary": 0,
+        "general": 0
+      }
+    }
   },
   "lean": {
     "pushByMargin": [
