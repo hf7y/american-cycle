@@ -8,7 +8,8 @@
     "sweep": "node sim/sweeps.ts",
     "build:ui": "node ui/build.ts",
     "typecheck": "tsc --noEmit",
-    "findings": "node sim/findings.ts"
+    "findings": "node sim/findings.ts",
+    "skowronek": "node sim/skowronek.ts"
   },
   "devDependencies": {
     "@types/node": "^26.4.0",
