@@ -104,6 +104,25 @@ test('the bill-year gate is one function, and biennial means even years only', (
   assert.deepEqual([2024, 2025, 2026, 2027].map((y) => isBillYear(biennial, y)), [true, false, true, false]);
 });
 
+/** A rule with THREE copies, two of them unified. The parity test above compares
+ *  tick() with interactiveTick(), and both read the same GameView -- so a rule
+ *  that is wrong in the view is wrong identically in both paths and parity still
+ *  passes. This asserts the view agrees with the function the engine gates on. */
+test('GameView.isElectionYear agrees with the gate the engine actually uses', () => {
+  const cfg = loadConfig('as-written-plus.json');
+  const odd = structuredClone(cfg);
+  odd.game.oddYearGovernors = true;
+  for (const c of [cfg, odd]) {
+    const g = new Game(build(c, 1), structuredClone(CARDS), c, 1);
+    for (let y = 0; y < 8; y++) {
+      const seen = (g as unknown as { view(i: number): { year: number; isElectionYear: boolean } }).view(0);
+      assert.equal(seen.isElectionYear, isElectionYear(c, seen.year),
+        `year ${seen.year}: the view tells an agent ${seen.isElectionYear} while the engine gates on ${isElectionYear(c, seen.year)}`);
+      g.tick();
+    }
+  }
+});
+
 test('the election-year gate is one function, and odd years need a governor up', () => {
   const cfg = loadConfig('as-written-plus.json');
   for (const y of [2024, 2026]) assert.equal(isElectionYear(cfg, y), true);
