@@ -219,16 +219,30 @@ export class HeterodoxSpecialist extends Base {
 }
 
 export class BillMaximizer extends Base {
-  /** §12 credits a passed bill to the largest bloc of the MAJORITY HOUSE PARTY
-   *  (`legislature.author`), and `victory: 'bills'` counts those credits. So
-   *  authorship is House seats of one particular party. It is not yes-votes,
-   *  and it is not the Senate.
-   *
-   *  This agent used to add +4 to House AND Senate alike and vote yes on
-   *  everything, which optimises the POINTS reading of a bill -- "every
-   *  yes-vote scores" -- rather than the bills victory. Under
-   *  `victory: 'bills'` it won 0-5% of games, the specialist losing its own
-   *  specialty, while HouseFarm merely piling into the House took 77-82%. */
+  declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[] {
+    const o = counterDeclare(options(v, open, this.cfg), pending, v.me, 2).map((x) => ({
+      ...x, edge: x.edge + (x.office === 'representative' || x.office === 'senator' ? 4 : 0),
+    }));
+    return pickDistinct(o.sort(byEdge), this.budget(v));
+  }
+  voteBill(): boolean { return true; }         // every yes-vote scores
+  proposeG(): number { return 4; }
+}
+
+/** Chases the PEN, which is a different game from chasing yes-votes.
+ *
+ *  §12 credits a passed bill to the largest bloc of the majority House party
+ *  (`legislature.author`), and `victory: 'bills'` counts those credits -- so a
+ *  bills victory is won on House seats of one party. But `billsBy` only
+ *  increments ON PASSAGE, and passage needs a House majority AND 60% of the
+ *  Senate. So this wants the House to author and enough Senate to clear
+ *  cloture: authorship is a House problem, cloture is a Senate one.
+ *
+ *  Kept separate from BillMaximizer deliberately. That agent optimises
+ *  yes-votes and majority status, which is what SIM-BRIEF describes and what
+ *  `bill-passage-is-the-table` measures as "a table willing to pass bills".
+ *  Folding the two into one slot silently changed that finding. */
+export class BillAuthor extends Base {
   declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[] {
     const maj = this.houseMajority(v);
     const o = counterDeclare(options(v, open, this.cfg), pending, v.me, 3).map((x) => ({
@@ -236,7 +250,8 @@ export class BillMaximizer extends Base {
       edge: x.edge
         + (x.office === 'representative' ? 6 : 0)
         // a House seat outside the majority party authors nothing
-        + (maj && x.office === 'representative' && x.d.card.party === maj ? 3 : 0),
+        + (maj && x.office === 'representative' && x.d.card.party === maj ? 3 : 0)
+        + (x.office === 'senator' ? 3 : 0),
     }));
     return pickDistinct(o.sort(byEdge), this.budget(v) + 2);
   }
@@ -356,4 +371,5 @@ export const AGENTS: Record<string, new (cfg: Config, rng: RNG) => Agent> = {
   VPBackstab: class extends VPBackstab { constructor(c: Config, r: RNG) { super('VPBackstab', c, r); } },
   Launchpad: class extends Launchpad { constructor(c: Config, r: RNG) { super('Launchpad', c, r); } },
   EconomyChicken: class extends EconomyChicken { constructor(c: Config, r: RNG) { super('EconomyChicken', c, r); } },
+  BillAuthor: class extends BillAuthor { constructor(c: Config, r: RNG) { super('BillAuthor', c, r); } },
 };
