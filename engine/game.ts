@@ -115,6 +115,16 @@ export type UiRequest =
 
 export interface UiAnswer { declarations?: Declaration[]; withdraw?: boolean; g?: number; yes?: boolean }
 
+/** The two year-gates, defined ONCE because they were written twice and drifted.
+ *  `tick` billed biennially and ran odd-year governor races; `interactiveTick`
+ *  billed every year and never ran an odd year. Same seed, same config, two
+ *  different games -- which is the whole of #29. */
+export const isBillYear = (cfg: Config, year: number): boolean =>
+  cfg.legislature.billFrequency !== 'biennial' || year % 2 === 0;
+export const isElectionYear = (cfg: Config, year: number): boolean =>
+  year % 2 === 0
+  || (cfg.game.oddYearGovernors === true && STATES.some((st) => governorUp(st, year)));
+
 const raceKeyOf = (d: { office: Office; state: string; slot?: number }) => `${d.office}|${d.state}|${d.slot ?? ''}`;
 const sameRace = (a: { office: Office; state: string; slot?: number }, b: { office: Office; state: string; slot?: number }) =>
   raceKeyOf(a) === raceKeyOf(b);
@@ -921,17 +931,13 @@ export class Game {
    *  `runRace` enforces for the agents (§8). */
   *interactiveTick(human: number): Generator<UiRequest, void, UiAnswer> {
     for (const p of this.players) p.tapped.clear();
-    if (!this.impeachment()) this.omnibillInteractive(human, yield* this.askBill(human));
+    if (isBillYear(this.cfg, this.year) && !this.impeachment()) this.omnibillInteractive(human, yield* this.askBill(human));
     const fed = econ.fedCheck(this.economy, this.cfg.economy, this.rng);
     if (fed.rateRise) { this.stats.rateRises++; this.log.push(`${this.year}: the Fed tightens`); }
     econ.walk(this.economy, this.cfg.economy, this.rng);
     lean.decay(this.leanMap, this.cfg.lean, this.year, this.rng);
 
-    if (this.year % 2 === 0) {
-      const open = this.openRaces();
-      this.releaseExpiringTerms(open);
-      const answer = yield { kind: 'declare', year: this.year, open };
-      this.humanDeclarations = answer.declarations ?? [];
+    if (isElectionYear(this.cfg, this.year)) {
       yield* this.electionsInteractive(human);
       this.refill();
     }
@@ -959,6 +965,10 @@ export class Game {
     // Collect every declaration first, so the human can see the pegs go down.
     const wave = new Wave(this.rng);
     const open = this.openRaces();
+    this.releaseExpiringTerms(open);
+    this.releaseHolders();
+    const answer = yield { kind: 'declare', year: this.year, open };
+    this.humanDeclarations = answer.declarations ?? [];
     const decls: Declaration[] = [];
     const pending: PendingPeg[] = [];
     // Math.floor matters: in an ODD year `year / 2` is fractional, so the
@@ -976,6 +986,8 @@ export class Game {
         pending.push({ player: i, office: d.office, state: d.state, slot: d.slot, party: d.card.party });
       }
     }
+
+    this.vacateForRunners(decls);
 
     // The withdrawal window, before any die is drawn.
     this.humanWithdrawals.clear();
@@ -1064,7 +1076,7 @@ export class Game {
   /** One annual tick — §7. */
   tick(): void {
     for (const p of this.players) p.tapped.clear();      // 1. action phase
-    const billYear = this.cfg.legislature.billFrequency !== 'biennial' || this.year % 2 === 0;
+    const billYear = isBillYear(this.cfg, this.year);
     if (billYear && !this.impeachment()) this.omnibill();   // 2-3. bill, or a removal instead
     const fed = econ.fedCheck(this.economy, this.cfg.economy, this.rng);  // 4.
     // Logged in BOTH paths. The interactive tick logged this and the headless
@@ -1074,9 +1086,7 @@ export class Game {
     econ.walk(this.economy, this.cfg.economy, this.rng);
     lean.decay(this.leanMap, this.cfg.lean, this.year, this.rng);  // 5.
 
-    const oddGovYear = this.cfg.game.oddYearGovernors === true && this.year % 2 !== 0
-      && STATES.some((st) => governorUp(st, this.year));
-    if (this.year % 2 === 0 || oddGovYear) {
+    if (isElectionYear(this.cfg, this.year)) {
       this.elections();                                  // 6-9.
       this.refill();
     }
@@ -1098,7 +1108,9 @@ export class Game {
     return this.result();
   }
 
-  private result(): GameResult {
+  /** Public because the interactive path needs the same read of a game that
+   *  `run()` hands back, which is how the two are compared (#29). */
+  result(): GameResult {
     const scores = this.players.map((p) => p.score);
     // Ties on final score are common between equally-skilled players, and
     // `indexOf` would hand every one of them to the lowest seat -- which reads

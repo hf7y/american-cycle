@@ -13,6 +13,16 @@ SHOT = pathlib.Path(os.environ.get("SHOT_DIR", "/tmp/american-cycle-shots"))
 SHOT.mkdir(parents=True, exist_ok=True)
 errors, logs = [], []
 
+# #28: the setup form seeds itself from Math.random(), so every CI run played a
+# DIFFERENT game and a red build could not be reproduced. Fix the seed, and
+# print it -- BUILD-BRIEF: "when you report a pathology, report the seed".
+SEED = int(os.environ.get("PLAYTEST_SEED", "20260831"))
+
+def start(pg):
+    """Fill the seed before starting, so this run is the one you can re-run."""
+    pg.fill("#sseed", str(SEED))
+    pg.click("#go")
+
 with sync_playwright() as pw:
     b = pw.chromium.launch()
     pg = b.new_page(viewport={"width": 1280, "height": 900})
@@ -23,7 +33,7 @@ with sync_playwright() as pw:
 
     assert pg.locator("#modal.on").count(), "setup modal did not open"
     pg.screenshot(path=str(SHOT / "shot-setup.png"))
-    pg.click("#go")
+    start(pg)
     pg.wait_for_timeout(400)
 
     cycles = declared = withdrew = bills = 0
@@ -67,6 +77,7 @@ with sync_playwright() as pw:
     pg.screenshot(path=str(SHOT / "shot-board.png"), full_page=True)
     b.close()
 
-print(f"\nconsole errors: {len(errors)}")
+print(f"\nseed {SEED} (PLAYTEST_SEED to change)")
+print(f"console errors: {len(errors)}")
 for e in errors[:12]: print("  ✗", e[:200])
 sys.exit(1 if errors else 0)
