@@ -40,7 +40,7 @@ export interface Config {
   draft: { packSize: number; districtsPerPack: number; refillToHandSize: boolean };
   game: { startYear: number; maxYears: number; victory: string; deckOutEnds: boolean; billTarget?: number;
           /** diagnostic only: §16 names hand size, endorsements and capture as
-           *  the three stacking feedback loops. Hand size is cleared (F18);
+           *  the three stacking feedback loops. Hand size is cleared;
            *  this switches the other two off so each can be isolated. Not a
            *  rules option -- both default on. */
           captureEnabled?: boolean;
@@ -231,7 +231,7 @@ export class Game {
    *  hands are full.
    *
    *  This replaces a random deal, and the difference is not cosmetic: dealing
-   *  at random made the opening hand predict the winner at twice chance (F21),
+   *  at random made the opening hand predict the winner at twice chance,
    *  because nobody could correct a bad opening. A draft is exactly the
    *  mechanism that lets them. */
   private draft(): void {
@@ -377,7 +377,7 @@ export class Game {
     // edge, Array.prototype.sort is stable, and ties therefore resolve to
     // whatever came first -- which was every district held by player 0. Their
     // seats drew the most declarations, so they lost them to capture most
-    // often, and since districts are ballast (F21) being stripped was an
+    // often, and since districts are ballast, being stripped was an
     // ADVANTAGE: seat 0 won 32% of five-player games against a 20% share.
     // Sorting by state and number makes the board's order a property of the
     // board rather than of the table.
@@ -628,7 +628,7 @@ export class Game {
       // runs." Incumbency was granted only for holding THIS seat, so a sitting
       // governor stepping up ran as a challenger -- one of the four things the
       // office is supposed to be worth, unimplemented. Same shape as the
-      // district clause that killed the presidency (F10).
+      // district clause that killed the presidency.
       for (const d of nominees) {
         this.readCounters(d);
         const holdsThis = !!incumbent && incumbent.holder!.cardId === d.card.id;
@@ -885,7 +885,7 @@ export class Game {
    *
    *  Taking an arbitrary district from the first opponent in seat order was a
    *  real bias and not a cosmetic one. It robbed low seats systematically, and
-   *  because districts are ballast rather than presence (F21 — hand size caps
+   *  because districts are ballast rather than presence (hand size caps
    *  total cards, so every district crowds out a candidate), being robbed was
    *  an ADVANTAGE. Seat 0 scored 164 against seat 4's 143 and won 32% of
    *  five-player games against a 20% share, entirely from this. */
@@ -1139,7 +1139,7 @@ function clampInt(v: number, lo: number, hi: number): number { return Math.max(l
 
 /** The default draft heuristic. Candidates are valued by home-state bonus and
  *  card text; districts only while a player is thin on presence, because
- *  holding many is measurably a liability (F21) -- hand size caps total cards,
+ *  holding many is measurably a liability -- hand size caps total cards,
  *  so every district crowds out someone to run. */
 function defaultPick(pack: Card[], p: PlayerState): Card {
   const states = new Set(p.districts.map((d) => d.state));

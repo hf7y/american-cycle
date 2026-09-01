@@ -13,7 +13,7 @@
  *    D  the identity bonus already shipped — demographics x the era's own
  *       candidate pool, which needs no table and no new field
  *
- *  POPULATION (F37's rule). Everything below is priced on Q: contested general
+ *  POPULATION (findings/incumbency-calibration.ts). Everything below is priced on Q: contested general
  *  elections 1976-2018 whose district-era both survives the >=3-elections rule
  *  and matches a district CARD in the pack of that era. 167 of the 258 cards
  *  match; the 1932, 1964 and 2024 packs fall outside the panel entirely. Q is
@@ -329,7 +329,7 @@ function main(): void {
   console.log(`  sim House winners are ${(100 * mean(hist.flatMap((h) => h.seq).map((s) => s.party === 'D' ? 1 : 0))).toFixed(1)}% D; real winners in Q are ${(100 * mean(Q.map((o) => o.y > 50 ? 1 : 0))).toFixed(1)}% D — a carrier that always said "D" scores the latter`);
 
   // ---- the table. Two populations, because C only speaks for districts the
-  // sim ever drafted into a House race: Q, and Q restricted to those. F37.
+  // sim ever drafted into a House race: Q, and Q restricted to those. See findings/incumbency-calibration.ts.
   const Qc = Q.filter((o) => cFull(o.unit)), Qco = Qopen.filter((o) => cFull(o.unit));
   const zb = (u: string) => { const v = bPred.get(u); return v === undefined ? undefined : v / Math.sqrt(vr([...bPred.values()])); };
   const zd = (u: string) => { const v = dPred.get(u); return v === undefined ? undefined : v / Math.sqrt(vr([...dPred.values()])); };

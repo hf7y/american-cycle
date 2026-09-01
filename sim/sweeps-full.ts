@@ -1,6 +1,6 @@
 /** The remaining sweeps from SIM-BRIEF Part 4, each holding the rest at
  *  baseline and reporting the metric it is supposed to move. Only worth
- *  running now: before F10/F13 these measured a board with half its rules
+ *  running now: before the presidency and the last three unbuilt rules were wired, these measured a board with half its rules
  *  switched off. */
 import { loadConfig, loadPacks, playOne } from './harness.ts';
 import type { Config } from '../engine/game.ts';
