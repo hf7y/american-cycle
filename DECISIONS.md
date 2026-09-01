@@ -23,6 +23,7 @@ The design doc says what the game *is*. This says what is **settled**, what is *
 | Governors never push lean | Falls out of the nationalization priority rule; Baker/Hogan/Scott are the evidence |
 | Impeachment consumes the omnibill slot | Prices the coup in the currency everyone is accumulating |
 | One macro number, not two | "How the country is doing" is honest. A separate ideological axis was double-counting |
+| **The House is a feeder, not a win route** | Ruled 2026-09-01. `HouseFarm` has won 0-0.6% of games in every engine version ever measured, including 0.1% at n=2400; the `what-wins` predicate puts House seats at 0.13x winner-to-field and calls holding them anti-correlated with winning. The House is a stepping stone to higher office and should stop being graded as a failed strategy |
 
 ### Correction, 2026-08-31: the split is NOT distribution-neutral
 
