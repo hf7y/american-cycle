@@ -1,8 +1,21 @@
 # Decisions register
 
-**Read this before changing anything in `design-doc.md`.**
+**This is the design record. There is no design document.**
 
-The design doc says what the game *is*. This says what is **settled**, what is **open**, and what was **considered and cut**. The last category is the important one — most of the ideas below are attractive, and several were mine. They were removed for reasons, and an agent trying to be helpful will otherwise reinvent them.
+`design-doc.md` was reaped on 2026-09-01 and is archived in the vault at
+`hf7y/ecosystem1-vault` commit `0746d7f`. It had ONE commit in its entire history and was
+never edited, while the engine moved through two tags and 38 findings -- and it lost every
+argument with the code it was meant to specify: its own odds table carried a correction to
+itself, its push table is contradicted by MIT returns (#51), and all four of its victory
+candidates were measured as failing (#13). Nine config files and 213 code comments cited it
+by section number, so a document nobody updated was dragging the repo behind it.
+
+The engine is the spec. This file is what is **settled**, what is **open**, and what was
+**considered and cut**.
+
+**Section numbers (`§N`) in code comments refer to that retired document.** They are
+historical citations, not live pointers. Do not add new ones; when you touch one, state the
+rule instead of citing a section. The last category is the important one — most of the ideas below are attractive, and several were mine. They were removed for reasons, and an agent trying to be helpful will otherwise reinvent them.
 
 ---
 

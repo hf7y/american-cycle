@@ -39,7 +39,7 @@ export const finding: Finding = {
     + 'quoted from this simulator is a property of its agent pool, because no agent here can '
     + 'negotiate, offer anything or remember a favour. Do not tune the threshold on it.',
   stampedAt: '2026-08-31T12:00:00Z',
-  stampedOn: 'phase1-engine',
+  stampedOn: 'f0bbaca',
 
   predicate(): Claim[] {
     const base = loadConfig('tuned.json');

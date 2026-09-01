@@ -36,7 +36,7 @@ export interface Finding {
    *  that names a dependency without a zero-tolerance claim reading it back.
    *  Empty is legal and means "this finding recommends no shipped setting". */
   dependsOn: string[];
-  /** the design-doc question this answers, verbatim where possible */
+  /** the design question this answers, verbatim where possible */
   question: string;
   /** prose, true as of `stampedAt` and no later */
   headline: string;

@@ -51,7 +51,7 @@ export const finding: Finding = {
     + 'saturates the map. The 3d6 design does not limit any of this: the dice fix how OFTEN each push '
     + 'tier fires, not what a tier is worth. Shipped as as-written-plus.json.',
   stampedAt: '2026-08-31T10:30:00Z',
-  stampedOn: 'phase1-engine',
+  stampedOn: 'f0bbaca',
 
   predicate(): Claim[] {
     const biennial = measure({ decayFrequency: 'biennial' });
