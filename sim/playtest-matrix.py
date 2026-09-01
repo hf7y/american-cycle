@@ -9,6 +9,16 @@ SHOT = pathlib.Path(os.environ.get("SHOT_DIR", "/tmp/american-cycle-shots"))
 SHOT.mkdir(parents=True, exist_ok=True)
 fails = []
 
+# #28: the setup form seeds itself from Math.random(), so every CI run played a
+# DIFFERENT game and a red build could not be reproduced. Fix the seed, and
+# print it -- BUILD-BRIEF: "when you report a pathology, report the seed".
+SEED = int(os.environ.get("PLAYTEST_SEED", "20260831"))
+
+def start(pg):
+    """Fill the seed before starting, so this run is the one you can re-run."""
+    pg.fill("#sseed", str(SEED))
+    pg.click("#go")
+
 def check(pg, label):
     errs = []
     pg.on("pageerror", lambda e: errs.append(str(e)))
@@ -34,7 +44,7 @@ with sync_playwright() as pw:
             pg.goto(HTML.as_uri()); pg.wait_for_timeout(500)
             label = f"{theme}/{tag}"
             errs, bg, fg = check(pg, label + " setup")
-            pg.click("#go"); pg.wait_for_timeout(500)
+            start(pg); pg.wait_for_timeout(500)
             e2, _, _ = check(pg, label + " board")
             if errs or e2: fails.append(f"{label}: pageerror {(errs+e2)[0][:120]}")
             pg.screenshot(path=str(SHOT / f"m-{theme}-{tag}.png"))
@@ -56,7 +66,7 @@ with sync_playwright() as pw:
             pg.on("pageerror", lambda e: errs.append(str(e)))
             pg.goto(HTML.as_uri()); pg.wait_for_timeout(350)
             pg.select_option("#scfg", cfg); pg.select_option("#sera", era)
-            pg.click("#go"); pg.wait_for_timeout(400)
+            start(pg); pg.wait_for_timeout(400)
             # play three cycles
             for _ in range(60):
                 if pg.locator("#modal.on").count():
@@ -76,6 +86,7 @@ with sync_playwright() as pw:
     print(f"  played {len(cfgs)*3} config x era combinations")
     b.close()
 
-print(f"\nfailures: {len(fails)}")
+print(f"\nseed {SEED} (PLAYTEST_SEED to change)")
+print(f"failures: {len(fails)}")
 for f in fails[:14]: print("  ✗", f)
 sys.exit(1 if fails else 0)
