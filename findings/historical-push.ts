@@ -115,8 +115,12 @@ export const finding: Finding = {
       { name: 'House surprise persistence', value: h.surprise, stamped: -0.7415, tolerance: 0.01 },
       { name: 'presidential lean half-life', value: Math.log(0.5) / Math.log(1 + p.level), stamped: 5.879, tolerance: 0.02, unit: 'cycles' },
       { name: 'real unopposed House share', value: (100 * h.unopposed) / h.rows, stamped: 13.907, tolerance: 0.01, unit: '%' },
-      // the config this finding indicts, read back so a change to it is visible here
-      { name: 'as-written-plus top push', value: cfg.lean.pushByMargin[cfg.lean.pushByMargin.length - 1].push, stamped: 4, tolerance: 0, unit: 'pips' },
+      // The config this finding indicts, read back so a change to it is visible
+      // here. The name has to carry `as-written-plus.json` in full: the guard in
+      // well-formed.test.ts pairs a dependsOn entry with a zero-tolerance claim by
+      // looking for the FILENAME in the claim name, so `as-written-plus top push`
+      // read as no check at all.
+      { name: 'as-written-plus.json still ships the top push', value: cfg.lean.pushByMargin[cfg.lean.pushByMargin.length - 1].push, stamped: 4, tolerance: 0, unit: 'pips' },
       // the engine, which is the only thing here that may legitimately move
       { name: 'sim House generals with one candidate', value: (100 * lone) / generals, stamped: 96.885, tolerance: 2, unit: '%' },
     ];
