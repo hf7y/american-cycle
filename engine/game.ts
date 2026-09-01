@@ -147,6 +147,12 @@ export interface GameResult {
   winner: number;
   leadChanges: number;
   /** year at which the eventual winner first took the lead and kept it */
+  /** The player a §14 victory condition fired for, or undefined when the game
+   *  simply ran out of years. `winner` is set either way, so without this a
+   *  result cannot distinguish "someone won" from "time expired" -- which is
+   *  exactly the question hf7y/american-cycle#13 has to answer, and a sweep
+   *  reported 0% of games ending because it could not ask it. */
+  wonBy?: number;
   determinationYear: number;
   events: RaceEvent[];
   billsPassed: number;
@@ -1134,6 +1140,7 @@ export class Game {
     return {
       seed: 0, config: this.cfg.name, years: this.year - this.cfg.game.startYear,
       scores, winner, leadChanges,
+      wonBy: this.wonBy,
       determinationYear: determination,
       events: this.events,
       billsPassed: this.stats.billsPassed, billsAttempted: this.stats.billsAttempted,
