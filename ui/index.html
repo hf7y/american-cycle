@@ -1391,7 +1391,13 @@ class Game {
           view(me        )           {
     return {
       year: this.year,
-      isElectionYear: this.year % 2 === 0,
+      // THE THIRD COPY. #48 unified this rule for tick() and interactiveTick()
+      // and missed the view, which is what every agent reads. With
+      // oddYearGovernors on, the engine ran elections in an odd year while
+      // telling agents it was not one. The parity test cannot catch this:
+      // both tick paths read the same view, so they stay identical while
+      // both are wrong.
+      isElectionYear: isElectionYear(this.cfg, this.year),
       isMidterm: this.year % 4 === 2,
       isPresidentialYear: this.year % 4 === 0,
       economy: this.economy, lean: this.leanMap, seats: this.seats,
