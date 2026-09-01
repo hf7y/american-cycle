@@ -20,7 +20,7 @@ export interface LeanConfig {
   /** §10 scales the push "by how decisively the race was won" and never says
    *  what a walkover does -- a race nobody contested has no margin at all.
    *  0 reads it as "a race nobody tested tells you nothing"; 1 reads running
-   *  unopposed as itself decisive. The gap is real either way (F5). */
+   *  unopposed as itself decisive. The gap is real either way (hf7y/american-cycle#10, still open). */
   uncontestedPush?: number;
   /** §10's nationalisation ordering, as data rather than a constant, so the
    *  claim that the Senate's lean push is what makes it dominant can be
