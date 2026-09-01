@@ -11,7 +11,6 @@ sustained pressure.
 
 | path | what it is |
 |---|---|
-| `design-doc.md` | the rules. The spec the engine implements |
 | `engine/` | the rules as code — `game.ts` is the turn loop, `rules/` the resolvers |
 | `engine/config/*.json` | nine tunings of the same rules; `as-written-plus` is §7 taken literally |
 | `sim/` | headless harness, agents, sweeps, and the browser playtests |
