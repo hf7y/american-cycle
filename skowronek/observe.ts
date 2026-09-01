@@ -66,7 +66,7 @@ export interface RunObs {
   seed: number;
   agents: string[];
   years: YearObs[];
-  stoppedBy: 'maxYears' | 'deckOut';
+  stoppedBy: 'maxYears' | 'deckOut' | 'victory';
   result: GameResult;
 }
 
@@ -128,12 +128,14 @@ export function observeRun(agentNames: string[], cards: Card[], cfg: Config, see
   const g = new Game(agents, cards, cfg, seed);
   const end = cfg.game.startYear + cfg.game.maxYears;
   const years: YearObs[] = [];
-  let stoppedBy: 'maxYears' | 'deckOut' = 'maxYears';
+  let stoppedBy: 'maxYears' | 'deckOut' | 'victory' = 'maxYears';
 
   while (g.year < end) {
     const played = g.year;
     g.tick();
     years.push(observeYear(g, agentNames.length, cfg, played));
+    const v = g.victor();
+    if (v !== undefined) { g.wonBy = v; stoppedBy = 'victory'; break; }
     if (cfg.game.deckOutEnds && !g.talon.length && !g.discard.length && !g.eraQueue.length) {
       stoppedBy = 'deckOut';
       break;
