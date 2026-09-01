@@ -16,6 +16,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readdirSync, existsSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import type { Claim, Finding } from './types.ts';
 
 const dir = new URL('./', import.meta.url);
@@ -63,6 +64,34 @@ test('every finding is well formed', () => {
     assert.equal(typeof finding.predicate, 'function', `${where}: predicate is not callable`);
     assert.equal(typeof finding.verdict, 'function', `${where}: verdict is not callable`);
     assert.ok(Array.isArray(finding.dependsOn), `${where}: dependsOn must be declared, [] if none`);
+  }
+});
+
+/** A sha-shaped stamp is not a sha this repo HAS. `contest-ratio` and
+ *  `margin-ceiling` both shipped `75de16c` while it was unreachable in the
+ *  clone that filed #64, and the shape check above admitted it, because it
+ *  reads the shape of a stamp and never asks git. Resolving a stamp needs
+ *  history a shallow checkout does not have, so this stands down when git
+ *  cannot answer rather than failing for the wrong reason -- and the engine
+ *  job fetches full history so that standing down is not the CI default. */
+const noHistory = (() => {
+  try {
+    return execFileSync('git', ['rev-parse', '--is-shallow-repository'],
+      { encoding: 'utf8' }).trim() !== 'false' && 'shallow clone: no history to resolve a stamp against';
+  } catch { return 'no git here to resolve a stamp against'; }
+})();
+
+test('every stamp names a commit this clone can reach', { skip: noHistory }, () => {
+  for (const [f, finding] of loaded) {
+    const reachable = (() => {
+      try {
+        execFileSync('git', ['merge-base', '--is-ancestor', finding.stampedOn, 'HEAD'], { stdio: 'ignore' });
+        return true;
+      } catch { return false; }
+    })();
+    assert.ok(reachable,
+      `${f} (${finding.id}): stampedOn ${finding.stampedOn} is not an ancestor of HEAD. `
+      + 'A stamp dates a headline to an engine; one nobody can check out dates it to nothing.');
   }
 });
 

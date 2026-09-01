@@ -9,7 +9,12 @@ jobs:
   engine:
     runs-on: ubuntu-latest
     steps:
+      # Full history, because a findings stamp names a commit and the guard
+      # that resolves it can only stand down on a depth-1 checkout -- which
+      # would make skipping the check the CI default, and green would again
+      # not be evidence.
       - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
       - uses: actions/setup-node@v4
         with: { node-version: '24' }
       - run: npm ci || npm install
