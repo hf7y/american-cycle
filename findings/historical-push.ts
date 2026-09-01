@@ -76,12 +76,13 @@ export const finding: Finding = {
     'It does not. Keyed on SURPRISE — how far a unit beat its own norm, which is what §10 already '
     + 'tracks for the lean LEVEL — an over-performance reverts rather than compounds, in both '
     + 'offices: presidential slope -0.511 (n=510), House -0.741 (n=5,563) against a pure-noise null '
-    + 'near -0.96. Neither ever overshoots, and a presidential surprise persists about TWICE as '
-    + 'strongly as a House one — the distance from the null is 0.45 against 0.22. §10 pushes hardest '
+    + 'of exactly -1. Neither ever overshoots, and a presidential surprise persists about TWICE as '
+    + 'strongly as a House one — the distance from the null is 0.49 against 0.26. §10 pushes hardest '
     + 'exactly where the data reverts hardest, and its single table charges both offices alike. '
     + 'The lean LEVEL meanwhile decays with a half-life of 5.88 presidential cycles — about 24 '
     + "years, which is SIM-BRIEF's \"realignment timescale: decades\" as a number. And 13.9% of real "
-    + 'House district-years are unopposed, against a simulator that leaves 76.0% uncontested.',
+    + 'House district-years are unopposed, against 96.9% of simulated House generals fielding a '
+    + 'single candidate -- measured on the matching population, which is most of the gap.',
   stampedAt: '2026-09-01T02:35:00Z',
   stampedOn: 'f0bbaca',
 
@@ -92,10 +93,21 @@ export const finding: Finding = {
     const house = panel('house_district_panel.json') as number[][];
     const h = reversion(house, (r) => `${r[1]}|${r[2]}`, 3, 4, era, true);
 
+    // MATCH THE POPULATION. The real figure counts House GENERALS in which one
+    // party fielded nobody. `uncontestedShare` counts uncontested events across
+    // every office AND both rounds, and primaries are 99.7% contested, so it
+    // dilutes the very thing being compared -- it read 76% where the matching
+    // measure reads 97%. `contestedSlotShare` is a third quantity again (slots
+    // drawing >1 declarer), which is what hf7y/american-cycle#40 cites at 9.7%.
     const cfg = loadConfig('as-written-plus.json');
     const cards = loadPacks(['1932', '1964', '1976', '1992', '2008', '2016', '2024']);
-    let unc = 0; const N = 30;
-    for (let i = 0; i < N; i++) unc += playOne(['Greedy', 'Random', 'Lookahead'], cards, cfg, 900000 + i).uncontestedShare;
+    let lone = 0, generals = 0; const N = 30;
+    for (let i = 0; i < N; i++) {
+      for (const e of playOne(['Greedy', 'Random', 'Lookahead'], cards, cfg, 900000 + i).events) {
+        if (e.round !== 'general' || e.office !== 'representative') continue;
+        generals++; if (e.uncontested) lone++;
+      }
+    }
 
     return [
       // real-world facts: deterministic, so a drift here means the DATA moved
@@ -106,20 +118,27 @@ export const finding: Finding = {
       // the config this finding indicts, read back so a change to it is visible here
       { name: 'as-written-plus top push', value: cfg.lean.pushByMargin[cfg.lean.pushByMargin.length - 1].push, stamped: 4, tolerance: 0, unit: 'pips' },
       // the engine, which is the only thing here that may legitimately move
-      { name: 'sim uncontested share', value: (100 * unc) / N, stamped: 75.954, tolerance: 5, unit: '%' },
+      { name: 'sim House generals with one candidate', value: (100 * lone) / generals, stamped: 96.885, tolerance: 2, unit: '%' },
     ];
   },
 
   verdict(c: Claim[]): string {
     const v = (n: string) => c.find((x) => x.name.startsWith(n))!.value;
-    const NULL_SLOPE = -0.957;
+    // The null is EXACT, not simulated. If a unit's deviation is a fixed
+    // baseline plus iid noise, surprise is e_t and next-cycle movement is
+    // e_{t+1} - e_t, so the slope is Cov(e_{t+1}-e_t, e_t)/Var(e_t) = -1. The
+    // leave-one-out baseline's correction terms cancel, and 200 simulated
+    // panels of this shape give -1.0012 +/- 0.0026. An earlier -0.957 here was
+    // one noisy draw frozen into the file -- exactly the cached number this
+    // findings system exists to prevent.
+    const NULL_SLOPE = -1;
     const lift = (s: number) => s - NULL_SLOPE;
     const pres = lift(v('presidential surprise')), house = lift(v('House surprise'));
     return [
       `a surprise REVERTS in both offices (presidential ${v('presidential surprise').toFixed(3)}, House ${v('House surprise').toFixed(3)}), never compounds`,
       `presidential surprises persist ${(pres / house).toFixed(1)}x as strongly as House ones (${pres.toFixed(2)} vs ${house.toFixed(2)} from the null), so one push table cannot serve both`,
       `lean half-life ${v('presidential lean').toFixed(2)} cycles`,
-      `and the walkover gap is ${v('sim uncontested').toFixed(1)}% uncontested in play against ${v('real unopposed').toFixed(1)}% in reality`,
+      `and ${v('sim House generals').toFixed(1)}% of simulated House generals have a single candidate against ${v('real unopposed').toFixed(1)}% unopposed in reality`,
     ].join('; ');
   },
 };
