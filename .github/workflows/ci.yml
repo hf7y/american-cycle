@@ -42,6 +42,15 @@ jobs:
       # board BLANK, and one shipped before this existed.
       - name: build the board
         run: node ui/build.ts
+      # The browser tests below run against the bundle CI just built, so a STALE
+      # COMMITTED bundle passes them silently -- while the board a player loads
+      # is the committed one. #60 changed sim/agents.ts without rebuilding, and
+      # the shipped board kept running a BillMaximizer that no longer existed in
+      # source: the board and the simulator playing different games, which is
+      # exactly the bug #29 was opened for.
+      - name: the committed board is current
+        run: git diff --exit-code ui/index.html
+
       - name: playwright
         run: |
           pip install --quiet playwright
