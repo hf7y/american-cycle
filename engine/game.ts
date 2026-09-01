@@ -38,7 +38,7 @@ export interface Config {
     billFrequency?: 'annual' | 'biennial';
   };
   draft: { packSize: number; districtsPerPack: number; refillToHandSize: boolean };
-  game: { startYear: number; maxYears: number; victory: string; deckOutEnds: boolean; billTarget?: number;
+  game: { startYear: number; maxYears: number; victory: Victory; deckOutEnds: boolean; billTarget?: number;
           /** diagnostic only: §16 names hand size, endorsements and capture as
            *  the three stacking feedback loops. Hand size is cleared;
            *  this switches the other two off so each can be isolated. Not a
@@ -124,6 +124,48 @@ export const isBillYear = (cfg: Config, year: number): boolean =>
 export const isElectionYear = (cfg: Config, year: number): boolean =>
   year % 2 === 0
   || (cfg.game.oddYearGovernors === true && STATES.some((st) => governorUp(st, year)));
+
+/** §14's endings. A union rather than `string` so a config cannot ship a
+ *  misspelled condition that silently reads as "play to the cap" -- which is
+ *  exactly what `victory: "points"` means here, and why a typo was invisible.
+ *  'points' names no ending: it plays out the year cap and the highest score
+ *  wins, so `victorOf` returns undefined for it by design. */
+export type Victory = 'points' | 'bills' | 'two-terms' | 'three-terms' | 'parallel';
+
+/** What `victorOf` needs to read. Structural, so `Game` satisfies it directly. */
+export interface VictoryTally {
+  billsBy: Record<number, number>;
+  termsBy: Record<number, number>;
+  consecutiveBy: Record<number, number>;
+}
+
+/** §14's victory conditions, defined ONCE and exported, for the same reason
+ *  the two year gates above are (#48) -- and this one had already drifted.
+ *
+ *  It was a PRIVATE method reachable from `run()` alone, so the headless game
+ *  ended on a victory and the browser, which drives `interactiveTick()`, played
+ *  a game with no ending at all. That is #29's divergence in a fifth place, and
+ *  the one place the parity test could not see because it compares ticks rather
+ *  than the loop around them.
+ *
+ *  Returns the winning player, or undefined to keep playing. */
+export function victorOf(
+  cfg: Config, players: readonly { id: number }[], t: VictoryTally,
+): number | undefined {
+  const v = cfg.game.victory;
+  if (v === 'bills' || v === 'parallel') {
+    const target = cfg.game.billTarget ?? 8;
+    for (const p of players) if ((t.billsBy[p.id] ?? 0) >= target) return p.id;
+  }
+  if (v === 'two-terms' || v === 'three-terms' || v === 'parallel') {
+    const need = v === 'three-terms' ? 3 : 2;
+    for (const p of players) {
+      const held = v === 'three-terms' ? (t.termsBy[p.id] ?? 0) : (t.consecutiveBy[p.id] ?? 0);
+      if (held >= need) return p.id;
+    }
+  }
+  return undefined;
+}
 
 const raceKeyOf = (d: { office: Office; state: string; slot?: number }) => `${d.office}|${d.state}|${d.slot ?? ''}`;
 const sameRace = (a: { office: Office; state: string; slot?: number }, b: { office: Office; state: string; slot?: number }) =>
@@ -955,6 +997,11 @@ export class Game {
     }
     this.scoreHistory.push(this.players.map((p) => p.score));
     this.year++;
+    // The ending, which this path never asked about: `victor()` was private and
+    // called from `run()` alone, so a browser game ran to the year cap however
+    // many bills anyone authored. Set here rather than returned so the existing
+    // generator signature holds; the driver reads `wonBy`.
+    if (this.wonBy === undefined) this.wonBy = this.victor();
   }
 
   private humanDeclarations: Declaration[] = [];
@@ -1037,29 +1084,11 @@ export class Game {
     }
   }
 
-  /** §14's victory conditions, which the doc lists as "under test" and §16
-   *  leaves open. None were implemented, and the deck-out ending it names as
-   *  the backstop is unreachable: §14 also has defeated politicians circulate
-   *  back through the draft, and circulation wins -- cards in the talon and
-   *  discard GROW from 79 to 273 over a hundred years, because the discard
-   *  fills faster than hands and seats absorb. Without a real condition the
-   *  game does not end at all.
-   *
-   *  Returns the winning player, or undefined to keep playing. */
-  private victor(): number | undefined {
-    const v = this.cfg.game.victory;
-    if (v === 'bills' || v === 'parallel') {
-      const target = this.cfg.game.billTarget ?? 8;
-      for (const p of this.players) if (this.billsBy[p.id] >= target) return p.id;
-    }
-    if (v === 'two-terms' || v === 'three-terms' || v === 'parallel') {
-      const need = v === 'three-terms' ? 3 : 2;
-      for (const p of this.players) {
-        if (v === 'three-terms' ? this.termsBy[p.id] >= need : this.consecutiveBy[p.id] >= need) return p.id;
-      }
-    }
-    return undefined;
-  }
+  /** §14's endings. The rule itself is `victorOf`, module-level and exported;
+   *  this is the reading of it against THIS game's tallies. Public because the
+   *  loop around a tick is what has to ask -- and a caller driving `tick()`
+   *  itself, as sim/skowronek.ts does, could not reach it while it was private. */
+  victor(): number | undefined { return victorOf(this.cfg, this.players, this); }
 
   /** §12: "the card's accumulated counters are simply read off at
    *  resolution." Counters carry the colour of the party that was in power
@@ -1081,9 +1110,11 @@ export class Game {
 
   /** §12's card counters, by card id. */
   private billCounters = new Map<string, { record: number; counters: Partial<Record<Party, number>> }>();
-  private billsBy: Record<number, number> = {};
-  private termsBy: Record<number, number> = {};
-  private consecutiveBy: Record<number, number> = {};
+  /** §14's counters. Public because `victorOf` reads them structurally and a
+   *  driver stepping `tick()` has to be able to ask the same question `run()` does. */
+  billsBy: Record<number, number> = {};
+  termsBy: Record<number, number> = {};
+  consecutiveBy: Record<number, number> = {};
 
   /** One annual tick — §7. */
   tick(): void {
