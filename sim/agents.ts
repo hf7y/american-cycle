@@ -219,13 +219,40 @@ export class HeterodoxSpecialist extends Base {
 }
 
 export class BillMaximizer extends Base {
+  /** §12 credits a passed bill to the largest bloc of the MAJORITY HOUSE PARTY
+   *  (`legislature.author`), and `victory: 'bills'` counts those credits. So
+   *  authorship is House seats of one particular party. It is not yes-votes,
+   *  and it is not the Senate.
+   *
+   *  This agent used to add +4 to House AND Senate alike and vote yes on
+   *  everything, which optimises the POINTS reading of a bill -- "every
+   *  yes-vote scores" -- rather than the bills victory. Under
+   *  `victory: 'bills'` it won 0-5% of games, the specialist losing its own
+   *  specialty, while HouseFarm merely piling into the House took 77-82%. */
   declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[] {
-    const o = counterDeclare(options(v, open, this.cfg), pending, v.me, 2).map((x) => ({
-      ...x, edge: x.edge + (x.office === 'representative' || x.office === 'senator' ? 4 : 0),
+    const maj = this.houseMajority(v);
+    const o = counterDeclare(options(v, open, this.cfg), pending, v.me, 3).map((x) => ({
+      ...x,
+      edge: x.edge
+        + (x.office === 'representative' ? 6 : 0)
+        // a House seat outside the majority party authors nothing
+        + (maj && x.office === 'representative' && x.d.card.party === maj ? 3 : 0),
     }));
-    return pickDistinct(o.sort(byEdge), this.budget(v));
+    return pickDistinct(o.sort(byEdge), this.budget(v) + 2);
   }
-  voteBill(): boolean { return true; }         // every yes-vote scores
+  /** The HOUSE majority, which is what authorship reads. `Base.majority`
+   *  tallies every seat in every chamber, so it answers a different question. */
+  private houseMajority(v: GameView): string | undefined {
+    const t = new Map<string, number>();
+    for (const s of v.seats) {
+      if (s.office !== 'representative' || !s.holder) continue;
+      t.set(s.holder.party, (t.get(s.holder.party) ?? 0) + 1);
+    }
+    let best: string | undefined, n = 0;
+    for (const [p, c] of t) if (c > n) { n = c; best = p; }
+    return best;
+  }
+  voteBill(): boolean { return true; }
   proposeG(): number { return 4; }
 }
 
