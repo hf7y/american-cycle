@@ -15,11 +15,19 @@ jobs:
       - run: npm ci || npm install
       - name: typecheck
         run: npx tsc --noEmit
-      # The findings half of this is the shape checks only. Their expensive
-      # half re-runs every predicate, which is exactly what the step below
-      # does, and running both cost this job four minutes twice over.
+      # The findings half of this used to be the shape checks ONLY: the two
+      # deep checks -- that a declared config dependency is actually read back,
+      # and that every claim is finite -- sit behind FINDINGS_DEEP because they
+      # re-run every predicate, and nothing set it. So one of them was failing
+      # on main and CI was green: historical-push declared as-written-plus.json
+      # and no claim checked it. That is #22's point exactly, so CI now sets it.
+      # FINDINGS_SEEDS cuts the game counts, which is what it is for -- this
+      # asks "does the wiring hold", not "does a headline hold" at full N.
       - name: tests
         run: npm test
+        env:
+          FINDINGS_DEEP: '1'
+          FINDINGS_SEEDS: 12
       # Findings are predicates, not prose. A stale headline is information
       # rather than a failure, so this reports drift and only fails on BROKEN.
       # At a cut sample size, so this asks "does every predicate still run",
