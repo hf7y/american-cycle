@@ -53,7 +53,13 @@ test('every finding is well formed', () => {
     assert.ok(finding.question.length > 20, `${where}: question is too short to be a question`);
     assert.ok(finding.headline.length > 40, `${where}: headline is too short to be a claim`);
     assert.ok(!Number.isNaN(Date.parse(finding.stampedAt)), `${where}: stampedAt does not parse`);
-    assert.ok(finding.stampedOn.length > 0, `${where}: stampedOn is empty`);
+    // A stamp names the ENGINE a headline was taken on, so it has to be a
+    // commit. Five findings shipped `phase1-engine` -- a branch name, which
+    // moves, and which `--restamp` could never fix because it only rewrites
+    // findings that are STALE and these all HOLD.
+    assert.match(finding.stampedOn, /^[0-9a-f]{7,40}$/,
+      `${where}: stampedOn must be a commit sha, not ${JSON.stringify(finding.stampedOn)}. `
+      + 'A branch name moves; a stamp that moves dates nothing.');
     assert.equal(typeof finding.predicate, 'function', `${where}: predicate is not callable`);
     assert.equal(typeof finding.verdict, 'function', `${where}: verdict is not callable`);
     assert.ok(Array.isArray(finding.dependsOn), `${where}: dependsOn must be declared, [] if none`);

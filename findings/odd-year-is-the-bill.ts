@@ -65,7 +65,7 @@ export const finding: Finding = {
     + 'even when the legislature is silent. So: biennial decay + biennial bill is the combination that '
     + 'makes the annual tick pointless, and it is the only one that does.',
   stampedAt: '2026-08-31T10:15:00Z',
-  stampedOn: 'phase1-engine',
+  stampedOn: 'f0bbaca',
 
   predicate(): Claim[] {
     const bienBien = measure('biennial', 'biennial');   // the empty odd year

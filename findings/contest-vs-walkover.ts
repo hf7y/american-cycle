@@ -37,7 +37,7 @@ export const finding: Finding = {
     + 'lever because the same change also moves decision density, dead turns, the midterm brake and '
     + 'heterodoxy, none of which the walkover rule touches.',
   stampedAt: '2026-08-31T09:45:00Z',
-  stampedOn: 'phase1-engine',
+  stampedOn: 'f0bbaca',
 
   predicate(): Claim[] {
     const lowOff = measure(4, 16, 1.0, 0);

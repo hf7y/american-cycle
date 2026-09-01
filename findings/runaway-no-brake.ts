@@ -55,7 +55,7 @@ export const finding: Finding = {
     + 'rate — and the only brake left is the one this simulator cannot test, which is the table '
     + 'ganging up. Recommend a human playtest before adding any catch-up mechanic.',
   stampedAt: '2026-08-31T12:00:00Z',
-  stampedOn: 'phase1-engine',
+  stampedOn: 'f0bbaca',
 
   predicate(): Claim[] {
     const base = loadConfig('tuned.json');
