@@ -2,7 +2,8 @@
 
 **This is the design record. There is no design document.**
 
-`design-doc.md` was reaped on 2026-09-01 and is archived in the vault at
+`design-doc.md` was reaped on 2026-09-01, and Zach accepted the reap the same day when
+asked directly whether to revert it. It is archived in the vault at
 `hf7y/ecosystem1-vault` commit `0746d7f`. It had ONE commit in its entire history and was
 never edited, while the engine moved through two tags and 38 findings -- and it lost every
 argument with the code it was meant to specify: its own odds table carried a correction to
@@ -36,7 +37,9 @@ rule instead of citing a section. The last category is the important one — mos
 | Governors never push lean | Falls out of the nationalization priority rule; Baker/Hogan/Scott are the evidence |
 | Impeachment consumes the omnibill slot | Prices the coup in the currency everyone is accumulating |
 | One macro number, not two | "How the country is doing" is honest. A separate ideological axis was double-counting |
-| **The House is a feeder, not a win route** | Ruled 2026-09-01. `HouseFarm` has won 0-0.6% of games in every engine version ever measured, including 0.1% at n=2400; the `what-wins` predicate puts House seats at 0.13x winner-to-field and calls holding them anti-correlated with winning. The House is a stepping stone to higher office and should stop being graded as a failed strategy |
+| **The House is a feeder, not a win route** — *contested, see below* | Ruled 2026-09-01. `HouseFarm` has won 0-0.6% of games in every engine version ever measured, including 0.1% at n=2400; the `what-wins` predicate puts House seats at 0.13x winner-to-field and calls holding them anti-correlated with winning. The House is a stepping stone to higher office and should stop being graded as a failed strategy |
+| **No year cap. `billTarget` is the only length knob** | Ruled 2026-09-01 ("infinity"). With bills as the victory condition the game ends itself: at `maxYears: 10000`, **100% of games terminate** at targets 5/8/12 on both shipped configs. Target 8 gives a median of 11-12 years — six election cycles — with p90 at 17-19 and a max of 26. A cap only ever created unfinished games |
+| **Bills passed is the victory condition** | Ruled 2026-09-01. The backbone; other conditions become options. Works for a scored session or a race to a high score. **Not yet wired** — no shipped config sets `victory: 'bills'`, so `billsBy` is still write-only |
 
 ### Correction, 2026-08-31: the split is NOT distribution-neutral
 
@@ -85,6 +88,8 @@ candidate is off-brand where their identities match the district while the
 state's lean points against their party, which is era-dependent in a way a
 printed tag cannot be. Manchin reads heterodox in 2018 and perfectly orthodox
 in 1958. `sim/agents.ts`'s `HeterodoxSpecialist` now detects it that way.
+
+**The two rulings above collide, and the collision is measured.** Under a bills victory with no cap, `BillAuthor` and `HouseFarm` take **90-99% of all games** between them (tuned, target 8: 62% / 37%), while `SenateFlood` — which wins 40-63% under points — wins **0%**. Bills are passed by House votes and credited to the largest House bloc, so an ending that counts bills makes the House the game. Whichever ending is counted, the strategy that farms it takes everything: points hands the game to the Senate, bills hand it to the House. The feeder ruling is not true under the ending that was also ruled, and one of the two has to move. See hf7y/american-cycle#13 and hf7y/american-cycle#50.
 
 ---
 
