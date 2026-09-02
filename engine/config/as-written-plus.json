@@ -86,7 +86,8 @@
     "repealAtDistance": 0.5,
     "offDistrictAtDistance": 0.5,
     "impeachBackfirePips": 2,
-    "shutdownPips": 1
+    "shutdownPips": 1,
+    "billLeanPips": 1
   },
   "draft": {
     "packSize": 15,
@@ -126,6 +127,7 @@
     "primaryGeneral.offDistrictPips": "v0.2 item 6, unprinted. The price of a yes-vote on a bill your districts do not want.",
     "legislature.impeachBackfirePips": "v0.2 item 7, flat. The 1998 midterm preceded the Senate vote by three months, so the penalty attaches to the attempt and there is no conviction margin to scale by. Scaling by strain is v0.3.",
     "legislature.shutdownPips": "v0.2 item 8. Weighted toward the party perceived as making the demand, NOT toward incumbents: 1995-96, 2013 and 2018-19 all point the same way and in two of the three the blamed party held the majority.",
+    "legislature.billLeanPips": "A passed bill's tags now write to the map too, a flat push toward the majority party in every district on the table they touch, mirroring the shutdown and impeachment-backfire pips already here. Unprinted anywhere; set level with those flat pushes rather than swept.",
     "economy.shockOnRollAtMost": "v0.2 item 9, the CHEAP version on purpose. If it moves the determination point the positional version is never built; if it does not, the complexity has been earned.",
     "hand.bonusPresident": "Office hand-size bonuses were printed without saying per-seat or per-office. Read per seat rather than per office they compound into a runaway as seats accumulate; findings/runaway-no-brake.ts measures the determination point with them switched off. Implemented per office held, same as hand.bonusSenator, hand.bonusGovernor and hand.bonusRepresentative.",
     "hand.bonusSenator": "Per office held, not per seat -- see hand.bonusPresident.",

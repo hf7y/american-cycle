@@ -896,6 +896,18 @@ export class Game {
         this.bills.push({ id: `b${this.year}-${this.bills.length}`, year: this.year, g, author: authorId, tags: billTags });
         this.log.push(`${this.year}: omnibill G${g} [${billTags.join(', ')}] passed ${out.houseYes}/${out.houseTotal} H, ${out.senateYes}/${out.senateTotal} S`);
       }
+      // #78's ruling: a passed bill places a counter, toward the House
+      // majority party, in every district ON THE TABLE (any player's) whose
+      // demographics touch the bill's tags. Repeal carries the same tags as
+      // what it undoes (line ~820), so when the majority has flipped between
+      // the two passages this nets the earlier counters out -- with no
+      // repeal-specific branch here, exactly as the ruling asked.
+      const billPips = this.cfg.legislature.billLeanPips ?? 0;
+      if (billPips && majH) {
+        for (const d of this.districtsInPlay()) {
+          if (amend.overlaps(billTags, d.demographics)) lean.nudge(this.leanMap, this.cfg.lean, d.state, majH, billPips);
+        }
+      }
     } else {
       this.shutdown(votes);
       this.log.push(`${this.year}: omnibill G${g} ${out.vetoed ? 'vetoed' : 'failed'}`);

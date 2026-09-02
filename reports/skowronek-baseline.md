@@ -1,6 +1,6 @@
 # Skowronek suite — does american-cycle produce political time?
 
-Run 2026-09-02T00:59:02Z on `7f60caa`.
+Run 2026-09-02T19:58:16Z on `99e69f6`.
 
 Regenerate with:
 
@@ -19,62 +19,58 @@ settlement object does not exist, most verdicts are `BLOCKED`, which is an *unde
 
 | config | cap | mean length | settlement forms? | movement? | power concentrates? | quadrants reachable |
 | --- | --- | --- | --- | --- | --- | --- |
-| `as-written-plus.json` | 100y | 68.2y | yes | no | yes | 0/4 |
+| `as-written-plus.json` | 100y | 68.7y | yes | yes | yes | 2/4 |
 | `as-written.json` | 16y | 16.0y | no | no | yes | 0/4 |
-| `baseline.json` | 16y | 16.0y | no | no | yes | 0/4 |
-| `brutal.json` | 16y | 16.0y | no | no | yes | 0/4 |
-| `flat-push.json` | 16y | 16.0y | no | no | yes | 0/4 |
-| `governors-push.json` | 16y | 16.0y | no | no | yes | 0/4 |
-| `realigning.json` | 24y | 24.0y | yes | no | yes | 0/4 |
-| `three-terms.json` | 60y | 42.5y | no | no | yes | 0/4 |
-| `tuned.json` | 16y | 16.0y | no | no | yes | 0/4 |
+| `baseline.json` | 16y | 16.0y | yes | yes | yes | 2/4 |
+| `brutal.json` | 16y | 16.0y | yes | yes | yes | 2/4 |
+| `flat-push.json` | 16y | 16.0y | yes | yes | yes | 2/4 |
+| `governors-push.json` | 16y | 16.0y | yes | yes | yes | 2/4 |
+| `realigning.json` | 24y | 24.0y | yes | yes | yes | 2/4 |
+| `three-terms.json` | 60y | 27.9y | yes | yes | yes | 2/4 |
+| `tuned.json` | 16y | 16.0y | yes | yes | yes | 2/4 |
 
 ## as-written-plus.json
 
-300 games, agents `Greedy,BillAuthor,SenateFlood,Random`, year cap 100, mean game length 68.2y.
+300 games, agents `Greedy,BillAuthor,SenateFlood,Random`, year cap 100, mean game length 68.7y.
 
 ### Verdict table
 
 | check | verdict | headline measure |
 | --- | --- | --- |
 | `control-instrument-liveness` | HEALTHY | synthetic regime: longest run: 20.000 ± 0.000 (n=1) years |
-| `control-non-electoral-lean-writer` | UNHEALTHY | state-years |lean| rose, election years: 236765.000 ± 0.000 (n=9964) state-years |
-| `control-power-is-measurable` | HEALTHY | peak power held: 0.532 ± 0.004 (n=300) share of offices |
-| `settlement-formation` | HEALTHY | mean |country position|: 0.685 ± 0.019 (n=300) lean counters |
-| `regime-duration` | UNHEALTHY | mean regime run: 7.013 ± 0.278 (n=2278) years |
-| `constraint-on-opponents` | UNHEALTHY | country move on party turnover: 0.812 ± 0.032 (n=205) lean counters/yr |
-| `presidency-dependence` | HEALTHY | sustained power windows (with presidency): 1.880 ± 0.082 (n=300) per game |
-| `quadrant-articulation` | BLOCKED | classifiable power windows: 564.000 ± 0.000 (n=300) windows |
-| `quadrant-preemption` | BLOCKED | classifiable power windows: 564.000 ± 0.000 (n=300) windows |
-| `quadrant-reconstruction` | BLOCKED | classifiable power windows: 564.000 ± 0.000 (n=300) windows |
-| `quadrant-disjunction` | BLOCKED | classifiable power windows: 564.000 ± 0.000 (n=300) windows |
+| `control-non-electoral-lean-writer` | HEALTHY | state-years |lean| rose, election years: 260529.000 ± 0.000 (n=10042) state-years |
+| `control-power-is-measurable` | HEALTHY | peak power held: 0.579 ± 0.004 (n=300) share of offices |
+| `settlement-formation` | HEALTHY | mean |country position|: 1.392 ± 0.034 (n=300) lean counters |
+| `regime-duration` | HEALTHY | mean regime run: 7.308 ± 0.247 (n=2469) years |
+| `constraint-on-opponents` | UNHEALTHY | country move on party turnover: 0.749 ± 0.019 (n=660) lean counters/yr |
+| `presidency-dependence` | HEALTHY | sustained power windows (with presidency): 3.860 ± 0.139 (n=300) per game |
+| `quadrant-articulation` | UNHEALTHY | classifiable power windows: 1158.000 ± 0.000 (n=300) windows |
+| `quadrant-preemption` | UNHEALTHY | classifiable power windows: 1158.000 ± 0.000 (n=300) windows |
+| `quadrant-reconstruction` | BLOCKED | classifiable power windows: 1158.000 ± 0.000 (n=300) windows |
+| `quadrant-disjunction` | BLOCKED | classifiable power windows: 1158.000 ± 0.000 (n=300) windows |
 
 ### Preconditions
 
 | precondition | status | basis |
 | --- | --- | --- |
-| `BILL_CORPUS` | ABSENT BY CONSTRUCTION | passed bills are counted (GameResult.billsPassed) and discarded; no enacted-bill list, no repeal, no books. The only trace legislation leaves is economy.accumulatedG, a single scalar the Fed decays. |
-| `BILL_POSITION` | ABSENT BY CONSTRUCTION | a bill is a single spending magnitude g (economy.gMin..gMax), not a point on any axis the engine defines; engine/rules/economy.ts: "There is deliberately no second ideological axis." |
+| `BILL_CORPUS` | MET | 4.726666666666667 bills on the books at the epilogue; EnactedBill.repealedIn takes them off |
+| `BILL_POSITION` | MET | bills carry IdentityTag[] (v0.2 item 4) and TAG_COMPASS.bill reads them |
 | `SETTLEMENT_FORMATION` | MET | the country position holds off baseline with a variance ratio above 1 |
-| `SETTLEMENT_MOVEMENT` | ABSENT | nothing writes lean outside an election: |lean| never rose in a non-election year, in which bills were passing. Legislation reaches only economy.accumulatedG (engine/rules/legislature.ts, economy.ts) |
-| `STRAIN_RISE` | ABSENT BY CONSTRUCTION | strain is the distance between a settlement and the country, and this build has no settlement object to be the far end of it. Downstream of BILL_CORPUS and BILL_POSITION. |
-| `EFFICACY_DROP` | ABSENT BY CONSTRUCTION | efficacy is bills moving the settlement toward the passer, per year of power. With no bill position it is undefined, and with SETTLEMENT_MOVEMENT absent it would be identically zero for every player in every year — which cannot distinguish a blocked leader from an effective one. |
+| `SETTLEMENT_MOVEMENT` | MET | passing more bills moved the country position |
+| `STRAIN_RISE` | ABSENT | strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable. |
+| `EFFICACY_DROP` | ABSENT | efficacy is bills moving the settlement toward the passer, per year of power. The bill position exists as of v0.2, so this is no longer undefined -- it is unmeasured, and it stays unmeasured until STRAIN_RISE has a settlement to move. |
 | `POWER_CONCENTRATION` | MET | sustained power windows occur |
 
 ### Why each quadrant is unreachable
 
-- **ARTICULATION** — blocked by `BILL_POSITION`, `SETTLEMENT_MOVEMENT`.
-  - First missing: a bill is a single spending magnitude g (economy.gMin..gMax), not a point on any axis the engine defines; engine/rules/economy.ts: "There is deliberately no second ideological axis."
-  - Control: none possible: no run can give a scalar a second dimension.
-- **PREEMPTION** — blocked by `BILL_CORPUS`, `BILL_POSITION`.
-  - First missing: passed bills are counted (GameResult.billsPassed) and discarded; no enacted-bill list, no repeal, no books. The only trace legislation leaves is economy.accumulatedG, a single scalar the Fed decays.
-  - Control: none possible: no run can create a record the engine does not keep.
-- **RECONSTRUCTION** — blocked by `SETTLEMENT_MOVEMENT`, `BILL_POSITION`, `STRAIN_RISE`.
-  - First missing: nothing writes lean outside an election: |lean| never rose in a non-election year, in which bills were passing. Legislation reaches only economy.accumulatedG (engine/rules/legislature.ts, economy.ts)
-  - Control: C2: |lean| rises in election years and never in non-election years, on the same runs.
-- **DISJUNCTION** — blocked by `BILL_POSITION`, `SETTLEMENT_MOVEMENT`, `STRAIN_RISE`, `EFFICACY_DROP`.
-  - First missing: a bill is a single spending magnitude g (economy.gMin..gMax), not a point on any axis the engine defines; engine/rules/economy.ts: "There is deliberately no second ideological axis."
-  - Control: none possible: no run can give a scalar a second dimension.
+- **ARTICULATION** — preconditions met; see the verdict table.
+- **PREEMPTION** — preconditions met; see the verdict table.
+- **RECONSTRUCTION** — blocked by `STRAIN_RISE`.
+  - First missing: strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable.
+  - Control: none yet: the instrument does not exist to be controlled.
+- **DISJUNCTION** — blocked by `STRAIN_RISE`, `EFFICACY_DROP`.
+  - First missing: strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable.
+  - Control: none yet: the instrument does not exist to be controlled.
 
 ### Controls
 
@@ -93,18 +89,18 @@ settlement object does not exist, most verdicts are `BLOCKED`, which is an *unde
 
 Run length separates a built 20-year regime from white noise (20y vs a handful), and the variance ratio correctly marks noise as mean-reverting. NOTE the caveat this control surfaced: the step regime scores VR 0.99 and the random walk 1.10, so VR does NOT distinguish a settlement from a walk. Persistence is read from run length; VR is reported as description only.
 
-#### control-non-electoral-lean-writer — **UNHEALTHY**
+#### control-non-electoral-lean-writer — **HEALTHY**
 
 *C2: in a year with no election, can anything — legislation included — add lean to the board?*
 
 | measure | value |
 | --- | --- |
-| state-years |lean| rose, election years | 236765.000 ± 0.000 (n=9964) state-years |
-| state-years |lean| rose, NON-election years | 0.000 ± 0.000 (n=10188) state-years |
-| bills passed in non-election years | 3.147 ± 0.124 (n=300) per game |
-| non-election bill years per game | 33.960 ± 1.071 (n=300) years |
+| state-years |lean| rose, election years | 260529.000 ± 0.000 (n=10042) state-years |
+| state-years |lean| rose, NON-election years | 5777.000 ± 0.000 (n=10261) state-years |
+| bills passed in non-election years | 3.390 ± 0.115 (n=300) per game |
+| non-election bill years per game | 34.203 ± 1.049 (n=300) years |
 
-The detector fires in election years and is silent in every non-election year, while bills pass in those same years. So legislation cannot write to the settlement board at all: lean is election-only (applyPush, honeymoon, decay). This is CANNOT ACT as a property of the rules, not of any agent's choices — no pool, however maximising, can move it.
+Lean rises in years with no election, so some non-electoral mechanism writes to the board and a legislative settlement channel is at least possible.
 
 #### control-power-is-measurable — **HEALTHY**
 
@@ -112,9 +108,9 @@ The detector fires in election years and is silent in every non-election year, w
 
 | measure | value |
 | --- | --- |
-| peak power held | 0.532 ± 0.004 (n=300) share of offices |
-| sustained windows (>=0.4 for >=3y) | 1.880 ± 0.082 (n=300) per game |
-| mean spread across players | 0.234 ± 0.002 (n=300) |
+| peak power held | 0.579 ± 0.004 (n=300) share of offices |
+| sustained windows (>=0.4 for >=3y) | 3.860 ± 0.139 (n=300) per game |
+| mean spread across players | 0.288 ± 0.004 (n=300) |
 
 Power does concentrate into sustained windows, so a quadrant finding no windows would be a fact about the quadrant and not about the scalar.
 
@@ -126,24 +122,24 @@ Power does concentrate into sustained windows, so a quadrant finding no windows 
 
 | measure | value |
 | --- | --- |
-| mean |country position| | 0.685 ± 0.019 (n=300) lean counters |
-| peak |country position| | 1.712 ± 0.030 (n=300) lean counters |
-| years displaced beyond deadband | 0.777 ± 0.010 (n=300) share |
-| longest unbroken run on one side | 29.330 ± 1.459 (n=300) years |
-| variance ratio at lag 4 (descriptive) | 0.512 ± 0.009 (n=300) 1 = random walk |
-| sign crossings per decade | 0.501 ± 0.029 (n=300) per 10y |
+| mean |country position| | 1.392 ± 0.034 (n=300) lean counters |
+| peak |country position| | 3.261 ± 0.050 (n=300) lean counters |
+| years displaced beyond deadband | 0.892 ± 0.005 (n=300) share |
+| longest unbroken run on one side | 30.170 ± 1.233 (n=300) years |
+| variance ratio at lag 4 (descriptive) | 0.768 ± 0.018 (n=300) 1 = random walk |
+| sign crossings per decade | 0.599 ± 0.028 (n=300) per 10y |
 
 A settlement that forms holds the polity off its own baseline for most of the game and in long unbroken stretches: displaced share >= 0.5 and a longest run >= 8y (a quarter of the 30-year historical low). Short runs around a near-zero mean are a polity oscillating about its baseline, not a regime — and every downstream quadrant then measures nothing. Variance ratio is printed for description only: C1 showed a step-function settlement scores ~1, the same as a random walk, so it cannot be the criterion.
 
-#### regime-duration — **UNHEALTHY**
+#### regime-duration — **HEALTHY**
 
 *Do regimes last a cycle? Historical reference is 30-40 years.*
 
 | measure | value |
 | --- | --- |
-| mean regime run | 7.013 ± 0.278 (n=2278) years |
-| longest regime per game | 29.330 ± 1.459 (n=300) years |
-| game length | 68.173 ± 2.128 (n=300) years |
+| mean regime run | 7.308 ± 0.247 (n=2469) years |
+| longest regime per game | 30.170 ± 1.233 (n=300) years |
+| game length | 68.677 ± 2.084 (n=300) years |
 | config year cap | 100.000 ± 0.000 (n=300) years |
 
 The cap (100y) admits at least one full cycle, so a short mean run here is a fact about the engine and not about the clock.
@@ -154,9 +150,9 @@ The cap (100y) admits at least one full cycle, so a short mean run here is a fac
 
 | measure | value |
 | --- | --- |
-| country move on party turnover | 0.812 ± 0.032 (n=205) lean counters/yr |
-| country move within a party | 0.257 ± 0.002 (n=19947) lean counters/yr |
-| excess move on turnover | 0.555 ± 0.032 (n=205) lean counters/yr |
+| country move on party turnover | 0.749 ± 0.019 (n=660) lean counters/yr |
+| country move within a party | 0.425 ± 0.003 (n=19643) lean counters/yr |
+| excess move on turnover | 0.324 ± 0.019 (n=660) lean counters/yr |
 
 A settlement nobody has to govern inside is not a settlement. If turnover moves the position much more than an ordinary year does, incoming opponents are unconstrained. NOTE the confound: with no settlement object, this measures the POLITY moving, not a settlement resisting — it cannot distinguish "the settlement constrained them" from "there was nothing there to move".
 
@@ -166,41 +162,37 @@ A settlement nobody has to govern inside is not a settlement. If turnover moves 
 
 | measure | value |
 | --- | --- |
-| sustained power windows (with presidency) | 1.880 ± 0.082 (n=300) per game |
-| sustained power windows (no presidency) | 2.180 ± 0.113 (n=300) per game |
-| mean power in window (with) | 0.481 ± 0.002 (n=564) |
-| mean power in window (no presidency) | 0.437 ± 0.001 (n=654) |
-| windows that held the presidency | 0.950 ± 0.009 (n=564) share |
+| sustained power windows (with presidency) | 3.860 ± 0.139 (n=300) per game |
+| sustained power windows (no presidency) | 2.200 ± 0.103 (n=300) per game |
+| mean power in window (with) | 0.506 ± 0.002 (n=1158) |
+| mean power in window (no presidency) | 0.438 ± 0.001 (n=660) |
+| windows that held the presidency | 0.992 ± 0.003 (n=1158) share |
 
 Power windows that survive dropping the presidency term are the ones a quadrant could be reached from without winning the White House. Zero here would mean every Skowronek category in this game is a presidential category.
 
 ### Quadrant coverage
 
-#### quadrant-articulation — **BLOCKED**
+#### quadrant-articulation — **UNHEALTHY**
 
 *Is ARTICULATION reachable?*
 
 | measure | value |
 | --- | --- |
-| classifiable power windows | 564.000 ± 0.000 (n=300) windows |
-| windows classified as this quadrant | — (n=300) |
+| classifiable power windows | 1158.000 ± 0.000 (n=300) windows |
+| windows classified as this quadrant | 0.000 (n=300) |
 
-Blocked by: `BILL_POSITION`, `SETTLEMENT_MOVEMENT`
+Preconditions met and no window matched.
 
-Never evaluated: BILL_POSITION, SETTLEMENT_MOVEMENT are missing, so no window could be classified either way. This is an undefined, not a zero.
-
-#### quadrant-preemption — **BLOCKED**
+#### quadrant-preemption — **UNHEALTHY**
 
 *Is PREEMPTION reachable?*
 
 | measure | value |
 | --- | --- |
-| classifiable power windows | 564.000 ± 0.000 (n=300) windows |
-| windows classified as this quadrant | — (n=300) |
+| classifiable power windows | 1158.000 ± 0.000 (n=300) windows |
+| windows classified as this quadrant | 0.000 (n=300) |
 
-Blocked by: `BILL_CORPUS`, `BILL_POSITION`
-
-Never evaluated: BILL_CORPUS, BILL_POSITION are missing, so no window could be classified either way. This is an undefined, not a zero.
+Preconditions met and no window matched.
 
 #### quadrant-reconstruction — **BLOCKED**
 
@@ -208,12 +200,12 @@ Never evaluated: BILL_CORPUS, BILL_POSITION are missing, so no window could be c
 
 | measure | value |
 | --- | --- |
-| classifiable power windows | 564.000 ± 0.000 (n=300) windows |
+| classifiable power windows | 1158.000 ± 0.000 (n=300) windows |
 | windows classified as this quadrant | — (n=300) |
 
-Blocked by: `SETTLEMENT_MOVEMENT`, `BILL_POSITION`, `STRAIN_RISE`
+Blocked by: `STRAIN_RISE`
 
-Never evaluated: SETTLEMENT_MOVEMENT, BILL_POSITION, STRAIN_RISE are missing, so no window could be classified either way. This is an undefined, not a zero.
+Never evaluated: STRAIN_RISE is missing, so no window could be classified either way. This is an undefined, not a zero.
 
 #### quadrant-disjunction — **BLOCKED**
 
@@ -221,12 +213,12 @@ Never evaluated: SETTLEMENT_MOVEMENT, BILL_POSITION, STRAIN_RISE are missing, so
 
 | measure | value |
 | --- | --- |
-| classifiable power windows | 564.000 ± 0.000 (n=300) windows |
+| classifiable power windows | 1158.000 ± 0.000 (n=300) windows |
 | windows classified as this quadrant | — (n=300) |
 
-Blocked by: `BILL_POSITION`, `SETTLEMENT_MOVEMENT`, `STRAIN_RISE`, `EFFICACY_DROP`
+Blocked by: `STRAIN_RISE`, `EFFICACY_DROP`
 
-Never evaluated: BILL_POSITION, SETTLEMENT_MOVEMENT, STRAIN_RISE, EFFICACY_DROP are missing, so no window could be classified either way. This is an undefined, not a zero.
+Never evaluated: STRAIN_RISE, EFFICACY_DROP are missing, so no window could be classified either way. This is an undefined, not a zero.
 
 ## as-written.json
 
@@ -237,41 +229,41 @@ Never evaluated: BILL_POSITION, SETTLEMENT_MOVEMENT, STRAIN_RISE, EFFICACY_DROP 
 | check | verdict | headline measure |
 | --- | --- | --- |
 | `control-instrument-liveness` | HEALTHY | synthetic regime: longest run: 20.000 ± 0.000 (n=1) years |
-| `control-non-electoral-lean-writer` | UNHEALTHY | state-years |lean| rose, election years: 19341.000 ± 0.000 (n=2100) state-years |
-| `control-power-is-measurable` | HEALTHY | peak power held: 0.538 ± 0.004 (n=300) share of offices |
-| `settlement-formation` | UNHEALTHY | mean |country position|: 0.201 ± 0.003 (n=300) lean counters |
-| `regime-duration` | UNHEALTHY | mean regime run: 1.110 ± 0.013 (n=789) years |
-| `constraint-on-opponents` | UNHEALTHY | country move on party turnover: 0.936 ± 0.024 (n=103) lean counters/yr |
-| `presidency-dependence` | HEALTHY | sustained power windows (with presidency): 1.190 ± 0.043 (n=300) per game |
-| `quadrant-articulation` | BLOCKED | classifiable power windows: 357.000 ± 0.000 (n=300) windows |
-| `quadrant-preemption` | BLOCKED | classifiable power windows: 357.000 ± 0.000 (n=300) windows |
-| `quadrant-reconstruction` | BLOCKED | classifiable power windows: 357.000 ± 0.000 (n=300) windows |
-| `quadrant-disjunction` | BLOCKED | classifiable power windows: 357.000 ± 0.000 (n=300) windows |
+| `control-non-electoral-lean-writer` | UNHEALTHY | state-years |lean| rose, election years: 25318.000 ± 0.000 (n=2100) state-years |
+| `control-power-is-measurable` | HEALTHY | peak power held: 0.547 ± 0.004 (n=300) share of offices |
+| `settlement-formation` | UNHEALTHY | mean |country position|: 0.227 ± 0.004 (n=300) lean counters |
+| `regime-duration` | UNHEALTHY | mean regime run: 1.112 ± 0.012 (n=921) years |
+| `constraint-on-opponents` | UNHEALTHY | country move on party turnover: 0.918 ± 0.018 (n=177) lean counters/yr |
+| `presidency-dependence` | HEALTHY | sustained power windows (with presidency): 1.363 ± 0.042 (n=300) per game |
+| `quadrant-articulation` | BLOCKED | classifiable power windows: 409.000 ± 0.000 (n=300) windows |
+| `quadrant-preemption` | BLOCKED | classifiable power windows: 409.000 ± 0.000 (n=300) windows |
+| `quadrant-reconstruction` | BLOCKED | classifiable power windows: 409.000 ± 0.000 (n=300) windows |
+| `quadrant-disjunction` | BLOCKED | classifiable power windows: 409.000 ± 0.000 (n=300) windows |
 
 ### Preconditions
 
 | precondition | status | basis |
 | --- | --- | --- |
-| `BILL_CORPUS` | ABSENT BY CONSTRUCTION | passed bills are counted (GameResult.billsPassed) and discarded; no enacted-bill list, no repeal, no books. The only trace legislation leaves is economy.accumulatedG, a single scalar the Fed decays. |
-| `BILL_POSITION` | ABSENT BY CONSTRUCTION | a bill is a single spending magnitude g (economy.gMin..gMax), not a point on any axis the engine defines; engine/rules/economy.ts: "There is deliberately no second ideological axis." |
+| `BILL_CORPUS` | MET | 2.5 bills on the books at the epilogue; EnactedBill.repealedIn takes them off |
+| `BILL_POSITION` | MET | bills carry IdentityTag[] (v0.2 item 4) and TAG_COMPASS.bill reads them |
 | `SETTLEMENT_FORMATION` | ABSENT | the country position random-walks around its own baseline; no persistent regime forms |
 | `SETTLEMENT_MOVEMENT` | ABSENT | nothing writes lean outside an election: |lean| never rose in a non-election year, in which bills were passing. Legislation reaches only economy.accumulatedG (engine/rules/legislature.ts, economy.ts) |
-| `STRAIN_RISE` | ABSENT BY CONSTRUCTION | strain is the distance between a settlement and the country, and this build has no settlement object to be the far end of it. Downstream of BILL_CORPUS and BILL_POSITION. |
-| `EFFICACY_DROP` | ABSENT BY CONSTRUCTION | efficacy is bills moving the settlement toward the passer, per year of power. With no bill position it is undefined, and with SETTLEMENT_MOVEMENT absent it would be identically zero for every player in every year — which cannot distinguish a blocked leader from an effective one. |
+| `STRAIN_RISE` | ABSENT | strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable. |
+| `EFFICACY_DROP` | ABSENT | efficacy is bills moving the settlement toward the passer, per year of power. The bill position exists as of v0.2, so this is no longer undefined -- it is unmeasured, and it stays unmeasured until STRAIN_RISE has a settlement to move. |
 | `POWER_CONCENTRATION` | MET | sustained power windows occur |
 
 ### Why each quadrant is unreachable
 
-- **ARTICULATION** — blocked by `SETTLEMENT_FORMATION`, `BILL_POSITION`, `SETTLEMENT_MOVEMENT`.
+- **ARTICULATION** — blocked by `SETTLEMENT_FORMATION`, `SETTLEMENT_MOVEMENT`.
   - First missing: the country position random-walks around its own baseline; no persistent regime forms
   - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
-- **PREEMPTION** — blocked by `SETTLEMENT_FORMATION`, `BILL_CORPUS`, `BILL_POSITION`.
+- **PREEMPTION** — blocked by `SETTLEMENT_FORMATION`.
   - First missing: the country position random-walks around its own baseline; no persistent regime forms
   - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
-- **RECONSTRUCTION** — blocked by `SETTLEMENT_FORMATION`, `SETTLEMENT_MOVEMENT`, `BILL_POSITION`, `STRAIN_RISE`.
+- **RECONSTRUCTION** — blocked by `SETTLEMENT_FORMATION`, `SETTLEMENT_MOVEMENT`, `STRAIN_RISE`.
   - First missing: the country position random-walks around its own baseline; no persistent regime forms
   - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
-- **DISJUNCTION** — blocked by `SETTLEMENT_FORMATION`, `BILL_POSITION`, `SETTLEMENT_MOVEMENT`, `STRAIN_RISE`, `EFFICACY_DROP`.
+- **DISJUNCTION** — blocked by `SETTLEMENT_FORMATION`, `SETTLEMENT_MOVEMENT`, `STRAIN_RISE`, `EFFICACY_DROP`.
   - First missing: the country position random-walks around its own baseline; no persistent regime forms
   - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
 
@@ -298,9 +290,9 @@ Run length separates a built 20-year regime from white noise (20y vs a handful),
 
 | measure | value |
 | --- | --- |
-| state-years |lean| rose, election years | 19341.000 ± 0.000 (n=2100) state-years |
+| state-years |lean| rose, election years | 25318.000 ± 0.000 (n=2100) state-years |
 | state-years |lean| rose, NON-election years | 0.000 ± 0.000 (n=2400) state-years |
-| bills passed in non-election years | 2.280 ± 0.122 (n=300) per game |
+| bills passed in non-election years | 1.643 ± 0.092 (n=300) per game |
 | non-election bill years per game | 8.000 ± 0.000 (n=300) years |
 
 The detector fires in election years and is silent in every non-election year, while bills pass in those same years. So legislation cannot write to the settlement board at all: lean is election-only (applyPush, honeymoon, decay). This is CANNOT ACT as a property of the rules, not of any agent's choices — no pool, however maximising, can move it.
@@ -311,9 +303,9 @@ The detector fires in election years and is silent in every non-election year, w
 
 | measure | value |
 | --- | --- |
-| peak power held | 0.538 ± 0.004 (n=300) share of offices |
-| sustained windows (>=0.4 for >=3y) | 1.190 ± 0.043 (n=300) per game |
-| mean spread across players | 0.272 ± 0.004 (n=300) |
+| peak power held | 0.547 ± 0.004 (n=300) share of offices |
+| sustained windows (>=0.4 for >=3y) | 1.363 ± 0.042 (n=300) per game |
+| mean spread across players | 0.298 ± 0.004 (n=300) |
 
 Power does concentrate into sustained windows, so a quadrant finding no windows would be a fact about the quadrant and not about the scalar.
 
@@ -325,12 +317,12 @@ Power does concentrate into sustained windows, so a quadrant finding no windows 
 
 | measure | value |
 | --- | --- |
-| mean |country position| | 0.201 ± 0.003 (n=300) lean counters |
-| peak |country position| | 1.076 ± 0.012 (n=300) lean counters |
-| years displaced beyond deadband | 0.182 ± 0.004 (n=300) share |
-| longest unbroken run on one side | 1.257 ± 0.031 (n=300) years |
-| variance ratio at lag 4 (descriptive) | 0.331 ± 0.010 (n=300) 1 = random walk |
-| sign crossings per decade | 0.483 ± 0.029 (n=300) per 10y |
+| mean |country position| | 0.227 ± 0.004 (n=300) lean counters |
+| peak |country position| | 1.099 ± 0.010 (n=300) lean counters |
+| years displaced beyond deadband | 0.213 ± 0.005 (n=300) share |
+| longest unbroken run on one side | 1.307 ± 0.033 (n=300) years |
+| variance ratio at lag 4 (descriptive) | 0.315 ± 0.010 (n=300) 1 = random walk |
+| sign crossings per decade | 0.673 ± 0.034 (n=300) per 10y |
 
 A settlement that forms holds the polity off its own baseline for most of the game and in long unbroken stretches: displaced share >= 0.5 and a longest run >= 8y (a quarter of the 30-year historical low). Short runs around a near-zero mean are a polity oscillating about its baseline, not a regime — and every downstream quadrant then measures nothing. Variance ratio is printed for description only: C1 showed a step-function settlement scores ~1, the same as a random walk, so it cannot be the criterion.
 
@@ -340,8 +332,8 @@ A settlement that forms holds the polity off its own baseline for most of the ga
 
 | measure | value |
 | --- | --- |
-| mean regime run | 1.110 ± 0.013 (n=789) years |
-| longest regime per game | 1.257 ± 0.031 (n=300) years |
+| mean regime run | 1.112 ± 0.012 (n=921) years |
+| longest regime per game | 1.307 ± 0.033 (n=300) years |
 | game length | 16.000 ± 0.000 (n=300) years |
 | config year cap | 16.000 ± 0.000 (n=300) years |
 
@@ -353,9 +345,9 @@ PRECONDITION FAILURE, not a result: the year cap is 16, so a 30-year regime cann
 
 | measure | value |
 | --- | --- |
-| country move on party turnover | 0.936 ± 0.024 (n=103) lean counters/yr |
-| country move within a party | 0.262 ± 0.005 (n=4397) lean counters/yr |
-| excess move on turnover | 0.674 ± 0.025 (n=103) lean counters/yr |
+| country move on party turnover | 0.918 ± 0.018 (n=177) lean counters/yr |
+| country move within a party | 0.305 ± 0.006 (n=4323) lean counters/yr |
+| excess move on turnover | 0.613 ± 0.018 (n=177) lean counters/yr |
 
 A settlement nobody has to govern inside is not a settlement. If turnover moves the position much more than an ordinary year does, incoming opponents are unconstrained. NOTE the confound: with no settlement object, this measures the POLITY moving, not a settlement resisting — it cannot distinguish "the settlement constrained them" from "there was nothing there to move".
 
@@ -365,11 +357,11 @@ A settlement nobody has to govern inside is not a settlement. If turnover moves 
 
 | measure | value |
 | --- | --- |
-| sustained power windows (with presidency) | 1.190 ± 0.043 (n=300) per game |
-| sustained power windows (no presidency) | 0.503 ± 0.034 (n=300) per game |
-| mean power in window (with) | 0.502 ± 0.003 (n=357) |
-| mean power in window (no presidency) | 0.452 ± 0.003 (n=151) |
-| windows that held the presidency | 1.000 ± 0.000 (n=357) share |
+| sustained power windows (with presidency) | 1.363 ± 0.042 (n=300) per game |
+| sustained power windows (no presidency) | 0.467 ± 0.032 (n=300) per game |
+| mean power in window (with) | 0.501 ± 0.003 (n=409) |
+| mean power in window (no presidency) | 0.457 ± 0.003 (n=140) |
+| windows that held the presidency | 0.995 ± 0.003 (n=409) share |
 
 Power windows that survive dropping the presidency term are the ones a quadrant could be reached from without winning the White House. Zero here would mean every Skowronek category in this game is a presidential category.
 
@@ -381,12 +373,12 @@ Power windows that survive dropping the presidency term are the ones a quadrant 
 
 | measure | value |
 | --- | --- |
-| classifiable power windows | 357.000 ± 0.000 (n=300) windows |
+| classifiable power windows | 409.000 ± 0.000 (n=300) windows |
 | windows classified as this quadrant | — (n=300) |
 
-Blocked by: `SETTLEMENT_FORMATION`, `BILL_POSITION`, `SETTLEMENT_MOVEMENT`
+Blocked by: `SETTLEMENT_FORMATION`, `SETTLEMENT_MOVEMENT`
 
-Never evaluated: SETTLEMENT_FORMATION, BILL_POSITION, SETTLEMENT_MOVEMENT are missing, so no window could be classified either way. This is an undefined, not a zero.
+Never evaluated: SETTLEMENT_FORMATION, SETTLEMENT_MOVEMENT are missing, so no window could be classified either way. This is an undefined, not a zero.
 
 #### quadrant-preemption — **BLOCKED**
 
@@ -394,12 +386,12 @@ Never evaluated: SETTLEMENT_FORMATION, BILL_POSITION, SETTLEMENT_MOVEMENT are mi
 
 | measure | value |
 | --- | --- |
-| classifiable power windows | 357.000 ± 0.000 (n=300) windows |
+| classifiable power windows | 409.000 ± 0.000 (n=300) windows |
 | windows classified as this quadrant | — (n=300) |
 
-Blocked by: `SETTLEMENT_FORMATION`, `BILL_CORPUS`, `BILL_POSITION`
+Blocked by: `SETTLEMENT_FORMATION`
 
-Never evaluated: SETTLEMENT_FORMATION, BILL_CORPUS, BILL_POSITION are missing, so no window could be classified either way. This is an undefined, not a zero.
+Never evaluated: SETTLEMENT_FORMATION is missing, so no window could be classified either way. This is an undefined, not a zero.
 
 #### quadrant-reconstruction — **BLOCKED**
 
@@ -407,12 +399,12 @@ Never evaluated: SETTLEMENT_FORMATION, BILL_CORPUS, BILL_POSITION are missing, s
 
 | measure | value |
 | --- | --- |
-| classifiable power windows | 357.000 ± 0.000 (n=300) windows |
+| classifiable power windows | 409.000 ± 0.000 (n=300) windows |
 | windows classified as this quadrant | — (n=300) |
 
-Blocked by: `SETTLEMENT_FORMATION`, `SETTLEMENT_MOVEMENT`, `BILL_POSITION`, `STRAIN_RISE`
+Blocked by: `SETTLEMENT_FORMATION`, `SETTLEMENT_MOVEMENT`, `STRAIN_RISE`
 
-Never evaluated: SETTLEMENT_FORMATION, SETTLEMENT_MOVEMENT, BILL_POSITION, STRAIN_RISE are missing, so no window could be classified either way. This is an undefined, not a zero.
+Never evaluated: SETTLEMENT_FORMATION, SETTLEMENT_MOVEMENT, STRAIN_RISE are missing, so no window could be classified either way. This is an undefined, not a zero.
 
 #### quadrant-disjunction — **BLOCKED**
 
@@ -420,12 +412,12 @@ Never evaluated: SETTLEMENT_FORMATION, SETTLEMENT_MOVEMENT, BILL_POSITION, STRAI
 
 | measure | value |
 | --- | --- |
-| classifiable power windows | 357.000 ± 0.000 (n=300) windows |
+| classifiable power windows | 409.000 ± 0.000 (n=300) windows |
 | windows classified as this quadrant | — (n=300) |
 
-Blocked by: `SETTLEMENT_FORMATION`, `BILL_POSITION`, `SETTLEMENT_MOVEMENT`, `STRAIN_RISE`, `EFFICACY_DROP`
+Blocked by: `SETTLEMENT_FORMATION`, `SETTLEMENT_MOVEMENT`, `STRAIN_RISE`, `EFFICACY_DROP`
 
-Never evaluated: SETTLEMENT_FORMATION, BILL_POSITION, SETTLEMENT_MOVEMENT, STRAIN_RISE, EFFICACY_DROP are missing, so no window could be classified either way. This is an undefined, not a zero.
+Never evaluated: SETTLEMENT_FORMATION, SETTLEMENT_MOVEMENT, STRAIN_RISE, EFFICACY_DROP are missing, so no window could be classified either way. This is an undefined, not a zero.
 
 ## baseline.json
 
@@ -436,839 +428,39 @@ Never evaluated: SETTLEMENT_FORMATION, BILL_POSITION, SETTLEMENT_MOVEMENT, STRAI
 | check | verdict | headline measure |
 | --- | --- | --- |
 | `control-instrument-liveness` | HEALTHY | synthetic regime: longest run: 20.000 ± 0.000 (n=1) years |
-| `control-non-electoral-lean-writer` | UNHEALTHY | state-years |lean| rose, election years: 18109.000 ± 0.000 (n=2100) state-years |
-| `control-power-is-measurable` | HEALTHY | peak power held: 0.535 ± 0.004 (n=300) share of offices |
-| `settlement-formation` | UNHEALTHY | mean |country position|: 0.363 ± 0.007 (n=300) lean counters |
-| `regime-duration` | UNHEALTHY | mean regime run: 2.557 ± 0.053 (n=740) years |
-| `constraint-on-opponents` | UNHEALTHY | country move on party turnover: 0.980 ± 0.021 (n=111) lean counters/yr |
-| `presidency-dependence` | HEALTHY | sustained power windows (with presidency): 1.150 ± 0.041 (n=300) per game |
-| `quadrant-articulation` | BLOCKED | classifiable power windows: 345.000 ± 0.000 (n=300) windows |
-| `quadrant-preemption` | BLOCKED | classifiable power windows: 345.000 ± 0.000 (n=300) windows |
-| `quadrant-reconstruction` | BLOCKED | classifiable power windows: 345.000 ± 0.000 (n=300) windows |
-| `quadrant-disjunction` | BLOCKED | classifiable power windows: 345.000 ± 0.000 (n=300) windows |
+| `control-non-electoral-lean-writer` | HEALTHY | state-years |lean| rose, election years: 20425.000 ± 0.000 (n=2100) state-years |
+| `control-power-is-measurable` | HEALTHY | peak power held: 0.543 ± 0.004 (n=300) share of offices |
+| `settlement-formation` | HEALTHY | mean |country position|: 1.120 ± 0.043 (n=300) lean counters |
+| `regime-duration` | UNHEALTHY | mean regime run: 4.258 ± 0.137 (n=922) years |
+| `constraint-on-opponents` | UNHEALTHY | country move on party turnover: 1.018 ± 0.034 (n=188) lean counters/yr |
+| `presidency-dependence` | HEALTHY | sustained power windows (with presidency): 1.377 ± 0.045 (n=300) per game |
+| `quadrant-articulation` | UNHEALTHY | classifiable power windows: 413.000 ± 0.000 (n=300) windows |
+| `quadrant-preemption` | UNHEALTHY | classifiable power windows: 413.000 ± 0.000 (n=300) windows |
+| `quadrant-reconstruction` | BLOCKED | classifiable power windows: 413.000 ± 0.000 (n=300) windows |
+| `quadrant-disjunction` | BLOCKED | classifiable power windows: 413.000 ± 0.000 (n=300) windows |
 
 ### Preconditions
 
 | precondition | status | basis |
 | --- | --- | --- |
-| `BILL_CORPUS` | ABSENT BY CONSTRUCTION | passed bills are counted (GameResult.billsPassed) and discarded; no enacted-bill list, no repeal, no books. The only trace legislation leaves is economy.accumulatedG, a single scalar the Fed decays. |
-| `BILL_POSITION` | ABSENT BY CONSTRUCTION | a bill is a single spending magnitude g (economy.gMin..gMax), not a point on any axis the engine defines; engine/rules/economy.ts: "There is deliberately no second ideological axis." |
-| `SETTLEMENT_FORMATION` | ABSENT | the country position random-walks around its own baseline; no persistent regime forms |
-| `SETTLEMENT_MOVEMENT` | ABSENT | nothing writes lean outside an election: |lean| never rose in a non-election year, in which bills were passing. Legislation reaches only economy.accumulatedG (engine/rules/legislature.ts, economy.ts) |
-| `STRAIN_RISE` | ABSENT BY CONSTRUCTION | strain is the distance between a settlement and the country, and this build has no settlement object to be the far end of it. Downstream of BILL_CORPUS and BILL_POSITION. |
-| `EFFICACY_DROP` | ABSENT BY CONSTRUCTION | efficacy is bills moving the settlement toward the passer, per year of power. With no bill position it is undefined, and with SETTLEMENT_MOVEMENT absent it would be identically zero for every player in every year — which cannot distinguish a blocked leader from an effective one. |
-| `POWER_CONCENTRATION` | MET | sustained power windows occur |
-
-### Why each quadrant is unreachable
-
-- **ARTICULATION** — blocked by `SETTLEMENT_FORMATION`, `BILL_POSITION`, `SETTLEMENT_MOVEMENT`.
-  - First missing: the country position random-walks around its own baseline; no persistent regime forms
-  - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
-- **PREEMPTION** — blocked by `SETTLEMENT_FORMATION`, `BILL_CORPUS`, `BILL_POSITION`.
-  - First missing: the country position random-walks around its own baseline; no persistent regime forms
-  - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
-- **RECONSTRUCTION** — blocked by `SETTLEMENT_FORMATION`, `SETTLEMENT_MOVEMENT`, `BILL_POSITION`, `STRAIN_RISE`.
-  - First missing: the country position random-walks around its own baseline; no persistent regime forms
-  - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
-- **DISJUNCTION** — blocked by `SETTLEMENT_FORMATION`, `BILL_POSITION`, `SETTLEMENT_MOVEMENT`, `STRAIN_RISE`, `EFFICACY_DROP`.
-  - First missing: the country position random-walks around its own baseline; no persistent regime forms
-  - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
-
-### Controls
-
-#### control-instrument-liveness — **HEALTHY**
-
-*C1: can the formation detector see a settlement that is there by construction?*
-
-| measure | value |
-| --- | --- |
-| synthetic regime: longest run | 20.000 ± 0.000 (n=1) years |
-| synthetic regime: variance ratio | 0.990 ± 0.000 (n=1) |
-| random walk: longest run | 15.000 ± 0.000 (n=1) years |
-| random walk: variance ratio | 1.102 ± 0.000 (n=1) |
-| white noise: longest run | 6.000 ± 0.000 (n=1) years |
-| white noise: variance ratio | 0.286 ± 0.000 (n=1) |
-
-Run length separates a built 20-year regime from white noise (20y vs a handful), and the variance ratio correctly marks noise as mean-reverting. NOTE the caveat this control surfaced: the step regime scores VR 0.99 and the random walk 1.10, so VR does NOT distinguish a settlement from a walk. Persistence is read from run length; VR is reported as description only.
-
-#### control-non-electoral-lean-writer — **UNHEALTHY**
-
-*C2: in a year with no election, can anything — legislation included — add lean to the board?*
-
-| measure | value |
-| --- | --- |
-| state-years |lean| rose, election years | 18109.000 ± 0.000 (n=2100) state-years |
-| state-years |lean| rose, NON-election years | 0.000 ± 0.000 (n=2400) state-years |
-| bills passed in non-election years | 2.353 ± 0.125 (n=300) per game |
-| non-election bill years per game | 8.000 ± 0.000 (n=300) years |
-
-The detector fires in election years and is silent in every non-election year, while bills pass in those same years. So legislation cannot write to the settlement board at all: lean is election-only (applyPush, honeymoon, decay). This is CANNOT ACT as a property of the rules, not of any agent's choices — no pool, however maximising, can move it.
-
-#### control-power-is-measurable — **HEALTHY**
-
-*C3: does the power scalar vary and concentrate, so its silence would be a finding?*
-
-| measure | value |
-| --- | --- |
-| peak power held | 0.535 ± 0.004 (n=300) share of offices |
-| sustained windows (>=0.4 for >=3y) | 1.150 ± 0.041 (n=300) per game |
-| mean spread across players | 0.271 ± 0.004 (n=300) |
-
-Power does concentrate into sustained windows, so a quadrant finding no windows would be a fact about the quadrant and not about the scalar.
-
-### Era checks
-
-#### settlement-formation — **UNHEALTHY**
-
-*Do settlements form at all, or does the country position random-walk with no persistent regime?*
-
-| measure | value |
-| --- | --- |
-| mean |country position| | 0.363 ± 0.007 (n=300) lean counters |
-| peak |country position| | 1.070 ± 0.012 (n=300) lean counters |
-| years displaced beyond deadband | 0.394 ± 0.010 (n=300) share |
-| longest unbroken run on one side | 3.267 ± 0.117 (n=300) years |
-| variance ratio at lag 4 (descriptive) | 0.583 ± 0.017 (n=300) 1 = random walk |
-| sign crossings per decade | 0.519 ± 0.029 (n=300) per 10y |
-
-A settlement that forms holds the polity off its own baseline for most of the game and in long unbroken stretches: displaced share >= 0.5 and a longest run >= 8y (a quarter of the 30-year historical low). Short runs around a near-zero mean are a polity oscillating about its baseline, not a regime — and every downstream quadrant then measures nothing. Variance ratio is printed for description only: C1 showed a step-function settlement scores ~1, the same as a random walk, so it cannot be the criterion.
-
-#### regime-duration — **UNHEALTHY**
-
-*Do regimes last a cycle? Historical reference is 30-40 years.*
-
-| measure | value |
-| --- | --- |
-| mean regime run | 2.557 ± 0.053 (n=740) years |
-| longest regime per game | 3.267 ± 0.117 (n=300) years |
-| game length | 16.000 ± 0.000 (n=300) years |
-| config year cap | 16.000 ± 0.000 (n=300) years |
-
-PRECONDITION FAILURE, not a result: the year cap is 16, so a 30-year regime cannot be observed in this config however the engine behaves. Read the quadrant table below as undefined rather than negative for this config.
-
-#### constraint-on-opponents — **UNHEALTHY**
-
-*When power changes hands to the other party, does the settlement position hold?*
-
-| measure | value |
-| --- | --- |
-| country move on party turnover | 0.980 ± 0.021 (n=111) lean counters/yr |
-| country move within a party | 0.220 ± 0.006 (n=4389) lean counters/yr |
-| excess move on turnover | 0.760 ± 0.022 (n=111) lean counters/yr |
-
-A settlement nobody has to govern inside is not a settlement. If turnover moves the position much more than an ordinary year does, incoming opponents are unconstrained. NOTE the confound: with no settlement object, this measures the POLITY moving, not a settlement resisting — it cannot distinguish "the settlement constrained them" from "there was nothing there to move".
-
-#### presidency-dependence — **HEALTHY**
-
-*Which of this is reachable with the presidency removed from the power scalar?*
-
-| measure | value |
-| --- | --- |
-| sustained power windows (with presidency) | 1.150 ± 0.041 (n=300) per game |
-| sustained power windows (no presidency) | 0.470 ± 0.034 (n=300) per game |
-| mean power in window (with) | 0.500 ± 0.003 (n=345) |
-| mean power in window (no presidency) | 0.454 ± 0.003 (n=141) |
-| windows that held the presidency | 1.000 ± 0.000 (n=345) share |
-
-Power windows that survive dropping the presidency term are the ones a quadrant could be reached from without winning the White House. Zero here would mean every Skowronek category in this game is a presidential category.
-
-### Quadrant coverage
-
-#### quadrant-articulation — **BLOCKED**
-
-*Is ARTICULATION reachable?*
-
-| measure | value |
-| --- | --- |
-| classifiable power windows | 345.000 ± 0.000 (n=300) windows |
-| windows classified as this quadrant | — (n=300) |
-
-Blocked by: `SETTLEMENT_FORMATION`, `BILL_POSITION`, `SETTLEMENT_MOVEMENT`
-
-Never evaluated: SETTLEMENT_FORMATION, BILL_POSITION, SETTLEMENT_MOVEMENT are missing, so no window could be classified either way. This is an undefined, not a zero.
-
-#### quadrant-preemption — **BLOCKED**
-
-*Is PREEMPTION reachable?*
-
-| measure | value |
-| --- | --- |
-| classifiable power windows | 345.000 ± 0.000 (n=300) windows |
-| windows classified as this quadrant | — (n=300) |
-
-Blocked by: `SETTLEMENT_FORMATION`, `BILL_CORPUS`, `BILL_POSITION`
-
-Never evaluated: SETTLEMENT_FORMATION, BILL_CORPUS, BILL_POSITION are missing, so no window could be classified either way. This is an undefined, not a zero.
-
-#### quadrant-reconstruction — **BLOCKED**
-
-*Is RECONSTRUCTION reachable?*
-
-| measure | value |
-| --- | --- |
-| classifiable power windows | 345.000 ± 0.000 (n=300) windows |
-| windows classified as this quadrant | — (n=300) |
-
-Blocked by: `SETTLEMENT_FORMATION`, `SETTLEMENT_MOVEMENT`, `BILL_POSITION`, `STRAIN_RISE`
-
-Never evaluated: SETTLEMENT_FORMATION, SETTLEMENT_MOVEMENT, BILL_POSITION, STRAIN_RISE are missing, so no window could be classified either way. This is an undefined, not a zero.
-
-#### quadrant-disjunction — **BLOCKED**
-
-*Is DISJUNCTION reachable?*
-
-| measure | value |
-| --- | --- |
-| classifiable power windows | 345.000 ± 0.000 (n=300) windows |
-| windows classified as this quadrant | — (n=300) |
-
-Blocked by: `SETTLEMENT_FORMATION`, `BILL_POSITION`, `SETTLEMENT_MOVEMENT`, `STRAIN_RISE`, `EFFICACY_DROP`
-
-Never evaluated: SETTLEMENT_FORMATION, BILL_POSITION, SETTLEMENT_MOVEMENT, STRAIN_RISE, EFFICACY_DROP are missing, so no window could be classified either way. This is an undefined, not a zero.
-
-## brutal.json
-
-300 games, agents `Greedy,BillAuthor,SenateFlood,Random`, year cap 16, mean game length 16.0y.
-
-### Verdict table
-
-| check | verdict | headline measure |
-| --- | --- | --- |
-| `control-instrument-liveness` | HEALTHY | synthetic regime: longest run: 20.000 ± 0.000 (n=1) years |
-| `control-non-electoral-lean-writer` | UNHEALTHY | state-years |lean| rose, election years: 17888.000 ± 0.000 (n=2100) state-years |
-| `control-power-is-measurable` | HEALTHY | peak power held: 0.539 ± 0.004 (n=300) share of offices |
-| `settlement-formation` | UNHEALTHY | mean |country position|: 0.368 ± 0.007 (n=300) lean counters |
-| `regime-duration` | UNHEALTHY | mean regime run: 2.620 ± 0.057 (n=755) years |
-| `constraint-on-opponents` | UNHEALTHY | country move on party turnover: 1.013 ± 0.020 (n=108) lean counters/yr |
-| `presidency-dependence` | HEALTHY | sustained power windows (with presidency): 1.190 ± 0.041 (n=300) per game |
-| `quadrant-articulation` | BLOCKED | classifiable power windows: 357.000 ± 0.000 (n=300) windows |
-| `quadrant-preemption` | BLOCKED | classifiable power windows: 357.000 ± 0.000 (n=300) windows |
-| `quadrant-reconstruction` | BLOCKED | classifiable power windows: 357.000 ± 0.000 (n=300) windows |
-| `quadrant-disjunction` | BLOCKED | classifiable power windows: 357.000 ± 0.000 (n=300) windows |
-
-### Preconditions
-
-| precondition | status | basis |
-| --- | --- | --- |
-| `BILL_CORPUS` | ABSENT BY CONSTRUCTION | passed bills are counted (GameResult.billsPassed) and discarded; no enacted-bill list, no repeal, no books. The only trace legislation leaves is economy.accumulatedG, a single scalar the Fed decays. |
-| `BILL_POSITION` | ABSENT BY CONSTRUCTION | a bill is a single spending magnitude g (economy.gMin..gMax), not a point on any axis the engine defines; engine/rules/economy.ts: "There is deliberately no second ideological axis." |
-| `SETTLEMENT_FORMATION` | ABSENT | the country position random-walks around its own baseline; no persistent regime forms |
-| `SETTLEMENT_MOVEMENT` | ABSENT | nothing writes lean outside an election: |lean| never rose in a non-election year, in which bills were passing. Legislation reaches only economy.accumulatedG (engine/rules/legislature.ts, economy.ts) |
-| `STRAIN_RISE` | ABSENT BY CONSTRUCTION | strain is the distance between a settlement and the country, and this build has no settlement object to be the far end of it. Downstream of BILL_CORPUS and BILL_POSITION. |
-| `EFFICACY_DROP` | ABSENT BY CONSTRUCTION | efficacy is bills moving the settlement toward the passer, per year of power. With no bill position it is undefined, and with SETTLEMENT_MOVEMENT absent it would be identically zero for every player in every year — which cannot distinguish a blocked leader from an effective one. |
-| `POWER_CONCENTRATION` | MET | sustained power windows occur |
-
-### Why each quadrant is unreachable
-
-- **ARTICULATION** — blocked by `SETTLEMENT_FORMATION`, `BILL_POSITION`, `SETTLEMENT_MOVEMENT`.
-  - First missing: the country position random-walks around its own baseline; no persistent regime forms
-  - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
-- **PREEMPTION** — blocked by `SETTLEMENT_FORMATION`, `BILL_CORPUS`, `BILL_POSITION`.
-  - First missing: the country position random-walks around its own baseline; no persistent regime forms
-  - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
-- **RECONSTRUCTION** — blocked by `SETTLEMENT_FORMATION`, `SETTLEMENT_MOVEMENT`, `BILL_POSITION`, `STRAIN_RISE`.
-  - First missing: the country position random-walks around its own baseline; no persistent regime forms
-  - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
-- **DISJUNCTION** — blocked by `SETTLEMENT_FORMATION`, `BILL_POSITION`, `SETTLEMENT_MOVEMENT`, `STRAIN_RISE`, `EFFICACY_DROP`.
-  - First missing: the country position random-walks around its own baseline; no persistent regime forms
-  - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
-
-### Controls
-
-#### control-instrument-liveness — **HEALTHY**
-
-*C1: can the formation detector see a settlement that is there by construction?*
-
-| measure | value |
-| --- | --- |
-| synthetic regime: longest run | 20.000 ± 0.000 (n=1) years |
-| synthetic regime: variance ratio | 0.990 ± 0.000 (n=1) |
-| random walk: longest run | 15.000 ± 0.000 (n=1) years |
-| random walk: variance ratio | 1.102 ± 0.000 (n=1) |
-| white noise: longest run | 6.000 ± 0.000 (n=1) years |
-| white noise: variance ratio | 0.286 ± 0.000 (n=1) |
-
-Run length separates a built 20-year regime from white noise (20y vs a handful), and the variance ratio correctly marks noise as mean-reverting. NOTE the caveat this control surfaced: the step regime scores VR 0.99 and the random walk 1.10, so VR does NOT distinguish a settlement from a walk. Persistence is read from run length; VR is reported as description only.
-
-#### control-non-electoral-lean-writer — **UNHEALTHY**
-
-*C2: in a year with no election, can anything — legislation included — add lean to the board?*
-
-| measure | value |
-| --- | --- |
-| state-years |lean| rose, election years | 17888.000 ± 0.000 (n=2100) state-years |
-| state-years |lean| rose, NON-election years | 0.000 ± 0.000 (n=2400) state-years |
-| bills passed in non-election years | 2.260 ± 0.113 (n=300) per game |
-| non-election bill years per game | 8.000 ± 0.000 (n=300) years |
-
-The detector fires in election years and is silent in every non-election year, while bills pass in those same years. So legislation cannot write to the settlement board at all: lean is election-only (applyPush, honeymoon, decay). This is CANNOT ACT as a property of the rules, not of any agent's choices — no pool, however maximising, can move it.
-
-#### control-power-is-measurable — **HEALTHY**
-
-*C3: does the power scalar vary and concentrate, so its silence would be a finding?*
-
-| measure | value |
-| --- | --- |
-| peak power held | 0.539 ± 0.004 (n=300) share of offices |
-| sustained windows (>=0.4 for >=3y) | 1.190 ± 0.041 (n=300) per game |
-| mean spread across players | 0.281 ± 0.004 (n=300) |
-
-Power does concentrate into sustained windows, so a quadrant finding no windows would be a fact about the quadrant and not about the scalar.
-
-### Era checks
-
-#### settlement-formation — **UNHEALTHY**
-
-*Do settlements form at all, or does the country position random-walk with no persistent regime?*
-
-| measure | value |
-| --- | --- |
-| mean |country position| | 0.368 ± 0.007 (n=300) lean counters |
-| peak |country position| | 1.074 ± 0.012 (n=300) lean counters |
-| years displaced beyond deadband | 0.412 ± 0.010 (n=300) share |
-| longest unbroken run on one side | 3.413 ± 0.128 (n=300) years |
-| variance ratio at lag 4 (descriptive) | 0.582 ± 0.016 (n=300) 1 = random walk |
-| sign crossings per decade | 0.573 ± 0.030 (n=300) per 10y |
-
-A settlement that forms holds the polity off its own baseline for most of the game and in long unbroken stretches: displaced share >= 0.5 and a longest run >= 8y (a quarter of the 30-year historical low). Short runs around a near-zero mean are a polity oscillating about its baseline, not a regime — and every downstream quadrant then measures nothing. Variance ratio is printed for description only: C1 showed a step-function settlement scores ~1, the same as a random walk, so it cannot be the criterion.
-
-#### regime-duration — **UNHEALTHY**
-
-*Do regimes last a cycle? Historical reference is 30-40 years.*
-
-| measure | value |
-| --- | --- |
-| mean regime run | 2.620 ± 0.057 (n=755) years |
-| longest regime per game | 3.413 ± 0.128 (n=300) years |
-| game length | 16.000 ± 0.000 (n=300) years |
-| config year cap | 16.000 ± 0.000 (n=300) years |
-
-PRECONDITION FAILURE, not a result: the year cap is 16, so a 30-year regime cannot be observed in this config however the engine behaves. Read the quadrant table below as undefined rather than negative for this config.
-
-#### constraint-on-opponents — **UNHEALTHY**
-
-*When power changes hands to the other party, does the settlement position hold?*
-
-| measure | value |
-| --- | --- |
-| country move on party turnover | 1.013 ± 0.020 (n=108) lean counters/yr |
-| country move within a party | 0.218 ± 0.006 (n=4392) lean counters/yr |
-| excess move on turnover | 0.795 ± 0.021 (n=108) lean counters/yr |
-
-A settlement nobody has to govern inside is not a settlement. If turnover moves the position much more than an ordinary year does, incoming opponents are unconstrained. NOTE the confound: with no settlement object, this measures the POLITY moving, not a settlement resisting — it cannot distinguish "the settlement constrained them" from "there was nothing there to move".
-
-#### presidency-dependence — **HEALTHY**
-
-*Which of this is reachable with the presidency removed from the power scalar?*
-
-| measure | value |
-| --- | --- |
-| sustained power windows (with presidency) | 1.190 ± 0.041 (n=300) per game |
-| sustained power windows (no presidency) | 0.507 ± 0.034 (n=300) per game |
-| mean power in window (with) | 0.503 ± 0.003 (n=357) |
-| mean power in window (no presidency) | 0.448 ± 0.002 (n=152) |
-| windows that held the presidency | 0.997 ± 0.003 (n=357) share |
-
-Power windows that survive dropping the presidency term are the ones a quadrant could be reached from without winning the White House. Zero here would mean every Skowronek category in this game is a presidential category.
-
-### Quadrant coverage
-
-#### quadrant-articulation — **BLOCKED**
-
-*Is ARTICULATION reachable?*
-
-| measure | value |
-| --- | --- |
-| classifiable power windows | 357.000 ± 0.000 (n=300) windows |
-| windows classified as this quadrant | — (n=300) |
-
-Blocked by: `SETTLEMENT_FORMATION`, `BILL_POSITION`, `SETTLEMENT_MOVEMENT`
-
-Never evaluated: SETTLEMENT_FORMATION, BILL_POSITION, SETTLEMENT_MOVEMENT are missing, so no window could be classified either way. This is an undefined, not a zero.
-
-#### quadrant-preemption — **BLOCKED**
-
-*Is PREEMPTION reachable?*
-
-| measure | value |
-| --- | --- |
-| classifiable power windows | 357.000 ± 0.000 (n=300) windows |
-| windows classified as this quadrant | — (n=300) |
-
-Blocked by: `SETTLEMENT_FORMATION`, `BILL_CORPUS`, `BILL_POSITION`
-
-Never evaluated: SETTLEMENT_FORMATION, BILL_CORPUS, BILL_POSITION are missing, so no window could be classified either way. This is an undefined, not a zero.
-
-#### quadrant-reconstruction — **BLOCKED**
-
-*Is RECONSTRUCTION reachable?*
-
-| measure | value |
-| --- | --- |
-| classifiable power windows | 357.000 ± 0.000 (n=300) windows |
-| windows classified as this quadrant | — (n=300) |
-
-Blocked by: `SETTLEMENT_FORMATION`, `SETTLEMENT_MOVEMENT`, `BILL_POSITION`, `STRAIN_RISE`
-
-Never evaluated: SETTLEMENT_FORMATION, SETTLEMENT_MOVEMENT, BILL_POSITION, STRAIN_RISE are missing, so no window could be classified either way. This is an undefined, not a zero.
-
-#### quadrant-disjunction — **BLOCKED**
-
-*Is DISJUNCTION reachable?*
-
-| measure | value |
-| --- | --- |
-| classifiable power windows | 357.000 ± 0.000 (n=300) windows |
-| windows classified as this quadrant | — (n=300) |
-
-Blocked by: `SETTLEMENT_FORMATION`, `BILL_POSITION`, `SETTLEMENT_MOVEMENT`, `STRAIN_RISE`, `EFFICACY_DROP`
-
-Never evaluated: SETTLEMENT_FORMATION, BILL_POSITION, SETTLEMENT_MOVEMENT, STRAIN_RISE, EFFICACY_DROP are missing, so no window could be classified either way. This is an undefined, not a zero.
-
-## flat-push.json
-
-300 games, agents `Greedy,BillAuthor,SenateFlood,Random`, year cap 16, mean game length 16.0y.
-
-### Verdict table
-
-| check | verdict | headline measure |
-| --- | --- | --- |
-| `control-instrument-liveness` | HEALTHY | synthetic regime: longest run: 20.000 ± 0.000 (n=1) years |
-| `control-non-electoral-lean-writer` | UNHEALTHY | state-years |lean| rose, election years: 21812.000 ± 0.000 (n=2100) state-years |
-| `control-power-is-measurable` | HEALTHY | peak power held: 0.511 ± 0.005 (n=300) share of offices |
-| `settlement-formation` | UNHEALTHY | mean |country position|: 0.395 ± 0.009 (n=300) lean counters |
-| `regime-duration` | UNHEALTHY | mean regime run: 3.654 ± 0.102 (n=659) years |
-| `constraint-on-opponents` | UNHEALTHY | country move on party turnover: 1.003 ± 0.029 (n=106) lean counters/yr |
-| `presidency-dependence` | HEALTHY | sustained power windows (with presidency): 1.030 ± 0.041 (n=300) per game |
-| `quadrant-articulation` | BLOCKED | classifiable power windows: 309.000 ± 0.000 (n=300) windows |
-| `quadrant-preemption` | BLOCKED | classifiable power windows: 309.000 ± 0.000 (n=300) windows |
-| `quadrant-reconstruction` | BLOCKED | classifiable power windows: 309.000 ± 0.000 (n=300) windows |
-| `quadrant-disjunction` | BLOCKED | classifiable power windows: 309.000 ± 0.000 (n=300) windows |
-
-### Preconditions
-
-| precondition | status | basis |
-| --- | --- | --- |
-| `BILL_CORPUS` | ABSENT BY CONSTRUCTION | passed bills are counted (GameResult.billsPassed) and discarded; no enacted-bill list, no repeal, no books. The only trace legislation leaves is economy.accumulatedG, a single scalar the Fed decays. |
-| `BILL_POSITION` | ABSENT BY CONSTRUCTION | a bill is a single spending magnitude g (economy.gMin..gMax), not a point on any axis the engine defines; engine/rules/economy.ts: "There is deliberately no second ideological axis." |
-| `SETTLEMENT_FORMATION` | ABSENT | the country position random-walks around its own baseline; no persistent regime forms |
-| `SETTLEMENT_MOVEMENT` | ABSENT | nothing writes lean outside an election: |lean| never rose in a non-election year, in which bills were passing. Legislation reaches only economy.accumulatedG (engine/rules/legislature.ts, economy.ts) |
-| `STRAIN_RISE` | ABSENT BY CONSTRUCTION | strain is the distance between a settlement and the country, and this build has no settlement object to be the far end of it. Downstream of BILL_CORPUS and BILL_POSITION. |
-| `EFFICACY_DROP` | ABSENT BY CONSTRUCTION | efficacy is bills moving the settlement toward the passer, per year of power. With no bill position it is undefined, and with SETTLEMENT_MOVEMENT absent it would be identically zero for every player in every year — which cannot distinguish a blocked leader from an effective one. |
-| `POWER_CONCENTRATION` | MET | sustained power windows occur |
-
-### Why each quadrant is unreachable
-
-- **ARTICULATION** — blocked by `SETTLEMENT_FORMATION`, `BILL_POSITION`, `SETTLEMENT_MOVEMENT`.
-  - First missing: the country position random-walks around its own baseline; no persistent regime forms
-  - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
-- **PREEMPTION** — blocked by `SETTLEMENT_FORMATION`, `BILL_CORPUS`, `BILL_POSITION`.
-  - First missing: the country position random-walks around its own baseline; no persistent regime forms
-  - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
-- **RECONSTRUCTION** — blocked by `SETTLEMENT_FORMATION`, `SETTLEMENT_MOVEMENT`, `BILL_POSITION`, `STRAIN_RISE`.
-  - First missing: the country position random-walks around its own baseline; no persistent regime forms
-  - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
-- **DISJUNCTION** — blocked by `SETTLEMENT_FORMATION`, `BILL_POSITION`, `SETTLEMENT_MOVEMENT`, `STRAIN_RISE`, `EFFICACY_DROP`.
-  - First missing: the country position random-walks around its own baseline; no persistent regime forms
-  - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
-
-### Controls
-
-#### control-instrument-liveness — **HEALTHY**
-
-*C1: can the formation detector see a settlement that is there by construction?*
-
-| measure | value |
-| --- | --- |
-| synthetic regime: longest run | 20.000 ± 0.000 (n=1) years |
-| synthetic regime: variance ratio | 0.990 ± 0.000 (n=1) |
-| random walk: longest run | 15.000 ± 0.000 (n=1) years |
-| random walk: variance ratio | 1.102 ± 0.000 (n=1) |
-| white noise: longest run | 6.000 ± 0.000 (n=1) years |
-| white noise: variance ratio | 0.286 ± 0.000 (n=1) |
-
-Run length separates a built 20-year regime from white noise (20y vs a handful), and the variance ratio correctly marks noise as mean-reverting. NOTE the caveat this control surfaced: the step regime scores VR 0.99 and the random walk 1.10, so VR does NOT distinguish a settlement from a walk. Persistence is read from run length; VR is reported as description only.
-
-#### control-non-electoral-lean-writer — **UNHEALTHY**
-
-*C2: in a year with no election, can anything — legislation included — add lean to the board?*
-
-| measure | value |
-| --- | --- |
-| state-years |lean| rose, election years | 21812.000 ± 0.000 (n=2100) state-years |
-| state-years |lean| rose, NON-election years | 0.000 ± 0.000 (n=2400) state-years |
-| bills passed in non-election years | 2.027 ± 0.116 (n=300) per game |
-| non-election bill years per game | 8.000 ± 0.000 (n=300) years |
-
-The detector fires in election years and is silent in every non-election year, while bills pass in those same years. So legislation cannot write to the settlement board at all: lean is election-only (applyPush, honeymoon, decay). This is CANNOT ACT as a property of the rules, not of any agent's choices — no pool, however maximising, can move it.
-
-#### control-power-is-measurable — **HEALTHY**
-
-*C3: does the power scalar vary and concentrate, so its silence would be a finding?*
-
-| measure | value |
-| --- | --- |
-| peak power held | 0.511 ± 0.005 (n=300) share of offices |
-| sustained windows (>=0.4 for >=3y) | 1.030 ± 0.041 (n=300) per game |
-| mean spread across players | 0.251 ± 0.004 (n=300) |
-
-Power does concentrate into sustained windows, so a quadrant finding no windows would be a fact about the quadrant and not about the scalar.
-
-### Era checks
-
-#### settlement-formation — **UNHEALTHY**
-
-*Do settlements form at all, or does the country position random-walk with no persistent regime?*
-
-| measure | value |
-| --- | --- |
-| mean |country position| | 0.395 ± 0.009 (n=300) lean counters |
-| peak |country position| | 1.038 ± 0.017 (n=300) lean counters |
-| years displaced beyond deadband | 0.502 ± 0.013 (n=300) share |
-| longest unbroken run on one side | 5.140 ± 0.185 (n=300) years |
-| variance ratio at lag 4 (descriptive) | 0.629 ± 0.018 (n=300) 1 = random walk |
-| sign crossings per decade | 0.381 ± 0.025 (n=300) per 10y |
-
-A settlement that forms holds the polity off its own baseline for most of the game and in long unbroken stretches: displaced share >= 0.5 and a longest run >= 8y (a quarter of the 30-year historical low). Short runs around a near-zero mean are a polity oscillating about its baseline, not a regime — and every downstream quadrant then measures nothing. Variance ratio is printed for description only: C1 showed a step-function settlement scores ~1, the same as a random walk, so it cannot be the criterion.
-
-#### regime-duration — **UNHEALTHY**
-
-*Do regimes last a cycle? Historical reference is 30-40 years.*
-
-| measure | value |
-| --- | --- |
-| mean regime run | 3.654 ± 0.102 (n=659) years |
-| longest regime per game | 5.140 ± 0.185 (n=300) years |
-| game length | 16.000 ± 0.000 (n=300) years |
-| config year cap | 16.000 ± 0.000 (n=300) years |
-
-PRECONDITION FAILURE, not a result: the year cap is 16, so a 30-year regime cannot be observed in this config however the engine behaves. Read the quadrant table below as undefined rather than negative for this config.
-
-#### constraint-on-opponents — **UNHEALTHY**
-
-*When power changes hands to the other party, does the settlement position hold?*
-
-| measure | value |
-| --- | --- |
-| country move on party turnover | 1.003 ± 0.029 (n=106) lean counters/yr |
-| country move within a party | 0.186 ± 0.005 (n=4394) lean counters/yr |
-| excess move on turnover | 0.817 ± 0.029 (n=106) lean counters/yr |
-
-A settlement nobody has to govern inside is not a settlement. If turnover moves the position much more than an ordinary year does, incoming opponents are unconstrained. NOTE the confound: with no settlement object, this measures the POLITY moving, not a settlement resisting — it cannot distinguish "the settlement constrained them" from "there was nothing there to move".
-
-#### presidency-dependence — **HEALTHY**
-
-*Which of this is reachable with the presidency removed from the power scalar?*
-
-| measure | value |
-| --- | --- |
-| sustained power windows (with presidency) | 1.030 ± 0.041 (n=300) per game |
-| sustained power windows (no presidency) | 0.410 ± 0.033 (n=300) per game |
-| mean power in window (with) | 0.492 ± 0.003 (n=309) |
-| mean power in window (no presidency) | 0.450 ± 0.003 (n=123) |
-| windows that held the presidency | 1.000 ± 0.000 (n=309) share |
-
-Power windows that survive dropping the presidency term are the ones a quadrant could be reached from without winning the White House. Zero here would mean every Skowronek category in this game is a presidential category.
-
-### Quadrant coverage
-
-#### quadrant-articulation — **BLOCKED**
-
-*Is ARTICULATION reachable?*
-
-| measure | value |
-| --- | --- |
-| classifiable power windows | 309.000 ± 0.000 (n=300) windows |
-| windows classified as this quadrant | — (n=300) |
-
-Blocked by: `SETTLEMENT_FORMATION`, `BILL_POSITION`, `SETTLEMENT_MOVEMENT`
-
-Never evaluated: SETTLEMENT_FORMATION, BILL_POSITION, SETTLEMENT_MOVEMENT are missing, so no window could be classified either way. This is an undefined, not a zero.
-
-#### quadrant-preemption — **BLOCKED**
-
-*Is PREEMPTION reachable?*
-
-| measure | value |
-| --- | --- |
-| classifiable power windows | 309.000 ± 0.000 (n=300) windows |
-| windows classified as this quadrant | — (n=300) |
-
-Blocked by: `SETTLEMENT_FORMATION`, `BILL_CORPUS`, `BILL_POSITION`
-
-Never evaluated: SETTLEMENT_FORMATION, BILL_CORPUS, BILL_POSITION are missing, so no window could be classified either way. This is an undefined, not a zero.
-
-#### quadrant-reconstruction — **BLOCKED**
-
-*Is RECONSTRUCTION reachable?*
-
-| measure | value |
-| --- | --- |
-| classifiable power windows | 309.000 ± 0.000 (n=300) windows |
-| windows classified as this quadrant | — (n=300) |
-
-Blocked by: `SETTLEMENT_FORMATION`, `SETTLEMENT_MOVEMENT`, `BILL_POSITION`, `STRAIN_RISE`
-
-Never evaluated: SETTLEMENT_FORMATION, SETTLEMENT_MOVEMENT, BILL_POSITION, STRAIN_RISE are missing, so no window could be classified either way. This is an undefined, not a zero.
-
-#### quadrant-disjunction — **BLOCKED**
-
-*Is DISJUNCTION reachable?*
-
-| measure | value |
-| --- | --- |
-| classifiable power windows | 309.000 ± 0.000 (n=300) windows |
-| windows classified as this quadrant | — (n=300) |
-
-Blocked by: `SETTLEMENT_FORMATION`, `BILL_POSITION`, `SETTLEMENT_MOVEMENT`, `STRAIN_RISE`, `EFFICACY_DROP`
-
-Never evaluated: SETTLEMENT_FORMATION, BILL_POSITION, SETTLEMENT_MOVEMENT, STRAIN_RISE, EFFICACY_DROP are missing, so no window could be classified either way. This is an undefined, not a zero.
-
-## governors-push.json
-
-300 games, agents `Greedy,BillAuthor,SenateFlood,Random`, year cap 16, mean game length 16.0y.
-
-### Verdict table
-
-| check | verdict | headline measure |
-| --- | --- | --- |
-| `control-instrument-liveness` | HEALTHY | synthetic regime: longest run: 20.000 ± 0.000 (n=1) years |
-| `control-non-electoral-lean-writer` | UNHEALTHY | state-years |lean| rose, election years: 15749.000 ± 0.000 (n=2100) state-years |
-| `control-power-is-measurable` | HEALTHY | peak power held: 0.510 ± 0.005 (n=300) share of offices |
-| `settlement-formation` | UNHEALTHY | mean |country position|: 0.339 ± 0.007 (n=300) lean counters |
-| `regime-duration` | UNHEALTHY | mean regime run: 2.692 ± 0.061 (n=671) years |
-| `constraint-on-opponents` | UNHEALTHY | country move on party turnover: 0.945 ± 0.034 (n=83) lean counters/yr |
-| `presidency-dependence` | HEALTHY | sustained power windows (with presidency): 1.043 ± 0.041 (n=300) per game |
-| `quadrant-articulation` | BLOCKED | classifiable power windows: 313.000 ± 0.000 (n=300) windows |
-| `quadrant-preemption` | BLOCKED | classifiable power windows: 313.000 ± 0.000 (n=300) windows |
-| `quadrant-reconstruction` | BLOCKED | classifiable power windows: 313.000 ± 0.000 (n=300) windows |
-| `quadrant-disjunction` | BLOCKED | classifiable power windows: 313.000 ± 0.000 (n=300) windows |
-
-### Preconditions
-
-| precondition | status | basis |
-| --- | --- | --- |
-| `BILL_CORPUS` | ABSENT BY CONSTRUCTION | passed bills are counted (GameResult.billsPassed) and discarded; no enacted-bill list, no repeal, no books. The only trace legislation leaves is economy.accumulatedG, a single scalar the Fed decays. |
-| `BILL_POSITION` | ABSENT BY CONSTRUCTION | a bill is a single spending magnitude g (economy.gMin..gMax), not a point on any axis the engine defines; engine/rules/economy.ts: "There is deliberately no second ideological axis." |
-| `SETTLEMENT_FORMATION` | ABSENT | the country position random-walks around its own baseline; no persistent regime forms |
-| `SETTLEMENT_MOVEMENT` | ABSENT | nothing writes lean outside an election: |lean| never rose in a non-election year, in which bills were passing. Legislation reaches only economy.accumulatedG (engine/rules/legislature.ts, economy.ts) |
-| `STRAIN_RISE` | ABSENT BY CONSTRUCTION | strain is the distance between a settlement and the country, and this build has no settlement object to be the far end of it. Downstream of BILL_CORPUS and BILL_POSITION. |
-| `EFFICACY_DROP` | ABSENT BY CONSTRUCTION | efficacy is bills moving the settlement toward the passer, per year of power. With no bill position it is undefined, and with SETTLEMENT_MOVEMENT absent it would be identically zero for every player in every year — which cannot distinguish a blocked leader from an effective one. |
-| `POWER_CONCENTRATION` | MET | sustained power windows occur |
-
-### Why each quadrant is unreachable
-
-- **ARTICULATION** — blocked by `SETTLEMENT_FORMATION`, `BILL_POSITION`, `SETTLEMENT_MOVEMENT`.
-  - First missing: the country position random-walks around its own baseline; no persistent regime forms
-  - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
-- **PREEMPTION** — blocked by `SETTLEMENT_FORMATION`, `BILL_CORPUS`, `BILL_POSITION`.
-  - First missing: the country position random-walks around its own baseline; no persistent regime forms
-  - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
-- **RECONSTRUCTION** — blocked by `SETTLEMENT_FORMATION`, `SETTLEMENT_MOVEMENT`, `BILL_POSITION`, `STRAIN_RISE`.
-  - First missing: the country position random-walks around its own baseline; no persistent regime forms
-  - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
-- **DISJUNCTION** — blocked by `SETTLEMENT_FORMATION`, `BILL_POSITION`, `SETTLEMENT_MOVEMENT`, `STRAIN_RISE`, `EFFICACY_DROP`.
-  - First missing: the country position random-walks around its own baseline; no persistent regime forms
-  - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
-
-### Controls
-
-#### control-instrument-liveness — **HEALTHY**
-
-*C1: can the formation detector see a settlement that is there by construction?*
-
-| measure | value |
-| --- | --- |
-| synthetic regime: longest run | 20.000 ± 0.000 (n=1) years |
-| synthetic regime: variance ratio | 0.990 ± 0.000 (n=1) |
-| random walk: longest run | 15.000 ± 0.000 (n=1) years |
-| random walk: variance ratio | 1.102 ± 0.000 (n=1) |
-| white noise: longest run | 6.000 ± 0.000 (n=1) years |
-| white noise: variance ratio | 0.286 ± 0.000 (n=1) |
-
-Run length separates a built 20-year regime from white noise (20y vs a handful), and the variance ratio correctly marks noise as mean-reverting. NOTE the caveat this control surfaced: the step regime scores VR 0.99 and the random walk 1.10, so VR does NOT distinguish a settlement from a walk. Persistence is read from run length; VR is reported as description only.
-
-#### control-non-electoral-lean-writer — **UNHEALTHY**
-
-*C2: in a year with no election, can anything — legislation included — add lean to the board?*
-
-| measure | value |
-| --- | --- |
-| state-years |lean| rose, election years | 15749.000 ± 0.000 (n=2100) state-years |
-| state-years |lean| rose, NON-election years | 0.000 ± 0.000 (n=2400) state-years |
-| bills passed in non-election years | 2.110 ± 0.117 (n=300) per game |
-| non-election bill years per game | 8.000 ± 0.000 (n=300) years |
-
-The detector fires in election years and is silent in every non-election year, while bills pass in those same years. So legislation cannot write to the settlement board at all: lean is election-only (applyPush, honeymoon, decay). This is CANNOT ACT as a property of the rules, not of any agent's choices — no pool, however maximising, can move it.
-
-#### control-power-is-measurable — **HEALTHY**
-
-*C3: does the power scalar vary and concentrate, so its silence would be a finding?*
-
-| measure | value |
-| --- | --- |
-| peak power held | 0.510 ± 0.005 (n=300) share of offices |
-| sustained windows (>=0.4 for >=3y) | 1.043 ± 0.041 (n=300) per game |
-| mean spread across players | 0.248 ± 0.004 (n=300) |
-
-Power does concentrate into sustained windows, so a quadrant finding no windows would be a fact about the quadrant and not about the scalar.
-
-### Era checks
-
-#### settlement-formation — **UNHEALTHY**
-
-*Do settlements form at all, or does the country position random-walk with no persistent regime?*
-
-| measure | value |
-| --- | --- |
-| mean |country position| | 0.339 ± 0.007 (n=300) lean counters |
-| peak |country position| | 1.035 ± 0.017 (n=300) lean counters |
-| years displaced beyond deadband | 0.376 ± 0.010 (n=300) share |
-| longest unbroken run on one side | 3.420 ± 0.125 (n=300) years |
-| variance ratio at lag 4 (descriptive) | 0.608 ± 0.018 (n=300) 1 = random walk |
-| sign crossings per decade | 0.467 ± 0.029 (n=300) per 10y |
-
-A settlement that forms holds the polity off its own baseline for most of the game and in long unbroken stretches: displaced share >= 0.5 and a longest run >= 8y (a quarter of the 30-year historical low). Short runs around a near-zero mean are a polity oscillating about its baseline, not a regime — and every downstream quadrant then measures nothing. Variance ratio is printed for description only: C1 showed a step-function settlement scores ~1, the same as a random walk, so it cannot be the criterion.
-
-#### regime-duration — **UNHEALTHY**
-
-*Do regimes last a cycle? Historical reference is 30-40 years.*
-
-| measure | value |
-| --- | --- |
-| mean regime run | 2.692 ± 0.061 (n=671) years |
-| longest regime per game | 3.420 ± 0.125 (n=300) years |
-| game length | 16.000 ± 0.000 (n=300) years |
-| config year cap | 16.000 ± 0.000 (n=300) years |
-
-PRECONDITION FAILURE, not a result: the year cap is 16, so a 30-year regime cannot be observed in this config however the engine behaves. Read the quadrant table below as undefined rather than negative for this config.
-
-#### constraint-on-opponents — **UNHEALTHY**
-
-*When power changes hands to the other party, does the settlement position hold?*
-
-| measure | value |
-| --- | --- |
-| country move on party turnover | 0.945 ± 0.034 (n=83) lean counters/yr |
-| country move within a party | 0.196 ± 0.005 (n=4417) lean counters/yr |
-| excess move on turnover | 0.749 ± 0.034 (n=83) lean counters/yr |
-
-A settlement nobody has to govern inside is not a settlement. If turnover moves the position much more than an ordinary year does, incoming opponents are unconstrained. NOTE the confound: with no settlement object, this measures the POLITY moving, not a settlement resisting — it cannot distinguish "the settlement constrained them" from "there was nothing there to move".
-
-#### presidency-dependence — **HEALTHY**
-
-*Which of this is reachable with the presidency removed from the power scalar?*
-
-| measure | value |
-| --- | --- |
-| sustained power windows (with presidency) | 1.043 ± 0.041 (n=300) per game |
-| sustained power windows (no presidency) | 0.397 ± 0.031 (n=300) per game |
-| mean power in window (with) | 0.492 ± 0.003 (n=313) |
-| mean power in window (no presidency) | 0.445 ± 0.002 (n=119) |
-| windows that held the presidency | 1.000 ± 0.000 (n=313) share |
-
-Power windows that survive dropping the presidency term are the ones a quadrant could be reached from without winning the White House. Zero here would mean every Skowronek category in this game is a presidential category.
-
-### Quadrant coverage
-
-#### quadrant-articulation — **BLOCKED**
-
-*Is ARTICULATION reachable?*
-
-| measure | value |
-| --- | --- |
-| classifiable power windows | 313.000 ± 0.000 (n=300) windows |
-| windows classified as this quadrant | — (n=300) |
-
-Blocked by: `SETTLEMENT_FORMATION`, `BILL_POSITION`, `SETTLEMENT_MOVEMENT`
-
-Never evaluated: SETTLEMENT_FORMATION, BILL_POSITION, SETTLEMENT_MOVEMENT are missing, so no window could be classified either way. This is an undefined, not a zero.
-
-#### quadrant-preemption — **BLOCKED**
-
-*Is PREEMPTION reachable?*
-
-| measure | value |
-| --- | --- |
-| classifiable power windows | 313.000 ± 0.000 (n=300) windows |
-| windows classified as this quadrant | — (n=300) |
-
-Blocked by: `SETTLEMENT_FORMATION`, `BILL_CORPUS`, `BILL_POSITION`
-
-Never evaluated: SETTLEMENT_FORMATION, BILL_CORPUS, BILL_POSITION are missing, so no window could be classified either way. This is an undefined, not a zero.
-
-#### quadrant-reconstruction — **BLOCKED**
-
-*Is RECONSTRUCTION reachable?*
-
-| measure | value |
-| --- | --- |
-| classifiable power windows | 313.000 ± 0.000 (n=300) windows |
-| windows classified as this quadrant | — (n=300) |
-
-Blocked by: `SETTLEMENT_FORMATION`, `SETTLEMENT_MOVEMENT`, `BILL_POSITION`, `STRAIN_RISE`
-
-Never evaluated: SETTLEMENT_FORMATION, SETTLEMENT_MOVEMENT, BILL_POSITION, STRAIN_RISE are missing, so no window could be classified either way. This is an undefined, not a zero.
-
-#### quadrant-disjunction — **BLOCKED**
-
-*Is DISJUNCTION reachable?*
-
-| measure | value |
-| --- | --- |
-| classifiable power windows | 313.000 ± 0.000 (n=300) windows |
-| windows classified as this quadrant | — (n=300) |
-
-Blocked by: `SETTLEMENT_FORMATION`, `BILL_POSITION`, `SETTLEMENT_MOVEMENT`, `STRAIN_RISE`, `EFFICACY_DROP`
-
-Never evaluated: SETTLEMENT_FORMATION, BILL_POSITION, SETTLEMENT_MOVEMENT, STRAIN_RISE, EFFICACY_DROP are missing, so no window could be classified either way. This is an undefined, not a zero.
-
-## realigning.json
-
-300 games, agents `Greedy,BillAuthor,SenateFlood,Random`, year cap 24, mean game length 24.0y.
-
-### Verdict table
-
-| check | verdict | headline measure |
-| --- | --- | --- |
-| `control-instrument-liveness` | HEALTHY | synthetic regime: longest run: 20.000 ± 0.000 (n=1) years |
-| `control-non-electoral-lean-writer` | UNHEALTHY | state-years |lean| rose, election years: 35209.000 ± 0.000 (n=3300) state-years |
-| `control-power-is-measurable` | HEALTHY | peak power held: 0.525 ± 0.004 (n=300) share of offices |
-| `settlement-formation` | HEALTHY | mean |country position|: 0.429 ± 0.010 (n=300) lean counters |
-| `regime-duration` | UNHEALTHY | mean regime run: 4.427 ± 0.131 (n=951) years |
-| `constraint-on-opponents` | UNHEALTHY | country move on party turnover: 1.026 ± 0.027 (n=138) lean counters/yr |
-| `presidency-dependence` | HEALTHY | sustained power windows (with presidency): 1.343 ± 0.052 (n=300) per game |
-| `quadrant-articulation` | BLOCKED | classifiable power windows: 403.000 ± 0.000 (n=300) windows |
-| `quadrant-preemption` | BLOCKED | classifiable power windows: 403.000 ± 0.000 (n=300) windows |
-| `quadrant-reconstruction` | BLOCKED | classifiable power windows: 403.000 ± 0.000 (n=300) windows |
-| `quadrant-disjunction` | BLOCKED | classifiable power windows: 403.000 ± 0.000 (n=300) windows |
-
-### Preconditions
-
-| precondition | status | basis |
-| --- | --- | --- |
-| `BILL_CORPUS` | ABSENT BY CONSTRUCTION | passed bills are counted (GameResult.billsPassed) and discarded; no enacted-bill list, no repeal, no books. The only trace legislation leaves is economy.accumulatedG, a single scalar the Fed decays. |
-| `BILL_POSITION` | ABSENT BY CONSTRUCTION | a bill is a single spending magnitude g (economy.gMin..gMax), not a point on any axis the engine defines; engine/rules/economy.ts: "There is deliberately no second ideological axis." |
+| `BILL_CORPUS` | MET | 2.283333333333333 bills on the books at the epilogue; EnactedBill.repealedIn takes them off |
+| `BILL_POSITION` | MET | bills carry IdentityTag[] (v0.2 item 4) and TAG_COMPASS.bill reads them |
 | `SETTLEMENT_FORMATION` | MET | the country position holds off baseline with a variance ratio above 1 |
-| `SETTLEMENT_MOVEMENT` | ABSENT | nothing writes lean outside an election: |lean| never rose in a non-election year, in which bills were passing. Legislation reaches only economy.accumulatedG (engine/rules/legislature.ts, economy.ts) |
-| `STRAIN_RISE` | ABSENT BY CONSTRUCTION | strain is the distance between a settlement and the country, and this build has no settlement object to be the far end of it. Downstream of BILL_CORPUS and BILL_POSITION. |
-| `EFFICACY_DROP` | ABSENT BY CONSTRUCTION | efficacy is bills moving the settlement toward the passer, per year of power. With no bill position it is undefined, and with SETTLEMENT_MOVEMENT absent it would be identically zero for every player in every year — which cannot distinguish a blocked leader from an effective one. |
+| `SETTLEMENT_MOVEMENT` | MET | passing more bills moved the country position |
+| `STRAIN_RISE` | ABSENT | strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable. |
+| `EFFICACY_DROP` | ABSENT | efficacy is bills moving the settlement toward the passer, per year of power. The bill position exists as of v0.2, so this is no longer undefined -- it is unmeasured, and it stays unmeasured until STRAIN_RISE has a settlement to move. |
 | `POWER_CONCENTRATION` | MET | sustained power windows occur |
 
 ### Why each quadrant is unreachable
 
-- **ARTICULATION** — blocked by `BILL_POSITION`, `SETTLEMENT_MOVEMENT`.
-  - First missing: a bill is a single spending magnitude g (economy.gMin..gMax), not a point on any axis the engine defines; engine/rules/economy.ts: "There is deliberately no second ideological axis."
-  - Control: none possible: no run can give a scalar a second dimension.
-- **PREEMPTION** — blocked by `BILL_CORPUS`, `BILL_POSITION`.
-  - First missing: passed bills are counted (GameResult.billsPassed) and discarded; no enacted-bill list, no repeal, no books. The only trace legislation leaves is economy.accumulatedG, a single scalar the Fed decays.
-  - Control: none possible: no run can create a record the engine does not keep.
-- **RECONSTRUCTION** — blocked by `SETTLEMENT_MOVEMENT`, `BILL_POSITION`, `STRAIN_RISE`.
-  - First missing: nothing writes lean outside an election: |lean| never rose in a non-election year, in which bills were passing. Legislation reaches only economy.accumulatedG (engine/rules/legislature.ts, economy.ts)
-  - Control: C2: |lean| rises in election years and never in non-election years, on the same runs.
-- **DISJUNCTION** — blocked by `BILL_POSITION`, `SETTLEMENT_MOVEMENT`, `STRAIN_RISE`, `EFFICACY_DROP`.
-  - First missing: a bill is a single spending magnitude g (economy.gMin..gMax), not a point on any axis the engine defines; engine/rules/economy.ts: "There is deliberately no second ideological axis."
-  - Control: none possible: no run can give a scalar a second dimension.
+- **ARTICULATION** — preconditions met; see the verdict table.
+- **PREEMPTION** — preconditions met; see the verdict table.
+- **RECONSTRUCTION** — blocked by `STRAIN_RISE`.
+  - First missing: strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable.
+  - Control: none yet: the instrument does not exist to be controlled.
+- **DISJUNCTION** — blocked by `STRAIN_RISE`, `EFFICACY_DROP`.
+  - First missing: strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable.
+  - Control: none yet: the instrument does not exist to be controlled.
 
 ### Controls
 
@@ -1287,18 +479,18 @@ Never evaluated: SETTLEMENT_FORMATION, BILL_POSITION, SETTLEMENT_MOVEMENT, STRAI
 
 Run length separates a built 20-year regime from white noise (20y vs a handful), and the variance ratio correctly marks noise as mean-reverting. NOTE the caveat this control surfaced: the step regime scores VR 0.99 and the random walk 1.10, so VR does NOT distinguish a settlement from a walk. Persistence is read from run length; VR is reported as description only.
 
-#### control-non-electoral-lean-writer — **UNHEALTHY**
+#### control-non-electoral-lean-writer — **HEALTHY**
 
 *C2: in a year with no election, can anything — legislation included — add lean to the board?*
 
 | measure | value |
 | --- | --- |
-| state-years |lean| rose, election years | 35209.000 ± 0.000 (n=3300) state-years |
-| state-years |lean| rose, NON-election years | 0.000 ± 0.000 (n=3600) state-years |
-| bills passed in non-election years | 2.800 ± 0.160 (n=300) per game |
-| non-election bill years per game | 12.000 ± 0.000 (n=300) years |
+| state-years |lean| rose, election years | 20425.000 ± 0.000 (n=2100) state-years |
+| state-years |lean| rose, NON-election years | 18373.000 ± 0.000 (n=2400) state-years |
+| bills passed in non-election years | 1.713 ± 0.098 (n=300) per game |
+| non-election bill years per game | 8.000 ± 0.000 (n=300) years |
 
-The detector fires in election years and is silent in every non-election year, while bills pass in those same years. So legislation cannot write to the settlement board at all: lean is election-only (applyPush, honeymoon, decay). This is CANNOT ACT as a property of the rules, not of any agent's choices — no pool, however maximising, can move it.
+Lean rises in years with no election, so some non-electoral mechanism writes to the board and a legislative settlement channel is at least possible.
 
 #### control-power-is-measurable — **HEALTHY**
 
@@ -1306,9 +498,9 @@ The detector fires in election years and is silent in every non-election year, w
 
 | measure | value |
 | --- | --- |
-| peak power held | 0.525 ± 0.004 (n=300) share of offices |
-| sustained windows (>=0.4 for >=3y) | 1.343 ± 0.052 (n=300) per game |
-| mean spread across players | 0.241 ± 0.003 (n=300) |
+| peak power held | 0.543 ± 0.004 (n=300) share of offices |
+| sustained windows (>=0.4 for >=3y) | 1.377 ± 0.045 (n=300) per game |
+| mean spread across players | 0.292 ± 0.004 (n=300) |
 
 Power does concentrate into sustained windows, so a quadrant finding no windows would be a fact about the quadrant and not about the scalar.
 
@@ -1320,12 +512,12 @@ Power does concentrate into sustained windows, so a quadrant finding no windows 
 
 | measure | value |
 | --- | --- |
-| mean |country position| | 0.429 ± 0.010 (n=300) lean counters |
-| peak |country position| | 1.140 ± 0.017 (n=300) lean counters |
-| years displaced beyond deadband | 0.585 ± 0.012 (n=300) share |
-| longest unbroken run on one side | 8.053 ± 0.311 (n=300) years |
-| variance ratio at lag 4 (descriptive) | 0.647 ± 0.013 (n=300) 1 = random walk |
-| sign crossings per decade | 0.471 ± 0.024 (n=300) per 10y |
+| mean |country position| | 1.120 ± 0.043 (n=300) lean counters |
+| peak |country position| | 2.292 ± 0.073 (n=300) lean counters |
+| years displaced beyond deadband | 0.818 ± 0.008 (n=300) share |
+| longest unbroken run on one side | 8.993 ± 0.239 (n=300) years |
+| variance ratio at lag 4 (descriptive) | 0.740 ± 0.028 (n=300) 1 = random walk |
+| sign crossings per decade | 0.821 ± 0.040 (n=300) per 10y |
 
 A settlement that forms holds the polity off its own baseline for most of the game and in long unbroken stretches: displaced share >= 0.5 and a longest run >= 8y (a quarter of the 30-year historical low). Short runs around a near-zero mean are a polity oscillating about its baseline, not a regime — and every downstream quadrant then measures nothing. Variance ratio is printed for description only: C1 showed a step-function settlement scores ~1, the same as a random walk, so it cannot be the criterion.
 
@@ -1335,8 +527,772 @@ A settlement that forms holds the polity off its own baseline for most of the ga
 
 | measure | value |
 | --- | --- |
-| mean regime run | 4.427 ± 0.131 (n=951) years |
-| longest regime per game | 8.053 ± 0.311 (n=300) years |
+| mean regime run | 4.258 ± 0.137 (n=922) years |
+| longest regime per game | 8.993 ± 0.239 (n=300) years |
+| game length | 16.000 ± 0.000 (n=300) years |
+| config year cap | 16.000 ± 0.000 (n=300) years |
+
+PRECONDITION FAILURE, not a result: the year cap is 16, so a 30-year regime cannot be observed in this config however the engine behaves. Read the quadrant table below as undefined rather than negative for this config.
+
+#### constraint-on-opponents — **UNHEALTHY**
+
+*When power changes hands to the other party, does the settlement position hold?*
+
+| measure | value |
+| --- | --- |
+| country move on party turnover | 1.018 ± 0.034 (n=188) lean counters/yr |
+| country move within a party | 0.458 ± 0.006 (n=4312) lean counters/yr |
+| excess move on turnover | 0.560 ± 0.034 (n=188) lean counters/yr |
+
+A settlement nobody has to govern inside is not a settlement. If turnover moves the position much more than an ordinary year does, incoming opponents are unconstrained. NOTE the confound: with no settlement object, this measures the POLITY moving, not a settlement resisting — it cannot distinguish "the settlement constrained them" from "there was nothing there to move".
+
+#### presidency-dependence — **HEALTHY**
+
+*Which of this is reachable with the presidency removed from the power scalar?*
+
+| measure | value |
+| --- | --- |
+| sustained power windows (with presidency) | 1.377 ± 0.045 (n=300) per game |
+| sustained power windows (no presidency) | 0.430 ± 0.033 (n=300) per game |
+| mean power in window (with) | 0.498 ± 0.002 (n=413) |
+| mean power in window (no presidency) | 0.448 ± 0.002 (n=129) |
+| windows that held the presidency | 1.000 ± 0.000 (n=413) share |
+
+Power windows that survive dropping the presidency term are the ones a quadrant could be reached from without winning the White House. Zero here would mean every Skowronek category in this game is a presidential category.
+
+### Quadrant coverage
+
+#### quadrant-articulation — **UNHEALTHY**
+
+*Is ARTICULATION reachable?*
+
+| measure | value |
+| --- | --- |
+| classifiable power windows | 413.000 ± 0.000 (n=300) windows |
+| windows classified as this quadrant | 0.000 (n=300) |
+
+Preconditions met and no window matched.
+
+#### quadrant-preemption — **UNHEALTHY**
+
+*Is PREEMPTION reachable?*
+
+| measure | value |
+| --- | --- |
+| classifiable power windows | 413.000 ± 0.000 (n=300) windows |
+| windows classified as this quadrant | 0.000 (n=300) |
+
+Preconditions met and no window matched.
+
+#### quadrant-reconstruction — **BLOCKED**
+
+*Is RECONSTRUCTION reachable?*
+
+| measure | value |
+| --- | --- |
+| classifiable power windows | 413.000 ± 0.000 (n=300) windows |
+| windows classified as this quadrant | — (n=300) |
+
+Blocked by: `STRAIN_RISE`
+
+Never evaluated: STRAIN_RISE is missing, so no window could be classified either way. This is an undefined, not a zero.
+
+#### quadrant-disjunction — **BLOCKED**
+
+*Is DISJUNCTION reachable?*
+
+| measure | value |
+| --- | --- |
+| classifiable power windows | 413.000 ± 0.000 (n=300) windows |
+| windows classified as this quadrant | — (n=300) |
+
+Blocked by: `STRAIN_RISE`, `EFFICACY_DROP`
+
+Never evaluated: STRAIN_RISE, EFFICACY_DROP are missing, so no window could be classified either way. This is an undefined, not a zero.
+
+## brutal.json
+
+300 games, agents `Greedy,BillAuthor,SenateFlood,Random`, year cap 16, mean game length 16.0y.
+
+### Verdict table
+
+| check | verdict | headline measure |
+| --- | --- | --- |
+| `control-instrument-liveness` | HEALTHY | synthetic regime: longest run: 20.000 ± 0.000 (n=1) years |
+| `control-non-electoral-lean-writer` | HEALTHY | state-years |lean| rose, election years: 20309.000 ± 0.000 (n=2100) state-years |
+| `control-power-is-measurable` | HEALTHY | peak power held: 0.546 ± 0.004 (n=300) share of offices |
+| `settlement-formation` | HEALTHY | mean |country position|: 1.101 ± 0.040 (n=300) lean counters |
+| `regime-duration` | UNHEALTHY | mean regime run: 4.144 ± 0.133 (n=946) years |
+| `constraint-on-opponents` | UNHEALTHY | country move on party turnover: 1.002 ± 0.030 (n=200) lean counters/yr |
+| `presidency-dependence` | HEALTHY | sustained power windows (with presidency): 1.400 ± 0.042 (n=300) per game |
+| `quadrant-articulation` | UNHEALTHY | classifiable power windows: 420.000 ± 0.000 (n=300) windows |
+| `quadrant-preemption` | UNHEALTHY | classifiable power windows: 420.000 ± 0.000 (n=300) windows |
+| `quadrant-reconstruction` | BLOCKED | classifiable power windows: 420.000 ± 0.000 (n=300) windows |
+| `quadrant-disjunction` | BLOCKED | classifiable power windows: 420.000 ± 0.000 (n=300) windows |
+
+### Preconditions
+
+| precondition | status | basis |
+| --- | --- | --- |
+| `BILL_CORPUS` | MET | 2.1266666666666665 bills on the books at the epilogue; EnactedBill.repealedIn takes them off |
+| `BILL_POSITION` | MET | bills carry IdentityTag[] (v0.2 item 4) and TAG_COMPASS.bill reads them |
+| `SETTLEMENT_FORMATION` | MET | the country position holds off baseline with a variance ratio above 1 |
+| `SETTLEMENT_MOVEMENT` | MET | passing more bills moved the country position |
+| `STRAIN_RISE` | ABSENT | strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable. |
+| `EFFICACY_DROP` | ABSENT | efficacy is bills moving the settlement toward the passer, per year of power. The bill position exists as of v0.2, so this is no longer undefined -- it is unmeasured, and it stays unmeasured until STRAIN_RISE has a settlement to move. |
+| `POWER_CONCENTRATION` | MET | sustained power windows occur |
+
+### Why each quadrant is unreachable
+
+- **ARTICULATION** — preconditions met; see the verdict table.
+- **PREEMPTION** — preconditions met; see the verdict table.
+- **RECONSTRUCTION** — blocked by `STRAIN_RISE`.
+  - First missing: strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable.
+  - Control: none yet: the instrument does not exist to be controlled.
+- **DISJUNCTION** — blocked by `STRAIN_RISE`, `EFFICACY_DROP`.
+  - First missing: strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable.
+  - Control: none yet: the instrument does not exist to be controlled.
+
+### Controls
+
+#### control-instrument-liveness — **HEALTHY**
+
+*C1: can the formation detector see a settlement that is there by construction?*
+
+| measure | value |
+| --- | --- |
+| synthetic regime: longest run | 20.000 ± 0.000 (n=1) years |
+| synthetic regime: variance ratio | 0.990 ± 0.000 (n=1) |
+| random walk: longest run | 15.000 ± 0.000 (n=1) years |
+| random walk: variance ratio | 1.102 ± 0.000 (n=1) |
+| white noise: longest run | 6.000 ± 0.000 (n=1) years |
+| white noise: variance ratio | 0.286 ± 0.000 (n=1) |
+
+Run length separates a built 20-year regime from white noise (20y vs a handful), and the variance ratio correctly marks noise as mean-reverting. NOTE the caveat this control surfaced: the step regime scores VR 0.99 and the random walk 1.10, so VR does NOT distinguish a settlement from a walk. Persistence is read from run length; VR is reported as description only.
+
+#### control-non-electoral-lean-writer — **HEALTHY**
+
+*C2: in a year with no election, can anything — legislation included — add lean to the board?*
+
+| measure | value |
+| --- | --- |
+| state-years |lean| rose, election years | 20309.000 ± 0.000 (n=2100) state-years |
+| state-years |lean| rose, NON-election years | 18831.000 ± 0.000 (n=2400) state-years |
+| bills passed in non-election years | 1.483 ± 0.086 (n=300) per game |
+| non-election bill years per game | 8.000 ± 0.000 (n=300) years |
+
+Lean rises in years with no election, so some non-electoral mechanism writes to the board and a legislative settlement channel is at least possible.
+
+#### control-power-is-measurable — **HEALTHY**
+
+*C3: does the power scalar vary and concentrate, so its silence would be a finding?*
+
+| measure | value |
+| --- | --- |
+| peak power held | 0.546 ± 0.004 (n=300) share of offices |
+| sustained windows (>=0.4 for >=3y) | 1.400 ± 0.042 (n=300) per game |
+| mean spread across players | 0.303 ± 0.004 (n=300) |
+
+Power does concentrate into sustained windows, so a quadrant finding no windows would be a fact about the quadrant and not about the scalar.
+
+### Era checks
+
+#### settlement-formation — **HEALTHY**
+
+*Do settlements form at all, or does the country position random-walk with no persistent regime?*
+
+| measure | value |
+| --- | --- |
+| mean |country position| | 1.101 ± 0.040 (n=300) lean counters |
+| peak |country position| | 2.301 ± 0.068 (n=300) lean counters |
+| years displaced beyond deadband | 0.817 ± 0.009 (n=300) share |
+| longest unbroken run on one side | 8.813 ± 0.247 (n=300) years |
+| variance ratio at lag 4 (descriptive) | 0.716 ± 0.025 (n=300) 1 = random walk |
+| sign crossings per decade | 0.875 ± 0.045 (n=300) per 10y |
+
+A settlement that forms holds the polity off its own baseline for most of the game and in long unbroken stretches: displaced share >= 0.5 and a longest run >= 8y (a quarter of the 30-year historical low). Short runs around a near-zero mean are a polity oscillating about its baseline, not a regime — and every downstream quadrant then measures nothing. Variance ratio is printed for description only: C1 showed a step-function settlement scores ~1, the same as a random walk, so it cannot be the criterion.
+
+#### regime-duration — **UNHEALTHY**
+
+*Do regimes last a cycle? Historical reference is 30-40 years.*
+
+| measure | value |
+| --- | --- |
+| mean regime run | 4.144 ± 0.133 (n=946) years |
+| longest regime per game | 8.813 ± 0.247 (n=300) years |
+| game length | 16.000 ± 0.000 (n=300) years |
+| config year cap | 16.000 ± 0.000 (n=300) years |
+
+PRECONDITION FAILURE, not a result: the year cap is 16, so a 30-year regime cannot be observed in this config however the engine behaves. Read the quadrant table below as undefined rather than negative for this config.
+
+#### constraint-on-opponents — **UNHEALTHY**
+
+*When power changes hands to the other party, does the settlement position hold?*
+
+| measure | value |
+| --- | --- |
+| country move on party turnover | 1.002 ± 0.030 (n=200) lean counters/yr |
+| country move within a party | 0.468 ± 0.006 (n=4300) lean counters/yr |
+| excess move on turnover | 0.533 ± 0.030 (n=200) lean counters/yr |
+
+A settlement nobody has to govern inside is not a settlement. If turnover moves the position much more than an ordinary year does, incoming opponents are unconstrained. NOTE the confound: with no settlement object, this measures the POLITY moving, not a settlement resisting — it cannot distinguish "the settlement constrained them" from "there was nothing there to move".
+
+#### presidency-dependence — **HEALTHY**
+
+*Which of this is reachable with the presidency removed from the power scalar?*
+
+| measure | value |
+| --- | --- |
+| sustained power windows (with presidency) | 1.400 ± 0.042 (n=300) per game |
+| sustained power windows (no presidency) | 0.510 ± 0.036 (n=300) per game |
+| mean power in window (with) | 0.501 ± 0.002 (n=420) |
+| mean power in window (no presidency) | 0.447 ± 0.002 (n=153) |
+| windows that held the presidency | 1.000 ± 0.000 (n=420) share |
+
+Power windows that survive dropping the presidency term are the ones a quadrant could be reached from without winning the White House. Zero here would mean every Skowronek category in this game is a presidential category.
+
+### Quadrant coverage
+
+#### quadrant-articulation — **UNHEALTHY**
+
+*Is ARTICULATION reachable?*
+
+| measure | value |
+| --- | --- |
+| classifiable power windows | 420.000 ± 0.000 (n=300) windows |
+| windows classified as this quadrant | 0.000 (n=300) |
+
+Preconditions met and no window matched.
+
+#### quadrant-preemption — **UNHEALTHY**
+
+*Is PREEMPTION reachable?*
+
+| measure | value |
+| --- | --- |
+| classifiable power windows | 420.000 ± 0.000 (n=300) windows |
+| windows classified as this quadrant | 0.000 (n=300) |
+
+Preconditions met and no window matched.
+
+#### quadrant-reconstruction — **BLOCKED**
+
+*Is RECONSTRUCTION reachable?*
+
+| measure | value |
+| --- | --- |
+| classifiable power windows | 420.000 ± 0.000 (n=300) windows |
+| windows classified as this quadrant | — (n=300) |
+
+Blocked by: `STRAIN_RISE`
+
+Never evaluated: STRAIN_RISE is missing, so no window could be classified either way. This is an undefined, not a zero.
+
+#### quadrant-disjunction — **BLOCKED**
+
+*Is DISJUNCTION reachable?*
+
+| measure | value |
+| --- | --- |
+| classifiable power windows | 420.000 ± 0.000 (n=300) windows |
+| windows classified as this quadrant | — (n=300) |
+
+Blocked by: `STRAIN_RISE`, `EFFICACY_DROP`
+
+Never evaluated: STRAIN_RISE, EFFICACY_DROP are missing, so no window could be classified either way. This is an undefined, not a zero.
+
+## flat-push.json
+
+300 games, agents `Greedy,BillAuthor,SenateFlood,Random`, year cap 16, mean game length 16.0y.
+
+### Verdict table
+
+| check | verdict | headline measure |
+| --- | --- | --- |
+| `control-instrument-liveness` | HEALTHY | synthetic regime: longest run: 20.000 ± 0.000 (n=1) years |
+| `control-non-electoral-lean-writer` | HEALTHY | state-years |lean| rose, election years: 26336.000 ± 0.000 (n=2100) state-years |
+| `control-power-is-measurable` | HEALTHY | peak power held: 0.532 ± 0.004 (n=300) share of offices |
+| `settlement-formation` | HEALTHY | mean |country position|: 1.507 ± 0.054 (n=300) lean counters |
+| `regime-duration` | UNHEALTHY | mean regime run: 4.848 ± 0.163 (n=846) years |
+| `constraint-on-opponents` | UNHEALTHY | country move on party turnover: 0.970 ± 0.033 (n=182) lean counters/yr |
+| `presidency-dependence` | HEALTHY | sustained power windows (with presidency): 1.400 ± 0.048 (n=300) per game |
+| `quadrant-articulation` | UNHEALTHY | classifiable power windows: 420.000 ± 0.000 (n=300) windows |
+| `quadrant-preemption` | UNHEALTHY | classifiable power windows: 420.000 ± 0.000 (n=300) windows |
+| `quadrant-reconstruction` | BLOCKED | classifiable power windows: 420.000 ± 0.000 (n=300) windows |
+| `quadrant-disjunction` | BLOCKED | classifiable power windows: 420.000 ± 0.000 (n=300) windows |
+
+### Preconditions
+
+| precondition | status | basis |
+| --- | --- | --- |
+| `BILL_CORPUS` | MET | 2.8466666666666667 bills on the books at the epilogue; EnactedBill.repealedIn takes them off |
+| `BILL_POSITION` | MET | bills carry IdentityTag[] (v0.2 item 4) and TAG_COMPASS.bill reads them |
+| `SETTLEMENT_FORMATION` | MET | the country position holds off baseline with a variance ratio above 1 |
+| `SETTLEMENT_MOVEMENT` | MET | passing more bills moved the country position |
+| `STRAIN_RISE` | ABSENT | strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable. |
+| `EFFICACY_DROP` | ABSENT | efficacy is bills moving the settlement toward the passer, per year of power. The bill position exists as of v0.2, so this is no longer undefined -- it is unmeasured, and it stays unmeasured until STRAIN_RISE has a settlement to move. |
+| `POWER_CONCENTRATION` | MET | sustained power windows occur |
+
+### Why each quadrant is unreachable
+
+- **ARTICULATION** — preconditions met; see the verdict table.
+- **PREEMPTION** — preconditions met; see the verdict table.
+- **RECONSTRUCTION** — blocked by `STRAIN_RISE`.
+  - First missing: strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable.
+  - Control: none yet: the instrument does not exist to be controlled.
+- **DISJUNCTION** — blocked by `STRAIN_RISE`, `EFFICACY_DROP`.
+  - First missing: strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable.
+  - Control: none yet: the instrument does not exist to be controlled.
+
+### Controls
+
+#### control-instrument-liveness — **HEALTHY**
+
+*C1: can the formation detector see a settlement that is there by construction?*
+
+| measure | value |
+| --- | --- |
+| synthetic regime: longest run | 20.000 ± 0.000 (n=1) years |
+| synthetic regime: variance ratio | 0.990 ± 0.000 (n=1) |
+| random walk: longest run | 15.000 ± 0.000 (n=1) years |
+| random walk: variance ratio | 1.102 ± 0.000 (n=1) |
+| white noise: longest run | 6.000 ± 0.000 (n=1) years |
+| white noise: variance ratio | 0.286 ± 0.000 (n=1) |
+
+Run length separates a built 20-year regime from white noise (20y vs a handful), and the variance ratio correctly marks noise as mean-reverting. NOTE the caveat this control surfaced: the step regime scores VR 0.99 and the random walk 1.10, so VR does NOT distinguish a settlement from a walk. Persistence is read from run length; VR is reported as description only.
+
+#### control-non-electoral-lean-writer — **HEALTHY**
+
+*C2: in a year with no election, can anything — legislation included — add lean to the board?*
+
+| measure | value |
+| --- | --- |
+| state-years |lean| rose, election years | 26336.000 ± 0.000 (n=2100) state-years |
+| state-years |lean| rose, NON-election years | 17993.000 ± 0.000 (n=2400) state-years |
+| bills passed in non-election years | 1.973 ± 0.111 (n=300) per game |
+| non-election bill years per game | 8.000 ± 0.000 (n=300) years |
+
+Lean rises in years with no election, so some non-electoral mechanism writes to the board and a legislative settlement channel is at least possible.
+
+#### control-power-is-measurable — **HEALTHY**
+
+*C3: does the power scalar vary and concentrate, so its silence would be a finding?*
+
+| measure | value |
+| --- | --- |
+| peak power held | 0.532 ± 0.004 (n=300) share of offices |
+| sustained windows (>=0.4 for >=3y) | 1.400 ± 0.048 (n=300) per game |
+| mean spread across players | 0.286 ± 0.004 (n=300) |
+
+Power does concentrate into sustained windows, so a quadrant finding no windows would be a fact about the quadrant and not about the scalar.
+
+### Era checks
+
+#### settlement-formation — **HEALTHY**
+
+*Do settlements form at all, or does the country position random-walk with no persistent regime?*
+
+| measure | value |
+| --- | --- |
+| mean |country position| | 1.507 ± 0.054 (n=300) lean counters |
+| peak |country position| | 2.834 ± 0.078 (n=300) lean counters |
+| years displaced beyond deadband | 0.854 ± 0.008 (n=300) share |
+| longest unbroken run on one side | 10.017 ± 0.257 (n=300) years |
+| variance ratio at lag 4 (descriptive) | 0.846 ± 0.029 (n=300) 1 = random walk |
+| sign crossings per decade | 0.762 ± 0.044 (n=300) per 10y |
+
+A settlement that forms holds the polity off its own baseline for most of the game and in long unbroken stretches: displaced share >= 0.5 and a longest run >= 8y (a quarter of the 30-year historical low). Short runs around a near-zero mean are a polity oscillating about its baseline, not a regime — and every downstream quadrant then measures nothing. Variance ratio is printed for description only: C1 showed a step-function settlement scores ~1, the same as a random walk, so it cannot be the criterion.
+
+#### regime-duration — **UNHEALTHY**
+
+*Do regimes last a cycle? Historical reference is 30-40 years.*
+
+| measure | value |
+| --- | --- |
+| mean regime run | 4.848 ± 0.163 (n=846) years |
+| longest regime per game | 10.017 ± 0.257 (n=300) years |
+| game length | 16.000 ± 0.000 (n=300) years |
+| config year cap | 16.000 ± 0.000 (n=300) years |
+
+PRECONDITION FAILURE, not a result: the year cap is 16, so a 30-year regime cannot be observed in this config however the engine behaves. Read the quadrant table below as undefined rather than negative for this config.
+
+#### constraint-on-opponents — **UNHEALTHY**
+
+*When power changes hands to the other party, does the settlement position hold?*
+
+| measure | value |
+| --- | --- |
+| country move on party turnover | 0.970 ± 0.033 (n=182) lean counters/yr |
+| country move within a party | 0.528 ± 0.007 (n=4318) lean counters/yr |
+| excess move on turnover | 0.442 ± 0.034 (n=182) lean counters/yr |
+
+A settlement nobody has to govern inside is not a settlement. If turnover moves the position much more than an ordinary year does, incoming opponents are unconstrained. NOTE the confound: with no settlement object, this measures the POLITY moving, not a settlement resisting — it cannot distinguish "the settlement constrained them" from "there was nothing there to move".
+
+#### presidency-dependence — **HEALTHY**
+
+*Which of this is reachable with the presidency removed from the power scalar?*
+
+| measure | value |
+| --- | --- |
+| sustained power windows (with presidency) | 1.400 ± 0.048 (n=300) per game |
+| sustained power windows (no presidency) | 0.410 ± 0.030 (n=300) per game |
+| mean power in window (with) | 0.492 ± 0.002 (n=420) |
+| mean power in window (no presidency) | 0.447 ± 0.002 (n=123) |
+| windows that held the presidency | 1.000 ± 0.000 (n=420) share |
+
+Power windows that survive dropping the presidency term are the ones a quadrant could be reached from without winning the White House. Zero here would mean every Skowronek category in this game is a presidential category.
+
+### Quadrant coverage
+
+#### quadrant-articulation — **UNHEALTHY**
+
+*Is ARTICULATION reachable?*
+
+| measure | value |
+| --- | --- |
+| classifiable power windows | 420.000 ± 0.000 (n=300) windows |
+| windows classified as this quadrant | 0.000 (n=300) |
+
+Preconditions met and no window matched.
+
+#### quadrant-preemption — **UNHEALTHY**
+
+*Is PREEMPTION reachable?*
+
+| measure | value |
+| --- | --- |
+| classifiable power windows | 420.000 ± 0.000 (n=300) windows |
+| windows classified as this quadrant | 0.000 (n=300) |
+
+Preconditions met and no window matched.
+
+#### quadrant-reconstruction — **BLOCKED**
+
+*Is RECONSTRUCTION reachable?*
+
+| measure | value |
+| --- | --- |
+| classifiable power windows | 420.000 ± 0.000 (n=300) windows |
+| windows classified as this quadrant | — (n=300) |
+
+Blocked by: `STRAIN_RISE`
+
+Never evaluated: STRAIN_RISE is missing, so no window could be classified either way. This is an undefined, not a zero.
+
+#### quadrant-disjunction — **BLOCKED**
+
+*Is DISJUNCTION reachable?*
+
+| measure | value |
+| --- | --- |
+| classifiable power windows | 420.000 ± 0.000 (n=300) windows |
+| windows classified as this quadrant | — (n=300) |
+
+Blocked by: `STRAIN_RISE`, `EFFICACY_DROP`
+
+Never evaluated: STRAIN_RISE, EFFICACY_DROP are missing, so no window could be classified either way. This is an undefined, not a zero.
+
+## governors-push.json
+
+300 games, agents `Greedy,BillAuthor,SenateFlood,Random`, year cap 16, mean game length 16.0y.
+
+### Verdict table
+
+| check | verdict | headline measure |
+| --- | --- | --- |
+| `control-instrument-liveness` | HEALTHY | synthetic regime: longest run: 20.000 ± 0.000 (n=1) years |
+| `control-non-electoral-lean-writer` | HEALTHY | state-years |lean| rose, election years: 21146.000 ± 0.000 (n=2100) state-years |
+| `control-power-is-measurable` | HEALTHY | peak power held: 0.533 ± 0.004 (n=300) share of offices |
+| `settlement-formation` | HEALTHY | mean |country position|: 1.429 ± 0.049 (n=300) lean counters |
+| `regime-duration` | UNHEALTHY | mean regime run: 4.638 ± 0.150 (n=878) years |
+| `constraint-on-opponents` | UNHEALTHY | country move on party turnover: 1.045 ± 0.039 (n=197) lean counters/yr |
+| `presidency-dependence` | HEALTHY | sustained power windows (with presidency): 1.427 ± 0.048 (n=300) per game |
+| `quadrant-articulation` | UNHEALTHY | classifiable power windows: 428.000 ± 0.000 (n=300) windows |
+| `quadrant-preemption` | UNHEALTHY | classifiable power windows: 428.000 ± 0.000 (n=300) windows |
+| `quadrant-reconstruction` | BLOCKED | classifiable power windows: 428.000 ± 0.000 (n=300) windows |
+| `quadrant-disjunction` | BLOCKED | classifiable power windows: 428.000 ± 0.000 (n=300) windows |
+
+### Preconditions
+
+| precondition | status | basis |
+| --- | --- | --- |
+| `BILL_CORPUS` | MET | 2.7133333333333334 bills on the books at the epilogue; EnactedBill.repealedIn takes them off |
+| `BILL_POSITION` | MET | bills carry IdentityTag[] (v0.2 item 4) and TAG_COMPASS.bill reads them |
+| `SETTLEMENT_FORMATION` | MET | the country position holds off baseline with a variance ratio above 1 |
+| `SETTLEMENT_MOVEMENT` | MET | passing more bills moved the country position |
+| `STRAIN_RISE` | ABSENT | strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable. |
+| `EFFICACY_DROP` | ABSENT | efficacy is bills moving the settlement toward the passer, per year of power. The bill position exists as of v0.2, so this is no longer undefined -- it is unmeasured, and it stays unmeasured until STRAIN_RISE has a settlement to move. |
+| `POWER_CONCENTRATION` | MET | sustained power windows occur |
+
+### Why each quadrant is unreachable
+
+- **ARTICULATION** — preconditions met; see the verdict table.
+- **PREEMPTION** — preconditions met; see the verdict table.
+- **RECONSTRUCTION** — blocked by `STRAIN_RISE`.
+  - First missing: strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable.
+  - Control: none yet: the instrument does not exist to be controlled.
+- **DISJUNCTION** — blocked by `STRAIN_RISE`, `EFFICACY_DROP`.
+  - First missing: strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable.
+  - Control: none yet: the instrument does not exist to be controlled.
+
+### Controls
+
+#### control-instrument-liveness — **HEALTHY**
+
+*C1: can the formation detector see a settlement that is there by construction?*
+
+| measure | value |
+| --- | --- |
+| synthetic regime: longest run | 20.000 ± 0.000 (n=1) years |
+| synthetic regime: variance ratio | 0.990 ± 0.000 (n=1) |
+| random walk: longest run | 15.000 ± 0.000 (n=1) years |
+| random walk: variance ratio | 1.102 ± 0.000 (n=1) |
+| white noise: longest run | 6.000 ± 0.000 (n=1) years |
+| white noise: variance ratio | 0.286 ± 0.000 (n=1) |
+
+Run length separates a built 20-year regime from white noise (20y vs a handful), and the variance ratio correctly marks noise as mean-reverting. NOTE the caveat this control surfaced: the step regime scores VR 0.99 and the random walk 1.10, so VR does NOT distinguish a settlement from a walk. Persistence is read from run length; VR is reported as description only.
+
+#### control-non-electoral-lean-writer — **HEALTHY**
+
+*C2: in a year with no election, can anything — legislation included — add lean to the board?*
+
+| measure | value |
+| --- | --- |
+| state-years |lean| rose, election years | 21146.000 ± 0.000 (n=2100) state-years |
+| state-years |lean| rose, NON-election years | 22763.000 ± 0.000 (n=2400) state-years |
+| bills passed in non-election years | 1.973 ± 0.108 (n=300) per game |
+| non-election bill years per game | 8.000 ± 0.000 (n=300) years |
+
+Lean rises in years with no election, so some non-electoral mechanism writes to the board and a legislative settlement channel is at least possible.
+
+#### control-power-is-measurable — **HEALTHY**
+
+*C3: does the power scalar vary and concentrate, so its silence would be a finding?*
+
+| measure | value |
+| --- | --- |
+| peak power held | 0.533 ± 0.004 (n=300) share of offices |
+| sustained windows (>=0.4 for >=3y) | 1.427 ± 0.048 (n=300) per game |
+| mean spread across players | 0.287 ± 0.004 (n=300) |
+
+Power does concentrate into sustained windows, so a quadrant finding no windows would be a fact about the quadrant and not about the scalar.
+
+### Era checks
+
+#### settlement-formation — **HEALTHY**
+
+*Do settlements form at all, or does the country position random-walk with no persistent regime?*
+
+| measure | value |
+| --- | --- |
+| mean |country position| | 1.429 ± 0.049 (n=300) lean counters |
+| peak |country position| | 2.912 ± 0.081 (n=300) lean counters |
+| years displaced beyond deadband | 0.848 ± 0.007 (n=300) share |
+| longest unbroken run on one side | 9.560 ± 0.244 (n=300) years |
+| variance ratio at lag 4 (descriptive) | 0.821 ± 0.030 (n=300) 1 = random walk |
+| sign crossings per decade | 0.821 ± 0.044 (n=300) per 10y |
+
+A settlement that forms holds the polity off its own baseline for most of the game and in long unbroken stretches: displaced share >= 0.5 and a longest run >= 8y (a quarter of the 30-year historical low). Short runs around a near-zero mean are a polity oscillating about its baseline, not a regime — and every downstream quadrant then measures nothing. Variance ratio is printed for description only: C1 showed a step-function settlement scores ~1, the same as a random walk, so it cannot be the criterion.
+
+#### regime-duration — **UNHEALTHY**
+
+*Do regimes last a cycle? Historical reference is 30-40 years.*
+
+| measure | value |
+| --- | --- |
+| mean regime run | 4.638 ± 0.150 (n=878) years |
+| longest regime per game | 9.560 ± 0.244 (n=300) years |
+| game length | 16.000 ± 0.000 (n=300) years |
+| config year cap | 16.000 ± 0.000 (n=300) years |
+
+PRECONDITION FAILURE, not a result: the year cap is 16, so a 30-year regime cannot be observed in this config however the engine behaves. Read the quadrant table below as undefined rather than negative for this config.
+
+#### constraint-on-opponents — **UNHEALTHY**
+
+*When power changes hands to the other party, does the settlement position hold?*
+
+| measure | value |
+| --- | --- |
+| country move on party turnover | 1.045 ± 0.039 (n=197) lean counters/yr |
+| country move within a party | 0.568 ± 0.008 (n=4303) lean counters/yr |
+| excess move on turnover | 0.478 ± 0.040 (n=197) lean counters/yr |
+
+A settlement nobody has to govern inside is not a settlement. If turnover moves the position much more than an ordinary year does, incoming opponents are unconstrained. NOTE the confound: with no settlement object, this measures the POLITY moving, not a settlement resisting — it cannot distinguish "the settlement constrained them" from "there was nothing there to move".
+
+#### presidency-dependence — **HEALTHY**
+
+*Which of this is reachable with the presidency removed from the power scalar?*
+
+| measure | value |
+| --- | --- |
+| sustained power windows (with presidency) | 1.427 ± 0.048 (n=300) per game |
+| sustained power windows (no presidency) | 0.410 ± 0.031 (n=300) per game |
+| mean power in window (with) | 0.493 ± 0.002 (n=428) |
+| mean power in window (no presidency) | 0.444 ± 0.002 (n=123) |
+| windows that held the presidency | 0.998 ± 0.002 (n=428) share |
+
+Power windows that survive dropping the presidency term are the ones a quadrant could be reached from without winning the White House. Zero here would mean every Skowronek category in this game is a presidential category.
+
+### Quadrant coverage
+
+#### quadrant-articulation — **UNHEALTHY**
+
+*Is ARTICULATION reachable?*
+
+| measure | value |
+| --- | --- |
+| classifiable power windows | 428.000 ± 0.000 (n=300) windows |
+| windows classified as this quadrant | 0.000 (n=300) |
+
+Preconditions met and no window matched.
+
+#### quadrant-preemption — **UNHEALTHY**
+
+*Is PREEMPTION reachable?*
+
+| measure | value |
+| --- | --- |
+| classifiable power windows | 428.000 ± 0.000 (n=300) windows |
+| windows classified as this quadrant | 0.000 (n=300) |
+
+Preconditions met and no window matched.
+
+#### quadrant-reconstruction — **BLOCKED**
+
+*Is RECONSTRUCTION reachable?*
+
+| measure | value |
+| --- | --- |
+| classifiable power windows | 428.000 ± 0.000 (n=300) windows |
+| windows classified as this quadrant | — (n=300) |
+
+Blocked by: `STRAIN_RISE`
+
+Never evaluated: STRAIN_RISE is missing, so no window could be classified either way. This is an undefined, not a zero.
+
+#### quadrant-disjunction — **BLOCKED**
+
+*Is DISJUNCTION reachable?*
+
+| measure | value |
+| --- | --- |
+| classifiable power windows | 428.000 ± 0.000 (n=300) windows |
+| windows classified as this quadrant | — (n=300) |
+
+Blocked by: `STRAIN_RISE`, `EFFICACY_DROP`
+
+Never evaluated: STRAIN_RISE, EFFICACY_DROP are missing, so no window could be classified either way. This is an undefined, not a zero.
+
+## realigning.json
+
+300 games, agents `Greedy,BillAuthor,SenateFlood,Random`, year cap 24, mean game length 24.0y.
+
+### Verdict table
+
+| check | verdict | headline measure |
+| --- | --- | --- |
+| `control-instrument-liveness` | HEALTHY | synthetic regime: longest run: 20.000 ± 0.000 (n=1) years |
+| `control-non-electoral-lean-writer` | HEALTHY | state-years |lean| rose, election years: 42843.000 ± 0.000 (n=3300) state-years |
+| `control-power-is-measurable` | HEALTHY | peak power held: 0.559 ± 0.003 (n=300) share of offices |
+| `settlement-formation` | HEALTHY | mean |country position|: 1.745 ± 0.055 (n=300) lean counters |
+| `regime-duration` | UNHEALTHY | mean regime run: 6.617 ± 0.234 (n=969) years |
+| `constraint-on-opponents` | UNHEALTHY | country move on party turnover: 0.954 ± 0.028 (n=288) lean counters/yr |
+| `presidency-dependence` | HEALTHY | sustained power windows (with presidency): 2.000 ± 0.061 (n=300) per game |
+| `quadrant-articulation` | UNHEALTHY | classifiable power windows: 600.000 ± 0.000 (n=300) windows |
+| `quadrant-preemption` | UNHEALTHY | classifiable power windows: 600.000 ± 0.000 (n=300) windows |
+| `quadrant-reconstruction` | BLOCKED | classifiable power windows: 600.000 ± 0.000 (n=300) windows |
+| `quadrant-disjunction` | BLOCKED | classifiable power windows: 600.000 ± 0.000 (n=300) windows |
+
+### Preconditions
+
+| precondition | status | basis |
+| --- | --- | --- |
+| `BILL_CORPUS` | MET | 3.79 bills on the books at the epilogue; EnactedBill.repealedIn takes them off |
+| `BILL_POSITION` | MET | bills carry IdentityTag[] (v0.2 item 4) and TAG_COMPASS.bill reads them |
+| `SETTLEMENT_FORMATION` | MET | the country position holds off baseline with a variance ratio above 1 |
+| `SETTLEMENT_MOVEMENT` | MET | passing more bills moved the country position |
+| `STRAIN_RISE` | ABSENT | strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable. |
+| `EFFICACY_DROP` | ABSENT | efficacy is bills moving the settlement toward the passer, per year of power. The bill position exists as of v0.2, so this is no longer undefined -- it is unmeasured, and it stays unmeasured until STRAIN_RISE has a settlement to move. |
+| `POWER_CONCENTRATION` | MET | sustained power windows occur |
+
+### Why each quadrant is unreachable
+
+- **ARTICULATION** — preconditions met; see the verdict table.
+- **PREEMPTION** — preconditions met; see the verdict table.
+- **RECONSTRUCTION** — blocked by `STRAIN_RISE`.
+  - First missing: strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable.
+  - Control: none yet: the instrument does not exist to be controlled.
+- **DISJUNCTION** — blocked by `STRAIN_RISE`, `EFFICACY_DROP`.
+  - First missing: strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable.
+  - Control: none yet: the instrument does not exist to be controlled.
+
+### Controls
+
+#### control-instrument-liveness — **HEALTHY**
+
+*C1: can the formation detector see a settlement that is there by construction?*
+
+| measure | value |
+| --- | --- |
+| synthetic regime: longest run | 20.000 ± 0.000 (n=1) years |
+| synthetic regime: variance ratio | 0.990 ± 0.000 (n=1) |
+| random walk: longest run | 15.000 ± 0.000 (n=1) years |
+| random walk: variance ratio | 1.102 ± 0.000 (n=1) |
+| white noise: longest run | 6.000 ± 0.000 (n=1) years |
+| white noise: variance ratio | 0.286 ± 0.000 (n=1) |
+
+Run length separates a built 20-year regime from white noise (20y vs a handful), and the variance ratio correctly marks noise as mean-reverting. NOTE the caveat this control surfaced: the step regime scores VR 0.99 and the random walk 1.10, so VR does NOT distinguish a settlement from a walk. Persistence is read from run length; VR is reported as description only.
+
+#### control-non-electoral-lean-writer — **HEALTHY**
+
+*C2: in a year with no election, can anything — legislation included — add lean to the board?*
+
+| measure | value |
+| --- | --- |
+| state-years |lean| rose, election years | 42843.000 ± 0.000 (n=3300) state-years |
+| state-years |lean| rose, NON-election years | 25881.000 ± 0.000 (n=3600) state-years |
+| bills passed in non-election years | 2.517 ± 0.131 (n=300) per game |
+| non-election bill years per game | 12.000 ± 0.000 (n=300) years |
+
+Lean rises in years with no election, so some non-electoral mechanism writes to the board and a legislative settlement channel is at least possible.
+
+#### control-power-is-measurable — **HEALTHY**
+
+*C3: does the power scalar vary and concentrate, so its silence would be a finding?*
+
+| measure | value |
+| --- | --- |
+| peak power held | 0.559 ± 0.003 (n=300) share of offices |
+| sustained windows (>=0.4 for >=3y) | 2.000 ± 0.061 (n=300) per game |
+| mean spread across players | 0.289 ± 0.004 (n=300) |
+
+Power does concentrate into sustained windows, so a quadrant finding no windows would be a fact about the quadrant and not about the scalar.
+
+### Era checks
+
+#### settlement-formation — **HEALTHY**
+
+*Do settlements form at all, or does the country position random-walk with no persistent regime?*
+
+| measure | value |
+| --- | --- |
+| mean |country position| | 1.745 ± 0.055 (n=300) lean counters |
+| peak |country position| | 3.396 ± 0.079 (n=300) lean counters |
+| years displaced beyond deadband | 0.891 ± 0.006 (n=300) share |
+| longest unbroken run on one side | 15.893 ± 0.358 (n=300) years |
+| variance ratio at lag 4 (descriptive) | 0.911 ± 0.026 (n=300) 1 = random walk |
+| sign crossings per decade | 0.622 ± 0.037 (n=300) per 10y |
+
+A settlement that forms holds the polity off its own baseline for most of the game and in long unbroken stretches: displaced share >= 0.5 and a longest run >= 8y (a quarter of the 30-year historical low). Short runs around a near-zero mean are a polity oscillating about its baseline, not a regime — and every downstream quadrant then measures nothing. Variance ratio is printed for description only: C1 showed a step-function settlement scores ~1, the same as a random walk, so it cannot be the criterion.
+
+#### regime-duration — **UNHEALTHY**
+
+*Do regimes last a cycle? Historical reference is 30-40 years.*
+
+| measure | value |
+| --- | --- |
+| mean regime run | 6.617 ± 0.234 (n=969) years |
+| longest regime per game | 15.893 ± 0.358 (n=300) years |
 | game length | 24.000 ± 0.000 (n=300) years |
 | config year cap | 24.000 ± 0.000 (n=300) years |
 
@@ -1348,9 +1304,9 @@ PRECONDITION FAILURE, not a result: the year cap is 24, so a 30-year regime cann
 
 | measure | value |
 | --- | --- |
-| country move on party turnover | 1.026 ± 0.027 (n=138) lean counters/yr |
-| country move within a party | 0.177 ± 0.004 (n=6762) lean counters/yr |
-| excess move on turnover | 0.849 ± 0.028 (n=138) lean counters/yr |
+| country move on party turnover | 0.954 ± 0.028 (n=288) lean counters/yr |
+| country move within a party | 0.502 ± 0.006 (n=6612) lean counters/yr |
+| excess move on turnover | 0.452 ± 0.028 (n=288) lean counters/yr |
 
 A settlement nobody has to govern inside is not a settlement. If turnover moves the position much more than an ordinary year does, incoming opponents are unconstrained. NOTE the confound: with no settlement object, this measures the POLITY moving, not a settlement resisting — it cannot distinguish "the settlement constrained them" from "there was nothing there to move".
 
@@ -1360,41 +1316,37 @@ A settlement nobody has to govern inside is not a settlement. If turnover moves 
 
 | measure | value |
 | --- | --- |
-| sustained power windows (with presidency) | 1.343 ± 0.052 (n=300) per game |
-| sustained power windows (no presidency) | 0.663 ± 0.037 (n=300) per game |
-| mean power in window (with) | 0.491 ± 0.003 (n=403) |
-| mean power in window (no presidency) | 0.446 ± 0.002 (n=199) |
-| windows that held the presidency | 0.993 ± 0.004 (n=403) share |
+| sustained power windows (with presidency) | 2.000 ± 0.061 (n=300) per game |
+| sustained power windows (no presidency) | 0.683 ± 0.038 (n=300) per game |
+| mean power in window (with) | 0.497 ± 0.002 (n=600) |
+| mean power in window (no presidency) | 0.447 ± 0.002 (n=205) |
+| windows that held the presidency | 1.000 ± 0.000 (n=600) share |
 
 Power windows that survive dropping the presidency term are the ones a quadrant could be reached from without winning the White House. Zero here would mean every Skowronek category in this game is a presidential category.
 
 ### Quadrant coverage
 
-#### quadrant-articulation — **BLOCKED**
+#### quadrant-articulation — **UNHEALTHY**
 
 *Is ARTICULATION reachable?*
 
 | measure | value |
 | --- | --- |
-| classifiable power windows | 403.000 ± 0.000 (n=300) windows |
-| windows classified as this quadrant | — (n=300) |
+| classifiable power windows | 600.000 ± 0.000 (n=300) windows |
+| windows classified as this quadrant | 0.000 (n=300) |
 
-Blocked by: `BILL_POSITION`, `SETTLEMENT_MOVEMENT`
+Preconditions met and no window matched.
 
-Never evaluated: BILL_POSITION, SETTLEMENT_MOVEMENT are missing, so no window could be classified either way. This is an undefined, not a zero.
-
-#### quadrant-preemption — **BLOCKED**
+#### quadrant-preemption — **UNHEALTHY**
 
 *Is PREEMPTION reachable?*
 
 | measure | value |
 | --- | --- |
-| classifiable power windows | 403.000 ± 0.000 (n=300) windows |
-| windows classified as this quadrant | — (n=300) |
+| classifiable power windows | 600.000 ± 0.000 (n=300) windows |
+| windows classified as this quadrant | 0.000 (n=300) |
 
-Blocked by: `BILL_CORPUS`, `BILL_POSITION`
-
-Never evaluated: BILL_CORPUS, BILL_POSITION are missing, so no window could be classified either way. This is an undefined, not a zero.
+Preconditions met and no window matched.
 
 #### quadrant-reconstruction — **BLOCKED**
 
@@ -1402,12 +1354,12 @@ Never evaluated: BILL_CORPUS, BILL_POSITION are missing, so no window could be c
 
 | measure | value |
 | --- | --- |
-| classifiable power windows | 403.000 ± 0.000 (n=300) windows |
+| classifiable power windows | 600.000 ± 0.000 (n=300) windows |
 | windows classified as this quadrant | — (n=300) |
 
-Blocked by: `SETTLEMENT_MOVEMENT`, `BILL_POSITION`, `STRAIN_RISE`
+Blocked by: `STRAIN_RISE`
 
-Never evaluated: SETTLEMENT_MOVEMENT, BILL_POSITION, STRAIN_RISE are missing, so no window could be classified either way. This is an undefined, not a zero.
+Never evaluated: STRAIN_RISE is missing, so no window could be classified either way. This is an undefined, not a zero.
 
 #### quadrant-disjunction — **BLOCKED**
 
@@ -1415,59 +1367,55 @@ Never evaluated: SETTLEMENT_MOVEMENT, BILL_POSITION, STRAIN_RISE are missing, so
 
 | measure | value |
 | --- | --- |
-| classifiable power windows | 403.000 ± 0.000 (n=300) windows |
+| classifiable power windows | 600.000 ± 0.000 (n=300) windows |
 | windows classified as this quadrant | — (n=300) |
 
-Blocked by: `BILL_POSITION`, `SETTLEMENT_MOVEMENT`, `STRAIN_RISE`, `EFFICACY_DROP`
+Blocked by: `STRAIN_RISE`, `EFFICACY_DROP`
 
-Never evaluated: BILL_POSITION, SETTLEMENT_MOVEMENT, STRAIN_RISE, EFFICACY_DROP are missing, so no window could be classified either way. This is an undefined, not a zero.
+Never evaluated: STRAIN_RISE, EFFICACY_DROP are missing, so no window could be classified either way. This is an undefined, not a zero.
 
 ## three-terms.json
 
-300 games, agents `Greedy,BillAuthor,SenateFlood,Random`, year cap 60, mean game length 42.5y.
+300 games, agents `Greedy,BillAuthor,SenateFlood,Random`, year cap 60, mean game length 27.9y.
 
 ### Verdict table
 
 | check | verdict | headline measure |
 | --- | --- | --- |
 | `control-instrument-liveness` | HEALTHY | synthetic regime: longest run: 20.000 ± 0.000 (n=1) years |
-| `control-non-electoral-lean-writer` | UNHEALTHY | state-years |lean| rose, election years: 38862.000 ± 0.000 (n=6170) state-years |
-| `control-power-is-measurable` | HEALTHY | peak power held: 0.534 ± 0.004 (n=300) share of offices |
-| `settlement-formation` | UNHEALTHY | mean |country position|: 0.290 ± 0.008 (n=300) lean counters |
-| `regime-duration` | UNHEALTHY | mean regime run: 2.507 ± 0.046 (n=1299) years |
-| `constraint-on-opponents` | UNHEALTHY | country move on party turnover: 0.963 ± 0.025 (n=126) lean counters/yr |
-| `presidency-dependence` | HEALTHY | sustained power windows (with presidency): 1.490 ± 0.050 (n=300) per game |
-| `quadrant-articulation` | BLOCKED | classifiable power windows: 447.000 ± 0.000 (n=300) windows |
-| `quadrant-preemption` | BLOCKED | classifiable power windows: 447.000 ± 0.000 (n=300) windows |
-| `quadrant-reconstruction` | BLOCKED | classifiable power windows: 447.000 ± 0.000 (n=300) windows |
-| `quadrant-disjunction` | BLOCKED | classifiable power windows: 447.000 ± 0.000 (n=300) windows |
+| `control-non-electoral-lean-writer` | HEALTHY | state-years |lean| rose, election years: 40294.000 ± 0.000 (n=4029) state-years |
+| `control-power-is-measurable` | HEALTHY | peak power held: 0.565 ± 0.003 (n=300) share of offices |
+| `settlement-formation` | HEALTHY | mean |country position|: 1.505 ± 0.051 (n=300) lean counters |
+| `regime-duration` | UNHEALTHY | mean regime run: 5.415 ± 0.191 (n=1321) years |
+| `constraint-on-opponents` | UNHEALTHY | country move on party turnover: 0.933 ± 0.028 (n=320) lean counters/yr |
+| `presidency-dependence` | HEALTHY | sustained power windows (with presidency): 2.047 ± 0.057 (n=300) per game |
+| `quadrant-articulation` | UNHEALTHY | classifiable power windows: 614.000 ± 0.000 (n=300) windows |
+| `quadrant-preemption` | UNHEALTHY | classifiable power windows: 614.000 ± 0.000 (n=300) windows |
+| `quadrant-reconstruction` | BLOCKED | classifiable power windows: 614.000 ± 0.000 (n=300) windows |
+| `quadrant-disjunction` | BLOCKED | classifiable power windows: 614.000 ± 0.000 (n=300) windows |
 
 ### Preconditions
 
 | precondition | status | basis |
 | --- | --- | --- |
-| `BILL_CORPUS` | ABSENT BY CONSTRUCTION | passed bills are counted (GameResult.billsPassed) and discarded; no enacted-bill list, no repeal, no books. The only trace legislation leaves is economy.accumulatedG, a single scalar the Fed decays. |
-| `BILL_POSITION` | ABSENT BY CONSTRUCTION | a bill is a single spending magnitude g (economy.gMin..gMax), not a point on any axis the engine defines; engine/rules/economy.ts: "There is deliberately no second ideological axis." |
-| `SETTLEMENT_FORMATION` | ABSENT | the country position random-walks around its own baseline; no persistent regime forms |
-| `SETTLEMENT_MOVEMENT` | ABSENT | nothing writes lean outside an election: |lean| never rose in a non-election year, in which bills were passing. Legislation reaches only economy.accumulatedG (engine/rules/legislature.ts, economy.ts) |
-| `STRAIN_RISE` | ABSENT BY CONSTRUCTION | strain is the distance between a settlement and the country, and this build has no settlement object to be the far end of it. Downstream of BILL_CORPUS and BILL_POSITION. |
-| `EFFICACY_DROP` | ABSENT BY CONSTRUCTION | efficacy is bills moving the settlement toward the passer, per year of power. With no bill position it is undefined, and with SETTLEMENT_MOVEMENT absent it would be identically zero for every player in every year — which cannot distinguish a blocked leader from an effective one. |
+| `BILL_CORPUS` | MET | 4.083333333333333 bills on the books at the epilogue; EnactedBill.repealedIn takes them off |
+| `BILL_POSITION` | MET | bills carry IdentityTag[] (v0.2 item 4) and TAG_COMPASS.bill reads them |
+| `SETTLEMENT_FORMATION` | MET | the country position holds off baseline with a variance ratio above 1 |
+| `SETTLEMENT_MOVEMENT` | MET | passing more bills moved the country position |
+| `STRAIN_RISE` | ABSENT | strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable. |
+| `EFFICACY_DROP` | ABSENT | efficacy is bills moving the settlement toward the passer, per year of power. The bill position exists as of v0.2, so this is no longer undefined -- it is unmeasured, and it stays unmeasured until STRAIN_RISE has a settlement to move. |
 | `POWER_CONCENTRATION` | MET | sustained power windows occur |
 
 ### Why each quadrant is unreachable
 
-- **ARTICULATION** — blocked by `SETTLEMENT_FORMATION`, `BILL_POSITION`, `SETTLEMENT_MOVEMENT`.
-  - First missing: the country position random-walks around its own baseline; no persistent regime forms
-  - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
-- **PREEMPTION** — blocked by `SETTLEMENT_FORMATION`, `BILL_CORPUS`, `BILL_POSITION`.
-  - First missing: the country position random-walks around its own baseline; no persistent regime forms
-  - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
-- **RECONSTRUCTION** — blocked by `SETTLEMENT_FORMATION`, `SETTLEMENT_MOVEMENT`, `BILL_POSITION`, `STRAIN_RISE`.
-  - First missing: the country position random-walks around its own baseline; no persistent regime forms
-  - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
-- **DISJUNCTION** — blocked by `SETTLEMENT_FORMATION`, `BILL_POSITION`, `SETTLEMENT_MOVEMENT`, `STRAIN_RISE`, `EFFICACY_DROP`.
-  - First missing: the country position random-walks around its own baseline; no persistent regime forms
-  - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
+- **ARTICULATION** — preconditions met; see the verdict table.
+- **PREEMPTION** — preconditions met; see the verdict table.
+- **RECONSTRUCTION** — blocked by `STRAIN_RISE`.
+  - First missing: strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable.
+  - Control: none yet: the instrument does not exist to be controlled.
+- **DISJUNCTION** — blocked by `STRAIN_RISE`, `EFFICACY_DROP`.
+  - First missing: strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable.
+  - Control: none yet: the instrument does not exist to be controlled.
 
 ### Controls
 
@@ -1486,18 +1434,18 @@ Never evaluated: BILL_POSITION, SETTLEMENT_MOVEMENT, STRAIN_RISE, EFFICACY_DROP 
 
 Run length separates a built 20-year regime from white noise (20y vs a handful), and the variance ratio correctly marks noise as mean-reverting. NOTE the caveat this control surfaced: the step regime scores VR 0.99 and the random walk 1.10, so VR does NOT distinguish a settlement from a walk. Persistence is read from run length; VR is reported as description only.
 
-#### control-non-electoral-lean-writer — **UNHEALTHY**
+#### control-non-electoral-lean-writer — **HEALTHY**
 
 *C2: in a year with no election, can anything — legislation included — add lean to the board?*
 
 | measure | value |
 | --- | --- |
-| state-years |lean| rose, election years | 38862.000 ± 0.000 (n=6170) state-years |
-| state-years |lean| rose, NON-election years | 0.000 ± 0.000 (n=6292) state-years |
-| bills passed in non-election years | 6.557 ± 0.416 (n=300) per game |
-| non-election bill years per game | 20.973 ± 0.537 (n=300) years |
+| state-years |lean| rose, election years | 40294.000 ± 0.000 (n=4029) state-years |
+| state-years |lean| rose, NON-election years | 41470.000 ± 0.000 (n=4050) state-years |
+| bills passed in non-election years | 2.720 ± 0.185 (n=300) per game |
+| non-election bill years per game | 13.500 ± 0.429 (n=300) years |
 
-The detector fires in election years and is silent in every non-election year, while bills pass in those same years. So legislation cannot write to the settlement board at all: lean is election-only (applyPush, honeymoon, decay). This is CANNOT ACT as a property of the rules, not of any agent's choices — no pool, however maximising, can move it.
+Lean rises in years with no election, so some non-electoral mechanism writes to the board and a legislative settlement channel is at least possible.
 
 #### control-power-is-measurable — **HEALTHY**
 
@@ -1505,26 +1453,26 @@ The detector fires in election years and is silent in every non-election year, w
 
 | measure | value |
 | --- | --- |
-| peak power held | 0.534 ± 0.004 (n=300) share of offices |
-| sustained windows (>=0.4 for >=3y) | 1.490 ± 0.050 (n=300) per game |
-| mean spread across players | 0.237 ± 0.004 (n=300) |
+| peak power held | 0.565 ± 0.003 (n=300) share of offices |
+| sustained windows (>=0.4 for >=3y) | 2.047 ± 0.057 (n=300) per game |
+| mean spread across players | 0.289 ± 0.004 (n=300) |
 
 Power does concentrate into sustained windows, so a quadrant finding no windows would be a fact about the quadrant and not about the scalar.
 
 ### Era checks
 
-#### settlement-formation — **UNHEALTHY**
+#### settlement-formation — **HEALTHY**
 
 *Do settlements form at all, or does the country position random-walk with no persistent regime?*
 
 | measure | value |
 | --- | --- |
-| mean |country position| | 0.290 ± 0.008 (n=300) lean counters |
-| peak |country position| | 1.159 ± 0.010 (n=300) lean counters |
-| years displaced beyond deadband | 0.305 ± 0.009 (n=300) share |
-| longest unbroken run on one side | 4.143 ± 0.143 (n=300) years |
-| variance ratio at lag 4 (descriptive) | 0.550 ± 0.013 (n=300) 1 = random walk |
-| sign crossings per decade | 0.525 ± 0.027 (n=300) per 10y |
+| mean |country position| | 1.505 ± 0.051 (n=300) lean counters |
+| peak |country position| | 3.359 ± 0.089 (n=300) lean counters |
+| years displaced beyond deadband | 0.859 ± 0.006 (n=300) share |
+| longest unbroken run on one side | 14.280 ± 0.542 (n=300) years |
+| variance ratio at lag 4 (descriptive) | 0.878 ± 0.026 (n=300) 1 = random walk |
+| sign crossings per decade | 0.861 ± 0.041 (n=300) per 10y |
 
 A settlement that forms holds the polity off its own baseline for most of the game and in long unbroken stretches: displaced share >= 0.5 and a longest run >= 8y (a quarter of the 30-year historical low). Short runs around a near-zero mean are a polity oscillating about its baseline, not a regime — and every downstream quadrant then measures nothing. Variance ratio is printed for description only: C1 showed a step-function settlement scores ~1, the same as a random walk, so it cannot be the criterion.
 
@@ -1534,9 +1482,9 @@ A settlement that forms holds the polity off its own baseline for most of the ga
 
 | measure | value |
 | --- | --- |
-| mean regime run | 2.507 ± 0.046 (n=1299) years |
-| longest regime per game | 4.143 ± 0.143 (n=300) years |
-| game length | 42.540 ± 1.052 (n=300) years |
+| mean regime run | 5.415 ± 0.191 (n=1321) years |
+| longest regime per game | 14.280 ± 0.542 (n=300) years |
+| game length | 27.930 ± 0.849 (n=300) years |
 | config year cap | 60.000 ± 0.000 (n=300) years |
 
 The cap (60y) admits at least one full cycle, so a short mean run here is a fact about the engine and not about the clock.
@@ -1547,9 +1495,9 @@ The cap (60y) admits at least one full cycle, so a short mean run here is a fact
 
 | measure | value |
 | --- | --- |
-| country move on party turnover | 0.963 ± 0.025 (n=126) lean counters/yr |
-| country move within a party | 0.147 ± 0.003 (n=12336) lean counters/yr |
-| excess move on turnover | 0.816 ± 0.025 (n=126) lean counters/yr |
+| country move on party turnover | 0.933 ± 0.028 (n=320) lean counters/yr |
+| country move within a party | 0.552 ± 0.006 (n=7759) lean counters/yr |
+| excess move on turnover | 0.381 ± 0.029 (n=320) lean counters/yr |
 
 A settlement nobody has to govern inside is not a settlement. If turnover moves the position much more than an ordinary year does, incoming opponents are unconstrained. NOTE the confound: with no settlement object, this measures the POLITY moving, not a settlement resisting — it cannot distinguish "the settlement constrained them" from "there was nothing there to move".
 
@@ -1559,41 +1507,37 @@ A settlement nobody has to govern inside is not a settlement. If turnover moves 
 
 | measure | value |
 | --- | --- |
-| sustained power windows (with presidency) | 1.490 ± 0.050 (n=300) per game |
-| sustained power windows (no presidency) | 1.377 ± 0.065 (n=300) per game |
-| mean power in window (with) | 0.489 ± 0.003 (n=447) |
-| mean power in window (no presidency) | 0.447 ± 0.001 (n=413) |
-| windows that held the presidency | 0.964 ± 0.009 (n=447) share |
+| sustained power windows (with presidency) | 2.047 ± 0.057 (n=300) per game |
+| sustained power windows (no presidency) | 0.873 ± 0.051 (n=300) per game |
+| mean power in window (with) | 0.494 ± 0.002 (n=614) |
+| mean power in window (no presidency) | 0.445 ± 0.002 (n=262) |
+| windows that held the presidency | 0.993 ± 0.003 (n=614) share |
 
 Power windows that survive dropping the presidency term are the ones a quadrant could be reached from without winning the White House. Zero here would mean every Skowronek category in this game is a presidential category.
 
 ### Quadrant coverage
 
-#### quadrant-articulation — **BLOCKED**
+#### quadrant-articulation — **UNHEALTHY**
 
 *Is ARTICULATION reachable?*
 
 | measure | value |
 | --- | --- |
-| classifiable power windows | 447.000 ± 0.000 (n=300) windows |
-| windows classified as this quadrant | — (n=300) |
+| classifiable power windows | 614.000 ± 0.000 (n=300) windows |
+| windows classified as this quadrant | 0.000 (n=300) |
 
-Blocked by: `SETTLEMENT_FORMATION`, `BILL_POSITION`, `SETTLEMENT_MOVEMENT`
+Preconditions met and no window matched.
 
-Never evaluated: SETTLEMENT_FORMATION, BILL_POSITION, SETTLEMENT_MOVEMENT are missing, so no window could be classified either way. This is an undefined, not a zero.
-
-#### quadrant-preemption — **BLOCKED**
+#### quadrant-preemption — **UNHEALTHY**
 
 *Is PREEMPTION reachable?*
 
 | measure | value |
 | --- | --- |
-| classifiable power windows | 447.000 ± 0.000 (n=300) windows |
-| windows classified as this quadrant | — (n=300) |
+| classifiable power windows | 614.000 ± 0.000 (n=300) windows |
+| windows classified as this quadrant | 0.000 (n=300) |
 
-Blocked by: `SETTLEMENT_FORMATION`, `BILL_CORPUS`, `BILL_POSITION`
-
-Never evaluated: SETTLEMENT_FORMATION, BILL_CORPUS, BILL_POSITION are missing, so no window could be classified either way. This is an undefined, not a zero.
+Preconditions met and no window matched.
 
 #### quadrant-reconstruction — **BLOCKED**
 
@@ -1601,12 +1545,12 @@ Never evaluated: SETTLEMENT_FORMATION, BILL_CORPUS, BILL_POSITION are missing, s
 
 | measure | value |
 | --- | --- |
-| classifiable power windows | 447.000 ± 0.000 (n=300) windows |
+| classifiable power windows | 614.000 ± 0.000 (n=300) windows |
 | windows classified as this quadrant | — (n=300) |
 
-Blocked by: `SETTLEMENT_FORMATION`, `SETTLEMENT_MOVEMENT`, `BILL_POSITION`, `STRAIN_RISE`
+Blocked by: `STRAIN_RISE`
 
-Never evaluated: SETTLEMENT_FORMATION, SETTLEMENT_MOVEMENT, BILL_POSITION, STRAIN_RISE are missing, so no window could be classified either way. This is an undefined, not a zero.
+Never evaluated: STRAIN_RISE is missing, so no window could be classified either way. This is an undefined, not a zero.
 
 #### quadrant-disjunction — **BLOCKED**
 
@@ -1614,12 +1558,12 @@ Never evaluated: SETTLEMENT_FORMATION, SETTLEMENT_MOVEMENT, BILL_POSITION, STRAI
 
 | measure | value |
 | --- | --- |
-| classifiable power windows | 447.000 ± 0.000 (n=300) windows |
+| classifiable power windows | 614.000 ± 0.000 (n=300) windows |
 | windows classified as this quadrant | — (n=300) |
 
-Blocked by: `SETTLEMENT_FORMATION`, `BILL_POSITION`, `SETTLEMENT_MOVEMENT`, `STRAIN_RISE`, `EFFICACY_DROP`
+Blocked by: `STRAIN_RISE`, `EFFICACY_DROP`
 
-Never evaluated: SETTLEMENT_FORMATION, BILL_POSITION, SETTLEMENT_MOVEMENT, STRAIN_RISE, EFFICACY_DROP are missing, so no window could be classified either way. This is an undefined, not a zero.
+Never evaluated: STRAIN_RISE, EFFICACY_DROP are missing, so no window could be classified either way. This is an undefined, not a zero.
 
 ## tuned.json
 
@@ -1630,43 +1574,39 @@ Never evaluated: SETTLEMENT_FORMATION, BILL_POSITION, SETTLEMENT_MOVEMENT, STRAI
 | check | verdict | headline measure |
 | --- | --- | --- |
 | `control-instrument-liveness` | HEALTHY | synthetic regime: longest run: 20.000 ± 0.000 (n=1) years |
-| `control-non-electoral-lean-writer` | UNHEALTHY | state-years |lean| rose, election years: 15782.000 ± 0.000 (n=2100) state-years |
-| `control-power-is-measurable` | HEALTHY | peak power held: 0.510 ± 0.005 (n=300) share of offices |
-| `settlement-formation` | UNHEALTHY | mean |country position|: 0.338 ± 0.007 (n=300) lean counters |
-| `regime-duration` | UNHEALTHY | mean regime run: 2.680 ± 0.060 (n=674) years |
-| `constraint-on-opponents` | UNHEALTHY | country move on party turnover: 0.944 ± 0.034 (n=83) lean counters/yr |
-| `presidency-dependence` | HEALTHY | sustained power windows (with presidency): 1.040 ± 0.041 (n=300) per game |
-| `quadrant-articulation` | BLOCKED | classifiable power windows: 312.000 ± 0.000 (n=300) windows |
-| `quadrant-preemption` | BLOCKED | classifiable power windows: 312.000 ± 0.000 (n=300) windows |
-| `quadrant-reconstruction` | BLOCKED | classifiable power windows: 312.000 ± 0.000 (n=300) windows |
-| `quadrant-disjunction` | BLOCKED | classifiable power windows: 312.000 ± 0.000 (n=300) windows |
+| `control-non-electoral-lean-writer` | HEALTHY | state-years |lean| rose, election years: 21152.000 ± 0.000 (n=2100) state-years |
+| `control-power-is-measurable` | HEALTHY | peak power held: 0.533 ± 0.004 (n=300) share of offices |
+| `settlement-formation` | HEALTHY | mean |country position|: 1.427 ± 0.049 (n=300) lean counters |
+| `regime-duration` | UNHEALTHY | mean regime run: 4.650 ± 0.150 (n=876) years |
+| `constraint-on-opponents` | UNHEALTHY | country move on party turnover: 1.045 ± 0.039 (n=197) lean counters/yr |
+| `presidency-dependence` | HEALTHY | sustained power windows (with presidency): 1.430 ± 0.048 (n=300) per game |
+| `quadrant-articulation` | UNHEALTHY | classifiable power windows: 429.000 ± 0.000 (n=300) windows |
+| `quadrant-preemption` | UNHEALTHY | classifiable power windows: 429.000 ± 0.000 (n=300) windows |
+| `quadrant-reconstruction` | BLOCKED | classifiable power windows: 429.000 ± 0.000 (n=300) windows |
+| `quadrant-disjunction` | BLOCKED | classifiable power windows: 429.000 ± 0.000 (n=300) windows |
 
 ### Preconditions
 
 | precondition | status | basis |
 | --- | --- | --- |
-| `BILL_CORPUS` | ABSENT BY CONSTRUCTION | passed bills are counted (GameResult.billsPassed) and discarded; no enacted-bill list, no repeal, no books. The only trace legislation leaves is economy.accumulatedG, a single scalar the Fed decays. |
-| `BILL_POSITION` | ABSENT BY CONSTRUCTION | a bill is a single spending magnitude g (economy.gMin..gMax), not a point on any axis the engine defines; engine/rules/economy.ts: "There is deliberately no second ideological axis." |
-| `SETTLEMENT_FORMATION` | ABSENT | the country position random-walks around its own baseline; no persistent regime forms |
-| `SETTLEMENT_MOVEMENT` | ABSENT | nothing writes lean outside an election: |lean| never rose in a non-election year, in which bills were passing. Legislation reaches only economy.accumulatedG (engine/rules/legislature.ts, economy.ts) |
-| `STRAIN_RISE` | ABSENT BY CONSTRUCTION | strain is the distance between a settlement and the country, and this build has no settlement object to be the far end of it. Downstream of BILL_CORPUS and BILL_POSITION. |
-| `EFFICACY_DROP` | ABSENT BY CONSTRUCTION | efficacy is bills moving the settlement toward the passer, per year of power. With no bill position it is undefined, and with SETTLEMENT_MOVEMENT absent it would be identically zero for every player in every year — which cannot distinguish a blocked leader from an effective one. |
+| `BILL_CORPUS` | MET | 2.6866666666666665 bills on the books at the epilogue; EnactedBill.repealedIn takes them off |
+| `BILL_POSITION` | MET | bills carry IdentityTag[] (v0.2 item 4) and TAG_COMPASS.bill reads them |
+| `SETTLEMENT_FORMATION` | MET | the country position holds off baseline with a variance ratio above 1 |
+| `SETTLEMENT_MOVEMENT` | MET | passing more bills moved the country position |
+| `STRAIN_RISE` | ABSENT | strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable. |
+| `EFFICACY_DROP` | ABSENT | efficacy is bills moving the settlement toward the passer, per year of power. The bill position exists as of v0.2, so this is no longer undefined -- it is unmeasured, and it stays unmeasured until STRAIN_RISE has a settlement to move. |
 | `POWER_CONCENTRATION` | MET | sustained power windows occur |
 
 ### Why each quadrant is unreachable
 
-- **ARTICULATION** — blocked by `SETTLEMENT_FORMATION`, `BILL_POSITION`, `SETTLEMENT_MOVEMENT`.
-  - First missing: the country position random-walks around its own baseline; no persistent regime forms
-  - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
-- **PREEMPTION** — blocked by `SETTLEMENT_FORMATION`, `BILL_CORPUS`, `BILL_POSITION`.
-  - First missing: the country position random-walks around its own baseline; no persistent regime forms
-  - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
-- **RECONSTRUCTION** — blocked by `SETTLEMENT_FORMATION`, `SETTLEMENT_MOVEMENT`, `BILL_POSITION`, `STRAIN_RISE`.
-  - First missing: the country position random-walks around its own baseline; no persistent regime forms
-  - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
-- **DISJUNCTION** — blocked by `SETTLEMENT_FORMATION`, `BILL_POSITION`, `SETTLEMENT_MOVEMENT`, `STRAIN_RISE`, `EFFICACY_DROP`.
-  - First missing: the country position random-walks around its own baseline; no persistent regime forms
-  - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
+- **ARTICULATION** — preconditions met; see the verdict table.
+- **PREEMPTION** — preconditions met; see the verdict table.
+- **RECONSTRUCTION** — blocked by `STRAIN_RISE`.
+  - First missing: strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable.
+  - Control: none yet: the instrument does not exist to be controlled.
+- **DISJUNCTION** — blocked by `STRAIN_RISE`, `EFFICACY_DROP`.
+  - First missing: strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable.
+  - Control: none yet: the instrument does not exist to be controlled.
 
 ### Controls
 
@@ -1685,18 +1625,18 @@ Never evaluated: SETTLEMENT_FORMATION, BILL_POSITION, SETTLEMENT_MOVEMENT, STRAI
 
 Run length separates a built 20-year regime from white noise (20y vs a handful), and the variance ratio correctly marks noise as mean-reverting. NOTE the caveat this control surfaced: the step regime scores VR 0.99 and the random walk 1.10, so VR does NOT distinguish a settlement from a walk. Persistence is read from run length; VR is reported as description only.
 
-#### control-non-electoral-lean-writer — **UNHEALTHY**
+#### control-non-electoral-lean-writer — **HEALTHY**
 
 *C2: in a year with no election, can anything — legislation included — add lean to the board?*
 
 | measure | value |
 | --- | --- |
-| state-years |lean| rose, election years | 15782.000 ± 0.000 (n=2100) state-years |
-| state-years |lean| rose, NON-election years | 0.000 ± 0.000 (n=2400) state-years |
-| bills passed in non-election years | 2.107 ± 0.117 (n=300) per game |
+| state-years |lean| rose, election years | 21152.000 ± 0.000 (n=2100) state-years |
+| state-years |lean| rose, NON-election years | 22718.000 ± 0.000 (n=2400) state-years |
+| bills passed in non-election years | 1.957 ± 0.107 (n=300) per game |
 | non-election bill years per game | 8.000 ± 0.000 (n=300) years |
 
-The detector fires in election years and is silent in every non-election year, while bills pass in those same years. So legislation cannot write to the settlement board at all: lean is election-only (applyPush, honeymoon, decay). This is CANNOT ACT as a property of the rules, not of any agent's choices — no pool, however maximising, can move it.
+Lean rises in years with no election, so some non-electoral mechanism writes to the board and a legislative settlement channel is at least possible.
 
 #### control-power-is-measurable — **HEALTHY**
 
@@ -1704,26 +1644,26 @@ The detector fires in election years and is silent in every non-election year, w
 
 | measure | value |
 | --- | --- |
-| peak power held | 0.510 ± 0.005 (n=300) share of offices |
-| sustained windows (>=0.4 for >=3y) | 1.040 ± 0.041 (n=300) per game |
-| mean spread across players | 0.248 ± 0.004 (n=300) |
+| peak power held | 0.533 ± 0.004 (n=300) share of offices |
+| sustained windows (>=0.4 for >=3y) | 1.430 ± 0.048 (n=300) per game |
+| mean spread across players | 0.287 ± 0.004 (n=300) |
 
 Power does concentrate into sustained windows, so a quadrant finding no windows would be a fact about the quadrant and not about the scalar.
 
 ### Era checks
 
-#### settlement-formation — **UNHEALTHY**
+#### settlement-formation — **HEALTHY**
 
 *Do settlements form at all, or does the country position random-walk with no persistent regime?*
 
 | measure | value |
 | --- | --- |
-| mean |country position| | 0.338 ± 0.007 (n=300) lean counters |
-| peak |country position| | 1.036 ± 0.017 (n=300) lean counters |
-| years displaced beyond deadband | 0.376 ± 0.010 (n=300) share |
-| longest unbroken run on one side | 3.400 ± 0.122 (n=300) years |
-| variance ratio at lag 4 (descriptive) | 0.607 ± 0.018 (n=300) 1 = random walk |
-| sign crossings per decade | 0.469 ± 0.029 (n=300) per 10y |
+| mean |country position| | 1.427 ± 0.049 (n=300) lean counters |
+| peak |country position| | 2.913 ± 0.080 (n=300) lean counters |
+| years displaced beyond deadband | 0.849 ± 0.007 (n=300) share |
+| longest unbroken run on one side | 9.580 ± 0.244 (n=300) years |
+| variance ratio at lag 4 (descriptive) | 0.819 ± 0.030 (n=300) 1 = random walk |
+| sign crossings per decade | 0.815 ± 0.044 (n=300) per 10y |
 
 A settlement that forms holds the polity off its own baseline for most of the game and in long unbroken stretches: displaced share >= 0.5 and a longest run >= 8y (a quarter of the 30-year historical low). Short runs around a near-zero mean are a polity oscillating about its baseline, not a regime — and every downstream quadrant then measures nothing. Variance ratio is printed for description only: C1 showed a step-function settlement scores ~1, the same as a random walk, so it cannot be the criterion.
 
@@ -1733,8 +1673,8 @@ A settlement that forms holds the polity off its own baseline for most of the ga
 
 | measure | value |
 | --- | --- |
-| mean regime run | 2.680 ± 0.060 (n=674) years |
-| longest regime per game | 3.400 ± 0.122 (n=300) years |
+| mean regime run | 4.650 ± 0.150 (n=876) years |
+| longest regime per game | 9.580 ± 0.244 (n=300) years |
 | game length | 16.000 ± 0.000 (n=300) years |
 | config year cap | 16.000 ± 0.000 (n=300) years |
 
@@ -1746,9 +1686,9 @@ PRECONDITION FAILURE, not a result: the year cap is 16, so a 30-year regime cann
 
 | measure | value |
 | --- | --- |
-| country move on party turnover | 0.944 ± 0.034 (n=83) lean counters/yr |
-| country move within a party | 0.196 ± 0.005 (n=4417) lean counters/yr |
-| excess move on turnover | 0.748 ± 0.034 (n=83) lean counters/yr |
+| country move on party turnover | 1.045 ± 0.039 (n=197) lean counters/yr |
+| country move within a party | 0.566 ± 0.008 (n=4303) lean counters/yr |
+| excess move on turnover | 0.479 ± 0.040 (n=197) lean counters/yr |
 
 A settlement nobody has to govern inside is not a settlement. If turnover moves the position much more than an ordinary year does, incoming opponents are unconstrained. NOTE the confound: with no settlement object, this measures the POLITY moving, not a settlement resisting — it cannot distinguish "the settlement constrained them" from "there was nothing there to move".
 
@@ -1758,41 +1698,37 @@ A settlement nobody has to govern inside is not a settlement. If turnover moves 
 
 | measure | value |
 | --- | --- |
-| sustained power windows (with presidency) | 1.040 ± 0.041 (n=300) per game |
-| sustained power windows (no presidency) | 0.400 ± 0.031 (n=300) per game |
-| mean power in window (with) | 0.492 ± 0.003 (n=312) |
-| mean power in window (no presidency) | 0.444 ± 0.002 (n=120) |
-| windows that held the presidency | 1.000 ± 0.000 (n=312) share |
+| sustained power windows (with presidency) | 1.430 ± 0.048 (n=300) per game |
+| sustained power windows (no presidency) | 0.410 ± 0.031 (n=300) per game |
+| mean power in window (with) | 0.492 ± 0.002 (n=429) |
+| mean power in window (no presidency) | 0.444 ± 0.002 (n=123) |
+| windows that held the presidency | 0.998 ± 0.002 (n=429) share |
 
 Power windows that survive dropping the presidency term are the ones a quadrant could be reached from without winning the White House. Zero here would mean every Skowronek category in this game is a presidential category.
 
 ### Quadrant coverage
 
-#### quadrant-articulation — **BLOCKED**
+#### quadrant-articulation — **UNHEALTHY**
 
 *Is ARTICULATION reachable?*
 
 | measure | value |
 | --- | --- |
-| classifiable power windows | 312.000 ± 0.000 (n=300) windows |
-| windows classified as this quadrant | — (n=300) |
+| classifiable power windows | 429.000 ± 0.000 (n=300) windows |
+| windows classified as this quadrant | 0.000 (n=300) |
 
-Blocked by: `SETTLEMENT_FORMATION`, `BILL_POSITION`, `SETTLEMENT_MOVEMENT`
+Preconditions met and no window matched.
 
-Never evaluated: SETTLEMENT_FORMATION, BILL_POSITION, SETTLEMENT_MOVEMENT are missing, so no window could be classified either way. This is an undefined, not a zero.
-
-#### quadrant-preemption — **BLOCKED**
+#### quadrant-preemption — **UNHEALTHY**
 
 *Is PREEMPTION reachable?*
 
 | measure | value |
 | --- | --- |
-| classifiable power windows | 312.000 ± 0.000 (n=300) windows |
-| windows classified as this quadrant | — (n=300) |
+| classifiable power windows | 429.000 ± 0.000 (n=300) windows |
+| windows classified as this quadrant | 0.000 (n=300) |
 
-Blocked by: `SETTLEMENT_FORMATION`, `BILL_CORPUS`, `BILL_POSITION`
-
-Never evaluated: SETTLEMENT_FORMATION, BILL_CORPUS, BILL_POSITION are missing, so no window could be classified either way. This is an undefined, not a zero.
+Preconditions met and no window matched.
 
 #### quadrant-reconstruction — **BLOCKED**
 
@@ -1800,12 +1736,12 @@ Never evaluated: SETTLEMENT_FORMATION, BILL_CORPUS, BILL_POSITION are missing, s
 
 | measure | value |
 | --- | --- |
-| classifiable power windows | 312.000 ± 0.000 (n=300) windows |
+| classifiable power windows | 429.000 ± 0.000 (n=300) windows |
 | windows classified as this quadrant | — (n=300) |
 
-Blocked by: `SETTLEMENT_FORMATION`, `SETTLEMENT_MOVEMENT`, `BILL_POSITION`, `STRAIN_RISE`
+Blocked by: `STRAIN_RISE`
 
-Never evaluated: SETTLEMENT_FORMATION, SETTLEMENT_MOVEMENT, BILL_POSITION, STRAIN_RISE are missing, so no window could be classified either way. This is an undefined, not a zero.
+Never evaluated: STRAIN_RISE is missing, so no window could be classified either way. This is an undefined, not a zero.
 
 #### quadrant-disjunction — **BLOCKED**
 
@@ -1813,9 +1749,9 @@ Never evaluated: SETTLEMENT_FORMATION, SETTLEMENT_MOVEMENT, BILL_POSITION, STRAI
 
 | measure | value |
 | --- | --- |
-| classifiable power windows | 312.000 ± 0.000 (n=300) windows |
+| classifiable power windows | 429.000 ± 0.000 (n=300) windows |
 | windows classified as this quadrant | — (n=300) |
 
-Blocked by: `SETTLEMENT_FORMATION`, `BILL_POSITION`, `SETTLEMENT_MOVEMENT`, `STRAIN_RISE`, `EFFICACY_DROP`
+Blocked by: `STRAIN_RISE`, `EFFICACY_DROP`
 
-Never evaluated: SETTLEMENT_FORMATION, BILL_POSITION, SETTLEMENT_MOVEMENT, STRAIN_RISE, EFFICACY_DROP are missing, so no window could be classified either way. This is an undefined, not a zero.
+Never evaluated: STRAIN_RISE, EFFICACY_DROP are missing, so no window could be classified either way. This is an undefined, not a zero.
