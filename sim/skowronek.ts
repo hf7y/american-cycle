@@ -73,9 +73,13 @@ const sha = (() => {
   try { return execSync('git rev-parse --short HEAD', { encoding: 'utf8' }).trim(); } catch { return 'unknown'; }
 })();
 const stamp = new Date().toISOString().replace(/\.\d+Z$/, 'Z');
-const md = renderReport(reports, stamp, sha);
+const md = renderReport(reports, stamp, sha, { games, pool, packs, configs });
 
 mkdirSync(new URL('../reports/', import.meta.url), { recursive: true });
-const out = new URL(`../reports/skowronek-${stamp.replace(/[:]/g, '')}.md`, import.meta.url);
+// ONE stable path, committed. A timestamped file per run accumulated 100KB of
+// near-identical markdown and made "what changed since the last baseline" a
+// diff between two filenames nobody could name; git already does that job.
+// An exploratory run overwrites it and is simply not committed.
+const out = new URL('../reports/skowronek-baseline.md', import.meta.url);
 writeFileSync(out, md);
 console.error(`wrote ${out.pathname}`);

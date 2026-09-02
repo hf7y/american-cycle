@@ -89,11 +89,21 @@ export function renderConfig(r: ConfigReport): string {
   ].join('\n');
 }
 
-export function renderReport(reports: ConfigReport[], stamp: string, sha: string): string {
+export interface RunParams { games: number; pool: string[]; packs: string[]; configs: string[] }
+
+export function renderReport(
+  reports: ConfigReport[], stamp: string, sha: string, p: RunParams,
+): string {
   const head = [
     '# Skowronek suite — does american-cycle produce political time?',
     '',
     `Run ${stamp} on \`${sha}\`.`,
+    '',
+    'Regenerate with:',
+    '',
+    '```',
+    `npm run skowronek -- --games ${p.games} --agents ${p.pool.join(',')} --packs ${p.packs.join(',')}`,
+    '```',
     '',
     'These are **design targets, not regressions**. They are expected to fail on the current build and are',
     'meant to keep failing until the design changes. This suite is not in `npm test` and not in the blocking',
