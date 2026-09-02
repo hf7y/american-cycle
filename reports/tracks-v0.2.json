@@ -688,6 +688,35 @@
       "calibrated": "amendment.dice, target and rescindTarget were swept to land this on the postwar figure, on tuned.json specifically. That makes the tuned number a fit rather than a prediction; the OTHER configs are the out-of-sample test, and they are reported below rather than tuned to match.",
       "pass": true,
       "verdict": "65% of proposals ratify, against 71% postwar (5 of 7 sent to the states after 1947) and 82% all-time (27 of 33). Band is 60-90%, which spans both point estimates and leaves room for the small-n uncertainty in 5 of 7. The convention-call rate alongside it has NO bar: Article V conventions have never been called, so the historical value is zero and the game needs an ending."
+    },
+    {
+      "id": "D7-wave-reversal",
+      "track": "D",
+      "question": "After a big national House swing, does the next cycle reverse it -- a thermostat -- or does the design compound it?",
+      "measures": [
+        {
+          "name": "lag-1 autocorrelation of the national House seat-share swing",
+          "value": -0.2522571352158133,
+          "n": 284,
+          "historical": -0.18671383759778504,
+          "historicalNote": "derived from house_district_panel.json, 1976-2018 -- 20 cycle-pairs across 22 cycles. NOT the register's 40-cycle postwar figure (-0.36 from HISTORICAL-CASES.md G1): that predates the panel and is a materially larger, earlier-starting sample. This is its own number, not reconciled to it by hand."
+        },
+        {
+          "name": "reversal rate after a swing of >=5.75pp",
+          "value": 0.6060606060606061,
+          "n": 99,
+          "historical": 0.8,
+          "historicalNote": "4 of 5 swings of >=5.75pp in the panel (the register's headline 25-of-435-seat case) reversed the following cycle. Same 1976-2018-sample caveat as the row above."
+        },
+        {
+          "name": "big swings observed",
+          "value": 99,
+          "n": 284
+        }
+      ],
+      "oracle": "historical-record",
+      "pass": true,
+      "verdict": "lag-1 autocorrelation -0.252 against -0.187 in the returns -- negative is a thermostat (big swings reverse), zero or positive compounds them. Whether a brake is needed and what shape it takes is hf7y/american-cycle#84's call; this only says which pattern the engine currently produces."
     }
   ]
 }

@@ -176,3 +176,18 @@ export function quantile(xs: number[], q: number): number {
 }
 
 export const mean = (xs: number[]): number => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : NaN);
+
+/** Pearson correlation. Shared by history.ts (deriving the historical figure)
+ *  and d.ts (deriving the engine's own), so the two sides of a comparison
+ *  cannot silently drift onto different formulas. */
+export function pearson(xs: number[], ys: number[]): number {
+  if (xs.length !== ys.length || !xs.length) return NaN;
+  const mx = mean(xs), my = mean(ys);
+  let num = 0, dx = 0, dy = 0;
+  for (let i = 0; i < xs.length; i++) {
+    num += (xs[i] - mx) * (ys[i] - my);
+    dx += (xs[i] - mx) ** 2;
+    dy += (ys[i] - my) ** 2;
+  }
+  return num / Math.sqrt(dx * dy);
+}

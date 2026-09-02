@@ -516,6 +516,35 @@
       "track": "D",
       "question": "Does an amendment that reaches the states ratify as often as the real ones did?",
       "notMeasurable": "GameResult.endedBy — this build has no ending but the year cap, so \"ends by condition\" is 0 by construction"
+    },
+    {
+      "id": "D7-wave-reversal",
+      "track": "D",
+      "question": "After a big national House swing, does the next cycle reverse it -- a thermostat -- or does the design compound it?",
+      "measures": [
+        {
+          "name": "lag-1 autocorrelation of the national House seat-share swing",
+          "value": -0.2599238048463124,
+          "n": 360,
+          "historical": -0.18671383759778504,
+          "historicalNote": "derived from house_district_panel.json, 1976-2018 -- 20 cycle-pairs across 22 cycles. NOT the register's 40-cycle postwar figure (-0.36 from HISTORICAL-CASES.md G1): that predates the panel and is a materially larger, earlier-starting sample. This is its own number, not reconciled to it by hand."
+        },
+        {
+          "name": "reversal rate after a swing of >=5.75pp",
+          "value": 0.6090909090909091,
+          "n": 110,
+          "historical": 0.8,
+          "historicalNote": "4 of 5 swings of >=5.75pp in the panel (the register's headline 25-of-435-seat case) reversed the following cycle. Same 1976-2018-sample caveat as the row above."
+        },
+        {
+          "name": "big swings observed",
+          "value": 110,
+          "n": 360
+        }
+      ],
+      "oracle": "historical-record",
+      "pass": true,
+      "verdict": "lag-1 autocorrelation -0.260 against -0.187 in the returns -- negative is a thermostat (big swings reverse), zero or positive compounds them. Whether a brake is needed and what shape it takes is hf7y/american-cycle#84's call; this only says which pattern the engine currently produces."
     }
   ]
 }
