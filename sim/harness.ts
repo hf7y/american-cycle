@@ -49,6 +49,11 @@ export interface Summary {
   meanSeats: Record<string, number>;
   realignedStates: number;
   meanAbsLean: number;
+  /** share of games that stopped on a §14 condition rather than the year
+   *  cap -- GameResult.endedBy, not wonBy, so a shared amendment ending
+   *  still counts. tracks/b.ts and tracks/c.ts compute this independently;
+   *  see hf7y/american-cycle#66 for why the harness itself had no reader. */
+  endedShare: number;
 }
 
 export function summarise(results: GameResult[], agentNames: string[]): Summary {
@@ -58,10 +63,11 @@ export function summarise(results: GameResult[], agentNames: string[]): Summary 
   let years = 0, leadChanges = 0, detFrac = 0, passed = 0, attempted = 0, cross = 0;
   let unc = 0, decisions = 0, decisionN = 0, upsets = 0, races = 0;
   const seats: Record<string, number> = { president: 0, senator: 0, governor: 0, representative: 0 };
-  let realigned = 0, absLean = 0, leanN = 0;
+  let realigned = 0, absLean = 0, leanN = 0, ended = 0;
 
   for (const r of results) {
     wins[r.winner]++;
+    if (r.endedBy) ended++;
     r.scores.forEach((s, i) => { scores[i] += s; });
     years += r.years; leadChanges += r.leadChanges;
     detFrac += r.years ? r.determinationYear / r.years : 0;
@@ -87,6 +93,7 @@ export function summarise(results: GameResult[], agentNames: string[]): Summary 
     meanSeats: Object.fromEntries(Object.entries(seats).map(([k, v]) => [k, v / n])),
     realignedStates: realigned / n,
     meanAbsLean: leanN ? absLean / leanN : 0,
+    endedShare: ended / n,
   };
 }
 
