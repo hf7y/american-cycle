@@ -1,11 +1,11 @@
 {
   "name": "1976",
   "era": 1976,
-  "note": "Real politicians of the 1976 cycle. Home-state bonuses run large (2-4) because friends-and-neighbours voting had not yet decayed -- \u00a75.",
+  "note": "Real politicians of the 1976 cycle. Home-state bonuses run large (2-4) because friends-and-neighbours voting had not yet decayed -- §5.",
   "cards": [
     {
       "kind": "candidate",
-      "id": "jimmy-carter",
+      "id": "jimmy-carter-1976",
       "name": "Jimmy Carter",
       "party": "D",
       "homeState": "GA",
@@ -21,7 +21,7 @@
     },
     {
       "kind": "candidate",
-      "id": "walter-mondale",
+      "id": "walter-mondale-1976",
       "name": "Walter Mondale",
       "party": "D",
       "homeState": "MN",
@@ -35,7 +35,7 @@
     },
     {
       "kind": "candidate",
-      "id": "hubert-humphrey",
+      "id": "hubert-humphrey-1976",
       "name": "Hubert Humphrey",
       "party": "D",
       "homeState": "MN",
@@ -50,7 +50,7 @@
     },
     {
       "kind": "candidate",
-      "id": "henry-m-jackson",
+      "id": "henry-m-jackson-1976",
       "name": "Henry M. Jackson",
       "party": "D",
       "homeState": "WA",
@@ -66,7 +66,7 @@
     },
     {
       "kind": "candidate",
-      "id": "morris-udall",
+      "id": "morris-udall-1976",
       "name": "Morris Udall",
       "party": "D",
       "homeState": "AZ",
@@ -80,7 +80,7 @@
     },
     {
       "kind": "candidate",
-      "id": "george-wallace",
+      "id": "george-wallace-1976",
       "name": "George Wallace",
       "party": "D",
       "homeState": "AL",
@@ -99,7 +99,7 @@
     },
     {
       "kind": "candidate",
-      "id": "frank-church",
+      "id": "frank-church-1976",
       "name": "Frank Church",
       "party": "D",
       "homeState": "ID",
@@ -113,7 +113,7 @@
     },
     {
       "kind": "candidate",
-      "id": "birch-bayh",
+      "id": "birch-bayh-1976",
       "name": "Birch Bayh",
       "party": "D",
       "homeState": "IN",
@@ -128,7 +128,7 @@
     },
     {
       "kind": "candidate",
-      "id": "edmund-muskie",
+      "id": "edmund-muskie-1976",
       "name": "Edmund Muskie",
       "party": "D",
       "homeState": "ME",
@@ -142,7 +142,7 @@
     },
     {
       "kind": "candidate",
-      "id": "robert-byrd",
+      "id": "robert-byrd-1976",
       "name": "Robert Byrd",
       "party": "D",
       "homeState": "WV",
@@ -156,7 +156,7 @@
     },
     {
       "kind": "candidate",
-      "id": "edward-kennedy",
+      "id": "edward-kennedy-1976",
       "name": "Edward Kennedy",
       "party": "D",
       "homeState": "MA",
@@ -171,13 +171,13 @@
         {
           "type": "may_endorse",
           "pips": 2,
-          "note": "an ideological validator with a national following (\u00a79)"
+          "note": "an ideological validator with a national following (§9)"
         }
       ]
     },
     {
       "kind": "candidate",
-      "id": "thomas-p-oneill",
+      "id": "thomas-p-oneill-1976",
       "name": "Thomas P. O'Neill",
       "party": "D",
       "homeState": "MA",
@@ -193,7 +193,7 @@
     },
     {
       "kind": "candidate",
-      "id": "john-glenn",
+      "id": "john-glenn-1976",
       "name": "John Glenn",
       "party": "D",
       "homeState": "OH",
@@ -207,7 +207,7 @@
     },
     {
       "kind": "candidate",
-      "id": "lloyd-bentsen",
+      "id": "lloyd-bentsen-1976",
       "name": "Lloyd Bentsen",
       "party": "D",
       "homeState": "TX",
@@ -222,7 +222,7 @@
     },
     {
       "kind": "candidate",
-      "id": "daniel-patrick-moynihan",
+      "id": "daniel-patrick-moynihan-1976",
       "name": "Daniel Patrick Moynihan",
       "party": "D",
       "homeState": "NY",
@@ -238,7 +238,7 @@
     },
     {
       "kind": "candidate",
-      "id": "jerry-brown",
+      "id": "jerry-brown-1976",
       "name": "Jerry Brown",
       "party": "D",
       "homeState": "CA",
@@ -252,7 +252,7 @@
     },
     {
       "kind": "candidate",
-      "id": "wendell-ford",
+      "id": "wendell-ford-1976",
       "name": "Wendell Ford",
       "party": "D",
       "homeState": "KY",
@@ -267,7 +267,7 @@
     },
     {
       "kind": "candidate",
-      "id": "dale-bumpers",
+      "id": "dale-bumpers-1976",
       "name": "Dale Bumpers",
       "party": "D",
       "homeState": "AR",
@@ -282,7 +282,7 @@
     },
     {
       "kind": "candidate",
-      "id": "sam-nunn",
+      "id": "sam-nunn-1976",
       "name": "Sam Nunn",
       "party": "D",
       "homeState": "GA",
@@ -297,7 +297,7 @@
     },
     {
       "kind": "candidate",
-      "id": "john-c-stennis",
+      "id": "john-c-stennis-1976",
       "name": "John C. Stennis",
       "party": "D",
       "homeState": "MS",
@@ -312,7 +312,7 @@
     },
     {
       "kind": "candidate",
-      "id": "james-eastland",
+      "id": "james-eastland-1976",
       "name": "James Eastland",
       "party": "D",
       "homeState": "MS",
@@ -331,7 +331,7 @@
     },
     {
       "kind": "candidate",
-      "id": "russell-long",
+      "id": "russell-long-1976",
       "name": "Russell Long",
       "party": "D",
       "homeState": "LA",
@@ -346,7 +346,7 @@
     },
     {
       "kind": "candidate",
-      "id": "adlai-stevenson-iii",
+      "id": "adlai-stevenson-iii-1976",
       "name": "Adlai Stevenson III",
       "party": "D",
       "homeState": "IL",
@@ -360,7 +360,7 @@
     },
     {
       "kind": "candidate",
-      "id": "abraham-ribicoff",
+      "id": "abraham-ribicoff-1976",
       "name": "Abraham Ribicoff",
       "party": "D",
       "homeState": "CT",
@@ -374,7 +374,7 @@
     },
     {
       "kind": "candidate",
-      "id": "barbara-jordan",
+      "id": "barbara-jordan-1976",
       "name": "Barbara Jordan",
       "party": "D",
       "homeState": "TX",
@@ -390,7 +390,7 @@
     },
     {
       "kind": "candidate",
-      "id": "andrew-young",
+      "id": "andrew-young-1976",
       "name": "Andrew Young",
       "party": "D",
       "homeState": "GA",
@@ -406,7 +406,7 @@
     },
     {
       "kind": "candidate",
-      "id": "ronald-v-dellums",
+      "id": "ronald-v-dellums-1976",
       "name": "Ronald V. Dellums",
       "party": "D",
       "homeState": "CA",
@@ -426,7 +426,7 @@
     },
     {
       "kind": "candidate",
-      "id": "shirley-chisholm",
+      "id": "shirley-chisholm-1976",
       "name": "Shirley Chisholm",
       "party": "D",
       "homeState": "NY",
@@ -441,7 +441,7 @@
     },
     {
       "kind": "candidate",
-      "id": "peter-rodino",
+      "id": "peter-rodino-1976",
       "name": "Peter Rodino",
       "party": "D",
       "homeState": "NJ",
@@ -456,7 +456,7 @@
     },
     {
       "kind": "candidate",
-      "id": "thomas-eagleton",
+      "id": "thomas-eagleton-1976",
       "name": "Thomas Eagleton",
       "party": "D",
       "homeState": "MO",
@@ -471,7 +471,7 @@
     },
     {
       "kind": "candidate",
-      "id": "gary-hart",
+      "id": "gary-hart-1976",
       "name": "Gary Hart",
       "party": "D",
       "homeState": "CO",
@@ -485,7 +485,7 @@
     },
     {
       "kind": "candidate",
-      "id": "patrick-leahy",
+      "id": "patrick-leahy-1976",
       "name": "Patrick Leahy",
       "party": "D",
       "homeState": "VT",
@@ -500,7 +500,7 @@
     },
     {
       "kind": "candidate",
-      "id": "joseph-r-biden",
+      "id": "joseph-r-biden-1976",
       "name": "Joseph R. Biden",
       "party": "D",
       "homeState": "DE",
@@ -514,7 +514,7 @@
     },
     {
       "kind": "candidate",
-      "id": "dick-clark",
+      "id": "dick-clark-1976",
       "name": "Dick Clark",
       "party": "D",
       "homeState": "IA",
@@ -529,7 +529,7 @@
     },
     {
       "kind": "candidate",
-      "id": "john-culver",
+      "id": "john-culver-1976",
       "name": "John Culver",
       "party": "D",
       "homeState": "IA",
@@ -545,7 +545,7 @@
     },
     {
       "kind": "candidate",
-      "id": "alan-cranston",
+      "id": "alan-cranston-1976",
       "name": "Alan Cranston",
       "party": "D",
       "homeState": "CA",
@@ -559,7 +559,7 @@
     },
     {
       "kind": "candidate",
-      "id": "william-proxmire",
+      "id": "william-proxmire-1976",
       "name": "William Proxmire",
       "party": "D",
       "homeState": "WI",
@@ -574,7 +574,7 @@
     },
     {
       "kind": "candidate",
-      "id": "ernest-hollings",
+      "id": "ernest-hollings-1976",
       "name": "Ernest Hollings",
       "party": "D",
       "homeState": "SC",
@@ -589,7 +589,7 @@
     },
     {
       "kind": "candidate",
-      "id": "lawton-chiles",
+      "id": "lawton-chiles-1976",
       "name": "Lawton Chiles",
       "party": "D",
       "homeState": "FL",
@@ -604,7 +604,7 @@
     },
     {
       "kind": "candidate",
-      "id": "gerald-r-ford",
+      "id": "gerald-r-ford-1976",
       "name": "Gerald R. Ford",
       "party": "R",
       "homeState": "MI",
@@ -619,7 +619,7 @@
     },
     {
       "kind": "candidate",
-      "id": "ronald-reagan",
+      "id": "ronald-reagan-1976",
       "name": "Ronald Reagan",
       "party": "R",
       "homeState": "CA",
@@ -638,7 +638,7 @@
     },
     {
       "kind": "candidate",
-      "id": "robert-dole",
+      "id": "robert-dole-1976",
       "name": "Robert Dole",
       "party": "R",
       "homeState": "KS",
@@ -654,7 +654,7 @@
     },
     {
       "kind": "candidate",
-      "id": "nelson-rockefeller",
+      "id": "nelson-rockefeller-1976",
       "name": "Nelson Rockefeller",
       "party": "R",
       "homeState": "NY",
@@ -669,7 +669,7 @@
     },
     {
       "kind": "candidate",
-      "id": "howard-baker",
+      "id": "howard-baker-1976",
       "name": "Howard Baker",
       "party": "R",
       "homeState": "TN",
@@ -683,7 +683,7 @@
     },
     {
       "kind": "candidate",
-      "id": "charles-h-percy",
+      "id": "charles-h-percy-1976",
       "name": "Charles H. Percy",
       "party": "R",
       "homeState": "IL",
@@ -698,7 +698,7 @@
     },
     {
       "kind": "candidate",
-      "id": "jacob-javits",
+      "id": "jacob-javits-1976",
       "name": "Jacob Javits",
       "party": "R",
       "homeState": "NY",
@@ -714,7 +714,7 @@
     },
     {
       "kind": "candidate",
-      "id": "edward-brooke",
+      "id": "edward-brooke-1976",
       "name": "Edward Brooke",
       "party": "R",
       "homeState": "MA",
@@ -730,7 +730,7 @@
     },
     {
       "kind": "candidate",
-      "id": "barry-goldwater",
+      "id": "barry-goldwater-1976",
       "name": "Barry Goldwater",
       "party": "R",
       "homeState": "AZ",
@@ -750,7 +750,7 @@
     },
     {
       "kind": "candidate",
-      "id": "john-tower",
+      "id": "john-tower-1976",
       "name": "John Tower",
       "party": "R",
       "homeState": "TX",
@@ -765,7 +765,7 @@
     },
     {
       "kind": "candidate",
-      "id": "strom-thurmond",
+      "id": "strom-thurmond-1976",
       "name": "Strom Thurmond",
       "party": "R",
       "homeState": "SC",
@@ -785,7 +785,7 @@
     },
     {
       "kind": "candidate",
-      "id": "jesse-helms",
+      "id": "jesse-helms-1976",
       "name": "Jesse Helms",
       "party": "R",
       "homeState": "NC",
@@ -804,7 +804,7 @@
     },
     {
       "kind": "candidate",
-      "id": "richard-lugar",
+      "id": "richard-lugar-1976",
       "name": "Richard Lugar",
       "party": "R",
       "homeState": "IN",
@@ -819,7 +819,7 @@
     },
     {
       "kind": "candidate",
-      "id": "h-john-heinz-iii",
+      "id": "h-john-heinz-iii-1976",
       "name": "H. John Heinz III",
       "party": "R",
       "homeState": "PA",
@@ -834,7 +834,7 @@
     },
     {
       "kind": "candidate",
-      "id": "bill-brock",
+      "id": "bill-brock-1976",
       "name": "Bill Brock",
       "party": "R",
       "homeState": "TN",
@@ -848,7 +848,7 @@
     },
     {
       "kind": "candidate",
-      "id": "bob-packwood",
+      "id": "bob-packwood-1976",
       "name": "Bob Packwood",
       "party": "R",
       "homeState": "OR",
@@ -862,7 +862,7 @@
     },
     {
       "kind": "candidate",
-      "id": "mark-hatfield",
+      "id": "mark-hatfield-1976",
       "name": "Mark Hatfield",
       "party": "R",
       "homeState": "OR",
@@ -877,7 +877,7 @@
     },
     {
       "kind": "candidate",
-      "id": "lowell-weicker",
+      "id": "lowell-weicker-1976",
       "name": "Lowell Weicker",
       "party": "R",
       "homeState": "CT",
@@ -892,7 +892,7 @@
     },
     {
       "kind": "candidate",
-      "id": "clifford-case",
+      "id": "clifford-case-1976",
       "name": "Clifford Case",
       "party": "R",
       "homeState": "NJ",
@@ -907,7 +907,7 @@
     },
     {
       "kind": "candidate",
-      "id": "pete-domenici",
+      "id": "pete-domenici-1976",
       "name": "Pete Domenici",
       "party": "R",
       "homeState": "NM",
@@ -922,7 +922,7 @@
     },
     {
       "kind": "candidate",
-      "id": "paul-laxalt",
+      "id": "paul-laxalt-1976",
       "name": "Paul Laxalt",
       "party": "R",
       "homeState": "NV",
@@ -937,7 +937,7 @@
     },
     {
       "kind": "candidate",
-      "id": "james-l-buckley",
+      "id": "james-l-buckley-1976",
       "name": "James L. Buckley",
       "party": "R",
       "homeState": "NY",
@@ -956,7 +956,7 @@
     },
     {
       "kind": "candidate",
-      "id": "john-danforth",
+      "id": "john-danforth-1976",
       "name": "John Danforth",
       "party": "R",
       "homeState": "MO",
@@ -971,7 +971,7 @@
     },
     {
       "kind": "candidate",
-      "id": "orrin-hatch",
+      "id": "orrin-hatch-1976",
       "name": "Orrin Hatch",
       "party": "R",
       "homeState": "UT",
@@ -986,7 +986,7 @@
     },
     {
       "kind": "candidate",
-      "id": "s-i-hayakawa",
+      "id": "s-i-hayakawa-1976",
       "name": "S. I. Hayakawa",
       "party": "R",
       "homeState": "CA",
@@ -1000,7 +1000,7 @@
     },
     {
       "kind": "candidate",
-      "id": "elliot-richardson",
+      "id": "elliot-richardson-1976",
       "name": "Elliot Richardson",
       "party": "R",
       "homeState": "MA",
@@ -1015,7 +1015,7 @@
     },
     {
       "kind": "candidate",
-      "id": "william-roth",
+      "id": "william-roth-1976",
       "name": "William Roth",
       "party": "R",
       "homeState": "DE",
@@ -1030,7 +1030,7 @@
     },
     {
       "kind": "candidate",
-      "id": "ted-stevens",
+      "id": "ted-stevens-1976",
       "name": "Ted Stevens",
       "party": "R",
       "homeState": "AK",
@@ -1045,7 +1045,7 @@
     },
     {
       "kind": "candidate",
-      "id": "milton-young",
+      "id": "milton-young-1976",
       "name": "Milton Young",
       "party": "R",
       "homeState": "ND",
@@ -1060,7 +1060,7 @@
     },
     {
       "kind": "candidate",
-      "id": "charles-mathias",
+      "id": "charles-mathias-1976",
       "name": "Charles Mathias",
       "party": "R",
       "homeState": "MD",
@@ -1075,7 +1075,7 @@
     },
     {
       "kind": "candidate",
-      "id": "robert-stafford",
+      "id": "robert-stafford-1976",
       "name": "Robert Stafford",
       "party": "R",
       "homeState": "VT",
@@ -1090,7 +1090,7 @@
     },
     {
       "kind": "district",
-      "id": "NY-12",
+      "id": "NY-12-1976",
       "state": "NY",
       "number": 12,
       "era": 1976,
@@ -1103,7 +1103,7 @@
     },
     {
       "kind": "district",
-      "id": "NY-18",
+      "id": "NY-18-1976",
       "state": "NY",
       "number": 18,
       "era": 1976,
@@ -1116,7 +1116,7 @@
     },
     {
       "kind": "district",
-      "id": "NY-39",
+      "id": "NY-39-1976",
       "state": "NY",
       "number": 39,
       "era": 1976,
@@ -1129,7 +1129,7 @@
     },
     {
       "kind": "district",
-      "id": "MA-8",
+      "id": "MA-8-1976",
       "state": "MA",
       "number": 8,
       "era": 1976,
@@ -1143,7 +1143,7 @@
     },
     {
       "kind": "district",
-      "id": "MA-2",
+      "id": "MA-2-1976",
       "state": "MA",
       "number": 2,
       "era": 1976,
@@ -1156,7 +1156,7 @@
     },
     {
       "kind": "district",
-      "id": "IL-1",
+      "id": "IL-1-1976",
       "state": "IL",
       "number": 1,
       "era": 1976,
@@ -1169,7 +1169,7 @@
     },
     {
       "kind": "district",
-      "id": "IL-11",
+      "id": "IL-11-1976",
       "state": "IL",
       "number": 11,
       "era": 1976,
@@ -1183,7 +1183,7 @@
     },
     {
       "kind": "district",
-      "id": "IL-21",
+      "id": "IL-21-1976",
       "state": "IL",
       "number": 21,
       "era": 1976,
@@ -1196,7 +1196,7 @@
     },
     {
       "kind": "district",
-      "id": "CA-5",
+      "id": "CA-5-1976",
       "state": "CA",
       "number": 5,
       "era": 1976,
@@ -1209,7 +1209,7 @@
     },
     {
       "kind": "district",
-      "id": "CA-8",
+      "id": "CA-8-1976",
       "state": "CA",
       "number": 8,
       "era": 1976,
@@ -1223,7 +1223,7 @@
     },
     {
       "kind": "district",
-      "id": "CA-35",
+      "id": "CA-35-1976",
       "state": "CA",
       "number": 35,
       "era": 1976,
@@ -1236,7 +1236,7 @@
     },
     {
       "kind": "district",
-      "id": "CA-21",
+      "id": "CA-21-1976",
       "state": "CA",
       "number": 21,
       "era": 1976,
@@ -1249,7 +1249,7 @@
     },
     {
       "kind": "district",
-      "id": "TX-18",
+      "id": "TX-18-1976",
       "state": "TX",
       "number": 18,
       "era": 1976,
@@ -1262,7 +1262,7 @@
     },
     {
       "kind": "district",
-      "id": "TX-15",
+      "id": "TX-15-1976",
       "state": "TX",
       "number": 15,
       "era": 1976,
@@ -1275,7 +1275,7 @@
     },
     {
       "kind": "district",
-      "id": "TX-7",
+      "id": "TX-7-1976",
       "state": "TX",
       "number": 7,
       "era": 1976,
@@ -1288,7 +1288,7 @@
     },
     {
       "kind": "district",
-      "id": "MI-13",
+      "id": "MI-13-1976",
       "state": "MI",
       "number": 13,
       "era": 1976,
@@ -1302,7 +1302,7 @@
     },
     {
       "kind": "district",
-      "id": "MI-5",
+      "id": "MI-5-1976",
       "state": "MI",
       "number": 5,
       "era": 1976,
@@ -1315,7 +1315,7 @@
     },
     {
       "kind": "district",
-      "id": "PA-1",
+      "id": "PA-1-1976",
       "state": "PA",
       "number": 1,
       "era": 1976,
@@ -1329,7 +1329,7 @@
     },
     {
       "kind": "district",
-      "id": "PA-20",
+      "id": "PA-20-1976",
       "state": "PA",
       "number": 20,
       "era": 1976,
@@ -1342,7 +1342,7 @@
     },
     {
       "kind": "district",
-      "id": "PA-16",
+      "id": "PA-16-1976",
       "state": "PA",
       "number": 16,
       "era": 1976,
@@ -1355,7 +1355,7 @@
     },
     {
       "kind": "district",
-      "id": "OH-21",
+      "id": "OH-21-1976",
       "state": "OH",
       "number": 21,
       "era": 1976,
@@ -1369,7 +1369,7 @@
     },
     {
       "kind": "district",
-      "id": "OH-1",
+      "id": "OH-1-1976",
       "state": "OH",
       "number": 1,
       "era": 1976,
@@ -1382,7 +1382,7 @@
     },
     {
       "kind": "district",
-      "id": "OH-18",
+      "id": "OH-18-1976",
       "state": "OH",
       "number": 18,
       "era": 1976,
@@ -1395,7 +1395,7 @@
     },
     {
       "kind": "district",
-      "id": "GA-5",
+      "id": "GA-5-1976",
       "state": "GA",
       "number": 5,
       "era": 1976,
@@ -1408,7 +1408,7 @@
     },
     {
       "kind": "district",
-      "id": "GA-8",
+      "id": "GA-8-1976",
       "state": "GA",
       "number": 8,
       "era": 1976,
@@ -1422,9 +1422,9 @@
     },
     {
       "kind": "district",
-      "id": "FL-18",
+      "id": "FL-14-1976",
       "state": "FL",
-      "number": 18,
+      "number": 14,
       "era": 1976,
       "demographics": [
         "cuban",
@@ -1435,7 +1435,7 @@
     },
     {
       "kind": "district",
-      "id": "FL-9",
+      "id": "FL-9-1976",
       "state": "FL",
       "number": 9,
       "era": 1976,
@@ -1448,7 +1448,7 @@
     },
     {
       "kind": "district",
-      "id": "AL-7",
+      "id": "AL-7-1976",
       "state": "AL",
       "number": 7,
       "era": 1976,
@@ -1461,7 +1461,7 @@
     },
     {
       "kind": "district",
-      "id": "MS-2",
+      "id": "MS-2-1976",
       "state": "MS",
       "number": 2,
       "era": 1976,
@@ -1475,7 +1475,7 @@
     },
     {
       "kind": "district",
-      "id": "LA-2",
+      "id": "LA-2-1976",
       "state": "LA",
       "number": 2,
       "era": 1976,
@@ -1489,7 +1489,7 @@
     },
     {
       "kind": "district",
-      "id": "MN-5",
+      "id": "MN-5-1976",
       "state": "MN",
       "number": 5,
       "era": 1976,
@@ -1502,7 +1502,7 @@
     },
     {
       "kind": "district",
-      "id": "MN-7",
+      "id": "MN-7-1976",
       "state": "MN",
       "number": 7,
       "era": 1976,
@@ -1515,7 +1515,7 @@
     },
     {
       "kind": "district",
-      "id": "IA-3",
+      "id": "IA-3-1976",
       "state": "IA",
       "number": 3,
       "era": 1976,
@@ -1528,7 +1528,7 @@
     },
     {
       "kind": "district",
-      "id": "KS-1",
+      "id": "KS-1-1976",
       "state": "KS",
       "number": 1,
       "era": 1976,
@@ -1541,7 +1541,7 @@
     },
     {
       "kind": "district",
-      "id": "WV-3",
+      "id": "WV-3-1976",
       "state": "WV",
       "number": 3,
       "era": 1976,
@@ -1554,7 +1554,7 @@
     },
     {
       "kind": "district",
-      "id": "KY-5",
+      "id": "KY-5-1976",
       "state": "KY",
       "number": 5,
       "era": 1976,
@@ -1567,7 +1567,7 @@
     },
     {
       "kind": "district",
-      "id": "AZ-2",
+      "id": "AZ-2-1976",
       "state": "AZ",
       "number": 2,
       "era": 1976,
@@ -1580,7 +1580,7 @@
     },
     {
       "kind": "district",
-      "id": "WA-7",
+      "id": "WA-7-1976",
       "state": "WA",
       "number": 7,
       "era": 1976,
@@ -1593,7 +1593,7 @@
     },
     {
       "kind": "district",
-      "id": "NJ-10",
+      "id": "NJ-10-1976",
       "state": "NJ",
       "number": 10,
       "era": 1976,
@@ -1606,7 +1606,7 @@
     },
     {
       "kind": "district",
-      "id": "CT-3",
+      "id": "CT-3-1976",
       "state": "CT",
       "number": 3,
       "era": 1976,
@@ -1620,7 +1620,7 @@
     },
     {
       "kind": "district",
-      "id": "UT-1",
+      "id": "UT-1-1976",
       "state": "UT",
       "number": 1,
       "era": 1976,
@@ -1633,7 +1633,7 @@
     },
     {
       "kind": "district",
-      "id": "SC-6",
+      "id": "SC-6-1976",
       "state": "SC",
       "number": 6,
       "era": 1976,
@@ -1646,7 +1646,7 @@
     },
     {
       "kind": "candidate",
-      "id": "harry-f-byrd-jr",
+      "id": "harry-f-byrd-jr-1976",
       "name": "Harry F. Byrd Jr.",
       "party": "I",
       "homeState": "VA",
@@ -1661,7 +1661,7 @@
     },
     {
       "kind": "candidate",
-      "id": "eugene-mccarthy",
+      "id": "eugene-mccarthy-1976",
       "name": "Eugene McCarthy",
       "party": "I",
       "homeState": "MN",
