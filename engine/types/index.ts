@@ -94,3 +94,42 @@ export interface RaceEvent {
   upset: boolean;
   uncontested: boolean;
 }
+
+/** v0.2 item 2: bills go ON THE BOOKS and can come off them.
+ *
+ *  Before this, passage incremented a counter and the bill was gone — which
+ *  is why `BILL_CORPUS_ABSENT` held and why board scoring would have been
+ *  equivalent to the running tally it replaces. A corpus that only grows is a
+ *  tally. `repealedIn` is the whole of the difference. */
+export interface EnactedBill {
+  id: string;
+  year: number;
+  /** the spending magnitude, unchanged from v0.1 */
+  g: number;
+  author: number;
+  repealedIn?: number;
+}
+
+/** v0.2 item 3: the only earned ending, and the goal deck in one object.
+ *
+ *  Thresholds do the anti-runaway work for free — two-thirds of the states to
+ *  call, three-quarters to ratify, thirteen to block. A narrow leader can
+ *  never close alone and a minority always has a wall, which is structurally
+ *  anti-runaway in a way no scoring tweak achieves. */
+export interface Amendment {
+  id: string;
+  proposer: number;
+  /** the demographic/issue content, drawn from the existing tag vocabulary */
+  tags: IdentityTag[];
+  calledIn: number;
+  /** states that voted to call the convention */
+  called: string[];
+  /** states that have ratified and survived the challenge */
+  ratified: string[];
+  /** states an opponent pulled back. The ERA's rescissions were one-time acts,
+   *  not an annual re-vote, and a rescinded state stayed out. */
+  rescinded: string[];
+  ratifiedIn?: number;
+  /** set when the window closed short — the ERA at 35 of 38 */
+  failedIn?: number;
+}

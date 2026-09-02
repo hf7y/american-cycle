@@ -88,11 +88,13 @@ export const BILL_POSITION_ABSENT =
   + 'axis the engine defines; engine/rules/economy.ts: "There is deliberately no second '
   + 'ideological axis."';
 
-/** Why there is no corpus to take a centroid OF, independent of position. */
+/** RESOLVED AT v0.2 (item 2). Kept because the reports quote it and because
+ *  what it says about v0.1.2 is still what was true of v0.1.2. */
 export const BILL_CORPUS_ABSENT =
-  'passed bills are counted (GameResult.billsPassed) and discarded; no enacted-bill list, '
-  + 'no repeal, no books. The only trace legislation leaves is economy.accumulatedG, a '
-  + 'single scalar the Fed decays.';
+  'RESOLVED at v0.2: Game.bills is the corpus and EnactedBill.repealedIn takes a bill off '
+  + 'the books. Before that, passed bills were counted (GameResult.billsPassed) and discarded — '
+  + 'no enacted-bill list, no repeal, no books — and the only trace legislation left was '
+  + 'economy.accumulatedG, a single scalar the Fed decays.';
 
 /** Partisan lean, n=1, R positive, in lean-counter units.
  *

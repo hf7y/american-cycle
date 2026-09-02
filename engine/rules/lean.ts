@@ -64,6 +64,24 @@ export function applyPush(
   return lean[state] - before;
 }
 
+/** A FLAT move, unscaled by any margin — v0.2 items 7 and 8.
+ *
+ *  `applyPush` prices an election result and therefore scales with how
+ *  decisively it was won. A backfire is not an election result: the historical
+ *  warrant for the impeachment penalty is chronological rather than
+ *  correlational (the 1998 midterm preceded the Senate vote by three months),
+ *  so there is no margin to be proportional to and inventing one would be
+ *  fitting a curve to n=4. Flat is the version the evidence supports.
+ *  Scaling by strain between the impeaching coalition and the country is the
+ *  right refinement and is v0.3: it needs bill positions to have a magnitude,
+ *  which nothing records. */
+export function nudge(lean: Lean, cfg: LeanConfig, state: string, party: Party, pips: number): number {
+  if (!pips) return 0;
+  const before = lean[state] ?? 0;
+  lean[state] = clampLean(before + pips * sign(party), cfg.maxLean);
+  return lean[state] - before;
+}
+
 /** Decay removes one counter from every state, toward zero. §10: it happens at
  *  the top of the year, so the board players see when they declare is already
  *  decayed -- and pushes land later, on election night. */

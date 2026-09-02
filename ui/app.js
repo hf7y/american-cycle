@@ -127,7 +127,12 @@ function advance(answer) {
     drainLog();
     const end = G.cfg.game.startYear + G.cfg.game.maxYears;
     const dead = !G.talon.length && !G.discard.length && !G.eraQueue.length;
-    if (G.year >= end || dead) return gameOver(dead);
+    // The browser played to the year cap however many bills anyone authored:
+    // interactiveTick sets `wonBy` and, since v0.2, `endedBy`, and nothing here
+    // read either. That is #29's headless/browser divergence in the one place
+    // the parity test cannot see, because it compares ticks and not the loop
+    // around them.
+    if (G.endedBy || G.wonBy !== undefined || G.year >= end || dead) return gameOver(dead);
     gen = G.interactiveTick(S.human);
     return advance();
   }
@@ -216,7 +221,7 @@ function phaseBill() {
   modal(`
     <span class="eyebrow">${G.year} · the omnibill</span>
     <h2 style="font-size:21px;margin-top:4px">${isAuthor ? 'You hold the pen' : 'The bill comes to a vote'}</h2>
-    <p class="note" style="margin:8px 0 12px">One number, G, for spending and taxation together. Every yes-vote scores,
+    <p class="note" style="margin:8px 0 12px">One number, G, for spending and taxation together. A bill that passes goes on the books and scores for its author until somebody repeals it,
       doubled for the majority party (${maj || 'none'}). Passage needs a House majority and 60% of the Senate —
       so it cannot pass on party lines alone. Spending warms the economy and loads the Fed.</p>
     <p class="note">Accumulated spending: <b class="mono">${G.economy.accumulatedG}</b> —
