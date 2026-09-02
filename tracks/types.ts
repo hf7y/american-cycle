@@ -36,6 +36,28 @@ import type { GameResult } from '../engine/game.ts';
 import type { Config } from '../engine/game.ts';
 import type { Card } from '../engine/types/index.ts';
 
+/** WHERE A PASSING THRESHOLD CAME FROM.
+ *
+ *  Not decoration. A green against a bar somebody else set is evidence; a
+ *  green against a bar the author drew after seeing the data is a scoreboard
+ *  drawn around where the ball landed. Both belong in the suite -- an
+ *  authored bar is still better than no bar -- but they are not the same
+ *  claim and a reader cannot tell them apart from the number.
+ *
+ *  WEAKEST LINK. A compound threshold takes the provenance of its weaker
+ *  half: an item whose first bar is quoted from the brief and whose second is
+ *  a number the author picked is `authored-here`, because passing it still
+ *  requires clearing something nobody external asked for. */
+export type Oracle =
+  /** the repo's own simulation brief, quoted */
+  | 'SIM-BRIEF'
+  /** the v0.2 build doc or the test program, quoted */
+  | 'design-doc'
+  /** the postwar record, as a figure rather than as a direction */
+  | 'historical-record'
+  /** set in tracks/, by whoever wrote the item, after seeing the data */
+  | 'authored-here';
+
 export interface Measure {
   name: string;
   value: number;
@@ -120,6 +142,13 @@ export interface TrackItem {
    *  it is the older build being asked a question it has no answer to. */
   needs?: (keyof Capabilities)[];
   run?(ctx: TrackCtx): Measure[] | Promise<Measure[]>;
+  /** Where this item's passing threshold comes from. Required wherever
+   *  `accept` is, because a verdict without a provenance is not readable. */
+  oracle?: Oracle;
+  /** Set when the MEASURED VALUE, not the bar, depends on a knob somebody
+   *  tuned to reach it. A green here says the dial is where it was put, which
+   *  is a much weaker claim than a green on an emergent number. */
+  calibrated?: string;
   /** C and D only. B has no oracle by construction. */
   accept?(m: Measure[]): { pass: boolean; note: string };
 }

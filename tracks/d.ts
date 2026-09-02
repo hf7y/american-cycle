@@ -19,6 +19,7 @@ const d1: TrackItem = {
   id: 'D1-midterm-loss',
   track: 'D',
   question: "Does the president's party lose ground at the midterm, as it did in every postwar cycle but two?",
+  oracle: 'authored-here',
   run({ runs }): Measure[] {
     let midterms = 0, losses = 0;
     for (const r of runs) {
@@ -66,6 +67,7 @@ const d2: TrackItem = {
   id: 'D2-failed-conviction-backfires',
   track: 'D',
   question: 'Does the side that tries and fails to remove a president pay for it?',
+  oracle: 'authored-here',
   needs: ['backfireShutdownShock'],
   run({ cards, cfg, seeds }): Measure[] {
     const pool = ['Impeacher', 'Impeacher', 'Greedy', 'Lookahead'];
@@ -100,6 +102,7 @@ const d3: TrackItem = {
   id: 'D3-shutdown-blame-direction',
   track: 'D',
   question: 'Is the blame for a failed bill attached to the obstructor rather than to whoever happens to be out of power?',
+  oracle: 'authored-here',
   needs: ['shutdownBlame'],
   run({ runs }): Measure[] {
     const all = runs.flatMap((r) => r.shutdownBlame);
@@ -130,6 +133,7 @@ const d4: TrackItem = {
   id: 'D4-regime-duration',
   track: 'D',
   question: 'Can a game even be long enough to contain one Skowronekian regime?',
+  oracle: 'design-doc',
   run({ cfg, runs }): Measure[] {
     return [
       { name: 'year cap', value: cfg.game.maxYears, unit: 'years' },

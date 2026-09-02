@@ -254,6 +254,7 @@
           "n": 240
         }
       ],
+      "oracle": "design-doc",
       "pass": false,
       "verdict": "top scorer lacks the presidency in 27% of games (target >=30%); presidential years explain r2=0.29 of final score (target <0.50)"
     },
@@ -295,6 +296,7 @@
           "n": 12000
         }
       ],
+      "oracle": "authored-here",
       "pass": true,
       "verdict": "longest run above a 40pp gap is 4 cycles (target >=3, the Deep South held 20 years); 45% of state-cycles clear 69pp (the 1984 figure)"
     },
@@ -321,6 +323,7 @@
           "unit": "party flips per interest flip"
         }
       ],
+      "oracle": "authored-here",
       "pass": false,
       "verdict": "5% of consecutive holds change party against 5% changing interest — ratio 1.0 (target >=2). NOTE: candidate tag-fit is measured against the district a card actually ran in, so a district with no card in play contributes nothing."
     },
@@ -359,6 +362,7 @@
           "n": 60
         }
       ],
+      "oracle": "SIM-BRIEF",
       "pass": false,
       "verdict": "determination at 50% against SIM-BRIEF's 75-85% band; comeback rate 0.0%"
     },
@@ -386,6 +390,7 @@
           "n": 240
         }
       ],
+      "oracle": "authored-here",
       "pass": false,
       "verdict": "53% of midterms cost the president's party ground (postwar: all but two, so the target band is 70-95% rather than 100%)"
     },
@@ -422,6 +427,7 @@
           "value": 1.875
         }
       ],
+      "oracle": "design-doc",
       "pass": false,
       "verdict": "the cap is 16 years against a 30-40 year reference regime; below 30 a null settlement result is a fact about the clock"
     },

@@ -80,7 +80,7 @@ if (missing.length) {
 
 const ctx: TrackCtx = { cards, cfg, configName, agents, seeds, runs, can };
 
-interface Row { id: string; track: string; question: string; notRun?: string; notMeasurable?: string; measures?: Measure[]; verdict?: string; pass?: boolean }
+interface Row { id: string; track: string; question: string; notRun?: string; notMeasurable?: string; oracle?: string; calibrated?: string; measures?: Measure[]; verdict?: string; pass?: boolean }
 const out: Row[] = [];
 let crashed = 0, red = 0, unmeasurable = 0;
 
@@ -110,12 +110,17 @@ for (const item of [...B, ...C, ...D] as TrackItem[]) {
     console.log(`    ${m.name.padEnd(52)} ${Number(m.value).toFixed(3).padStart(10)}`
       + `${m.unit ? '  ' + m.unit : ''}${m.n ? `  (n=${m.n})` : ''}`);
   }
-  const row: Row = { id: item.id, track: item.track, question: item.question, measures };
+  const row: Row = { id: item.id, track: item.track, question: item.question, measures,
+                     oracle: item.oracle, calibrated: item.calibrated };
   if (item.accept) {
     const v = item.accept(measures);
     row.pass = v.pass; row.verdict = v.note;
     if (!v.pass) red++;
-    console.log(`  ${v.pass ? 'GREEN' : 'RED  '} — ${v.note}`);
+    // The provenance rides with the verdict, because a green against a bar
+    // the author drew after seeing the data is not the same claim as a green
+    // against one the brief set, and the number cannot say which it is.
+    console.log(`  ${v.pass ? 'GREEN' : 'RED  '} [bar: ${item.oracle ?? 'unlabelled'}] — ${v.note}`);
+    if (item.calibrated) console.log(`         CALIBRATED — ${item.calibrated.replace(/\s+/g, ' ')}`);
   } else {
     console.log('  RECORDED (Track B judges nothing).');
   }
