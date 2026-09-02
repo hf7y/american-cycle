@@ -104,12 +104,12 @@ export interface Agent {
   withdraw(v: WithdrawalView): boolean;
   /** the omnibill's single number, 1..6, negative for austerity */
   proposeG(v: GameView): number;
-  /** v0.2 item 2: repeal instead of legislating. Returns a bill id from
-   *  `books`. Omit for the default heuristic. */
-  proposeRepeal?(v: GameView, books: readonly EnactedBill[]): string | undefined;
   /** v0.2 item 4: the bill's position. Omit for the default, which is the
    *  author's own coalition -- the tags their districts actually carry. */
   proposeTags?(v: GameView, books: readonly EnactedBill[]): IdentityTag[] | undefined;
+  /** v0.2 item 2: repeal instead of legislating. Returns a bill id from
+   *  `books`. Omit for the default heuristic. */
+  proposeRepeal?(v: GameView, books: readonly EnactedBill[]): string | undefined;
   /** v0.2 item 3: call a constitutional convention, which spends the year's
    *  legislating exactly as impeachment does. Returns the amendment's tags.
    *  Omit for the default heuristic. */
@@ -249,6 +249,12 @@ export interface GameResult {
   /** bills on the books at the epilogue, and those repealed along the way */
   billsOnBooks: number;
   billsRepealed: number;
+  /** v0.2 item 8, recorded so the DIRECTION can be tested and not just the
+   *  firing. The record says the party perceived as making the demand takes
+   *  it, and in 1995 and 2013 that party held the congressional majority — so
+   *  a rule that can only ever blame the minority has encoded incumbency by
+   *  accident, and only `wasMajority` can tell the two apart. */
+  shutdownBlame: { year: number; party: Party; wasMajority: boolean }[];
 }
 
 export class Game {
@@ -265,6 +271,7 @@ export class Game {
    *  did not exist. */
   bills: EnactedBill[] = [];
   amendments: Amendment[] = [];
+  shutdownBlame: { year: number; party: Party; wasMajority: boolean }[] = [];
   log: string[] = [];
   stats = { billsPassed: 0, billsAttempted: 0, crossBench: 0, impeachments: 0, rateRises: 0,
             decisions: [] as number[],
@@ -272,9 +279,11 @@ export class Game {
              *  Counting "uncontested generals" instead undercounts badly: a race
              *  several players crowd in one party resolves as a contested PRIMARY
              *  and a one-candidate general. */
-            raceSlots: 0, contestedSlots: 0, billsRepealed: 0 };
+            raceSlots: 0, contestedSlots: 0, billsRepealed: 0, shutdowns: 0, shocks: 0 };
   /** v0.2 item 6: off-position yes-votes, by card id. */
   private offDistrict = new Map<string, number>();
+  /** v0.2 item 9: pips of shock in force this year, 0 in a quiet one. */
+  private shockPips = 0;
   private agents: Agent[];
   private scoreHistory: number[][] = [];
 
@@ -329,6 +338,15 @@ export class Game {
     };
     const out = boardScores(this.cfg.scoring, b);
     this.players.forEach((p, i) => { p.score = out[i]; });
+  }
+
+  /** A player's share of the seats actually held, over its fair share. 1 is an
+   *  average faction; the shock is proportional to this. */
+  private powerOf(player: number): number {
+    const held = this.seats.filter((s) => s.holder);
+    if (!held.length) return 1;
+    const mine = held.filter((s) => s.holder!.player === player).length;
+    return (mine / held.length) * this.players.length;
   }
 
   private draw(p: PlayerState, n: number): void {
@@ -543,12 +561,14 @@ export class Game {
     const movers = this.players.filter((_, i) => this.agents[i].moveImpeach?.(this.view(i)));
     if (!movers.length) return false;
 
-    let yes = 0;
     const senate = this.seats.filter((s) => s.office === 'senator' && s.holder);
-    for (const s of senate) {
-      if (this.agents[s.holder!.player].voteImpeach?.(this.view(s.holder!.player), s)) yes++;
-    }
+    // WHO voted, not how many. v0.1 kept a count, which is why nothing could
+    // be made to fall on the people who voted for it.
+    const forRemoval = senate.filter((s) =>
+      this.agents[s.holder!.player].voteImpeach?.(this.view(s.holder!.player), s));
+    const yes = forRemoval.length;
     if (!leg.impeach(this.cfg.legislature, this.seats, yes)) {
+      this.backfire(forRemoval, pres.party);
       this.log.push(`${this.year}: impeachment fails, ${yes} of ${senate.length} in the Senate`);
       return true;                            // the year's slot is spent either way
     }
@@ -745,6 +765,30 @@ export class Game {
     }
   }
 
+  /** v0.2 item 7: the failed conviction backfires, FLAT.
+   *
+   *  The warrant is chronological rather than correlational, which is what
+   *  makes it trustworthy on n=4: the 1998 midterm was November 3, the House
+   *  impeached in December, the Senate acquitted in February 1999. Republicans
+   *  lost five seats in the first midterm since 1934 where the president's
+   *  party gained, and the Speaker resigned within a week -- all before any
+   *  conviction margin existed. The electorate punished the attempt, so there
+   *  is no shortfall to scale by.
+   *
+   *  TWO-SIDED, because the failed attempt pays the target: Clinton hit 73%
+   *  approval at the House vote, and Trump's highest ever rating came days
+   *  after his first acquittal.
+   *
+   *  EVERYONE WHO VOTED TO IMPEACH EATS IT, not the filer -- filers are not
+   *  tracked, and this makes impeachment a trap you can bait an opponent into. */
+  private backfire(forRemoval: Seat[], targetParty: Party): void {
+    const pips = this.cfg.legislature.impeachBackfirePips ?? 0;
+    if (!pips) return;
+    for (const s of forRemoval) lean.nudge(this.leanMap, this.cfg.lean, s.state, s.holder!.party, -pips);
+    const target = new Set(this.seats.filter((s) => s.holder?.party === targetParty).map((s) => s.state));
+    for (const st of target) lean.nudge(this.leanMap, this.cfg.lean, st, targetParty, pips);
+  }
+
   // ---- §7 step 2-3: the omnibill -------------------------------------------
   private omnibill(human = -1, humanG?: number, humanYes?: boolean): void {
     const authorId = leg.author(this.seats);
@@ -763,6 +807,7 @@ export class Game {
       : clampInt(proposed, this.cfg.economy.gMin, this.cfg.economy.gMax);
     const billTags = repealing ? repealing.tags
       : (this.agents[authorId].proposeTags?.(view, this.bills) ?? this.defaultBillTags(authorId));
+
     const votes: leg.Vote[] = [];
     for (const s of this.seats) {
       if (!s.holder || (s.office !== 'senator' && s.office !== 'representative')) continue;
@@ -839,8 +884,51 @@ export class Game {
         this.log.push(`${this.year}: omnibill G${g} [${billTags.join(', ')}] passed ${out.houseYes}/${out.houseTotal} H, ${out.senateYes}/${out.senateTotal} S`);
       }
     } else {
+      this.shutdown(votes);
       this.log.push(`${this.year}: omnibill G${g} ${out.vetoed ? 'vetoed' : 'failed'}`);
     }
+  }
+
+  /** v0.2 item 8: nothing passes, and everyone takes a reputational hit
+   *  weighted toward the party perceived as making the demand.
+   *
+   *  NOT weighted toward incumbents, and the record is why: 1995-96, 2013 and
+   *  2018-19 all point the same way, and in 1995 and 2013 the blamed party
+   *  held the congressional majority, so incumbency did not protect them. The
+   *  capability check this was blocked on is satisfied -- `leg.Vote` carries
+   *  player, party, office and yes/no, so the no-votes are attributable and
+   *  the obstructing party is a fact rather than an inference.
+   *
+   *  The hit is a lean move, not a score dock, because under board scoring
+   *  there is no tally to dock. */
+  private shutdown(votes: leg.Vote[]): void {
+    const pips = this.cfg.legislature.shutdownPips ?? 0;
+    if (!pips) return;
+    const noBy = new Map<Party, number>();
+    for (const v of votes) if (!v.yes) noBy.set(v.party, (noBy.get(v.party) ?? 0) + 1);
+    let blamed: Party | undefined, n = 0, tied = false;
+    for (const [pty, c] of noBy) {
+      if (c > n) { n = c; blamed = pty; tied = false; } else if (c === n) tied = true;
+    }
+    // A deadlock nobody owns blames nobody. Splitting the hit evenly would
+    // make every failed bill a wash, which is the one outcome the record
+    // never shows.
+    if (!blamed || tied) return;
+    this.stats.shutdowns++;
+    const majH = leg.majorityParty(this.seats, 'representative');
+    const majS = leg.majorityParty(this.seats, 'senator');
+    this.shutdownBlame.push({ year: this.year, party: blamed, wasMajority: blamed === majH || blamed === majS });
+    // WHERE the hit lands is the attribution, not the party register. Nudging
+    // every state the blamed party holds a seat in makes a failed bill write
+    // more lean than an election does -- ~6.5 failures a game across ~30
+    // states against ~50 election pushes -- which inverts §10, where the map
+    // moves because voters moved it. The no-voters' own states are the set the
+    // `Vote` record actually supports.
+    const states = new Set(votes.filter((v) => !v.yes && v.party === blamed)
+      .map((v) => this.seats.find((s) => s.holder?.cardId === v.cardId)?.state)
+      .filter((x): x is string => !!x));
+    for (const st of states) lean.nudge(this.leanMap, this.cfg.lean, st, blamed, -pips);
+    this.log.push(`${this.year}: the shutdown is blamed on ${blamed}, ${n} no-votes`);
   }
 
   // ---- §7 steps 6-9: the elections -----------------------------------------
@@ -1000,7 +1088,7 @@ export class Game {
     return this.agents[p].withdraw(v);
   }
 
-  /** v0.2 items 5 and 6, read off the board onto one declaration.
+  /** v0.2 items 5, 6 and 9, read off the board onto one declaration.
    *
    *  `partyFit` is the distance from this card's tags to the CURRENT centroid
    *  of its party's officeholders -- so the cost of the label is a fact about
@@ -1012,6 +1100,7 @@ export class Game {
     const party = tags.partyPosition(this.seats, this.cardById, d.card.party);
     d.partyFit = tags.distance(mine, party);
     d.offDistrict = this.offDistrict.get(d.card.id) ?? 0;
+    d.power = this.powerOf(d.player);
   }
 
   private raceContext(office: Office, state: string, slot: number | undefined, presidentialWinner?: Party): RaceContext {
@@ -1023,6 +1112,7 @@ export class Game {
       presidentParty: this.president?.party,
       economyMod: econ.economyModifier(this.economy, this.cfg.economy, this.cfg.national.strongEconomy, this.cfg.national.recession),
       presidentialWinner,
+      shock: this.shockPips,
     };
   }
 
@@ -1270,6 +1360,7 @@ export class Game {
     if (fed.rateRise) { this.stats.rateRises++; this.log.push(`${this.year}: the Fed tightens`); }
     econ.walk(this.economy, this.cfg.economy, this.rng);
     lean.decay(this.leanMap, this.cfg.lean, this.year, this.rng);
+    this.rollShock();
 
     if (isElectionYear(this.cfg, this.year)) {
       yield* this.electionsInteractive(human);
@@ -1418,6 +1509,7 @@ export class Game {
     if (fed.rateRise) { this.stats.rateRises++; this.log.push(`${this.year}: the Fed tightens`); }
     econ.walk(this.economy, this.cfg.economy, this.rng);
     lean.decay(this.leanMap, this.cfg.lean, this.year, this.rng);  // 5.
+    this.rollShock();
 
     if (isElectionYear(this.cfg, this.year)) {
       this.elections();                                  // 6-9.
@@ -1426,6 +1518,14 @@ export class Game {
     this.rescore();
     this.scoreHistory.push(this.players.map((p) => p.score));
     this.year++;
+  }
+
+  /** v0.2 item 9. Rolled before the elections and cleared after them, so a
+   *  shock is a property of one cycle and never of the whole game. */
+  private rollShock(): void {
+    this.shockPips = econ.shockCheck(this.cfg.economy, this.rng)
+      ? (this.cfg.economy.shockPips ?? 0) : 0;
+    if (this.shockPips) { this.stats.shocks++; this.log.push(`${this.year}: a shock hits the incumbents`); }
   }
 
   /** Set when a §14 victory condition fires, so the result can say which. */
@@ -1488,6 +1588,7 @@ export class Game {
       bills: this.bills, amendments: this.amendments,
       billsOnBooks: this.bills.filter((b) => b.repealedIn === undefined).length,
       billsRepealed: this.stats.billsRepealed,
+      shutdownBlame: this.shutdownBlame,
     };
   }
 }

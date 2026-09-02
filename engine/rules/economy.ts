@@ -11,6 +11,17 @@ export interface EconomyConfig {
   rateRiseSpendDown: number;
   rateRiseEconomyHit: number;
   walkDrift: number;
+  /** v0.2 item 9, the CHEAP version deliberately. An exogenous shock on a d6
+   *  roll-under, hitting incumbents in proportion to the power their faction
+   *  holds. Nothing positional: shocks discredit POSITIONS in reality —
+   *  stagflation discredited demand management, 2008 discredited deregulation
+   *  — but that version needs tags on bills and a country position, and its
+   *  value is unproven. Build this, then test whether it moves the
+   *  determination point. If it does, the fancy one is never built; if it does
+   *  not, the complexity has been earned rather than assumed. 0 disables. */
+  shockOnRollAtMost?: number;
+  /** pips against an incumbent of average power. Scaled by power held. */
+  shockPips?: number;
 }
 
 export interface Economy { level: number; accumulatedG: number; lastRateRise?: number; }
@@ -47,6 +58,13 @@ export function fedCheck(e: Economy, cfg: EconomyConfig, rng: RNG): { roll: numb
     e.level = clampEcon(e.level + cfg.rateRiseEconomyHit, cfg.min, cfg.max);
   }
   return { roll, rateRise };
+}
+
+/** The shock roll. Separate from `fedCheck` because the Fed is endogenous —
+ *  it reads accumulated spending — and this is not. */
+export function shockCheck(cfg: EconomyConfig, rng: RNG): boolean {
+  const at = cfg.shockOnRollAtMost ?? 0;
+  return at > 0 && rng.d6() <= at;
 }
 
 /** Exact probability the Fed tightens at a given accumulation, 2d6 roll-under. */

@@ -74,6 +74,9 @@ export interface RaceContext {
   economyMod: number;
   /** set once the presidential general has resolved, for down-ballot coattails */
   presidentialWinner?: Party;
+  /** v0.2 item 9: pips of exogenous shock this year, 0 in a quiet one. Falls
+   *  on incumbents, scaled by `Declaration.power`. */
+  shock?: number;
 }
 
 export interface Declaration {
@@ -103,6 +106,9 @@ export interface Declaration {
   partyFit?: number;
   /** v0.2 item 6: yes-votes this card cast on bills far from its district. */
   offDistrict?: number;
+  /** v0.2 item 9: the player's share of held seats over its fair share, so
+   *  1 is an average faction. The shock is proportional to power held. */
+  power?: number;
 }
 
 /** §5: district cards gate all races. You may run only where you hold a
@@ -176,6 +182,13 @@ export function buildModifiers(
       m.push({ source: `off-position votes \u00d7${d.offDistrict}`, pips: pg.offDistrictPips * d.offDistrict });
     }
 
+    // v0.2 item 9: the cheap shock. It falls on the people in office and it
+    // falls hardest on whoever holds most of them, which is the only brake in
+    // the design that reads a player's total position rather than one race.
+    if (ctx.shock && d.incumbent) {
+      const pips = -Math.round(ctx.shock * (d.power ?? 1));
+      if (pips) m.push({ source: 'shock', pips });
+    }
 
     // National modifiers -- the tide, never the noise.
     if (ctx.presidentParty === d.card.party) {
