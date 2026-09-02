@@ -89,6 +89,32 @@ baselines. The headline of the diff between them: player-scores that never
 decrease **1.00 → 0.05**, games ending by condition **n/a → 48%**, bill passage
 **6.3% → 26.1%**, determination point **0.50 → 0.625** against a 75–85% band.
 
+### Read the bar before you read the verdict
+
+Every acceptance item carries an `oracle`: where its **passing threshold** came
+from. `SIM-BRIEF` and `design-doc` are quoted from something external;
+`authored-here` means whoever wrote the item picked the number, in most cases
+after seeing the data. A compound bar takes the provenance of its weaker half.
+
+A green against an external bar is evidence. A green against an authored one is
+a scoreboard drawn around where the ball landed. Both belong in the suite — an
+authored bar beats no bar — but they are not the same claim, and the number
+alone cannot tell you which it is. At v0.2:
+
+| bar set by | green |
+|---|---|
+| SIM-BRIEF | 0 / 1 |
+| design-doc | 0 / 3 |
+| authored-here | 4 / 7 |
+
+**Every externally-set bar is red, and every green is one we set ourselves.**
+
+Separately, `calibrated` marks an item whose *measured value* — not its bar —
+depends on a knob somebody tuned to reach it. C6's 48% is the case: Article V's
+two-thirds and three-quarters are constitutional, but the die thresholds under
+them are not, and across the swept grid the ending rate runs from 3% to 98%. A
+green there says the dial is where it was put.
+
 An item that is deliberately not built says so and says what it would need.
 Silent omission reads as "covered everything" when it did not.
 

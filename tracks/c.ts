@@ -32,6 +32,7 @@ const c2: TrackItem = {
   id: 'C2-win-without-the-presidency',
   track: 'C',
   question: 'Is the presidency the game? A committee operator should be able to win without it.',
+  oracle: 'design-doc',
   run({ runs }): Measure[] {
     let lacksPresidency = 0;
     // Regression of final score on years holding the presidency, across games
@@ -88,6 +89,7 @@ const c3: TrackItem = {
   id: 'C3-cross-office-divergence',
   track: 'C',
   question: 'Does the board produce split-ticket voting — a state going one way at the top and another below it?',
+  oracle: 'authored-here',
   run({ runs }): Measure[] {
     const gaps: number[] = [];
     let persistence = 0, reversals = 0, statesWithNoHouse = 0, cells = 0;
@@ -165,6 +167,7 @@ const c4: TrackItem = {
   id: 'C4-shopping-blocs',
   track: 'C',
   question: 'Does a district ever change its vehicle while keeping its interest?',
+  oracle: 'authored-here',
   run({ runs, cards }): Measure[] {
     const demo = new Map(cards.filter((c) => c.kind === 'district').map((c) => [`${c.state}|${c.number}`, c.demographics]));
     const ids = new Map(cards.filter((c) => c.kind === 'candidate').map((c) => [c.id, c.identities]));
@@ -229,6 +232,11 @@ const c6: TrackItem = {
   id: 'C6-games-end-by-condition',
   track: 'C',
   question: 'Does the game have an ending, or only a timer?',
+  oracle: 'authored-here',
+  calibrated: 'the ending RATE is set by amendment.target and rescindTarget, two die thresholds nothing '
+    + 'specifies and which were chosen by sweeping. Across that grid the rate runs from 3% to 98%, so a '
+    + 'green here says the dial is where it was put. Article V\u0027s two-thirds and three-quarters are '
+    + 'constitutional and are NOT tuning; the die targets are.',
   needs: ['ending'],
   run({ runs, cfg }): Measure[] {
     return [
@@ -249,6 +257,7 @@ const c7: TrackItem = {
   id: 'C7-runaway-bars',
   track: 'C',
   question: 'Can a player behind at the midpoint still win?',
+  oracle: 'SIM-BRIEF',
   run({ cards, cfg, seeds }): Measure[] {
     const m = runawayMetrics(seeds, ['Greedy', 'Lookahead', 'SenateFlood', 'HeterodoxSpecialist'], cards, cfg);
     return [
@@ -274,6 +283,7 @@ const c8: TrackItem = {
   id: 'C8-backfire-shutdown-shock',
   track: 'C',
   question: 'Do the failed impeachment, the shutdown and the shock move the board in the direction the record says?',
+  oracle: 'design-doc',
   needs: ['backfireShutdownShock'],
   run({ cards, cfg, seeds }): Measure[] {
     const block = seeds.slice(0, Math.min(30, seeds.length));
@@ -355,6 +365,7 @@ const c9: TrackItem = {
   id: 'C9-repeal-is-reachable',
   track: 'C',
   question: 'Do bills actually come off the books, or is the corpus monotone in a second costume?',
+  oracle: 'authored-here',
   needs: ['corpus'],
   run({ runs }): Measure[] {
     const authorSpread = runs.map((r) => new Set(r.bills.map((b) => b.author)).size);
