@@ -7,7 +7,7 @@ import { Game } from '../engine/game.ts';
 import { RNG } from '../engine/rules/rng.ts';
 import { AGENTS } from '../sim/agents.ts';
 import { playOne } from '../sim/harness.ts';
-import { unopposedHouseShare } from './history.ts';
+import { effectiveCompetitiveness, unopposedHouseShare } from './history.ts';
 import { mean, quantile, share, type Measure, type TrackCtx, type TrackItem } from './types.ts';
 
 /** B1 — race resolution.
@@ -37,15 +37,24 @@ const b1: TrackItem = {
       { name: 'contested: mean margin', value: mean(contested.map((e) => e.margin)), unit: 'pips', n: contested.length },
       { name: 'contested: median margin', value: quantile(contested.map((e) => e.margin), 0.5), unit: 'pips', n: contested.length },
       { name: 'contested-slot share', value: mean(runs.map((r) => r.contestedSlotShare)), unit: 'share of slots', n: runs.length },
-      // LIKE-FOR-LIKE, and the restriction is the whole point. The walkover
-      // share above is over every event -- primaries and fifty presidential
-      // state races included -- and has no counterpart in the returns.
-      // Unopposed HOUSE GENERALS do.
-      { name: 'House generals: walkover share', value: houseWalkover, unit: 'share of House generals', n: houseGenerals,
-        historical: unopposedHouseShare().share,
-        historicalNote: 'a House race with no votes recorded on one side was unopposed: '
-          + `${(100 * unopposedHouseShare().share).toFixed(1)}% of ${unopposedHouseShare().n} district-years, `
-          + '1976-2018. Both sides are one-candidate general elections for the House and nothing else.' },
+      // NOT LIKE-FOR-LIKE (#93, filed against B1's own original claim). This
+      // row is the engine's empty-ballot-line share; the returns run a
+      // sacrificial candidate who loses 80-20 and never produce an empty
+      // line, so subtracting the two manufactures a gap that is substantially
+      // a definitional artifact. Left un-paired with `historical` on purpose
+      // -- the honest comparison is the effective-competitiveness band below.
+      { name: 'House generals: walkover share', value: houseWalkover, unit: 'share of House generals', n: houseGenerals },
+      { name: 'historical: House generals unopposed (one side got no votes)',
+        value: unopposedHouseShare().share, unit: 'share of House generals', n: unopposedHouseShare().n,
+        historicalNote: '1976-2018, house_district_panel.json. Not a like-for-like bar for the walkover-share '
+          + 'row above -- see #93. The band below (unopposed OR a blowout margin) is the honest comparison, '
+          + 'reported at three thresholds rather than one picked number.' },
+      { name: 'historical: House generals safe seat (unopposed or margin >= 40pp)',
+        value: effectiveCompetitiveness(40).share, unit: 'share of House generals', n: effectiveCompetitiveness(40).n },
+      { name: 'historical: House generals safe seat (unopposed or margin >= 30pp)',
+        value: effectiveCompetitiveness(30).share, unit: 'share of House generals', n: effectiveCompetitiveness(30).n },
+      { name: 'historical: House generals safe seat (unopposed or margin >= 20pp)',
+        value: effectiveCompetitiveness(20).share, unit: 'share of House generals', n: effectiveCompetitiveness(20).n },
     ];
   },
 };

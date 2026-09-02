@@ -68,9 +68,32 @@
           "name": "House generals: walkover share",
           "value": 0.9637385086823289,
           "unit": "share of House generals",
-          "n": 5874,
-          "historical": 0.13907492674759314,
-          "historicalNote": "a House race with no votes recorded on one side was unopposed: 13.9% of 9556 district-years, 1976-2018. Both sides are one-candidate general elections for the House and nothing else."
+          "n": 5874
+        },
+        {
+          "name": "historical: House generals unopposed (one side got no votes)",
+          "value": 0.13907492674759314,
+          "unit": "share of House generals",
+          "n": 9556,
+          "historicalNote": "1976-2018, house_district_panel.json. Not a like-for-like bar for the walkover-share row above -- see #93. The band below (unopposed OR a blowout margin) is the honest comparison, reported at three thresholds rather than one picked number."
+        },
+        {
+          "name": "historical: House generals safe seat (unopposed or margin >= 40pp)",
+          "value": 0.3946404270909662,
+          "unit": "share of House generals",
+          "n": 9553
+        },
+        {
+          "name": "historical: House generals safe seat (unopposed or margin >= 30pp)",
+          "value": 0.5623364388150319,
+          "unit": "share of House generals",
+          "n": 9553
+        },
+        {
+          "name": "historical: House generals safe seat (unopposed or margin >= 20pp)",
+          "value": 0.7233329844028054,
+          "unit": "share of House generals",
+          "n": 9553
         }
       ]
     },
