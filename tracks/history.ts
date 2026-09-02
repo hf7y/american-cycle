@@ -146,6 +146,21 @@ export function unopposedHouseShare(): { share: number; n: number } {
   return { share: HOUSE.filter(([, , , d, r]) => d === 0 || r === 0).length / n, n };
 }
 
+/** B1 (#93). A House race with no votes recorded on one side is the ONLY
+ *  like-for-like counterpart the engine's raw walkover share has -- but
+ *  reality also runs a sacrificial candidate who loses 80-20, which the
+ *  panel's vote counts show as contested and the engine's empty-ballot-line
+ *  model cannot produce at all. Effective competitiveness widens "safe" from
+ *  strictly-unopposed to a margin threshold, so the reader sees a band
+ *  instead of one number picked to imply a single right answer. `pp` is a
+ *  parameter, not a constant, because the honest reporting is the band across
+ *  several thresholds, not one row. */
+export function effectiveCompetitiveness(pp: number): { share: number; n: number } {
+  const margins = HOUSE.map(([, , , d, r]) => (d + r === 0 ? undefined : (100 * Math.abs(d - r)) / (d + r)))
+    .filter((m): m is number => m !== undefined);
+  return { share: margins.filter((m) => m >= pp).length / margins.length, n: margins.length };
+}
+
 /** D5. Deep South Republican share of House seats, per cycle. The realignment
  *  this measures BEGINS before the panel: 0% Republican 1947-1963 and 18.9% in
  *  1965 are outside it, so what the data can show is the second half — the
