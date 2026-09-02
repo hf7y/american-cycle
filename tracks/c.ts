@@ -10,9 +10,8 @@
  */
 import { playOne } from '../sim/harness.ts';
 import { runawayMetrics } from '../sim/roundrobin.ts';
-import * as tags from '../engine/rules/tags.ts';
 import type { Party, RaceEvent } from '../engine/types/index.ts';
-import { mean, pick, share, type Measure, type TrackItem } from './types.ts';
+import { mean, overlapDistance, pick, share, type Measure, type TrackItem } from './types.ts';
 
 /** C1 — the Skowronek suite. BUILT, and it lives in `skowronek/` with its own
  *  runner (`npm run skowronek`). Not duplicated here: the flagship
@@ -179,7 +178,7 @@ const c4: TrackItem = {
         // INTEREST is the fit between the winner and the district they won —
         // what the seat is now FOR. Party is the label on the same seat.
         // Stable interest with an unstable label is the shopping signature.
-        const fit = tags.distance(tags.weights(ids.get(w.cardId) ?? []), tags.weights(d));
+        const fit = overlapDistance(ids.get(w.cardId) ?? [], d);
         if (fit === undefined) continue;
         const prev = last.get(`${e.state}|${e.slot}`);
         if (prev) {
@@ -230,6 +229,7 @@ const c6: TrackItem = {
   id: 'C6-games-end-by-condition',
   track: 'C',
   question: 'Does the game have an ending, or only a timer?',
+  needs: ['ending'],
   run({ runs, cfg }): Measure[] {
     return [
       { name: 'games ending by condition', value: share(runs.filter((r) => r.endedBy).length, runs.length), unit: 'share of games', n: runs.length },
@@ -274,6 +274,7 @@ const c8: TrackItem = {
   id: 'C8-backfire-shutdown-shock',
   track: 'C',
   question: 'Do the failed impeachment, the shutdown and the shock move the board in the direction the record says?',
+  needs: ['backfireShutdownShock'],
   run({ cards, cfg, seeds }): Measure[] {
     const block = seeds.slice(0, Math.min(30, seeds.length));
 
@@ -354,6 +355,7 @@ const c9: TrackItem = {
   id: 'C9-repeal-is-reachable',
   track: 'C',
   question: 'Do bills actually come off the books, or is the corpus monotone in a second costume?',
+  needs: ['corpus'],
   run({ runs }): Measure[] {
     const authorSpread = runs.map((r) => new Set(r.bills.map((b) => b.author)).size);
     return [

@@ -49,7 +49,22 @@ and `hf7y/ecosystem1-vault` for the text.
 `findings/` carries its stamp inline and goes stale. `tracks/` carries none —
 one suite lives on main and runs against any worktree, and what gets frozen per
 tag is a **numbers file**. Comparison is diffing two numbers files, so a test
-written today can be re-run against v0.1.2 in a year.
+written today can be re-run against v0.1.2 in a year:
+
+```
+git worktree add /tmp/old <tag>
+cp -r tracks /tmp/old/tracks && cp sim/tracks.ts /tmp/old/sim/
+(cd /tmp/old && node sim/tracks.ts --tag <tag> --emit /tmp/old.json)
+npm run tracks -- --diff /tmp/old.json reports/tracks-v0.2.json
+```
+
+That only works because the suite **probes the build rather than assuming
+it**. Nothing in `tracks/` may import a module that postdates the oldest build
+it runs against, or read a `GameResult` field without asking whether this build
+has one. An item declares what it `needs`; the runner reports **NOT
+MEASURABLE**, which is a third state — not a pass, not a failure, and not a
+decision not to build. In a diff those cells read `n/a`, never `0`, because a
+zero would claim the mechanic did nothing when in fact it did not exist.
 
 | track | oracle | expected state | blocks CI |
 |---|---|---|---|
@@ -63,11 +78,16 @@ measures and passes has to pick a tolerance, and a wide one hides staleness.
 Track B stamps a number without comment; Track C fails on it loudly.
 
 ```
-npm run tracks                                  # everything
+npm run tracks                                      # everything
 npm run tracks -- --emit reports/tracks-v0.2.json   # freeze a baseline
-npm run tracks -- --diff old.json new.json          # what moved between tags
+npm run tracks -- --diff reports/tracks-v0.1.2.json reports/tracks-v0.2.json
 npm run skowronek                                   # the regime suite (Track C1)
 ```
+
+`reports/tracks-v0.1.2.json` and `reports/tracks-v0.2.json` are the two frozen
+baselines. The headline of the diff between them: player-scores that never
+decrease **1.00 → 0.05**, games ending by condition **n/a → 48%**, bill passage
+**6.3% → 26.1%**, determination point **0.50 → 0.625** against a 75–85% band.
 
 An item that is deliberately not built says so and says what it would need.
 Silent omission reads as "covered everything" when it did not.

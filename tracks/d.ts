@@ -66,6 +66,7 @@ const d2: TrackItem = {
   id: 'D2-failed-conviction-backfires',
   track: 'D',
   question: 'Does the side that tries and fails to remove a president pay for it?',
+  needs: ['backfireShutdownShock'],
   run({ cards, cfg, seeds }): Measure[] {
     const pool = ['Impeacher', 'Impeacher', 'Greedy', 'Lookahead'];
     const block = seeds.slice(0, Math.min(40, seeds.length));
@@ -99,6 +100,7 @@ const d3: TrackItem = {
   id: 'D3-shutdown-blame-direction',
   track: 'D',
   question: 'Is the blame for a failed bill attached to the obstructor rather than to whoever happens to be out of power?',
+  needs: ['shutdownBlame'],
   run({ runs }): Measure[] {
     const all = runs.flatMap((r) => r.shutdownBlame);
     return [

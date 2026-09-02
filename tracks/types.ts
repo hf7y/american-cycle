@@ -22,6 +22,15 @@
  *
  *  TRACK C MUST NOT BLOCK. A test that should be red for six months needs
  *  somewhere to live; that is what makes acceptance-test-first possible.
+ *
+ *  NOTHING HERE MAY IMPORT A MODULE THAT POSTDATES THE OLDEST BUILD IT
+ *  RUNS AGAINST, and nothing may read a `GameResult` field without asking
+ *  whether this build has one. That is not defensive style, it is the whole
+ *  premise: a suite pinned to the build it was written on cannot produce a
+ *  before-and-after, which is the one thing a baseline is for. `probe`
+ *  answers what the build under test can be asked; `TrackItem.needs`
+ *  declares what an item requires; the runner reports NOT MEASURABLE, which
+ *  is a different fact from NOT RUN and from RED.
  */
 import type { GameResult } from '../engine/game.ts';
 import type { Config } from '../engine/game.ts';
@@ -35,9 +44,61 @@ export interface Measure {
   n?: number;
 }
 
+/** What the build under test can be asked. Detected from a played result and
+ *  the config in force, never from a version string -- a worktree has no
+ *  version, and the fields are the thing that actually matters. */
+export interface Capabilities {
+  /** `GameResult.bills`: the enacted-bill corpus, with a repeal (v0.2 item 2) */
+  corpus: boolean;
+  /** `GameResult.endedBy` and `.amendments`: an ending that is not the clock (item 3) */
+  ending: boolean;
+  /** the impeachment backfire, shutdown blame and economic shock knobs (items 7-9) */
+  backfireShutdownShock: boolean;
+  /** `GameResult.shutdownBlame`: which party was blamed, and whether it held a
+   *  chamber. Item 8's direction cannot be tested without the second half. */
+  shutdownBlame: boolean;
+}
+
+export const CAPABILITY_NOTE: Record<keyof Capabilities, string> = {
+  corpus: 'GameResult.bills — this build counts bills passed and discards them, so there is no corpus to read',
+  ending: 'GameResult.endedBy — this build has no ending but the year cap, so "ends by condition" is 0 by construction',
+  backfireShutdownShock: 'legislature.impeachBackfirePips / shutdownPips / economy.shockOnRollAtMost — the rules are not in this build',
+  shutdownBlame: 'GameResult.shutdownBlame — this build does not record who was blamed for a failed bill',
+};
+
+/** Ask the build, do not assume it. A result object and a config are enough. */
+export function probe(r: Record<string, unknown>, cfg: Record<string, any>): Capabilities {
+  return {
+    corpus: Array.isArray(r.bills),
+    ending: 'endedBy' in r && Array.isArray(r.amendments),
+    backfireShutdownShock: cfg.legislature?.impeachBackfirePips !== undefined
+      || cfg.legislature?.shutdownPips !== undefined
+      || cfg.economy?.shockOnRollAtMost !== undefined,
+    shutdownBlame: Array.isArray(r.shutdownBlame),
+  };
+}
+
+/** Set-overlap distance over tag sets, 0 identical and 1 disjoint.
+ *
+ *  DELIBERATELY A SECOND COPY of `engine/rules/tags.ts`'s `distance`, because
+ *  that module postdates v0.1.2 and importing it would make this whole file
+ *  unloadable on the build it most needs to measure. The two are held together
+ *  by `tracks/overlap.test.ts`, which fails if they ever disagree. Returns
+ *  undefined when either side is empty: that is "not asked", not agreement. */
+export function overlapDistance(a: readonly string[], b: readonly string[]): number | undefined {
+  if (!a.length || !b.length) return undefined;
+  const wa = new Map<string, number>(), wb = new Map<string, number>();
+  for (const t of a) wa.set(t, (wa.get(t) ?? 0) + 1 / a.length);
+  for (const t of b) wb.set(t, (wb.get(t) ?? 0) + 1 / b.length);
+  let overlap = 0;
+  for (const [t, v] of wa) overlap += Math.min(v, wb.get(t) ?? 0);
+  return 1 - overlap;
+}
+
 export interface TrackCtx {
   cards: Card[];
   cfg: Config;
+  can: Capabilities;
   configName: string;
   agents: string[];
   seeds: number[];
@@ -54,6 +115,10 @@ export interface TrackItem {
    *  CAPS: an item that bounds coverage or is skipped says so in the report,
    *  because silent omission reads as "covered everything" when it did not. */
   notRun?: string;
+  /** What this item needs the build to have. Unmet means NOT MEASURABLE,
+   *  which is neither a pass nor a failure nor a decision not to build:
+   *  it is the older build being asked a question it has no answer to. */
+  needs?: (keyof Capabilities)[];
   run?(ctx: TrackCtx): Measure[] | Promise<Measure[]>;
   /** C and D only. B has no oracle by construction. */
   accept?(m: Measure[]): { pass: boolean; note: string };

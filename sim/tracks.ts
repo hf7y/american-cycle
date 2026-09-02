@@ -19,7 +19,7 @@ import { loadConfig, loadPacks, playOne } from './harness.ts';
 import { B } from '../tracks/b.ts';
 import { C } from '../tracks/c.ts';
 import { D } from '../tracks/d.ts';
-import type { Measure, TrackCtx, TrackItem } from '../tracks/types.ts';
+import { CAPABILITY_NOTE, probe, type Capabilities, type Measure, type TrackCtx, type TrackItem } from '../tracks/types.ts';
 
 const arg = (flag: string, dflt: string): string => {
   const i = process.argv.indexOf(flag);
@@ -40,8 +40,18 @@ if (process.argv.includes('--diff')) {
     }
   }
   for (const [k, [x, y]] of rows) {
+    // A blank is NOT a zero. An item the older build could not be asked has no
+    // value, and printing 0 there would invent a before-and-after that says
+    // the mechanic did nothing when in fact it did not exist.
+    const f = (v: number | undefined) => (v === undefined ? 'n/a' : Number(v.toFixed(4)).toString());
     const d = x === undefined ? 'NEW' : y === undefined ? 'GONE' : (y - x).toFixed(3);
-    console.log(`  ${k.padEnd(64)} ${String(x ?? '-').padStart(9)} -> ${String(y ?? '-').padStart(9)}  ${d}`);
+    console.log(`  ${k.padEnd(62)} ${f(x).padStart(10)} -> ${f(y).padStart(10)}   ${d}`);
+  }
+  const caps = (f: { capabilities?: Capabilities }) => Object.entries(f.capabilities ?? {})
+    .filter(([, v]) => !v).map(([k]) => k);
+  for (const [label, f] of [['left', a], ['right', b]] as const) {
+    const missing = caps(f);
+    if (missing.length) console.log(`\n  ${label} build could not be asked: ${missing.join(', ')}`);
   }
   process.exit(0);
 }
@@ -59,11 +69,20 @@ process.stderr.write(`playing ${games} games on ${configName} ... `);
 const runs = seeds.map((s) => playOne(agents, cards, cfg, s));
 process.stderr.write('done\n');
 
-const ctx: TrackCtx = { cards, cfg, configName, agents, seeds, runs };
+// Ask the build what it is, rather than assuming it is this one. A worktree
+// carries no version, and the fields are what actually decide the answer.
+const can: Capabilities = probe(runs[0] as unknown as Record<string, unknown>, cfg as unknown as Record<string, unknown>);
+const missing = (Object.keys(can) as (keyof Capabilities)[]).filter((k) => !can[k]);
+if (missing.length) {
+  console.log(`build under test is missing: ${missing.join(', ')}`);
+  for (const k of missing) console.log(`  ${k}: ${CAPABILITY_NOTE[k]}`);
+}
 
-interface Row { id: string; track: string; question: string; notRun?: string; measures?: Measure[]; verdict?: string; pass?: boolean }
+const ctx: TrackCtx = { cards, cfg, configName, agents, seeds, runs, can };
+
+interface Row { id: string; track: string; question: string; notRun?: string; notMeasurable?: string; measures?: Measure[]; verdict?: string; pass?: boolean }
 const out: Row[] = [];
-let crashed = 0, red = 0;
+let crashed = 0, red = 0, unmeasurable = 0;
 
 for (const item of [...B, ...C, ...D] as TrackItem[]) {
   if (only && item.track !== only) continue;
@@ -71,6 +90,17 @@ for (const item of [...B, ...C, ...D] as TrackItem[]) {
   if (item.notRun || !item.run) {
     console.log(`  NOT RUN — ${item.notRun?.replace(/\s+/g, ' ')}`);
     out.push({ id: item.id, track: item.track, question: item.question, notRun: item.notRun });
+    continue;
+  }
+  // NOT MEASURABLE is a third state, and collapsing it into either of the
+  // other two loses the fact the baseline exists to carry. NOT RUN is a
+  // decision; RED is a result; this is the build having no answer.
+  const unmet = (item.needs ?? []).filter((k) => !can[k]);
+  if (unmet.length) {
+    const why = unmet.map((k) => CAPABILITY_NOTE[k]).join('; ');
+    unmeasurable++;
+    console.log(`  NOT MEASURABLE on this build — ${why}`);
+    out.push({ id: item.id, track: item.track, question: item.question, notMeasurable: why });
     continue;
   }
   let measures: Measure[];
@@ -92,7 +122,7 @@ for (const item of [...B, ...C, ...D] as TrackItem[]) {
   out.push(row);
 }
 
-console.log(`\n${red} acceptance item(s) red, ${crashed} crashed.`);
+console.log(`\n${red} acceptance item(s) red, ${unmeasurable} not measurable on this build, ${crashed} crashed.`);
 console.log('Track C and D are NOT blocking: red is the expected state until the mechanic lands.');
 
 const emit = arg('--emit', '');
@@ -100,7 +130,8 @@ if (emit) {
   mkdirSync(new URL('../reports/', import.meta.url), { recursive: true });
   const path = emit.startsWith('/') ? emit : new URL(`../${emit}`, import.meta.url).pathname;
   writeFileSync(path, JSON.stringify({
-    tag: arg('--tag', 'working-tree'), config: configName, agents, games, packs, items: out,
+    tag: arg('--tag', 'working-tree'), config: configName, agents, games, packs,
+    capabilities: can, items: out,
   }, null, 2) + '\n');
   console.error(`wrote ${path}`);
 }

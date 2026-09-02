@@ -1,5 +1,5 @@
 {
-  "tag": "v0.2",
+  "tag": "v0.1.2",
   "config": "tuned.json",
   "agents": [
     "Greedy",
@@ -18,10 +18,10 @@
     "2024"
   ],
   "capabilities": {
-    "corpus": true,
-    "ending": true,
-    "backfireShutdownShock": true,
-    "shutdownBlame": true
+    "corpus": false,
+    "ending": false,
+    "backfireShutdownShock": false,
+    "shutdownBlame": false
   },
   "items": [
     {
@@ -31,36 +31,36 @@
       "measures": [
         {
           "name": "races",
-          "value": 26437,
+          "value": 29571,
           "n": 60
         },
         {
           "name": "walkover share",
-          "value": 0.8161289102394371,
+          "value": 0.8189780528220216,
           "unit": "share of races",
-          "n": 26437
+          "n": 29571
         },
         {
           "name": "upset rate",
-          "value": 0.04845481711238037,
+          "value": 0.045517567887457304,
           "unit": "share of races",
-          "n": 26437
+          "n": 29571
         },
         {
           "name": "contested: mean margin",
-          "value": 4.297058218473565,
+          "value": 4.525686530917243,
           "unit": "pips",
-          "n": 4861
+          "n": 5353
         },
         {
           "name": "contested: median margin",
           "value": 4,
           "unit": "pips",
-          "n": 4861
+          "n": 5353
         },
         {
           "name": "contested-slot share",
-          "value": 0.23306787062603823,
+          "value": 0.2204456709804638,
           "unit": "share of slots",
           "n": 60
         }
@@ -75,35 +75,35 @@
           "name": "p10",
           "value": 1,
           "unit": "pips",
-          "n": 4861
+          "n": 5353
         },
         {
           "name": "p25",
           "value": 2,
           "unit": "pips",
-          "n": 4861
+          "n": 5353
         },
         {
           "name": "p50",
           "value": 4,
           "unit": "pips",
-          "n": 4861
+          "n": 5353
         },
         {
           "name": "p75",
-          "value": 6,
+          "value": 7,
           "unit": "pips",
-          "n": 4861
+          "n": 5353
         },
         {
           "name": "p90",
           "value": 9,
           "unit": "pips",
-          "n": 4861
+          "n": 5353
         },
         {
           "name": "within 2 pips",
-          "value": 0.3630940135774532,
+          "value": 0.34167756398281335,
           "unit": "share of contested"
         }
       ]
@@ -119,13 +119,13 @@
         },
         {
           "name": "district-cards in play at the epilogue",
-          "value": 1297
+          "value": 1307
         },
         {
           "name": "drift rate",
           "value": 0,
           "unit": "share of district-games",
-          "n": 1297
+          "n": 1307
         }
       ]
     },
@@ -136,17 +136,17 @@
       "measures": [
         {
           "name": "cross-bench votes a game",
-          "value": 140.31666666666666,
+          "value": 77.93333333333334,
           "n": 60
         },
         {
           "name": "bills attempted a game",
-          "value": 12,
+          "value": 15,
           "n": 60
         },
         {
           "name": "bill passage rate",
-          "value": 0.2611111111111111,
+          "value": 0.06333333333333334,
           "unit": "share of attempts"
         }
       ]
@@ -175,23 +175,23 @@
       "measures": [
         {
           "name": "president: mean terms won",
-          "value": 1.4875,
-          "n": 80
+          "value": 1.654320987654321,
+          "n": 81
         },
         {
           "name": "senator: mean terms won",
-          "value": 1.7801256424900058,
-          "n": 1751
+          "value": 2.016835016835017,
+          "n": 1782
         },
         {
           "name": "governor: mean terms won",
-          "value": 1.4833333333333334,
-          "n": 240
+          "value": 1.7276422764227641,
+          "n": 246
         },
         {
           "name": "representative: mean terms won",
-          "value": 4.492774566473988,
-          "n": 692
+          "value": 4.991758241758242,
+          "n": 728
         }
       ]
     },
@@ -199,47 +199,7 @@
       "id": "B7-board-scoring-and-endings",
       "track": "B",
       "question": "What does board scoring, repeal and the amendment ending actually do to the shape of a game?",
-      "measures": [
-        {
-          "name": "player-scores that never decrease",
-          "value": 0.05,
-          "unit": "share of series",
-          "n": 240
-        },
-        {
-          "name": "games ending by condition",
-          "value": 0.48333333333333334,
-          "unit": "share of games",
-          "n": 60
-        },
-        {
-          "name": "games ending by amendment",
-          "value": 0.48333333333333334,
-          "unit": "share of games",
-          "n": 60
-        },
-        {
-          "name": "mean game length",
-          "value": 14.166666666666666,
-          "unit": "years",
-          "n": 60
-        },
-        {
-          "name": "bills on the books at the epilogue",
-          "value": 3.066666666666667,
-          "n": 60
-        },
-        {
-          "name": "bills repealed a game",
-          "value": 0.03333333333333333,
-          "n": 60
-        },
-        {
-          "name": "conventions called a game",
-          "value": 1,
-          "n": 60
-        }
-      ]
+      "notMeasurable": "GameResult.bills — this build counts bills passed and discards them, so there is no corpus to read; GameResult.endedBy — this build has no ending but the year cap, so \"ends by condition\" is 0 by construction"
     },
     {
       "id": "B7b-score-monotonicity",
@@ -248,19 +208,19 @@
       "measures": [
         {
           "name": "player-scores that never decrease",
-          "value": 0.05,
+          "value": 1,
           "unit": "share of series",
           "n": 240
         },
         {
           "name": "mean game length",
-          "value": 14.166666666666666,
+          "value": 16,
           "unit": "years",
           "n": 60
         },
         {
           "name": "mean lead changes",
-          "value": 1.1666666666666667,
+          "value": 1.55,
           "n": 60
         }
       ]
@@ -284,18 +244,18 @@
       "measures": [
         {
           "name": "top scorer lacks the presidency",
-          "value": 0.2833333333333333,
+          "value": 0.26666666666666666,
           "unit": "share of games",
           "n": 60
         },
         {
           "name": "r2 of final score on presidential years",
-          "value": 0.2810540604332847,
+          "value": 0.28711530888447495,
           "n": 240
         }
       ],
       "pass": false,
-      "verdict": "top scorer lacks the presidency in 28% of games (target >=30%); presidential years explain r2=0.28 of final score (target <0.50)"
+      "verdict": "top scorer lacks the presidency in 27% of games (target >=30%); presidential years explain r2=0.29 of final score (target <0.50)"
     },
     {
       "id": "C3-cross-office-divergence",
@@ -304,15 +264,15 @@
       "measures": [
         {
           "name": "mean gap",
-          "value": 49.86553976181329,
+          "value": 49.12209889001008,
           "unit": "pp",
-          "n": 2603
+          "n": 2973
         },
         {
           "name": "share of state-cycles above 69pp",
-          "value": 0.45370726085286206,
+          "value": 0.4493777329297006,
           "unit": "share",
-          "n": 2603
+          "n": 2973
         },
         {
           "name": "longest persistence above 40pp",
@@ -321,8 +281,8 @@
         },
         {
           "name": "reversals",
-          "value": 305,
-          "n": 11000
+          "value": 383,
+          "n": 12000
         },
         {
           "name": "office ordering matches §10 priority",
@@ -331,8 +291,8 @@
         },
         {
           "name": "precondition: presidential-year state-cells with no House seat",
-          "value": 8397,
-          "n": 11000
+          "value": 9027,
+          "n": 12000
         }
       ],
       "pass": true,
@@ -345,24 +305,24 @@
       "measures": [
         {
           "name": "party flips",
-          "value": 0.0678987545198875,
+          "value": 0.05155674589889521,
           "unit": "share of consecutive holds",
-          "n": 4978
+          "n": 5974
         },
         {
           "name": "interest flips",
-          "value": 0.061470470068300524,
+          "value": 0.05155674589889521,
           "unit": "share of consecutive holds",
-          "n": 4978
+          "n": 5974
         },
         {
           "name": "shopping ratio",
-          "value": 1.1045751633986929,
+          "value": 1,
           "unit": "party flips per interest flip"
         }
       ],
       "pass": false,
-      "verdict": "7% of consecutive holds change party against 6% changing interest — ratio 1.1 (target >=2). NOTE: candidate tag-fit is measured against the district a card actually ran in, so a district with no card in play contributes nothing."
+      "verdict": "5% of consecutive holds change party against 5% changing interest — ratio 1.0 (target >=2). NOTE: candidate tag-fit is measured against the district a card actually ran in, so a district with no card in play contributes nothing."
     },
     {
       "id": "C5-strategy-ladder-breaks",
@@ -374,21 +334,7 @@
       "id": "C6-games-end-by-condition",
       "track": "C",
       "question": "Does the game have an ending, or only a timer?",
-      "measures": [
-        {
-          "name": "games ending by condition",
-          "value": 0.48333333333333334,
-          "unit": "share of games",
-          "n": 60
-        },
-        {
-          "name": "mean game length as a share of the cap",
-          "value": 0.8854166666666666,
-          "unit": "share"
-        }
-      ],
-      "pass": true,
-      "verdict": "48% of games end by condition (target >=25%; v0.1.2 was 0% on eight of nine configs)"
+      "notMeasurable": "GameResult.endedBy — this build has no ending but the year cap, so \"ends by condition\" is 0 by construction"
     },
     {
       "id": "C7-runaway-bars",
@@ -397,94 +343,36 @@
       "measures": [
         {
           "name": "determination point",
-          "value": 0.625,
+          "value": 0.5,
           "unit": "fraction of game length",
           "n": 60
         },
         {
           "name": "comeback rate",
-          "value": 0.016666666666666666,
+          "value": 0,
           "unit": "share of games",
           "n": 60
         },
         {
           "name": "lead changes a game",
-          "value": 1.65,
+          "value": 1.6666666666666667,
           "n": 60
         }
       ],
       "pass": false,
-      "verdict": "determination at 63% against SIM-BRIEF's 75-85% band; comeback rate 1.7%"
+      "verdict": "determination at 50% against SIM-BRIEF's 75-85% band; comeback rate 0.0%"
     },
     {
       "id": "C8-backfire-shutdown-shock",
       "track": "C",
       "question": "Do the failed impeachment, the shutdown and the shock move the board in the direction the record says?",
-      "measures": [
-        {
-          "name": "item 7: lean mass with backfire",
-          "value": 112.66666666666667,
-          "n": 30
-        },
-        {
-          "name": "item 7: lean mass without backfire",
-          "value": 21.366666666666667,
-          "n": 30
-        },
-        {
-          "name": "item 8: lean mass with shutdown blame",
-          "value": 27.233333333333334,
-          "n": 30
-        },
-        {
-          "name": "item 8: lean mass without shutdown blame",
-          "value": 14.133333333333333,
-          "n": 30
-        },
-        {
-          "name": "item 9: determination with shock",
-          "value": 0.625,
-          "unit": "fraction of game length"
-        },
-        {
-          "name": "item 9: determination without shock",
-          "value": 0.625,
-          "unit": "fraction of game length"
-        }
-      ],
-      "pass": false,
-      "verdict": "item 7 backfire fires; item 8 shutdown blame fires; item 9 shock moves determination by 0.0pp — i.e. NOT AT ALL, which is the branch the build order names: at 400 seeds on tuned.json the determination point is 0.625 with the shock and 0.625 without it. A shock proportional to power held is not a brake, so the brake has to be POSITIONAL — shocks discredit positions, stagflation discredited demand management, 2008 discredited deregulation — and the complexity of that version has now been earned rather than assumed. v0.3. NOTE: determination quantises to 1/maxYears, so a block below ~200 seeds cannot resolve this."
+      "notMeasurable": "legislature.impeachBackfirePips / shutdownPips / economy.shockOnRollAtMost — the rules are not in this build"
     },
     {
       "id": "C9-repeal-is-reachable",
       "track": "C",
       "question": "Do bills actually come off the books, or is the corpus monotone in a second costume?",
-      "measures": [
-        {
-          "name": "bills enacted a game",
-          "value": 3.1,
-          "n": 60
-        },
-        {
-          "name": "bills repealed a game",
-          "value": 0.03333333333333333,
-          "n": 60
-        },
-        {
-          "name": "games with a repeal",
-          "value": 0.016666666666666666,
-          "unit": "share of games",
-          "n": 60
-        },
-        {
-          "name": "games whose bills had more than one author",
-          "value": 0.016666666666666666,
-          "unit": "share of games",
-          "n": 60
-        }
-      ],
-      "pass": false,
-      "verdict": "2% of games see a repeal (target >=20%), against 2% whose bills had more than one author. The rule is built and fires; what is missing is turnover in the pen — §12 hands authorship to the largest bloc of the majority House party and a faction holds both parties, so it never changes hands. Fix authorship, not repeal."
+      "notMeasurable": "GameResult.bills — this build counts bills passed and discards them, so there is no corpus to read"
     },
     {
       "id": "D1-midterm-loss",
@@ -493,9 +381,9 @@
       "measures": [
         {
           "name": "president's party loses seat share at the midterm",
-          "value": 0.5308056872037915,
+          "value": 0.525,
           "unit": "share of midterms",
-          "n": 211
+          "n": 240
         }
       ],
       "pass": false,
@@ -505,40 +393,13 @@
       "id": "D2-failed-conviction-backfires",
       "track": "D",
       "question": "Does the side that tries and fails to remove a president pay for it?",
-      "measures": [
-        {
-          "name": "impeachers: board share with backfire",
-          "value": 0.468527166938934,
-          "n": 40
-        },
-        {
-          "name": "impeachers: board share without backfire",
-          "value": 0.48472107001798365,
-          "n": 40
-        }
-      ],
-      "pass": true,
-      "verdict": "impeaching pool holds 46.9% of the board with the rule on against 48.5% with it off — the attempt must cost, not pay"
+      "notMeasurable": "legislature.impeachBackfirePips / shutdownPips / economy.shockOnRollAtMost — the rules are not in this build"
     },
     {
       "id": "D3-shutdown-blame-direction",
       "track": "D",
       "question": "Is the blame for a failed bill attached to the obstructor rather than to whoever happens to be out of power?",
-      "measures": [
-        {
-          "name": "shutdowns a game",
-          "value": 8.016666666666667,
-          "n": 60
-        },
-        {
-          "name": "blamed party held a chamber majority",
-          "value": 0.7879417879417879,
-          "unit": "share of shutdowns",
-          "n": 481
-        }
-      ],
-      "pass": true,
-      "verdict": "the blamed party held a chamber majority in 79% of shutdowns. In 1995 and 2013 the blamed party held the congressional majority, so a rule that never blames the majority has encoded incumbency by accident. Target >20%."
+      "notMeasurable": "GameResult.shutdownBlame — this build does not record who was blamed for a failed bill"
     },
     {
       "id": "D4-regime-duration",
@@ -552,7 +413,7 @@
         },
         {
           "name": "mean game length",
-          "value": 14.166666666666666,
+          "value": 16,
           "unit": "years",
           "n": 60
         },
