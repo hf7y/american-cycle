@@ -1,0 +1,29 @@
+name: reconcile-milestone-labels
+
+# Arming is inferred from the ROSTER row + milestone order (issue #115),
+# never declared in a milestone description. This runs whenever a milestone
+# changes (arming happens by closing the one ahead of it) and on a schedule,
+# because the other half of "armed" -- the ROSTER row -- lives in a
+# different repo and can change without touching this one at all.
+on:
+  milestone:
+    types: [edited, closed, opened, reopened, deleted]
+  schedule:
+    - cron: '*/20 * * * *'
+  workflow_dispatch: {}
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '24' }
+      - run: node .github/scripts/reconcile-milestone-labels.ts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
