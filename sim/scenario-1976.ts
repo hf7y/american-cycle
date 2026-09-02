@@ -33,8 +33,8 @@ const LEAN_1976: Record<string, number> = {
 
 const cfg = loadConfig('tuned.json');
 const cards = loadPacks(['1976']);
-const carter = cards.find((c) => c.kind === 'candidate' && c.id === 'jimmy-carter')!;
-const ford = cards.find((c) => c.kind === 'candidate' && c.id === 'gerald-r-ford')!;
+const carter = cards.find((c) => c.kind === 'candidate' && c.id === 'jimmy-carter-1976')!;
+const ford = cards.find((c) => c.kind === 'candidate' && c.id === 'gerald-r-ford-1976')!;
 
 let hits = 0, total = 0, cEV = 0, fEV = 0, runs = 0;
 const perState: Record<string, number> = {};
