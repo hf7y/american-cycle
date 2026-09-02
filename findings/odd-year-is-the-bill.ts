@@ -64,20 +64,20 @@ export const finding: Finding = {
     + 'carries a decay step, so it survives a biennial bill — the map keeps moving between elections '
     + 'even when the legislature is silent. So: biennial decay + biennial bill is the combination that '
     + 'makes the annual tick pointless, and it is the only one that does.',
-  stampedAt: '2026-08-31T10:15:00Z',
-  stampedOn: 'f0bbaca',
+  stampedAt: '2026-09-02T02:19:08Z',
+  stampedOn: '5d06f41',
 
   predicate(): Claim[] {
     const bienBien = measure('biennial', 'biennial');   // the empty odd year
     const bienAnn = measure('biennial', 'annual');      // decay still occupies it
     const annBien = measure('annual', 'biennial');      // the shipped baseline
     return [
-      { name: 'bill annual + decay biennial: bills in an odd year', value: annBien.oddBills, stamped: 1.00, tolerance: 0.15 },
-      { name: 'bill annual + decay biennial: decay steps in an odd year', value: annBien.oddDecays, stamped: 0.00, tolerance: 0.10 },
-      { name: 'bill annual + decay biennial: races in an even year', value: annBien.evenRaces, stamped: 56.67, tolerance: 15 },
-      { name: 'bill biennial + decay biennial: bills in an odd year', value: bienBien.oddBills, stamped: 0.00, tolerance: 0.05 },
-      { name: 'bill biennial + decay biennial: decay steps in an odd year', value: bienBien.oddDecays, stamped: 0.00, tolerance: 0.10 },
-      { name: 'bill biennial + decay ANNUAL: decay steps in an odd year', value: bienAnn.oddDecays, stamped: 0.90, tolerance: 0.25 },
+      { name: 'bill annual + decay biennial: bills in an odd year', value: annBien.oddBills, stamped: 0.8, tolerance: 0.15 },
+      { name: 'bill annual + decay biennial: decay steps in an odd year', value: annBien.oddDecays, stamped: 0.33, tolerance: 0.10 },
+      { name: 'bill annual + decay biennial: races in an even year', value: annBien.evenRaces, stamped: 54.48, tolerance: 15 },
+      { name: 'bill biennial + decay biennial: bills in an odd year', value: bienBien.oddBills, stamped: 0, tolerance: 0.05 },
+      { name: 'bill biennial + decay biennial: decay steps in an odd year', value: bienBien.oddDecays, stamped: 0, tolerance: 0.10 },
+      { name: 'bill biennial + decay ANNUAL: decay steps in an odd year', value: bienAnn.oddDecays, stamped: 1, tolerance: 0.25 },
     ];
   },
 

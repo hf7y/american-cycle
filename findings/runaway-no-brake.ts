@@ -46,16 +46,20 @@ export const finding: Finding = {
     + 'players ganging up. Verify those are sufficient. (§16)',
 
   headline:
-    'There is no mechanical brake. The determination point sits at 44% of game length against '
-    + "SIM-BRIEF's healthy 75-85%, and the comeback rate is 1%. But the three named loops are not "
-    + 'the cause: switching off endorsements, capture or the office hand bonuses each leaves '
-    + 'determination at 50%, still far below the healthy band and no better than leaving them on. '
-    + 'The cause is that 100% of player-score series never decrease. Nothing in the design can take '
-    + 'a point away, so a leader at the midpoint cannot be caught by anyone accruing at a similar '
-    + 'rate — and the only brake left is the one this simulator cannot test, which is the table '
-    + 'ganging up. Recommend a human playtest before adding any catch-up mechanic.',
-  stampedAt: '2026-08-31T12:00:00Z',
-  stampedOn: 'f0bbaca',
+    'DIAGNOSED, ACTED ON, STILL SHORT OF THE BAR. At v0.1.2 the determination point sat at 44% of game '
+    + "length against SIM-BRIEF's healthy 75-85%, with a 1% comeback rate, and none of §16's three named "
+    + 'loops was the cause: switching off endorsements, capture or the office hand bonuses each left it at '
+    + '50%. The cause was that 100% of player-score series never decreased — nothing in the design could '
+    + 'take a point away, so a leader at the midpoint could not be caught by anyone accruing at a similar '
+    + 'rate. v0.2 removed the accumulator rather than adding a catch-up mechanic: score is a pure function '
+    + 'of the board (engine/rules/scoring.ts), so anything repealed, reversed or unseated scores zero and a '
+    + 'score CAN fall. The monotone share went 1.00 -> 0.02 and determination 0.44 -> 0.63. That is '
+    + 'movement, not arrival: 0.63 is still below the band and the comeback rate barely moved. The exogenous '
+    + 'shock built for the remaining gap (v0.2 item 9) does not close it — at 400 seeds determination is '
+    + '0.625 with it and 0.625 without — which is the evidence that the brake has to be positional. '
+    + 'tracks/c.ts C7 is the live acceptance test and is red.',
+  stampedAt: '2026-09-02T02:20:04Z',
+  stampedOn: '5d06f41',
 
   predicate(): Claim[] {
     const base = loadConfig('tuned.json');
@@ -70,12 +74,12 @@ export const finding: Finding = {
     const run = (cfg: Config) => runawayMetrics(SEEDS, AGENTS, cards, cfg);
     const on = run(base);
     return [
-      { name: 'baseline: determination point', value: on.determination, stamped: 0.44, tolerance: 0.2, unit: 'fraction of game length' },
-      { name: 'baseline: comeback rate', value: on.comeback, stamped: 0.01, tolerance: 0.03, unit: 'share of games' },
-      { name: 'baseline: player-scores that never decrease', value: monotonicShare(cards, base), stamped: 1, tolerance: 0.02, unit: 'share of series' },
-      { name: 'endorsements off: determination point', value: run(noEndorsements).determination, stamped: 0.5, tolerance: 0.2, unit: 'fraction of game length' },
-      { name: 'capture off: determination point', value: run(noCapture).determination, stamped: 0.5, tolerance: 0.2, unit: 'fraction of game length' },
-      { name: 'hand bonuses off: determination point', value: run(noHandBonus).determination, stamped: 0.5, tolerance: 0.2, unit: 'fraction of game length' },
+      { name: 'baseline: determination point', value: on.determination, stamped: 0.63, tolerance: 0.2, unit: 'fraction of game length' },
+      { name: 'baseline: comeback rate', value: on.comeback, stamped: 0.02, tolerance: 0.03, unit: 'share of games' },
+      { name: 'baseline: player-scores that never decrease', value: monotonicShare(cards, base), stamped: 0.02, tolerance: 0.02, unit: 'share of series' },
+      { name: 'endorsements off: determination point', value: run(noEndorsements).determination, stamped: 0.75, tolerance: 0.2, unit: 'fraction of game length' },
+      { name: 'capture off: determination point', value: run(noCapture).determination, stamped: 0.69, tolerance: 0.2, unit: 'fraction of game length' },
+      { name: 'hand bonuses off: determination point', value: run(noHandBonus).determination, stamped: 0.69, tolerance: 0.2, unit: 'fraction of game length' },
     ];
   },
 

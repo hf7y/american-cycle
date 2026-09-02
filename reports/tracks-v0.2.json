@@ -1,0 +1,544 @@
+{
+  "tag": "working-tree",
+  "config": "tuned.json",
+  "agents": [
+    "Greedy",
+    "Lookahead",
+    "HouseFarm",
+    "SenateFlood"
+  ],
+  "games": 60,
+  "packs": [
+    "1932",
+    "1964",
+    "1976",
+    "1992",
+    "2008",
+    "2016",
+    "2024"
+  ],
+  "items": [
+    {
+      "id": "B1-race-resolution",
+      "track": "B",
+      "question": "How do races resolve — how often do the dice reverse the favourite, and how often is there no race at all?",
+      "measures": [
+        {
+          "name": "races",
+          "value": 26437,
+          "n": 60
+        },
+        {
+          "name": "walkover share",
+          "value": 0.8161289102394371,
+          "unit": "share of races",
+          "n": 26437
+        },
+        {
+          "name": "upset rate",
+          "value": 0.04845481711238037,
+          "unit": "share of races",
+          "n": 26437
+        },
+        {
+          "name": "contested: mean margin",
+          "value": 4.297058218473565,
+          "unit": "pips",
+          "n": 4861
+        },
+        {
+          "name": "contested: median margin",
+          "value": 4,
+          "unit": "pips",
+          "n": 4861
+        },
+        {
+          "name": "contested-slot share",
+          "value": 0.23306787062603823,
+          "unit": "share of slots",
+          "n": 60
+        }
+      ]
+    },
+    {
+      "id": "B2-losing-margin",
+      "track": "B",
+      "question": "Are contested races close enough for anything to be at stake?",
+      "measures": [
+        {
+          "name": "p10",
+          "value": 1,
+          "unit": "pips",
+          "n": 4861
+        },
+        {
+          "name": "p25",
+          "value": 2,
+          "unit": "pips",
+          "n": 4861
+        },
+        {
+          "name": "p50",
+          "value": 4,
+          "unit": "pips",
+          "n": 4861
+        },
+        {
+          "name": "p75",
+          "value": 6,
+          "unit": "pips",
+          "n": 4861
+        },
+        {
+          "name": "p90",
+          "value": 9,
+          "unit": "pips",
+          "n": 4861
+        },
+        {
+          "name": "within 2 pips",
+          "value": 0.3630940135774532,
+          "unit": "share of contested"
+        }
+      ]
+    },
+    {
+      "id": "B3-district-tag-drift",
+      "track": "B",
+      "question": "How far do district demographics move across a full game?",
+      "measures": [
+        {
+          "name": "district cards printed",
+          "value": 258
+        },
+        {
+          "name": "district-cards in play at the epilogue",
+          "value": 1297
+        },
+        {
+          "name": "drift rate",
+          "value": 0,
+          "unit": "share of district-games",
+          "n": 1297
+        }
+      ]
+    },
+    {
+      "id": "B4-cross-bench",
+      "track": "B",
+      "question": "Does cross-benching actually happen at an ordinary table?",
+      "measures": [
+        {
+          "name": "cross-bench votes a game",
+          "value": 140.31666666666666,
+          "n": 60
+        },
+        {
+          "name": "bills attempted a game",
+          "value": 12,
+          "n": 60
+        },
+        {
+          "name": "bill passage rate",
+          "value": 0.2611111111111111,
+          "unit": "share of attempts"
+        }
+      ]
+    },
+    {
+      "id": "B5-impeachment-unstacked",
+      "track": "B",
+      "question": "How often does impeachment happen at an ordinary table, rather than a table of Impeachers?",
+      "measures": [
+        {
+          "name": "ordinary pool: impeachments a game",
+          "value": 0,
+          "n": 60
+        },
+        {
+          "name": "four Impeachers: impeachments a game",
+          "value": 0,
+          "n": 40
+        }
+      ]
+    },
+    {
+      "id": "B6-tenure",
+      "track": "B",
+      "question": "How long do members serve, by office?",
+      "measures": [
+        {
+          "name": "president: mean terms won",
+          "value": 67.5,
+          "n": 80
+        },
+        {
+          "name": "senator: mean terms won",
+          "value": 1.7801256424900058,
+          "n": 1751
+        },
+        {
+          "name": "governor: mean terms won",
+          "value": 1.4833333333333334,
+          "n": 240
+        },
+        {
+          "name": "representative: mean terms won",
+          "value": 4.492774566473988,
+          "n": 692
+        }
+      ]
+    },
+    {
+      "id": "B7-board-scoring-and-endings",
+      "track": "B",
+      "question": "What does board scoring, repeal and the amendment ending actually do to the shape of a game?",
+      "measures": [
+        {
+          "name": "player-scores that never decrease",
+          "value": 0.05,
+          "unit": "share of series",
+          "n": 240
+        },
+        {
+          "name": "games ending by condition",
+          "value": 0.48333333333333334,
+          "unit": "share of games",
+          "n": 60
+        },
+        {
+          "name": "games ending by amendment",
+          "value": 0.48333333333333334,
+          "unit": "share of games",
+          "n": 60
+        },
+        {
+          "name": "mean game length",
+          "value": 14.166666666666666,
+          "unit": "years",
+          "n": 60
+        },
+        {
+          "name": "bills on the books at the epilogue",
+          "value": 3.066666666666667,
+          "n": 60
+        },
+        {
+          "name": "bills repealed a game",
+          "value": 0.03333333333333333,
+          "n": 60
+        },
+        {
+          "name": "conventions called a game",
+          "value": 1,
+          "n": 60
+        }
+      ]
+    },
+    {
+      "id": "B8-variance-sweep",
+      "track": "B",
+      "question": "At what dice spread do races stop resolving on the tally, and does race-flip diverge from winner-flip?",
+      "notRun": "the 3d6 spread is not a config knob; `zeroDiceWinner` gives the 0x point and nothing gives 0.25x, 0.5x or 2x. Report both share of races resolving differently AND share of games with a different winner when it is built: high race-flip with low winner-flip is the healthy shape."
+    },
+    {
+      "id": "C1-skowronek-suite",
+      "track": "C",
+      "question": "Does the engine produce a Skowronekian regime — settlement, strain, disjunction?",
+      "notRun": "built and run separately: `npm run skowronek`. Read era-check 1 first — if settlement position random-walks with no persistent regime, nothing else in the suite means anything. As of v0.2 its two construction-level preconditions (BILL_CORPUS, BILL_POSITION) are MET; STRAIN_RISE and EFFICACY_DROP are now ABSENT rather than ABSENT_BY_CONSTRUCTION, i.e. unbuilt rather than unbuildable."
+    },
+    {
+      "id": "C2-win-without-the-presidency",
+      "track": "C",
+      "question": "Is the presidency the game? A committee operator should be able to win without it.",
+      "measures": [
+        {
+          "name": "top scorer lacks the presidency",
+          "value": 0.2833333333333333,
+          "unit": "share of games",
+          "n": 60
+        },
+        {
+          "name": "r2 of final score on presidential years",
+          "value": 0.2810540604332847,
+          "n": 240
+        }
+      ],
+      "pass": false,
+      "verdict": "top scorer lacks the presidency in 28% of games (target >=30%); presidential years explain r2=0.28 of final score (target <0.50)"
+    },
+    {
+      "id": "C3-cross-office-divergence",
+      "track": "C",
+      "question": "Does the board produce split-ticket voting — a state going one way at the top and another below it?",
+      "measures": [
+        {
+          "name": "mean gap",
+          "value": 49.86553976181329,
+          "unit": "pp",
+          "n": 2603
+        },
+        {
+          "name": "share of state-cycles above 69pp",
+          "value": 0.45370726085286206,
+          "unit": "share",
+          "n": 2603
+        },
+        {
+          "name": "longest persistence above 40pp",
+          "value": 4,
+          "unit": "consecutive cycles"
+        },
+        {
+          "name": "reversals",
+          "value": 305,
+          "n": 11000
+        },
+        {
+          "name": "office ordering matches §10 priority",
+          "value": 1,
+          "unit": "1 = monotone president>senator>rep>governor"
+        },
+        {
+          "name": "precondition: presidential-year state-cells with no House seat",
+          "value": 8397,
+          "n": 11000
+        }
+      ],
+      "pass": true,
+      "verdict": "longest run above a 40pp gap is 4 cycles (target >=3, the Deep South held 20 years); 45% of state-cycles clear 69pp (the 1984 figure)"
+    },
+    {
+      "id": "C4-shopping-blocs",
+      "track": "C",
+      "question": "Does a district ever change its vehicle while keeping its interest?",
+      "measures": [
+        {
+          "name": "party flips",
+          "value": 0.0678987545198875,
+          "unit": "share of consecutive holds",
+          "n": 4978
+        },
+        {
+          "name": "interest flips",
+          "value": 0.061470470068300524,
+          "unit": "share of consecutive holds",
+          "n": 4978
+        },
+        {
+          "name": "shopping ratio",
+          "value": 1.1045751633986929,
+          "unit": "party flips per interest flip"
+        }
+      ],
+      "pass": false,
+      "verdict": "7% of consecutive holds change party against 6% changing interest — ratio 1.1 (target >=2). NOTE: candidate tag-fit is measured against the district a card actually ran in, so a district with no card in play contributes nothing."
+    },
+    {
+      "id": "C5-strategy-ladder-breaks",
+      "track": "C",
+      "question": "Do concentration and diversity beat each other conditionally, or is the ladder perfectly transitive?",
+      "notRun": "the duel matrix is `node sim/roundrobin.ts`, not re-run here. Acceptance: the matrix must NOT be perfectly transitive on both configs, and must include hand-written adversarial strategies designed to beat the top — if nothing in a reasonable strategy space beats it, that is structural. `WideAndEmpty` at 0.0% of every duel is the v0.1.2 reading."
+    },
+    {
+      "id": "C6-games-end-by-condition",
+      "track": "C",
+      "question": "Does the game have an ending, or only a timer?",
+      "measures": [
+        {
+          "name": "games ending by condition",
+          "value": 0.48333333333333334,
+          "unit": "share of games",
+          "n": 60
+        },
+        {
+          "name": "mean game length as a share of the cap",
+          "value": 0.8854166666666666,
+          "unit": "share"
+        }
+      ],
+      "pass": true,
+      "verdict": "48% of games end by condition (target >=25%; v0.1.2 was 0% on eight of nine configs)"
+    },
+    {
+      "id": "C7-runaway-bars",
+      "track": "C",
+      "question": "Can a player behind at the midpoint still win?",
+      "measures": [
+        {
+          "name": "determination point",
+          "value": 0.625,
+          "unit": "fraction of game length",
+          "n": 60
+        },
+        {
+          "name": "comeback rate",
+          "value": 0.016666666666666666,
+          "unit": "share of games",
+          "n": 60
+        },
+        {
+          "name": "lead changes a game",
+          "value": 1.65,
+          "n": 60
+        }
+      ],
+      "pass": false,
+      "verdict": "determination at 63% against SIM-BRIEF's 75-85% band; comeback rate 1.7%"
+    },
+    {
+      "id": "C8-backfire-shutdown-shock",
+      "track": "C",
+      "question": "Do the failed impeachment, the shutdown and the shock move the board in the direction the record says?",
+      "measures": [
+        {
+          "name": "item 7: lean mass with backfire",
+          "value": 112.66666666666667,
+          "n": 30
+        },
+        {
+          "name": "item 7: lean mass without backfire",
+          "value": 21.366666666666667,
+          "n": 30
+        },
+        {
+          "name": "item 8: lean mass with shutdown blame",
+          "value": 27.233333333333334,
+          "n": 30
+        },
+        {
+          "name": "item 8: lean mass without shutdown blame",
+          "value": 14.133333333333333,
+          "n": 30
+        },
+        {
+          "name": "item 9: determination with shock",
+          "value": 0.625,
+          "unit": "fraction of game length"
+        },
+        {
+          "name": "item 9: determination without shock",
+          "value": 0.625,
+          "unit": "fraction of game length"
+        }
+      ],
+      "pass": false,
+      "verdict": "item 7 backfire fires; item 8 shutdown blame fires; item 9 shock moves determination by 0.0pp — i.e. NOT AT ALL, which is the branch the build order names: at 400 seeds on tuned.json the determination point is 0.625 with the shock and 0.625 without it. A shock proportional to power held is not a brake, so the brake has to be POSITIONAL — shocks discredit positions, stagflation discredited demand management, 2008 discredited deregulation — and the complexity of that version has now been earned rather than assumed. v0.3. NOTE: determination quantises to 1/maxYears, so a block below ~200 seeds cannot resolve this."
+    },
+    {
+      "id": "C9-repeal-is-reachable",
+      "track": "C",
+      "question": "Do bills actually come off the books, or is the corpus monotone in a second costume?",
+      "measures": [
+        {
+          "name": "bills enacted a game",
+          "value": 3.1,
+          "n": 60
+        },
+        {
+          "name": "bills repealed a game",
+          "value": 0.03333333333333333,
+          "n": 60
+        },
+        {
+          "name": "games with a repeal",
+          "value": 0.016666666666666666,
+          "unit": "share of games",
+          "n": 60
+        },
+        {
+          "name": "games whose bills had more than one author",
+          "value": 0.016666666666666666,
+          "unit": "share of games",
+          "n": 60
+        }
+      ],
+      "pass": false,
+      "verdict": "2% of games see a repeal (target >=20%), against 2% whose bills had more than one author. The rule is built and fires; what is missing is turnover in the pen — §12 hands authorship to the largest bloc of the majority House party and a faction holds both parties, so it never changes hands. Fix authorship, not repeal."
+    },
+    {
+      "id": "D1-midterm-loss",
+      "track": "D",
+      "question": "Does the president's party lose ground at the midterm, as it did in every postwar cycle but two?",
+      "measures": [
+        {
+          "name": "president's party loses seat share at the midterm",
+          "value": 0.5308056872037915,
+          "unit": "share of midterms",
+          "n": 211
+        }
+      ],
+      "pass": false,
+      "verdict": "53% of midterms cost the president's party ground (postwar: all but two, so the target band is 70-95% rather than 100%)"
+    },
+    {
+      "id": "D2-failed-conviction-backfires",
+      "track": "D",
+      "question": "Does the side that tries and fails to remove a president pay for it?",
+      "measures": [
+        {
+          "name": "impeachers: board share with backfire",
+          "value": 0.468527166938934,
+          "n": 40
+        },
+        {
+          "name": "impeachers: board share without backfire",
+          "value": 0.48472107001798365,
+          "n": 40
+        }
+      ],
+      "pass": true,
+      "verdict": "impeaching pool holds 46.9% of the board with the rule on against 48.5% with it off — the attempt must cost, not pay"
+    },
+    {
+      "id": "D3-shutdown-blame-direction",
+      "track": "D",
+      "question": "Is the blame for a failed bill attached to the obstructor rather than to whoever happens to be out of power?",
+      "measures": [
+        {
+          "name": "shutdowns a game",
+          "value": 8.016666666666667,
+          "n": 60
+        },
+        {
+          "name": "blamed party held a chamber majority",
+          "value": 0.7879417879417879,
+          "unit": "share of shutdowns",
+          "n": 481
+        }
+      ],
+      "pass": true,
+      "verdict": "the blamed party held a chamber majority in 79% of shutdowns. In 1995 and 2013 the blamed party held the congressional majority, so a rule that never blames the majority has encoded incumbency by accident. Target >20%."
+    },
+    {
+      "id": "D4-regime-duration",
+      "track": "D",
+      "question": "Can a game even be long enough to contain one Skowronekian regime?",
+      "measures": [
+        {
+          "name": "year cap",
+          "value": 16,
+          "unit": "years"
+        },
+        {
+          "name": "mean game length",
+          "value": 14.166666666666666,
+          "unit": "years",
+          "n": 60
+        },
+        {
+          "name": "caps needed for a 30-year regime",
+          "value": 1.875
+        }
+      ],
+      "pass": false,
+      "verdict": "the cap is 16 years against a 30-40 year reference regime; below 30 a null settlement result is a fact about the clock"
+    },
+    {
+      "id": "D5-realignment-lag",
+      "track": "D",
+      "question": "How long does the board take to turn lean into seats?",
+      "notRun": "needs a lean series per state per year, which `GameResult.finalLean` does not carry — skowronek/observe.ts snapshots it and is the right home for this. The historical target is a thirty-year lag: Deep South House seats went 0% R 1947-63, 18.9% in 1965, 16.2% in 1967, and did not reach a majority until 1994."
+    }
+  ]
+}

@@ -44,27 +44,30 @@ export const finding: Finding = {
 
   headline:
     'Yes, and it makes §7\'s LITERAL reading the best configuration measured. Annual decay with the '
-    + 'push table raised +2 to 2/3/4 realigns 13.8 states a game against the shipped baseline\'s 5.8, '
-    + 'pins nothing at the ±8 cap against 3.5, and — because §7 also runs the omnibill every year — '
-    + 'passes 7.3 bills a game against 3.1. Biennial decay was never the fix; it was a workaround for '
-    + 'a push table too small to outrun an annual −2, and it costs half the legislative layer and '
-    + 'saturates the map. The 3d6 design does not limit any of this: the dice fix how OFTEN each push '
-    + 'tier fires, not what a tier is worth. Shipped as as-written-plus.json.',
-  stampedAt: '2026-08-31T10:30:00Z',
-  stampedOn: 'f0bbaca',
+    + 'push table raised +2 to 2/3/4 realigns 8.7 states a game against the shipped baseline\'s 6.8, and '
+    + 'pins 0.4 states at the ±8 cap against 2.0 — the margin narrowed at v0.2 because board scoring '
+    + 'gives every player a reason to hold a state rather than trade it, but the ordering did not '
+    + 'change. Annual decay at the SHIPPED push table still realigns almost nothing (0.4), which is the '
+    + 'load-bearing pair: it is the push table that has to outrun the decay, not the decay that has to '
+    + 'be slowed. Biennial decay was never the fix; it was a workaround for a push table too small to '
+    + 'outrun an annual −2, and it costs half the legislative layer and saturates the map. The 3d6 '
+    + 'design does not limit any of this: the dice fix how OFTEN each push tier fires, not what a tier '
+    + 'is worth. Shipped as as-written-plus.json.',
+  stampedAt: '2026-09-02T02:28:36Z',
+  stampedOn: '5d06f41',
 
   predicate(): Claim[] {
     const biennial = measure({ decayFrequency: 'biennial' });
     const annual = measure({ decayFrequency: 'annual' });
     const plus2 = measure({ decayFrequency: 'annual', pushByMargin: P(2, 3, 4) });
     return [
-      { name: 'biennial 0/1/2: states realigned per game', value: biennial.fourPerGame, stamped: 6.7, tolerance: 2.0 },
-      { name: 'biennial 0/1/2: states pinned at the cap', value: biennial.cappedPerGame, stamped: 3.7, tolerance: 2.0 },
-      { name: 'annual 0/1/2: states realigned per game', value: annual.fourPerGame, stamped: 0.0, tolerance: 0.5 },
-      { name: 'annual 2/3/4: states realigned per game', value: plus2.fourPerGame, stamped: 14.0, tolerance: 4.0 },
-      { name: 'annual 2/3/4: states pinned at the cap', value: plus2.cappedPerGame, stamped: 0.0, tolerance: 0.5 },
-      { name: 'annual 2/3/4: mean absolute lean', value: plus2.meanAbs, stamped: 2.18, tolerance: 0.7 },
-      { name: 'biennial 0/1/2: mean absolute lean', value: biennial.meanAbs, stamped: 1.17, tolerance: 0.5 },
+      { name: 'biennial 0/1/2: states realigned per game', value: biennial.fourPerGame, stamped: 6.78, tolerance: 2.0 },
+      { name: 'biennial 0/1/2: states pinned at the cap', value: biennial.cappedPerGame, stamped: 2.04, tolerance: 2.0 },
+      { name: 'annual 0/1/2: states realigned per game', value: annual.fourPerGame, stamped: 0.44, tolerance: 0.5 },
+      { name: 'annual 2/3/4: states realigned per game', value: plus2.fourPerGame, stamped: 8.68, tolerance: 4.0 },
+      { name: 'annual 2/3/4: states pinned at the cap', value: plus2.cappedPerGame, stamped: 0.44, tolerance: 0.5 },
+      { name: 'annual 2/3/4: mean absolute lean', value: plus2.meanAbs, stamped: 1.52, tolerance: 0.7 },
+      { name: 'biennial 0/1/2: mean absolute lean', value: biennial.meanAbs, stamped: 1.4, tolerance: 0.5 },
       // The shipped config must still BE the setting this finding recommends.
       // If as-written-plus.json is edited away from 2/3/4 the finding goes
       // stale, which is the point: the config cannot outlive its evidence.
