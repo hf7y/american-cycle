@@ -7,6 +7,7 @@ import { Game } from '../engine/game.ts';
 import { RNG } from '../engine/rules/rng.ts';
 import { AGENTS } from '../sim/agents.ts';
 import { playOne } from '../sim/harness.ts';
+import { unopposedHouseShare } from './history.ts';
 import { mean, quantile, share, type Measure, type TrackCtx, type TrackItem } from './types.ts';
 
 /** B1 — race resolution.
@@ -26,6 +27,9 @@ const b1: TrackItem = {
     // not close races. Split on `uncontested` FIRST, always.
     const walkovers = ev.filter((e) => e.uncontested);
     const contested = ev.filter((e) => !e.uncontested);
+    const house = ev.filter((e) => e.office === 'representative' && e.round === 'general');
+    const houseGenerals = house.length;
+    const houseWalkover = share(house.filter((e) => e.uncontested).length, houseGenerals);
     return [
       { name: 'races', value: ev.length, n: runs.length },
       { name: 'walkover share', value: share(walkovers.length, ev.length), unit: 'share of races', n: ev.length },
@@ -33,6 +37,15 @@ const b1: TrackItem = {
       { name: 'contested: mean margin', value: mean(contested.map((e) => e.margin)), unit: 'pips', n: contested.length },
       { name: 'contested: median margin', value: quantile(contested.map((e) => e.margin), 0.5), unit: 'pips', n: contested.length },
       { name: 'contested-slot share', value: mean(runs.map((r) => r.contestedSlotShare)), unit: 'share of slots', n: runs.length },
+      // LIKE-FOR-LIKE, and the restriction is the whole point. The walkover
+      // share above is over every event -- primaries and fifty presidential
+      // state races included -- and has no counterpart in the returns.
+      // Unopposed HOUSE GENERALS do.
+      { name: 'House generals: walkover share', value: houseWalkover, unit: 'share of House generals', n: houseGenerals,
+        historical: unopposedHouseShare().share,
+        historicalNote: 'a House race with no votes recorded on one side was unopposed: '
+          + `${(100 * unopposedHouseShare().share).toFixed(1)}% of ${unopposedHouseShare().n} district-years, `
+          + '1976-2018. Both sides are one-candidate general elections for the House and nothing else.' },
     ];
   },
 };

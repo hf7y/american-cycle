@@ -11,6 +11,7 @@
 import { playOne } from '../sim/harness.ts';
 import { runawayMetrics } from '../sim/roundrobin.ts';
 import type { Party, RaceEvent } from '../engine/types/index.ts';
+import { crossOfficeGap } from './history.ts';
 import { mean, overlapDistance, pick, share, type Measure, type TrackItem } from './types.ts';
 
 /** C1 — the Skowronek suite. BUILT, and it lives in `skowronek/` with its own
@@ -89,7 +90,7 @@ const c3: TrackItem = {
   id: 'C3-cross-office-divergence',
   track: 'C',
   question: 'Does the board produce split-ticket voting — a state going one way at the top and another below it?',
-  oracle: 'authored-here',
+  oracle: 'historical-record',
   run({ runs }): Measure[] {
     const gaps: number[] = [];
     let persistence = 0, reversals = 0, statesWithNoHouse = 0, cells = 0;
@@ -139,9 +140,23 @@ const c3: TrackItem = {
       ? Number(mean(byOffice.senator) <= mean(byOffice.representative)
         && mean(byOffice.representative) <= mean(byOffice.governor))
       : NaN;
+    const h = crossOfficeGap();
     return [
-      { name: 'mean gap', value: mean(gaps), unit: 'pp', n: gaps.length },
-      { name: 'share of state-cycles above 69pp', value: share(gaps.filter((g) => g >= 69).length, gaps.length), unit: 'share', n: gaps.length },
+      { name: 'mean gap', value: mean(gaps), unit: 'pp', n: gaps.length,
+        historical: h.allStatesMean,
+        historicalNote: 'all fifty states, every presidential cycle 1976-2016, from pres_state_panel.json '
+          + 'and house_district_panel.json. Same definition both sides — the test program\'s SPEC one, '
+          + 'top-of-ticket party\'s House share subtracted from 100. NOTE the source disagrees with '
+          + 'itself: the worked table in the test program is keyed on the REPUBLICAN share in every row, '
+          + 'which is a different quantity once the top of the ticket flips. On 1976 the two readings give '
+          + '24.9pp and 75.1pp, and only the R-keyed one supports the table\'s "reversed" note.' },
+      { name: 'share of state-cycles above 69pp', value: share(gaps.filter((g) => g >= 69).length, gaps.length), unit: 'share', n: gaps.length,
+        historical: h.shareAbove69,
+        historicalNote: 'same population and same definition as the row above. For scale, the five Deep '
+          + `South states the test program tracks average ${h.deepSouthMean.toFixed(1)}pp over the same `
+          + 'period — the extreme case the design is aimed at. There is no engine counterpart to that row, '
+          + 'because the engine plays all fifty, so it is quoted here rather than measured.' },
+
       { name: 'longest persistence above 40pp', value: persistence, unit: 'consecutive cycles' },
       { name: 'reversals', value: reversals, n: cells },
       { name: 'office ordering matches §10 priority', value: ordered, unit: '1 = monotone president>senator>rep>governor' },
@@ -149,12 +164,26 @@ const c3: TrackItem = {
     ];
   },
   accept(m) {
-    const p = pick(m, 'longest persistence above 40pp');
+    const h = crossOfficeGap();
+    const gap = pick(m, 'mean gap');
     const above = pick(m, 'share of state-cycles above 69pp');
+    // The bar is the record, within a tolerance wide enough for the engine to
+    // be a game rather than a replica: half the historical mean either side.
+    const lo = h.allStatesMean * 0.5, hi = h.allStatesMean * 1.5;
+    // BOTH bounds on both rows. A floor alone -- "at least half the historical
+    // share of extremes" -- is a bar that cannot fail upward, and the engine
+    // fails upward: it produces three times as many 69pp state-cycles as the
+    // record does. A one-sided bar would have passed that silently.
+    const aLo = h.shareAbove69 * 0.5, aHi = h.shareAbove69 * 2;
     return {
-      pass: p >= 3 && above >= 0.1,
-      note: `longest run above a 40pp gap is ${p} cycles (target >=3, the Deep South held 20 years); `
-        + `${(100 * above).toFixed(0)}% of state-cycles clear 69pp (the 1984 figure)`,
+      pass: gap >= lo && gap <= hi && above >= aLo && above <= aHi,
+      note: `mean gap ${gap.toFixed(1)}pp against ${h.allStatesMean.toFixed(1)}pp in the returns `
+        + `(all fifty states, 1976-2016); band ${lo.toFixed(0)}-${hi.toFixed(0)}pp. `
+        + `${(100 * above).toFixed(0)}% of state-cycles clear 69pp against `
+        + `${(100 * h.shareAbove69).toFixed(0)}% historically; band `
+        + `${(100 * aLo).toFixed(0)}-${(100 * aHi).toFixed(0)}%. The mean is inside the record and the `
+        + 'tail is not: the board produces divergence of about the right average size and far too many '
+        + 'extreme cases.',
     };
   },
 };
