@@ -6,7 +6,7 @@ import cfgJson from '../config/baseline.json' with { type: 'json' };
 
 const cfg = cfgJson.lean as LeanConfig;
 
-test('pushes are margin-based, not flat (§10)', () => {
+test('pushes are margin-based, not flat', () => {
   assert.equal(pushForMargin(cfg, 0), 0, 'a squeaker changes nothing');
   assert.equal(pushForMargin(cfg, 1), 0);
   assert.equal(pushForMargin(cfg, 2), 1);
@@ -62,10 +62,10 @@ test('decay applies to every state and runs before push', () => {
   assert.ok(map.OH >= 4, `sustained blowouts must produce a durable lean; got ${map.OH}`);
 });
 
-/** §16's first open question, settled by arithmetic. Annual decay removes 2 a
- *  cycle against a maximum push of 2, so the map cannot move regardless of how
- *  decisively anyone wins. This test is the proof, and it is why the baseline
- *  ships biennial. */
+/** DECISIONS.md's first open question -- decay frequency -- settled by
+ *  arithmetic. Annual decay removes 2 a cycle against a maximum push of 2, so
+ *  the map cannot move regardless of how decisively anyone wins. This test is
+ *  the proof, and it is why the baseline ships biennial. */
 test('annual decay makes realignment impossible at any margin', () => {
   const annual: LeanConfig = { ...cfg, decayFrequency: 'annual' };
   const map = { OH: 0 };
@@ -94,9 +94,9 @@ test('the honeymoon counter is placed and then decays away', () => {
   const lean = { OH: 0, CA: 0 };
   honeymoon(lean, cfg, ['OH', 'CA'], 'D');
   assert.deepEqual(lean, { OH: -1, CA: -1 });
-  // Biennial decay fires in election years, at the top, before declaration
-  // (§7 step 5, §10 "the board players see when they declare is already
-  // decayed"). So a president elected in 1976 carries the honeymoon through
+  // Biennial decay fires in election years, at the top, before declaration --
+  // "the board players see when they declare is already decayed" (see
+  // lean.ts). So a president elected in 1976 carries the honeymoon through
   // the quiet odd year and loses it at the top of the 1978 midterm -- exactly
   // as the -2 midterm penalty lands.
   decay(lean, cfg, 1977);

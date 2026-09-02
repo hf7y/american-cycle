@@ -7,7 +7,7 @@ import cfgJson from '../config/baseline.json' with { type: 'json' };
 
 const cfg = cfgJson.economy as EconomyConfig;
 
-test('the Fed curve is steepest at 6-8, and G12 is a certainty (§13)', () => {
+test('the Fed curve is steepest at 6-8, and G12 is a certainty', () => {
   assert.equal(rateRiseOdds(12), 1, 'G12 is a certainty');
   assert.equal(rateRiseOdds(1), 0, '2d6 cannot roll under 2');
   const slope = (g: number) => rateRiseOdds(g) - rateRiseOdds(g - 1);
@@ -25,7 +25,7 @@ test('a rate rise spends down the track and cools the economy', () => {
   assert.equal(e.level, 1, 'the recession follows the tightening');
 });
 
-test('the economy modifier is asymmetric — punishment exceeds reward (§9)', () => {
+test('the economy modifier is asymmetric — punishment exceeds reward', () => {
   const e = newEconomy(cfg);
   e.level = cfg.strongAt;
   assert.equal(economyModifier(e, cfg, 1, -2), 1);
@@ -35,7 +35,7 @@ test('the economy modifier is asymmetric — punishment exceeds reward (§9)', (
   assert.equal(economyModifier(e, cfg, 1, -2), 0);
 });
 
-test('austerity is legal and cools the economy (§12: negative G)', () => {
+test('austerity is legal and cools the economy (negative G)', () => {
   const e = newEconomy(cfg); e.level = 2; e.accumulatedG = 6;
   spend(e, cfg, -3);
   assert.ok(e.level < 2, 'austerity cools');

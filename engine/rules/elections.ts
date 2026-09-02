@@ -1,11 +1,12 @@
-/** Declaration, withdrawal, and the modifier stack — design doc §8 and §9.
+/** Declaration, withdrawal, and the modifier stack.
  *
- *  §8 is the heart of the card economy. Withdrawal comes BEFORE reveal in the
+ *  Withdrawal is the heart of the card economy. It comes BEFORE reveal in the
  *  primary and BEFORE the national die in the general, so you pull out on
  *  incomplete information; by the time the arithmetic is knowable it is too
  *  late to run. That ordering is enforced structurally here: the withdrawal
  *  window is handed a `WithdrawalView`, which has no field that could carry a
- *  die, and the Wave counts its own rolls so a test can prove none were drawn.
+ *  die, and the Wave counts its own rolls so a test can prove none were drawn
+ *  (see elections.test.ts).
  */
 import type {
   CandidateCard, DistrictCard, Modifier, Office, Party, Round, Seat,
@@ -18,12 +19,13 @@ export interface ResolutionConfig {
   /** Incumbency in a PRIMARY, which is a different contest: every side is the
    *  same party in the same state, so `Wave` hands them the same national and
    *  state die and only the candidate die differs. A primary is 1d6 vs 1d6,
-   *  SD 2.42 against the general's 4.18, and §3's odds table does not describe
-   *  it. Renomination is also the safer half of reelection in reality -- House
+   *  SD 2.42 against the general's 4.18, and the general odds table in
+   *  resolution.ts does not describe it. Renomination is also the safer half
+   *  of reelection in reality -- House
    *  incumbents lose a primary at 1-2% a cycle -- so one scalar cannot serve
    *  both rounds. */
   incumbencyPrimary: number;
-  /** §11's stepping stone, flat: what a card already holding an office is
+  /** The stepping-stone bonus, flat: what a card already holding an office is
    *  worth running for a DIFFERENT one. One number for every combination,
    *  because the primary/general asymmetry it would otherwise encode is
    *  already emergent from the board -- a House member stepping up runs +4.3pp
@@ -42,11 +44,12 @@ export interface PrimaryGeneralConfig {
   extremistPrimary: number; extremistGeneral: number;
   crossBenchPrimaryPenalty: number;
   billCounterPips: number;
-  /** Most counters a cross-bench record can be worth. §12 says the counters
-   *  are read off, and uncapped they read off ~30 -- but §12 also makes
-   *  cross-benching structurally necessary to pass anything at a 60% Senate
-   *  threshold, so an uncapped record makes cooperation career-ending. The cap
-   *  keeps a serial defector distinct from a one-time one without that. */
+  /** Most counters a cross-bench record can be worth. The record's counters
+   *  are read off at resolution (see legislature.ts), and uncapped they read
+   *  off ~30 -- but the 60% Senate threshold also makes cross-benching
+   *  structurally necessary to pass anything, so an uncapped record makes
+   *  cooperation career-ending. The cap keeps a serial defector distinct from
+   *  a one-time one without that. */
   crossBenchCap: number;
   /** v0.2 items 5 and 6: what it costs to run under a label whose CURRENT
    *  officeholders you do not resemble. A party's position is the centroid of
@@ -86,18 +89,19 @@ export interface Declaration {
   office: Office;
   state: string;
   slot?: number;
-  /** pips of endorsement bought in the primary; §9 makes these primary-only */
+  /** pips of endorsement bought in the primary; primary-only, since the
+   *  general effect is coattails, already modelled (see elections.test.ts) */
   endorsements?: number;
   incumbent?: boolean;
-  /** §12: how many counters this card carries in the OTHER party's colour,
+  /** How many counters this card carries in the OTHER party's colour,
    *  and which colour that is. Not a boolean -- a serial cross-bencher is not
    *  a one-time defector. */
   crossBench?: number;
   crossBenchToward?: Party;
   /** The office this card holds right now, captured before any seat it is
-   *  vacating is cleared. §11's stepping stone. */
+   *  vacating is cleared. Feeds the stepping-stone bonus above. */
   heldOffice?: Office;
-  /** §12: "the card's accumulated counters are simply read off at resolution."
+  /** The card's accumulated counters are simply read off at resolution.
    *  Signed: a good reaction on a yes-vote is an asset, a bad one a liability. */
   billRecord?: number;
   /** v0.2 item 5: distance in [0,1] between this card's tags and the CURRENT
@@ -111,9 +115,9 @@ export interface Declaration {
   power?: number;
 }
 
-/** §5: district cards gate all races. You may run only where you hold a
+/** District cards gate all races. You may run only where you hold a
  *  district card, or where your candidate is a native. This is the brake on
- *  wide-and-empty play. */
+ *  wide-and-empty play (see elections.test.ts). */
 export function eligible(card: CandidateCard, state: string, districts: DistrictCard[]): boolean {
   return card.homeState === state || districts.some((d) => d.state === state);
 }
@@ -129,7 +133,7 @@ export function buildModifiers(
   const m: Modifier[] = [];
   const partySign = d.card.party === 'R' ? 1 : d.card.party === 'D' ? -1 : 0;
 
-  // §10: the lean applies once, to the party it favours -- one counter is one
+  // The lean applies once, to the party it favours -- one counter is one
   // pip. Giving the other side the negative would double the scale.
   if (ctx.lean !== 0 && partySign !== 0 && Math.sign(ctx.lean) === partySign) {
     m.push({ source: 'state lean', pips: Math.abs(ctx.lean) });
@@ -140,7 +144,7 @@ export function buildModifiers(
   }
 
   if (d.district && d.district.state === ctx.state) {
-    // Synergy is the district's machine and stays whole. §10's named case is
+    // Synergy is the district's machine and stays whole. The named case is
     // "Joe Manchin wins most of the time, because his card is good and his
     // district synergy is real" -- diluting that would delete the example.
     m.push({ source: `district ${d.district.id}`, pips: d.district.synergy });
@@ -211,7 +215,7 @@ export function buildModifiers(
       if (w.state && w.state !== ctx.state) continue;
       if (w.round && w.round !== round) continue;
       if (w.office && w.office !== d.office) continue;
-      // §5: "John Bel Edwards is pro-life, which reads as a bonus in Catholic
+      // "John Bel Edwards is pro-life, which reads as a bonus in Catholic
       // districts." An identity condition is a claim about the DISTRICT being
       // run in, not about the candidate -- without this the effect fires in
       // every race and the condition is decorative.
@@ -231,7 +235,8 @@ export function toSide(d: Declaration, modifiers: Modifier[]): Side {
 }
 
 /** What a player may look at when deciding to withdraw. Deliberately narrow:
- *  no dice, and in the primary not even the opponent's card. §8. */
+ *  no dice, and in the primary not even the opponent's card (see
+ *  elections.test.ts). */
 export interface WithdrawalView {
   round: Round;
   office: Office;
@@ -273,9 +278,9 @@ export interface RunRaceArgs {
   rng: RNG;
 }
 
-/** The ordering §8 depends on: build stacks, open the withdrawal window,
- *  close it, and only then touch the dice. Nothing between `decide` and
- *  `resolveRace` may consult the wave. */
+/** The ordering withdrawal depends on: build stacks, open the withdrawal
+ *  window, close it, and only then touch the dice. Nothing between `decide`
+ *  and `resolveRace` may consult the wave. */
 export function runRace(a: RunRaceArgs) {
   const stacks = a.declarations.map((d) => buildModifiers(d, a.ctx, a.round, a.res, a.nat, a.pg));
 

@@ -1,4 +1,4 @@
-/** The macro layer — design doc §13. One number for how the country is doing,
+/** The macro layer. One number for how the country is doing,
  *  one accumulated-spending track, and a 2d6 roll-under that decides when the
  *  Fed tightens. There is deliberately no second ideological axis. */
 import type { RNG } from './rng.ts';
@@ -30,7 +30,7 @@ export function newEconomy(cfg: EconomyConfig): Economy {
   return { level: cfg.start, accumulatedG: 0 };
 }
 
-/** §13: "the economy random-walks with memory". The walk is small relative to
+/** The economy random-walks with memory. The walk is small relative to
  *  spending and tightening, so policy is legible against the noise. */
 export function walk(e: Economy, cfg: EconomyConfig, rng: RNG): number {
   const step = rng.d6() <= 3 ? -1 : 1;
@@ -46,9 +46,10 @@ export function spend(e: Economy, cfg: EconomyConfig, g: number): void {
   e.level = clampEcon(e.level + Math.sign(g) * (Math.abs(g) >= 4 ? 2 : 1), cfg.min, cfg.max);
 }
 
-/** §13: 2d6 roll-under against the accumulation. G12 is a certainty; the
+/** 2d6 roll-under against the accumulation. G12 is a certainty; the
  *  interesting range is 6 to 8, where the curve is steepest -- which is
- *  exactly where a player trying to run hot will hover. */
+ *  exactly where a player trying to run hot will hover (see
+ *  economy.test.ts). */
 export function fedCheck(e: Economy, cfg: EconomyConfig, rng: RNG): { roll: number; rateRise: boolean } {
   let roll = 0;
   for (let i = 0; i < cfg.fedDice; i++) roll += rng.d6();
@@ -80,7 +81,7 @@ export function rateRiseOdds(accumulatedG: number, dice = 2): number {
   return ways / total;
 }
 
-/** §9's national modifier from the economy, applied to the president's party.
+/** The national modifier from the economy, applied to the president's party.
  *  Asymmetric on purpose: voters punish downturns harder than they reward booms. */
 export function economyModifier(e: Economy, cfg: EconomyConfig, strong: number, recession: number): number {
   if (e.level >= cfg.strongAt) return strong;

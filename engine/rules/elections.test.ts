@@ -24,7 +24,7 @@ const ctx = (o: Partial<RaceContext>): RaceContext => ({
   isMidterm: false, isPresidentialYear: false, economyMod: 0, ...o,
 });
 
-/** BUILD-BRIEF correctness target #2, and §8's central claim. */
+/** BUILD-BRIEF correctness target #2, and withdrawal's central claim. */
 test('the withdrawal window closes before any die is rolled', () => {
   const wave = new Wave(new RNG(1));
   const rng = new RNG(1);
@@ -45,7 +45,7 @@ test('the withdrawal window closes before any die is rolled', () => {
   assert.ok(wave.rolls > 0, 'and the dice are rolled once the window has closed');
 });
 
-test('a primary hides the opponent card; a general reveals it (§8)', () => {
+test('a primary hides the opponent card; a general reveals it', () => {
   const me: Declaration = { player: 0, card: cand({ id: 'a' }), office: 'senator', state: 'OH' };
   const them: Declaration = { player: 1, card: cand({ id: 'b', party: 'R' }), office: 'senator', state: 'OH' };
   const mods = buildModifiers(me, ctx({}), 'primary', res, nat, pg);
@@ -56,7 +56,7 @@ test('a primary hides the opponent card; a general reveals it (§8)', () => {
   assert.equal(g.contenders, 1, 'a peg on the board is always visible');
 });
 
-test('withdrawal returns the card and hands the opponent a walkover (§8)', () => {
+test('withdrawal returns the card and hands the opponent a walkover', () => {
   const wave = new Wave(new RNG(2));
   const out = runRace({
     ctx: ctx({}), round: 'general', wave, rng: new RNG(2), res, nat, pg,
@@ -72,14 +72,14 @@ test('withdrawal returns the card and hands the opponent a walkover (§8)', () =
   assert.ok(out.event?.uncontested, 'uncontested is an auto-win');
 });
 
-test('district cards gate all races (§5)', () => {
+test('district cards gate all races', () => {
   const ohio = cand({ homeState: 'OH' });
   assert.ok(eligible(ohio, 'OH', []), 'a native may always run at home');
   assert.ok(!eligible(ohio, 'CA', []), 'and nowhere else without presence');
   assert.ok(eligible(ohio, 'CA', [dist({ id: 'CA-3', state: 'CA' })]), 'presence is purchased in the draft');
 });
 
-test('lean applies once, to the party it favours (§10)', () => {
+test('lean applies once, to the party it favours', () => {
   const r = { player: 0, card: cand({ party: 'R' as const }), office: 'senator' as const, state: 'OH' };
   const d = { player: 1, card: cand({ party: 'D' as const }), office: 'senator' as const, state: 'OH' };
   const c = ctx({ lean: 3 });
@@ -90,7 +90,7 @@ test('lean applies once, to the party it favours (§10)', () => {
     'the other side takes no penalty -- that would double the pip scale');
 });
 
-test('the midterm penalty reaches everyone; a local card outruns it (§9)', () => {
+test('the midterm penalty reaches everyone; a local card outruns it', () => {
   // Manchin's insulation was a printed tag and is now the ordinary arithmetic
   // of a big personal vote: he takes the -2 like anyone else and survives it
   // on home state plus district synergy.
@@ -106,7 +106,7 @@ test('the midterm penalty reaches everyone; a local card outruns it (§9)', () =
   assert.equal(resolution.modifierTotal(side), 3, 'home state 2 + synergy 3 - midterm 2');
 });
 
-test('coattails run in reverse in hostile states, with no extra rule (§9)', () => {
+test('coattails run in reverse in hostile states, with no extra rule', () => {
   const base = { player: 0, office: 'senator' as const, state: 'OH' };
   const dem = { ...base, card: cand({ party: 'D' as const }) };
   const withGrain = buildModifiers(dem, ctx({ lean: -3, isPresidentialYear: true, presidentialWinner: 'D' }), 'general', res, nat, pg);
@@ -116,7 +116,7 @@ test('coattails run in reverse in hostile states, with no extra rule (§9)', () 
     'an unpopular nominee drags his own party down in hostile states');
 });
 
-test('endorsements are primary-only (§9)', () => {
+test('endorsements are primary-only', () => {
   const d: Declaration = { player: 0, card: cand({}), office: 'governor', state: 'OH', endorsements: 3 };
   assert.ok(buildModifiers(d, ctx({}), 'primary', res, nat, pg).some((m) => m.source === 'endorsements'));
   assert.ok(!buildModifiers(d, ctx({}), 'general', res, nat, pg).some((m) => m.source === 'endorsements'),

@@ -25,7 +25,7 @@ export interface CandidateCard {
   name: string;
   party: Party;
   homeState: string;
-  /** printed per card, NOT global — §5, the decline of localism */
+  /** printed per card, NOT global -- models the decline of localism */
   homeStateBonus: number;
   identities: IdentityTag[];
   belief?: string;

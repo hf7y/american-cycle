@@ -1,5 +1,5 @@
-/** The board: states, their Senate classes, and their gubernatorial schedules.
- *  Design doc §2 — "a per-state table of gubernatorial election years". */
+/** The board: states, their Senate classes, and their gubernatorial schedules
+ *  -- a per-state table of gubernatorial election years. */
 
 export type StateCode = string;
 
