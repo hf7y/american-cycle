@@ -14,6 +14,7 @@
  *  marked as such rather than silently extrapolated.
  */
 import { readFileSync } from 'node:fs';
+import { pearson } from './types.ts';
 
 const panel = (f: string): { columns: string[]; rows: (string | number)[][] } =>
   JSON.parse(readFileSync(new URL(`../data/historical/${f}`, import.meta.url), 'utf8'));
@@ -94,6 +95,68 @@ export function midtermLoss(): { rate: number; lost: number; n: number; lo: numb
   return { ...wilson(lost, n), rate: lost / n, lost, n, exceptions };
 }
 
+/** D7 (#97). Democrats' SHARE of national House seats, one figure per cycle
+ *  -- share rather than a raw count, because the engine's House is nothing
+ *  like 435 seats (only districts that are IN PLAY get contested) and a raw
+ *  seat-count threshold calibrated to the real chamber would never fire
+ *  there at all. Share is the quantity that is actually comparable across
+ *  two chambers of different size, and is what lets the same threshold and
+ *  the same code (`waveReversal`) grade both sides. */
+function nationalDSeatShareByYear(): { year: number; share: number }[] {
+  const national = new Map<number, [number, number]>();
+  for (const [y, , , d, r] of HOUSE) {
+    if (d + r === 0) continue;
+    const cur = national.get(y) ?? [0, 0];
+    cur[d > r ? 0 : 1]++;
+    national.set(y, cur);
+  }
+  return [...national.entries()].sort(([a], [b]) => a - b)
+    .map(([year, [d, r]]) => ({ year, share: (100 * d) / (d + r) }));
+}
+
+/** D7's threshold default: the register's headline case (1965 +44 D, 1967
+ *  -48 D of a 435-seat House) is ~25 seats, ~5.75pp of the chamber. */
+export const WAVE_THRESHOLD_PP = (25 / 435) * 100;
+
+/** D7. Lag-1 (cycle, next-cycle) seat-share swing pairs from one chronological
+ *  series. Exported so `tracks/d.ts` can build the engine's own pairs across
+ *  many games -- concatenated, not run through this function once per game,
+ *  since a swing from the end of one game paired with the start of another
+ *  would not be a real lag. */
+export function swingPairs(cycles: { share: number }[]): { x: number; y: number }[] {
+  const swings = cycles.slice(1).map((c, i) => c.share - cycles[i].share);
+  const pairs: { x: number; y: number }[] = [];
+  for (let i = 0; i < swings.length - 1; i++) pairs.push({ x: swings[i], y: swings[i + 1] });
+  return pairs;
+}
+
+/** D7. Is a big national House swing a thermostat -- the next cycle reverses
+ *  it -- or does the design compound it? One formula for both chambers: the
+ *  historical side calls it on the panel's own pairs, `tracks/d.ts` calls it
+ *  on the engine's. `thresholdPp` is the swing (in seat-share percentage
+ *  points) that counts as "big" -- the register's own reversal rate (71%,
+ *  from a 40-cycle postwar roster) does NOT reproduce on the panel's pairs:
+ *  1976-2018 is 22 cycles, a materially smaller and later-starting sample.
+ *  Report this as its own number rather than reconciling it to the roster by
+ *  hand. */
+export function reversalStats(pairs: { x: number; y: number }[], thresholdPp = WAVE_THRESHOLD_PP): {
+  autocorr: number; pairs: number; bigN: number; reversed: number; reversalRate: number;
+} {
+  const x = pairs.map((p) => p.x), y = pairs.map((p) => p.y);
+  let bigN = 0, reversed = 0;
+  for (const { x: sx, y: sy } of pairs) {
+    if (Math.abs(sx) < thresholdPp) continue;
+    bigN++;
+    if (Math.sign(sy) !== 0 && Math.sign(sy) !== Math.sign(sx)) reversed++;
+  }
+  return { autocorr: pearson(x, y), pairs: pairs.length, bigN, reversed, reversalRate: bigN ? reversed / bigN : NaN };
+}
+
+/** D7's historical figure — the panel's own seat-share series, fixed. */
+export function historicalWaveReversal(thresholdPp = WAVE_THRESHOLD_PP) {
+  return reversalStats(swingPairs(nationalDSeatShareByYear()), thresholdPp);
+}
+
 /** C3. The cross-office gap, as the test program's SPEC defines it: the
  *  top-of-ticket party's share of that state's House seats, subtracted from
  *  100.
@@ -144,6 +207,21 @@ export function crossOfficeGap(): {
 export function unopposedHouseShare(): { share: number; n: number } {
   const n = HOUSE.length;
   return { share: HOUSE.filter(([, , , d, r]) => d === 0 || r === 0).length / n, n };
+}
+
+/** B1 (#93). A House race with no votes recorded on one side is the ONLY
+ *  like-for-like counterpart the engine's raw walkover share has -- but
+ *  reality also runs a sacrificial candidate who loses 80-20, which the
+ *  panel's vote counts show as contested and the engine's empty-ballot-line
+ *  model cannot produce at all. Effective competitiveness widens "safe" from
+ *  strictly-unopposed to a margin threshold, so the reader sees a band
+ *  instead of one number picked to imply a single right answer. `pp` is a
+ *  parameter, not a constant, because the honest reporting is the band across
+ *  several thresholds, not one row. */
+export function effectiveCompetitiveness(pp: number): { share: number; n: number } {
+  const margins = HOUSE.map(([, , , d, r]) => (d + r === 0 ? undefined : (100 * Math.abs(d - r)) / (d + r)))
+    .filter((m): m is number => m !== undefined);
+  return { share: margins.filter((m) => m >= pp).length / margins.length, n: margins.length };
 }
 
 /** D5. Deep South Republican share of House seats, per cycle. The realignment

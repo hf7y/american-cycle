@@ -1,5 +1,5 @@
 /** Parameter sweeps — SIM-BRIEF Part 4. Each holds the rest at baseline. */
-import { loadConfig, loadPacks, playOne, summarise } from './harness.ts';
+import { loadConfig, loadPacks, playOne, summarise, BALANCE_PACKS } from './harness.ts';
 import type { Config } from '../engine/game.ts';
 import type { Card } from '../engine/types/index.ts';
 
@@ -36,7 +36,7 @@ export function withDistrictFraction(cards: Card[], frac: number, seed: number):
 
 if (import.meta.filename === process.argv[1]) {
   const cfg = loadConfig('baseline.json');
-  const all = loadPacks(['1976', '1992', '2008', '2016']);
+  const all = loadPacks(BALANCE_PACKS);
   const seeds = Array.from({ length: 12 }, (_, i) => 700 + i);
   const agents = ['Greedy', 'Lookahead', 'Greedy', 'HouseFarm'];
 

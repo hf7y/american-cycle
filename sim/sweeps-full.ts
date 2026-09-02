@@ -2,7 +2,7 @@
  *  baseline and reporting the metric it is supposed to move. Only worth
  *  running now: before the presidency and the last three unbuilt rules were wired, these measured a board with half its rules
  *  switched off. */
-import { loadConfig, loadPacks, playOne } from './harness.ts';
+import { loadConfig, loadPacks, playOne, BALANCE_PACKS } from './harness.ts';
 import type { Config } from '../engine/game.ts';
 import type { Card } from '../engine/types/index.ts';
 
@@ -41,7 +41,7 @@ function measure(cfg: Config, cards: Card[], seedBase: number) {
 }
 
 const base = loadConfig('tuned.json');
-const cards = loadPacks(['1976', '1992', '2008', '2016']);
+const cards = loadPacks(BALANCE_PACKS);
 const clone = (): Config => JSON.parse(JSON.stringify(base));
 
 function sweep(title: string, watch: string, values: (number | string)[],

@@ -17,7 +17,7 @@
  */
 import { execSync } from 'node:child_process';
 import { mkdirSync, readdirSync, writeFileSync } from 'node:fs';
-import { loadConfig, loadPacks } from './harness.ts';
+import { loadConfig, loadPacks, ALL_PACKS } from './harness.ts';
 import { observeRun } from '../skowronek/observe.ts';
 import { eraChecks, quadrantCoverage, mean } from '../skowronek/checks.ts';
 import { leanWriterControl, powerControl, preconditions, syntheticControl } from '../skowronek/controls.ts';
@@ -30,7 +30,7 @@ const arg = (flag: string, dflt: string): string => {
 
 const games = Number(arg('--games', '12'));
 const pool = arg('--agents', 'Greedy,BillAuthor,SenateFlood,Random').split(',');
-const packs = arg('--packs', '1932,1964,1976,1992,2008,2016,2024').split(',');
+const packs = arg('--packs', ALL_PACKS.join(',')).split(',');
 const cfgDir = new URL('../engine/config/', import.meta.url);
 const configs = arg('--configs', '').length
   ? arg('--configs', '').split(',')

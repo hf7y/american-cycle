@@ -10,7 +10,8 @@ import { RNG } from '../engine/rules/rng.ts';
 import { AGENTS } from '../sim/agents.ts';
 import { playOne } from '../sim/harness.ts';
 import type { Party, RaceEvent } from '../engine/types/index.ts';
-import { crossOfficeGap, deepSouthRShare, midtermLoss, realignmentLagYears } from './history.ts';
+import { crossOfficeGap, deepSouthRShare, historicalWaveReversal, midtermLoss, realignmentLagYears,
+  reversalStats, swingPairs, WAVE_THRESHOLD_PP } from './history.ts';
 import { mean, pick, quantile, share, type Measure, type TrackItem } from './types.ts';
 
 const partyOf = (e: RaceEvent): Party | undefined => e.sides.find((s) => s.player === e.winner)?.party;
@@ -302,4 +303,72 @@ const d6: TrackItem = {
   },
 };
 
-export const D: TrackItem[] = [d1, d2, d3, d4, d5, d6];
+/** D7 (#97). Measurement only, no brake built here -- that is #84's call and
+ *  this item is the evidence for it. THE TRAP #84 ALREADY FELL INTO TWICE:
+ *  board scoring and the exogenous shock both failed to close the runaway,
+ *  and neither is a thermostat, because neither pushes back harder after a
+ *  bigger win. A negative lag-1 autocorrelation on the national House swing
+ *  is what a thermostat looks like in the returns; zero or positive means
+ *  the design compounds a big win instead of correcting it.
+ *
+ *  DECK-SENSITIVE BY CONSTRUCTION: a bigger card pool seats more contested
+ *  races and directly reshapes the swing series. #91 is the item that will
+ *  eventually flag that; it is open as of this item landing, so there is no
+ *  flag to carry yet. */
+const d7: TrackItem = {
+  id: 'D7-wave-reversal',
+  track: 'D',
+  question: 'After a big national House swing, does the next cycle reverse it -- a thermostat -- or does the design compound it?',
+  oracle: 'historical-record',
+  run({ runs }): Measure[] {
+    // SHARE, NOT RAW COUNT. The engine's House is nothing like 435 seats --
+    // only districts IN PLAY get contested -- so a raw seat-count threshold
+    // calibrated to the real chamber would never fire here (checked: it
+    // doesn't, big-swing n was 0 across every seed). Seat share is what is
+    // actually comparable across two chambers of very different size.
+    const pairs = runs.flatMap((r) => {
+      const byYear = new Map<number, RaceEvent[]>();
+      for (const e of r.events) {
+        if (e.office !== 'representative' || e.round !== 'general') continue;
+        (byYear.get(e.year) ?? byYear.set(e.year, []).get(e.year)!).push(e);
+      }
+      const years = [...byYear.keys()].sort((a, b) => a - b);
+      const cycles = years.map((y) => {
+        const ev = byYear.get(y)!;
+        return { share: share(ev.filter((e) => partyOf(e) === 'D').length, ev.length) * 100 };
+      });
+      // Pairs computed PER GAME, then concatenated -- a swing at the end of
+      // one game paired with the start of another would not be a real lag.
+      return swingPairs(cycles);
+    });
+    const s = reversalStats(pairs);
+    const h = historicalWaveReversal();
+    return [
+      { name: 'lag-1 autocorrelation of the national House seat-share swing', value: s.autocorr, n: pairs.length,
+        historical: h.autocorr,
+        historicalNote: `derived from house_district_panel.json, 1976-2018 -- ${h.pairs} cycle-pairs across 22 `
+          + 'cycles. NOT the register\'s 40-cycle postwar figure (-0.36 from HISTORICAL-CASES.md G1): that '
+          + 'predates the panel and is a materially larger, earlier-starting sample. This is its own number, '
+          + 'not reconciled to it by hand.' },
+      { name: `reversal rate after a swing of >=${WAVE_THRESHOLD_PP.toFixed(2)}pp`, value: s.reversalRate, n: s.bigN,
+        historical: h.reversalRate,
+        historicalNote: `${h.reversed} of ${h.bigN} swings of >=${WAVE_THRESHOLD_PP.toFixed(2)}pp in the panel `
+          + `(the register's headline 25-of-435-seat case) reversed the following cycle. Same 1976-2018-sample `
+          + 'caveat as the row above.' },
+      { name: 'big swings observed', value: s.bigN, n: pairs.length },
+    ];
+  },
+  accept(m) {
+    const ac = pick(m, 'lag-1 autocorrelation of the national House seat-share swing');
+    const h = historicalWaveReversal();
+    return {
+      pass: ac < 0,
+      note: `lag-1 autocorrelation ${ac.toFixed(3)} against ${h.autocorr.toFixed(3)} in the returns -- negative `
+        + 'is a thermostat (big swings reverse), zero or positive compounds them. Whether a brake is needed '
+        + 'and what shape it takes is hf7y/american-cycle#84\'s call; this only says which pattern the engine '
+        + 'currently produces.',
+    };
+  },
+};
+
+export const D: TrackItem[] = [d1, d2, d3, d4, d5, d6, d7];
