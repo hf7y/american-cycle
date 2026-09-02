@@ -33,6 +33,12 @@ export interface LegislatureConfig {
   impeachBackfirePips?: number;
   /** v0.2 item 8: flat lean pips against the party blamed for a shutdown. */
   shutdownPips?: number;
+  /** #78's ruling: a passed bill places a counter, this many flat lean pips
+   *  toward the House majority party, in every district on the table (any
+   *  player's) whose demographics overlap the bill's tags. Fires on repeal
+   *  exactly like any other bill -- there is no repeal-specific code path,
+   *  which is what lets an opposite-fit bill net out a prior one's counters. */
+  billLeanPips?: number;
 }
 
 /** The counter goes on the CARD, so a vote must name the card that cast it.

@@ -366,3 +366,104 @@ test('engine/config/three-terms.json actually ends a game on three-terms, not ju
   assert.equal(result.wonBy, result.winner, 'a victory condition, not a score tie-break, decided this game');
   assert.ok((g.termsBy[result.winner!] ?? 0) >= 3, 'the winner actually holds 3 presidential terms, not fewer');
 });
+
+// ------------------------------------------------------------- #78: bills write to the board
+
+/** Votes yes on everything, so the omnibill's passage is a fact about the
+ *  fixture rather than a heuristic's guess. */
+class BillYesAgent extends ScriptedAgent {
+  voteBill(): boolean { return true; }
+}
+
+test('#78: a passed bill places a lean counter in every district on the table its tags touch, not just the author’s own', () => {
+  const cfg = loadConfig('as-written-plus.json');
+  cfg.legislature = { ...cfg.legislature, billLeanPips: 3, tagsPerBill: 1 };
+  cfg.amendment = { ...cfg.amendment, enabled: false };
+
+  const author = new BillYesAgent('author');
+  const other = new BillYesAgent('other');
+  const g = new Game([author, other], structuredClone(CARDS), cfg, 1);
+  g.year = 1977; // odd: no election, isolating the bill's push from any electoral one
+
+  g.seats = [
+    { office: 'representative', state: 'OH', slot: 1, holder: { cardId: 'h1', player: 0, party: 'R', since: 1976 } },
+    { office: 'representative', state: 'OH', slot: 2, holder: { cardId: 'h2', player: 0, party: 'R', since: 1976 } },
+    { office: 'senator', state: 'OH', slot: 1, senateClass: 1, holder: { cardId: 's1', player: 0, party: 'R', since: 1976 } },
+  ];
+  g.players[0].hand = [];
+  g.players[0].districts = [dist({ id: 'OH-1', state: 'OH', number: 1, demographics: ['union'] })];
+  g.players[1].hand = [];
+  // Held by the OTHER player, with no seat in the chamber at all -- proving the
+  // channel reads every district on the table, not the author's own coalition.
+  g.players[1].districts = [dist({ id: 'ZZ-9', state: 'ZZ', number: 9, demographics: ['union'] })];
+
+  g.tick();
+
+  assert.equal(g.bills.length, 1, 'the bill passed');
+  assert.deepEqual(g.bills[0].tags, ['union'], 'carrying the tag the author’s own coalition supplied');
+  assert.equal(g.leanMap.OH, 2, 'the author’s own matching district moved (3 pips pushed, 1 decayed the same tick)');
+  assert.equal(g.leanMap.ZZ, 2, 'so did the OTHER player’s matching district -- the channel is not author-scoped');
+});
+
+test('#78: a bill whose tags touch nothing on the table moves no state', () => {
+  const cfg = loadConfig('as-written-plus.json');
+  cfg.legislature = { ...cfg.legislature, billLeanPips: 3, tagsPerBill: 1 };
+  cfg.amendment = { ...cfg.amendment, enabled: false };
+
+  const author = new BillYesAgent('author');
+  const g = new Game([author], structuredClone(CARDS), cfg, 1);
+  g.year = 1977;
+  g.seats = [
+    { office: 'representative', state: 'OH', slot: 1, holder: { cardId: 'h1', player: 0, party: 'R', since: 1976 } },
+    { office: 'senator', state: 'OH', slot: 1, senateClass: 1, holder: { cardId: 's1', player: 0, party: 'R', since: 1976 } },
+  ];
+  g.players[0].hand = [];
+  g.players[0].districts = [dist({ id: 'OH-1', state: 'OH', number: 1, demographics: ['union'] })];
+
+  g.tick();
+
+  assert.equal(g.bills.length, 1, 'the bill passed');
+  assert.equal(g.leanMap.CA ?? 0, 0, 'a state with no matching district on the table is untouched');
+});
+
+test('#78: a second bill on the same tags, passed once the House flips, nets the first one’s counters out -- with no repeal object involved', () => {
+  const cfg = loadConfig('as-written-plus.json');
+  cfg.legislature = { ...cfg.legislature, billLeanPips: 3, tagsPerBill: 1 };
+  cfg.amendment = { ...cfg.amendment, enabled: false };
+
+  const r = new BillYesAgent('r'), d = new BillYesAgent('d');
+  const g = new Game([r, d], structuredClone(CARDS), cfg, 1);
+  g.year = 1977;
+  g.seats = [
+    { office: 'representative', state: 'OH', slot: 1, holder: { cardId: 'h1', player: 0, party: 'R', since: 1976 } },
+    { office: 'representative', state: 'OH', slot: 2, holder: { cardId: 'h2', player: 0, party: 'R', since: 1976 } },
+    { office: 'senator', state: 'OH', slot: 1, senateClass: 1, holder: { cardId: 's1', player: 0, party: 'R', since: 1976 } },
+  ];
+  g.players[0].hand = [];
+  g.players[0].districts = [dist({ id: 'OH-1', state: 'OH', number: 1, demographics: ['union'] })];
+  g.players[1].hand = [];
+  g.players[1].districts = [];
+
+  g.tick(); // 1977, R-controlled: passes, pushes OH toward R
+  assert.equal(g.leanMap.OH, 2, 'the first bill’s push, net of the same tick’s decay');
+
+  // The House flips to D. Player 1 needs a district of its own for the
+  // default bill-tagger to reach for "union" again -- proposeTags is not
+  // scripted here on purpose, so nothing in this test hand-picks the tag.
+  g.year = 1979; // odd again: skip the intervening election year entirely
+  g.seats = [
+    { office: 'representative', state: 'OH', slot: 1, holder: { cardId: 'h3', player: 1, party: 'D', since: 1978 } },
+    { office: 'representative', state: 'OH', slot: 2, holder: { cardId: 'h4', player: 1, party: 'D', since: 1978 } },
+    { office: 'senator', state: 'OH', slot: 1, senateClass: 1, holder: { cardId: 's2', player: 1, party: 'D', since: 1978 } },
+  ];
+  g.players[1].districts = [dist({ id: 'TX-1', state: 'TX', number: 1, demographics: ['union'] })];
+
+  g.tick(); // 1979, D-controlled: a second, ordinary bill -- not a repeal
+
+  assert.equal(g.bills.length, 2, 'a second bill passed');
+  assert.equal(g.bills[1].tags[0], 'union', 'carrying the same tag as the first, from player 1’s own district');
+  assert.equal(g.bills[1].repealedIn, undefined, 'the FIRST bill, not carried here -- this one is not flagged as a repeal at all');
+  assert.equal(g.leanMap.OH, 0,
+    'OH nets fully back to baseline: the D push (3 pips) overtakes the R remainder (2), then decays -1 toward zero');
+  assert.equal(g.leanMap.TX, -2, 'TX has no earlier push to net against, so the same D bill just moves it, ordinarily');
+});
