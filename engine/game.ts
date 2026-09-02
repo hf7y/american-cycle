@@ -1,8 +1,8 @@
-/** The game — design doc §7's annual tick, wired to the rule modules.
+/** The game — the annual tick, wired to the rule modules.
  *
  *  Players are not parties. A player is a faction holding cards of both
- *  parties (§13: "a skilled player runs one party hot and pivots to the other
- *  in the recession year"), so score is per player and party is per card.
+ *  parties -- a skilled player runs one party hot and pivots to the other
+ *  in the recession year -- so score is per player and party is per card.
  *
  *  The board starts empty and fills as seats are won. Chamber majorities are
  *  computed over HELD seats only, which is what makes a legislature possible
@@ -36,9 +36,10 @@ export interface Config {
   lean: lean.LeanConfig;
   economy: econ.EconomyConfig;
   legislature: leg.LegislatureConfig & {
-    /** §7 runs the omnibill every year. 'biennial' runs it only in election
-     *  years, which empties the odd year and effectively makes the game a
-     *  two-year cycle. */
+    /** The omnibill runs every year by default. 'biennial' runs it only in
+     *  election years, which empties the odd year and effectively makes the
+     *  game a two-year cycle. See `isBillYear` and
+     *  findings/odd-year-is-the-bill.ts. */
     billFrequency?: 'annual' | 'biennial';
   };
   draft: { packSize: number; districtsPerPack: number; refillToHandSize: boolean };
@@ -47,19 +48,19 @@ export interface Config {
   scoring: ScoringConfig;
   amendment: amend.AmendmentConfig;
   game: { startYear: number; maxYears: number; victory: Victory; deckOutEnds: boolean; billTarget?: number;
-          /** diagnostic only: §16 names hand size, endorsements and capture as
-           *  the three stacking feedback loops. Hand size is cleared;
+          /** diagnostic only: hand size, endorsements and capture are the
+           *  three stacking feedback loops. Hand size is cleared;
            *  this switches the other two off so each can be isolated. Not a
            *  rules option -- both default on. */
           captureEnabled?: boolean;
-          /** §7 puts every election in an even year, but §2 asks the board to
-           *  carry a real per-state gubernatorial table -- and KY, LA, MS, NJ
-           *  and VA elect in odd years. As written those races are computed and
+          /** Elections default to every even year, but the board carries a
+           *  real per-state gubernatorial table -- and KY, LA, MS, NJ and VA
+           *  elect in odd years. Off by default those races are computed and
            *  never run: 1,039 governor races resolved in even years and 0 in
-           *  odd. Enabling this runs them, which also opens a strategic line
-           *  §11 implies but §7 forecloses: win a governorship in a year with
-           *  no other race competing for your declarations, then carry
-           *  incumbency upward into the next even-year Senate run. */
+           *  odd. Enabling this runs them, which also opens a strategic line:
+           *  win a governorship in a year with no other race competing for
+           *  your declarations, then carry incumbency upward into the next
+           *  even-year Senate run. See findings/odd-year-is-the-bill.ts. */
           oddYearGovernors?: boolean;
           /** may an office-holder stand for a different seat mid-term, vacating
            *  the one it holds the moment it declares? */
@@ -72,7 +73,7 @@ export interface PlayerState {
   hand: Card[];
   districts: DistrictCard[];
   score: number;
-  /** cards tapped to endorse this cycle; untap at cycle start (§9) */
+  /** cards tapped to endorse this cycle; untap at cycle start */
   tapped: Set<string>;
 }
 
@@ -95,12 +96,14 @@ export interface GameView {
 
 export interface Agent {
   name: string;
-  /** Which races to enter. §8: declaration is sequential around the table, so
+  /** Which races to enter. Declaration is sequential around the table, so
    *  `pending` carries the pegs already on the board -- visible as contested
    *  races, with the cards still face down. Counter-declaring is the
    *  counterplay to spreading thin. */
   declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[];
-  /** §8: decided on incomplete information, by construction */
+  /** Decided on incomplete information, by construction -- see
+   *  engine/rules/elections.test.ts ("the withdrawal window closes before
+   *  any die is rolled"). */
   withdraw(v: WithdrawalView): boolean;
   /** the omnibill's single number, 1..6, negative for austerity */
   proposeG(v: GameView): number;
@@ -114,14 +117,14 @@ export interface Agent {
    *  legislating exactly as impeachment does. Returns the amendment's tags.
    *  Omit for the default heuristic. */
   moveAmendment?(v: GameView, pending: Amendment | undefined): IdentityTag[] | undefined;
-  /** §12: impeachment replaces the omnibill for the year, so wanting it is a
+  /** Impeachment replaces the omnibill for the year, so wanting it is a
    *  decision taken instead of legislating, not alongside it. */
   moveImpeach?(v: GameView): boolean;
   voteImpeach?(v: GameView, seat: Seat): boolean;
-  /** §6: "Standard pack-pass draft: take one, pass the rest." Given a pack,
+  /** Standard pack-pass draft: take one, pass the rest. Given a pack,
    *  return the card to take. Omit for the default heuristic. */
   draftPick?(v: GameView, pack: Card[]): Card | undefined;
-  /** §11: the VP's real function is as a bargaining chip during the
+  /** The VP's real function is as a bargaining chip during the
    *  nomination. Any player may offer a card to any ticket. */
   offerVP?(v: GameView, nominee: { player: number; party: Party }): CandidateCard | undefined;
   pickVP?(v: GameView, offers: VPOffer[]): VPOffer | undefined;
@@ -147,11 +150,12 @@ export const isElectionYear = (cfg: Config, year: number): boolean =>
   year % 2 === 0
   || (cfg.game.oddYearGovernors === true && STATES.some((st) => governorUp(st, year)));
 
-/** §14's endings. A union rather than `string` so a config cannot ship a
- *  misspelled condition that silently reads as "play to the cap" -- which is
- *  exactly what `victory: "points"` means here, and why a typo was invisible.
- *  'points' names no ending: it plays out the year cap and the highest score
- *  wins, so `victorOf` returns undefined for it by design. */
+/** The endings a game can have. A union rather than `string` so a config
+ *  cannot ship a misspelled condition that silently reads as "play to the
+ *  cap" -- which is exactly what `victory: "points"` means here, and why a
+ *  typo was invisible. 'points' names no ending: it plays out the year cap
+ *  and the highest score wins, so `victorOf` returns undefined for it by
+ *  design. */
 export type Victory = 'points' | 'bills' | 'two-terms' | 'three-terms' | 'parallel' | 'amendment';
 
 /** v0.2 item 3. 'amendment' is an ENDING, not a winner: ratification stops the
@@ -167,7 +171,7 @@ export interface VictoryTally {
   consecutiveBy: Record<number, number>;
 }
 
-/** §14's victory conditions, defined ONCE and exported, for the same reason
+/** The victory conditions, defined ONCE and exported, for the same reason
  *  the two year gates above are (#48) -- and this one had already drifted.
  *
  *  It was a PRIVATE method reachable from `run()` alone, so the headless game
@@ -200,7 +204,7 @@ const sameRace = (a: { office: Office; state: string; slot?: number }, b: { offi
   raceKeyOf(a) === raceKeyOf(b);
 
 export interface VPOffer { from: number; card: CandidateCard }
-/** §11: a second card on the ticket. It does not score and is not consumed on
+/** A second card on the ticket. It does not score and is not consumed on
  *  a loss. `from` is who supplied it -- on succession THAT player scores, which
  *  is the whole of the VP backstab. */
 export interface VicePresident { cardId: string; card: CandidateCard; from: number }
@@ -217,7 +221,7 @@ export interface GameResult {
   winner: number;
   leadChanges: number;
   /** year at which the eventual winner first took the lead and kept it */
-  /** The player a §14 victory condition fired for, or undefined when the game
+  /** The player a victory condition fired for, or undefined when the game
    *  simply ran out of years. `winner` is set either way, so without this a
    *  result cannot distinguish "someone won" from "time expired" -- which is
    *  exactly the question hf7y/american-cycle#13 has to answer, and a sweep
@@ -235,8 +239,9 @@ export interface GameResult {
   /** share of race-slots that drew declarations from more than one player */
   contestedSlotShare: number;
   decisionCounts: number[];
-  /** score by player, one row per year -- the runaway metrics in SIM-BRIEF §2
-   *  are cross-game curves over this, not per-game summaries. */
+  /** score by player, one row per year -- the runaway metrics (see
+   *  findings/runaway-no-brake.ts, sim/roundrobin.ts) are cross-game curves
+   *  over this, not per-game summaries. */
   scoreHistory: number[][];
   seatsByOffice: Record<Office, number>;
   /** v0.2. `wonBy` says a PLAYER won outright; this says the game stopped for
@@ -263,7 +268,7 @@ export class Game {
   year: number; talon: Card[] = []; discard: Card[] = []; eraQueue: Card[][] = [];
   president?: { player: number; cardId: string; party: Party; since: number };
   vicePresident?: VicePresident;
-  /** §12: impeached presidents leave the game entirely -- the only permanent removal. */
+  /** Impeached presidents leave the game entirely -- the only permanent removal. */
   expelled = new Set<string>();
   events: RaceEvent[] = [];
   /** v0.2 item 2: the books. Public, because the epilogue and every detector
@@ -300,7 +305,7 @@ export class Game {
     this.economy = econ.newEconomy(cfg.economy);
     this.players = agents.map((a, i) => ({ id: i, name: a.name, hand: [], districts: [], score: 0, tapped: new Set() }));
     for (const s of STATES) this.leanMap[s.code] = 0;
-    // §14: "refill packs draw from later years", so a game beginning in 1976
+    // Refill packs draw from later years, so a game beginning in 1976
     // is playing 2010s cards by year ten. The talon is therefore era-ordered,
     // not shuffled together: each era is shuffled within itself and they are
     // consumed oldest first. This also concentrates presence early, when the
@@ -312,11 +317,12 @@ export class Game {
     this.draft();
   }
 
-  /** §6/§11: the office bonuses are per OFFICE HELD, not per seat. The doc's
-   *  own arithmetic fixes this -- "base 12 with president +2 is a 17% edge"
-   *  is 2/12, a one-off. Read per seat, a player holding twenty Senate seats
-   *  draws thirty-two cards a cycle, which both runs away and exhausts the
-   *  talon: game length collapsed from 24 years to 7 before this was fixed. */
+  /** The office bonuses are per OFFICE HELD, not per seat: "base 12 with
+   *  president +2 is a 17% edge" only holds if it is 2/12, a one-off bonus
+   *  rather than one paid per seat held. Read per seat, a player holding
+   *  twenty Senate seats draws thirty-two cards a cycle, which both runs away
+   *  and exhausts the talon: game length collapsed from 24 years to 7 before
+   *  this was fixed. */
   private handSize(p: PlayerState): number {
     const h = this.cfg.hand;
     const holds = (o: Office) => this.seats.some((s) => s.holder?.player === p.id && s.office === o);
@@ -353,17 +359,17 @@ export class Game {
     for (let i = 0; i < n; i++) {
       if (!this.talon.length) {
         // The next era enters play before the discard is recycled -- that is
-        // what puts 2010s districts under 1970s politicians (§14).
+        // what puts 2010s districts under 1970s politicians.
         if (this.eraQueue.length) this.talon = this.eraQueue.shift()!;
         else if (this.discard.length) { this.talon = this.rng.shuffle(this.discard); this.discard = []; }
-        else return;                                 // §14: the deck-out ending
+        else return;                                 // the deck-out ending
       }
       const c = this.talon.pop()!;
       if (c.kind === 'district') p.districts.push(c); else p.hand.push(c);
     }
   }
 
-  /** §6's draft: packs are dealt, each player takes one card and passes the
+  /** The draft: packs are dealt, each player takes one card and passes the
    *  rest, and the pass repeats until the packs are exhausted. Repeat until
    *  hands are full.
    *
@@ -412,7 +418,8 @@ export class Game {
     }
   }
 
-  /** Pull one card from the talon, advancing eras and reshuffling as §14 says. */
+  /** Pull one card from the talon, advancing eras and reshuffling the discard
+   *  the same way the constructor's initial deal does. */
   private nextCard(): Card | undefined {
     if (!this.talon.length) {
       if (this.eraQueue.length) this.talon = this.eraQueue.shift()!;
@@ -425,13 +432,14 @@ export class Game {
   /** total cards held: candidates in hand plus districts in play */
   held(p: PlayerState): number { return p.hand.length + p.districts.length; }
 
-  /** §11: seats are held for their real terms, and then the member may run
+  /** Seats are held for their real terms, and then the member may run
    *  again. Winning removed the card from hand and nothing put it back, so no
    *  politician had ever stood for re-election and the +1 incumbency modifier
-   *  fired in exactly zero races -- which silently voided §16's "incumbency is
-   *  a calibration check on +1". A member whose term is up returns to their
-   *  player's hand and may be re-declared into the same seat, or run elsewhere. */
-  /** §11's stepping stone only reaches cards that are IN HAND, and winning
+   *  fired in exactly zero races -- which silently voided the incumbency
+   *  calibration check on +1 (see findings/incumbency-calibration.ts). A
+   *  member whose term is up returns to their player's hand and may be
+   *  re-declared into the same seat, or run elsewhere. */
+  /** The stepping-stone bonus only reaches cards that are IN HAND, and winning
    *  takes a card out of it. So an office-holder could reach for a higher one
    *  only in the single cycle its term was expiring -- which is close to the
    *  complement of real ambition, not an approximation of it: every sitting
@@ -462,8 +470,9 @@ export class Game {
         && !(st.office === d.office && st.state === d.state && st.slot === d.slot))) {
         const vo = v.office, vs = v.state, vslot = v.slot;
         // Record the office BEFORE the seat is cleared. Resigning to run
-        // otherwise destroys the very credential §11 is trying to price, and
-        // the term collapsed from 23.2% of presidential sides to 0.8%.
+        // otherwise destroys the very credential the stepping-stone bonus is
+        // trying to price, and the term collapsed from 23.2% of presidential
+        // sides to 0.8%.
         if (vo !== 'president') d.heldOffice = vo;
         v.holder = undefined;
         this.log.push(`${this.year}: ${d.card.name} gives up ${vo === 'representative' ? 'a House seat' : `the ${vo}'s office`} in ${vs} to run`);
@@ -503,11 +512,11 @@ export class Game {
       }
       if (governorUp(s, y)) out.push({ office: 'governor', state: s.code, incumbent: this.seatFor('governor', s.code) });
     }
-    // §2: the board prints no districts. A House race therefore exists only
+    // The board prints no districts. A House race therefore exists only
     // where a district CARD is in play -- the House map IS the set of drafted
-    // districts, which is also what makes §15's capture coherent (you take the
-    // seat by taking the card). Opening all 435 seats instead leaves the map so
-    // sparse that players never meet, and the game becomes solitaire.
+    // districts, which is also what makes `capture` (below) coherent (you take
+    // the seat by taking the card). Opening all 435 seats instead leaves the
+    // map so sparse that players never meet, and the game becomes solitaire.
     const inPlay = new Map<string, { state: string; number: number }>();
     for (const p of this.players) for (const d of p.districts) inPlay.set(d.id, d);
     // ORDER MATTERS, and must not follow seat order. Agents sort options by
@@ -549,10 +558,12 @@ export class Game {
     };
   }
 
-  /** §12: "Impeachment replaces the omnibill for that year. The same coalition
+  /** Impeachment replaces the omnibill for that year: the same coalition
    *  capable of passing a bill can remove a president, but doing so costs the
-   *  year's scoring." Two-thirds of the Senate. An impeached president leaves
-   *  the game entirely -- not to the discard, out.
+   *  year's scoring. Two-thirds of the Senate (see
+   *  engine/rules/legislature.test.ts, "impeachment needs two-thirds of the
+   *  Senate"). An impeached president leaves the game entirely -- not to the
+   *  discard, out.
    *
    *  Returns true when the year's legislating was spent on this instead. */
   private impeachment(): boolean {
@@ -579,7 +590,7 @@ export class Game {
     const removedParty = pres.party;
     this.log.push(`${this.year}: the president is removed, ${yes} of ${senate.length}`);
 
-    // §11: the VP succeeds, and the VP's ORIGINAL player scores -- which is
+    // The VP succeeds, and the VP's ORIGINAL player scores -- which is
     // the entire point of putting your card on a rival's ticket.
     const vp = this.vicePresident;
     if (vp) {
@@ -789,7 +800,7 @@ export class Game {
     for (const st of target) lean.nudge(this.leanMap, this.cfg.lean, st, targetParty, pips);
   }
 
-  // ---- §7 step 2-3: the omnibill -------------------------------------------
+  // ---- annual tick step 2-3: the omnibill -----------------------------------
   private omnibill(human = -1, humanG?: number, humanYes?: boolean): void {
     const authorId = leg.author(this.seats);
     if (authorId === undefined) return;
@@ -826,26 +837,27 @@ export class Game {
 
     const out = leg.tallyBill(this.cfg.legislature, this.seats, votes, g, pres, vetoes, override, this.rng);
     this.stats.crossBench += out.crossBenched;
-    // §12: "Voting places a counter on the card, coloured by the party in
-    // power. Cross-bench votes therefore show as the opposite colour ... the
-    // card's accumulated counters are simply read off at resolution."
-    // Nothing recorded these, so the bill's electoral consequence never
-    // reached a candidate and the cross-bench penalty never fired once.
+    // Voting places a counter on the card, coloured by the party in power.
+    // Cross-bench votes therefore show as the opposite colour, and the card's
+    // accumulated counters are simply read off at resolution (`readCounters`,
+    // below; see findings/cross-bench-pricing.ts). Nothing recorded these, so
+    // the bill's electoral consequence never reached a candidate and the
+    // cross-bench penalty never fired once.
     const majH = leg.majorityParty(this.seats, 'representative');
     const majS = leg.majorityParty(this.seats, 'senator');
     for (const v of votes) {
       const cardId = v.cardId;
       const rec = this.billCounters.get(cardId) ?? { record: 0, counters: {} };
       const maj = v.office === 'representative' ? majH : majS;
-      // §12: "Voting places a counter on the card, coloured by the party in
-      // power. Cross-bench votes therefore show as the opposite colour." The
-      // colour was dropped and the count flattened to a boolean, so the
-      // direction of a defection was unrecoverable and a serial cross-bencher
-      // paid exactly what a one-time defector paid.
+      // Voting places a counter on the card, coloured by the party in power.
+      // Cross-bench votes therefore show as the opposite colour. The colour
+      // was dropped and the count flattened to a boolean, so the direction of
+      // a defection was unrecoverable and a serial cross-bencher paid exactly
+      // what a one-time defector paid.
       if (v.yes && maj) rec.counters[maj] = (rec.counters[maj] ?? 0) + 1;
-      // Only PASSAGE carries a consequence: §12 says a symbolic vote on a
-      // failed bill earns heterodoxy credit but no points. With the heterodox
-      // TAG cut, that credit is no longer a mechanic -- only passage scores.
+      // Only PASSAGE carries a consequence: a symbolic vote on a failed bill
+      // earns heterodoxy credit but no points. With the heterodox TAG cut,
+      // that credit is no longer a mechanic -- only passage scores.
       if (v.yes && out.passed) rec.record += out.reactionGood ? 1 : -1;
       this.billCounters.set(cardId, rec);
     }
@@ -921,8 +933,8 @@ export class Game {
     // WHERE the hit lands is the attribution, not the party register. Nudging
     // every state the blamed party holds a seat in makes a failed bill write
     // more lean than an election does -- ~6.5 failures a game across ~30
-    // states against ~50 election pushes -- which inverts §10, where the map
-    // moves because voters moved it. The no-voters' own states are the set the
+    // states against ~50 election pushes -- which inverts the rule that the
+    // map moves because voters moved it. The no-voters' own states are the set the
     // `Vote` record actually supports.
     const states = new Set(votes.filter((v) => !v.yes && v.party === blamed)
       .map((v) => this.seats.find((s) => s.holder?.cardId === v.cardId)?.state)
@@ -931,7 +943,7 @@ export class Game {
     this.log.push(`${this.year}: the shutdown is blamed on ${blamed}, ${n} no-votes`);
   }
 
-  // ---- §7 steps 6-9: the elections -----------------------------------------
+  // ---- annual tick steps 6-9: the elections ---------------------------------
   private elections(): void {
     const wave = new Wave(this.rng);
     const open = this.openRaces();
@@ -939,8 +951,8 @@ export class Game {
     this.releaseHolders();
     const decls: Declaration[] = [];
     const pending: PendingPeg[] = [];
-    // §8: sequential around the table, and the order rotates each cycle so
-    // going last is not a permanent tax.
+    // Declaration is sequential around the table, and the order rotates each
+    // cycle so going last is not a permanent tax.
     // Math.floor matters: in an ODD year `year / 2` is fractional, so the
     // rotation produced a fractional agent index and crashed the moment
     // odd-year governor races were allowed to run.
@@ -960,11 +972,12 @@ export class Game {
     this.resolveDeclared(decls, wave, -1);
   }
 
-  /** §9: "Endorsement is a tap. A card taps to endorse and untaps at cycle
-   *  start. Incumbents may endorse and run in the same cycle." A president
-   *  endorses anywhere for +3; a governor endorses in their own state for +2.
+  /** Endorsement is a tap: a card taps to endorse and untaps at cycle start.
+   *  Incumbents may endorse and run in the same cycle. A president endorses
+   *  anywhere for +3; a governor endorses in their own state for +2.
    *  Endorsements are primary-only -- the general effect is coattails, already
-   *  modelled, and a general endorsement would double-count.
+   *  modelled, and a general endorsement would double-count (see
+   *  engine/rules/elections.test.ts).
    *
    *  The +3 is the single largest modifier in the game and had never been
    *  spent, because nothing ever assigned one. Each endorser backs the
@@ -985,10 +998,10 @@ export class Game {
         } else if (seat.office === 'governor') {
           endorsers.push({ pips: this.cfg.endorsements.governorInState, state: seat.state, cardId: seat.holder.cardId });
         } else if (seat.office === 'senator') {
-          // §9: "Senators do not endorse as a class, because most senators move
+          // Senators do not endorse as a class, because most senators move
           // nothing. The exceptions are ideological validators with national
-          // followings ... and those get printed text." That printed text is
-          // the may_endorse effect, which no card carried and nothing read.
+          // followings, and those get printed text: the may_endorse effect,
+          // which no card carried and nothing read.
           const card = this.cardById.get(seat.holder.cardId);
           const e = card?.effects.find((x) => x.type === 'may_endorse');
           if (e) endorsers.push({ pips: e.pips ?? this.cfg.endorsements.senator, cardId: seat.holder.cardId });
@@ -1037,8 +1050,8 @@ export class Game {
       for (const d of group) { this.readCounters(d); this.readPosition(d); }
       const nominees = this.runPrimaries(group, ctx, wave, human);
       if (!nominees.length) continue;
-      // §11: "Governors ... carry incumbency into Senate and presidential
-      // runs." Incumbency was granted only for holding THIS seat, so a sitting
+      // Governors carry incumbency into Senate and presidential runs.
+      // Incumbency was granted only for holding THIS seat, so a sitting
       // governor stepping up ran as a challenger -- one of the four things the
       // office is supposed to be worth, unimplemented. Same shape as the
       // district clause that killed the presidency.
@@ -1046,8 +1059,8 @@ export class Game {
         this.readCounters(d);
         this.readPosition(d);
         const holdsThis = !!incumbent && incumbent.holder!.cardId === d.card.id;
-        // §11's stepping stone is priced once, by `crossOfficeIncumbency`, for
-        // every combination of offices. This used to hand governor -> Senate a
+        // The stepping-stone bonus is priced once, by `crossOfficeIncumbency`,
+        // for every combination of offices. This used to hand governor -> Senate a
         // BORROWED incumbency pip -- a different quantity wearing the same
         // name -- while governor -> president went through a table.
         d.incumbent = holdsThis;
@@ -1116,13 +1129,13 @@ export class Game {
     };
   }
 
-  /** §11: nomination is a national primary, so only two cards reach the general
+  /** Nomination is a national primary, so only two cards reach the general
    *  regardless of table size. The general then runs state by state -- which is
    *  what produces the states carried that the honeymoon counter needs, and
    *  what makes the map worth holding. */
   private presidentialRace(declarations: Declaration[], wave: Wave, human = -1): Party | undefined {
     const natCtx = this.raceContext('president', 'US', undefined);
-    // §11's stepping stone. The office a card holds when it reaches for the
+    // The stepping-stone bonus. The office a card holds when it reaches for the
     // presidency is worth something, and worth different amounts in the two
     // rounds. Read off the board, so it needs no card data and no new state.
     for (const d of declarations) {
@@ -1132,7 +1145,7 @@ export class Game {
         const held = this.seats.find((st) => st.office !== 'president' && st.holder?.cardId === d.card.id);
         d.heldOffice = held?.office;
       }
-      // §11: the presidency never set this, so `incumbency` fired in 0 of
+      // The presidency never set this, so `incumbency` fired in 0 of
       // 11,327 presidential sides against 41.7% everywhere else.
       // The presidency never set this, so `incumbency` fired in 0 of 11,327
       // presidential sides against 41.7% everywhere else: the one office the
@@ -1142,7 +1155,7 @@ export class Game {
     const nominees = this.runPrimaries(declarations, natCtx, wave, human);
     if (!nominees.length) return undefined;
 
-    // §11: the ticket is chosen before the general. Any player may offer a
+    // The ticket is chosen before the general. Any player may offer a
     // card; the nominee decides. A card placed here is not consumed on a loss.
     const tickets = new Map<number, VicePresident>();
     for (const nom of nominees) {
@@ -1164,14 +1177,14 @@ export class Game {
     const carried = new Map<Party, string[]>();
     for (const st of STATES) {
       const ctx = this.raceContext('president', st.code, undefined);
-      // §5: "A district card boosts House, Senate, governor, and presidential
-      // runs in its state. It is an investment in a state, not just a seat."
+      // A district card boosts House, Senate, governor, and presidential runs
+      // in its state -- it is an investment in a state, not just a seat.
       // The presidential general runs state by state, so each nominee reads
       // their own district for THIS state -- without which presence buys
       // nothing at the top of the ticket and no agent ever wants the office.
       const local = nominees.map((d) => {
         const vp = tickets.get(d.player);
-        // §11: the VP "adds a home-state bonus in the general".
+        // The VP adds a home-state bonus in the general.
         const vpBonus = vp && vp.card.homeState === st.code
           ? [{ type: 'conditional' as const, pips: vp.card.homeStateBonus, note: `VP ${vp.card.name}` }]
           : [];
@@ -1206,16 +1219,19 @@ export class Game {
     const winner = nominees.find((d) => d.player === best)!;
     for (const d of nominees) if (d.player !== best) this.discardCard(d);
     this.seat('president', 'US', undefined, winner);
-    // §14's term counters, for the two- and three-term conditions.
+    // Term counters, for the two- and three-term conditions (see
+    // engine/victory.test.ts).
     this.termsBy[best] = (this.termsBy[best] ?? 0) + 1;
     for (const p of this.players) {
       this.consecutiveBy[p.id] = p.id === best ? (this.consecutiveBy[p.id] ?? 0) + 1 : 0;
     }
     this.log.push(`${this.year}: ${winner.card.name} (${winner.card.party}) wins with ${bestEV} electoral votes`);
 
-    // §10: the honeymoon. One counter in every state carried, removed at the
+    // The honeymoon. One counter in every state carried, removed at the
     // next decay -- so the incoming party enters the midterm with a fleeting
-    // map advantage immediately before the -2 lands on them.
+    // map advantage immediately before the -2 lands on them (see
+    // engine/rules/lean.test.ts, "the honeymoon counter is placed and then
+    // decays away").
     lean.honeymoon(this.leanMap, this.cfg.lean, carried.get(winner.card.party) ?? [], winner.card.party);
     this.vicePresident = tickets.get(best);
     return winner.card.party;
@@ -1229,7 +1245,7 @@ export class Game {
     }
     const winners: Declaration[] = [];
     for (const [party, cands] of byParty) {
-      if (party === 'I') { winners.push(...cands); continue; }  // §9: independents skip the primary
+      if (party === 'I') { winners.push(...cands); continue; }  // independents skip the primary
       if (cands.length === 1) { winners.push(cands[0]); continue; }
       const out = runRace({
         ctx, round: 'primary', declarations: cands, wave, rng: this.rng,
@@ -1241,7 +1257,7 @@ export class Game {
       this.events.push(out.event);
       const w = cands.find((d) => d.player === out.event!.winner);
       if (w) winners.push(w);
-      // §8: primary loss returns the card to hand. Cheap to enter; the cost is
+      // A primary loss returns the card to hand. Cheap to enter; the cost is
       // that you revealed it.
       for (const d of cands) if (d.player !== out.event!.winner) this.returnToHand(d);
     }
@@ -1264,8 +1280,8 @@ export class Game {
     }
   }
 
-  /** §11: "Governors appoint Senate vacancies, placing a card from hand with
-   *  no election." A vacancy arises here the way it does in life: a sitting
+  /** Governors appoint Senate vacancies, placing a card from hand with
+   *  no election. A vacancy arises here the way it does in life: a sitting
    *  senator wins a different office and leaves the seat behind. The governor
    *  of that state fills it, which is the only route to a seat that never
    *  faces the voters. */
@@ -1294,7 +1310,7 @@ export class Game {
 
     // Winning something else leaves EVERY other seat behind. This looked only
     // for a senate seat, so one card could sit in as many as five at once.
-    // §11 gives the governor an appointment for a Senate vacancy and nothing
+    // The governor gets an appointment for a Senate vacancy and nothing
     // for the others; a governorship or a House seat simply stands empty until
     // its next election, which is what the board can express.
     for (const v of this.seats.filter((st) => st.holder?.cardId === d.card.id
@@ -1310,7 +1326,7 @@ export class Game {
     // it is HELD -- `cfg.scoring.office`, read off the board in the epilogue.
   }
 
-  /** §15: "Winning a seat transfers the district card to the winner." THE
+  /** Winning a seat transfers the district card to the winner: THE
    *  district — the one the race was fought over, identified by its number —
    *  not merely some card the winner's opponent happens to hold in that state.
    *
@@ -1330,7 +1346,7 @@ export class Game {
   }
 
   private returnToHand(d: Declaration): void {
-    if (this.expelled.has(d.card.id)) return;      // §12: out, not discarded
+    if (this.expelled.has(d.card.id)) return;      // impeached: out, not discarded
     const p = this.players[d.player];
     if (!p.hand.some((c) => c.kind === 'candidate' && c.id === d.card.id)) {
       p.hand.push({ kind: 'candidate', ...d.card });
@@ -1349,7 +1365,8 @@ export class Game {
    *  engine knowing a UI exists, and without a second copy of the rules.
    *
    *  The withdrawal yield happens BEFORE any die is drawn -- the same ordering
-   *  `runRace` enforces for the agents (§8). */
+   *  `runRace` enforces for the agents (see engine/rules/elections.test.ts,
+   *  "the withdrawal window closes before any die is rolled"). */
   *interactiveTick(human: number): Generator<UiRequest, void, UiAnswer> {
     for (const p of this.players) p.tapped.clear();
     if (isBillYear(this.cfg, this.year) && !this.impeachment() && !this.convention()) {
@@ -1446,12 +1463,12 @@ export class Game {
     this.resolveDeclared(decls, wave, human);
   }
 
-  /** §6: refill is a rotating draw-and-pass, not a fixed sweep. Refilling in
+  /** Refill is a rotating draw-and-pass, not a fixed sweep. Refilling in
    *  seat order hands the low seats every card when the talon is short, which
    *  showed up as a persistent ~7% scoring advantage for seat 0 and a 22pp
    *  win-share gap -- entirely an artefact of the loop order, not the design.
    *
-   *  §5: "presence is scarce and must be purchased in the draft", so hand size
+   *  Presence is scarce and must be purchased in the draft, so hand size
    *  caps TOTAL cards held; a district you keep is a candidate you do not. */
   private refill(): void {
     const start = Math.floor(this.year / 2) % this.players.length;
@@ -1462,14 +1479,14 @@ export class Game {
     }
   }
 
-  /** §14's endings. The rule itself is `victorOf`, module-level and exported;
+  /** The endings. The rule itself is `victorOf`, module-level and exported;
    *  this is the reading of it against THIS game's tallies. Public because the
    *  loop around a tick is what has to ask -- and a caller driving `tick()`
    *  itself, as sim/skowronek.ts does, could not reach it while it was private. */
   victor(): number | undefined { return victorOf(this.cfg, this.players, this); }
 
-  /** §12: "the card's accumulated counters are simply read off at
-   *  resolution." Counters carry the colour of the party that was in power
+  /** A card's accumulated counters are simply read off at resolution.
+   *  Counters carry the colour of the party that was in power
    *  when the vote was cast, so a card's cross-bench counters are the ones
    *  whose colour is not its own party -- and which party they DO carry is
    *  the direction of the defection. */
@@ -1486,20 +1503,21 @@ export class Game {
     d.crossBenchToward = toward;
   }
 
-  /** §12's card counters, by card id. */
+  /** Bill-vote counters, by card id. */
   private billCounters = new Map<string, { record: number; counters: Partial<Record<Party, number>> }>();
-  /** §14's counters. Public because `victorOf` reads them structurally and a
+  /** Victory-condition counters. Public because `victorOf` reads them structurally and a
    *  driver stepping `tick()` has to be able to ask the same question `run()` does. */
   billsBy: Record<number, number> = {};
   termsBy: Record<number, number> = {};
   consecutiveBy: Record<number, number> = {};
 
-  /** One annual tick — §7. */
+  /** One annual tick. */
   tick(): void {
     for (const p of this.players) p.tapped.clear();      // 1. action phase
     const billYear = isBillYear(this.cfg, this.year);
-    // §12's slot, now three-way: a removal, a convention call, or a bill.
-    // Wanting the ending is a decision taken INSTEAD of legislating.
+    // The year's legislating slot, now three-way: a removal, a convention
+    // call, or a bill. Wanting the ending is a decision taken INSTEAD of
+    // legislating.
     if (billYear && !this.impeachment() && !this.convention()) this.omnibill();   // 2-3.
     this.ratify();
     const fed = econ.fedCheck(this.economy, this.cfg.economy, this.rng);  // 4.
@@ -1528,7 +1546,7 @@ export class Game {
     if (this.shockPips) { this.stats.shocks++; this.log.push(`${this.year}: a shock hits the incumbents`); }
   }
 
-  /** Set when a §14 victory condition fires, so the result can say which. */
+  /** Set when a victory condition fires, so the result can say which. */
   wonBy?: number;
   /** Why the game stopped, if it was not the clock. See `GameResult.endedBy`. */
   endedBy?: Victory | 'deckOut';
@@ -1554,8 +1572,8 @@ export class Game {
     const scores = this.players.map((p) => p.score);
     // Ties on final score are common between equally-skilled players, and
     // `indexOf` would hand every one of them to the lowest seat -- which reads
-    // as a 25pp seat bias that is not in the game at all. The design does not
-    // say how a tie resolves (§14's victory condition is still open), so the
+    // as a 25pp seat bias that is not in the game at all. How a tie resolves
+    // is not settled by anything in DECISIONS.md, so the
     // placeholder is a coin flip, which at least measures nothing that is not
     // there.
     const best = Math.max(...scores);
