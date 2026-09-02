@@ -38,8 +38,26 @@ rule instead of citing a section. The last category is the important one — mos
 | Impeachment consumes the omnibill slot | Prices the coup in the currency everyone is accumulating |
 | One macro number, not two | "How the country is doing" is honest. A separate ideological axis was double-counting |
 | **The House is a feeder, not a win route** — *contested, see below* | Ruled 2026-09-01. `HouseFarm` has won 0-0.6% of games in every engine version ever measured, including 0.1% at n=2400; the `what-wins` predicate puts House seats at 0.13x winner-to-field and calls holding them anti-correlated with winning. The House is a stepping stone to higher office and should stop being graded as a failed strategy |
-| **No year cap. `billTarget` is the only length knob** | Ruled 2026-09-01 ("infinity"). With bills as the victory condition the game ends itself: at `maxYears: 10000`, **100% of games terminate** at targets 5/8/12 on both shipped configs. Target 8 gives a median of 11-12 years — six election cycles — with p90 at 17-19 and a max of 26. A cap only ever created unfinished games |
-| **Bills passed is the victory condition** | Ruled 2026-09-01. The backbone; other conditions become options. Works for a scored session or a race to a high score. **Not yet wired** — no shipped config sets `victory: 'bills'`, so `billsBy` is still write-only |
+| **No year cap. `billTarget` is the only length knob** — *amended 2026-09-01, see below* | Ruled 2026-09-01 ("infinity"). With bills as the victory condition the game was measured to end itself: at `maxYears: 10000`, **100% of games terminate** at targets 5/8/12 on both shipped configs, target 8 giving a median of 11-12 years. **That does not reproduce.** `as-written-plus` now ships `maxYears: 100` as a backstop; the amendment records why |
+| **Bills passed is the victory condition** | Ruled 2026-09-01. The backbone; other conditions become options. Works for a scored session or a race to a high score. **Wired 2026-09-01** on `as-written-plus` (`victory: 'bills'`, `billTarget: 8`), the config named because hf7y/american-cycle#50 leaves canonical open |
+
+### Amendment, 2026-09-01: the no-cap ruling does not survive measurement
+
+The "infinity" ruling rests on the claim that **100% of games terminate** at target 8 with a median of 11-12 years. Re-measured on `as-written-plus` at `maxYears: 100000`, 20 games a cell, it does not hold — **and the reason is the agent pool, which the original measurement did not vary**:
+
+| pool | ended | median | within 100y |
+|---|---|---|---|
+| `Greedy, Lookahead, SenateFlood, HeterodoxSpecialist` — the pool 6 of 11 findings use | 11/20 | 91y | 6/20 |
+| `BillMaximizer` x4 | 20/20 | 13y | 20/20 |
+| six-way with `BillMaximizer` and `EconomyChicken` | 18/20 | 17y | 15/20 |
+
+A pool that chases bills ends fast, and matches the ruling. A pool that does not chase them may never end at all: `billsBy` credits the **author**, the largest bloc of the majority party in the House, so a table with no bill-chaser accumulates authorship slowly while passage itself needs a House majority AND 60% of the Senate. At six players the fragmentation is severe enough that one trace passed **2 bills in 200 years**.
+
+The design's own backstop cannot catch this. §14 has defeated politicians circulate back through the draft, and circulation wins: the talon and discard **grow** from 79 to 273 cards over a century, so `deckOutEnds` never fires. With no cap and no deck-out, a game that does not reach the target does not end.
+
+**So `maxYears: 100` ships as a backstop, not as a length knob.** It binds in about 70% of games for the passive findings pool and in none for a bill-chasing one. `billTarget` remains the intended length control; the cap exists so that an unfinished game is bounded rather than infinite.
+
+**What would restore the ruling** is making the deck-out backstop reachable — that is the real defect, and it is upstream of this. Until then, "no cap" and "the game ends itself" are not both true.
 
 ### Correction, 2026-08-31: the split is NOT distribution-neutral
 

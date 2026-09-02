@@ -101,7 +101,7 @@ export const finding: Finding = {
     'Nothing hardens the PLAYER, one rule hardens the CARD, and since abdc37d it hardens it too '
     + 'hard. Portfolios come out party-random — mean excess concentration -0.006 — and the engine '
     + 'contains no force pushing a player toward one party, so hardening does NOT emerge from '
-    + 'strategy. (Ranking players by raw Herfindahl shows a 46-point penalty for concentrating, but '
+    + 'strategy. (Ranking players by raw Herfindahl shows a 161-point penalty for concentrating, but '
     + 'that is a 6-seat gap wearing a disguise: four seats are likelier to be all one party than '
     + 'thirty are. Corrected, the sign flips.) The one mechanic that prices fluidity as such is '
     + '§12\'s cross-bench counter, and its shape is right: permanent, card-scoped, charged in the '
@@ -109,29 +109,29 @@ export const finding: Finding = {
     + 'the same state, so Wave hands them the same national and state die (100% of contested '
     + 'primaries) and the contest is 1d6 vs 1d6, SD 2.42 not 4.18. A pip buys 65.3% there against '
     + '59.2% in a general. But now that the penalty scales with the count it is TOO strong: it '
-    + 'takes a lone cross-bencher from 56.7% to 33.4%, averaging 3.5 pips — 1.45 PRIMARY standard '
+    + 'takes a lone cross-bencher from 54.3% to 37.1%, averaging 2.5 pips — 1.04 PRIMARY standard '
     + 'deviations, not the 0.84 you get by benchmarking against the general\'s 4.18. §12 makes '
     + 'cross-benching structurally necessary to pass anything ("bills essentially cannot pass '
     + 'without cross-benching"), so the engine now charges two thirds of a primary for doing what '
     + 'the design requires; it wants a cap. On the general term: crossBenchGeneral moves the '
     + 'with-drift-minus-against-drift gap monotonically — -36.4pp at 0, -11.6 at 1, -2.9 at 2, '
-    + '+10.2 at 3 in a 120-game sweep — so it works. But 74% of the races where it would fire are '
+    + '+10.2 at 3 in a 120-game sweep — so it works. But 47% of the races where it would fire are '
     + 'in states with |lean| <= 3, because a hardened state\'s general is a walkover 96% of the '
     + 'time. The term keys on a drift signal precisely where that signal is weakest. That same '
-    + 'walkover asymmetry is real and large — the primary-to-general contested ratio runs 0.38 in '
-    + 'purple states and 6.1 in hardened ones — so it does excuse the PRIMARY penalty from needing '
+    + 'walkover asymmetry is real and large — the primary-to-general contested ratio runs 0.51 in '
+    + 'purple states and 12.1 in hardened ones — so it does excuse the PRIMARY penalty from needing '
     + 'a lean condition, and it indicts the general one.',
-  stampedAt: '2026-08-31T16:31:37Z',
-  stampedOn: 'ea6ad71',
+  stampedAt: '2026-09-02T00:07:41Z',
+  stampedOn: 'b3293d9',
 
   predicate(): Claim[] {
     const m = measure();
     return [
       // --- the null: nothing rewards a one-party PORTFOLIO ---
-      { name: 'mean excess party concentration of a portfolio', value: m.excessMean, stamped: -0.01, tolerance: 0.02 },
-      { name: 'score gap by EXCESS concentration (median split)', value: m.excessGap, stamped: 21.72, tolerance: 40 },
-      { name: 'score gap by RAW Herfindahl (the confound)', value: m.rawSplit.gap, stamped: -46.12, tolerance: 40 },
-      { name: 'seats riding along with the raw split', value: m.rawSplit.seatGap, stamped: -3.23, tolerance: 6 },
+      { name: 'mean excess party concentration of a portfolio', value: m.excessMean, stamped: 0, tolerance: 0.02 },
+      { name: 'score gap by EXCESS concentration (median split)', value: m.excessGap, stamped: -12.76, tolerance: 40 },
+      { name: 'score gap by RAW Herfindahl (the confound)', value: m.rawSplit.gap, stamped: -160.86, tolerance: 40 },
+      { name: 'seats riding along with the raw split', value: m.rawSplit.seatGap, stamped: -3.41, tolerance: 6 },
 
       // --- why the primary is where a pip bites ---
       { name: 'contested primaries sharing the national AND state die', value: 100 * m.sharedDice, stamped: 100, tolerance: 0, unit: '%' },
@@ -139,16 +139,16 @@ export const finding: Finding = {
       { name: 'a 1-pip edge in a general (3d6)', value: 100 * oddsAtEdge(1), stamped: 59.17, tolerance: 0.01, unit: '%' },
 
       // --- the scaled primary penalty is too strong ---
-      { name: 'lone cross-bencher wins the primary, unpriced', value: 100 * m.unpricedPrimary, stamped: 62.14, tolerance: 7, unit: '%' },
-      { name: 'lone cross-bencher wins the primary, at the shipped penalty', value: 100 * m.shippedPrimary, stamped: 47.3, tolerance: 7, unit: '%' },
-      { name: 'mean pips the primary penalty applies, in PRIMARY SDs', value: m.shippedPips / PRIMARY_SD, stamped: 0.99, tolerance: 0.5 },
+      { name: 'lone cross-bencher wins the primary, unpriced', value: 100 * m.unpricedPrimary, stamped: 54.29, tolerance: 7, unit: '%' },
+      { name: 'lone cross-bencher wins the primary, at the shipped penalty', value: 100 * m.shippedPrimary, stamped: 37.09, tolerance: 7, unit: '%' },
+      { name: 'mean pips the primary penalty applies, in PRIMARY SDs', value: m.shippedPips / PRIMARY_SD, stamped: 1.04, tolerance: 0.5 },
 
       // --- why a signed general term was measured and then cut ---
-      { name: 'races a signed general term would fire in that are |lean| <= 3', value: 100 * m.purpleShare, stamped: 69.85, tolerance: 12, unit: '%' },
+      { name: 'races a signed general term would fire in that are |lean| <= 3', value: 100 * m.purpleShare, stamped: 47.46, tolerance: 12, unit: '%' },
 
       // --- the walkover asymmetry that excuses the primary from a lean condition ---
-      { name: 'primary:general contested ratio, purple states (|lean| 0-1)', value: m.purple, stamped: 0.38, tolerance: 0.25 },
-      { name: 'primary:general contested ratio, hardened states (|lean| 6-8)', value: m.hardened, stamped: 6.14, tolerance: 3.5 },
+      { name: 'primary:general contested ratio, purple states (|lean| 0-1)', value: m.purple, stamped: 0.51, tolerance: 0.25 },
+      { name: 'primary:general contested ratio, hardened states (|lean| 6-8)', value: m.hardened, stamped: 12.13, tolerance: 3.5 },
 
       // The conclusion is about SHIPPED numbers, so the shipped numbers are
       // checked. If either moves, this finding goes stale rather than quietly

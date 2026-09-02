@@ -25,7 +25,17 @@ const sha = (() => {
   try { return execSync('git rev-parse --short HEAD', { encoding: 'utf8' }).trim(); } catch { return 'unknown'; }
 })();
 
-let stale = 0, broken = 0, held = 0;
+/** The claim name goes into a RegExp, so its metacharacters must be escaped.
+ *  The previous class was `[.*+?^${}()|[\\]\\\\]`, which CLOSES at the first `]` --
+ *  so it matched "a metacharacter followed by a backslash followed by `]`",
+ *  i.e. essentially nothing, and no escaping happened at all. Any claim whose
+ *  name contained parentheses then had them read as regex GROUPS, matched
+ *  nothing, and was silently left at its old stamp while the run still printed
+ *  RESTAMPED. `cross-bench-pricing` carried two such claims and could not be
+ *  restamped by this tool at any point in its history. */
+const escapeRe = (s: string): string => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+let stale = 0, broken = 0, held = 0, unstampable = 0;
 
 for (const file of files.sort()) {
   const mod = await import(new URL(file, dir).href) as { finding: Finding };
@@ -50,11 +60,21 @@ for (const file of files.sort()) {
     if (restamp) {
       const path = new URL(file, dir);
       let src = readFileSync(path, 'utf8');
+      const missed: string[] = [];
       for (const c of claims) {
         const rounded = Number(c.value.toFixed(2));
-        src = src.replace(
-          new RegExp(`(name: '${c.name.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}'[^}]*stamped: )[-\\d.]+`),
-          `$1${rounded}`);
+        const re = new RegExp(`(name: '${escapeRe(c.name)}'[^}]*stamped: )[-\\d.]+`);
+        // Whether the PATTERN matched, not whether the text changed: a claim
+        // already carrying its new value rewrites to itself, and treating that
+        // as a miss would cry wolf on every claim that simply held.
+        if (!re.test(src)) { missed.push(c.name); continue; }
+        src = src.replace(re, `$1${rounded}`);
+      }
+      // A restamp that silently skips a claim leaves it stale for ever while
+      // reporting success -- #22 in the one mechanism that exists to prevent it.
+      if (missed.length) {
+        console.log(`  COULD NOT RESTAMP ${missed.length}: ${missed.join('; ')}`);
+        unstampable += missed.length;
       }
       src = src.replace(/stampedAt: '[^']*'/, `stampedAt: '${new Date().toISOString().replace(/\.\d+Z$/, 'Z')}'`);
       src = src.replace(/stampedOn: '[^']*'/, `stampedOn: '${sha}'`);
@@ -65,4 +85,5 @@ for (const file of files.sort()) {
 }
 
 console.log(`\n${held} hold, ${stale} stale, ${broken} broken.`);
-if (broken) process.exit(1);
+if (unstampable) console.log(`${unstampable} claim(s) could not be restamped -- their stamps are NOT current.`);
+if (broken || unstampable) process.exit(1);
