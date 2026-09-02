@@ -116,6 +116,39 @@ test('coattails run in reverse in hostile states, with no extra rule', () => {
     'an unpopular nominee drags his own party down in hostile states');
 });
 
+test('a per-office incumbency override falls back to the flat value when unset', () => {
+  const house: Declaration = { player: 0, card: cand({}), office: 'representative', state: 'OH', incumbent: true };
+  const senate: Declaration = { player: 0, card: cand({}), office: 'senator', state: 'OH', incumbent: true };
+  const houseMods = buildModifiers(house, ctx({ office: 'representative' }), 'general', res, nat, pg);
+  const senateMods = buildModifiers(senate, ctx({ office: 'senator' }), 'general', res, nat, pg);
+  assert.equal(houseMods.find((m) => m.source === 'incumbency')?.pips, res.incumbency,
+    'no incumbencyHouse set on baseline.json, so the House falls back to the flat value');
+  assert.equal(senateMods.find((m) => m.source === 'incumbency')?.pips, res.incumbency,
+    'same fallback for the Senate -- #16 ships the field before it ships a new number');
+});
+
+test('a per-office incumbency override, once set, wins over the flat value -- and only for that office', () => {
+  const split: ResolutionConfig = { ...res, incumbencyHouse: 7, incumbencySenate: 4 };
+  const house: Declaration = { player: 0, card: cand({}), office: 'representative', state: 'OH', incumbent: true };
+  const senate: Declaration = { player: 0, card: cand({}), office: 'senator', state: 'OH', incumbent: true };
+  const governor: Declaration = { player: 0, card: cand({}), office: 'governor', state: 'OH', incumbent: true };
+  assert.equal(buildModifiers(house, ctx({ office: 'representative' }), 'general', split, nat, pg)
+    .find((m) => m.source === 'incumbency')?.pips, 7);
+  assert.equal(buildModifiers(senate, ctx({ office: 'senator' }), 'general', split, nat, pg)
+    .find((m) => m.source === 'incumbency')?.pips, 4);
+  assert.equal(buildModifiers(governor, ctx({ office: 'governor' }), 'general', split, nat, pg)
+    .find((m) => m.source === 'incumbency')?.pips, res.incumbency,
+    'governor and president are left on the flat value -- #16 has no data for them yet');
+});
+
+test('a per-office incumbency override does not touch the primary', () => {
+  const split: ResolutionConfig = { ...res, incumbencyHouse: 7, incumbencySenate: 4 };
+  const house: Declaration = { player: 0, card: cand({}), office: 'representative', state: 'OH', incumbent: true };
+  assert.equal(buildModifiers(house, ctx({ office: 'representative' }), 'primary', split, nat, pg)
+    .find((m) => m.source === 'incumbency')?.pips, res.incumbencyPrimary,
+    'the primary keeps its own scalar regardless of office');
+});
+
 test('endorsements are primary-only', () => {
   const d: Declaration = { player: 0, card: cand({}), office: 'governor', state: 'OH', endorsements: 3 };
   assert.ok(buildModifiers(d, ctx({}), 'primary', res, nat, pg).some((m) => m.source === 'endorsements'));

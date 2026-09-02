@@ -29,7 +29,8 @@ import { STATES, BY_CODE, senateUp, governorUp, electors, DC_ELECTORS, type Stat
 export interface Config {
   name: string;
   hand: { base: number; bonusPresident: number; bonusSenator: number; bonusGovernor: number; bonusRepresentative: number };
-  resolution: { incumbency: number; identityBonus: number; incumbencyPrimary: number; crossOfficeIncumbency: number; tieBreak: string };
+  resolution: { incumbency: number; identityBonus: number; incumbencyPrimary: number; crossOfficeIncumbency: number; tieBreak: string;
+                incumbencyHouse?: number; incumbencySenate?: number };
   national: { strongEconomy: number; recession: number; midtermPenalty: number; coattailsWith: number; coattailsAgainst: number };
   endorsements: { president: number; governorInState: number; senator: number };
   primaryGeneral: { extremistPrimary: number; extremistGeneral: number; crossBenchPrimaryPenalty: number; billCounterPips: number; crossBenchCap: number };
