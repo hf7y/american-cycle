@@ -104,8 +104,6 @@
     "game.victory": "Open question -- STILL OPEN, and now with evidence that none of the four original candidates works. Term-based conditions (two/three terms) terminate tightly but concentrate all value in one race: the SAME agent pool goes from 28% to 90% purely by switching points -> three-terms. Bills-passed keeps the field balanced (top 33%) but leaves 37-42% of games unfinished and runs to a median 34-49 years. Shipping points + a year cap as the least-bad playable default. See hf7y/american-cycle#13, still open.",
     "economy.*": "The economy is described as a shape (random walk with memory, 2d6 roll-under on accumulated G) but prints no bounds or step sizes.",
     "legislature.reactionGoodOnRollAtLeast": "A reaction is rolled immediately on passage, and nothing says on what.",
-    "hand.bonus*": "These were printed without saying per-seat or per-office. Read per seat they are a runaway: a player holding 20 Senate seats draws 32 cards a cycle. The original 'base 12 with president +2 is a 17% edge' is 2/12, which only parses as per-office. Implemented per office held.",
-    "game.victory (ties)": "The victory condition was left open, and nothing was said about ties on final score, which are common. Placeholder is a coin flip. Resolving by lowest seat -- the natural coding accident -- manufactures a 25pp seat bias that does not exist.",
     "game.deckOutEnds": "Deck-out was named as the ending, but also has defeated politicians circulate back through the draft. Circulation wins: talon+discard GROW from 79 to 273 cards over a hundred years, so deck-out is unreachable and cannot be the backstop it was treated as.",
     "lean.uncontestedPush": "A push scales with how decisively a race was won, and nothing says what a walkover does -- a race nobody contested has no margin at all. This is the single highest-leverage undecided rule in the design: 0 leaves the map a driftless random walk and the central thesis unimplemented; 1 produces genuine realignment. See hf7y/american-cycle#10, still open, and hf7y/american-cycle#51.",
     "primaryGeneral.billCounterPips": "A good reaction rewards yes-voters and a bad one penalises them at the next election, in both rounds, and that the card's accumulated counters are read off at resolution -- but prints no magnitude. One pip a counter is a stand-in.",
@@ -118,7 +116,11 @@
     "primaryGeneral.offDistrictPips": "v0.2 item 6, unprinted. The price of a yes-vote on a bill your districts do not want.",
     "legislature.impeachBackfirePips": "v0.2 item 7, flat. The 1998 midterm preceded the Senate vote by three months, so the penalty attaches to the attempt and there is no conviction margin to scale by. Scaling by strain is v0.3.",
     "legislature.shutdownPips": "v0.2 item 8. Weighted toward the party perceived as making the demand, NOT toward incumbents: 1995-96, 2013 and 2018-19 all point the same way and in two of the three the blamed party held the majority.",
-    "economy.shockOnRollAtMost": "v0.2 item 9, the CHEAP version on purpose. If it moves the determination point the positional version is never built; if it does not, the complexity has been earned."
+    "economy.shockOnRollAtMost": "v0.2 item 9, the CHEAP version on purpose. If it moves the determination point the positional version is never built; if it does not, the complexity has been earned.",
+    "hand.bonusPresident": "Office hand-size bonuses were printed without saying per-seat or per-office. Read per seat rather than per office they compound into a runaway as seats accumulate; findings/runaway-no-brake.ts measures the determination point with them switched off. Implemented per office held, same as hand.bonusSenator, hand.bonusGovernor and hand.bonusRepresentative.",
+    "hand.bonusSenator": "Per office held, not per seat -- see hand.bonusPresident.",
+    "hand.bonusGovernor": "Per office held, not per seat -- see hand.bonusPresident.",
+    "hand.bonusRepresentative": "Per office held, not per seat -- see hand.bonusPresident."
   },
   "scoring": {
     "billOnBooks": 3,

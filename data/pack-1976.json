@@ -1,7 +1,7 @@
 {
   "name": "1976",
   "era": 1976,
-  "note": "Real politicians of the 1976 cycle. Home-state bonuses run large (2-4) because friends-and-neighbours voting had not yet decayed -- §5.",
+  "note": "Real politicians of the 1976 cycle. Home-state bonuses run large (2-4) because friends-and-neighbours voting had not yet decayed.",
   "cards": [
     {
       "kind": "candidate",
@@ -171,7 +171,7 @@
         {
           "type": "may_endorse",
           "pips": 2,
-          "note": "an ideological validator with a national following (§9)"
+          "note": "an ideological validator with a national following"
         }
       ]
     },

@@ -44,9 +44,9 @@ const CONFIG_BLURB = {
   'flat-push':'Flat +1 lean pushes, the rule that was cut. Win a state every cycle for a decade and move the map nowhere.',
   'governors-push':'Governors push lean when they win with the grain of the state, never against it.',
   brutal:'Large office bonuses. The leader compounds hard.',
-  'as-written-plus':'§7 exactly as written — a bill every year, decay every year — with the push table raised to 2/3/4, which is what makes annual decay work. Best-measured settings: most realignment, no saturation, twice the legislating.',
+  'as-written-plus':'The omnibill every year, decay every year, exactly as written — with the push table raised to 2/3/4, which is what makes annual decay work. Best-measured settings: most realignment, no saturation, twice the legislating.',
   realigning:'The one rule change that makes the map actually realign: a walkover counts as one pip of evidence about a state. Play it against "tuned" to feel the difference.',
-  'three-terms':'§14\'s three-term victory. Ends tightly — but collapses the game onto the presidency, and whoever is best at that race takes everything.',
+  'three-terms':'The three-term victory. Ends tightly — but collapses the game onto the presidency, and whoever is best at that race takes everything.',
 };
 
 function setup() {
@@ -70,7 +70,7 @@ function setup() {
       <b>3.5&times; the Senate seats</b> of everyone else &mdash; and <b>fewer House seats</b>, not more.
       Governors make no measurable difference either way. Taking the highest-edge race each turn is what
       the board invites and loses about 94% of the time.</p>
-      <label class="f">Start era<select id="sera"></select><span class="note">Play opens here; later packs enter as the talon runs down (§14).</span></label>
+      <label class="f">Start era<select id="sera"></select><span class="note">Play opens here; later packs enter as the talon runs down.</span></label>
     </div>
     <div class="row" style="margin-top:18px"><button class="btn" id="go">Open the cycle</button></div>
   `);
@@ -99,8 +99,8 @@ function setup() {
 
 function start() {
   const cfg = JSON.parse(JSON.stringify(CONFIGS[S.cfgName]));
-  // every era in the build, oldest first -- §14 has refill packs draw from
-  // later years, and the engine consumes them in era order
+  // every era in the build, oldest first -- refill packs draw from later
+  // years, and the engine consumes them in era order
   const cards = [];
   for (const k of Object.keys(PACKS).sort()) {
     if (S.startEra && k < S.startEra) continue;      // begin at the chosen era
@@ -161,7 +161,7 @@ const uiRaceKey = (r) => `${r.office}|${r.state}|${r.slot ?? ''}`;
 
 function racesInState(state) {
   if (!S.eligibleFor || !S.sel) return [];
-  // §8: one peg per race per player. You may not stack three of your own
+  // One peg per race per player. You may not stack three of your own
   // candidates into a single Senate seat.
   const taken = new Set(S.picks.map(uiRaceKey));
   return S.eligibleFor(S.sel).filter((r) => r.state === state && !taken.has(uiRaceKey(r)));
