@@ -1,14 +1,14 @@
 /** SIM-BRIEF Part 3 and Part 5 measures that need instrumenting rather than
  *  reading off a result: decision density, board load, dead players, and
  *  swinginess against what the odds table predicts. */
-import { loadConfig, loadPacks } from './harness.ts';
+import { loadConfig, loadPacks, BALANCE_PACKS } from './harness.ts';
 import { Game } from '../engine/game.ts';
 import { AGENTS, options } from './agents.ts';
 import { RNG } from '../engine/rules/rng.ts';
 import { oddsAtEdge } from '../engine/rules/resolution.ts';
 
 const cfg = loadConfig(process.argv[2] ?? 'tuned.json');
-const cards = loadPacks(['1976', '1992', '2008', '2016']);
+const cards = loadPacks(BALANCE_PACKS);
 const NAMES = ['Greedy', 'Lookahead', 'SenateFlood', 'HeterodoxSpecialist'];
 const GAMES = Number(process.argv[3] ?? 40);
 

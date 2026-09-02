@@ -1,5 +1,5 @@
 /** Balance — SIM-BRIEF Part 2. Skill signal, seat bias, dominance search. */
-import { loadConfig, loadPacks, playOne } from './harness.ts';
+import { loadConfig, loadPacks, playOne, arg, ALL_PACKS } from './harness.ts';
 import { AGENTS } from './agents.ts';
 import type { Config } from '../engine/game.ts';
 import type { Card } from '../engine/types/index.ts';
@@ -82,8 +82,10 @@ export function runawayMetrics(seeds: number[], agents: string[], cards: Card[],
 
 if (import.meta.filename === process.argv[1]) {
   const cfg = loadConfig(process.argv[2] ?? 'tuned.json');
-  const cards = loadPacks(['1976', '1992', '2008', '2016']);
+  const packs = arg('--packs', ALL_PACKS.join(',')).split(',');
+  const cards = loadPacks(packs);
   const N = Number(process.argv[3] ?? 60);
+  console.log(`packs: ${packs.join(',')} (${cards.length} cards)`);
 
   console.log(`== skill signal (${N} games each, seats alternated) ==`);
   for (const [a, b, target] of [

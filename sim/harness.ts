@@ -11,6 +11,16 @@ export function loadConfig(path: string): Config {
   return JSON.parse(readFileSync(new URL(`../engine/config/${path}`, import.meta.url), 'utf8')) as Config;
 }
 
+// ALL SEVEN ERAS. Defaulting to one era, or to a hand-picked subset, quietly
+// ran different entry points on different-sized card pools -- see
+// hf7y/american-cycle#74. This is the one place that pool is named; every
+// entry point that wants "the default" imports it rather than retyping it.
+export const ALL_PACKS = ['1932', '1964', '1976', '1992', '2008', '2016', '2024'];
+
+// The four-era subset several balance scripts settled on before #74 -- kept
+// as one named constant instead of a literal repeated at each call site.
+export const BALANCE_PACKS = ['1976', '1992', '2008', '2016'];
+
 export function loadPacks(names: string[]): Card[] {
   const out: Card[] = [];
   for (const n of names) {
@@ -90,7 +100,7 @@ export function summarise(results: GameResult[], agentNames: string[]): Summary 
   };
 }
 
-function arg(flag: string, dflt: string): string {
+export function arg(flag: string, dflt: string): string {
   const i = process.argv.indexOf(flag);
   return i >= 0 && process.argv[i + 1] ? process.argv[i + 1] : dflt;
 }
@@ -99,14 +109,11 @@ if (import.meta.filename === process.argv[1]) {
   const games = Number(arg('--games', '200'));
   const cfgName = arg('--config', 'baseline.json');
   const agentNames = arg('--agents', 'Greedy,Random').split(',');
-  // ALL FOUR ERAS BY DEFAULT. Defaulting to '1976' alone quietly ran every CLI
-  // measurement on 112 cards instead of 400, which ends four-player games at
-  // ~3.5 years instead of ~13 -- a silent factor of four in any number taken
-  // from the command line.
-  const packs = arg('--packs', '1932,1964,1976,1992,2008,2016,2024').split(',');
+  const packs = arg('--packs', ALL_PACKS.join(',')).split(',');
   const csv = arg('--csv', '');
   const cfg = loadConfig(cfgName);
   const cards = loadPacks(packs);
+  console.error(`packs: ${packs.join(',')} (${cards.length} cards)`);
 
   const results: GameResult[] = [];
   for (let i = 0; i < games; i++) results.push(playOne(agentNames, cards, cfg, 1000 + i));
