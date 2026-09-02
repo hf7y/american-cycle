@@ -23,6 +23,15 @@ export interface Side {
   modifiers: Modifier[];
 }
 
+/** A primary shares its national and state die between both sides (same
+ *  party, same state), so they cancel and only the candidate die decides it.
+ *  A flat 1d6 candidate die made every gap of 6+ pips mathematically
+ *  unbeatable (hf7y/american-cycle#94) -- 354 of 354 measured favourites at
+ *  that gap won. 2d6 widens the swing from 5 to 10 so no modifier gap is
+ *  certain, mirroring the precedent in `amendment.ts`'s state check. */
+export const PRIMARY_CANDIDATE_DICE = 2;
+export const GENERAL_CANDIDATE_DICE = 1;
+
 /** A cycle's dice, drawn once and reused so waves correlate across races. */
 export class Wave {
   private national = new Map<Party, number>();
@@ -42,10 +51,13 @@ export class Wave {
     if (!this.state.has(k)) { this.state.set(k, this.rng.d6()); this.rolls++; }
     return this.state.get(k)!;
   }
-  roll(p: Party, st: string, rng: RNG): DiceRoll {
+  roll(p: Party, st: string, rng: RNG, round: Round): DiceRoll {
     const n = this.nationalDie(p), st2 = this.stateDie(p, st);
-    this.rolls++;
-    return { national: n, state: st2, candidate: rng.d6() };
+    const n6 = round === 'primary' ? PRIMARY_CANDIDATE_DICE : GENERAL_CANDIDATE_DICE;
+    let candidate = 0;
+    for (let i = 0; i < n6; i++) candidate += rng.d6();
+    this.rolls += n6;
+    return { national: n, state: st2, candidate };
   }
 }
 
@@ -60,7 +72,7 @@ export interface ResolveArgs {
 
 export function resolveRace(a: ResolveArgs): RaceEvent {
   const scored = a.sides.map((s) => {
-    const dice = a.wave.roll(s.party, a.state, a.rng);
+    const dice = a.wave.roll(s.party, a.state, a.rng, a.round);
     const mt = modifierTotal(s);
     return {
       player: s.player, cardId: s.cardId, party: s.party, dice,
@@ -92,18 +104,43 @@ export function resolveRace(a: ResolveArgs): RaceEvent {
   };
 }
 
-/** Exact win probability at a given pip edge, 3d6 vs 3d6, ties broken evenly.
- *  resolution.test.ts asserts against this table as the foundation the rest
- *  of the game sits on. */
-export function oddsAtEdge(edge: number): number {
-  const d3: number[] = new Array(19).fill(0);
-  for (let i = 1; i <= 6; i++) for (let j = 1; j <= 6; j++) for (let k = 1; k <= 6; k++) d3[i + j + k]++;
+/** Distribution of the sum of `n` d6, index = sum, value = ways to roll it. */
+function diceSumCounts(n: number): number[] {
+  let dist = [1];
+  for (let d = 0; d < n; d++) {
+    const next: number[] = new Array(dist.length + 6).fill(0);
+    for (let s = 0; s < dist.length; s++) for (let f = 1; f <= 6; f++) next[s + f] += dist[s];
+    dist = next;
+  }
+  return dist;
+}
+
+/** Exact win probability at a given pip edge for an n-dice-a-side contest,
+ *  ties broken evenly. */
+function oddsAtEdgeForDice(edge: number, dice: number): number {
+  const d = diceSumCounts(dice);
+  const total = 6 ** dice;
   let win = 0, tie = 0;
-  for (let a = 3; a <= 18; a++) {
-    for (let b = 3; b <= 18; b++) {
-      const w = d3[a] * d3[b];
+  for (let a = 0; a < d.length; a++) {
+    for (let b = 0; b < d.length; b++) {
+      const w = d[a] * d[b];
       if (a + edge > b) win += w; else if (a + edge === b) tie += w;
     }
   }
-  return (win + tie / 2) / (216 * 216);
+  return (win + tie / 2) / (total * total);
+}
+
+/** Exact win probability at a given pip edge, 3d6 vs 3d6 (a general), ties
+ *  broken evenly. resolution.test.ts asserts against this table as the
+ *  foundation the rest of the game sits on. */
+export function oddsAtEdge(edge: number): number {
+  return oddsAtEdgeForDice(edge, GENERAL_CANDIDATE_DICE + 2);
+}
+
+/** Exact win probability at a given pip edge in a primary. National and
+ *  state dice are shared between both sides (same party, same state) and
+ *  cancel, so this is the candidate dice alone -- see
+ *  hf7y/american-cycle#94. */
+export function primaryOddsAtEdge(edge: number): number {
+  return oddsAtEdgeForDice(edge, PRIMARY_CANDIDATE_DICE);
 }

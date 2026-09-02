@@ -25,6 +25,10 @@ five.
 > item 7 of the closing list is stale. **E1 answered** — a primary loser cannot
 > currently re-declare, because the declaration window closes before any primary
 > resolves. One source reconciliation added at C1.
+>
+> **Third revision, 2026-09-02.** **A2 fixed** — the primary's candidate die
+> widened from 1d6 to 2d6 (hf7y/american-cycle#94), so the maximum dice
+> difference is now 10, not 5. A2 is no longer marked impossible: see below.
 
 ---
 
@@ -70,29 +74,39 @@ actual situation was worse than −4 and included a three-way coalition split
 (Thurmond right, J. Wallace left) — see the comeback-rate concern in
 TEST-PROGRAM.md, currently 0–1.3%.
 
-### A2. Eric Cantor, 2014 — **CURRENTLY IMPOSSIBLE**
+### A2. Eric Cantor, 2014 — **FIXED, hf7y/american-cycle#94**
 A sitting House Majority Leader lost his own primary.
 
-A primary is 1d6 vs 1d6, so the maximum dice difference is 5 and **+6 is
-literally unbeatable** — PROGRESS.md already records +6 → 100.0%. An incumbent
-with `incumbencyPrimary` plus a presidential endorsement clears +6 routinely.
+Was: a primary is 1d6 vs 1d6, so the maximum dice difference was 5 and **+6
+was literally unbeatable** — PROGRESS.md recorded +6 → 100.0%, and 354 of 354
+contested primaries decided at a gap of 6 or more went to the favourite. An
+incumbent with `incumbencyPrimary` plus a presidential endorsement clears +6
+routinely, so no favoured incumbent could ever lose a primary.
 
-✅ **Confirmed at `v0.2`**, 1,244 contested primaries over 40 games on `tuned`.
-The cliff is exactly where the arithmetic says:
+**Fixed 2026-09-02** by widening the primary's candidate die from 1d6 to 2d6
+(`engine/rules/resolution.ts`, `Wave.roll`), the cheapest of the three fix
+candidates this section originally listed. Maximum dice difference is now 10;
+a gap of 11+ is still unbeatable by arithmetic, but no gap an incumbent can
+plausibly print onto one card is. Re-measured, 40 games on `tuned`, 1,665
+contested primaries:
 
 | modifier gap | 0 | 1 | 2 | 3 | 4 | 5 | **6** | 7 | 8 | 9 | 10+ |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| favourite loses | 51.1% | 29.7% | 14.5% | 9.6% | 6.2% | 2.9% | **0.0%** | 0.0% | 0.0% | 0.0% | 0.0% |
+| favourite loses (measured) | 49.0% | 41.9% | 23.0% | 20.7% | 17.7% | 11.7% | **4.3%** | 4.2% | 4.9% | 5.1% | 1.1% |
+| favourite loses (exact, 2d6 vs 2d6) | 50.0% | 39.0% | 28.7% | 19.9% | 12.8% | 7.6% | **4.1%** | 1.9% | 0.8% | 0.2% | ~0% |
 
-354 primaries were decided at a gap of 6 or more and the favourite lost **none**
-of them. Largest gap observed: 16, nearly three times the dice range.
+The 6+ row is no longer a hard zero — Cantor-shaped upsets are now possible,
+just rare, matching the "1–2% a cycle" real rate roughly for gaps in the 6-9
+range where an incumbent-plus-endorsement stack actually lands. The
+10+ bucket mixes gaps up to 16, where the exact probability genuinely does
+go to ~0% (finite dice can't make an 11+ gap anything but certain) — that
+ceiling still exists, it has just moved from +6 to +11.
 
-**Finding:** no favoured incumbent can ever lose a primary. Renomination is
-safe in reality (House incumbents lose 1–2% a cycle) but it is not *certain*,
-and the difference between 1% and 0% is the entire Tea Party.
-
-**Fix candidates:** widen the primary's candidate die, cap the primary modifier
-stack below the dice range, or give the primary its own noise term.
+**incumbencyPrimary is still calibrated against the old 1d6 curve**
+(`engine/config/*.json`, "4 puts contested primary incumbent survival at
+91.2%" — under 2d6 that same +4 is 87.2%). Recalibrating it, and the
+cross-bench pricing that also assumes a 1d6 primary noise floor, is
+hf7y/american-cycle#20 and #21.
 
 ### A3. Roy Moore / Doug Jones, Alabama 2017 — **CURRENTLY IMPOSSIBLE**
 A candidate-specific catastrophe flips a state that leans ~30 points the other
@@ -245,7 +259,11 @@ often *and* costs its party seats it would otherwise hold.
 
 ### D4. Mourdock over Lugar, 2012
 A 36-year incumbent loses a primary to an extremist, and the party loses the
-seat. Blocked by A2 — verify the fix admits this.
+seat. Was blocked by A2, now fixed (hf7y/american-cycle#94) — a long-tenured
+incumbent's modifier stack (`incumbencyPrimary` + possibly a home-state bonus)
+still routinely exceeds +6, but +6 through +9 no longer round to zero, so the
+shape D4 needs is reachable. Not separately re-measured against an
+`extremist`-tagged challenger; the A2 table above is the general case.
 
 ---
 
