@@ -3,8 +3,8 @@
  *  1976 is the fairest test available: it is the game's founding era pack, the
  *  race was close (Carter 297–240), and the map has a clean regional story —
  *  Carter sweeps the South, Ford takes the West. Nothing here tunes anything;
- *  it seeds the board with the real pre-election lean and runs §9's resolution
- *  the same way a game would.
+ *  it seeds the board with the real pre-election lean and runs the engine's
+ *  ordinary election resolution the same way a game would.
  */
 import { loadConfig, loadPacks } from './harness.ts';
 import { Game } from '../engine/game.ts';

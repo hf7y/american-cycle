@@ -1,8 +1,8 @@
-/** What should cross-benching cost, and in which round? — §9, §12, §16.
+/** What should cross-benching cost, and in which round?
  *
  *  Party fluidity is the DEFAULT in this design: `PlayerState` has no party
- *  field, a player is a faction holding cards of both parties (§13), and the
- *  only mechanic that prices fluidity as such is §12's cross-bench counter.
+ *  field, a player is a faction holding cards of both parties, and the
+ *  only mechanic that prices fluidity as such is the cross-bench counter.
  *  This script measures what that counter is worth, and whether anything in
  *  the engine makes a one-party portfolio pay.
  *
@@ -12,7 +12,7 @@
  *
  *  Reads `billCounters` off the Game the way `sim/feel.ts` reads `leanMap`.
  *  The snapshot is taken after each tick, which is exactly the state that
- *  tick's elections saw: §7 runs the omnibill (step 2-3) before the elections
+ *  tick's elections saw: the omnibill runs (step 2-3) before the elections
  *  (step 6-9), and nothing else writes the counters. Counts are copied out as
  *  numbers rather than held as references, because the engine mutates the
  *  stored record in place and a reference would report end-of-game values.
@@ -29,7 +29,7 @@ import type { Party, RaceEvent } from '../engine/types/index.ts';
 const POOL = ['Greedy', 'Lookahead', 'SenateFlood', 'Launchpad'];
 const PACKS = ALL_PACKS;
 
-/** one side's §12 counters as they stood when the race ran */
+/** one side's cross-bench counters as they stood when the race ran */
 interface Side { crossBench: number; toward?: Party; record: number }
 export interface Obs { game: number; ev: RaceEvent; lean: number; sides: Side[] }
 

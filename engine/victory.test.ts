@@ -1,4 +1,4 @@
-/** §14's endings, and the path that never asked about them.
+/** The victory endings, and the path that never asked about them.
  *
  *  `victor()` was a private method called from `run()` alone. The headless game
  *  therefore ended on a victory and the browser, which drives

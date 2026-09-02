@@ -1,4 +1,4 @@
-/** State lean — design doc §10. Signed pips: positive = R, negative = D,
+/** State lean. Signed pips: positive = R, negative = D,
  *  counters cancelling on placement, which is what a signed integer is.
  *  Neutral is the state's own baseline, not purple: the board tracks
  *  deviation only, exactly as Cook PVI does. */
@@ -17,14 +17,14 @@ export interface LeanConfig {
   governorPushes: 'never' | 'with-lean';
   honeymoonCounter: number;
   maxLean: number;
-  /** §10 scales the push "by how decisively the race was won" and never says
+  /** The push scales by how decisively the race was won, and that leaves open
    *  what a walkover does -- a race nobody contested has no margin at all.
    *  0 reads it as "a race nobody tested tells you nothing"; 1 reads running
    *  unopposed as itself decisive. The gap is real either way (hf7y/american-cycle#10, still open). */
   uncontestedPush?: number;
-  /** §10's nationalisation ordering, as data rather than a constant, so the
+  /** The nationalisation ordering, as data rather than a constant, so the
    *  claim that the Senate's lean push is what makes it dominant can be
-   *  tested by moving the House above it. Default is the doc's order. */
+   *  tested by moving the House above it. Default is `PRIORITY`, below. */
   priority?: Office[];
 }
 
@@ -35,7 +35,7 @@ export function pushForMargin(cfg: LeanConfig, marginPips: number): number {
   return cfg.pushByMargin[cfg.pushByMargin.length - 1].push;
 }
 
-/** §10: the most nationalized race on the ballot pushes. Governors never reach
+/** The most nationalized race on the ballot pushes. Governors never reach
  *  the top of this ordering in an election year, which is why they never push
  *  -- the exclusion falls out of the priority rule rather than being asserted. */
 const PRIORITY: Office[] = ['president', 'senator', 'representative', 'governor'];
@@ -54,7 +54,7 @@ export function applyPush(
   if (office === 'governor') {
     if (cfg.governorPushes === 'never') return 0;
     // 'with-lean': a governor pushes only when winning WITH the existing lean,
-    // never against it (§10, "the alternative under test").
+    // never against it ("the alternative under test" -- see lean.test.ts).
     const cur = lean[state] ?? 0;
     if (cur === 0 || Math.sign(cur) !== sign(winner)) return 0;
   }
@@ -82,7 +82,7 @@ export function nudge(lean: Lean, cfg: LeanConfig, state: string, party: Party, 
   return lean[state] - before;
 }
 
-/** Decay removes one counter from every state, toward zero. §10: it happens at
+/** Decay removes one counter from every state, toward zero. It happens at
  *  the top of the year, so the board players see when they declare is already
  *  decayed -- and pushes land later, on election night. */
 export function decay(lean: Lean, cfg: LeanConfig, year: number, rng?: { bool(): boolean }): void {

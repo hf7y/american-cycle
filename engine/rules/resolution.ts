@@ -1,15 +1,17 @@
-/** Election resolution — design doc §9, with the three labeled dice of §4.
+/** Election resolution, with three labeled dice: national, state, candidate.
  *
- *  HOW THE DICE ARE WIRED, and why. §3 fixes the spread: "the difference
- *  between two 3d6 rolls has a standard deviation of 4.18 pips", and Zach
- *  confirmed the dice are correct. That only holds if each SIDE rolls its own
- *  three dice — six in a race. §4's "same value for every race in the cycle"
- *  is therefore per PARTY, not per race: a party rolls one national die for
- *  the cycle and reuses it across all its races, and one state die per state.
- *  Within a race the two sides hold different values so nothing cancels;
- *  across races a party's results are correlated, which is exactly what a wave
- *  is. Rolling one shared national die per race would cancel it out entirely
- *  and collapse the spread to 2.42 pips, breaking the odds table.
+ *  HOW THE DICE ARE WIRED, and why. The spread is fixed: the difference
+ *  between two 3d6 rolls has a standard deviation of 4.18 pips, and Zach
+ *  confirmed the dice are correct (resolution.test.ts guards this as the
+ *  foundation the rest of the game sits on). That only holds if each SIDE
+ *  rolls its own three dice — six in a race. "Same value for every race in
+ *  the cycle" is therefore per PARTY, not per race: a party rolls one
+ *  national die for the cycle and reuses it across all its races, and one
+ *  state die per state. Within a race the two sides hold different values so
+ *  nothing cancels; across races a party's results are correlated, which is
+ *  exactly what a wave is. Rolling one shared national die per race would
+ *  cancel it out entirely and collapse the spread to 2.42 pips, breaking the
+ *  odds table.
  */
 import type { DiceRoll, Modifier, Party, RaceEvent, Round, Office } from '../types/index.ts';
 import type { RNG } from './rng.ts';
@@ -68,7 +70,7 @@ export function resolveRace(a: ResolveArgs): RaceEvent {
   });
 
   const uncontested = scored.length === 1;
-  // §8: a player who fields nobody loses; uncontested is an auto-win.
+  // A player who fields nobody loses; uncontested is an auto-win.
   const ranked = [...scored].sort((x, y) => y.total - x.total);
   let winner = ranked[0].player;
   // Ties: the doc says only "higher total wins". Placeholder = even break,
@@ -91,7 +93,8 @@ export function resolveRace(a: ResolveArgs): RaceEvent {
 }
 
 /** Exact win probability at a given pip edge, 3d6 vs 3d6, ties broken evenly.
- *  This is the table in §3 and the foundation test asserts against it. */
+ *  resolution.test.ts asserts against this table as the foundation the rest
+ *  of the game sits on. */
 export function oddsAtEdge(edge: number): number {
   const d3: number[] = new Array(19).fill(0);
   for (let i = 1; i <= 6; i++) for (let j = 1; j <= 6; j++) for (let k = 1; k <= 6; k++) d3[i + j + k]++;

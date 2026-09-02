@@ -23,7 +23,7 @@ const votes = (seats: Seat[], yes: (s: Seat) => boolean): Vote[] =>
     cardId: s.holder!.cardId,
   }));
 
-test('a bare majority cannot pass the Senate — 60% forces cross-benching (§12)', () => {
+test('a bare majority cannot pass the Senate — 60% forces cross-benching', () => {
   const seats = bench(Array(10).fill('D'), [...Array(5).fill('D'), ...Array(4).fill('R')]);
   const partyLine = votes(seats, (s) => s.holder!.party === 'D');
   const out = tallyBill(cfg, seats, partyLine, 3, undefined, false, undefined, new RNG(1));
@@ -36,7 +36,7 @@ test('a bare majority cannot pass the Senate — 60% forces cross-benching (§12
   assert.equal(out2.crossBenched, 1);
 });
 
-test('yes-voters score, doubled for the majority party (§12)', () => {
+test('yes-voters score, doubled for the majority party', () => {
   const seats = bench(['D', 'D', 'D', 'R'], [...Array(7).fill('D'), ...Array(3).fill('R')]);
   const all = votes(seats, () => true);
   const out = tallyBill(cfg, seats, all, 3, undefined, false, undefined, new RNG(2));
@@ -55,7 +55,7 @@ test('the minority gains nothing when the bill fails', () => {
   assert.deepEqual(out.scores, {}, 'no passage, no points, for anyone');
 });
 
-test('the veto stands unless two-thirds of both chambers override (§12)', () => {
+test('the veto stands unless two-thirds of both chambers override', () => {
   const seats = bench(Array(9).fill('D'), Array(10).fill('D'));
   const all = votes(seats, () => true);
   const vetoed = tallyBill(cfg, seats, all, 3, { player: 1, party: 'R' }, true, undefined, new RNG(4));
@@ -69,7 +69,7 @@ test('the veto stands unless two-thirds of both chambers override (§12)', () =>
   assert.ok(over.overridden && over.passed, 'two-thirds of both carries it over the veto');
 });
 
-test('impeachment needs two-thirds of the Senate (§12)', () => {
+test('impeachment needs two-thirds of the Senate', () => {
   const seats = bench([], Array(9).fill('D'));
   assert.ok(!impeach(cfg, seats, 5));
   assert.ok(impeach(cfg, seats, 6), 'six of nine is two-thirds');

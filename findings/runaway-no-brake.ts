@@ -43,11 +43,11 @@ export const finding: Finding = {
   question:
     'Whether the leader runs away. Hand size, endorsements and capture are three stacking '
     + 'positive-feedback loops; the intended brakes are the midterm penalty, recession and other '
-    + 'players ganging up. Verify those are sufficient. (§16)',
+    + 'players ganging up. Verify those are sufficient.',
 
   headline:
     'DIAGNOSED, ACTED ON, STILL SHORT OF THE BAR. At v0.1.2 the determination point sat at 44% of game '
-    + "length against SIM-BRIEF's healthy 75-85%, with a 1% comeback rate, and none of §16's three named "
+    + "length against SIM-BRIEF's healthy 75-85%, with a 1% comeback rate, and none of the three named "
     + 'loops was the cause: switching off endorsements, capture or the office hand bonuses each left it at '
     + '50%. The cause was that 100% of player-score series never decreased — nothing in the design could '
     + 'take a point away, so a leader at the midpoint could not be caught by anyone accruing at a similar '
@@ -64,7 +64,7 @@ export const finding: Finding = {
   predicate(): Claim[] {
     const base = loadConfig('tuned.json');
     const cards = loadPacks(['1976', '1992', '2008', '2016']);
-    // §16's three suspects, isolated one at a time.
+    // The three suspect loops, isolated one at a time.
     const noEndorsements: Config = { ...base, endorsements: { ...base.endorsements, president: 0, governorInState: 0 } };
     const noCapture: Config = { ...base, game: { ...base.game, captureEnabled: false } };
     const noHandBonus: Config = {
@@ -85,7 +85,7 @@ export const finding: Finding = {
 
   verdict(c: Claim[]): string {
     const v = (n: string) => c.find((x) => x.name.startsWith(n))!.value;
-    // SIM-BRIEF §2: healthy is 75-85% of the way through.
+    // SIM-BRIEF: healthy is 75-85% of the way through.
     const HEALTHY = 0.75;
     const early = v('baseline: determination') < HEALTHY;
     const switches = ['endorsements off', 'capture off', 'hand bonuses off'].map(v);
@@ -96,8 +96,8 @@ export const finding: Finding = {
         ? `the leader is settled at ${(100 * v('baseline: determination')).toFixed(0)}% of game length, below the healthy 75-85%`
         : 'determination sits inside the healthy 75-85% band',
       noneBrakes
-        ? 'and none of §16\'s three loops is the cause — switching each off leaves it below the band'
-        : 'and switching one of §16\'s three loops off restores a healthy determination point',
+        ? 'and none of the three feedback loops is the cause — switching each off leaves it below the band'
+        : 'and switching one of the three feedback loops off restores a healthy determination point',
       monotonic
         ? 'because no score can ever fall: the brake would have to be the table'
         : 'and scores can now fall, so a mechanical brake exists',

@@ -25,9 +25,9 @@ export const finding: Finding = {
   id: 'bill-passage-is-the-table',
   dependsOn: [],
   question:
-    'Does the 60% Senate threshold stall the omnibill? §12 says the filibuster "means bills '
+    'Does the 60% Senate threshold stall the omnibill? The filibuster means bills '
     + 'essentially cannot pass without cross-benching, which makes cooperation structurally '
-    + 'necessary rather than optional." (§7, §12)',
+    + 'necessary rather than optional -- does that hold up?',
 
   headline:
     'The threshold is not what sets passage — the table is. Holding senatePassage at 0.6 and '
@@ -36,7 +36,7 @@ export const finding: Finding = {
     + 'wider lever is the players, and v0.2 widened the gap rather than closing it: politicians now '
     + 'vote by the distance between a bill\'s tags and their districts\', so a concentrated bloc '
     + 'legislates cheaply and a diverse table still cannot. Passage tracks cross-benching directly: '
-    + '139 cross-bench votes a game at 16% passage, 243 at 100%. That is §12 working as written, not '
+    + '139 cross-bench votes a game at 16% passage, 243 at 100%. That is the filibuster working as written, not '
     + 'failing — the filibuster makes the bill depend on whether anyone will cross the aisle. Any '
     + 'passage figure quoted from this simulator is a property of its agent pool, because no agent '
     + 'here can negotiate, offer anything or remember a favour. Do not tune the threshold on it.',
@@ -77,7 +77,7 @@ export const finding: Finding = {
         ? 'so passage is set by who is at the table, not by the filibuster'
         : 'so the filibuster threshold is the larger lever after all',
       v('four BillMaximizers: cross-bench') > 2 * v('mixed table: cross-bench')
-        ? 'and it runs on cross-benching, exactly as §12 intends'
+        ? 'and it runs on cross-benching, exactly as the filibuster rule intends'
         : 'and cross-benching does not track it',
     ].join('; ');
   },

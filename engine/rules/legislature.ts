@@ -1,4 +1,4 @@
-/** The omnibill — design doc §12. One bill a year, a single number G, a House
+/** The omnibill. One bill a year, a single number G, a House
  *  majority and 60% of the Senate, a veto, and an impeachment that replaces the
  *  bill outright. Scoring is by yes-vote, doubled for the majority party, which
  *  is what makes this a cooperation game with a defection option. */
@@ -35,7 +35,7 @@ export interface LegislatureConfig {
   shutdownPips?: number;
 }
 
-/** §12's counter goes on the CARD, so a vote must name the card that cast it.
+/** The counter goes on the CARD, so a vote must name the card that cast it.
  *  Carrying only the player made every vote of a delegation attributable to
  *  whichever of its seats `find` happened to return first. */
 export interface Vote { player: number; party: Party; office: 'senator' | 'representative'; yes: boolean; cardId: string; }
@@ -68,7 +68,7 @@ export function majorityParty(seats: Seat[], office: 'senator' | 'representative
   return best;
 }
 
-/** §12: authorship goes to the player holding the largest bloc of the majority
+/** Authorship goes to the player holding the largest bloc of the majority
  *  party in the House. */
 export function author(seats: Seat[]): number | undefined {
   const maj = majorityParty(seats, 'representative');
@@ -95,7 +95,7 @@ export function tallyBill(
 
   const carriedHouse = moreThan(houseYes, house.length, cfg.houseMajority);
   // The 60% Senate threshold is what makes cross-benching structurally
-  // necessary rather than optional (§12).
+  // necessary rather than optional (see legislature.test.ts).
   const carriedSenate = atLeast(senateYes, senate.length, cfg.senatePassage);
   let passed = carriedHouse && carriedSenate;
 
@@ -113,7 +113,7 @@ export function tallyBill(
   const scores: Record<number, number> = {};
   let reaction: number | undefined, reactionGood: boolean | undefined;
   if (passed) {
-    // §7: the reaction rolls immediately on passage, long before the national die.
+    // The reaction rolls immediately on passage, long before the national die.
     reaction = rng.d6();
     reactionGood = reaction >= cfg.reactionGoodOnRollAtLeast;
     const majH = majorityParty(seats, 'representative');
@@ -140,7 +140,7 @@ export function tallyBill(
   };
 }
 
-/** §12: impeachment replaces the omnibill for the year. Two-thirds of the
+/** Impeachment replaces the omnibill for the year. Two-thirds of the
  *  Senate, and an impeached president leaves the game entirely -- the only
  *  permanent removal in the design. */
 export function impeach(cfg: LegislatureConfig, seats: Seat[], yesVotes: number): boolean {

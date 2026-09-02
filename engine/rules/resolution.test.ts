@@ -5,7 +5,7 @@ import { RNG } from './rng.ts';
 
 /** BUILD-BRIEF: "a single passing test that verifies the odds table. That test
  *  is the foundation the rest of the game sits on." */
-test('odds table matches design doc §3 within one percentage point', () => {
+test('odds table matches the exact 3d6 vs 3d6 probabilities within one percentage point', () => {
   const doc: Record<number, number> = { 0: 50, 1: 59, 2: 68, 3: 76, 4: 82, 5: 88, 6: 92, 8: 97 };
   for (const [edge, pct] of Object.entries(doc)) {
     const actual = 100 * oddsAtEdge(Number(edge));
@@ -20,7 +20,7 @@ test('simulated dice reproduce the odds table within one point', () => {
     let wins = 0;
     const N = 200_000;
     for (let i = 0; i < N; i++) {
-      // fresh wave each race: independent 3d6 a side, which is what §3's SD requires
+      // fresh wave each race: independent 3d6 a side, which is what the 4.18-pip SD requires
       const w = new Wave(rng);
       const ev = resolveRace({
         year: 1976, round: 'general', office: 'senator', state: 'OH', wave: w, rng,

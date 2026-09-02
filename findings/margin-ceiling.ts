@@ -19,7 +19,7 @@ function real() {
 }
 
 /** Every CONTESTED House general over `seeds` games, as a margin in POINTS —
- *  §3 calibrates 1 pip = 2 points.
+ *  the engine's settled scale calibrates 1 pip = 2 points (DECISIONS.md).
  *
  *  Walkovers are excluded because they have no margin: `resolution.ts` reports
  *  0 for a one-candidate race, and folding the walkover pile in as zeroes would
@@ -55,7 +55,7 @@ export const finding: Finding = {
   dependsOn: [],
   question:
     'Does the margin distribution reproduce the real bimodal one, or the unimodal blob SIM-BRIEF '
-    + 'names as the falsification of the "1 pip = 2 points" calibration? (§3, SIM-BRIEF Part 5)',
+    + 'names as the falsification of the "1 pip = 2 points" calibration (SIM-BRIEF Part 5)?',
 
   headline:
     'The blob. Simulated House margins sit at a median of 8 points against a real 32.5; safe seats — '

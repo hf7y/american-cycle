@@ -38,7 +38,7 @@ export function roundRobin(names: string[], cards: Card[], cfg: Config, n: numbe
   return { wins, games };
 }
 
-/** SIM-BRIEF §2's runaway measures, to its definitions rather than to
+/** SIM-BRIEF's runaway measures, to its own definitions below rather than to
  *  convenient proxies.
  *
  *  Determination point: across games, at each year, the share where the

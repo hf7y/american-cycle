@@ -12,8 +12,9 @@ const TARGET = 60;
  *
  *  Contest is a RATIO — cards per player over eligible races per player — so it
  *  is measured along both of its terms: `hand` is the numerator, and the
- *  district supply kept by `withDistrictFraction` is the denominator, since §5
- *  gates a declaration on holding a district card in the state.
+ *  district supply kept by `withDistrictFraction` is the denominator, since a
+ *  declaration is gated on holding a district card in the state (`eligible`
+ *  in engine/rules/elections.ts).
  *
  *  Config is `tuned` as shipped, including its 16-year cap; only the start year
  *  moves, to keep the era-ordered seven-pack talon in step with the calendar. */
@@ -34,7 +35,8 @@ export const finding: Finding = {
   dependsOn: [],
   question:
     'What actually sets the contest rate, and does the shipped tuning reach the level SIM-BRIEF '
-    + 'asks for? (§10, and §16 on the district-to-candidate ratio)',
+    + 'asks for -- with the district-to-candidate ratio (DECISIONS.md open question 4) as the other '
+    + 'lever?',
 
   headline:
     'Contest is a ratio and both of its terms move it, but neither term reaches the target from '

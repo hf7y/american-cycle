@@ -55,7 +55,7 @@ export const finding: Finding = {
   dependsOn: [],
   question:
     'Should the game run on two-year cycles rather than annual ticks — i.e. what is left in the odd '
-    + 'year, and what happens if the omnibill is biennial too? (§7)',
+    + 'year, and what happens if the omnibill is biennial too?',
 
   headline:
     'Whether the odd year is empty depends on TWO choices, not one. With biennial decay (the shipped '

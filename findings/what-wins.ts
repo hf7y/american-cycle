@@ -47,7 +47,8 @@ function seatsByOutcome() {
 export const finding: Finding = {
   id: 'what-wins',
   dependsOn: [],
-  question: 'Which offices do the players who win actually hold? (§11, and §14 on what scores)',
+  question: 'Which offices do the players who win actually hold, and what does each score '
+    + '(engine/rules/scoring.ts)?',
 
   headline:
     'The Senate and the presidency; everything else loses. Winners hold 2.4x the Senate seats and '
@@ -56,8 +57,9 @@ export const finding: Finding = {
     + 'is: it scores 1, expires every two years, grants no hand size, and arrives attached to a '
     + 'district card that is itself ballast. Governorships have now joined it at 0.89x: they were '
     + 'read as 1.2x while one card could sit in as many as five seats at once, and correcting that '
-    + 'took the whole seat count down and the governorship below parity. §11 gives governors '
-    + 'points, Senate appointments and a launchpad, and measured against this board none of it '
+    + 'took the whole seat count down and the governorship below parity. A governor scores '
+    + 'points, gets a Senate appointment power, and carries a stepping-stone bonus into other '
+    + 'races, and measured against this board none of it '
     + 'pays — which is a claim about the LAUNCHPAD being unreachable, not about the office: only '
     + '21.9% of gubernatorial elections fall in a presidential year, and a governor could reach '
     + 'the presidency only in the cycle its term expired until `resignToRun` existed.',

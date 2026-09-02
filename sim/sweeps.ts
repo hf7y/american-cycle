@@ -24,8 +24,9 @@ export function contestRate(seeds: number[], agents: string[], cards: Card[], cf
   };
 }
 
-/** Keep every candidate; keep only `frac` of the district cards. §16's
- *  district-to-candidate ratio, which the doc says sets the tempo. */
+/** Keep every candidate; keep only `frac` of the district cards. Sweeps the
+ *  district-to-candidate ratio, which sets map fill rate and turn density
+ *  (DECISIONS.md's open question 4). */
 export function withDistrictFraction(cards: Card[], frac: number, seed: number): Card[] {
   const cand = cards.filter((c) => c.kind === 'candidate');
   const dist = cards.filter((c) => c.kind === 'district');

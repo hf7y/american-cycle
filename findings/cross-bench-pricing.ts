@@ -94,8 +94,8 @@ export const finding: Finding = {
   dependsOn: ['as-written-plus.json'],
   question:
     'Party fluidity is already the default — PlayerState has no party field and a player is a '
-    + 'faction holding cards of both parties (§13). So does party hardening emerge from strategy, '
-    + 'and what should cross-benching cost in the primary against the general? (§9, §12, §16)',
+    + 'faction holding cards of both parties. So does party hardening emerge from strategy, '
+    + 'and what should cross-benching cost in the primary against the general?',
 
   headline:
     'Nothing hardens the PLAYER, one rule hardens the CARD, and since abdc37d it hardens it too '
@@ -104,13 +104,13 @@ export const finding: Finding = {
     + 'strategy. (Ranking players by raw Herfindahl shows a 161-point penalty for concentrating, but '
     + 'that is a 6-seat gap wearing a disguise: four seats are likelier to be all one party than '
     + 'thirty are. Corrected, the sign flips.) The one mechanic that prices fluidity as such is '
-    + '§12\'s cross-bench counter, and its shape is right: permanent, card-scoped, charged in the '
+    + 'the cross-bench counter, and its shape is right: permanent, card-scoped, charged in the '
     + 'PRIMARY, which is where a pip is worth most — every side of a primary is the same party in '
     + 'the same state, so Wave hands them the same national and state die (100% of contested '
     + 'primaries) and the contest is 1d6 vs 1d6, SD 2.42 not 4.18. A pip buys 65.3% there against '
     + '59.2% in a general. But now that the penalty scales with the count it is TOO strong: it '
     + 'takes a lone cross-bencher from 54.3% to 37.1%, averaging 2.5 pips — 1.04 PRIMARY standard '
-    + 'deviations, not the 0.84 you get by benchmarking against the general\'s 4.18. §12 makes '
+    + 'deviations, not the 0.84 you get by benchmarking against the general\'s 4.18. The filibuster makes '
     + 'cross-benching structurally necessary to pass anything ("bills essentially cannot pass '
     + 'without cross-benching"), so the engine now charges two thirds of a primary for doing what '
     + 'the design requires; it wants a cap. On the general term: crossBenchGeneral moves the '
@@ -172,7 +172,7 @@ export const finding: Finding = {
         ? `the primary is a one-die contest, so a pip buys ${v('a 1-pip edge in a primary').toFixed(1)}% there against ${v('a 1-pip edge in a general').toFixed(1)}% in a general`
         : 'primaries no longer share their dice, and the primary/general asymmetry is gone',
       v('mean pips the primary penalty applies') > 1
-        ? `the scaled primary penalty is ${v('mean pips the primary penalty applies').toFixed(2)} primary SDs and moves a defector ${shift.toFixed(1)}pp to ${v('lone cross-bencher wins the primary, at the shipped').toFixed(1)}% — too strong for something §12 makes structurally necessary; cap it`
+        ? `the scaled primary penalty is ${v('mean pips the primary penalty applies').toFixed(2)} primary SDs and moves a defector ${shift.toFixed(1)}pp to ${v('lone cross-bencher wins the primary, at the shipped').toFixed(1)}% — too strong for something the filibuster makes structurally necessary; cap it`
         : `the scaled primary penalty is ${v('mean pips the primary penalty applies').toFixed(2)} primary SDs and no longer overwhelms the round`,
       v('races a signed general term would fire in') > 60
         ? `a signed GENERAL term was measured and cut: ${v('races a signed general term would fire in').toFixed(0)}% of the races it would fire in are near-purple, so it keyed on drift exactly where drift is weakest`

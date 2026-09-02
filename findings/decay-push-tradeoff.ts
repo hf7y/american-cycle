@@ -39,11 +39,12 @@ export const finding: Finding = {
   id: 'decay-push-tradeoff',
   dependsOn: ['as-written-plus.json'],
   question:
-    'Can annual decay be balanced by raising push values, or is that limited by the 3d6 design? '
-    + '(§7, §10, §16 open question 1)',
+    'Can annual decay be balanced by raising push values, or is that limited by the 3d6 design '
+    + '(DECISIONS.md open question 1: decay frequency)?',
 
   headline:
-    'Yes, and it makes §7\'s LITERAL reading the best configuration measured. Annual decay with the '
+    'Yes, and it makes annual decay -- the literal reading of the decay-frequency rule -- the best '
+    + 'configuration measured. Annual decay with the '
     + 'push table raised +2 to 2/3/4 realigns 8.7 states a game against the shipped baseline\'s 6.8, and '
     + 'pins 0.4 states at the ±8 cap against 2.0 — the margin narrowed at v0.2 because board scoring '
     + 'gives every player a reason to hold a state rather than trade it, but the ordering did not '
@@ -86,7 +87,7 @@ export const finding: Finding = {
       beatsBiennial ? 'and realigns more than biennial' : 'but realigns less than biennial',
       noSaturation ? 'without saturating the cap' : 'and saturates the cap as biennial does',
       by('annual 2/3/4: mean absolute') > by('biennial 0/1/2: mean absolute')
-        ? "so §7's literal annual decay is the better setting, not the broken one"
+        ? 'so literal annual decay is the better setting, not the broken one'
         : 'though biennial still moves the map further',
       by('as-written-plus.json still ships the recommended') === 9
         ? 'and the shipped config still matches this evidence'

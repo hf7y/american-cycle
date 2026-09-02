@@ -79,8 +79,9 @@ export const supportPips = (cfg: AmendmentConfig, s: StateStanding): number =>
   + cfg.leanPips * s.leanWith;
 
 /** One state, one die. Governors become meaningful here, which they currently
- *  are not: they never push lean because they never top §10's priority
- *  ordering, so the convention is the first thing the office is for. */
+ *  are not: they never push lean because they never top the nationalization
+ *  priority ordering (see engine/rules/lean.ts), so the convention is the
+ *  first thing the office is for. */
 export function stateBacks(cfg: AmendmentConfig, s: StateStanding, rng: RNG, target = cfg.target): boolean {
   let roll = 0;
   for (let i = 0; i < cfg.dice; i++) roll += rng.d6();

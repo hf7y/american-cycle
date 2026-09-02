@@ -28,7 +28,8 @@ export const finding: Finding = {
   dependsOn: [],
   question:
     'Is scaling cards and races until states are actually contested an alternative to deciding what '
-    + 'an uncontested win pushes? (§10, and §16 on district-to-candidate ratio)',
+    + "an uncontested win pushes (uncontestedPush, engine/rules/lean.ts), and the district-to-candidate "
+    + 'ratio (DECISIONS.md open question 4)?',
 
   headline:
     'They are ALTERNATIVES, not complements, and contest is now clearly the stronger of the two. '
