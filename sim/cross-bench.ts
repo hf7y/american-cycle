@@ -57,9 +57,15 @@ function herfindahl(parties: string[]): number {
  *
  *  In a primary every side is the same party in the same state, so `Wave`
  *  memoization hands them the SAME national and state die and only the
- *  candidate die differs. The primary is a one-die contest with a 2.42-pip
- *  noise floor, not the 4.18 of a general — which is why a pip bought in the
- *  primary is worth more than the same pip in November. */
+ *  candidate die differs. This models what the primary WAS: a one-die
+ *  contest with a 2.42-pip noise floor against a general's 4.18.
+ *
+ *  hf7y/american-cycle#94 widened the candidate die to 2d6 (SD 3.42) because
+ *  the 1d6 version made every 6+ pip modifier gap mathematically unbeatable.
+ *  This function, and the `findings/cross-bench-pricing.ts` claim measured
+ *  against it, were left on the OLD 1d6 curve -- recalibrating cross-bench
+ *  pricing to the new noise floor is hf7y/american-cycle#20 / #21, not done
+ *  here. */
 export function oddsAtEdge1d6(e: number): number {
   let w = 0, t = 0;
   for (let a = 1; a <= 6; a++) {

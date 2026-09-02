@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { oddsAtEdge, resolveRace, Wave, modifierTotal } from './resolution.ts';
+import { oddsAtEdge, primaryOddsAtEdge, resolveRace, Wave, modifierTotal } from './resolution.ts';
 import { RNG } from './rng.ts';
 
 /** BUILD-BRIEF: "a single passing test that verifies the odds table. That test
@@ -35,6 +35,62 @@ test('simulated dice reproduce the odds table within one point', () => {
     const want = 100 * oddsAtEdge(edge);
     assert.ok(Math.abs(pct - want) < 1.0, `edge +${edge}: simulated ${pct.toFixed(1)}% vs exact ${want.toFixed(1)}%`);
   }
+});
+
+// hf7y/american-cycle#94: a primary is 1d6 vs 1d6 (national/state cancel --
+// same party, same state), so a flat candidate die made a 6+ modifier gap
+// mathematically unbeatable. 354 of 354 measured favourites at that gap won.
+// The candidate die widened to 2d6, swing 5 -> 10.
+test('primary odds table matches the exact 2d6 vs 2d6 probabilities within one percentage point', () => {
+  const doc: Record<number, number> = { 0: 50, 1: 61, 2: 71, 3: 80, 4: 87, 5: 92, 6: 96, 8: 99, 10: 100 };
+  for (const [edge, pct] of Object.entries(doc)) {
+    const actual = 100 * primaryOddsAtEdge(Number(edge));
+    assert.ok(Math.abs(actual - pct) <= 1.0,
+      `edge +${edge}: doc says ${pct}%, exact is ${actual.toFixed(1)}%`);
+  }
+});
+
+test('no modifier gap reachable by the printed cards makes a primary certain', () => {
+  // incumbencyPrimary (4) + a presidential endorsement (3) + identityBonus (1)
+  // + extremistPrimary (2) = 10, the largest stack the shipped configs can
+  // print onto one side (engine/config/tuned.json). At the old 1d6 candidate
+  // die this and everything past +5 was a certainty; it no longer is.
+  const REACHABLE_MAX_GAP = 10;
+  for (let edge = 0; edge <= REACHABLE_MAX_GAP; edge++) {
+    assert.ok(primaryOddsAtEdge(edge) < 1,
+      `edge +${edge}: favourite's win rate is ${100 * primaryOddsAtEdge(edge)}%, should be < 100%`);
+  }
+});
+
+test('primary dice reproduce the odds table within one point', () => {
+  const rng = new RNG(20260902);
+  for (const edge of [0, 2, 4, 6]) {
+    let wins = 0;
+    const N = 200_000;
+    for (let i = 0; i < N; i++) {
+      const w = new Wave(rng);
+      const ev = resolveRace({
+        year: 1976, round: 'primary', office: 'senator', state: 'OH', wave: w, rng,
+        sides: [
+          { player: 0, cardId: 'a', party: 'D', modifiers: [{ source: 'edge', pips: edge }] },
+          { player: 1, cardId: 'b', party: 'D', modifiers: [] },
+        ],
+      });
+      if (ev.winner === 0) wins++;
+    }
+    const pct = 100 * wins / N;
+    const want = 100 * primaryOddsAtEdge(edge);
+    assert.ok(Math.abs(pct - want) < 1.0, `edge +${edge}: simulated ${pct.toFixed(1)}% vs exact ${want.toFixed(1)}%`);
+  }
+});
+
+test('a primary side rolls two candidate dice, a general rolls one', () => {
+  const rng = new RNG(5);
+  const wave = new Wave(rng);
+  const primary = wave.roll('D', 'OH', rng, 'primary');
+  assert.ok(primary.candidate >= 2 && primary.candidate <= 12, `2d6 sums to 2-12, got ${primary.candidate}`);
+  const general = wave.roll('R', 'PA', rng, 'general');
+  assert.ok(general.candidate >= 1 && general.candidate <= 6, `1d6 is 1-6, got ${general.candidate}`);
 });
 
 test('nobody is insulated: the tide counts and three dice still roll', () => {
