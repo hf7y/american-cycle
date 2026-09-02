@@ -69,7 +69,9 @@
     "fedDice": 2,
     "rateRiseSpendDown": 4,
     "rateRiseEconomyHit": -2,
-    "walkDrift": 0
+    "walkDrift": 0,
+    "shockOnRollAtMost": 1,
+    "shockPips": 2
   },
   "legislature": {
     "houseMajority": 0.5,
@@ -81,7 +83,9 @@
     "reactionGoodOnRollAtLeast": 4,
     "tagsPerBill": 2,
     "repealAtDistance": 0.5,
-    "offDistrictAtDistance": 0.5
+    "offDistrictAtDistance": 0.5,
+    "impeachBackfirePips": 2,
+    "shutdownPips": 1
   },
   "draft": {
     "packSize": 15,
@@ -119,7 +123,10 @@
     "scoring": "v0.2 item 1. Weights for the EPILOGUE, not a running tally: score is a pure function of the board, so it can fall. Office weights are v0.1's win awards, re-read as what a seat is worth while it is HELD.",
     "amendment": "v0.2 item 3. Article V's fractions are not tuning knobs -- two-thirds to call and three-quarters to ratify are what make thirteen states a blocking minority, which is the anti-runaway claim. `target`, the pips and `windowYears` ARE tuning, and are unprinted anywhere.",
     "primaryGeneral.partyFitPips": "v0.2 item 5, unprinted. What it costs to run under a label whose current officeholders you do not resemble -- Thurmond's 1964 switch, priced.",
-    "primaryGeneral.offDistrictPips": "v0.2 item 6, unprinted. The price of a yes-vote on a bill your districts do not want."
+    "primaryGeneral.offDistrictPips": "v0.2 item 6, unprinted. The price of a yes-vote on a bill your districts do not want.",
+    "legislature.impeachBackfirePips": "v0.2 item 7, flat. The 1998 midterm preceded the Senate vote by three months, so the penalty attaches to the attempt and there is no conviction margin to scale by. Scaling by strain is v0.3.",
+    "legislature.shutdownPips": "v0.2 item 8. Weighted toward the party perceived as making the demand, NOT toward incumbents: 1995-96, 2013 and 2018-19 all point the same way and in two of the three the blamed party held the majority.",
+    "economy.shockOnRollAtMost": "v0.2 item 9, the CHEAP version on purpose. If it moves the determination point the positional version is never built; if it does not, the complexity has been earned."
   },
   "scoring": {
     "billOnBooks": 3,

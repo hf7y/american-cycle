@@ -28,6 +28,11 @@ export interface LegislatureConfig {
   repealAtDistance?: number;
   /** v0.2 item 6: the same distance, for "you voted against your district". */
   offDistrictAtDistance?: number;
+  /** v0.2 item 7: flat lean pips against every senator who voted to convict,
+   *  and the same toward the acquitted president's party. */
+  impeachBackfirePips?: number;
+  /** v0.2 item 8: flat lean pips against the party blamed for a shutdown. */
+  shutdownPips?: number;
 }
 
 /** §12's counter goes on the CARD, so a vote must name the card that cast it.
