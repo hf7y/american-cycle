@@ -30,22 +30,35 @@ if (process.argv.includes('--diff')) {
   const i = process.argv.indexOf('--diff');
   const [a, b] = [process.argv[i + 1], process.argv[i + 2]].map((f) => JSON.parse(readFileSync(f, 'utf8')));
   console.log(`${a.tag ?? a.config} -> ${b.tag ?? b.config}\n`);
-  const rows = new Map<string, [number | undefined, number | undefined]>();
+  const rows = new Map<string, [number | undefined, number | undefined, number | undefined]>();
   for (const [file, slot] of [[a, 0], [b, 1]] as const) {
     for (const item of file.items) for (const m of item.measures ?? []) {
       const k = `${item.id} :: ${m.name}`;
-      const row = rows.get(k) ?? [undefined, undefined];
+      const row = rows.get(k) ?? [undefined, undefined, undefined];
       row[slot] = m.value;
+      // The historical figure is a property of the ITEM, not of the build, so
+      // either file may supply it. It is derived from the committed returns,
+      // so the two files agreeing is a check that the datasets have not moved.
+      if (m.historical !== undefined) row[2] = m.historical;
       rows.set(k, row);
     }
   }
-  for (const [k, [x, y]] of rows) {
+  const f = (v: number | undefined) => (v === undefined ? 'n/a' : Number(v.toFixed(4)).toString());
+  for (const [k, [x, y, h]] of rows) {
     // A blank is NOT a zero. An item the older build could not be asked has no
     // value, and printing 0 there would invent a before-and-after that says
     // the mechanic did nothing when in fact it did not exist.
-    const f = (v: number | undefined) => (v === undefined ? 'n/a' : Number(v.toFixed(4)).toString());
     const d = x === undefined ? 'NEW' : y === undefined ? 'GONE' : (y - x).toFixed(3);
-    console.log(`  ${k.padEnd(62)} ${f(x).padStart(10)} -> ${f(y).padStart(10)}   ${d}`);
+    // Movement TOWARD the record is the only reading that matters on a
+    // historical row: a change is not an improvement unless it closed a gap.
+    let toward = '';
+    if (h !== undefined && x !== undefined && y !== undefined) {
+      const before = Math.abs(x - h), after = Math.abs(y - h);
+      toward = after < before ? `  CLOSER by ${(before - after).toFixed(3)}`
+        : after > before ? `  further by ${(after - before).toFixed(3)}` : '  unmoved';
+    }
+    console.log(`  ${k.padEnd(58)} ${f(x).padStart(9)} -> ${f(y).padStart(9)}`
+      + `${(h === undefined ? '' : '  hist ' + f(h)).padEnd(16)}${d.padStart(8)}${toward}`);
   }
   const caps = (f: { capabilities?: Capabilities }) => Object.entries(f.capabilities ?? {})
     .filter(([, v]) => !v).map(([k]) => k);
@@ -107,8 +120,11 @@ for (const item of [...B, ...C, ...D] as TrackItem[]) {
   try { measures = await item.run(ctx); }
   catch (e) { crashed++; console.log(`  CRASHED — ${(e as Error).message}`); continue; }
   for (const m of measures) {
+    const hist = m.historical === undefined ? ''
+      : `   hist ${m.historical.toFixed(3)}  (off by ${Math.abs(m.value - m.historical).toFixed(3)})`;
     console.log(`    ${m.name.padEnd(52)} ${Number(m.value).toFixed(3).padStart(10)}`
-      + `${m.unit ? '  ' + m.unit : ''}${m.n ? `  (n=${m.n})` : ''}`);
+      + `${m.unit ? '  ' + m.unit : ''}${m.n ? `  (n=${m.n})` : ''}${hist}`);
+    if (m.historicalNote) console.log(`      ${m.historicalNote.replace(/\s+/g, ' ')}`);
   }
   const row: Row = { id: item.id, track: item.track, question: item.question, measures,
                      oracle: item.oracle, calibrated: item.calibrated };

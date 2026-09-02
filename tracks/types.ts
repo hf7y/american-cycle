@@ -64,6 +64,17 @@ export interface Measure {
   unit?: string;
   /** sample size behind the value, where one exists */
   n?: number;
+  /** What the real record does, in the same unit, DERIVED from
+   *  `data/historical/` rather than quoted. Present only where a like-for-like
+   *  comparison exists — and "like-for-like" is the hard part, not the
+   *  arithmetic. The engine's walkover share counts primaries and fifty
+   *  presidential state races; the returns count House generals. Comparing
+   *  those two would manufacture a gap out of a definition. */
+  historical?: number;
+  /** Why this comparison is fair, or what it is not. Required wherever
+   *  `historical` is, because a bare second number invites the reader to
+   *  subtract two things that are not the same quantity. */
+  historicalNote?: string;
 }
 
 /** What the build under test can be asked. Detected from a played result and

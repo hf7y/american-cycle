@@ -63,6 +63,14 @@
           "value": 0.23524633891648244,
           "unit": "share of slots",
           "n": 60
+        },
+        {
+          "name": "House generals: walkover share",
+          "value": 0.9637385086823289,
+          "unit": "share of House generals",
+          "n": 5874,
+          "historical": 0.13907492674759314,
+          "historicalNote": "a House race with no votes recorded on one side was unopposed: 13.9% of 9556 district-years, 1976-2018. Both sides are one-candidate general elections for the House and nothing else."
         }
       ]
     },
@@ -307,13 +315,17 @@
           "name": "mean gap",
           "value": 49.881400865076046,
           "unit": "pp",
-          "n": 2389
+          "n": 2389,
+          "historical": 39.04964887461299,
+          "historicalNote": "all fifty states, every presidential cycle 1976-2016, from pres_state_panel.json and house_district_panel.json. Same definition both sides — the test program's SPEC one, top-of-ticket party's House share subtracted from 100. NOTE the source disagrees with itself: the worked table in the test program is keyed on the REPUBLICAN share in every row, which is a different quantity once the top of the ticket flips. On 1976 the two readings give 24.9pp and 75.1pp, and only the R-keyed one supports the table's \"reversed\" note."
         },
         {
           "name": "share of state-cycles above 69pp",
           "value": 0.4558392632900795,
           "unit": "share",
-          "n": 2389
+          "n": 2389,
+          "historical": 0.13818181818181818,
+          "historicalNote": "same population and same definition as the row above. For scale, the five Deep South states the test program tracks average 42.2pp over the same period — the extreme case the design is aimed at. There is no engine counterpart to that row, because the engine plays all fifty, so it is quoted here rather than measured."
         },
         {
           "name": "longest persistence above 40pp",
@@ -336,9 +348,9 @@
           "n": 10150
         }
       ],
-      "oracle": "authored-here",
-      "pass": true,
-      "verdict": "longest run above a 40pp gap is 4 cycles (target >=3, the Deep South held 20 years); 46% of state-cycles clear 69pp (the 1984 figure)"
+      "oracle": "historical-record",
+      "pass": false,
+      "verdict": "mean gap 49.9pp against 39.0pp in the returns (all fifty states, 1976-2016); band 20-59pp. 46% of state-cycles clear 69pp against 14% historically; band 7-28%. The mean is inside the record and the tail is not: the board produces divergence of about the right average size and far too many extreme cases."
     },
     {
       "id": "C4-shopping-blocs",
@@ -503,12 +515,24 @@
           "name": "president's party loses seat share at the midterm",
           "value": 0.5024875621890548,
           "unit": "share of midterms",
-          "n": 201
+          "n": 201,
+          "historical": 0.8181818181818182,
+          "historicalNote": "9 of 11 midterms 1978-2018 in house_district_panel.json; the two exceptions the data finds are 1998 and 2002, which are the two the record names. Same quantity both sides: share of House seats held by the president's party, against the previous election."
+        },
+        {
+          "name": "historical band, lower (Wilson 95% on the record)",
+          "value": 0.5230138624217553,
+          "unit": "share of midterms"
+        },
+        {
+          "name": "historical band, upper (Wilson 95% on the record)",
+          "value": 0.9486333993289995,
+          "unit": "share of midterms"
         }
       ],
-      "oracle": "authored-here",
+      "oracle": "historical-record",
       "pass": false,
-      "verdict": "50% of midterms cost the president's party ground (postwar: all but two, so the target band is 70-95% rather than 100%)"
+      "verdict": "50% of midterms cost the president's party ground, against 81.8% in the returns (9 of 11, 1978-2018, the exceptions being 1998 and 2002). Band is the Wilson 95% interval on that: 52-95%. Derived from house_district_panel.json, not chosen."
     },
     {
       "id": "D2-failed-conviction-backfires",
@@ -580,7 +604,34 @@
       "id": "D5-realignment-lag",
       "track": "D",
       "question": "How long does the board take to turn lean into seats?",
-      "notRun": "needs a lean series per state per year, which `GameResult.finalLean` does not carry — skowronek/observe.ts snapshots it and is the right home for this. The historical target is a thirty-year lag: Deep South House seats went 0% R 1947-63, 18.9% in 1965, 16.2% in 1967, and did not reach a majority until 1994."
+      "measures": [
+        {
+          "name": "median years from lean crossing to delegation flip",
+          "value": 0,
+          "unit": "years",
+          "n": 165,
+          "historical": 32,
+          "historicalNote": "the Deep South turned at the top of the ticket in 1964 and its House delegation went majority-R in 1996, per house_district_panel.json — a 32-year lag. The lean date is documented rather than derived: the panel starts in 1976 and the turn is outside it. NOT like-for-like on the clock: a game is 16 years, so a 32-year lag cannot occur in one, and the engine figure is bounded by the cap rather than by the rules."
+        },
+        {
+          "name": "lean crossings that reached a delegation flip",
+          "value": 165,
+          "n": 165
+        },
+        {
+          "name": "Deep South R House share, first panel year",
+          "value": 22.22222222222222,
+          "unit": "%"
+        },
+        {
+          "name": "Deep South R House share, last panel year",
+          "value": 72.97297297297297,
+          "unit": "%"
+        }
+      ],
+      "oracle": "historical-record",
+      "pass": false,
+      "verdict": "median lag 0 years against 32 in the record (1964 lean -> 1996 delegation). The bar is >=8 years, a quarter of the historical figure, because a 16-year cap cannot contain 32 and grading against the full figure would grade the clock. See D4."
     },
     {
       "id": "D6-amendment-rate",

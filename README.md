@@ -105,14 +105,37 @@ alone cannot tell you which it is. At v0.2:
 |---|---|
 | SIM-BRIEF | 0 / 1 |
 | design-doc | 0 / 3 |
-| historical-record | 2 / 2 |
-| authored-here | 3 / 6 |
+| historical-record | 2 / 5 |
+| authored-here | 3 / 5 |
 
-Read that as evidence, not as a score. Both `historical-record` greens are the
-amendment: the ratification rate is fitted to the postwar record (5 of 7
-amendments sent to the states after 1947 were ratified; 27 of 33 all-time), so
-they are a **fit reported honestly**, not a prediction that came true. Every
-bar quoted from SIM-BRIEF or the build doc is still red.
+Read that as evidence, not as a score. The two `historical-record` greens are
+both the amendment, whose dice are *fitted* to the postwar ratification record
+— a fit reported honestly, not a prediction that came true. Every bar quoted
+from SIM-BRIEF or the build doc is still red.
+
+### The historical column
+
+Where a like-for-like comparison exists, a measure carries the real figure
+alongside it, **derived from `data/historical/` rather than quoted** — the same
+discipline `findings/` applies to its own numbers, for the same reason. A
+number typed into a test is a bar nobody can check.
+
+`--diff` then reads three ways, and reports movement *toward the record*
+rather than movement as such:
+
+```
+B1 :: House generals: walkover share    0.9667 -> 0.9637  hist 0.1391  CLOSER by 0.003
+C3 :: mean gap                         49.1221 -> 49.8814 hist 39.0496 further by 0.759
+D1 :: president's party loses at midterm  0.525 -> 0.5025 hist 0.8182  further by 0.023
+D5 :: years from lean to delegation flip      0 ->      0 hist 32      unmoved
+```
+
+"Like-for-like" is the hard part, not the arithmetic. The engine's overall
+walkover share counts primaries and fifty presidential state races and has no
+counterpart in the returns; **House generals** do, so that is what the row
+compares. Where the clock makes a comparison unfair — a 32-year realignment
+cannot fit in a 16-year game — the note says so and the bar is set against a
+fraction of the historical figure rather than against the figure.
 
 Separately, `calibrated` marks an item whose *measured value* — not its bar —
 depends on a knob somebody tuned to reach it. Both amendment items carry one.

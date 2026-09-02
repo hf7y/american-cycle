@@ -5,9 +5,13 @@
  *  and a rule that reproduces the record on one axis will miss on another.
  *  Not blocking, for the same reason C is not.
  */
+import { Game } from '../engine/game.ts';
+import { RNG } from '../engine/rules/rng.ts';
+import { AGENTS } from '../sim/agents.ts';
 import { playOne } from '../sim/harness.ts';
 import type { Party, RaceEvent } from '../engine/types/index.ts';
-import { mean, pick, share, type Measure, type TrackItem } from './types.ts';
+import { crossOfficeGap, deepSouthRShare, midtermLoss, realignmentLagYears } from './history.ts';
+import { mean, pick, quantile, share, type Measure, type TrackItem } from './types.ts';
 
 const partyOf = (e: RaceEvent): Party | undefined => e.sides.find((s) => s.player === e.winner)?.party;
 
@@ -19,7 +23,7 @@ const d1: TrackItem = {
   id: 'D1-midterm-loss',
   track: 'D',
   question: "Does the president's party lose ground at the midterm, as it did in every postwar cycle but two?",
-  oracle: 'authored-here',
+  oracle: 'historical-record',
   run({ runs }): Measure[] {
     let midterms = 0, losses = 0;
     for (const r of runs) {
@@ -45,13 +49,34 @@ const d1: TrackItem = {
         if (shareIn(y, pres) < shareIn(prev, pres)) losses++;
       }
     }
+    const h = midtermLoss();
     return [
-      { name: "president's party loses seat share at the midterm", value: share(losses, midterms), unit: 'share of midterms', n: midterms },
+      { name: "president's party loses seat share at the midterm",
+        value: share(losses, midterms), unit: 'share of midterms', n: midterms,
+        historical: h.rate,
+        historicalNote: `${h.lost} of ${h.n} midterms 1978-2018 in house_district_panel.json; the two `
+          + `exceptions the data finds are ${h.exceptions.join(' and ')}, which are the two the record names. `
+          + 'Same quantity both sides: share of House seats held by the president\'s party, against the '
+          + 'previous election.' },
+      { name: 'historical band, lower (Wilson 95% on the record)', value: h.lo, unit: 'share of midterms' },
+      { name: 'historical band, upper (Wilson 95% on the record)', value: h.hi, unit: 'share of midterms' },
     ];
   },
   accept(m) {
+    const h = midtermLoss();
     const v = pick(m, "president's party loses seat share at the midterm");
-    return { pass: v >= 0.7 && v <= 0.95, note: `${(100 * v).toFixed(0)}% of midterms cost the president's party ground (postwar: all but two, so the target band is 70-95% rather than 100%)` };
+    const lo = pick(m, 'historical band, lower (Wilson 95% on the record)');
+    const hi = pick(m, 'historical band, upper (Wilson 95% on the record)');
+    // The band is the Wilson interval on 9 of 11, not a number picked here.
+    // Wilson rather than the normal approximation because at n=11 the normal
+    // upper bound exceeds 1 and would read as "no ceiling".
+    return {
+      pass: v >= lo && v <= hi,
+      note: `${(100 * v).toFixed(0)}% of midterms cost the president's party ground, against `
+        + `${(100 * h.rate).toFixed(1)}% in the returns (${h.lost} of ${h.n}, 1978-2018, the exceptions `
+        + `being ${h.exceptions.join(' and ')}). Band is the Wilson 95% interval on that: `
+        + `${(100 * lo).toFixed(0)}-${(100 * hi).toFixed(0)}%. Derived from house_district_panel.json, not chosen.`,
+    };
   },
 };
 
@@ -154,10 +179,66 @@ const d5: TrackItem = {
   id: 'D5-realignment-lag',
   track: 'D',
   question: 'How long does the board take to turn lean into seats?',
-  notRun: 'needs a lean series per state per year, which `GameResult.finalLean` does not carry — '
-    + 'skowronek/observe.ts snapshots it and is the right home for this. The historical target is a '
-    + 'thirty-year lag: Deep South House seats went 0% R 1947-63, 18.9% in 1965, 16.2% in 1967, and did not '
-    + 'reach a majority until 1994.',
+  oracle: 'historical-record',
+  run({ cards, cfg, agents, seeds }): Measure[] {
+    // Drives its own year loop, as B3 does: `GameResult.finalLean` is one
+    // snapshot and this needs the series. `Game.leanMap` and `Game.seats` are
+    // public for exactly this.
+    const lags: number[] = [];
+    let crossings = 0;
+    for (const seed of seeds.slice(0, Math.min(30, seeds.length))) {
+      const rng = new RNG(seed);
+      const g = new Game(agents.map((n) => new AGENTS[n](cfg, rng)), cards, cfg, seed);
+      const crossedAt = new Map<string, { year: number; dir: number }>();
+      const end = cfg.game.startYear + cfg.game.maxYears;
+      while (g.year < end) {
+        const year = g.year;
+        g.tick();
+        for (const [st, v] of Object.entries(g.leanMap)) {
+          const dir = Math.sign(v);
+          // A lean CROSSING is the earliest moment the map says a state has
+          // moved. Recorded once per direction, so a state oscillating around
+          // the threshold does not manufacture a short lag.
+          if (Math.abs(v) >= 2 && crossedAt.get(st)?.dir !== dir) crossedAt.set(st, { year, dir });
+        }
+        for (const [st, c] of crossedAt) {
+          const held = g.seats.filter((x) => x.office === 'representative' && x.state === st && x.holder);
+          if (held.length < 2) continue;
+          const want = c.dir > 0 ? 'R' : 'D';
+          const shareOf = held.filter((x) => x.holder!.party === want).length / held.length;
+          if (shareOf > 0.5) { lags.push(year - c.year); crossings++; crossedAt.delete(st); }
+        }
+        if (g.endedBy) break;
+      }
+    }
+    const h = realignmentLagYears();
+    const ds = deepSouthRShare();
+    return [
+      { name: 'median years from lean crossing to delegation flip', value: quantile(lags, 0.5), unit: 'years', n: lags.length,
+        historical: h.lagYears,
+        historicalNote: 'the Deep South turned at the top of the ticket in 1964 and its House delegation '
+          + `went majority-R in ${h.seatsFlipped}, per house_district_panel.json — a ${h.lagYears}-year lag. `
+          + 'The lean date is documented rather than derived: the panel starts in 1976 and the turn is '
+          + 'outside it. NOT like-for-like on the clock: a game is 16 years, so a 32-year lag cannot occur '
+          + 'in one, and the engine figure is bounded by the cap rather than by the rules.' },
+      { name: 'lean crossings that reached a delegation flip', value: crossings, n: lags.length },
+      { name: 'Deep South R House share, first panel year', value: ds[0]?.share ?? NaN, unit: '%' },
+      { name: 'Deep South R House share, last panel year', value: ds[ds.length - 1]?.share ?? NaN, unit: '%' },
+    ];
+  },
+  accept(m) {
+    const lag = pick(m, 'median years from lean crossing to delegation flip');
+    const h = realignmentLagYears();
+    return {
+      pass: Number.isFinite(lag) && lag >= 8,
+      note: Number.isFinite(lag)
+        ? `median lag ${lag} years against ${h.lagYears} in the record (1964 lean -> ${h.seatsFlipped} `
+          + 'delegation). The bar is >=8 years, a quarter of the historical figure, because a 16-year cap '
+          + 'cannot contain 32 and grading against the full figure would grade the clock. See D4.'
+        : 'no state crossed its lean and then flipped its delegation in any game — the realignment the '
+          + 'design is named for does not complete inside a game',
+    };
+  },
 };
 
 /** D6 — the amendment rate against the record.
