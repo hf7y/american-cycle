@@ -105,15 +105,21 @@ alone cannot tell you which it is. At v0.2:
 |---|---|
 | SIM-BRIEF | 0 / 1 |
 | design-doc | 0 / 3 |
-| authored-here | 4 / 7 |
+| historical-record | 2 / 2 |
+| authored-here | 3 / 6 |
 
-**Every externally-set bar is red, and every green is one we set ourselves.**
+Read that as evidence, not as a score. Both `historical-record` greens are the
+amendment: the ratification rate is fitted to the postwar record (5 of 7
+amendments sent to the states after 1947 were ratified; 27 of 33 all-time), so
+they are a **fit reported honestly**, not a prediction that came true. Every
+bar quoted from SIM-BRIEF or the build doc is still red.
 
 Separately, `calibrated` marks an item whose *measured value* — not its bar —
-depends on a knob somebody tuned to reach it. C6's 48% is the case: Article V's
-two-thirds and three-quarters are constitutional, but the die thresholds under
-them are not, and across the swept grid the ending rate runs from 3% to 98%. A
-green there says the dial is where it was put.
+depends on a knob somebody tuned to reach it. Both amendment items carry one.
+Article V's two-thirds and three-quarters are constitutional; the dice under
+them are not, and they were fitted. The fit was made on `tuned.json`, so the
+other configs are the out-of-sample test and are reported rather than tuned to
+match.
 
 An item that is deliberately not built says so and says what it would need.
 Silent omission reads as "covered everything" when it did not.

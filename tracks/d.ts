@@ -160,4 +160,65 @@ const d5: TrackItem = {
     + 'reach a majority until 1994.',
 };
 
-export const D: TrackItem[] = [d1, d2, d3, d4, d5];
+/** D6 — the amendment rate against the record.
+ *
+ *  THE PROPOSAL STAGE HAS AN ORACLE AND THE CONVENTION STAGE DOES NOT, and
+ *  the two must not be graded together.
+ *
+ *  RATIFICATION GIVEN PROPOSAL is measurable. Congress has sent 33 amendments
+ *  to the states since 1789 and 27 were ratified — 82% all-time. In the
+ *  modelled era seven went out after 1947: the 22nd, 23rd, 24th, 25th and
+ *  26th ratified; the ERA stalled at 35 of 38 and DC Voting Rights reached 16
+ *  before its seven years ran out. That is 5 of 7, 71% postwar. This is the
+ *  stage the engine models and the number it is calibrated against.
+ *
+ *  CALLING A CONVENTION HAS NO ORACLE. Article V's convention route has never
+ *  been used — no convention has been called in 237 years, against roughly
+ *  four hundred state applications. The historical rate is zero and the game
+ *  calls one in nearly every game, because a game needs an ending. That is an
+ *  authored number for a stated design reason, and it is reported here
+ *  without a bar rather than graded against a zero that would be meaningless.
+ *
+ *  AMENDMENTS PER UNIT TIME IS CONTAMINATED BY THE ENDING RULE. Six
+ *  amendments entered the Constitution between 1947 and 2026, one per ~13
+ *  years, so ~1.2 per sixteen. The game cannot reach that: ratification STOPS
+ *  the clock, so no game can record more than one. Reported as
+ *  characterization, never as a target — grading it would be grading the
+ *  ending rule under another name. */
+const d6: TrackItem = {
+  id: 'D6-amendment-rate',
+  track: 'D',
+  question: 'Does an amendment that reaches the states ratify as often as the real ones did?',
+  oracle: 'historical-record',
+  needs: ['ending'],
+  calibrated: 'amendment.dice, target and rescindTarget were swept to land this on the postwar figure, on '
+    + 'tuned.json specifically. That makes the tuned number a fit rather than a prediction; the OTHER '
+    + 'configs are the out-of-sample test, and they are reported below rather than tuned to match.',
+  run({ runs }): Measure[] {
+    const all = runs.flatMap((r) => r.amendments);
+    const ratified = all.filter((a) => a.ratifiedIn !== undefined);
+    const years = runs.reduce((n, r) => n + r.years, 0);
+    // The ERA case: how far short does a failure get? 35 of 38 is the model.
+    const failed = all.filter((a) => a.failedIn !== undefined);
+    const shortfall = failed.map((a) => a.ratified.length);
+    return [
+      { name: 'ratification given proposal', value: share(ratified.length, all.length), unit: 'share of conventions', n: all.length },
+      { name: 'conventions called a game', value: all.length / runs.length, n: runs.length },
+      { name: 'amendments per 16 game-years', value: years ? 16 * ratified.length / years : 0, n: runs.length },
+      { name: 'failed amendments: mean states reached', value: mean(shortfall), unit: 'of 38 needed', n: failed.length },
+    ];
+  },
+  accept(m) {
+    const r = pick(m, 'ratification given proposal');
+    return {
+      pass: r >= 0.6 && r <= 0.9,
+      note: `${(100 * r).toFixed(0)}% of proposals ratify, against 71% postwar (5 of 7 sent to the states `
+        + 'after 1947) and 82% all-time (27 of 33). Band is 60-90%, which spans both point estimates and '
+        + 'leaves room for the small-n uncertainty in 5 of 7. The convention-call rate alongside it has NO '
+        + 'bar: Article V conventions have never been called, so the historical value is zero and the game '
+        + 'needs an ending.',
+    };
+  },
+};
+
+export const D: TrackItem[] = [d1, d2, d3, d4, d5, d6];

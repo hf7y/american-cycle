@@ -31,7 +31,18 @@ export interface AmendmentConfig {
    *  the last-shot phase where everyone not winning tries to find thirteen
    *  states. */
   windowYears: number;
-  /** the state check: pips + d6 must reach `target` */
+  /** How many d6 the state check rolls.
+   *
+   *  ONE DIE CANNOT BE CALIBRATED. A flat d6 moves the per-state probability
+   *  in sixths, and that compounds: across fifty states and a multi-year
+   *  window, the ratification rate jumps 0.49 -> 0.92 between two adjacent
+   *  integer targets, with nothing in between. The record puts ratification
+   *  given proposal at 71% postwar (5 of 7) and 82% all-time (27 of 33), and
+   *  neither is reachable on one die at any setting. Two dice give a bell
+   *  rather than a step and land on it. The engine rolls 2d6 for the Fed and
+   *  3d6 for a race; a flat single die was the odd one out. */
+  dice: number;
+  /** the state check: pips + the dice must reach `target` */
   target: number;
   /** the same check for an opponent PULLING a state back, and deliberately a
    *  harder one. Ratifying is the default motion once a convention sits;
@@ -70,8 +81,11 @@ export const supportPips = (cfg: AmendmentConfig, s: StateStanding): number =>
 /** One state, one die. Governors become meaningful here, which they currently
  *  are not: they never push lean because they never top §10's priority
  *  ordering, so the convention is the first thing the office is for. */
-export const stateBacks = (cfg: AmendmentConfig, s: StateStanding, rng: RNG, target = cfg.target): boolean =>
-  supportPips(cfg, s) + rng.d6() >= target;
+export function stateBacks(cfg: AmendmentConfig, s: StateStanding, rng: RNG, target = cfg.target): boolean {
+  let roll = 0;
+  for (let i = 0; i < cfg.dice; i++) roll += rng.d6();
+  return supportPips(cfg, s) + roll >= target;
+}
 
 export const needed = (fraction: number, states: number): number => Math.ceil(fraction * states);
 

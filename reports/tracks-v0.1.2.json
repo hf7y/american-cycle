@@ -436,6 +436,12 @@
       "track": "D",
       "question": "How long does the board take to turn lean into seats?",
       "notRun": "needs a lean series per state per year, which `GameResult.finalLean` does not carry — skowronek/observe.ts snapshots it and is the right home for this. The historical target is a thirty-year lag: Deep South House seats went 0% R 1947-63, 18.9% in 1965, 16.2% in 1967, and did not reach a majority until 1994."
+    },
+    {
+      "id": "D6-amendment-rate",
+      "track": "D",
+      "question": "Does an amendment that reaches the states ratify as often as the real ones did?",
+      "notMeasurable": "GameResult.endedBy — this build has no ending but the year cap, so \"ends by condition\" is 0 by construction"
     }
   ]
 }
