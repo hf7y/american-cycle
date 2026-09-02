@@ -21,7 +21,7 @@ import * as amend from './rules/amendment.ts';
 import * as tags from './rules/tags.ts';
 import { boardScores, type BoardView, type ScoringConfig } from './rules/scoring.ts';
 import {
-  buildModifiers, eligible, runRace, withdrawalView,
+  buildModifiers, eligible, homeDistrict, runRace, withdrawalView,
   type Declaration, type RaceContext, type WithdrawalView,
 } from './rules/elections.ts';
 import { STATES, BY_CODE, senateUp, governorUp, electors, DC_ELECTORS, type StateDef } from './states.ts';
@@ -1183,6 +1183,10 @@ export class Game {
       // The presidential general runs state by state, so each nominee reads
       // their own district for THIS state -- without which presence buys
       // nothing at the top of the ticket and no agent ever wants the office.
+      // A presidential race has no single correct district to read fit
+      // against (unlike a House seat), so `homeDistrict` combines every
+      // district the player holds in the state rather than reading
+      // whichever one the array yields first -- see #112.
       const local = nominees.map((d) => {
         const vp = tickets.get(d.player);
         // The VP adds a home-state bonus in the general.
@@ -1192,7 +1196,7 @@ export class Game {
         return {
           ...d,
           card: vpBonus.length ? { ...d.card, effects: [...d.card.effects, ...vpBonus] } : d.card,
-          district: this.players[d.player].districts.find((x) => x.state === st.code),
+          district: homeDistrict(this.players[d.player].districts, st.code),
         };
       });
       const out = runRace({
