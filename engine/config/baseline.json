@@ -34,7 +34,9 @@
     "billCounterPips": 1,
     "crossBenchCap": 3,
     "partyFitPips": -3,
-    "offDistrictPips": -1
+    "offDistrictPips": -1,
+    "bruisingPrimaryMargin": 3,
+    "bruisingPrimaryPips": -2
   },
   "lean": {
     "pushByMargin": [
@@ -123,6 +125,8 @@
     "amendment": "v0.2 item 3. Article V's fractions are not tuning knobs -- two-thirds to call and three-quarters to ratify are what make thirteen states a blocking minority, which is the anti-runaway claim. `dice`, `target` and `rescindTarget` ARE tuning and are unprinted anywhere, so they are fitted to the postwar ratification rate instead (5 of 7 amendments sent to the states after 1947 were ratified; 27 of 33 all-time). tracks/d.ts D6 grades that fit. `windowYears` is INERT above about 5: rescission is a one-time act, so every state is decided within a few years and a longer window changes nothing -- 8 and 12 give identical results to three decimals.",
     "primaryGeneral.partyFitPips": "v0.2 item 5, unprinted. What it costs to run under a label whose current officeholders you do not resemble -- Thurmond's 1964 switch, priced.",
     "primaryGeneral.offDistrictPips": "v0.2 item 6, unprinted. The price of a yes-vote on a bill your districts do not want.",
+    "primaryGeneral.bruisingPrimaryMargin": "Unprinted margin, in pips, below which a primary win still counts as a bruising showing rather than a clean one -- the McCarthy give-in case in HISTORICAL-CASES.md.",
+    "primaryGeneral.bruisingPrimaryPips": "Unprinted penalty a bruising primary win carries into the general, the same shape as the other primary-into-general counters here.",
     "legislature.impeachBackfirePips": "v0.2 item 7, flat. The 1998 midterm preceded the Senate vote by three months, so the penalty attaches to the attempt and there is no conviction margin to scale by. Scaling by strain is v0.3.",
     "legislature.shutdownPips": "v0.2 item 8. Weighted toward the party perceived as making the demand, NOT toward incumbents: 1995-96, 2013 and 2018-19 all point the same way and in two of the three the blamed party held the majority.",
     "legislature.billLeanPips": "A passed bill's tags now write to the map too, a flat push toward the majority party in every district on the table they touch, mirroring the shutdown and impeachment-backfire pips already here. Unprinted anywhere; set level with those flat pushes rather than swept.",

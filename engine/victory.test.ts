@@ -77,13 +77,22 @@ test('a missing tally entry is zero, not a crash', () => {
 
 /** `human = -1` matches no player, so every seat is agent-driven and the
  *  interactive path is the headless one plus its yields -- the same device
- *  game.parity.test.ts uses. */
+ *  game.parity.test.ts uses.
+ *
+ *  Stops on `endedBy`, not just `wonBy`: `run()` breaks on ANY `endedBy`
+ *  (line ~1584) -- an amendment ratification or a deck-out ends the clock
+ *  with no winner named. A loop that only checked `wonBy` would keep
+ *  ticking the browser path past that stop, comparing a game that ended at
+ *  year N against one played to the cap -- exactly the bug this file exists
+ *  to catch, just aimed at the harness instead of the engine (found when
+ *  hf7y/american-cycle#95 shifted seed 7777 past an amendment ratification
+ *  that no prior seed combination had reached before the bill target). */
 function playInteractive(cfg: Config, seed: number, years: number): Game {
   const rng = new RNG(seed);
   const agents: Agent[] = ['BillAuthor', 'Greedy', 'Random'].map((n) => new AGENTS[n](cfg, rng));
   const g = new Game(agents, structuredClone(CARDS), cfg, seed);
   for (let y = 0; y < years; y++) {
-    if (g.wonBy !== undefined) break;
+    if (g.wonBy !== undefined || g.endedBy !== undefined) break;
     const it = g.interactiveTick(-1);
     for (let r = it.next(); !r.done; r = it.next({ declarations: [] } as UiAnswer));
   }

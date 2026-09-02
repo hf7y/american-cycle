@@ -179,3 +179,20 @@ test('endorsements are primary-only', () => {
   assert.ok(!buildModifiers(d, ctx({}), 'general', res, nat, pg).some((m) => m.source === 'endorsements'),
     'the general effect is coattails, already modelled -- an endorsement would double-count');
 });
+
+/** #95: McCarthy lost New Hampshire 1968 and the strong showing was the
+ *  event. A nominee who won their primary by less than the threshold carries
+ *  a scar into the general; one who was unopposed carries nothing. */
+test('a bruising primary win carries a worse general stack than an unopposed one', () => {
+  const bruised: Declaration = { player: 0, card: cand({}), office: 'senator', state: 'OH', bruisingPrimary: true };
+  const clean: Declaration = { player: 0, card: cand({}), office: 'senator', state: 'OH' };
+  const bruisedMods = buildModifiers(bruised, ctx({}), 'general', res, nat, pg);
+  const cleanMods = buildModifiers(clean, ctx({}), 'general', res, nat, pg);
+  assert.equal(bruisedMods.find((m) => m.source === 'bruising primary')?.pips, pg.bruisingPrimaryPips);
+  const total = (mods: typeof bruisedMods) =>
+    resolution.modifierTotal({ player: 0, cardId: 'c', party: 'D', modifiers: mods });
+  assert.ok(total(bruisedMods) < total(cleanMods),
+    'the same card, the only difference is the bruise -- the general stack must be worse');
+  assert.ok(!buildModifiers(bruised, ctx({}), 'primary', res, nat, pg).some((m) => m.source === 'bruising primary'),
+    'the counter is read in the general only -- see Declaration.bruisingPrimary');
+});
