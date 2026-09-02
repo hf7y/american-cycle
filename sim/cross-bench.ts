@@ -19,7 +19,7 @@
  *
  *  node sim/cross-bench.ts [games]
  */
-import { loadConfig, loadPacks } from './harness.ts';
+import { loadConfig, loadPacks, ALL_PACKS } from './harness.ts';
 import { AGENTS } from './agents.ts';
 import { Game, type Config } from '../engine/game.ts';
 import { RNG } from '../engine/rules/rng.ts';
@@ -27,7 +27,7 @@ import { oddsAtEdge } from '../engine/rules/resolution.ts';
 import type { Party, RaceEvent } from '../engine/types/index.ts';
 
 const POOL = ['Greedy', 'Lookahead', 'SenateFlood', 'Launchpad'];
-const PACKS = ['1932', '1964', '1976', '1992', '2008', '2016', '2024'];
+const PACKS = ALL_PACKS;
 
 /** one side's §12 counters as they stood when the race ran */
 interface Side { crossBench: number; toward?: Party; record: number }

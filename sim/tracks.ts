@@ -15,7 +15,7 @@
  *  unchanged, which is the whole reason these are not `findings/`.
  */
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
-import { loadConfig, loadPacks, playOne } from './harness.ts';
+import { loadConfig, loadPacks, playOne, ALL_PACKS } from './harness.ts';
 import { B } from '../tracks/b.ts';
 import { C } from '../tracks/c.ts';
 import { D } from '../tracks/d.ts';
@@ -73,7 +73,7 @@ const configName = arg('--config', 'tuned.json');
 const games = Number(arg('--games', '80'));
 const only = arg('--track', '');
 const agents = arg('--agents', 'Greedy,Lookahead,HouseFarm,SenateFlood').split(',');
-const packs = arg('--packs', '1932,1964,1976,1992,2008,2016,2024').split(',');
+const packs = arg('--packs', ALL_PACKS.join(',')).split(',');
 
 const cfg = loadConfig(configName);
 const cards = loadPacks(packs);
