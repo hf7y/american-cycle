@@ -177,7 +177,7 @@ Ordered by how much the answer changes the game.
 
 1. **Decay frequency** — annual or biennial. Decides whether realignment is possible at all.
 2. **Base hand size and office bonuses** — the master tuning knob for game length and runaway.
-3. **District synergy magnitudes** — currently unbounded card text with no baseline. Must be tuned against specific historical cases: Manchin holding West Virginia, Collins holding Maine, Edwards holding Louisiana.
+~~3. **District synergy magnitudes**~~ — **RESOLVED 2026-09-02, see below.** `synergy` is deleted rather than tuned.
 4. **District-to-candidate ratio per pack** — sets map fill rate and turn density.
 5. **Victory condition** — bills passed, two consecutive presidential terms, three terms, or parallel conditions.
 6. **Governor pushes** — never, or only when winning with the existing lean.
