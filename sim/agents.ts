@@ -3,7 +3,7 @@
  *  as an opponent personality in the app. */
 import type { Agent, GameView, OpenRace, PendingPeg, Config, VPOffer } from '../engine/game.ts';
 import type { Declaration, WithdrawalView } from '../engine/rules/elections.ts';
-import { buildModifiers, eligible } from '../engine/rules/elections.ts';
+import { buildModifiers, eligible, homeDistrict } from '../engine/rules/elections.ts';
 import type { CandidateCard, IdentityTag, Office, Party, Seat } from '../engine/types/index.ts';
 import { RNG } from '../engine/rules/rng.ts';
 import * as tags from '../engine/rules/tags.ts';
@@ -45,7 +45,7 @@ export function options(v: GameView, open: OpenRace[], cfg: Config): Option[] {
         const states = [...new Set(me.districts.map((x) => x.state))];
         const each = states.map((st) => {
           const sctx = { ...ctx, state: st, lean: v.lean[st] ?? 0 };
-          const sd = { ...d, state: st, district: me.districts.find((x) => x.state === st) };
+          const sd = { ...d, state: st, district: homeDistrict(me.districts, st) };
           return buildModifiers(sd, sctx, 'general', cfg.resolution, cfg.national, cfg.primaryGeneral)
             .reduce((n, m) => n + m.pips, 0);
         });

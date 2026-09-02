@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import * as resolution from './resolution.ts';
 import { Wave } from './resolution.ts';
 import { RNG } from './rng.ts';
-import { buildModifiers, eligible, runRace, withdrawalView } from './elections.ts';
+import { buildModifiers, eligible, homeDistrict, runRace, withdrawalView } from './elections.ts';
 import type { Declaration, RaceContext, NationalConfig, PrimaryGeneralConfig, ResolutionConfig } from './elections.ts';
 import type { CandidateCard, DistrictCard } from '../types/index.ts';
 import cfg from '../config/baseline.json' with { type: 'json' };
@@ -77,6 +77,30 @@ test('district cards gate all races', () => {
   assert.ok(eligible(ohio, 'OH', []), 'a native may always run at home');
   assert.ok(!eligible(ohio, 'CA', []), 'and nowhere else without presence');
   assert.ok(eligible(ohio, 'CA', [dist({ id: 'CA-3', state: 'CA' })]), 'presence is purchased in the draft');
+});
+
+/** #112: a statewide race has no single correct district to read fit
+ *  against, so `homeDistrict` must not depend on which of a player's
+ *  districts an array happens to yield first. */
+test('homeDistrict combines a state\'s districts regardless of array order', () => {
+  const a = dist({ id: 'CA-3', state: 'CA', synergy: 2, demographics: ['urban'] });
+  const b = dist({ id: 'CA-9', state: 'CA', synergy: 1, demographics: ['union'] });
+  const forward = homeDistrict([a, b], 'CA')!;
+  const reversed = homeDistrict([b, a], 'CA')!;
+  assert.deepEqual(forward, reversed, 'draw order must not change the combined district');
+  assert.equal(forward.synergy, 3, 'synergy sums rather than reading one card');
+  assert.deepEqual(new Set(forward.demographics), new Set(['urban', 'union']));
+  assert.equal(homeDistrict([a, b], 'OH'), undefined, 'no district in the state, no fit');
+});
+
+test('#112: the presidential modifier stack does not depend on district draw order', () => {
+  const a = dist({ id: 'CA-3', state: 'CA', synergy: 2, demographics: ['urban'] });
+  const b = dist({ id: 'CA-9', state: 'CA', synergy: 1, demographics: ['union'] });
+  const candidate = cand({ homeState: 'OH', identities: ['union'] });
+  const c = ctx({ office: 'president', state: 'CA' });
+  const forward = { player: 0, card: candidate, office: 'president' as const, state: 'CA', district: homeDistrict([a, b], 'CA') };
+  const reversed = { player: 0, card: candidate, office: 'president' as const, state: 'CA', district: homeDistrict([b, a], 'CA') };
+  assert.deepEqual(buildModifiers(forward, c, 'general', res, nat, pg), buildModifiers(reversed, c, 'general', res, nat, pg));
 });
 
 test('lean applies once, to the party it favours', () => {
