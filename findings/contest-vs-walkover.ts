@@ -31,13 +31,15 @@ export const finding: Finding = {
     + 'an uncontested win pushes? (§10, and §16 on district-to-candidate ratio)',
 
   headline:
-    'They are ALTERNATIVES, not complements. Raising contest to 64% produces realignment (6.1 states a '
-    + 'game) with the walkover rule OFF, matching what the walkover rule alone achieves at low contest '
-    + '(6.5). Doing both gives 15.1, which is realignment as background noise. Contest is the better '
-    + 'lever because the same change also moves decision density, dead turns, the midterm brake and '
-    + 'heterodoxy, none of which the walkover rule touches.',
-  stampedAt: '2026-08-31T09:45:00Z',
-  stampedOn: 'f0bbaca',
+    'They are ALTERNATIVES, not complements, and contest is now clearly the stronger of the two. '
+    + 'Raising contest to 63% produces 16.4 realigned states a game with the walkover rule OFF, against '
+    + '5.6 from the walkover rule alone at low contest — a gap that widened at v0.2, where board scoring '
+    + 'makes holding a state worth defending and the failed-bill and failed-impeachment nudges add '
+    + 'attributable lean writes between elections. Doing both gives 25.5, which is realignment as '
+    + 'background noise. Contest is also the better lever because the same change moves decision '
+    + 'density, dead turns, the midterm brake and heterodoxy, none of which the walkover rule touches.',
+  stampedAt: '2026-09-02T02:26:17Z',
+  stampedOn: '5d06f41',
 
   predicate(): Claim[] {
     const lowOff = measure(4, 16, 1.0, 0);
@@ -46,11 +48,11 @@ export const finding: Finding = {
     const highOn = measure(6, 24, 0.06, 1);
     return [
       { name: 'low contest, walkover off: contested share', value: lowOff.contested, stamped: 0.28, tolerance: 0.10, unit: 'share' },
-      { name: 'low contest, walkover off: states realigned', value: lowOff.fourPerGame, stamped: 0.2, tolerance: 1.0 },
-      { name: 'high contest, walkover off: contested share', value: highOff.contested, stamped: 0.64, tolerance: 0.12, unit: 'share' },
-      { name: 'high contest, walkover off: states realigned', value: highOff.fourPerGame, stamped: 6.1, tolerance: 3.0 },
-      { name: 'low contest, walkover on: states realigned', value: lowOn.fourPerGame, stamped: 6.5, tolerance: 3.0 },
-      { name: 'both: states realigned', value: highOn.fourPerGame, stamped: 15.1, tolerance: 5.0 },
+      { name: 'low contest, walkover off: states realigned', value: lowOff.fourPerGame, stamped: 3.05, tolerance: 1.0 },
+      { name: 'high contest, walkover off: contested share', value: highOff.contested, stamped: 0.63, tolerance: 0.12, unit: 'share' },
+      { name: 'high contest, walkover off: states realigned', value: highOff.fourPerGame, stamped: 16.43, tolerance: 3.0 },
+      { name: 'low contest, walkover on: states realigned', value: lowOn.fourPerGame, stamped: 5.63, tolerance: 3.0 },
+      { name: 'both: states realigned', value: highOn.fourPerGame, stamped: 25.48, tolerance: 5.0 },
     ];
   },
 

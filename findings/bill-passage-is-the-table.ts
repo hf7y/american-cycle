@@ -31,15 +31,17 @@ export const finding: Finding = {
 
   headline:
     'The threshold is not what sets passage — the table is. Holding senatePassage at 0.6 and '
-    + 'changing only who is playing moves passage from 12% to 100%, an 88-point range, while '
-    + 'sweeping the threshold 50/60/67 at a fixed table moves it 41% to 2%, a 39-point range. The '
-    + 'wider lever is the players. Passage tracks cross-benching directly: 57 cross-bench votes a '
-    + 'game at 12% passage, 346 at 100%. That is §12 working as written, not failing — the '
-    + 'filibuster makes the bill depend on whether anyone will cross the aisle. Any passage figure '
-    + 'quoted from this simulator is a property of its agent pool, because no agent here can '
-    + 'negotiate, offer anything or remember a favour. Do not tune the threshold on it.',
-  stampedAt: '2026-08-31T12:00:00Z',
-  stampedOn: 'f0bbaca',
+    + 'changing only who is playing moves passage from 16% to 100%, an 84-point range, while '
+    + 'sweeping the threshold 50/60/67 at a fixed table moves it 31% to 9%, a 22-point range. The '
+    + 'wider lever is the players, and v0.2 widened the gap rather than closing it: politicians now '
+    + 'vote by the distance between a bill\'s tags and their districts\', so a concentrated bloc '
+    + 'legislates cheaply and a diverse table still cannot. Passage tracks cross-benching directly: '
+    + '139 cross-bench votes a game at 16% passage, 243 at 100%. That is §12 working as written, not '
+    + 'failing — the filibuster makes the bill depend on whether anyone will cross the aisle. Any '
+    + 'passage figure quoted from this simulator is a property of its agent pool, because no agent '
+    + 'here can negotiate, offer anything or remember a favour. Do not tune the threshold on it.',
+  stampedAt: '2026-09-02T02:14:02Z',
+  stampedOn: '5d06f41',
 
   predicate(): Claim[] {
     const base = loadConfig('tuned.json');
@@ -52,13 +54,13 @@ export const finding: Finding = {
     const cloture50 = measure(MIXED, 0.5, cards, base);
     const cloture67 = measure(MIXED, 2 / 3, cards, base);
     return [
-      { name: 'mixed table at 60%: bills pass', value: mixed.pass, stamped: 0.12, tolerance: 0.07, unit: 'share of attempts' },
-      { name: 'one BillMaximizer at 60%: bills pass', value: willing.pass, stamped: 0.67, tolerance: 0.12, unit: 'share of attempts' },
+      { name: 'mixed table at 60%: bills pass', value: mixed.pass, stamped: 0.16, tolerance: 0.07, unit: 'share of attempts' },
+      { name: 'one BillMaximizer at 60%: bills pass', value: willing.pass, stamped: 0.65, tolerance: 0.12, unit: 'share of attempts' },
       { name: 'four BillMaximizers at 60%: bills pass', value: allIn.pass, stamped: 1, tolerance: 0.06, unit: 'share of attempts' },
-      { name: 'mixed table at 50%: bills pass', value: cloture50.pass, stamped: 0.41, tolerance: 0.1, unit: 'share of attempts' },
-      { name: 'mixed table at 67%: bills pass', value: cloture67.pass, stamped: 0.02, tolerance: 0.06, unit: 'share of attempts' },
-      { name: 'mixed table: cross-bench votes a game', value: mixed.cross, stamped: 57.44, tolerance: 18 },
-      { name: 'four BillMaximizers: cross-bench votes a game', value: allIn.cross, stamped: 346.28, tolerance: 60 },
+      { name: 'mixed table at 50%: bills pass', value: cloture50.pass, stamped: 0.31, tolerance: 0.1, unit: 'share of attempts' },
+      { name: 'mixed table at 67%: bills pass', value: cloture67.pass, stamped: 0.09, tolerance: 0.06, unit: 'share of attempts' },
+      { name: 'mixed table: cross-bench votes a game', value: mixed.cross, stamped: 139.07, tolerance: 18 },
+      { name: 'four BillMaximizers: cross-bench votes a game', value: allIn.cross, stamped: 243.35, tolerance: 60 },
     ];
   },
 

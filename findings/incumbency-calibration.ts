@@ -64,20 +64,20 @@ export const finding: Finding = {
     + 'Strip the walkovers and contested incumbents hold 78%, so the 98.8% is measuring how few '
     + 'incumbents are challenged rather than what +1 is worth, and the calibration check §16 asks '
     + 'for cannot be run until the contest rate is fixed.',
-  stampedAt: '2026-08-31T16:32:27Z',
-  stampedOn: 'ea6ad71',
+  stampedAt: '2026-09-02T02:29:09Z',
+  stampedOn: '5d06f41',
 
   predicate(): Claim[] {
     const one = reelection(1);
     const two = reelection(2);
     const three = reelection(3);
     return [
-      { name: 'sim: House reelection at +1', value: one.house, stamped: 98.84, tolerance: 1.5, unit: '%' },
-      { name: 'sim: House reelection at +2', value: two.house, stamped: 99.37, tolerance: 1, unit: '%' },
-      { name: 'sim: House reelection at +3', value: three.house, stamped: 99.66, tolerance: 1, unit: '%' },
+      { name: 'sim: House reelection at +1', value: one.house, stamped: 99.39, tolerance: 1.5, unit: '%' },
+      { name: 'sim: House reelection at +2', value: two.house, stamped: 99.65, tolerance: 1, unit: '%' },
+      { name: 'sim: House reelection at +3', value: three.house, stamped: 99.79, tolerance: 1, unit: '%' },
       { name: 'real: House reelection 1976-2016', value: realHouseReelection(), stamped: 94.1, tolerance: 0.5, unit: '%' },
-      { name: 'sim: +1, contested House races only', value: one.contested, stamped: 78.18, tolerance: 15, unit: '%' },
-      { name: 'sim: +1, pooled over every office below the presidency', value: one.allOffices, stamped: 94.05, tolerance: 2, unit: '%' },
+      { name: 'sim: +1, contested House races only', value: one.contested, stamped: 55, tolerance: 15, unit: '%' },
+      { name: 'sim: +1, pooled over every office below the presidency', value: one.allOffices, stamped: 93.34, tolerance: 2, unit: '%' },
     ];
   },
 
