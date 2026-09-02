@@ -7,6 +7,7 @@ import { buildModifiers, eligible, homeDistrict } from '../engine/rules/election
 import type { CandidateCard, IdentityTag, Office, Party, Seat } from '../engine/types/index.ts';
 import { RNG } from '../engine/rules/rng.ts';
 import * as tags from '../engine/rules/tags.ts';
+import { economyModifier } from '../engine/rules/economy.ts';
 
 export interface AgentCtx { cfg: Config; rng: RNG }
 
@@ -34,7 +35,11 @@ export function options(v: GameView, open: OpenRace[], cfg: Config): Option[] {
         year: v.year, office: r.office, state: r.state, slot: r.slot,
         lean: v.lean[r.state] ?? 0, isMidterm: v.isMidterm, isPresidentialYear: v.isPresidentialYear,
         presidentParty: v.presidentParty,
-        economyMod: 0,
+        // Was a stub 0 -- an agent could see everything else in RaceContext
+        // but not the economy, though it is a visible board track and
+        // `v.economy` already carries it. #39, ruled 2026-09-02: "a visible
+        // track agents cannot read is a bug unless someone says otherwise."
+        economyMod: economyModifier(v.economy, cfg.economy, cfg.national.strongEconomy, cfg.national.recession),
       };
       let edge: number;
       if (r.office === 'president') {
