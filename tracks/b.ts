@@ -143,12 +143,20 @@ const b6: TrackItem = {
     void runs;
     for (const s of seeds.slice(0, Math.min(30, seeds.length))) {
       const r = playOne(['Greedy', 'Lookahead', 'HouseFarm', 'SenateFlood'], cards, cfg, s);
-      // Terms served is the count of race events a card won, per office.
+      // Terms served is the count of ELECTIONS a card won, per office -- which
+      // is not the count of race events. The presidential general runs state
+      // by state (engine/game.ts), so one term is fifty winning events and
+      // counting events reported the president at 74 terms a game. Distinct
+      // (card, office, year) is the term.
+      const seen = new Set<string>();
       const won = new Map<string, { office: string; n: number }>();
       for (const e of r.events) {
         if (e.round !== 'general') continue;
         const w = e.sides.find((x) => x.player === e.winner);
         if (!w) continue;
+        const once = `${w.cardId}|${e.office}|${e.year}`;
+        if (seen.has(once)) continue;
+        seen.add(once);
         const k = `${w.cardId}|${e.office}`;
         const rec = won.get(k) ?? { office: e.office, n: 0 };
         rec.n++; won.set(k, rec);
@@ -169,6 +177,11 @@ const b7: TrackItem = {
   id: 'B7-board-scoring-and-endings',
   track: 'B',
   question: 'What does board scoring, repeal and the amendment ending actually do to the shape of a game?',
+  // The monotone-score number is the one that matters most and it needs
+  // nothing: `scoreHistory` is as old as the harness, so v0.1.2's 1.00 and
+  // v0.2's 0.02 are the same measurement on both builds. The rest of B7 reads
+  // the corpus and the ending, which only one of them has.
+  needs: ['corpus', 'ending'],
   run({ runs }): Measure[] {
     let series = 0, never = 0;
     for (const r of runs) {
@@ -191,6 +204,34 @@ const b7: TrackItem = {
   },
 };
 
+/** B7b — the one number from B7 that every build can answer.
+ *
+ *  Split out deliberately. B7 needs the corpus and the ending, so it goes
+ *  NOT MEASURABLE on v0.1.2 — and the monotone-score share would have gone
+ *  with it, which is the single most load-bearing figure in the whole
+ *  before-and-after. `scoreHistory` is as old as the harness. */
+const b7b: TrackItem = {
+  id: 'B7b-score-monotonicity',
+  track: 'B',
+  question: 'Can a score ever fall?',
+  run({ runs }): Measure[] {
+    let series = 0, never = 0;
+    for (const r of runs) {
+      for (let p = 0; p < (r.scoreHistory[0]?.length ?? 0); p++) {
+        series++;
+        let fell = false;
+        for (let y = 1; y < r.scoreHistory.length; y++) if (r.scoreHistory[y][p] < r.scoreHistory[y - 1][p]) { fell = true; break; }
+        if (!fell) never++;
+      }
+    }
+    return [
+      { name: 'player-scores that never decrease', value: share(never, series), unit: 'share of series', n: series },
+      { name: 'mean game length', value: mean(runs.map((r) => r.years)), unit: 'years', n: runs.length },
+      { name: 'mean lead changes', value: mean(runs.map((r) => r.leadChanges)), n: runs.length },
+    ];
+  },
+};
+
 /** B8 — the variance sweep. NOT BUILT, and named rather than omitted.
  *  `zeroDiceWinner` gives the 0x point for free; the sweep needs a dice-spread
  *  knob the engine does not expose, so building it is an engine change and not
@@ -204,4 +245,4 @@ const b8: TrackItem = {
     + 'winner when it is built: high race-flip with low winner-flip is the healthy shape.',
 };
 
-export const B: TrackItem[] = [b1, b2, b3, b4, b5, b6, b7, b8];
+export const B: TrackItem[] = [b1, b2, b3, b4, b5, b6, b7, b7b, b8];

@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --test 'engine/**/*.test.ts' 'findings/**/*.test.ts'",
+    "test": "node --test 'engine/**/*.test.ts' 'findings/**/*.test.ts' 'tracks/**/*.test.ts'",
     "sim": "node sim/harness.ts",
     "sweep": "node sim/sweeps.ts",
     "build:ui": "node ui/build.ts",
