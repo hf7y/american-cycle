@@ -82,7 +82,13 @@ const shareOf = (seats: Seat[], office: Office, player: number): number => {
  *  election year's pushes under the following odd year and inverts every
  *  year-gated measurement taken from this series. */
 function observeYear(g: Game, nPlayers: number, cfg: Config, played: number): YearObs {
-  const board: Board = { lean: g.leanMap, year: played };
+  const board: Board = {
+    lean: g.leanMap, year: played,
+    // v0.2: TAG_COMPASS needs both. LEAN_COMPASS ignores them, so supplying
+    // them costs nothing and swapping COMPASS becomes the one-line change
+    // position.ts promises.
+    cards: g.cardById, districts: g.players.flatMap((p) => p.districts),
+  };
   const pres = g.seats.find((s) => s.office === 'president' && s.holder);
 
   const parts: PowerParts[] = [];

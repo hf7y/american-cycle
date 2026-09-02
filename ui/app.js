@@ -221,7 +221,7 @@ function phaseBill() {
   modal(`
     <span class="eyebrow">${G.year} · the omnibill</span>
     <h2 style="font-size:21px;margin-top:4px">${isAuthor ? 'You hold the pen' : 'The bill comes to a vote'}</h2>
-    <p class="note" style="margin:8px 0 12px">One number, G, for spending and taxation together. A bill that passes goes on the books and scores for its author until somebody repeals it,
+    <p class="note" style="margin:8px 0 12px">One number, G, for spending and taxation together, and the tags it is about. A bill that passes goes on the books and scores for its author until somebody repeals it,
       doubled for the majority party (${maj || 'none'}). Passage needs a House majority and 60% of the Senate —
       so it cannot pass on party lines alone. Spending warms the economy and loads the Fed.</p>
     <p class="note">Accumulated spending: <b class="mono">${G.economy.accumulatedG}</b> —

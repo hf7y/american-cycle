@@ -54,9 +54,12 @@ for (const name of configs) {
   const formation = checks.find((c) => c.id === 'settlement-formation')!;
   const pre = preconditions(
     formation.verdict === 'HEALTHY', c2.movementDetected, c3.concentrated, c1.passed,
-    // v0.2 item 2: the corpus is measured off the runs now, not asserted
-    // from the code.
-    { billsOnBooks: mean(runs.map((r) => r.result.billsOnBooks)) },
+    // v0.2: the corpus and the bill position are measured off the runs now,
+    // not asserted from the code.
+    {
+      billsOnBooks: mean(runs.map((r) => r.result.billsOnBooks)),
+      tagged: runs.some((r) => r.result.bills.some((b) => b.tags.length > 0)),
+    },
   );
   reports.push({
     config: name,

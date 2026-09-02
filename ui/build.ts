@@ -17,6 +17,7 @@ const ORDER = [
   'engine/rules/lean.ts',
   'engine/rules/economy.ts',
   'engine/rules/legislature.ts',
+  'engine/rules/tags.ts',
   'engine/rules/amendment.ts',
   'engine/rules/scoring.ts',
   'engine/rules/elections.ts',

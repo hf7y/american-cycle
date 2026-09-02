@@ -16,8 +16,8 @@ const empty = (n = 2): BoardView => ({
 
 test('a repealed bill scores zero — the epilogue rule, not an exception to it', () => {
   const bills: EnactedBill[] = [
-    { id: 'b1', year: 1980, g: 3, author: 0 },
-    { id: 'b2', year: 1982, g: 3, author: 0, repealedIn: 1984 },
+    { id: 'b1', year: 1980, g: 3, author: 0, tags: ['union'] },
+    { id: 'b2', year: 1982, g: 3, author: 0, tags: ['farm'], repealedIn: 1984 },
   ];
   assert.deepEqual(boardScores(cfg, { ...empty(), bills }), [3, 0]);
 });

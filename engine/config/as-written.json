@@ -32,7 +32,9 @@
     "extremistGeneral": -2,
     "crossBenchPrimaryPenalty": -1,
     "billCounterPips": 1,
-    "crossBenchCap": 3
+    "crossBenchCap": 3,
+    "partyFitPips": 0,
+    "offDistrictPips": 0
   },
   "lean": {
     "pushByMargin": [
@@ -76,7 +78,10 @@
     "impeachThreshold": 0.6666666666666666,
     "scorePerYesVote": 1,
     "majorityMultiplier": 2,
-    "reactionGoodOnRollAtLeast": 4
+    "reactionGoodOnRollAtLeast": 4,
+    "tagsPerBill": 2,
+    "repealAtDistance": 0.5,
+    "offDistrictAtDistance": 0.5
   },
   "draft": {
     "packSize": 15,
@@ -112,7 +117,9 @@
     "resolution.crossOfficeIncumbency": "The stepping stone to higher office, flat. One number for every pair of offices: the primary/general asymmetry a table would encode is already emergent from the board, and the history refutes it (sitting House members won 61% of Senate primaries and 63% of the generals).",
     "primaryGeneral.crossBenchCap": "The accumulated counters are simply read off, and uncapped they read ~30. But cross-benching is also structurally necessary to pass anything at a 60% Senate threshold, so an uncapped record makes cooperation career-ending. 3 puts the mean at 2.35 pips, 0.97 of the primary's 2.42 SD.",
     "scoring": "v0.2 item 1. Weights for the EPILOGUE, not a running tally: score is a pure function of the board, so it can fall. Office weights are v0.1's win awards, re-read as what a seat is worth while it is HELD.",
-    "amendment": "v0.2 item 3. Article V's fractions are not tuning knobs -- two-thirds to call and three-quarters to ratify are what make thirteen states a blocking minority, which is the anti-runaway claim. `target`, the pips and `windowYears` ARE tuning, and are unprinted anywhere."
+    "amendment": "v0.2 item 3. Article V's fractions are not tuning knobs -- two-thirds to call and three-quarters to ratify are what make thirteen states a blocking minority, which is the anti-runaway claim. `target`, the pips and `windowYears` ARE tuning, and are unprinted anywhere.",
+    "primaryGeneral.partyFitPips": "v0.2 item 5, unprinted. What it costs to run under a label whose current officeholders you do not resemble -- Thurmond's 1964 switch, priced.",
+    "primaryGeneral.offDistrictPips": "v0.2 item 6, unprinted. The price of a yes-vote on a bill your districts do not want."
   },
   "scoring": {
     "billOnBooks": 3,

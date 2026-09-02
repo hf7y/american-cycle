@@ -48,6 +48,17 @@ export interface PrimaryGeneralConfig {
    *  threshold, so an uncapped record makes cooperation career-ending. The cap
    *  keeps a serial defector distinct from a one-time one without that. */
   crossBenchCap: number;
+  /** v0.2 items 5 and 6: what it costs to run under a label whose CURRENT
+   *  officeholders you do not resemble. A party's position is the centroid of
+   *  its officeholders' tags (engine/rules/tags.ts), so this is Thurmond's
+   *  1964 switch, priced — and it is what makes a primary a fight over who
+   *  defines the party's claim in this district rather than a coin flip with
+   *  extra steps. Negative; multiplied by a distance in [0,1]. */
+  partyFitPips?: number;
+  /** v0.2 item 6: heterodoxy stops being a strategy label and becomes a
+   *  per-vote decision with a price. Vote against your district's position,
+   *  lose competitiveness, gain the bill. Negative, per off-position vote. */
+  offDistrictPips?: number;
 }
 
 export interface RaceContext {
@@ -86,6 +97,12 @@ export interface Declaration {
   /** §12: "the card's accumulated counters are simply read off at resolution."
    *  Signed: a good reaction on a yes-vote is an asset, a bad one a liability. */
   billRecord?: number;
+  /** v0.2 item 5: distance in [0,1] between this card's tags and the CURRENT
+   *  centroid of its party's officeholders. Undefined when either side carries
+   *  no tags — which is not distance 0 and must not read as a perfect fit. */
+  partyFit?: number;
+  /** v0.2 item 6: yes-votes this card cast on bills far from its district. */
+  offDistrict?: number;
 }
 
 /** §5: district cards gate all races. You may run only where you hold a
@@ -128,6 +145,15 @@ export function buildModifiers(
     }
   }
 
+  // v0.2 item 5. Priced in BOTH rounds: a primary is where the party's claim
+  // is contested and a general is where the mismatch is punished, and the
+  // whole point of defining a party as its officeholders is that the two are
+  // the same measurement.
+  if (d.partyFit !== undefined && pg.partyFitPips) {
+    const pips = Math.round(pg.partyFitPips * d.partyFit);
+    if (pips) m.push({ source: 'party fit', pips });
+  }
+
   if (d.incumbent) m.push({ source: 'incumbency', pips: round === 'primary' ? res.incumbencyPrimary : res.incumbency });
 
   if (d.heldOffice && d.heldOffice !== ctx.office && res.crossOfficeIncumbency) {
@@ -144,6 +170,12 @@ export function buildModifiers(
     if (d.billRecord) m.push({ source: 'bill record', pips: d.billRecord * pg.billCounterPips });
   } else {
     if (hasEffect(d.card, 'extremist')) m.push({ source: 'extremist (general)', pips: pg.extremistGeneral });
+
+    // v0.2 item 6: the price of the bill you gained.
+    if (d.offDistrict && pg.offDistrictPips) {
+      m.push({ source: `off-position votes \u00d7${d.offDistrict}`, pips: pg.offDistrictPips * d.offDistrict });
+    }
+
 
     // National modifiers -- the tide, never the noise.
     if (ctx.presidentParty === d.card.party) {

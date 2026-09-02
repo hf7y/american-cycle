@@ -180,7 +180,7 @@ export function preconditions(
   /** v0.2 turned two of these from facts about the engine into facts about a
    *  run: the corpus exists now, so whether it is populated is measured rather
    *  than asserted. Pass what the run actually produced. */
-  corpus = { billsOnBooks: 0 },
+  corpus = { billsOnBooks: 0, tagged: false },
 ): PreconditionState[] {
   return [
     {
@@ -197,9 +197,11 @@ export function preconditions(
     },
     {
       id: 'BILL_POSITION',
-      status: 'ABSENT_BY_CONSTRUCTION',
-      why: BILL_POSITION_ABSENT,
-      control: 'none possible: no run can give a scalar a second dimension.',
+      status: corpus.tagged ? 'MET' : 'ABSENT',
+      why: corpus.tagged
+        ? 'bills carry IdentityTag[] (v0.2 item 4) and TAG_COMPASS.bill reads them'
+        : BILL_POSITION_ABSENT,
+      control: 'none needed: the position is on the record or it is not.',
     },
     {
       id: 'SETTLEMENT_FORMATION',
@@ -222,20 +224,26 @@ export function preconditions(
     },
     {
       id: 'STRAIN_RISE',
-      status: 'ABSENT_BY_CONSTRUCTION',
-      why: 'strain is the distance between a settlement and the country. The corpus half arrived with v0.2 '
-        + 'item 2 -- Game.bills, with a repeal that takes a bill off the books -- but a bill still carries no '
-        + 'position, so there is no settlement object to be the far end of the distance. Downstream of '
-        + 'BILL_POSITION alone now, where it used to be downstream of both.',
-      control: 'none possible while a bill has no position.',
+      // NOT ABSENT_BY_CONSTRUCTION any more, and the distinction is the point
+      // of the ledger. v0.2 supplied both things this was downstream of: the
+      // corpus (item 2) and the bill position (item 4). What is still missing
+      // is a DETECTOR -- a settlement object built as the centroid of the
+      // bills on the books, and strain as its distance from the country under
+      // TAG_COMPASS. That is unbuilt work, not an impossibility, and calling
+      // it impossible would be the exact staleness this file exists to catch.
+      status: 'ABSENT',
+      why: 'strain is the distance between a settlement and the country. Its two preconditions were met at '
+        + 'v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the '
+        + 'settlement from them yet. Unbuilt, not unbuildable.',
+      control: 'none yet: the instrument does not exist to be controlled.',
     },
     {
       id: 'EFFICACY_DROP',
-      status: 'ABSENT_BY_CONSTRUCTION',
-      why: 'efficacy is bills moving the settlement toward the passer, per year of power. With no bill '
-        + 'position it is undefined, and with SETTLEMENT_MOVEMENT absent it would be identically zero for '
-        + 'every player in every year — which cannot distinguish a blocked leader from an effective one.',
-      control: 'C2 shows the movement term is zero for every non-electoral mechanism in the rules.',
+      status: 'ABSENT',
+      why: 'efficacy is bills moving the settlement toward the passer, per year of power. The bill position '
+        + 'exists as of v0.2, so this is no longer undefined -- it is unmeasured, and it stays unmeasured '
+        + 'until STRAIN_RISE has a settlement to move.',
+      control: 'the maximizer control (C2) is ready for it: BillMaximizer already ships in sim/agents.ts.',
     },
     {
       id: 'POWER_CONCENTRATION',
