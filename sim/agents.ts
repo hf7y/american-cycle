@@ -4,8 +4,9 @@
 import type { Agent, GameView, OpenRace, PendingPeg, Config, VPOffer } from '../engine/game.ts';
 import type { Declaration, WithdrawalView } from '../engine/rules/elections.ts';
 import { buildModifiers, eligible } from '../engine/rules/elections.ts';
-import type { CandidateCard, Office, Party, Seat } from '../engine/types/index.ts';
+import type { CandidateCard, IdentityTag, Office, Party, Seat } from '../engine/types/index.ts';
 import { RNG } from '../engine/rules/rng.ts';
+import * as tags from '../engine/rules/tags.ts';
 
 export interface AgentCtx { cfg: Config; rng: RNG }
 
@@ -85,6 +86,21 @@ function pickDistinct(opts: Option[], limit: number): Declaration[] {
   return out;
 }
 
+/** v0.2 item 4: how close a bill must sit to the districts you represent
+ *  before you carry it. Agent policy, not a rule, so it lives here and not in
+ *  a config -- but it is the single number that decides whether a bloc
+ *  concentrated in one tag region is cheap to legislate for, so it was chosen
+ *  by measurement rather than taste.
+ *
+ *  Set-overlap distance, so 0.5 is "every tag in common" and 0.75 is "at
+ *  least one". Passage rate over a mixed table at the 60% Senate threshold:
+ *  0.50 -> 2.2%, 0.60 -> 15.7%, 0.75 -> 81.3%, 0.90 -> 91.5%. The stamped
+ *  pre-tag figure is 12% (findings/bill-passage-is-the-table.ts), and passage
+ *  scarcity is the table's central tension rather than a bug to tune out, so
+ *  0.6 is the setting that adds a position to the vote without also deleting
+ *  the 60% threshold's whole effect. */
+const VOTE_AT_DISTANCE = 0.6;
+
 const byEdge = (a: Option, b: Option) => b.edge - a.edge;
 
 abstract class Base implements Agent {
@@ -97,8 +113,22 @@ abstract class Base implements Agent {
     return v.contenders > 0 && v.myModifierTotal <= -4;
   }
   proposeG(_v: GameView): number { return 3; }
-  voteBill(v: GameView, _g: number, seat: Seat): boolean {
-    return seat.holder?.party === this.majority(v);
+  /** v0.2 item 4: a politician votes by DISTANCE, not by label.
+   *
+   *  This is the whole of coalition synergy. A bloc concentrated in one tag
+   *  region finds most of its members close to most of its bills and passes
+   *  them cheaply and reliably; a diverse one has to buy every vote. It is
+   *  also why a conservative-coalition Democrat falls out with no party-loyalty
+   *  variable anywhere -- the D votes with the bill that fits their districts,
+   *  and the label is not consulted.
+   *
+   *  Party is the FALLBACK, for the case the typed absence exists to catch:
+   *  no tags on the bill or none in the district is not distance 0. */
+  voteBill(v: GameView, _g: number, seat: Seat, billTags?: readonly IdentityTag[]): boolean {
+    const home = tags.stateposition(v.players.flatMap((p) => p.districts), seat.state);
+    const d = billTags ? tags.distance(tags.weights(billTags), home) : undefined;
+    if (d === undefined) return seat.holder?.party === this.majority(v);
+    return d <= VOTE_AT_DISTANCE;
   }
   /** §12: "Vetoing makes most sense when a midterm has handed the opposition
    *  the majority" -- the president chooses between everyone gaining, rivals

@@ -18,6 +18,7 @@ import * as lean from './rules/lean.ts';
 import * as econ from './rules/economy.ts';
 import * as leg from './rules/legislature.ts';
 import * as amend from './rules/amendment.ts';
+import * as tags from './rules/tags.ts';
 import { boardScores, type BoardView, type ScoringConfig } from './rules/scoring.ts';
 import {
   buildModifiers, eligible, runRace, withdrawalView,
@@ -106,6 +107,9 @@ export interface Agent {
   /** v0.2 item 2: repeal instead of legislating. Returns a bill id from
    *  `books`. Omit for the default heuristic. */
   proposeRepeal?(v: GameView, books: readonly EnactedBill[]): string | undefined;
+  /** v0.2 item 4: the bill's position. Omit for the default, which is the
+   *  author's own coalition -- the tags their districts actually carry. */
+  proposeTags?(v: GameView, books: readonly EnactedBill[]): IdentityTag[] | undefined;
   /** v0.2 item 3: call a constitutional convention, which spends the year's
    *  legislating exactly as impeachment does. Returns the amendment's tags.
    *  Omit for the default heuristic. */
@@ -121,7 +125,7 @@ export interface Agent {
    *  nomination. Any player may offer a card to any ticket. */
   offerVP?(v: GameView, nominee: { player: number; party: Party }): CandidateCard | undefined;
   pickVP?(v: GameView, offers: VPOffer[]): VPOffer | undefined;
-  voteBill(v: GameView, g: number, seat: Seat): boolean;
+  voteBill(v: GameView, g: number, seat: Seat, billTags?: readonly IdentityTag[]): boolean;
   veto(v: GameView, g: number): boolean;
 }
 
@@ -269,6 +273,8 @@ export class Game {
              *  several players crowd in one party resolves as a contested PRIMARY
              *  and a one-candidate general. */
             raceSlots: 0, contestedSlots: 0, billsRepealed: 0 };
+  /** v0.2 item 6: off-position yes-votes, by card id. */
+  private offDistrict = new Map<string, number>();
   private agents: Agent[];
   private scoreHistory: number[][] = [];
 
@@ -576,28 +582,44 @@ export class Game {
     return true;
   }
 
-  /** What a player's own districts are about, most common demographic first.
-   *  An amendment carries demographic content, and the proposer's own map is
-   *  where it comes from: a player maneuvers toward the amendment they can
-   *  actually pass. */
-  private ownDemographics(player: number, n: number): IdentityTag[] {
-    const freq = new Map<IdentityTag, number>();
-    for (const d of this.players[player].districts) {
-      for (const t of d.demographics) freq.set(t, (freq.get(t) ?? 0) + 1);
-    }
-    return [...freq.entries()].sort((a, b) => b[1] - a[1]).slice(0, n).map(([t]) => t);
+  /** Every district card in play, by state. The finest positional granularity
+   *  the engine has: `DistrictCard` carries demographics, states do not. */
+  private districtsInPlay(): DistrictCard[] {
+    return this.players.flatMap((p) => p.districts);
   }
 
-  /** v0.2 item 2's default: repeal the oldest thing on the books that somebody
-   *  else wrote. Deterministic, so a repeal is a consequence of the board and
-   *  not of a die. Item 4 replaces "oldest" with "furthest from the author's
-   *  own coalition", once a bill has a position to be far from.
-   *
-   *  The `author !== author` guard is doing more work than it looks: §12 hands
-   *  the pen to the largest bloc of the majority House party, and a faction
-   *  holds cards of both parties, so the pen rarely changes hands. */
+  /** The tag position of one player's own coalition -- the districts they
+   *  hold. This is what "a bloc concentrated in one tag region" means
+   *  concretely, and why such a bloc passes bills cheaply. */
+  private playerPosition(player: number): tags.TagWeights {
+    return tags.centroid(this.players[player].districts.map((d) => tags.weights(d.demographics)));
+  }
+
+  /** v0.2 item 4: what a bill is about, when the author does not say.
+   *  The author's own districts -- the coalition they can actually pass. */
+  private defaultBillTags(author: number): IdentityTag[] {
+    const freq = new Map<IdentityTag, number>();
+    for (const d of this.players[author].districts) {
+      for (const t of d.demographics) freq.set(t, (freq.get(t) ?? 0) + 1);
+    }
+    return [...freq.entries()].sort((a, b) => b[1] - a[1])
+      .slice(0, this.cfg.legislature.tagsPerBill ?? 2).map(([t]) => t);
+  }
+
+  /** v0.2 item 2's default: repeal the furthest thing on the books that
+   *  somebody else wrote. Deterministic, so a repeal is a consequence of the
+   *  board rather than of a die -- and it fires only when the corpus actually
+   *  contains something the author is at odds with. */
   private defaultRepeal(author: number): string | undefined {
-    return this.bills.find((b) => b.repealedIn === undefined && b.author !== author)?.id;
+    const mine = this.playerPosition(author);
+    if (tags.isEmpty(mine)) return undefined;
+    let worst: EnactedBill | undefined, far = this.cfg.legislature.repealAtDistance ?? 0.5;
+    for (const b of this.bills) {
+      if (b.repealedIn !== undefined || b.author === author) continue;
+      const d = tags.distance(mine, tags.weights(b.tags));
+      if (d !== undefined && d > far) { far = d; worst = b; }
+    }
+    return worst?.id;
   }
 
   // ---- v0.2 item 3: the convention -----------------------------------------
@@ -635,7 +657,7 @@ export class Game {
     let best = -1, n = 0;
     for (const [p, c] of tally) if (c > n) { n = c; best = p; }
     if (best < 0) return undefined;
-    const t = this.ownDemographics(best, this.cfg.amendment.tagsPerAmendment);
+    const t = this.defaultBillTags(best).slice(0, this.cfg.amendment.tagsPerAmendment);
     return t.length ? { player: best, tags: t } : undefined;
   }
 
@@ -739,11 +761,13 @@ export class Game {
     // A repeal carries the bill it undoes: same position, opposite spending.
     const g = repealing ? -repealing.g
       : clampInt(proposed, this.cfg.economy.gMin, this.cfg.economy.gMax);
+    const billTags = repealing ? repealing.tags
+      : (this.agents[authorId].proposeTags?.(view, this.bills) ?? this.defaultBillTags(authorId));
     const votes: leg.Vote[] = [];
     for (const s of this.seats) {
       if (!s.holder || (s.office !== 'senator' && s.office !== 'representative')) continue;
       const yes = s.holder.player === human && humanYes !== undefined
-        ? humanYes : this.agents[s.holder.player].voteBill(this.view(s.holder.player), g, s);
+        ? humanYes : this.agents[s.holder.player].voteBill(this.view(s.holder.player), g, s, billTags);
       votes.push({ player: s.holder.player, party: s.holder.party, office: s.office, yes, cardId: s.holder.cardId });
     }
 
@@ -781,6 +805,24 @@ export class Game {
       this.billCounters.set(cardId, rec);
     }
 
+    // v0.2 item 6: heterodoxy, priced per vote. A yes cast on a bill far from
+    // the tags of the districts you represent buys the bill and costs
+    // competitiveness -- which is what makes concentration efficient and
+    // fragile, and diversity expensive and durable.
+    if (out.passed) {
+      const bt = tags.weights(billTags);
+      for (const v of votes) {
+        if (!v.yes) continue;
+        const seat = this.seats.find((st) => st.holder?.cardId === v.cardId);
+        if (!seat) continue;
+        const home = tags.stateposition(this.districtsInPlay(), seat.state);
+        const dist = tags.distance(bt, home);
+        if (dist !== undefined && dist > (this.cfg.legislature.offDistrictAtDistance ?? 0.5)) {
+          this.offDistrict.set(v.cardId, (this.offDistrict.get(v.cardId) ?? 0) + 1);
+        }
+      }
+    }
+
     if (out.passed) {
       this.stats.billsPassed++;
       this.billsBy[authorId] = (this.billsBy[authorId] ?? 0) + 1;
@@ -793,8 +835,8 @@ export class Game {
         this.stats.billsRepealed++;
         this.log.push(`${this.year}: ${repealing.id} repealed, ${out.houseYes}/${out.houseTotal} H, ${out.senateYes}/${out.senateTotal} S`);
       } else {
-        this.bills.push({ id: `b${this.year}-${this.bills.length}`, year: this.year, g, author: authorId });
-        this.log.push(`${this.year}: omnibill G${g} passed ${out.houseYes}/${out.houseTotal} H, ${out.senateYes}/${out.senateTotal} S`);
+        this.bills.push({ id: `b${this.year}-${this.bills.length}`, year: this.year, g, author: authorId, tags: billTags });
+        this.log.push(`${this.year}: omnibill G${g} [${billTags.join(', ')}] passed ${out.houseYes}/${out.houseTotal} H, ${out.senateYes}/${out.senateTotal} S`);
       }
     } else {
       this.log.push(`${this.year}: omnibill G${g} ${out.vetoed ? 'vetoed' : 'failed'}`);
@@ -904,7 +946,7 @@ export class Game {
       const incumbent = this.seatFor(office as Office, state, slot);
       const ctx = this.raceContext(office as Office, state, slot, presidentialWinner);
 
-      for (const d of group) this.readCounters(d);
+      for (const d of group) { this.readCounters(d); this.readPosition(d); }
       const nominees = this.runPrimaries(group, ctx, wave, human);
       if (!nominees.length) continue;
       // §11: "Governors ... carry incumbency into Senate and presidential
@@ -914,6 +956,7 @@ export class Game {
       // district clause that killed the presidency.
       for (const d of nominees) {
         this.readCounters(d);
+        this.readPosition(d);
         const holdsThis = !!incumbent && incumbent.holder!.cardId === d.card.id;
         // §11's stepping stone is priced once, by `crossOfficeIncumbency`, for
         // every combination of offices. This used to hand governor -> Senate a
@@ -957,6 +1000,20 @@ export class Game {
     return this.agents[p].withdraw(v);
   }
 
+  /** v0.2 items 5 and 6, read off the board onto one declaration.
+   *
+   *  `partyFit` is the distance from this card's tags to the CURRENT centroid
+   *  of its party's officeholders -- so the cost of the label is a fact about
+   *  who holds office under it this year, and nowhere is it written down that
+   *  Democrats are left. It is left undefined when either side carries no
+   *  tags, because that is not a perfect fit. */
+  private readPosition(d: Declaration): void {
+    const mine = tags.weights(d.card.identities);
+    const party = tags.partyPosition(this.seats, this.cardById, d.card.party);
+    d.partyFit = tags.distance(mine, party);
+    d.offDistrict = this.offDistrict.get(d.card.id) ?? 0;
+  }
+
   private raceContext(office: Office, state: string, slot: number | undefined, presidentialWinner?: Party): RaceContext {
     return {
       year: this.year, office, state, slot,
@@ -979,6 +1036,7 @@ export class Game {
     // presidency is worth something, and worth different amounts in the two
     // rounds. Read off the board, so it needs no card data and no new state.
     for (const d of declarations) {
+      this.readPosition(d);
       // Already set if the card resigned a seat to get here.
       if (!d.heldOffice) {
         const held = this.seats.find((st) => st.office !== 'president' && st.holder?.cardId === d.card.id);

@@ -10,21 +10,38 @@
  *  A position is `number[]`, length `dim`. Not a scalar, even at n=1, so that
  *  no caller can quietly do arithmetic that stops working at n=2.
  *
- *  THE ABSENCE IS TYPED. `bill()` returns `Position | undefined`, and today it
- *  returns undefined for every bill on every config. That is not a stub: it is
- *  the finding. See `BILL_POSITION_ABSENT` for why, and `Precondition` in
- *  checks.ts for what it costs. Encoding it in the return type is what stops a
- *  detector from silently scoring 0 when it should be scoring "not asked".
+ *  THE ABSENCE IS TYPED. `bill()` returns `Position | undefined`, and under
+ *  `LEAN_COMPASS` it returns undefined for every bill on every config.
+ *  Encoding it in the return type is what stops a detector from silently
+ *  scoring 0 when it should be scoring "not asked".
+ *
+ *  v0.2 RESOLVED BOTH ABSENCES, and the way it did is why the typed return
+ *  was worth having. `BILL_POSITION_ABSENT` and `BILL_CORPUS_ABSENT` are now
+ *  historical: bills carry `IdentityTag[]` (v0.2 item 4) and go on the books
+ *  with a repeal that takes them off again (item 2). `TAG_COMPASS` below is
+ *  the compass that can read them, and swapping it in is one assignment --
+ *  which is the claim this file was written to make good on.
  */
-import type { Party, Seat } from '../engine/types/index.ts';
+import type { CandidateCard, DistrictCard, IdentityTag, Party, Seat } from '../engine/types/index.ts';
+import * as tagspace from '../engine/rules/tags.ts';
 import type { Lean } from '../engine/rules/lean.ts';
 import { BY_CODE, seatsIn } from '../engine/states.ts';
 
 /** A point in compass space. Length is always `Compass.dim`. */
 export type Position = number[];
 
-/** Everything a compass may read to place something. */
-export interface Board { lean: Lean; year: number }
+/** Everything a compass may read to place something.
+ *
+ *  `cards` and `districts` are optional because LEAN_COMPASS does not need
+ *  them. A compass that does returns undefined without them, which keeps the
+ *  typed absence honest: a caller that forgot to supply them gets "not asked",
+ *  never a fabricated 0. */
+export interface Board {
+  lean: Lean;
+  year: number;
+  cards?: ReadonlyMap<string, CandidateCard>;
+  districts?: readonly DistrictCard[];
+}
 
 /** A bill as the engine actually records it: one signed magnitude and the
  *  coalition that carried it. Deliberately the WHOLE record — if a compass
@@ -32,6 +49,9 @@ export interface Board { lean: Lean; year: number }
 export interface BillRecord {
   year: number;
   g: number;
+  /** v0.2 item 4. Optional because a v0.1 record has none, which is exactly
+   *  the case `TAG_COMPASS.bill` must return undefined for. */
+  tags?: IdentityTag[];
   author?: number;
   authorParty?: Party;
   yesByParty: Record<Party, number>;
@@ -73,20 +93,20 @@ export function centroid(points: Position[], weights?: number[]): Position | und
 
 export const sign = (p: Party): number => (p === 'R' ? 1 : p === 'D' ? -1 : 0);
 
-/** Why `bill()` is undefined on this engine, recorded once so every report can
- *  quote the same reason rather than paraphrasing it four times.
+/** Why `bill()` is undefined under LEAN_COMPASS, recorded once so every report
+ *  can quote the same reason rather than paraphrasing it four times.
  *
- *  A bill is `{ g: number }` — engine/rules/legislature.ts, `BillOutcome`. `g`
- *  is a SPENDING magnitude (config `economy.gMin..gMax`, −3..6 on
- *  as-written-plus), consumed only by `economy.spend`. engine/rules/economy.ts
- *  states the design intent outright: "There is deliberately no second
- *  ideological axis." So `g` is not commensurable with the partisan axis this
- *  compass measures — it is not a position in this space, or in any other the
- *  engine defines. */
+ *  STILL TRUE OF THIS COMPASS, NO LONGER TRUE OF THE ENGINE. `g` remains a
+ *  spending magnitude and remains incommensurable with the partisan axis; what
+ *  changed at v0.2 is that a bill now ALSO carries `IdentityTag[]`, which is a
+ *  position in a different space. `TAG_COMPASS` reads it. The two are separate
+ *  compasses on purpose — projecting tags onto a partisan axis would be
+ *  inventing a number, which is the thing this file exists to refuse. */
 export const BILL_POSITION_ABSENT =
-  'a bill is a single spending magnitude g (economy.gMin..gMax), not a point on any '
-  + 'axis the engine defines; engine/rules/economy.ts: "There is deliberately no second '
-  + 'ideological axis."';
+  'under the partisan-lean compass a bill is a single spending magnitude g '
+  + '(economy.gMin..gMax), not a point on that axis; engine/rules/economy.ts: "There is '
+  + 'deliberately no second ideological axis." v0.2 gave bills IdentityTag[] as well, '
+  + 'which TAG_COMPASS reads — so this is a fact about LEAN_COMPASS, not about the engine.';
 
 /** RESOLVED AT v0.2 (item 2). Kept because the reports quote it and because
  *  what it says about v0.1.2 is still what was true of v0.1.2. */
@@ -137,6 +157,62 @@ export const LEAN_COMPASS: Compass = {
       const def = BY_CODE[st];
       if (!def) continue;
       pts.push([board.lean[st] ?? 0]);
+      w.push(seatsIn(def, board.year));
+    }
+    return centroid(pts, w);
+  },
+};
+
+// ------------------------------------------------------------- the tag compass
+
+/** v0.2's compass: the fifteen `IdentityTag`s, one axis each.
+ *
+ *  This is the one the settlement measurements were waiting on. Under
+ *  LEAN_COMPASS `bill()` is undefined on every config, so every
+ *  settlement-based detector scores "not asked" by construction; here a bill
+ *  has a position, the corpus of bills still on the books has a centroid, and
+ *  a settlement is something that can be dismantled — which is what makes
+ *  disjunction reachable at all.
+ *
+ *  DISTANCE. The vector helpers above are Euclidean, and on normalised weight
+ *  vectors that is a monotone transform of set overlap rather than the same
+ *  number. `engine/rules/tags.ts` is where set overlap lives, and it is the
+ *  function the ENGINE prices votes with; this compass exists so the same
+ *  objects can be fed to detectors written against `Position`. Keep both, and
+ *  change tags.ts if sets prove too coarse. */
+export const TAG_COMPASS: Compass = {
+  name: 'identity-tags',
+  dim: tagspace.TAGS.length,
+  axes: [...tagspace.TAGS],
+
+  bill(b) {
+    const w = tagspace.weights(b.tags ?? []);
+    return tagspace.isEmpty(w) ? undefined : w;
+  },
+
+  politician(seat, board) {
+    if (!seat.holder || !board.cards) return undefined;
+    const c = board.cards.get(seat.holder.cardId);
+    if (!c) return undefined;
+    const w = tagspace.weights(c.identities);
+    return tagspace.isEmpty(w) ? undefined : w;
+  },
+
+  district(state, board) {
+    if (!board.districts) return undefined;
+    const w = tagspace.stateposition(board.districts, state);
+    return tagspace.isEmpty(w) ? undefined : w;
+  },
+
+  country(board) {
+    if (!board.districts) return undefined;
+    const states = [...new Set(board.districts.map((d) => d.state))];
+    const pts: Position[] = [], w: number[] = [];
+    for (const st of states) {
+      const def = BY_CODE[st];
+      const p = this.district(st, board);
+      if (!def || !p) continue;
+      pts.push(p);
       w.push(seatsIn(def, board.year));
     }
     return centroid(pts, w);

@@ -107,6 +107,9 @@ export interface EnactedBill {
   /** the spending magnitude, unchanged from v0.1 */
   g: number;
   author: number;
+  /** v0.2 item 4: the bill's position, in the same vocabulary as
+   *  `CandidateCard.identities` and `DistrictCard.demographics`. */
+  tags: IdentityTag[];
   repealedIn?: number;
 }
 

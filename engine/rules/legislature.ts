@@ -20,6 +20,14 @@ export interface LegislatureConfig {
   scorePerYesVote: number;
   majorityMultiplier: number;
   reactionGoodOnRollAtLeast: number;
+  /** v0.2 item 4: how many tags a bill carries when the author does not say. */
+  tagsPerBill?: number;
+  /** v0.2 item 2: how far from an author's own coalition a bill must sit
+   *  before the default heuristic reaches for repeal. Set-overlap distance,
+   *  0 identical and 1 disjoint. */
+  repealAtDistance?: number;
+  /** v0.2 item 6: the same distance, for "you voted against your district". */
+  offDistrictAtDistance?: number;
 }
 
 /** §12's counter goes on the CARD, so a vote must name the card that cast it.
