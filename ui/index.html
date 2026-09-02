@@ -3102,7 +3102,11 @@ function options(v          , open            , cfg        )           {
         year: v.year, office: r.office, state: r.state, slot: r.slot,
         lean: v.lean[r.state] ?? 0, isMidterm: v.isMidterm, isPresidentialYear: v.isPresidentialYear,
         presidentParty: v.presidentParty,
-        economyMod: 0,
+        // Was a stub 0 -- an agent could see everything else in RaceContext
+        // but not the economy, though it is a visible board track and
+        // `v.economy` already carries it. #39, ruled 2026-09-02: "a visible
+        // track agents cannot read is a bug unless someone says otherwise."
+        economyMod: economyModifier(v.economy, cfg.economy, cfg.national.strongEconomy, cfg.national.recession),
       };
       let edge        ;
       if (r.office === 'president') {
