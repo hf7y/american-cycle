@@ -109,6 +109,36 @@ in 1958. `sim/agents.ts`'s `HeterodoxSpecialist` now detects it that way.
 
 **The two rulings above collide, and the collision is measured.** Under a bills victory with no cap, `BillAuthor` and `HouseFarm` take **90-99% of all games** between them (tuned, target 8: 62% / 37%), while `SenateFlood` — which wins 40-63% under points — wins **0%**. Bills are passed by House votes and credited to the largest House bloc, so an ending that counts bills makes the House the game. Whichever ending is counted, the strategy that farms it takes everything: points hands the game to the Senate, bills hand it to the House. The feeder ruling is not true under the ending that was also ruled, and one of the two has to move. See hf7y/american-cycle#13 and hf7y/american-cycle#50.
 
+### Amendment, 2026-09-02: "1 pip = 2 points" is a conversion, not a claim about dispersion
+
+Ruled on hf7y/american-cycle#11. The settled line fixes the *conversion* — it
+anchors the vocabulary to a real unit and makes the odds table mentally
+computable. It never should have been read as a claim that the resulting
+margin distribution matches the real one's shape, and any prose that read it
+that way is withdrawn.
+
+`findings/margin-ceiling.ts` measures the shape and finds the sim's spread
+compressed against the real bimodal one: median 8pts against a real 32.5, 0%
+of races at 40+ against a real 37.5%. That gap is not evidence against the
+conversion. **A locked-down district shows up in this engine as a race the
+other side does not contest, not as a forty-point beating** — the two
+distributions are answering different questions, so comparing their shapes
+directly is not a like-for-like calibration check.
+
+Widening the pip scale to close the gap was considered and rejected. Two
+different changes hide behind "widen the scale": relabeling the conversion
+(1 pip = 4 points) changes nothing, since every number in the game — including
+the dice — is denominated in pips and every ratio is unchanged; widening the
+*spread* of printed modifiers would make safe seats genuinely unlosable,
+compounding hf7y/american-cycle#94 ("+6 is unbeatable, and 354 of 354 confirm
+it") rather than fixing this.
+
+The margin-distribution comparison retires as a calibration check. The honest
+comparison is effective competitiveness — the band hf7y/american-cycle#93
+built in `tracks/history.ts` — measured on the historical side now and
+deferred on the sim side to hf7y/american-cycle#91, because that figure is
+deck-sensitive and needs its flag first.
+
 ---
 
 ## Cut — do not reintroduce
