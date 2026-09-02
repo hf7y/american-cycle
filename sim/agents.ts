@@ -1,5 +1,5 @@
 /** Scripted agents. The first three measure skill signal; the rest are the
- *  strategies SIM-BRIEF §2 asks to be tested for dominance. Each also doubles
+ *  strategies SIM-BRIEF asks to be tested for dominance. Each also doubles
  *  as an opponent personality in the app. */
 import type { Agent, GameView, OpenRace, PendingPeg, Config, VPOffer } from '../engine/game.ts';
 import type { Declaration, WithdrawalView } from '../engine/rules/elections.ts';
@@ -21,7 +21,8 @@ export function options(v: GameView, open: OpenRace[], cfg: Config): Option[] {
   for (const r of open) {
     for (const card of cands) {
       if (r.office !== 'president' && !eligible(card, r.state, me.districts)) continue;
-      // §15 identifies a district BY ITS NUMBER. Matching on state alone let
+      // A district is identified BY ITS NUMBER, not just its state. Matching
+      // on state alone let
       // whichever card `find` reached first supply the synergy and the
       // demographics for a House race in a different district entirely.
       const district = r.office === 'representative'
@@ -61,7 +62,7 @@ export function options(v: GameView, open: OpenRace[], cfg: Config): Option[] {
 
 const raceKey = (r: { office: Office; state: string; slot?: number }) => `${r.office}|${r.state}|${r.slot ?? ''}`;
 
-/** §8: denial. Contesting a race someone else has declared costs a real card
+/** Denial: contesting a race someone else has declared costs a real card
  *  against someone who may have spent nothing -- which is the asymmetry that
  *  makes district gating necessary. An agent that never does this plays
  *  solitaire. */
@@ -108,7 +109,8 @@ abstract class Base implements Agent {
   constructor(name: string, cfg: Config, rng: RNG) { this.name = name; this.cfg = cfg; this.rng = rng; }
   abstract declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[];
   /** Default: pull out only when the visible arithmetic is clearly against you.
-   *  The dice are unknowable here by construction (§8). */
+   *  The dice are unknowable here by construction -- withdrawal closes before
+   *  any die is rolled (see elections.ts, elections.test.ts). */
   withdraw(v: WithdrawalView): boolean {
     return v.contenders > 0 && v.myModifierTotal <= -4;
   }
@@ -130,8 +132,8 @@ abstract class Base implements Agent {
     if (d === undefined) return seat.holder?.party === this.majority(v);
     return d <= VOTE_AT_DISTANCE;
   }
-  /** §12: "Vetoing makes most sense when a midterm has handed the opposition
-   *  the majority" -- the president chooses between everyone gaining, rivals
+  /** Vetoing makes most sense when a midterm has handed the opposition the
+   *  majority -- the president chooses between everyone gaining, rivals
    *  gaining more, and nobody gaining while he owns the stagnation. Every agent
    *  returned false, so the veto had never been exercised once. */
   veto(v: GameView, _g: number): boolean {
@@ -261,8 +263,8 @@ export class BillMaximizer extends Base {
 
 /** Chases the PEN, which is a different game from chasing yes-votes.
  *
- *  §12 credits a passed bill to the largest bloc of the majority House party
- *  (`legislature.author`), and `victory: 'bills'` counts those credits -- so a
+ *  A passed bill credits its author to the largest bloc of the majority House
+ *  party (`legislature.author`), and `victory: 'bills'` counts those credits -- so a
  *  bills victory is won on House seats of one party. But `billsBy` only
  *  increments ON PASSAGE, and passage needs a House majority AND 60% of the
  *  Senate. So this wants the House to author and enough Senate to clear
@@ -302,8 +304,9 @@ export class BillAuthor extends Base {
 }
 
 /** Builds a Senate bloc and moves to remove whoever holds the presidency.
- *  §12 prices the coup in the currency everyone is accumulating: it costs the
- *  year's scoring. Whether that is a sufficient brake is what this measures. */
+ *  Impeachment prices the coup in the currency everyone is accumulating: it
+ *  costs the year's scoring. Whether that is a sufficient brake is what this
+ *  measures. */
 export class Impeacher extends Base {
   declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[] {
     const o = counterDeclare(options(v, open, this.cfg), pending, v.me, 2).map((x) => ({ ...x, edge: x.edge + (x.office === 'senator' ? 6 : 0) }));
@@ -353,7 +356,7 @@ export class VPBackstab extends Base {
 }
 
 /** Spend hot, get your candidate into position, be out of the way before the
- *  reckoning (§13). */
+ *  reckoning (see engine/rules/economy.ts). */
 export class EconomyChicken extends Base {
   declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[] {
     return pickDistinct(counterDeclare(options(v, open, this.cfg), pending, v.me, 2).sort(byEdge), this.budget(v));
@@ -368,7 +371,8 @@ export class EconomyChicken extends Base {
  *  the governorships nobody is competing for -- KY, LA, MS, NJ and VA elect in
  *  ODD years, when no Senate class is up and no House term expires, so a
  *  declaration there is uncontested by construction -- then run those same
- *  cards for Senate, where §11 says a governor carries incumbency upward.
+ *  cards for Senate, where the stepping-stone bonus (see
+ *  engine/rules/elections.ts) carries a governor's incumbency upward.
  *
  *  Whether the line pays is an empirical question. Every other agent leaves it
  *  on the table: enabling odd-year races raised governorships held by 45% and

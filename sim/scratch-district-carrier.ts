@@ -4,12 +4,12 @@
  *  b8ec0eb measured the thing to be carried: stable district partisanship is
  *  56.4% of the variance in two-party House share, 89.4% of it WITHIN state,
  *  and knowing which way a district leans is worth +5.0 pips over all contested
- *  races / +4.0 over open seats, calibrated on win rates against §3's dice.
+ *  races / +4.0 over open seats, calibrated on win rates against the general's dice.
  *  Three candidate carriers, priced here on one population:
  *
  *    A  a printed party lean            — the ceiling, and frozen across eras
  *    B  an era-keyed demographics table — fitted here per era from the panel
- *    C  emergent from play (§15 capture) — no printed value, no table
+ *    C  emergent from play (district-card capture on a win) — no printed value, no table
  *    D  the identity bonus already shipped — demographics x the era's own
  *       candidate pool, which needs no table and no new field
  *
@@ -88,7 +88,7 @@ function fit(obs: { y: number; inc: number; unit: string; year: number }[]) {
   return { beta, base: mu + am, a, g, byUnit };
 }
 
-/** 3d6 vs 3d6, ties split — §3's own odds table. */
+/** 3d6 vs 3d6, ties split — the general odds table (engine/rules/resolution.ts). */
 function odds(edge: number): number {
   const p = new Map<number, number>();
   for (let i = 1; i <= 6; i++) for (let j = 1; j <= 6; j++) for (let k = 1; k <= 6; k++) { const s = i + j + k; p.set(s, (p.get(s) ?? 0) + 1 / 216); }
@@ -107,8 +107,9 @@ const edgeFor = (target: number) => { for (let e = 0; e <= 20; e += 0.01) if (od
 type Carrier = (unit: string) => { pD: number } | undefined;
 const sure = (v: number): { pD: number } => ({ pD: v > 0 ? 1 : v < 0 ? 0 : 0.5 });
 
-/** Win rate of a carrier over a population, then the §3 edge that reproduces
- *  it — the same calibration b8ec0eb used, so the numbers are comparable. */
+/** Win rate of a carrier over a population, then the odds-table edge that
+ *  reproduces it — the same calibration b8ec0eb used, so the numbers are
+ *  comparable. */
 function price(pop: Obs[], c: Carrier): { n: number; win: number; pips: number } {
   let n = 0, w = 0;
   for (const o of pop) {
@@ -124,8 +125,9 @@ function price(pop: Obs[], c: Carrier): { n: number; win: number; pips: number }
 // ------------------------------------------------------------------ the sim
 
 /** Per game, per district, the House generals it held, in order. `party` is
- *  the generous reading of C; `player` is the literal one — §15 moves the CARD
- *  to the winning player, and a player is not a party. */
+ *  the generous reading of C; `player` is the literal one — capturing a
+ *  district moves the CARD to the winning player, and a player is not a
+ *  party. */
 interface Held { party: Party; player: number; contested: boolean }
 function holdHistories(games: number, agents: string[], cfg: ReturnType<typeof loadConfig>, cards: Card[]) {
   const out: { unit: string; seq: Held[] }[] = [];
@@ -268,7 +270,7 @@ function main(): void {
 
   // ---- C: emergent from play
   const cfg = loadConfig(cfgName);
-  // §14's era queue is consumed oldest first, so a 24-year game starting in
+  // The era queue is consumed oldest first, so a 24-year game starting in
   // 1976 mostly plays 1932/1964/1976 districts and never reaches 2016 — which
   // is most of the panel-matched half of the pack. `--packs 1976,1992,2008,2016`
   // gives C its best case: every district it could be scored against is in the
@@ -297,7 +299,7 @@ function main(): void {
   runs.sort((a, b) => a - b);
   const rq = (p: number) => runs[Math.floor(p * (runs.length - 1))];
   console.log(`  a seat changes PARTY between consecutive elections in ${flips}/${pairs} = ${(100 * flips / pairs).toFixed(1)}% of them; ${flipsContested} of those ${flips} flips were a contested general, the rest are the holder simply not standing`);
-  console.log(`  it changes PLAYER (the literal §15 reading — the card moves) in ${(100 * playerFlips / pairs).toFixed(1)}%`);
+  console.log(`  it changes PLAYER (the literal capture reading — the card moves) in ${(100 * playerFlips / pairs).toFixed(1)}%`);
   console.log(`  consecutive holds by one party: mean ${f2(mean(runs))} p50 ${rq(0.5)} p90 ${rq(0.9)} max ${runs[runs.length - 1]}`);
   const oneParty = hist.filter((h) => new Set(h.seq.map((s) => s.party)).size === 1);
   console.log(`  districts that NEVER change party in a game: ${(100 * oneParty.length / hist.length).toFixed(1)}% (of which ${(100 * oneParty.filter((h) => h.seq.length === 1).length / oneParty.length).toFixed(0)}% held exactly one election)`);
@@ -346,7 +348,7 @@ function main(): void {
     ['D + C combined', DC],
   ];
   const table = (label: string, pop: Obs[], popOpen: Obs[]) => {
-    console.log(`\n=== the price of each carrier, on ${label} (win% = carrier points at the real winner; pips = §3 edge reproducing it) ===`);
+    console.log(`\n=== the price of each carrier, on ${label} (win% = carrier points at the real winner; pips = odds-table edge reproducing it) ===`);
     console.log(`  ${'carrier'.padEnd(46)}${'n'.padStart(6)}${'win'.padStart(9)}${'pips'.padStart(7)}   ${'open'.padStart(7)}${'pips'.padStart(7)}`);
     const A = priceLoo(pop), Ao = priceLoo(popOpen);
     console.log(`  ${'A  printed lean, leave-one-out (the ceiling)'.padEnd(46)}${String(A.n).padStart(6)}${A.win.toFixed(1).padStart(8)}%${('+' + A.pips.toFixed(1)).padStart(7)}   ${Ao.win.toFixed(1).padStart(6)}%${('+' + Ao.pips.toFixed(1)).padStart(7)}`);
@@ -376,7 +378,7 @@ function main(): void {
   }
 
   // ---- what C would deliver IF something seeded it: the pure learning curve
-  console.log(`\n=== C4. the ceiling on C, if a seed existed. Majority of k elections, each decided by §3 with a true edge s ===`);
+  console.log(`\n=== C4. the ceiling on C, if a seed existed. Majority of k elections, each decided by the odds table with a true edge s ===`);
   console.log(`  the number is 2p-1: the fraction of a printed value's pips that a k-election history delivers`);
   console.log(`  ${'s (pips)'.padEnd(10)}${'p(one)'.padStart(9)}${[1, 2, 3, 5, 7, 9].map((k) => `k=${k}`.padStart(9)).join('')}`);
   for (const s of [2, 4, 5, 8]) {

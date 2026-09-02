@@ -59,10 +59,11 @@ export interface Summary {
   meanSeats: Record<string, number>;
   realignedStates: number;
   meanAbsLean: number;
-  /** share of games that stopped on a §14 condition rather than the year
-   *  cap -- GameResult.endedBy, not wonBy, so a shared amendment ending
-   *  still counts. tracks/b.ts and tracks/c.ts compute this independently;
-   *  see hf7y/american-cycle#66 for why the harness itself had no reader. */
+  /** share of games that stopped on an end condition (victory or deck-out)
+   *  rather than the year cap -- GameResult.endedBy, not wonBy, so a shared
+   *  amendment ending still counts. tracks/b.ts and tracks/c.ts compute this
+   *  independently; see hf7y/american-cycle#66 for why the harness itself
+   *  had no reader. */
   endedShare: number;
 }
 

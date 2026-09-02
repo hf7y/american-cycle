@@ -2,8 +2,9 @@ import { readFileSync } from 'node:fs';
 import { loadConfig, loadPacks, playOne } from '../sim/harness.ts';
 import type { Claim, Finding } from './types.ts';
 
-/** §10 asserts a state "realigns when someone wins it big, repeatedly". That is
- *  a claim about the real world, so it is answered from returns, not from play.
+/** The push rule (engine/rules/lean.ts) asserts a state "realigns when someone
+ *  wins it big, repeatedly". That is a claim about the real world, so it is
+ *  answered from returns, not from play.
  *
  *  The quantities here are derived from COMMITTED datasets and are therefore
  *  deterministic: their tolerance is ~0, which makes this finding a guard on
@@ -19,7 +20,7 @@ function slope(xs: number[], ys: number[]): number {
   return sxy / sxx;
 }
 
-/** Deviation from the national result -- §10's own Cook PVI framing -- then the
+/** Deviation from the national result -- lean's own Cook PVI framing -- then the
  *  SURPRISE, which is deviation minus that unit's own leave-one-out norm. A
  *  safe state posting its usual blowout has a large margin and zero surprise,
  *  and it is surprise, not margin, that the design needs to be keyed on. */
@@ -69,16 +70,16 @@ export const finding: Finding = {
   id: 'historical-push',
   dependsOn: ['as-written-plus.json'],
   question:
-    '§10: "A state realigns when someone wins it big, repeatedly — which is what realignments '
-    + 'actually look like." Does that bear out in real returns? (§10, SIM-BRIEF Part 1)',
+    'The push rule claims: "A state realigns when someone wins it big, repeatedly — which is what '
+    + 'realignments actually look like." Does that bear out in real returns (SIM-BRIEF Part 1)?',
 
   headline:
-    'It does not. Keyed on SURPRISE — how far a unit beat its own norm, which is what §10 already '
-    + 'tracks for the lean LEVEL — an over-performance reverts rather than compounds, in both '
+    'It does not. Keyed on SURPRISE — how far a unit beat its own norm, which is what the push rule '
+    + 'already tracks for the lean LEVEL — an over-performance reverts rather than compounds, in both '
     + 'offices: presidential slope -0.511 (n=510), House -0.741 (n=5,563) against a pure-noise null '
     + 'of exactly -1. Neither ever overshoots, and a presidential surprise persists about TWICE as '
-    + 'strongly as a House one — the distance from the null is 0.49 against 0.26. §10 pushes hardest '
-    + 'exactly where the data reverts hardest, and its single table charges both offices alike. '
+    + 'strongly as a House one — the distance from the null is 0.49 against 0.26. The push table hits '
+    + 'hardest exactly where the data reverts hardest, and its single table charges both offices alike. '
     + 'The lean LEVEL meanwhile decays with a half-life of 5.88 presidential cycles — about 24 '
     + "years, which is SIM-BRIEF's \"realignment timescale: decades\" as a number. And 13.9% of real "
     + 'House district-years are unopposed, against 96.9% of simulated House generals fielding a '

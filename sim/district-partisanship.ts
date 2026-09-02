@@ -1,9 +1,9 @@
 /** How much of a House result is the DISTRICT? — the pip value of a party match.
  *
- *  §3 fixes the scale at 1 pip = 2 points of margin. A district's Democratic
- *  share of the two-party vote is half its margin, so **one point of two-party
- *  vote share is exactly one pip** and every number below is printed in share
- *  points. Multiply by 2 for margin.
+ *  The engine's settled scale fixes 1 pip = 2 points of margin (DECISIONS.md).
+ *  A district's Democratic share of the two-party vote is half its margin, so
+ *  **one point of two-party vote share is exactly one pip** and every number
+ *  below is printed in share points. Multiply by 2 for margin.
  *
  *  `data/historical/house_margins.json` is a flat array of absolute margins
  *  with no district, year or party attached, so none of this is computable
@@ -164,7 +164,7 @@ function fit(obs: Obs[]): Fit {
   return { beta, base: mu + am, a, g, byUnit, nYears: byYear.size };
 }
 
-/** 3d6 vs 3d6, ties split — §3's own odds table. */
+/** 3d6 vs 3d6, ties split — the general odds table (engine/rules/resolution.ts). */
 function odds(edge: number): number {
   const p = new Map<number, number>();
   for (let i = 1; i <= 6; i++) for (let j = 1; j <= 6; j++) for (let k = 1; k <= 6; k++) { const s = i + j + k; p.set(s, (p.get(s) ?? 0) + 1 / 216); }
@@ -172,7 +172,7 @@ function odds(edge: number): number {
   for (const [x, px] of p) for (const [y, py] of p) { const d = x + edge - y; if (d > 0) w += px * py; else if (d === 0) t += px * py; }
   return 100 * (w + t / 2);
 }
-/** Smallest edge in pips whose §3 win probability reaches `target`. */
+/** Smallest edge in pips whose win probability, from the odds table above, reaches `target`. */
 const edgeFor = (target: number) => { for (let e = 0; e <= 20; e += 0.01) if (odds(e) >= target) return e; return 20; };
 
 // -------------------------------------------------------------------- reports
@@ -232,7 +232,7 @@ function main(): void {
   console.log(`  contested (both a D and an R on the ballot): ${contested.length} (${(100 * contested.length / rows.length).toFixed(1)}%)`);
   console.log(`  uncontested: ${rows.length - contested.length} (${(100 * (rows.length - contested.length) / rows.length).toFixed(1)}%)`);
   console.log(`  an incumbent is on the ballot in ${rows.filter((r) => r.inc !== 0).length} (${(100 * rows.filter((r) => r.inc !== 0).length / rows.length).toFixed(1)}%)`);
-  console.log('\nUnits: share points of the two-party Democratic vote. 1 share pt = 2 margin pts = 1 pip (§3).');
+  console.log('\nUnits: share points of the two-party Democratic vote. 1 share pt = 2 margin pts = 1 pip.');
 
   // A district-era with one or two elections cannot separate its own effect
   // from the races it is fitted to, so the FE populations require three.
@@ -271,8 +271,8 @@ function main(): void {
   console.log(`  mean |district effect| over races: ${f2(mean(loo.map((o) => Math.abs(r1.a.get(o.unit)!))))} share pts = ${f2(2 * mean(loo.map((o) => Math.abs(r1.a.get(o.unit)!))))} margin pts`);
   const looResid = (rs: (Obs & { loo: number })[]) => Math.sqrt(vr(rs.map((o) => o.y - r1.base - r1.g.get(o.year)! - r1.beta * (o.inc - incBar) - o.loo)));
   console.log(`  out-of-sample dispersion around the fundamentals: all contested ${f2(looResid(loo))} pips, open seats ${f2(looResid(open))} pips`);
-  console.log(`  §3's dice give 4.18. Reality is ${(looResid(loo) / 4.18).toFixed(2)}-${(looResid(open) / 4.18).toFixed(2)}x noisier, so a modifier read straight off the margin scale overshoots by that factor.`);
-  console.log(`\n  bucket by |leave-one-out district effect|; "pips" is the §3 edge that reproduces the observed win rate`);
+  console.log(`  the general's dice give 4.18. Reality is ${(looResid(loo) / 4.18).toFixed(2)}-${(looResid(open) / 4.18).toFixed(2)}x noisier, so a modifier read straight off the margin scale overshoots by that factor.`);
+  console.log(`\n  bucket by |leave-one-out district effect|; "pips" is the odds-table edge that reproduces the observed win rate`);
   console.log(`  ${'population'.padEnd(22)}${'mean |effect|'.padEnd(15)}${'n'.padEnd(7)}win%   pips`);
   const bucket = (v: number) => { const x = Math.abs(v); return x < 2 ? 0 : x < 5 ? 2 : x < 10 ? 5 : x < 15 ? 10 : x < 20 ? 15 : 20; };
   for (const [lab, rs] of [['all contested', loo], ['open seats only', open]] as [string, (Obs & { loo: number })[]][]) {
@@ -300,7 +300,7 @@ function main(): void {
   }
 }
 
-/** LOYALTY vs LEAN. Both sides are expressed the way §10 tracks lean: as a
+/** LOYALTY vs LEAN. Both sides are expressed the way engine/rules/lean.ts tracks lean: as a
  *  deviation from the national two-party D share, in share points. The gap is
  *  how much more Democratic a state votes for its House than for president —
  *  the ancestral identification the design doc's Robert Byrd case is about.

@@ -52,7 +52,7 @@ function reelection(incumbency: number, seeds = sample(60)) {
 export const finding: Finding = {
   id: 'incumbency-calibration',
   dependsOn: [],
-  question: 'Is +1 the right incumbency modifier? §16 calls it "a calibration check on +1".',
+  question: 'Is +1 the right incumbency modifier -- the calibration check its own design intends?',
 
   headline:
     'It cannot be read off this board, and the reading that said it could was counting the wrong '
@@ -62,8 +62,8 @@ export const finding: Finding = {
     + 'and that agreement is a coincidence of averaging: it folds the Senate and the governorships '
     + 'into a number then reported against a House-only figure. The real result is underneath. '
     + 'Strip the walkovers and contested incumbents hold 78%, so the 98.8% is measuring how few '
-    + 'incumbents are challenged rather than what +1 is worth, and the calibration check §16 asks '
-    + 'for cannot be run until the contest rate is fixed.',
+    + 'incumbents are challenged rather than what +1 is worth, and the intended calibration check '
+    + 'cannot be run until the contest rate is fixed.',
   stampedAt: '2026-09-02T02:29:09Z',
   stampedOn: '5d06f41',
 
