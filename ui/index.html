@@ -1122,6 +1122,12 @@ function boardScores(cfg               , b           )           {
                                                                              
                                                                          
                                 
+                                                                              
+                                                                              
+                                                                             
+                                                              
+                           
+                            
  
                                  
                                                                    
@@ -1251,7 +1257,13 @@ function buildModifiers(
     if (pips) m.push({ source: 'party fit', pips });
   }
 
-  if (d.incumbent) m.push({ source: 'incumbency', pips: round === 'primary' ? res.incumbencyPrimary : res.incumbency });
+  if (d.incumbent) {
+    const perOffice = ctx.office === 'representative' ? res.incumbencyHouse
+      : ctx.office === 'senator' ? res.incumbencySenate
+      : undefined;
+    const pips = round === 'primary' ? res.incumbencyPrimary : (perOffice ?? res.incumbency);
+    m.push({ source: 'incumbency', pips });
+  }
 
   if (d.heldOffice && d.heldOffice !== ctx.office && res.crossOfficeIncumbency) {
     m.push({ source: `${d.heldOffice} stepping up`, pips: res.crossOfficeIncumbency });
@@ -1412,7 +1424,8 @@ function runRace(a             ) {
                          
                
                                                                                                                            
-                                                                                                                                        
+                                                                                                                                      
+                                                                      
                                                                                                                                   
                                                                                 
                                                                                                                                                            

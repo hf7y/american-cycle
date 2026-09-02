@@ -35,6 +35,12 @@ export interface ResolutionConfig {
    *  number twice. What actually separates them is whether the seat is open,
    *  80% against 30%, which the board already models as an incumbent. */
   crossOfficeIncumbency: number;
+  /** Per-office override of `incumbency` for a GENERAL, House and Senate only
+   *  -- governor and president stay on the flat value until there is data for
+   *  them (#16). Unset falls back to `incumbency`, so a config that does not
+   *  set these behaves exactly as it did before the split. */
+  incumbencyHouse?: number;
+  incumbencySenate?: number;
 }
 export interface NationalConfig {
   strongEconomy: number; recession: number; midtermPenalty: number;
@@ -164,7 +170,13 @@ export function buildModifiers(
     if (pips) m.push({ source: 'party fit', pips });
   }
 
-  if (d.incumbent) m.push({ source: 'incumbency', pips: round === 'primary' ? res.incumbencyPrimary : res.incumbency });
+  if (d.incumbent) {
+    const perOffice = ctx.office === 'representative' ? res.incumbencyHouse
+      : ctx.office === 'senator' ? res.incumbencySenate
+      : undefined;
+    const pips = round === 'primary' ? res.incumbencyPrimary : (perOffice ?? res.incumbency);
+    m.push({ source: 'incumbency', pips });
+  }
 
   if (d.heldOffice && d.heldOffice !== ctx.office && res.crossOfficeIncumbency) {
     m.push({ source: `${d.heldOffice} stepping up`, pips: res.crossOfficeIncumbency });
