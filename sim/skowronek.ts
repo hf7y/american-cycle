@@ -54,6 +54,9 @@ for (const name of configs) {
   const formation = checks.find((c) => c.id === 'settlement-formation')!;
   const pre = preconditions(
     formation.verdict === 'HEALTHY', c2.movementDetected, c3.concentrated, c1.passed,
+    // v0.2 item 2: the corpus is measured off the runs now, not asserted
+    // from the code.
+    { billsOnBooks: mean(runs.map((r) => r.result.billsOnBooks)) },
   );
   reports.push({
     config: name,
@@ -80,6 +83,10 @@ mkdirSync(new URL('../reports/', import.meta.url), { recursive: true });
 // near-identical markdown and made "what changed since the last baseline" a
 // diff between two filenames nobody could name; git already does that job.
 // An exploratory run overwrites it and is simply not committed.
-const out = new URL('../reports/skowronek-baseline.md', import.meta.url);
+// BASELINES ARE FROZEN PER TAG. Defaulting the output to the tracked
+// v0.1.2 baseline meant every exploratory run silently overwrote it; the
+// comparison the test program is built on is diffing two frozen files, and it
+// cannot survive one of them being a scratch pad. Pass --out to write a new one.
+const out = new URL(`../reports/${arg('--out', 'skowronek-baseline.md')}`, import.meta.url);
 writeFileSync(out, md);
 console.error(`wrote ${out.pathname}`);

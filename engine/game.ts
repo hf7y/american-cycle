@@ -9,13 +9,16 @@
  *  at all when a table of four holds thirty seats between them.
  */
 import type {
-  CandidateCard, Card, DistrictCard, Office, Party, RaceEvent, Seat,
+  Amendment, CandidateCard, Card, DistrictCard, EnactedBill, IdentityTag,
+  Office, Party, RaceEvent, Seat,
 } from './types/index.ts';
 import { RNG } from './rules/rng.ts';
 import { Wave } from './rules/resolution.ts';
 import * as lean from './rules/lean.ts';
 import * as econ from './rules/economy.ts';
 import * as leg from './rules/legislature.ts';
+import * as amend from './rules/amendment.ts';
+import { boardScores, type BoardView, type ScoringConfig } from './rules/scoring.ts';
 import {
   buildModifiers, eligible, runRace, withdrawalView,
   type Declaration, type RaceContext, type WithdrawalView,
@@ -38,6 +41,10 @@ export interface Config {
     billFrequency?: 'annual' | 'biennial';
   };
   draft: { packSize: number; districtsPerPack: number; refillToHandSize: boolean };
+  /** v0.2 item 1. There is no running tally to configure: these are the
+   *  weights the EPILOGUE reads off the board. */
+  scoring: ScoringConfig;
+  amendment: amend.AmendmentConfig;
   game: { startYear: number; maxYears: number; victory: Victory; deckOutEnds: boolean; billTarget?: number;
           /** diagnostic only: §16 names hand size, endorsements and capture as
            *  the three stacking feedback loops. Hand size is cleared;
@@ -79,6 +86,10 @@ export interface GameView {
   players: PlayerState[];
   me: number;
   presidentParty?: Party;
+  /** v0.2 item 2: the corpus. Repealed bills stay in the list with
+   *  `repealedIn` set, because "what did you undo" is a decision input. */
+  bills: readonly EnactedBill[];
+  amendments: readonly Amendment[];
 }
 
 export interface Agent {
@@ -92,6 +103,13 @@ export interface Agent {
   withdraw(v: WithdrawalView): boolean;
   /** the omnibill's single number, 1..6, negative for austerity */
   proposeG(v: GameView): number;
+  /** v0.2 item 2: repeal instead of legislating. Returns a bill id from
+   *  `books`. Omit for the default heuristic. */
+  proposeRepeal?(v: GameView, books: readonly EnactedBill[]): string | undefined;
+  /** v0.2 item 3: call a constitutional convention, which spends the year's
+   *  legislating exactly as impeachment does. Returns the amendment's tags.
+   *  Omit for the default heuristic. */
+  moveAmendment?(v: GameView, pending: Amendment | undefined): IdentityTag[] | undefined;
   /** §12: impeachment replaces the omnibill for the year, so wanting it is a
    *  decision taken instead of legislating, not alongside it. */
   moveImpeach?(v: GameView): boolean;
@@ -130,7 +148,13 @@ export const isElectionYear = (cfg: Config, year: number): boolean =>
  *  exactly what `victory: "points"` means here, and why a typo was invisible.
  *  'points' names no ending: it plays out the year cap and the highest score
  *  wins, so `victorOf` returns undefined for it by design. */
-export type Victory = 'points' | 'bills' | 'two-terms' | 'three-terms' | 'parallel';
+export type Victory = 'points' | 'bills' | 'two-terms' | 'three-terms' | 'parallel' | 'amendment';
+
+/** v0.2 item 3. 'amendment' is an ENDING, not a winner: ratification stops the
+ *  clock and the epilogue decides who won. That is why it is not in
+ *  `victorOf`, which answers "did a player win outright" -- the proposer gets
+ *  no premium over the ratifiers, so there is nobody for it to return. The
+ *  game ends and `GameResult.endedBy` records why. */
 
 /** What `victorOf` needs to read. Structural, so `Game` satisfies it directly. */
 export interface VictoryTally {
@@ -211,6 +235,16 @@ export interface GameResult {
    *  are cross-game curves over this, not per-game summaries. */
   scoreHistory: number[][];
   seatsByOffice: Record<Office, number>;
+  /** v0.2. `wonBy` says a PLAYER won outright; this says the game stopped for
+   *  a reason other than the clock. An amendment ending sets `endedBy` and
+   *  leaves `wonBy` undefined, because ratification is shared. Track C6
+   *  ("games end by condition") reads this, not `wonBy`. */
+  endedBy?: Victory | 'deckOut';
+  bills: EnactedBill[];
+  amendments: Amendment[];
+  /** bills on the books at the epilogue, and those repealed along the way */
+  billsOnBooks: number;
+  billsRepealed: number;
 }
 
 export class Game {
@@ -222,6 +256,11 @@ export class Game {
   /** §12: impeached presidents leave the game entirely -- the only permanent removal. */
   expelled = new Set<string>();
   events: RaceEvent[] = [];
+  /** v0.2 item 2: the books. Public, because the epilogue and every detector
+   *  in skowronek/ read it -- `BILL_CORPUS_ABSENT` was the note saying this
+   *  did not exist. */
+  bills: EnactedBill[] = [];
+  amendments: Amendment[] = [];
   log: string[] = [];
   stats = { billsPassed: 0, billsAttempted: 0, crossBench: 0, impeachments: 0, rateRises: 0,
             decisions: [] as number[],
@@ -229,13 +268,16 @@ export class Game {
              *  Counting "uncontested generals" instead undercounts badly: a race
              *  several players crowd in one party resolves as a contested PRIMARY
              *  and a one-candidate general. */
-            raceSlots: 0, contestedSlots: 0 };
+            raceSlots: 0, contestedSlots: 0, billsRepealed: 0 };
   private agents: Agent[];
   private scoreHistory: number[][] = [];
 
   /** Every candidate by id, so a seated member can be handed back to their
-   *  player when the term runs out. Seats store a cardId, not the card. */
-  private cardById = new Map<string, CandidateCard>();
+   *  player when the term runs out. Seats store a cardId, not the card.
+   *  Public for the same reason `seats` and `leanMap` are: skowronek/observe.ts
+   *  drives its own year loop and TAG_COMPASS cannot place a politician
+   *  without it. */
+  cardById = new Map<string, CandidateCard>();
 
   constructor(agents: Agent[], cards: Card[], cfg: Config, seed: number) {
     this.cfg = cfg; this.rng = new RNG(seed); this.agents = agents;
@@ -268,6 +310,19 @@ export class Game {
       + (holds('senator') ? h.bonusSenator : 0)
       + (holds('governor') ? h.bonusGovernor : 0)
       + (holds('representative') ? h.bonusRepresentative : 0);
+  }
+
+  /** v0.2 item 1: the epilogue, evaluated every year so the curve exists.
+   *  `PlayerState.score` is now a CACHE of a pure function of the board, not
+   *  an accumulator -- which is the whole of why a score can now fall. */
+  private rescore(): void {
+    const b: BoardView = {
+      seats: this.seats, lean: this.leanMap, bills: this.bills, amendments: this.amendments,
+      players: this.players,
+      identitiesOf: (id) => this.cardById.get(id)?.identities,
+    };
+    const out = boardScores(this.cfg.scoring, b);
+    this.players.forEach((p, i) => { p.score = out[i]; });
   }
 
   private draw(p: PlayerState, n: number): void {
@@ -466,6 +521,7 @@ export class Game {
       isPresidentialYear: this.year % 4 === 0,
       economy: this.economy, lean: this.leanMap, seats: this.seats,
       players: this.players, me, presidentParty: this.president?.party,
+      bills: this.bills, amendments: this.amendments,
     };
   }
 
@@ -504,7 +560,6 @@ export class Game {
       const holder = { cardId: vp.cardId, player: vp.from, party: vp.card.party, since: this.year };
       if (seat) seat.holder = holder;
       this.president = { ...holder };
-      this.players[vp.from].score += 5;
       this.vicePresident = undefined;
       this.log.push(`${this.year}: ${vp.card.name} succeeds to the presidency`);
     } else {
@@ -512,12 +567,160 @@ export class Game {
       this.president = undefined;
     }
 
-    // §12: the pain goes to the party. The coalition that installed him is hit,
-    // which is the brake the design bets on against the backstab.
-    for (const s of this.seats) {
-      if (s.holder?.party === removedParty) this.players[s.holder.player].score -= 1;
-    }
+    // v0.1 docked a point from every seat of the removed president's party.
+    // Under board scoring there is no tally to dock, and there does not need
+    // to be one: the coalition that installed him has just lost the
+    // presidency off its board, which IS the hit. Successful conviction pays
+    // by removal alone -- no separate reward, and no separate penalty.
+    void removedParty;
     return true;
+  }
+
+  /** What a player's own districts are about, most common demographic first.
+   *  An amendment carries demographic content, and the proposer's own map is
+   *  where it comes from: a player maneuvers toward the amendment they can
+   *  actually pass. */
+  private ownDemographics(player: number, n: number): IdentityTag[] {
+    const freq = new Map<IdentityTag, number>();
+    for (const d of this.players[player].districts) {
+      for (const t of d.demographics) freq.set(t, (freq.get(t) ?? 0) + 1);
+    }
+    return [...freq.entries()].sort((a, b) => b[1] - a[1]).slice(0, n).map(([t]) => t);
+  }
+
+  /** v0.2 item 2's default: repeal the oldest thing on the books that somebody
+   *  else wrote. Deterministic, so a repeal is a consequence of the board and
+   *  not of a die. Item 4 replaces "oldest" with "furthest from the author's
+   *  own coalition", once a bill has a position to be far from.
+   *
+   *  The `author !== author` guard is doing more work than it looks: §12 hands
+   *  the pen to the largest bloc of the majority House party, and a faction
+   *  holds cards of both parties, so the pen rarely changes hands. */
+  private defaultRepeal(author: number): string | undefined {
+    return this.bills.find((b) => b.repealedIn === undefined && b.author !== author)?.id;
+  }
+
+  // ---- v0.2 item 3: the convention -----------------------------------------
+
+  /** One state's standing on one amendment, for one player. Governor,
+   *  district cards, partisan lean -- the machinery that already exists. */
+  private standing(a: { tags: IdentityTag[] }, player: number, state: string): amend.StateStanding {
+    const gov = this.seats.find((s) => s.office === 'governor' && s.state === state && s.holder);
+    const mine = this.seats.filter((s) => s.state === state && s.holder?.player === player);
+    const leanV = this.leanMap[state] ?? 0;
+    // Whose way the lean runs is a question about the player, and a player is
+    // a faction of both parties: read it off the party they actually hold the
+    // state with.
+    const side = mine.filter((s) => s.holder!.party === (leanV > 0 ? 'R' : 'D')).length;
+    return {
+      governor: gov?.holder?.player === player,
+      matchingDistricts: this.players[player].districts
+        .filter((d) => d.state === state && amend.overlaps(a.tags, d.demographics)).length,
+      leanWith: side > 0 ? Math.abs(leanV) : 0,
+    };
+  }
+
+  /** The default mover: whoever holds most of the board, once the clock is
+   *  past halfway. The leader is exactly who wants the game to stop -- and
+   *  under Article V's thresholds the leader is exactly who cannot close
+   *  alone, which is the anti-runaway claim doing its work rather than being
+   *  asserted. */
+  private defaultAmendmentTags(): { player: number; tags: IdentityTag[] } | undefined {
+    const half = this.cfg.game.startYear + this.cfg.game.maxYears / 2;
+    if (this.year < half) return undefined;
+    const held = this.seats.filter((s) => s.holder);
+    if (!held.length) return undefined;
+    const tally = new Map<number, number>();
+    for (const s of held) tally.set(s.holder!.player, (tally.get(s.holder!.player) ?? 0) + 1);
+    let best = -1, n = 0;
+    for (const [p, c] of tally) if (c > n) { n = c; best = p; }
+    if (best < 0) return undefined;
+    const t = this.ownDemographics(best, this.cfg.amendment.tagsPerAmendment);
+    return t.length ? { player: best, tags: t } : undefined;
+  }
+
+  /** Calling a convention spends the year's legislating, exactly as
+   *  impeachment does: wanting the ending is a decision taken INSTEAD of
+   *  governing, not alongside it. Returns true when the year was spent. */
+  private convention(): boolean {
+    if (!this.cfg.amendment.enabled) return false;
+    if (this.amendments.some((a) => a.ratifiedIn === undefined && a.failedIn === undefined)) return false;
+    let move: { player: number; tags: IdentityTag[] } | undefined;
+    for (let i = 0; i < this.players.length; i++) {
+      const t = this.agents[i].moveAmendment?.(this.view(i), undefined);
+      if (t?.length) { move = { player: i, tags: t }; break; }
+    }
+    move ??= this.defaultAmendmentTags();
+    if (!move) return false;
+
+    const cfg = this.cfg.amendment;
+    const called = STATES.filter((st) => amend.stateBacks(cfg, this.standing(move!, move!.player, st.code), this.rng))
+      .map((st) => st.code);
+    if (called.length < amend.needed(cfg.callFraction, STATES.length)) {
+      this.log.push(`${this.year}: the convention call fails, ${called.length} of ${STATES.length} states`);
+      return true;
+    }
+    this.amendments.push({
+      id: `a${this.year}`, proposer: move.player, tags: move.tags,
+      calledIn: this.year, called, ratified: [], rescinded: [],
+    });
+    this.log.push(`${this.year}: a convention is called on [${move.tags.join(', ')}], ${called.length} states`);
+    return true;
+  }
+
+  /** The ratification window. This runs EVERY year, bill year or not, because
+   *  it is the states acting and not Congress -- and because the window is the
+   *  last-shot phase in which everyone not winning tries to find thirteen
+   *  states. Rescission is that counterplay: the ERA reached 35 of 38 and then
+   *  went backwards. */
+  private ratify(): void {
+    const cfg = this.cfg.amendment;
+    const a = this.amendments.find((x) => x.ratifiedIn === undefined && x.failedIn === undefined);
+    if (!a || a.calledIn === this.year) return;
+
+    const fresh: string[] = [];
+    for (const st of STATES) {
+      if (a.ratified.includes(st.code) || a.rescinded.includes(st.code)) continue;
+      if (amend.stateBacks(cfg, this.standing(a, a.proposer, st.code), this.rng)) fresh.push(st.code);
+    }
+
+    // RESCISSION IS NOT SYMMETRIC WITH RATIFICATION, and both asymmetries are
+    // the rule rather than a balance patch.
+    //
+    // WHERE: a state ratifies on its own lean and a die whether or not anyone
+    // holds it; an opponent can only PULL a state they have a hold on -- the
+    // governorship, a matching district, or the lean running their way.
+    //
+    // WHEN: once, as the state ratifies. The ERA's rescissions were one-time
+    // acts and a rescinded state stayed out; re-litigating every state every
+    // year instead is not a blocking minority, it is a permanent veto, and it
+    // pins ratification at ~33 of the 38 needed for ever.
+    for (const code of fresh) {
+      let pulled = false;
+      for (const other of this.players) {
+        if (other.id === a.proposer || pulled) continue;
+        const st = this.standing(a, other.id, code);
+        if (amend.supportPips(cfg, st) > 0 && amend.stateBacks(cfg, st, this.rng, cfg.rescindTarget)) pulled = true;
+      }
+      (pulled ? a.rescinded : a.ratified).push(code);
+    }
+
+    if (a.ratified.length >= amend.needed(cfg.ratifyFraction, STATES.length)) {
+      a.ratifiedIn = this.year;
+      this.endedBy = 'amendment';
+      this.log.push(`${this.year}: the amendment is ratified by ${a.ratified.length} states`);
+      return;
+    }
+    if (this.year - a.calledIn >= cfg.windowYears) {
+      a.failedIn = this.year;
+      // Failure rearranges positions. The ERA is the model: 35 of 38, and the
+      // states that ratified had still moved.
+      for (const code of a.ratified) {
+        const pty = (this.leanMap[code] ?? 0) >= 0 ? 'R' : 'D';
+        lean.nudge(this.leanMap, this.cfg.lean, code, pty, cfg.failurePush);
+      }
+      this.log.push(`${this.year}: the amendment fails at ${a.ratified.length} of ${amend.needed(cfg.ratifyFraction, STATES.length)}`);
+    }
   }
 
   // ---- §7 step 2-3: the omnibill -------------------------------------------
@@ -525,10 +728,17 @@ export class Game {
     const authorId = leg.author(this.seats);
     if (authorId === undefined) return;
     this.stats.billsAttempted++;
-    const proposed = authorId === human && humanG !== undefined
-      ? humanG : this.agents[authorId].proposeG(this.view(authorId));
-    const g = clampInt(proposed, this.cfg.economy.gMin, this.cfg.economy.gMax);
+    const view = this.view(authorId);
+    const repealId = this.agents[authorId].proposeRepeal
+      ? this.agents[authorId].proposeRepeal!(view, this.bills)
+      : this.defaultRepeal(authorId);
+    const repealing = this.bills.find((b) => b.id === repealId && b.repealedIn === undefined);
 
+    const proposed = authorId === human && humanG !== undefined
+      ? humanG : this.agents[authorId].proposeG(view);
+    // A repeal carries the bill it undoes: same position, opposite spending.
+    const g = repealing ? -repealing.g
+      : clampInt(proposed, this.cfg.economy.gMin, this.cfg.economy.gMax);
     const votes: leg.Vote[] = [];
     for (const s of this.seats) {
       if (!s.holder || (s.office !== 'senator' && s.office !== 'representative')) continue;
@@ -574,9 +784,18 @@ export class Game {
     if (out.passed) {
       this.stats.billsPassed++;
       this.billsBy[authorId] = (this.billsBy[authorId] ?? 0) + 1;
-      for (const [p, n] of Object.entries(out.scores)) this.players[Number(p)].score += n;
+      // `out.scores` is still computed -- it is the record of who carried the
+      // bill -- but nothing adds it to anyone. Passage is worth the bill's
+      // place on the books, and only for as long as it stays there.
       econ.spend(this.economy, this.cfg.economy, g);
-      this.log.push(`${this.year}: omnibill G${g} passed ${out.houseYes}/${out.houseTotal} H, ${out.senateYes}/${out.senateTotal} S`);
+      if (repealing) {
+        repealing.repealedIn = this.year;
+        this.stats.billsRepealed++;
+        this.log.push(`${this.year}: ${repealing.id} repealed, ${out.houseYes}/${out.houseTotal} H, ${out.senateYes}/${out.senateTotal} S`);
+      } else {
+        this.bills.push({ id: `b${this.year}-${this.bills.length}`, year: this.year, g, author: authorId });
+        this.log.push(`${this.year}: omnibill G${g} passed ${out.houseYes}/${out.houseTotal} H, ${out.senateYes}/${out.senateTotal} S`);
+      }
     } else {
       this.log.push(`${this.year}: omnibill G${g} ${out.vetoed ? 'vetoed' : 'failed'}`);
     }
@@ -915,7 +1134,6 @@ export class Game {
     if (!seat) return;
     seat.holder = { cardId: pick.id, player: gov.holder!.player, party: pick.party, since: this.year };
     p.hand = p.hand.filter((c) => !(c.kind === 'candidate' && c.id === pick.id));
-    p.score += 3;
     this.log.push(`${this.year}: the governor of ${state} appoints ${pick.name} to the Senate`);
   }
 
@@ -940,7 +1158,8 @@ export class Game {
 
     const p = this.players[d.player];
     p.hand = p.hand.filter((c) => !(c.kind === 'candidate' && c.id === d.card.id));
-    p.score += office === 'president' ? 5 : office === 'senator' ? 3 : office === 'governor' ? 2 : 1;
+    // No award for winning. A seat is worth what it is worth for as long as
+    // it is HELD -- `cfg.scoring.office`, read off the board in the epilogue.
   }
 
   /** §15: "Winning a seat transfers the district card to the winner." THE
@@ -985,7 +1204,10 @@ export class Game {
    *  `runRace` enforces for the agents (§8). */
   *interactiveTick(human: number): Generator<UiRequest, void, UiAnswer> {
     for (const p of this.players) p.tapped.clear();
-    if (isBillYear(this.cfg, this.year) && !this.impeachment()) this.omnibillInteractive(human, yield* this.askBill(human));
+    if (isBillYear(this.cfg, this.year) && !this.impeachment() && !this.convention()) {
+      this.omnibillInteractive(human, yield* this.askBill(human));
+    }
+    this.ratify();
     const fed = econ.fedCheck(this.economy, this.cfg.economy, this.rng);
     if (fed.rateRise) { this.stats.rateRises++; this.log.push(`${this.year}: the Fed tightens`); }
     econ.walk(this.economy, this.cfg.economy, this.rng);
@@ -995,13 +1217,20 @@ export class Game {
       yield* this.electionsInteractive(human);
       this.refill();
     }
+    this.rescore();
     this.scoreHistory.push(this.players.map((p) => p.score));
     this.year++;
     // The ending, which this path never asked about: `victor()` was private and
     // called from `run()` alone, so a browser game ran to the year cap however
     // many bills anyone authored. Set here rather than returned so the existing
     // generator signature holds; the driver reads `wonBy`.
-    if (this.wonBy === undefined) this.wonBy = this.victor();
+    if (this.wonBy === undefined) {
+      this.wonBy = this.victor();
+      // `endedBy` was set by `run()` alone, so the browser could ratify an
+      // amendment or reach a bill target and keep playing. Both paths now
+      // record the same two facts.
+      if (this.wonBy !== undefined) this.endedBy = this.cfg.game.victory;
+    }
   }
 
   private humanDeclarations: Declaration[] = [];
@@ -1120,7 +1349,10 @@ export class Game {
   tick(): void {
     for (const p of this.players) p.tapped.clear();      // 1. action phase
     const billYear = isBillYear(this.cfg, this.year);
-    if (billYear && !this.impeachment()) this.omnibill();   // 2-3. bill, or a removal instead
+    // §12's slot, now three-way: a removal, a convention call, or a bill.
+    // Wanting the ending is a decision taken INSTEAD of legislating.
+    if (billYear && !this.impeachment() && !this.convention()) this.omnibill();   // 2-3.
+    this.ratify();
     const fed = econ.fedCheck(this.economy, this.cfg.economy, this.rng);  // 4.
     // Logged in BOTH paths. The interactive tick logged this and the headless
     // one did not, so a coverage sweep that reads the log reported the Fed as
@@ -1133,20 +1365,27 @@ export class Game {
       this.elections();                                  // 6-9.
       this.refill();
     }
+    this.rescore();
     this.scoreHistory.push(this.players.map((p) => p.score));
     this.year++;
   }
 
   /** Set when a §14 victory condition fires, so the result can say which. */
   wonBy?: number;
+  /** Why the game stopped, if it was not the clock. See `GameResult.endedBy`. */
+  endedBy?: Victory | 'deckOut';
 
   run(): GameResult {
     const end = this.cfg.game.startYear + this.cfg.game.maxYears;
     while (this.year < end) {
       this.tick();
+      // v0.2 item 3: ratification stops the clock without naming a winner.
+      if (this.endedBy) break;
       const v = this.victor();
-      if (v !== undefined) { this.wonBy = v; break; }
-      if (this.cfg.game.deckOutEnds && !this.talon.length && !this.discard.length && !this.eraQueue.length) break;
+      if (v !== undefined) { this.wonBy = v; this.endedBy = this.cfg.game.victory; break; }
+      if (this.cfg.game.deckOutEnds && !this.talon.length && !this.discard.length && !this.eraQueue.length) {
+        this.endedBy = 'deckOut'; break;
+      }
     }
     return this.result();
   }
@@ -1187,6 +1426,10 @@ export class Game {
       contestedSlotShare: this.stats.raceSlots ? this.stats.contestedSlots / this.stats.raceSlots : 0,
       decisionCounts: this.stats.decisions, seatsByOffice,
       scoreHistory: this.scoreHistory,
+      endedBy: this.endedBy,
+      bills: this.bills, amendments: this.amendments,
+      billsOnBooks: this.bills.filter((b) => b.repealedIn === undefined).length,
+      billsRepealed: this.stats.billsRepealed,
     };
   }
 }

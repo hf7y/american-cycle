@@ -177,13 +177,23 @@ export function powerControl(runs: RunObs[]): { check: Check; concentrated: bool
 /** The ledger. Construction-level absences cite code; the rest cite a control. */
 export function preconditions(
   formationHealthy: boolean, movementDetected: boolean, concentrated: boolean, instrumentLive: boolean,
+  /** v0.2 turned two of these from facts about the engine into facts about a
+   *  run: the corpus exists now, so whether it is populated is measured rather
+   *  than asserted. Pass what the run actually produced. */
+  corpus = { billsOnBooks: 0 },
 ): PreconditionState[] {
   return [
     {
       id: 'BILL_CORPUS',
-      status: 'ABSENT_BY_CONSTRUCTION',
-      why: BILL_CORPUS_ABSENT,
-      control: 'none possible: no run can create a record the engine does not keep.',
+      // Was ABSENT_BY_CONSTRUCTION through v0.1.2. v0.2 item 2 built the books
+      // and the repeal, so this is now an empirical question and answering it
+      // with a constant would be exactly the staleness the ledger exists to
+      // prevent.
+      status: corpus.billsOnBooks > 0 ? 'MET' : 'ABSENT',
+      why: corpus.billsOnBooks > 0
+        ? `${corpus.billsOnBooks} bills on the books at the epilogue; EnactedBill.repealedIn takes them off`
+        : `the corpus exists (Game.bills) but this run enacted nothing. ${BILL_CORPUS_ABSENT}`,
+      control: 'run a BillMaximizer pool: if the corpus fills there, an empty one is a table, not a rule.',
     },
     {
       id: 'BILL_POSITION',
@@ -213,9 +223,11 @@ export function preconditions(
     {
       id: 'STRAIN_RISE',
       status: 'ABSENT_BY_CONSTRUCTION',
-      why: 'strain is the distance between a settlement and the country, and this build has no settlement '
-        + 'object to be the far end of it. Downstream of BILL_CORPUS and BILL_POSITION.',
-      control: 'none possible while the corpus is absent.',
+      why: 'strain is the distance between a settlement and the country. The corpus half arrived with v0.2 '
+        + 'item 2 -- Game.bills, with a repeal that takes a bill off the books -- but a bill still carries no '
+        + 'position, so there is no settlement object to be the far end of the distance. Downstream of '
+        + 'BILL_POSITION alone now, where it used to be downstream of both.',
+      control: 'none possible while a bill has no position.',
     },
     {
       id: 'EFFICACY_DROP',
