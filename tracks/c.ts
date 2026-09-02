@@ -232,11 +232,11 @@ const c6: TrackItem = {
   id: 'C6-games-end-by-condition',
   track: 'C',
   question: 'Does the game have an ending, or only a timer?',
-  oracle: 'authored-here',
-  calibrated: 'the ending RATE is set by amendment.target and rescindTarget, two die thresholds nothing '
-    + 'specifies and which were chosen by sweeping. Across that grid the rate runs from 3% to 98%, so a '
-    + 'green here says the dial is where it was put. Article V\u0027s two-thirds and three-quarters are '
-    + 'constitutional and are NOT tuning; the die targets are.',
+  oracle: 'historical-record',
+  calibrated: 'the ending rate is downstream of amendment.dice/target/rescindTarget, which were swept -- '
+    + 'but they are no longer swept to a number somebody liked. They are fitted to the postwar '
+    + 'ratification rate, which D6 grades directly. So this item is calibrated in the sense that its value '
+    + 'is a consequence of a fit, and the fit itself is the thing under test one item down.',
   needs: ['ending'],
   run({ runs, cfg }): Measure[] {
     return [
@@ -246,7 +246,21 @@ const c6: TrackItem = {
   },
   accept(m) {
     const e = pick(m, 'games ending by condition');
-    return { pass: e >= 0.25, note: `${(100 * e).toFixed(0)}% of games end by condition (target >=25%; v0.1.2 was 0% on eight of nine configs)` };
+    // DERIVED, not chosen. Six amendments entered the Constitution between
+    // 1947 and 2026, one per ~13 years, so ~1.2 per sixteen-year game. A
+    // Poisson process at that rate puts at least one in a sixteen-year window
+    // 70% of the time -- but the real series is bursty rather than Poisson
+    // (five of the six landed between 1951 and 1971, and nothing has been
+    // proposed since 1978), and over-dispersion means more empty windows than
+    // Poisson allows. So the band opens downward from 70 rather than centring
+    // on it.
+    return {
+      pass: e >= 0.5 && e <= 0.75,
+      note: `${(100 * e).toFixed(0)}% of games end by condition, against a 50-75% band derived from the `
+        + 'record: ~1.2 amendments per 16 years postwar puts at least one in a 16-year window at 70% under '
+        + 'Poisson, and the real series is bursty, which pushes the true figure below that. v0.1.2 was 0% '
+        + 'on eight of nine configs.',
+    };
   },
 };
 

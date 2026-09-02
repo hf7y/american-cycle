@@ -31,36 +31,36 @@
       "measures": [
         {
           "name": "races",
-          "value": 26437,
+          "value": 24558,
           "n": 60
         },
         {
           "name": "walkover share",
-          "value": 0.8161289102394371,
+          "value": 0.8137063278768629,
           "unit": "share of races",
-          "n": 26437
+          "n": 24558
         },
         {
           "name": "upset rate",
-          "value": 0.04845481711238037,
+          "value": 0.04910823356950892,
           "unit": "share of races",
-          "n": 26437
+          "n": 24558
         },
         {
           "name": "contested: mean margin",
-          "value": 4.297058218473565,
+          "value": 4.3506010928961745,
           "unit": "pips",
-          "n": 4861
+          "n": 4575
         },
         {
           "name": "contested: median margin",
           "value": 4,
           "unit": "pips",
-          "n": 4861
+          "n": 4575
         },
         {
           "name": "contested-slot share",
-          "value": 0.23306787062603823,
+          "value": 0.23524633891648244,
           "unit": "share of slots",
           "n": 60
         }
@@ -75,35 +75,35 @@
           "name": "p10",
           "value": 1,
           "unit": "pips",
-          "n": 4861
+          "n": 4575
         },
         {
           "name": "p25",
           "value": 2,
           "unit": "pips",
-          "n": 4861
+          "n": 4575
         },
         {
           "name": "p50",
           "value": 4,
           "unit": "pips",
-          "n": 4861
+          "n": 4575
         },
         {
           "name": "p75",
           "value": 6,
           "unit": "pips",
-          "n": 4861
+          "n": 4575
         },
         {
           "name": "p90",
           "value": 9,
           "unit": "pips",
-          "n": 4861
+          "n": 4575
         },
         {
           "name": "within 2 pips",
-          "value": 0.3630940135774532,
+          "value": 0.35387978142076504,
           "unit": "share of contested"
         }
       ]
@@ -119,13 +119,13 @@
         },
         {
           "name": "district-cards in play at the epilogue",
-          "value": 1297
+          "value": 1283
         },
         {
           "name": "drift rate",
           "value": 0,
           "unit": "share of district-games",
-          "n": 1297
+          "n": 1283
         }
       ]
     },
@@ -136,17 +136,17 @@
       "measures": [
         {
           "name": "cross-bench votes a game",
-          "value": 140.31666666666666,
+          "value": 128.23333333333332,
           "n": 60
         },
         {
           "name": "bills attempted a game",
-          "value": 12,
+          "value": 11.066666666666666,
           "n": 60
         },
         {
           "name": "bill passage rate",
-          "value": 0.2611111111111111,
+          "value": 0.26656626506024095,
           "unit": "share of attempts"
         }
       ]
@@ -175,23 +175,23 @@
       "measures": [
         {
           "name": "president: mean terms won",
-          "value": 1.4875,
-          "n": 80
+          "value": 1.4675324675324675,
+          "n": 77
         },
         {
           "name": "senator: mean terms won",
-          "value": 1.7801256424900058,
-          "n": 1751
+          "value": 1.7131382673551347,
+          "n": 1743
         },
         {
           "name": "governor: mean terms won",
-          "value": 1.4833333333333334,
-          "n": 240
+          "value": 1.4680851063829787,
+          "n": 235
         },
         {
           "name": "representative: mean terms won",
-          "value": 4.492774566473988,
-          "n": 692
+          "value": 4.36417033773862,
+          "n": 681
         }
       ]
     },
@@ -202,31 +202,31 @@
       "measures": [
         {
           "name": "player-scores that never decrease",
-          "value": 0.05,
+          "value": 0.07083333333333333,
           "unit": "share of series",
           "n": 240
         },
         {
           "name": "games ending by condition",
-          "value": 0.48333333333333334,
+          "value": 0.65,
           "unit": "share of games",
           "n": 60
         },
         {
           "name": "games ending by amendment",
-          "value": 0.48333333333333334,
+          "value": 0.65,
           "unit": "share of games",
           "n": 60
         },
         {
           "name": "mean game length",
-          "value": 14.166666666666666,
+          "value": 13.083333333333334,
           "unit": "years",
           "n": 60
         },
         {
           "name": "bills on the books at the epilogue",
-          "value": 3.066666666666667,
+          "value": 2.8833333333333333,
           "n": 60
         },
         {
@@ -248,19 +248,19 @@
       "measures": [
         {
           "name": "player-scores that never decrease",
-          "value": 0.05,
+          "value": 0.07083333333333333,
           "unit": "share of series",
           "n": 240
         },
         {
           "name": "mean game length",
-          "value": 14.166666666666666,
+          "value": 13.083333333333334,
           "unit": "years",
           "n": 60
         },
         {
           "name": "mean lead changes",
-          "value": 1.1666666666666667,
+          "value": 1.1333333333333333,
           "n": 60
         }
       ]
@@ -284,19 +284,19 @@
       "measures": [
         {
           "name": "top scorer lacks the presidency",
-          "value": 0.2833333333333333,
+          "value": 0.25,
           "unit": "share of games",
           "n": 60
         },
         {
           "name": "r2 of final score on presidential years",
-          "value": 0.2810540604332847,
+          "value": 0.2603767257228739,
           "n": 240
         }
       ],
       "oracle": "design-doc",
       "pass": false,
-      "verdict": "top scorer lacks the presidency in 28% of games (target >=30%); presidential years explain r2=0.28 of final score (target <0.50)"
+      "verdict": "top scorer lacks the presidency in 25% of games (target >=30%); presidential years explain r2=0.26 of final score (target <0.50)"
     },
     {
       "id": "C3-cross-office-divergence",
@@ -305,15 +305,15 @@
       "measures": [
         {
           "name": "mean gap",
-          "value": 49.86553976181329,
+          "value": 49.881400865076046,
           "unit": "pp",
-          "n": 2603
+          "n": 2389
         },
         {
           "name": "share of state-cycles above 69pp",
-          "value": 0.45370726085286206,
+          "value": 0.4558392632900795,
           "unit": "share",
-          "n": 2603
+          "n": 2389
         },
         {
           "name": "longest persistence above 40pp",
@@ -322,23 +322,23 @@
         },
         {
           "name": "reversals",
-          "value": 305,
-          "n": 11000
+          "value": 240,
+          "n": 10150
         },
         {
           "name": "office ordering matches §10 priority",
-          "value": 1,
+          "value": 0,
           "unit": "1 = monotone president>senator>rep>governor"
         },
         {
           "name": "precondition: presidential-year state-cells with no House seat",
-          "value": 8397,
-          "n": 11000
+          "value": 7761,
+          "n": 10150
         }
       ],
       "oracle": "authored-here",
       "pass": true,
-      "verdict": "longest run above a 40pp gap is 4 cycles (target >=3, the Deep South held 20 years); 45% of state-cycles clear 69pp (the 1984 figure)"
+      "verdict": "longest run above a 40pp gap is 4 cycles (target >=3, the Deep South held 20 years); 46% of state-cycles clear 69pp (the 1984 figure)"
     },
     {
       "id": "C4-shopping-blocs",
@@ -347,19 +347,19 @@
       "measures": [
         {
           "name": "party flips",
-          "value": 0.0678987545198875,
+          "value": 0.06962025316455696,
           "unit": "share of consecutive holds",
-          "n": 4978
+          "n": 4582
         },
         {
           "name": "interest flips",
-          "value": 0.061470470068300524,
+          "value": 0.06176342208642514,
           "unit": "share of consecutive holds",
-          "n": 4978
+          "n": 4582
         },
         {
           "name": "shopping ratio",
-          "value": 1.1045751633986929,
+          "value": 1.127208480565371,
           "unit": "party flips per interest flip"
         }
       ],
@@ -380,20 +380,20 @@
       "measures": [
         {
           "name": "games ending by condition",
-          "value": 0.48333333333333334,
+          "value": 0.65,
           "unit": "share of games",
           "n": 60
         },
         {
           "name": "mean game length as a share of the cap",
-          "value": 0.8854166666666666,
+          "value": 0.8177083333333334,
           "unit": "share"
         }
       ],
-      "oracle": "authored-here",
-      "calibrated": "the ending RATE is set by amendment.target and rescindTarget, two die thresholds nothing specifies and which were chosen by sweeping. Across that grid the rate runs from 3% to 98%, so a green here says the dial is where it was put. Article V's two-thirds and three-quarters are constitutional and are NOT tuning; the die targets are.",
+      "oracle": "historical-record",
+      "calibrated": "the ending rate is downstream of amendment.dice/target/rescindTarget, which were swept -- but they are no longer swept to a number somebody liked. They are fitted to the postwar ratification rate, which D6 grades directly. So this item is calibrated in the sense that its value is a consequence of a fit, and the fit itself is the thing under test one item down.",
       "pass": true,
-      "verdict": "48% of games end by condition (target >=25%; v0.1.2 was 0% on eight of nine configs)"
+      "verdict": "65% of games end by condition, against a 50-75% band derived from the record: ~1.2 amendments per 16 years postwar puts at least one in a 16-year window at 70% under Poisson, and the real series is bursty, which pushes the true figure below that. v0.1.2 was 0% on eight of nine configs."
     },
     {
       "id": "C7-runaway-bars",
@@ -408,19 +408,19 @@
         },
         {
           "name": "comeback rate",
-          "value": 0.016666666666666666,
+          "value": 0.06666666666666667,
           "unit": "share of games",
           "n": 60
         },
         {
           "name": "lead changes a game",
-          "value": 1.65,
+          "value": 1.7166666666666666,
           "n": 60
         }
       ],
       "oracle": "SIM-BRIEF",
       "pass": false,
-      "verdict": "determination at 63% against SIM-BRIEF's 75-85% band; comeback rate 1.7%"
+      "verdict": "determination at 63% against SIM-BRIEF's 75-85% band; comeback rate 6.7%"
     },
     {
       "id": "C8-backfire-shutdown-shock",
@@ -434,17 +434,17 @@
         },
         {
           "name": "item 7: lean mass without backfire",
-          "value": 21.366666666666667,
+          "value": 26.233333333333334,
           "n": 30
         },
         {
           "name": "item 8: lean mass with shutdown blame",
-          "value": 27.233333333333334,
+          "value": 18.3,
           "n": 30
         },
         {
           "name": "item 8: lean mass without shutdown blame",
-          "value": 14.133333333333333,
+          "value": 11.533333333333333,
           "n": 30
         },
         {
@@ -469,7 +469,7 @@
       "measures": [
         {
           "name": "bills enacted a game",
-          "value": 3.1,
+          "value": 2.9166666666666665,
           "n": 60
         },
         {
@@ -501,14 +501,14 @@
       "measures": [
         {
           "name": "president's party loses seat share at the midterm",
-          "value": 0.5308056872037915,
+          "value": 0.5024875621890548,
           "unit": "share of midterms",
-          "n": 211
+          "n": 201
         }
       ],
       "oracle": "authored-here",
       "pass": false,
-      "verdict": "53% of midterms cost the president's party ground (postwar: all but two, so the target band is 70-95% rather than 100%)"
+      "verdict": "50% of midterms cost the president's party ground (postwar: all but two, so the target band is 70-95% rather than 100%)"
     },
     {
       "id": "D2-failed-conviction-backfires",
@@ -517,18 +517,18 @@
       "measures": [
         {
           "name": "impeachers: board share with backfire",
-          "value": 0.468527166938934,
+          "value": 0.4656794133854502,
           "n": 40
         },
         {
           "name": "impeachers: board share without backfire",
-          "value": 0.48472107001798365,
+          "value": 0.490171950414197,
           "n": 40
         }
       ],
       "oracle": "authored-here",
       "pass": true,
-      "verdict": "impeaching pool holds 46.9% of the board with the rule on against 48.5% with it off — the attempt must cost, not pay"
+      "verdict": "impeaching pool holds 46.6% of the board with the rule on against 49.0% with it off — the attempt must cost, not pay"
     },
     {
       "id": "D3-shutdown-blame-direction",
@@ -537,19 +537,19 @@
       "measures": [
         {
           "name": "shutdowns a game",
-          "value": 8.016666666666667,
+          "value": 7.383333333333334,
           "n": 60
         },
         {
           "name": "blamed party held a chamber majority",
-          "value": 0.7879417879417879,
+          "value": 0.7990970654627539,
           "unit": "share of shutdowns",
-          "n": 481
+          "n": 443
         }
       ],
       "oracle": "authored-here",
       "pass": true,
-      "verdict": "the blamed party held a chamber majority in 79% of shutdowns. In 1995 and 2013 the blamed party held the congressional majority, so a rule that never blames the majority has encoded incumbency by accident. Target >20%."
+      "verdict": "the blamed party held a chamber majority in 80% of shutdowns. In 1995 and 2013 the blamed party held the congressional majority, so a rule that never blames the majority has encoded incumbency by accident. Target >20%."
     },
     {
       "id": "D4-regime-duration",
@@ -563,7 +563,7 @@
         },
         {
           "name": "mean game length",
-          "value": 14.166666666666666,
+          "value": 13.083333333333334,
           "unit": "years",
           "n": 60
         },
@@ -581,6 +581,39 @@
       "track": "D",
       "question": "How long does the board take to turn lean into seats?",
       "notRun": "needs a lean series per state per year, which `GameResult.finalLean` does not carry — skowronek/observe.ts snapshots it and is the right home for this. The historical target is a thirty-year lag: Deep South House seats went 0% R 1947-63, 18.9% in 1965, 16.2% in 1967, and did not reach a majority until 1994."
+    },
+    {
+      "id": "D6-amendment-rate",
+      "track": "D",
+      "question": "Does an amendment that reaches the states ratify as often as the real ones did?",
+      "measures": [
+        {
+          "name": "ratification given proposal",
+          "value": 0.65,
+          "unit": "share of conventions",
+          "n": 60
+        },
+        {
+          "name": "conventions called a game",
+          "value": 1,
+          "n": 60
+        },
+        {
+          "name": "amendments per 16 game-years",
+          "value": 0.7949044585987262,
+          "n": 60
+        },
+        {
+          "name": "failed amendments: mean states reached",
+          "value": null,
+          "unit": "of 38 needed",
+          "n": 0
+        }
+      ],
+      "oracle": "historical-record",
+      "calibrated": "amendment.dice, target and rescindTarget were swept to land this on the postwar figure, on tuned.json specifically. That makes the tuned number a fit rather than a prediction; the OTHER configs are the out-of-sample test, and they are reported below rather than tuned to match.",
+      "pass": true,
+      "verdict": "65% of proposals ratify, against 71% postwar (5 of 7 sent to the states after 1947) and 82% all-time (27 of 33). Band is 60-90%, which spans both point estimates and leaves room for the small-n uncertainty in 5 of 7. The convention-call rate alongside it has NO bar: Article V conventions have never been called, so the historical value is zero and the game needs an ending."
     }
   ]
 }
