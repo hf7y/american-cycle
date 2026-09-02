@@ -55,7 +55,8 @@ export const finding: Finding = {
   dependsOn: [],
   question:
     'Does the margin distribution reproduce the real bimodal one, or the unimodal blob SIM-BRIEF '
-    + 'names as the falsification of the "1 pip = 2 points" calibration (SIM-BRIEF Part 5)?',
+    + 'flags in Part 5 -- and is that gap a defect in the "1 pip = 2 points" conversion, or the '
+    + 'walkover/blowout definitional split DECISIONS.md now names (hf7y/american-cycle#11)?',
 
   headline:
     'The blob. Simulated House margins sit at a median of 8 points against a real 32.5; safe seats — '
