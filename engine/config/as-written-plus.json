@@ -86,8 +86,8 @@
   },
   "game": {
     "startYear": 1976,
-    "maxYears": 24,
-    "victory": "points",
+    "maxYears": 100,
+    "victory": "bills",
     "deckOutEnds": true,
     "billTarget": 8,
     "resignToRun": false
