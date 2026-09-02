@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# Displace, never destroy. The counterpart to .claude/hooks/guard-destructive.py.
+#
+# Moves each path into .claude/trash/<UTC stamp>-<pid>/ keeping its path
+# relative to the repo root, and prints where each one went so the move is
+# reversible from the transcript alone.
+#
+#   .claude/bin/trash reports/old.md build/stale.js
+#   mv .claude/trash/20260902T010203Z-1234/reports/old.md reports/old.md
+#
+# .claude/trash/ is gitignored; empty it yourself when you are sure.
+set -euo pipefail
+
+if [ "$#" -eq 0 ]; then
+  echo "usage: .claude/bin/trash <path>..." >&2
+  exit 64
+fi
+
+root="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+dest="$root/.claude/trash/$(date -u +%Y%m%dT%H%M%SZ)-$$"
+mkdir -p "$dest"
+
+for p in "$@"; do
+  if [ ! -e "$p" ] && [ ! -L "$p" ]; then
+    echo "skip (does not exist): $p"
+    continue
+  fi
+  abs="$(cd "$(dirname "$p")" && pwd)/$(basename "$p")"
+  case "$abs" in
+    "$root"/*) rel="${abs#"$root"/}" ;;
+    *)         rel="external/$(basename "$abs")" ;;   # outside the repo: keep it flat
+  esac
+  mkdir -p "$dest/$(dirname "$rel")"
+  mv -- "$abs" "$dest/$rel"
+  echo "trashed: $p"
+  echo "  restore: mv '$dest/$rel' '$abs'"
+done
