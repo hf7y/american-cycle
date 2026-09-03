@@ -1684,4 +1684,4 @@ function defaultPick(pack: Card[], p: PlayerState, districtGoal: number): Card {
   };
   return pack.reduce((best, c) => (value(c) > value(best) ? c : best), pack[0]);
 }
-export { STATES, BY_CODE, electors, type StateDef };
+export { STATES, BY_CODE, electors, type StateDef, defaultPick };
