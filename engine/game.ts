@@ -408,7 +408,7 @@ export class Game {
           const p = this.players[i];
           const want = this.held(p) < this.handSize(p);
           const pick = want
-            ? (this.agents[i].draftPick?.(this.view(i), pack) ?? defaultPick(pack, p))
+            ? (this.agents[i].draftPick?.(this.view(i), pack) ?? defaultPick(pack, p, this.cfg.draft.districtsPerPack))
             : pack[0];
           const idx = pack.findIndex((c) => c === pick);
           taken.push(pack.splice(idx >= 0 ? idx : 0, 1)[0]);
@@ -1653,20 +1653,31 @@ function clampInt(v: number, lo: number, hi: number): number { return Math.max(l
  *  holding many is measurably a liability -- hand size caps total cards,
  *  so every district crowds out someone to run.
  *
- *  Four unprinted magnitudes, audited by hf7y/american-cycle#87 and left
- *  as-is pending a separate decision on whether the `4` becomes a config
- *  field: `4` is the target spread of distinct states before a player is
- *  "thin" no longer -- past it a district scores `synergy - 2` rather than
- *  `2 + synergy`, which is the actual cap on board size (#87 measured this
- *  pinning House races between 56 and 79 regardless of card-pool size).
- *  `0.5` discounts a district in a state already held, so a fifth district
- *  in one state loses to a first district in a new one. `2` and `-2` are
- *  the size of the thin/full swing itself. */
-function defaultPick(pack: Card[], p: PlayerState): Card {
+ *  hf7y/american-cycle#87 audited this as four unprinted magnitudes and left
+ *  three of them (`0.5`, `2`, `-2` -- the same-state discount and the size of
+ *  the thin/full swing) as-is: `0.5` discounts a district in a state already
+ *  held, so a fifth district in one state loses to a first district in a new
+ *  one; `2`/`-2` are the swing itself.
+ *
+ *  The fourth, the target spread of distinct states before a player is
+ *  "thin" no longer, is now `cfg.draft.districtsPerPack` rather than a
+ *  hardcoded `4` -- #87's own deferred decision, resolved by reusing the
+ *  field that already shipped in every config for exactly this ratio and
+ *  was read nowhere (DECISIONS.md Open item 4). Its "per pack" name is a
+ *  holdover from a pack-composition mechanism the draft never built --
+ *  packs are dealt from one shuffled talon with no district/candidate
+ *  quota -- so this is that number wired to the nearest live mechanism
+ *  that actually sets district-to-candidate ratio: past the target, a
+ *  district scores `synergy - 2` rather than `2 + synergy`, which is the
+ *  cap on board size (#87 measured the `4` default pinning House races
+ *  between 56 and 79 regardless of card-pool size; see
+ *  sim/scratch-district-threshold-ablation.ts for the swept comparison
+ *  that set each shipped config's value). */
+function defaultPick(pack: Card[], p: PlayerState, districtGoal: number): Card {
   const states = new Set(p.districts.map((d) => d.state));
   const value = (c: Card): number => {
     if (c.kind === 'district') {
-      const need = Math.max(0, 4 - states.size);
+      const need = Math.max(0, districtGoal - states.size);
       return (states.has(c.state) ? 0.5 : 1) * (need > 0 ? 2 + c.synergy : c.synergy - 2);
     }
     return 2 + c.homeStateBonus + c.effects.length;
