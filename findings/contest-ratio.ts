@@ -46,19 +46,19 @@ export const finding: Finding = {
     + 'race eligible and more eligible races spread the same cards thinner. Every point measured is '
     + "below SIM-BRIEF's 60% floor: there is simply more board than there are cards to put on it, "
     + 'so players farm their own territory.',
-  stampedAt: '2026-09-02T02:14:36Z',
-  stampedOn: '5d06f41',
+  stampedAt: '2026-09-03T22:09:22Z',
+  stampedOn: 'eb1d185',
 
   predicate(): Claim[] {
     // the hand sweep and the district sweep cross at hand 16, districts 0.15,
     // which is therefore one claim serving both orderings
     return [
-      { name: 'hand 8, districts 0.15', value: contested(8, 0.15), stamped: 34.78, tolerance: 3, unit: '%' },
-      { name: 'hand 16, districts 0.15', value: contested(16, 0.15), stamped: 42.32, tolerance: 3, unit: '%' },
-      { name: 'hand 24, districts 0.15', value: contested(24, 0.15), stamped: 51.76, tolerance: 3, unit: '%' },
-      { name: 'hand 16, districts 0.06', value: contested(16, 0.06), stamped: 46.19, tolerance: 3, unit: '%' },
-      { name: 'hand 16, districts 0.40', value: contested(16, 0.4), stamped: 36.17, tolerance: 3, unit: '%' },
-      { name: 'hand 16, districts 1.00', value: contested(16, 1), stamped: 31.23, tolerance: 3, unit: '%' },
+      { name: 'hand 8, districts 0.15', value: contested(8, 0.15), stamped: 38.56, tolerance: 3, unit: '%' },
+      { name: 'hand 16, districts 0.15', value: contested(16, 0.15), stamped: 46.69, tolerance: 3, unit: '%' },
+      { name: 'hand 24, districts 0.15', value: contested(24, 0.15), stamped: 54.88, tolerance: 3, unit: '%' },
+      { name: 'hand 16, districts 0.06', value: contested(16, 0.06), stamped: 47.64, tolerance: 3, unit: '%' },
+      { name: 'hand 16, districts 0.40', value: contested(16, 0.4), stamped: 41.22, tolerance: 3, unit: '%' },
+      { name: 'hand 16, districts 1.00', value: contested(16, 1), stamped: 35.73, tolerance: 3, unit: '%' },
     ];
   },
 

@@ -40,8 +40,8 @@ export const finding: Finding = {
     + 'failing — the filibuster makes the bill depend on whether anyone will cross the aisle. Any '
     + 'passage figure quoted from this simulator is a property of its agent pool, because no agent '
     + 'here can negotiate, offer anything or remember a favour. Do not tune the threshold on it.',
-  stampedAt: '2026-09-02T02:14:02Z',
-  stampedOn: '5d06f41',
+  stampedAt: '2026-09-03T22:09:20Z',
+  stampedOn: 'eb1d185',
 
   predicate(): Claim[] {
     const base = loadConfig('tuned.json');
@@ -54,13 +54,13 @@ export const finding: Finding = {
     const cloture50 = measure(MIXED, 0.5, cards, base);
     const cloture67 = measure(MIXED, 2 / 3, cards, base);
     return [
-      { name: 'mixed table at 60%: bills pass', value: mixed.pass, stamped: 0.16, tolerance: 0.07, unit: 'share of attempts' },
-      { name: 'one BillMaximizer at 60%: bills pass', value: willing.pass, stamped: 0.65, tolerance: 0.12, unit: 'share of attempts' },
+      { name: 'mixed table at 60%: bills pass', value: mixed.pass, stamped: 0.24, tolerance: 0.07, unit: 'share of attempts' },
+      { name: 'one BillMaximizer at 60%: bills pass', value: willing.pass, stamped: 0.61, tolerance: 0.12, unit: 'share of attempts' },
       { name: 'four BillMaximizers at 60%: bills pass', value: allIn.pass, stamped: 1, tolerance: 0.06, unit: 'share of attempts' },
-      { name: 'mixed table at 50%: bills pass', value: cloture50.pass, stamped: 0.31, tolerance: 0.1, unit: 'share of attempts' },
-      { name: 'mixed table at 67%: bills pass', value: cloture67.pass, stamped: 0.09, tolerance: 0.06, unit: 'share of attempts' },
-      { name: 'mixed table: cross-bench votes a game', value: mixed.cross, stamped: 139.07, tolerance: 18 },
-      { name: 'four BillMaximizers: cross-bench votes a game', value: allIn.cross, stamped: 243.35, tolerance: 60 },
+      { name: 'mixed table at 50%: bills pass', value: cloture50.pass, stamped: 0.34, tolerance: 0.1, unit: 'share of attempts' },
+      { name: 'mixed table at 67%: bills pass', value: cloture67.pass, stamped: 0.15, tolerance: 0.06, unit: 'share of attempts' },
+      { name: 'mixed table: cross-bench votes a game', value: mixed.cross, stamped: 58.75, tolerance: 18 },
+      { name: 'four BillMaximizers: cross-bench votes a game', value: allIn.cross, stamped: 154.83, tolerance: 60 },
     ];
   },
 
