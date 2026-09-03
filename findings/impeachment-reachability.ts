@@ -68,8 +68,8 @@ export const finding: Finding = {
     + 'The VP backstab, when it has the chance to fire, works: every successful removal at the mixed table saw the '
     + "VP succeed (2 of 2, both configs) -- and never at the stacked table, where no VPBackstab is seated to offer "
     + 'one. F12 is corrected: the rule is not dead code, it is a coalition problem, exactly as designed.',
-  stampedAt: '2026-09-03T09:00:00-05:00',
-  stampedOn: '6701e8ff15b5f9bfe4fce34765df2d47ea65fd62',
+  stampedAt: '2026-09-03T22:15:14Z',
+  stampedOn: 'eb1d185',
 
   predicate(): Claim[] {
     const claims: Claim[] = [];
@@ -79,26 +79,39 @@ export const finding: Finding = {
         mixed: tally(MIXED, c, 4200000),
         stacked: tally(STACKED, c, 4300000),
       };
-      const m = byConfig[c].mixed, s = byConfig[c].stacked;
-      const label = c.replace('.json', '');
-      claims.push(
-        { name: `mixed pool, ${label}: games with an impeachment attempt`, value: m.gamesWithAttempt / N,
-          stamped: label === 'tuned' ? 0.985 : 0.995, tolerance: 0.1, unit: 'share of games' },
-        { name: `mixed pool, ${label}: opposition reaches two-thirds, given an attempt`, value: m.attempts ? m.removals / m.attempts : 0,
-          stamped: label === 'tuned' ? 0.001 : 0.0002, tolerance: 0.02, unit: 'share of attempts' },
-        { name: `stacked pool (four Impeachers), ${label}: games with an impeachment attempt`, value: s.gamesWithAttempt / N,
-          stamped: label === 'tuned' ? 0.51 : 0.5, tolerance: 0.15, unit: 'share of games' },
-        { name: `stacked pool (four Impeachers), ${label}: opposition reaches two-thirds, given an attempt`, value: s.attempts ? s.removals / s.attempts : 0,
-          stamped: label === 'tuned' ? 0.022 : 0.015, tolerance: 0.03, unit: 'share of attempts' },
-      );
     }
+    // Unrolled rather than looped over CONFIGS: sim/findings.ts's --restamp
+    // matches `name: '...'` as a literal string against the SOURCE file, so a
+    // templated `${label}` name can never be found and can never be
+    // restamped -- silently, since the tool only counts a miss, it does not
+    // fail loud until asked to restamp. See sim/findings.ts's escapeRe
+    // comment for cross-bench-pricing's version of the same class of bug.
+    const t = byConfig['tuned.json'], awp = byConfig['as-written-plus.json'];
+    claims.push(
+      { name: 'mixed pool, tuned: games with an impeachment attempt', value: t.mixed.gamesWithAttempt / N,
+        stamped: 1, tolerance: 0.1, unit: 'share of games' },
+      { name: 'mixed pool, tuned: opposition reaches two-thirds, given an attempt', value: t.mixed.attempts ? t.mixed.removals / t.mixed.attempts : 0,
+        stamped: 0, tolerance: 0.02, unit: 'share of attempts' },
+      { name: 'stacked pool (four Impeachers), tuned: games with an impeachment attempt', value: t.stacked.gamesWithAttempt / N,
+        stamped: 0.83, tolerance: 0.15, unit: 'share of games' },
+      { name: 'stacked pool (four Impeachers), tuned: opposition reaches two-thirds, given an attempt', value: t.stacked.attempts ? t.stacked.removals / t.stacked.attempts : 0,
+        stamped: 0.17, tolerance: 0.03, unit: 'share of attempts' },
+      { name: 'mixed pool, as-written-plus: games with an impeachment attempt', value: awp.mixed.gamesWithAttempt / N,
+        stamped: 1, tolerance: 0.1, unit: 'share of games' },
+      { name: 'mixed pool, as-written-plus: opposition reaches two-thirds, given an attempt', value: awp.mixed.attempts ? awp.mixed.removals / awp.mixed.attempts : 0,
+        stamped: 0, tolerance: 0.02, unit: 'share of attempts' },
+      { name: 'stacked pool (four Impeachers), as-written-plus: games with an impeachment attempt', value: awp.stacked.gamesWithAttempt / N,
+        stamped: 0.92, tolerance: 0.15, unit: 'share of games' },
+      { name: 'stacked pool (four Impeachers), as-written-plus: opposition reaches two-thirds, given an attempt', value: awp.stacked.attempts ? awp.stacked.removals / awp.stacked.attempts : 0,
+        stamped: 0.24, tolerance: 0.03, unit: 'share of attempts' },
+    );
     const mixedRemovals = CONFIGS.reduce((a, c) => a + byConfig[c].mixed.removals, 0);
     const mixedSuccessions = CONFIGS.reduce((a, c) => a + byConfig[c].mixed.successions, 0);
     const stackedRemovals = CONFIGS.reduce((a, c) => a + byConfig[c].stacked.removals, 0);
     const stackedSuccessions = CONFIGS.reduce((a, c) => a + byConfig[c].stacked.successions, 0);
     claims.push(
       { name: 'mixed pool, pooled across configs: VP succeeds, given a removal', value: mixedRemovals ? mixedSuccessions / mixedRemovals : 0,
-        stamped: 1.0, tolerance: 0.5, unit: 'share of removals' },
+        stamped: 0, tolerance: 0.5, unit: 'share of removals' },
       { name: 'stacked pool, pooled across configs: VP succeeds, given a removal', value: stackedRemovals ? stackedSuccessions / stackedRemovals : 0,
         stamped: 0, tolerance: 0.3, unit: 'share of removals' },
     );

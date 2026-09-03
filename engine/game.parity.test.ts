@@ -125,12 +125,15 @@ test('GameView.isElectionYear agrees with the gate the engine actually uses', ()
 
 test('the election-year gate is one function, and odd years need a governor up', () => {
   const cfg = loadConfig('as-written-plus.json');
-  for (const y of [2024, 2026]) assert.equal(isElectionYear(cfg, y), true);
-  for (const y of [2025, 2027]) assert.equal(isElectionYear(cfg, y), false);
 
-  const odd = structuredClone(cfg);
-  odd.game.oddYearGovernors = true;
-  assert.equal(isElectionYear(odd, 2024), true);
-  assert.ok([2025, 2027].some((y) => isElectionYear(odd, y)),
+  const even = structuredClone(cfg);
+  even.game.oddYearGovernors = false;
+  for (const y of [2024, 2026]) assert.equal(isElectionYear(even, y), true);
+  for (const y of [2025, 2027]) assert.equal(isElectionYear(even, y), false);
+
+  // #17/#23 ship oddYearGovernors: true on the loaded config itself.
+  assert.equal(cfg.game.oddYearGovernors, true);
+  assert.equal(isElectionYear(cfg, 2024), true);
+  assert.ok([2025, 2027].some((y) => isElectionYear(cfg, y)),
     'no odd year has a governor up, so the flag could never do anything');
 });

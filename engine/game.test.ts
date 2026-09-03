@@ -464,6 +464,10 @@ test('#78: a second bill on the same tags, passed once the House flips, nets the
   const cfg = loadConfig('as-written-plus.json');
   cfg.legislature = { ...cfg.legislature, billLeanPips: 3, tagsPerBill: 1 };
   cfg.amendment = { ...cfg.amendment, enabled: false };
+  // NJ/VA (1977) and KY/LA/MS (1979) have governors up, so with the shipped
+  // oddYearGovernors flag this test's hand-staged odd years would trigger a
+  // real election tick -- this test is about bill netting, not elections.
+  cfg.game = { ...cfg.game, oddYearGovernors: false };
 
   const r = new BillYesAgent('r'), d = new BillYesAgent('d');
   const g = new Game([r, d], structuredClone(CARDS), cfg, 1);

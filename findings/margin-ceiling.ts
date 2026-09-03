@@ -67,8 +67,8 @@ export const finding: Finding = {
     + "sim's favour is that it encodes a safe seat as a WALKOVER where reality encodes it as a "
     + 'contested race won by forty, so the two distributions are partly the same phenomenon in '
     + 'different clothes; the gap narrows and does not close.',
-  stampedAt: '2026-09-02T02:29:14Z',
-  stampedOn: '5d06f41',
+  stampedAt: '2026-09-03T22:09:47Z',
+  stampedOn: 'eb1d185',
 
   predicate(): Claim[] {
     const sim = simMargins();
@@ -76,9 +76,9 @@ export const finding: Finding = {
     return [
       { name: 'sim: median House margin', value: sim.median, stamped: 10, tolerance: 3, unit: 'pts' },
       { name: 'real: median House margin', value: r.house_median_abs_margin_pts, stamped: 32.5, tolerance: 0.5, unit: 'pts' },
-      { name: 'sim: safe seats, 40+ pts', value: sim.safe, stamped: 0, tolerance: 2, unit: '%' },
+      { name: 'sim: safe seats, 40+ pts', value: sim.safe, stamped: 2.56, tolerance: 2, unit: '%' },
       { name: 'real: safe seats, 40+ pts', value: r.house_safe_40plus_pct, stamped: 37.5, tolerance: 0.5, unit: '%' },
-      { name: 'sim: competitive, under 10 pts', value: sim.competitive, stamped: 45.57, tolerance: 8, unit: '%' },
+      { name: 'sim: competitive, under 10 pts', value: sim.competitive, stamped: 46.15, tolerance: 8, unit: '%' },
       { name: 'real: competitive, under 10 pts', value: r.house_competitive_under10_pct, stamped: 13.5, tolerance: 0.5, unit: '%' },
     ];
   },

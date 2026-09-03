@@ -58,8 +58,8 @@ export const finding: Finding = {
     + 'shock built for the remaining gap (v0.2 item 9) does not close it — at 400 seeds determination is '
     + '0.625 with it and 0.625 without — which is the evidence that the brake has to be positional. '
     + 'tracks/c.ts C7 is the live acceptance test and is red.',
-  stampedAt: '2026-09-02T02:20:04Z',
-  stampedOn: '5d06f41',
+  stampedAt: '2026-09-03T22:09:49Z',
+  stampedOn: 'eb1d185',
 
   predicate(): Claim[] {
     const base = loadConfig('tuned.json');
@@ -75,11 +75,11 @@ export const finding: Finding = {
     const on = run(base);
     return [
       { name: 'baseline: determination point', value: on.determination, stamped: 0.63, tolerance: 0.2, unit: 'fraction of game length' },
-      { name: 'baseline: comeback rate', value: on.comeback, stamped: 0.02, tolerance: 0.03, unit: 'share of games' },
-      { name: 'baseline: player-scores that never decrease', value: monotonicShare(cards, base), stamped: 0.02, tolerance: 0.02, unit: 'share of series' },
+      { name: 'baseline: comeback rate', value: on.comeback, stamped: 0, tolerance: 0.03, unit: 'share of games' },
+      { name: 'baseline: player-scores that never decrease', value: monotonicShare(cards, base), stamped: 0, tolerance: 0.02, unit: 'share of series' },
       { name: 'endorsements off: determination point', value: run(noEndorsements).determination, stamped: 0.75, tolerance: 0.2, unit: 'fraction of game length' },
-      { name: 'capture off: determination point', value: run(noCapture).determination, stamped: 0.69, tolerance: 0.2, unit: 'fraction of game length' },
-      { name: 'hand bonuses off: determination point', value: run(noHandBonus).determination, stamped: 0.69, tolerance: 0.2, unit: 'fraction of game length' },
+      { name: 'capture off: determination point', value: run(noCapture).determination, stamped: 0.38, tolerance: 0.2, unit: 'fraction of game length' },
+      { name: 'hand bonuses off: determination point', value: run(noHandBonus).determination, stamped: 0.63, tolerance: 0.2, unit: 'fraction of game length' },
     ];
   },
 
