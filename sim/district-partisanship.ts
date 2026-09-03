@@ -25,11 +25,11 @@
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 
-const PANEL = 'data/historical/house_district_panel.json';
+export const PANEL = 'data/historical/house_district_panel.json';
 const PRES = 'data/historical/pres_state_panel.json';
 
-interface Row { year: number; state: string; district: number; dem: number; rep: number; inc: number }
-interface Obs { y: number; inc: number; unit: string; year: number; row: Row }
+export interface Row { year: number; state: string; district: number; dem: number; rep: number; inc: number }
+export interface Obs { y: number; inc: number; unit: string; year: number; row: Row }
 
 // ---------------------------------------------------------------- panel build
 
@@ -109,21 +109,21 @@ function build(csvPath: string): void {
 
 // ------------------------------------------------------------------ estimator
 
-const mean = (a: number[]) => a.reduce((x, z) => x + z, 0) / a.length;
+export const mean = (a: number[]) => a.reduce((x, z) => x + z, 0) / a.length;
 const vr = (a: number[]) => { const m = mean(a); return mean(a.map((z) => (z - m) * (z - m))); };
 const cv = (a: number[], b: number[]) => { const ma = mean(a), mb = mean(b); let s = 0; for (let i = 0; i < a.length; i++) s += (a[i] - ma) * (b[i] - mb); return s / a.length; };
 const f2 = (x: number) => x.toFixed(2);
 
 /** Redistricting eras. A district number is only the same place inside one. */
-const era = (y: number) => (y <= 1980 ? 'A' : y <= 1990 ? 'B' : y <= 2000 ? 'C' : y <= 2010 ? 'D' : 'E');
+export const era = (y: number) => (y <= 1980 ? 'A' : y <= 1990 ? 'B' : y <= 2000 ? 'C' : y <= 2010 ? 'D' : 'E');
 
-interface Fit {
+export interface Fit {
   beta: number; base: number;
   a: Map<string, number>; g: Map<number, number>;
   byUnit: Map<string, number[]>; nYears: number;
 }
 
-function fit(obs: Obs[]): Fit {
+export function fit(obs: Obs[]): Fit {
   const byUnit = new Map<string, number[]>(), byYear = new Map<number, number[]>();
   obs.forEach((o, i) => {
     if (!byUnit.has(o.unit)) byUnit.set(o.unit, []);
@@ -363,4 +363,4 @@ function loyalty(house: Row[]): void {
   console.log(`  SD of the gap across states, by year: ${years.map((y, i) => `${y}:${sds[i].toFixed(1)}`).join(' ')}`);
 }
 
-main();
+if (import.meta.filename === process.argv[1]) main();
