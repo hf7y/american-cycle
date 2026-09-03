@@ -382,6 +382,11 @@ export class Game {
   private draft(): void {
     const size = this.cfg.draft.packSize;
     let guard = 0;
+    // 40 rounds is a stall guard, not a rule: one card is taken per pack per
+    // round, so filling even the largest configured hand (well under 40 with
+    // hand.base=16 plus office bonuses) finishes long before this fires. It
+    // only bites if a config makes hands unfillable, in which case a game
+    // that ends short of a full hand beats one that spins forever (#87).
     while (this.players.some((p) => this.held(p) < this.handSize(p)) && guard++ < 40) {
       const packs: Card[][] = [];
       for (let i = 0; i < this.players.length; i++) {
@@ -1295,6 +1300,11 @@ export class Game {
       const st = r.ev.state;
       if (st === 'US') continue;
       if (!byState.has(st)) byState.set(st, []);
+      // An uncontested race has no real margin, so `uncontestedPush` (the
+      // config field itself) is fed through `lean.pushForMargin`'s table as
+      // a synthetic one rather than applied directly -- ×2 unprinted, audited
+      // by #87: it exists to clear the table's own maxPips:1/push:0 tier,
+      // which would otherwise read `uncontestedPush: 1` as no push at all.
       byState.get(st)!.push({ office: r.ev.office, party: r.won.card.party,
         margin: r.ev.uncontested ? (this.cfg.lean.uncontestedPush ?? 0) * 2 : r.ev.margin });
     }
@@ -1641,7 +1651,17 @@ function clampInt(v: number, lo: number, hi: number): number { return Math.max(l
 /** The default draft heuristic. Candidates are valued by home-state bonus and
  *  card text; districts only while a player is thin on presence, because
  *  holding many is measurably a liability -- hand size caps total cards,
- *  so every district crowds out someone to run. */
+ *  so every district crowds out someone to run.
+ *
+ *  Four unprinted magnitudes, audited by hf7y/american-cycle#87 and left
+ *  as-is pending a separate decision on whether the `4` becomes a config
+ *  field: `4` is the target spread of distinct states before a player is
+ *  "thin" no longer -- past it a district scores `synergy - 2` rather than
+ *  `2 + synergy`, which is the actual cap on board size (#87 measured this
+ *  pinning House races between 56 and 79 regardless of card-pool size).
+ *  `0.5` discounts a district in a state already held, so a fifth district
+ *  in one state loses to a first district in a new one. `2` and `-2` are
+ *  the size of the thin/full swing itself. */
 function defaultPick(pack: Card[], p: PlayerState): Card {
   const states = new Set(p.districts.map((d) => d.state));
   const value = (c: Card): number => {

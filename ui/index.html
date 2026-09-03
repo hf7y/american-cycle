@@ -1854,6 +1854,11 @@ class Game {
           draft()       {
     const size = this.cfg.draft.packSize;
     let guard = 0;
+    // 40 rounds is a stall guard, not a rule: one card is taken per pack per
+    // round, so filling even the largest configured hand (well under 40 with
+    // hand.base=16 plus office bonuses) finishes long before this fires. It
+    // only bites if a config makes hands unfillable, in which case a game
+    // that ends short of a full hand beats one that spins forever (#87).
     while (this.players.some((p) => this.held(p) < this.handSize(p)) && guard++ < 40) {
       const packs           = [];
       for (let i = 0; i < this.players.length; i++) {
@@ -2767,6 +2772,11 @@ class Game {
       const st = r.ev.state;
       if (st === 'US') continue;
       if (!byState.has(st)) byState.set(st, []);
+      // An uncontested race has no real margin, so `uncontestedPush` (the
+      // config field itself) is fed through `lean.pushForMargin`'s table as
+      // a synthetic one rather than applied directly -- ×2 unprinted, audited
+      // by #87: it exists to clear the table's own maxPips:1/push:0 tier,
+      // which would otherwise read `uncontestedPush: 1` as no push at all.
       byState.get(st) .push({ office: r.ev.office, party: r.won.card.party,
         margin: r.ev.uncontested ? (this.cfg.lean.uncontestedPush ?? 0) * 2 : r.ev.margin });
     }
@@ -3113,7 +3123,17 @@ function clampInt(v        , lo        , hi        )         { return Math.max(l
 /** The default draft heuristic. Candidates are valued by home-state bonus and
  *  card text; districts only while a player is thin on presence, because
  *  holding many is measurably a liability -- hand size caps total cards,
- *  so every district crowds out someone to run. */
+ *  so every district crowds out someone to run.
+ *
+ *  Four unprinted magnitudes, audited by hf7y/american-cycle#87 and left
+ *  as-is pending a separate decision on whether the `4` becomes a config
+ *  field: `4` is the target spread of distinct states before a player is
+ *  "thin" no longer -- past it a district scores `synergy - 2` rather than
+ *  `2 + synergy`, which is the actual cap on board size (#87 measured this
+ *  pinning House races between 56 and 79 regardless of card-pool size).
+ *  `0.5` discounts a district in a state already held, so a fifth district
+ *  in one state loses to a first district in a new one. `2` and `-2` are
+ *  the size of the thin/full swing itself. */
 function defaultPick(pack        , p             )       {
   const states = new Set(p.districts.map((d) => d.state));
   const value = (c      )         => {
@@ -3197,6 +3217,13 @@ const raceKey = (r                                                  ) => `${r.of
  *  against someone who may have spent nothing -- which is the asymmetry that
  *  makes district gating necessary. An agent that never does this plays
  *  solitaire. */
+/** `appetite`: a flat edge bonus for a race a rival already committed to, so
+ *  contesting reads as attractive rather than agents only ever taking open
+ *  seats and leaving walkovers to accumulate. Unprinted magnitude (#87);
+ *  every caller uses 2 except `HouseFarm` and `BillAuthor`'s 3, which is the
+ *  same bump their office-specific sort already gives their target office,
+ *  applied a second time to specifically prioritise CONTESTING it over an
+ *  uncontested race elsewhere. */
 function counterDeclare(
   opts          , pending              , me        , appetite        ,
 )           {
@@ -3241,7 +3268,12 @@ const byEdge = (a        , b        ) => b.edge - a.edge;
                                                                                         
   /** Default: pull out only when the visible arithmetic is clearly against you.
    *  The dice are unknowable here by construction -- withdrawal closes before
-   *  any die is rolled (see elections.ts, elections.test.ts). */
+   *  any die is rolled (see elections.ts, elections.test.ts).
+   *
+   *  -4 is unprinted (#87), chosen off DECISIONS.md's own odds table: a +4
+   *  edge already wins 82.5% of generals and 94.4% of primaries, so a -4
+   *  modifier total reads as a fight worth conceding before the dice, not
+   *  merely an uphill one. */
   withdraw(v                )          {
     return v.contenders > 0 && v.myModifierTotal <= -4;
   }
@@ -3323,6 +3355,12 @@ class LookaheadAgent extends Base {
       const pts = o.office === 'president' ? 5 : o.office === 'senator' ? 3 : o.office === 'governor' ? 2 : 1;
       // future value = points and hand size over the term, discounted by the
       // chance of actually winning it
+      //
+      // 0.045 linearises DECISIONS.md's general-election odds table (edge +1
+      // = 59.2%, +4 = 82.5%, +6 = 92.1%) around its own slope -- unprinted
+      // (#87), and cheap on purpose: this is a planning heuristic picking
+      // between open races, not a resolver, so it undershoots at high edge
+      // rather than reproducing the table's curve exactly.
       const win = 0.5 + 0.045 * o.edge;
       const value = win * (pts + term[o.office] * (hand[o.office] + (o.office === 'representative' ? 0.5 : 0)));
       return { ...o, edge: value };
@@ -3492,6 +3530,11 @@ class EconomyChicken extends Base {
   declare(v          , open            , pending              )                {
     return pickDistinct(counterDeclare(options(v, open, this.cfg), pending, v.me, 2).sort(byEdge), this.budget(v));
   }
+  // `fedCheck` (engine/rules/economy.ts) fires when 2d6 rolls <= accumulatedG:
+  // 58.3% of rolls clear 7, 72.2% clear 8. Unprinted (#87); 7 and 8 are where
+  // that curve stops being "probably fine" and start being "probably not" --
+  // this agent stops PROPOSING growth right at the pivot and stops VOTING for
+  // it one pip later, since a vote it doesn't control needs less margin.
   proposeG(v          )         {
     return v.economy.accumulatedG >= 7 ? this.cfg.economy.gMin : this.cfg.economy.gMax;
   }
