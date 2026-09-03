@@ -68,6 +68,12 @@ export interface PrimaryGeneralConfig {
    *  per-vote decision with a price. Vote against your district's position,
    *  lose competitiveness, gain the bill. Negative, per off-position vote. */
   offDistrictPips?: number;
+  /** McCarthy, New Hampshire 1968: the strong SHOWING was the event, not the
+   *  loss. A primary won by fewer than `bruisingPrimaryMargin` pips carries a
+   *  `bruisingPrimaryPips` penalty into the general -- see #95. Read by
+   *  `game.ts`'s `runPrimaries`, which sets `Declaration.bruisingPrimary`. */
+  bruisingPrimaryMargin?: number;
+  bruisingPrimaryPips?: number;
 }
 
 export interface RaceContext {
@@ -119,6 +125,10 @@ export interface Declaration {
   /** v0.2 item 9: the player's share of held seats over its fair share, so
    *  1 is an average faction. The shock is proportional to power held. */
   power?: number;
+  /** Set by `game.ts`'s `runPrimaries` when this card won its primary by
+   *  fewer than `PrimaryGeneralConfig.bruisingPrimaryMargin` pips (#95). Read
+   *  once, in the general round only -- a primary loser never reaches here. */
+  bruisingPrimary?: boolean;
 }
 
 /** District cards gate all races. You may run only where you hold a
@@ -212,6 +222,10 @@ export function buildModifiers(
     if (d.billRecord) m.push({ source: 'bill record', pips: d.billRecord * pg.billCounterPips });
   } else {
     if (hasEffect(d.card, 'extremist')) m.push({ source: 'extremist (general)', pips: pg.extremistGeneral });
+
+    if (d.bruisingPrimary && pg.bruisingPrimaryPips) {
+      m.push({ source: 'bruising primary', pips: pg.bruisingPrimaryPips });
+    }
 
     // v0.2 item 6: the price of the bill you gained.
     if (d.offDistrict && pg.offDistrictPips) {

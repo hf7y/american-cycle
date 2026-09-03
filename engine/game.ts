@@ -33,7 +33,8 @@ export interface Config {
                 incumbencyHouse?: number; incumbencySenate?: number };
   national: { strongEconomy: number; recession: number; midtermPenalty: number; coattailsWith: number; coattailsAgainst: number };
   endorsements: { president: number; governorInState: number; senator: number };
-  primaryGeneral: { extremistPrimary: number; extremistGeneral: number; crossBenchPrimaryPenalty: number; billCounterPips: number; crossBenchCap: number };
+  primaryGeneral: { extremistPrimary: number; extremistGeneral: number; crossBenchPrimaryPenalty: number; billCounterPips: number; crossBenchCap: number;
+                    bruisingPrimaryMargin?: number };
   lean: lean.LeanConfig;
   economy: econ.EconomyConfig;
   legislature: leg.LegislatureConfig & {
@@ -1273,7 +1274,14 @@ export class Game {
       if (!out.event) continue;
       this.events.push(out.event);
       const w = cands.find((d) => d.player === out.event!.winner);
-      if (w) winners.push(w);
+      if (w) {
+        // McCarthy, New Hampshire 1968: a strong SHOWING damaged the
+        // incumbent, not just a loss. A primary won by less than the
+        // threshold carries the same bruise into the general (see #95).
+        const threshold = this.cfg.primaryGeneral.bruisingPrimaryMargin;
+        if (threshold !== undefined && !out.event.uncontested && out.event.margin < threshold) w.bruisingPrimary = true;
+        winners.push(w);
+      }
       // A primary loss returns the card to hand. Cheap to enter; the cost is
       // that you revealed it.
       for (const d of cands) if (d.player !== out.event!.winner) this.returnToHand(d);

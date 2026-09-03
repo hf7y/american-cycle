@@ -201,6 +201,40 @@ test('winning a House race captures the underlying district card, by number', ()
   assert.equal(seat?.holder?.player, 1);
 });
 
+/** #95: McCarthy lost New Hampshire 1968 and the strong showing was the
+ *  event. Two same-party cards contest one race, so the loser returns to
+ *  hand and the winner reaches the general alone -- an unopposed general run
+ *  by a nominee who only barely survived their own primary. Seed 1 rolls a
+ *  1-pip primary margin, comfortably under `bruisingPrimaryMargin` (3). */
+test('#95: a primary won by a narrow margin carries a bruise into the general', () => {
+  const cfg = loadConfig('as-written-plus.json');
+  const a1 = cand({ id: 'a1', homeState: 'OH' });
+  const a2 = cand({ id: 'a2', homeState: 'OH' });
+  const held5 = dist({ id: 'OH-5', state: 'OH', number: 5 });
+
+  const p0 = new ScriptedAgent('p0', (_v, open) => {
+    const race = open.find((r) => r.office === 'representative' && r.state === 'OH' && r.slot === 5);
+    return race ? [{ player: 0, card: a1, office: 'representative', state: 'OH', slot: 5 }] : [];
+  });
+  const p1 = new ScriptedAgent('p1', (_v, open) => {
+    const race = open.find((r) => r.office === 'representative' && r.state === 'OH' && r.slot === 5);
+    return race ? [{ player: 1, card: a2, office: 'representative', state: 'OH', slot: 5 }] : [];
+  });
+  const g = new Game([p0, p1], [{ kind: 'candidate', ...a1 }, { kind: 'candidate', ...a2 }], cfg, 1);
+  g.players[0].hand = [{ kind: 'candidate', ...a1 }];
+  g.players[1].hand = [{ kind: 'candidate', ...a2 }];
+  g.players[0].districts = [held5];
+  g.players[1].districts = [];
+
+  g.tick();
+
+  const primary = g.events.find((e) => e.round === 'primary' && e.office === 'representative' && e.state === 'OH');
+  assert.equal(primary?.margin, 1, 'the scenario is pinned to a specific narrow-margin roll');
+  const general = g.events.find((e) => e.round === 'general' && e.office === 'representative' && e.state === 'OH');
+  assert.ok(general?.sides[0].modifiers.some((m) => m.source === 'bruising primary'),
+    'the nominee who barely survived the primary carries the scar into the general');
+});
+
 test('capture is a no-op when nobody else holds the contested district', () => {
   const cfg = loadConfig('as-written-plus.json');
   const incumbent = cand({ id: 'incumbent', party: 'R', homeState: 'OH' });

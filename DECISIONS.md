@@ -175,13 +175,13 @@ These were considered in design and rejected. Each has a plausible-sounding case
 
 Ordered by how much the answer changes the game.
 
-1. **Decay frequency** — annual or biennial. Decides whether realignment is possible at all.
+1. ~~Decay frequency~~ — **answered**, `findings/decay-push-tradeoff.ts`: annual decay is the best configuration measured, but only paired with the push table raised to 2/3/4. Annual decay at the shipped push table realigns almost nothing (0.4 states/game) — it is the push table that has to outrun the decay, not the decay that has to be slowed. Shipped on `as-written-plus.json`.
 2. **Base hand size and office bonuses** — the master tuning knob for game length and runaway.
-3. **District synergy magnitudes** — currently unbounded card text with no baseline. Must be tuned against specific historical cases: Manchin holding West Virginia, Collins holding Maine, Edwards holding Louisiana.
-4. **District-to-candidate ratio per pack** — sets map fill rate and turn density.
-5. **Victory condition** — bills passed, two consecutive presidential terms, three terms, or parallel conditions.
-6. **Governor pushes** — never, or only when winning with the existing lean.
-7. **Deck-out as the end condition** — whether it needs a year backstop.
+3. **District synergy magnitudes** — currently unbounded card text with no baseline. Must be tuned against specific historical cases: Manchin holding West Virginia, Collins holding Maine, Edwards holding Louisiana. Open per hf7y/american-cycle#27.
+4. **District-to-candidate ratio per pack** — sets map fill rate and turn density. Still open: `draft.districtsPerPack` ships in every config's `placeholders` block marked "Open", and hf7y/american-cycle#87 found the field is read nowhere in the engine — the ratio is not wired to anything yet, let alone tuned.
+5. ~~Victory condition~~ — **settled**, see the Settled table above: bills passed, ruled 2026-09-01, wired on `as-written-plus.json` (`victory: 'bills'`, `billTarget: 8`). hf7y/american-cycle#13 measured the other three candidates failing.
+6. **Governor pushes** — never, or only when winning with the existing lean. Open per hf7y/american-cycle#26.
+7. ~~Deck-out as the end condition~~ — **settled in part**, see the no-cap amendment above: `maxYears: 100` ships as a length backstop because deck-out itself does not reliably fire (circulation regrows the talon faster than it depletes). Making deck-out itself reachable remains unresolved and is called out there as "the real defect."
 8. **Whether capture is too strong** — parked; reintroduce only if balance requires it.
 
 If an implementation question is not answered by the design doc, **it is probably on this list.** Add to it rather than inventing a rule, and note the placeholder you used.
