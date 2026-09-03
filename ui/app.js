@@ -38,6 +38,8 @@ const OPPONENT_BLURB = {
   VPBackstab:'Puts its own running mate on your ticket, then builds a Senate bloc to remove you. Currently cannot cash it.',
   Launchpad:'Runs governors as cheap ground in odd years, then steps a sitting governor up to the Senate.',
   BillAuthor:'Packs the House and votes the majority line — authorship is credited to the largest House bloc.',
+  Vetoer:'Strong on some rulesets. Chases the presidency and vetoes every bill while it holds the pen, rather than only under split government.',
+  BillBlocker:'Strong. Floods the Senate like SenateFlood, but votes no on everything — denies the 60% cloture threshold outright.',
 };
 const CONFIG_BLURB = {
   tuned:'The playable tuning. Bigger hand, thinner district supply — the settings that actually produce a contested board.',

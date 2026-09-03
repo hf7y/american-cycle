@@ -420,6 +420,35 @@ export class Launchpad extends Base {
   }
 }
 
+/** hf7y/american-cycle#75: `Base.veto` only presses the veto under split
+ *  government, so no shipped agent had ever exercised it -- a rule §12 writes
+ *  at length went unmeasured. This agent chases the presidency and vetoes
+ *  unconditionally while it holds the pen, which is the specimen #75 measured
+ *  beating the whole old six-agent field. */
+export class Vetoer extends Base {
+  declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[] {
+    const o = counterDeclare(options(v, open, this.cfg), pending, v.me, 2);
+    const pres = o.filter((x) => x.office === 'president').sort(byEdge);
+    return pickDistinct([...pres, ...o.filter((x) => x.office !== 'president').sort(byEdge)], this.budget(v));
+  }
+  veto(v: GameView, _g: number): boolean {
+    const pres = v.seats.find((s) => s.office === 'president' && s.holder);
+    return pres?.holder?.player === v.me;
+  }
+}
+
+/** hf7y/american-cycle#75's second counter: SenateFlood's declare policy
+ *  (Senate seats first) paired with a permanent no vote, which denies the
+ *  60% cloture threshold outright rather than merely under-supplying it. */
+export class BillBlocker extends Base {
+  declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[] {
+    const o = counterDeclare(options(v, open, this.cfg), pending, v.me, 2);
+    const sen = o.filter((x) => x.office === 'senator').sort(byEdge);
+    return pickDistinct([...sen, ...o.filter((x) => x.office !== 'senator').sort(byEdge)], this.budget(v));
+  }
+  voteBill(): boolean { return false; }
+}
+
 export const AGENTS: Record<string, new (cfg: Config, rng: RNG) => Agent> = {
   Random: class extends RandomAgent { constructor(c: Config, r: RNG) { super('Random', c, r); } },
   Greedy: class extends GreedyAgent { constructor(c: Config, r: RNG) { super('Greedy', c, r); } },
@@ -434,4 +463,6 @@ export const AGENTS: Record<string, new (cfg: Config, rng: RNG) => Agent> = {
   Launchpad: class extends Launchpad { constructor(c: Config, r: RNG) { super('Launchpad', c, r); } },
   EconomyChicken: class extends EconomyChicken { constructor(c: Config, r: RNG) { super('EconomyChicken', c, r); } },
   BillAuthor: class extends BillAuthor { constructor(c: Config, r: RNG) { super('BillAuthor', c, r); } },
+  Vetoer: class extends Vetoer { constructor(c: Config, r: RNG) { super('Vetoer', c, r); } },
+  BillBlocker: class extends BillBlocker { constructor(c: Config, r: RNG) { super('BillBlocker', c, r); } },
 };
