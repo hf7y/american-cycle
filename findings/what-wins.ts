@@ -51,18 +51,18 @@ export const finding: Finding = {
     + '(engine/rules/scoring.ts)?',
 
   headline:
-    'The Senate and the presidency; everything else loses. Winners hold 2.4x the Senate seats and '
-    + '3.7x the presidencies of everyone else, and 0.13x the House seats — holding House seats is '
-    + 'anti-correlated with winning, not merely a weak play. That follows from what a House seat '
-    + 'is: it scores 1, expires every two years, grants no hand size, and arrives attached to a '
-    + 'district card that is itself ballast. Governorships have now joined it at 0.89x: they were '
-    + 'read as 1.2x while one card could sit in as many as five seats at once, and correcting that '
-    + 'took the whole seat count down and the governorship below parity. A governor scores '
-    + 'points, gets a Senate appointment power, and carries a stepping-stone bonus into other '
-    + 'races, and measured against this board none of it '
-    + 'pays — which is a claim about the LAUNCHPAD being unreachable, not about the office: only '
-    + '21.9% of gubernatorial elections fall in a presidential year, and a governor could reach '
-    + 'the presidency only in the cycle its term expired until `resignToRun` existed.',
+    'The presidency and the Senate lead, and the governorship has closed most of the gap since '
+    + '`resignToRun` and `oddYearGovernors` shipped (hf7y/american-cycle#141). Winners hold 2.9x '
+    + 'the Senate seats and 6.0x the presidencies of everyone else; governorships, at 2.0x, now '
+    + 'sit close behind the Senate ratio rather than at 0.89x below parity. House seats have moved too '
+    + '(0.69x, up from 0.13x) but stay the one office where holding it does not help you win: it '
+    + 'scores 1, expires every two years, grants no hand size, and arrives attached to a district '
+    + 'card that is itself ballast. The governorship reversal is the launchpad opening, not the '
+    + 'office changing: only 21.9% of gubernatorial elections fall in a presidential year, and a '
+    + 'governor could reach the presidency only in the cycle its term expired until `resignToRun` '
+    + 'existed. hf7y/american-cycle#26 measured the remaining lever, a lean push for governors '
+    + 'winning with the state\'s existing tilt, and found no further effect on top of the '
+    + 'stepping-stone alone.',
   stampedAt: '2026-09-03T22:09:49Z',
   stampedOn: 'eb1d185',
 
