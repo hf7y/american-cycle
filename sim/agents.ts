@@ -71,6 +71,13 @@ const raceKey = (r: { office: Office; state: string; slot?: number }) => `${r.of
  *  against someone who may have spent nothing -- which is the asymmetry that
  *  makes district gating necessary. An agent that never does this plays
  *  solitaire. */
+/** `appetite`: a flat edge bonus for a race a rival already committed to, so
+ *  contesting reads as attractive rather than agents only ever taking open
+ *  seats and leaving walkovers to accumulate. Unprinted magnitude (#87);
+ *  every caller uses 2 except `HouseFarm` and `BillAuthor`'s 3, which is the
+ *  same bump their office-specific sort already gives their target office,
+ *  applied a second time to specifically prioritise CONTESTING it over an
+ *  uncontested race elsewhere. */
 export function counterDeclare(
   opts: Option[], pending: PendingPeg[], me: number, appetite: number,
 ): Option[] {
@@ -115,7 +122,12 @@ abstract class Base implements Agent {
   abstract declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[];
   /** Default: pull out only when the visible arithmetic is clearly against you.
    *  The dice are unknowable here by construction -- withdrawal closes before
-   *  any die is rolled (see elections.ts, elections.test.ts). */
+   *  any die is rolled (see elections.ts, elections.test.ts).
+   *
+   *  -4 is unprinted (#87), chosen off DECISIONS.md's own odds table: a +4
+   *  edge already wins 82.5% of generals and 94.4% of primaries, so a -4
+   *  modifier total reads as a fight worth conceding before the dice, not
+   *  merely an uphill one. */
   withdraw(v: WithdrawalView): boolean {
     return v.contenders > 0 && v.myModifierTotal <= -4;
   }
@@ -197,6 +209,12 @@ export class LookaheadAgent extends Base {
       const pts = o.office === 'president' ? 5 : o.office === 'senator' ? 3 : o.office === 'governor' ? 2 : 1;
       // future value = points and hand size over the term, discounted by the
       // chance of actually winning it
+      //
+      // 0.045 linearises DECISIONS.md's general-election odds table (edge +1
+      // = 59.2%, +4 = 82.5%, +6 = 92.1%) around its own slope -- unprinted
+      // (#87), and cheap on purpose: this is a planning heuristic picking
+      // between open races, not a resolver, so it undershoots at high edge
+      // rather than reproducing the table's curve exactly.
       const win = 0.5 + 0.045 * o.edge;
       const value = win * (pts + term[o.office] * (hand[o.office] + (o.office === 'representative' ? 0.5 : 0)));
       return { ...o, edge: value };
@@ -366,6 +384,11 @@ export class EconomyChicken extends Base {
   declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[] {
     return pickDistinct(counterDeclare(options(v, open, this.cfg), pending, v.me, 2).sort(byEdge), this.budget(v));
   }
+  // `fedCheck` (engine/rules/economy.ts) fires when 2d6 rolls <= accumulatedG:
+  // 58.3% of rolls clear 7, 72.2% clear 8. Unprinted (#87); 7 and 8 are where
+  // that curve stops being "probably fine" and start being "probably not" --
+  // this agent stops PROPOSING growth right at the pivot and stops VOTING for
+  // it one pip later, since a vote it doesn't control needs less margin.
   proposeG(v: GameView): number {
     return v.economy.accumulatedG >= 7 ? this.cfg.economy.gMin : this.cfg.economy.gMax;
   }

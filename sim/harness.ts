@@ -87,6 +87,10 @@ export function summarise(results: GameResult[], agentNames: string[]): Summary 
     decisions += r.decisionCounts.reduce((a, b) => a + b, 0); decisionN += r.decisionCounts.length;
     upsets += r.events.filter((e) => e.upset).length; races += r.events.length;
     for (const k of Object.keys(seats)) seats[k] += r.seatsByOffice[k as keyof typeof r.seatsByOffice] ?? 0;
+    // "Realigned" reads as half of lean.maxLean (8 on every shipped config),
+    // i.e. a state that moved at least halfway to the cap. Unprinted (#87);
+    // every config shares the same maxLean, so this tracks it rather than a
+    // literal 4.
     for (const v of Object.values(r.finalLean)) { absLean += Math.abs(v); leanN++; if (Math.abs(v) >= 4) realigned++; }
   }
   return {
