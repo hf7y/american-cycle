@@ -145,6 +145,7 @@ function advance(answer) {
   render();
   if (pending.kind === 'declare') phaseDeclare();
   else if (pending.kind === 'withdraw') phaseWithdraw();
+  else if (pending.kind === 'independent') phaseIndependent();
   else if (pending.kind === 'bill') phaseBill();
 }
 
@@ -216,6 +217,22 @@ function phaseWithdraw() {
     </div>`);
   $('stand').onclick = () => { closeModal(); advance({ withdraw:false }); };
   $('pull').onclick  = () => { closeModal(); advance({ withdraw:true  }); };
+}
+
+function phaseIndependent() {
+  const { race } = pending;
+  modal(`
+    <span class="eyebrow">primary · ${race.state} ${OFFICE_LABEL[race.office]}</span>
+    <h2 style="font-size:21px;margin-top:4px">If ${race.cardName} loses this primary, run as an independent?</h2>
+    <p class="note" style="margin:8px 0 12px">Decided now, before the primary's dice are rolled. Committing means that
+      losing the primary does not return the card to your hand -- it stays in this same race under no party's line,
+      forfeiting coattails but keeping what it earned.</p>
+    <div class="row" style="margin-top:16px">
+      <button class="btn" id="party">Stay in the party</button>
+      <button class="btn ghost" id="indep">Run independent if I lose</button>
+    </div>`);
+  $('party').onclick = () => { closeModal(); advance({ independent:false }); };
+  $('indep').onclick = () => { closeModal(); advance({ independent:true  }); };
 }
 
 // ---- the omnibill -----------------------------------------------------------

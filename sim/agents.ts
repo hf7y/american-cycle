@@ -131,6 +131,16 @@ abstract class Base implements Agent {
   withdraw(v: WithdrawalView): boolean {
     return v.contenders > 0 && v.myModifierTotal <= -4;
   }
+  /** hf7y/american-cycle#96: Lieberman 2006, Murkowski 2010 -- both were
+   *  sitting incumbents facing a real primary fight, not challengers with no
+   *  base to run on. `myModifiers` carries an `incumbency` line only for a
+   *  card that already holds the seat (elections.ts:208), and the same -4
+   *  bound `withdraw` uses marks a primary as genuinely contested rather
+   *  than already lost. */
+  declareIndependent(v: WithdrawalView): boolean {
+    return v.contenders > 0 && v.myModifierTotal > -4
+      && v.myModifiers.some((m) => m.source === 'incumbency');
+  }
   proposeG(_v: GameView): number { return 3; }
   /** v0.2 item 4: a politician votes by DISTANCE, not by label.
    *
