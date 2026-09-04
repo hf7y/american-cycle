@@ -99,6 +99,21 @@ test('identities and demographics carry only live IdentityTag values', () => {
   }
 });
 
+// #41: a signed weight only ever fires through `identities`, so a weight
+// keyed on a tag the card does not carry, or on a tag outside the live
+// vocabulary, is dead data nobody would notice was wrong.
+test('identityWeights keys are live tags the card actually carries', () => {
+  for (const { file, pack } of packs) {
+    for (const c of pack.cards) {
+      if (c.kind !== 'candidate' || !c.identityWeights) continue;
+      for (const t of Object.keys(c.identityWeights)) {
+        assert.ok((TAGS as readonly string[]).includes(t), `${file}: ${c.id} weights unknown tag "${t}"`);
+        assert.ok(c.identities.includes(t as never), `${file}: ${c.id} weights "${t}" but does not carry it in identities`);
+      }
+    }
+  }
+});
+
 // ---------------------------------------------------------- stale prose
 
 // #89: pack notes sold a printed `heterodox` tag two commits after it was

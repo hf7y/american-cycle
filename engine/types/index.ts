@@ -30,6 +30,11 @@ export interface CandidateCard {
   /** printed per card, NOT global -- models the decline of localism */
   homeStateBonus: number;
   identities: IdentityTag[];
+  /** Signed per-tag override of resolution.identityBonus (#41). A tag absent
+   *  here still matches at the flat default -- this is what lets one card
+   *  price `business` as an asset and another price it as a liability,
+   *  something a single positive scalar could never express. */
+  identityWeights?: Partial<Record<IdentityTag, number>>;
   belief?: string;
   era: number;
   effects: CardEffect[];
