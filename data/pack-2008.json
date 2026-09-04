@@ -783,7 +783,6 @@
         "black",
         "urban"
       ],
-      "synergy": 2,
       "note": "South Side"
     },
     {
@@ -796,7 +795,6 @@
         "urban",
         "catholic"
       ],
-      "synergy": 2,
       "note": "North Side"
     },
     {
@@ -809,7 +807,6 @@
         "black",
         "urban"
       ],
-      "synergy": 2,
       "note": "Harlem"
     },
     {
@@ -822,7 +819,6 @@
         "rural",
         "union"
       ],
-      "synergy": 1,
       "note": "North Country"
     },
     {
@@ -835,7 +831,6 @@
         "urban",
         "academic"
       ],
-      "synergy": 2,
       "note": "San Francisco"
     },
     {
@@ -848,7 +843,6 @@
         "hispanic",
         "urban"
       ],
-      "synergy": 3,
       "note": "Downtown LA"
     },
     {
@@ -861,7 +855,6 @@
         "suburban",
         "business"
       ],
-      "synergy": 2,
       "note": "North San Diego County"
     },
     {
@@ -874,7 +867,6 @@
         "hispanic",
         "rural"
       ],
-      "synergy": 3,
       "note": "Border district"
     },
     {
@@ -887,7 +879,6 @@
         "suburban",
         "business"
       ],
-      "synergy": 2,
       "note": "Sugar Land"
     },
     {
@@ -900,7 +891,6 @@
         "cuban",
         "suburban"
       ],
-      "synergy": 3,
       "note": "Miami-Dade"
     },
     {
@@ -913,7 +903,6 @@
         "suburban",
         "jewish"
       ],
-      "synergy": 2,
       "note": "Broward-Palm Beach"
     },
     {
@@ -926,7 +915,6 @@
         "suburban",
         "union"
       ],
-      "synergy": 2,
       "note": "Pittsburgh suburbs"
     },
     {
@@ -940,7 +928,6 @@
         "rural",
         "catholic"
       ],
-      "synergy": 2,
       "note": "Murtha country"
     },
     {
@@ -953,7 +940,6 @@
         "black",
         "urban"
       ],
-      "synergy": 2,
       "note": "Cincinnati"
     },
     {
@@ -966,7 +952,6 @@
         "suburban",
         "academic"
       ],
-      "synergy": 2,
       "note": "Columbus suburbs"
     },
     {
@@ -980,7 +965,6 @@
         "hispanic",
         "business"
       ],
-      "synergy": 3,
       "note": "Northern Virginia"
     },
     {
@@ -993,7 +977,6 @@
         "rural",
         "evangelical"
       ],
-      "synergy": 2,
       "note": "Fighting Ninth"
     },
     {
@@ -1006,7 +989,6 @@
         "black",
         "rural"
       ],
-      "synergy": 2,
       "note": "Charlotte to Fayetteville"
     },
     {
@@ -1020,7 +1002,6 @@
         "evangelical",
         "veteran"
       ],
-      "synergy": 2,
       "note": "Western North Carolina"
     },
     {
@@ -1033,7 +1014,6 @@
         "suburban",
         "hispanic"
       ],
-      "synergy": 2,
       "note": "Denver suburbs"
     },
     {
@@ -1046,7 +1026,6 @@
         "suburban",
         "hispanic"
       ],
-      "synergy": 2,
       "note": "Las Vegas suburbs"
     },
     {
@@ -1059,7 +1038,6 @@
         "suburban",
         "hispanic"
       ],
-      "synergy": 2,
       "note": "Tucson"
     },
     {
@@ -1072,7 +1050,6 @@
         "hispanic",
         "urban"
       ],
-      "synergy": 2,
       "note": "Albuquerque"
     },
     {
@@ -1086,7 +1063,6 @@
         "rural",
         "catholic"
       ],
-      "synergy": 2,
       "note": "South Bend"
     },
     {
@@ -1099,7 +1075,6 @@
         "suburban",
         "jewish"
       ],
-      "synergy": 2,
       "note": "Oakland County"
     },
     {
@@ -1113,7 +1088,6 @@
         "union",
         "catholic"
       ],
-      "synergy": 2,
       "note": "Green Bay"
     },
     {
@@ -1126,7 +1100,6 @@
         "suburban",
         "evangelical"
       ],
-      "synergy": 2,
       "note": "The Sixth"
     },
     {
@@ -1139,7 +1112,6 @@
         "farm",
         "suburban"
       ],
-      "synergy": 2,
       "note": "Des Moines"
     },
     {
@@ -1153,7 +1125,6 @@
         "rural",
         "evangelical"
       ],
-      "synergy": 2,
       "note": "Northern Missouri"
     },
     {
@@ -1167,7 +1138,6 @@
         "rural",
         "veteran"
       ],
-      "synergy": 2,
       "note": "Eastern Kansas"
     },
     {
@@ -1180,7 +1150,6 @@
         "black",
         "suburban"
       ],
-      "synergy": 2,
       "note": "DeKalb County"
     },
     {
@@ -1194,7 +1163,6 @@
         "evangelical",
         "veteran"
       ],
-      "synergy": 2,
       "note": "Montgomery"
     },
     {
@@ -1208,7 +1176,6 @@
         "farm",
         "evangelical"
       ],
-      "synergy": 2,
       "note": "North Mississippi"
     },
     {
@@ -1221,7 +1188,6 @@
         "suburban",
         "evangelical"
       ],
-      "synergy": 2,
       "note": "Baton Rouge"
     },
     {
@@ -1235,7 +1201,6 @@
         "business",
         "veteran"
       ],
-      "synergy": 2,
       "note": "Lowcountry"
     },
     {
@@ -1248,7 +1213,6 @@
         "urban",
         "union"
       ],
-      "synergy": 2,
       "note": "Louisville"
     },
     {
@@ -1261,7 +1225,6 @@
         "union",
         "rural"
       ],
-      "synergy": 2,
       "note": "Northern West Virginia"
     },
     {
@@ -1274,7 +1237,6 @@
         "suburban",
         "rural"
       ],
-      "synergy": 2,
       "note": "Manchester"
     },
     {
@@ -1288,7 +1250,6 @@
         "suburban",
         "business"
       ],
-      "synergy": 2,
       "note": "Eastern Shore"
     },
     {
@@ -1301,7 +1262,6 @@
         "suburban",
         "business"
       ],
-      "synergy": 2,
       "note": "Central Jersey"
     },
     {
@@ -1314,7 +1274,6 @@
         "suburban",
         "business"
       ],
-      "synergy": 2,
       "note": "Fairfield County"
     },
     {
@@ -1327,7 +1286,6 @@
         "suburban",
         "academic"
       ],
-      "synergy": 2,
       "note": "Eastside"
     },
     {

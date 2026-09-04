@@ -17,7 +17,7 @@ const cand = (o: Partial<CandidateCard>): CandidateCard => ({
   identities: [], era: 1976, effects: [], ...o,
 });
 const dist = (o: Partial<DistrictCard>): DistrictCard => ({
-  id: 'OH-9', state: 'OH', number: 9, era: 1976, demographics: [], synergy: 1, ...o,
+  id: 'OH-9', state: 'OH', number: 9, era: 1976, demographics: [], ...o,
 });
 const ctx = (o: Partial<RaceContext>): RaceContext => ({
   year: 1978, office: 'senator', state: 'OH', lean: 0,
@@ -83,19 +83,18 @@ test('district cards gate all races', () => {
  *  against, so `homeDistrict` must not depend on which of a player's
  *  districts an array happens to yield first. */
 test('homeDistrict combines a state\'s districts regardless of array order', () => {
-  const a = dist({ id: 'CA-3', state: 'CA', synergy: 2, demographics: ['urban'] });
-  const b = dist({ id: 'CA-9', state: 'CA', synergy: 1, demographics: ['union'] });
+  const a = dist({ id: 'CA-3', state: 'CA', demographics: ['urban'] });
+  const b = dist({ id: 'CA-9', state: 'CA', demographics: ['union'] });
   const forward = homeDistrict([a, b], 'CA')!;
   const reversed = homeDistrict([b, a], 'CA')!;
   assert.deepEqual(forward, reversed, 'draw order must not change the combined district');
-  assert.equal(forward.synergy, 3, 'synergy sums rather than reading one card');
   assert.deepEqual(new Set(forward.demographics), new Set(['urban', 'union']));
   assert.equal(homeDistrict([a, b], 'OH'), undefined, 'no district in the state, no fit');
 });
 
 test('#112: the presidential modifier stack does not depend on district draw order', () => {
-  const a = dist({ id: 'CA-3', state: 'CA', synergy: 2, demographics: ['urban'] });
-  const b = dist({ id: 'CA-9', state: 'CA', synergy: 1, demographics: ['union'] });
+  const a = dist({ id: 'CA-3', state: 'CA', demographics: ['urban'] });
+  const b = dist({ id: 'CA-9', state: 'CA', demographics: ['union'] });
   const candidate = cand({ homeState: 'OH', identities: ['union'] });
   const c = ctx({ office: 'president', state: 'CA' });
   const forward = { player: 0, card: candidate, office: 'president' as const, state: 'CA', district: homeDistrict([a, b], 'CA') };
@@ -117,17 +116,20 @@ test('lean applies once, to the party it favours', () => {
 test('the midterm penalty reaches everyone; a local card outruns it', () => {
   // Manchin's insulation was a printed tag and is now the ordinary arithmetic
   // of a big personal vote: he takes the -2 like anyone else and survives it
-  // on home state plus district synergy.
+  // on home state plus identity match against his district.
   const manchin: Declaration = {
     player: 0, state: 'WV', office: 'senator',
-    district: dist({ id: 'WV-1', state: 'WV', synergy: 3 }),
-    card: cand({ id: 'manchin', party: 'D', homeState: 'WV', homeStateBonus: 2 }),
+    district: dist({ id: 'WV-1', state: 'WV', demographics: ['rural', 'union', 'veteran'] }),
+    card: cand({
+      id: 'manchin', party: 'D', homeState: 'WV', homeStateBonus: 2,
+      identities: ['rural', 'union', 'veteran'],
+    }),
   };
   const c = ctx({ state: 'WV', isMidterm: true, presidentParty: 'D' });
   const mods = buildModifiers(manchin, c, 'general', res, nat, pg);
   assert.ok(mods.some((m) => m.source === 'midterm'), 'the tide is not shed');
   const side = { player: 0, cardId: 'manchin', party: 'D' as const, modifiers: mods };
-  assert.equal(resolution.modifierTotal(side), 3, 'home state 2 + synergy 3 - midterm 2');
+  assert.equal(resolution.modifierTotal(side), 3, 'home state 2 + identity match 3 (res.identityBonus 1 x 3) - midterm 2');
 });
 
 test('coattails run in reverse in hostile states, with no extra rule', () => {

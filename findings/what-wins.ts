@@ -63,18 +63,18 @@ export const finding: Finding = {
     + 'existed. hf7y/american-cycle#26 measured the remaining lever, a lean push for governors '
     + 'winning with the state\'s existing tilt, and found no further effect on top of the '
     + 'stepping-stone alone.',
-  stampedAt: '2026-09-03T22:09:49Z',
-  stampedOn: 'eb1d185',
+  stampedAt: '2026-09-04T10:35:36Z',
+  stampedOn: '3089e90',
 
   predicate(): Claim[] {
     const s = seatsByOutcome();
     return [
-      { name: 'Senate seats: winner vs everyone else', value: s.senator.ratio, stamped: 2.87, tolerance: 0.7, unit: 'x' },
-      { name: 'House seats: winner vs everyone else', value: s.representative.ratio, stamped: 0.69, tolerance: 0.15, unit: 'x' },
-      { name: 'governorships: winner vs everyone else', value: s.governor.ratio, stamped: 2, tolerance: 0.5, unit: 'x' },
-      { name: 'the presidency: winner vs everyone else', value: s.president.ratio, stamped: 6, tolerance: 1.6, unit: 'x' },
-      { name: 'Senate seats held by the winner', value: s.senator.winner, stamped: 9.42, tolerance: 4 },
-      { name: 'House seats held by the winner', value: s.representative.winner, stamped: 3.25, tolerance: 1.5 },
+      { name: 'Senate seats: winner vs everyone else', value: s.senator.ratio, stamped: 3.07, tolerance: 0.7, unit: 'x' },
+      { name: 'House seats: winner vs everyone else', value: s.representative.ratio, stamped: 0.27, tolerance: 0.15, unit: 'x' },
+      { name: 'governorships: winner vs everyone else', value: s.governor.ratio, stamped: 0.91, tolerance: 0.5, unit: 'x' },
+      { name: 'the presidency: winner vs everyone else', value: s.president.ratio, stamped: 15, tolerance: 1.6, unit: 'x' },
+      { name: 'Senate seats held by the winner', value: s.senator.winner, stamped: 10.25, tolerance: 4 },
+      { name: 'House seats held by the winner', value: s.representative.winner, stamped: 1.33, tolerance: 1.5 },
     ];
   },
 

@@ -61,7 +61,7 @@ const ENGINE_SOURCES = new Set([
   'midterm', 'economy', 'coattails',
 ]);
 const enginePrefixed = (s: string): boolean =>
-  s.startsWith('district ') || s.startsWith('identity: ') || s.endsWith(' stepping up')
+  s.startsWith('identity: ') || s.endsWith(' stepping up')
   || s.startsWith('cross-benched') || s.startsWith('off-position votes') || s.startsWith('VP ');
 
 interface Rule { id: string; note: string; hit(r: GameResult, log: readonly string[]): number }
@@ -76,7 +76,6 @@ const RULES: Rule[] = [
   // ---- election modifiers (buildModifiers, engine/rules/elections.ts) ----
   { id: 'state-lean', note: 'the map lean applies to a race', hit: bySource((s) => s === 'state lean') },
   { id: 'home-state-bonus', note: "a candidate's printed home-state bonus", hit: bySource((s) => s === 'home state') },
-  { id: 'district-synergy', note: 'a held district card prices a race', hit: bySource((s) => s.startsWith('district ')) },
   { id: 'identity-bonus', note: 'a candidate identity matches district demographics', hit: bySource((s) => s.startsWith('identity: ')) },
   { id: 'party-fit', note: 'distance from the party tag centroid', hit: bySource((s) => s === 'party fit') },
   { id: 'incumbency', note: 'an incumbent runs again', hit: bySource((s) => s === 'incumbency') },

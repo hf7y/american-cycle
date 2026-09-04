@@ -34,7 +34,7 @@ const cand = (o: Partial<CandidateCard>): CandidateCard => ({
   identities: [], era: 1976, effects: [], ...o,
 });
 const dist = (o: Partial<DistrictCard>): DistrictCard => ({
-  id: 'ZZ-1', state: 'ZZ', number: 1, era: 1976, demographics: [], synergy: 1, ...o,
+  id: 'ZZ-1', state: 'ZZ', number: 1, era: 1976, demographics: [], ...o,
 });
 
 /** A fully scripted `Agent`: declares whatever `declFn` returns and otherwise
@@ -65,10 +65,10 @@ class ScriptedAgent implements Agent {
  *  electors, winner-take-all, to whoever takes it -- so a candidate who
  *  dominates a few huge states can beat one who wins many small ones. That is
  *  the property a national vote-share tally would not have, so it is the one
- *  worth constructing: district-card synergy (25 pips) swamps the largest
- *  possible dice swing (two 3d6 sides, at most ~15 pips apart), so who wins
- *  which state is decided by which player we hand the district to, not by
- *  the dice. */
+ *  worth constructing: a per-state card-text bonus (25 pips, since #27
+ *  deleted district-card synergy) swamps the largest possible dice swing (two
+ *  3d6 sides, at most ~15 pips apart), so who wins which state is decided by
+ *  which player we hand the bonus to, not by the dice. */
 test('the presidency goes to whoever crosses the electors majority, not whoever carries more states', () => {
   const cfg = loadConfig('as-written-plus.json');
   const year = cfg.game.startYear; // 1976, and a presidential year (1976 % 4 === 0)
@@ -82,18 +82,16 @@ test('the presidency goes to whoever crosses the electors majority, not whoever 
   assert.ok(fewBigStates.length < manySmallStates.length, 'the big-state bloc must be the smaller number of states');
   assert.ok(sum > totalElectors(year) / 2, 'and still hold the electoral majority');
 
-  const candD = cand({ id: 'many-states', party: 'D' });
-  const candR = cand({ id: 'few-states', party: 'R' });
-  const districtsFor = (codes: string[]): DistrictCard[] =>
-    codes.map((code) => dist({ id: `${code}-1`, state: code, number: 1, synergy: 25 }));
+  const effectsFor = (codes: string[]) =>
+    codes.map((state) => ({ type: 'conditional' as const, pips: 25, when: { state }, note: `${state} lock` }));
+  const candD = cand({ id: 'many-states', party: 'D', effects: effectsFor(manySmallStates) });
+  const candR = cand({ id: 'few-states', party: 'R', effects: effectsFor(fewBigStates) });
 
   const agentD = new ScriptedAgent('D', () => [{ player: 0, card: candD, office: 'president', state: 'US' }]);
   const agentR = new ScriptedAgent('R', () => [{ player: 1, card: candR, office: 'president', state: 'US' }]);
   const g = new Game([agentD, agentR], [{ kind: 'candidate', ...candD }, { kind: 'candidate', ...candR }], cfg, 1);
   g.players[0].hand = [{ kind: 'candidate', ...candD }];
-  g.players[0].districts = districtsFor(manySmallStates);
   g.players[1].hand = [{ kind: 'candidate', ...candR }];
-  g.players[1].districts = districtsFor(fewBigStates);
 
   g.tick();
 
@@ -114,13 +112,16 @@ test('the presidency goes to whoever crosses the electors majority, not whoever 
  *  DC add up to the real 538. */
 test('a simulated presidential general’s electors sum to the real total and pick the real winner', () => {
   const cfg = loadConfig('as-written-plus.json');
-  const rng = new RNG(3);
+  // #40/#27 changed what agents value a House declaration at, which reorders
+  // the RNG draws downstream -- seed 3 no longer reaches a contested
+  // presidential race under the new modifier stack. Re-stamped to seed 1.
+  const rng = new RNG(1);
   const agents: Agent[] = ['Greedy', 'BillAuthor', 'Random'].map((n) => new AGENTS[n](cfg, rng));
-  const g = new Game(agents, structuredClone(CARDS), cfg, 3);
+  const g = new Game(agents, structuredClone(CARDS), cfg, 1);
   g.tick();
 
   const prez = g.events.filter((e) => e.office === 'president' && e.round === 'general');
-  assert.ok(prez.length > 0, 'seed 3 is stamped to produce a contested presidential race');
+  assert.ok(prez.length > 0, 'seed 1 is stamped to produce a contested presidential race');
   const evByPlayer = new Map<number, number>();
   for (const e of prez) {
     const ev = electors(BY_CODE[e.state], cfg.game.startYear) + (e.state === 'MD' ? DC_ELECTORS : 0);

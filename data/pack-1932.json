@@ -619,7 +619,6 @@
         "catholic",
         "union"
       ],
-      "synergy": 3,
       "note": "Lower East Side"
     },
     {
@@ -632,7 +631,6 @@
         "urban",
         "jewish"
       ],
-      "synergy": 3,
       "note": "Harlem and up"
     },
     {
@@ -645,7 +643,6 @@
         "rural",
         "farm"
       ],
-      "synergy": 2,
       "note": "Upstate dairy"
     },
     {
@@ -659,7 +656,6 @@
         "union",
         "catholic"
       ],
-      "synergy": 3,
       "note": "Back of the Yards"
     },
     {
@@ -672,7 +668,6 @@
         "urban",
         "black"
       ],
-      "synergy": 3,
       "note": "The Black Belt, newly Democratic"
     },
     {
@@ -685,7 +680,6 @@
         "farm",
         "rural"
       ],
-      "synergy": 2,
       "note": "Downstate"
     },
     {
@@ -699,7 +693,6 @@
         "union",
         "catholic"
       ],
-      "synergy": 3,
       "note": "Philadelphia wards"
     },
     {
@@ -712,7 +705,6 @@
         "union",
         "rural"
       ],
-      "synergy": 3,
       "note": "Anthracite country"
     },
     {
@@ -726,7 +718,6 @@
         "catholic",
         "union"
       ],
-      "synergy": 3,
       "note": "South Boston"
     },
     {
@@ -739,7 +730,6 @@
         "urban",
         "union"
       ],
-      "synergy": 3,
       "note": "Detroit, before the UAW"
     },
     {
@@ -753,7 +743,6 @@
         "union",
         "black"
       ],
-      "synergy": 3,
       "note": "Cleveland"
     },
     {
@@ -767,7 +756,6 @@
         "catholic",
         "union"
       ],
-      "synergy": 3,
       "note": "Pendergast's Kansas City"
     },
     {
@@ -780,7 +768,6 @@
         "rural",
         "farm"
       ],
-      "synergy": 3,
       "note": "Rayburn's Fourth"
     },
     {
@@ -794,7 +781,6 @@
         "rural",
         "farm"
       ],
-      "synergy": 3,
       "note": "The Valley"
     },
     {
@@ -808,7 +794,6 @@
         "evangelical",
         "farm"
       ],
-      "synergy": 3,
       "note": "Long's parishes"
     },
     {
@@ -822,7 +807,6 @@
         "rural",
         "farm"
       ],
-      "synergy": 3,
       "note": "The Delta"
     },
     {
@@ -835,7 +819,6 @@
         "rural",
         "farm"
       ],
-      "synergy": 3,
       "note": "North Alabama hill country"
     },
     {
@@ -848,7 +831,6 @@
         "urban",
         "black"
       ],
-      "synergy": 2,
       "note": "Atlanta"
     },
     {
@@ -861,7 +843,6 @@
         "rural",
         "farm"
       ],
-      "synergy": 3,
       "note": "The Byrd organisation"
     },
     {
@@ -874,7 +855,6 @@
         "rural",
         "union"
       ],
-      "synergy": 3,
       "note": "The Tennessee Valley"
     },
     {
@@ -887,7 +867,6 @@
         "rural",
         "union"
       ],
-      "synergy": 3,
       "note": "Harlan County"
     },
     {
@@ -900,7 +879,6 @@
         "union",
         "rural"
       ],
-      "synergy": 3,
       "note": "The coalfields"
     },
     {
@@ -913,7 +891,6 @@
         "farm",
         "rural"
       ],
-      "synergy": 3,
       "note": "Wheat, and dust"
     },
     {
@@ -926,7 +903,6 @@
         "farm",
         "rural"
       ],
-      "synergy": 3,
       "note": "The Platte"
     },
     {
@@ -939,7 +915,6 @@
         "farm",
         "rural"
       ],
-      "synergy": 3,
       "note": "Farm Holiday country"
     },
     {
@@ -953,7 +928,6 @@
         "rural",
         "union"
       ],
-      "synergy": 3,
       "note": "Farmer-Labor"
     },
     {
@@ -966,7 +940,6 @@
         "farm",
         "rural"
       ],
-      "synergy": 3,
       "note": "La Follette's base"
     },
     {
@@ -979,7 +952,6 @@
         "farm",
         "rural"
       ],
-      "synergy": 3,
       "note": "Nonpartisan League"
     },
     {
@@ -992,7 +964,6 @@
         "union",
         "rural"
       ],
-      "synergy": 3,
       "note": "Butte and the mines"
     },
     {
@@ -1005,7 +976,6 @@
         "urban",
         "business"
       ],
-      "synergy": 2,
       "note": "Los Angeles"
     }
   ]
