@@ -267,6 +267,10 @@ function render() {
   drawHand();
   drawControls();
   drawFloor();
+  $('mapHint').textContent = pending && pending.kind === 'declare'
+    ? (S.sel ? 'gold = on the ballot · outlined = your card cannot run there · brass border = contested'
+             : 'gold = on the ballot this year · pick a card to see where it can run')
+    : "deviation from each state's own baseline";
 }
 
 /** How many of the card's identities match the district you hold in this
@@ -327,6 +331,12 @@ function drawMap() {
     t.appendChild(pips);
     const held = G.seats.find((s)=>s.state===code && s.holder && (s.office==='senator'||s.office==='governor'));
     if (held){ const pg = el('div','peg'); pg.style.background = PLAYER_COLORS[held.holder.player]; t.appendChild(pg); }
+    // Every race on this state's ballot this year, and the subset this card
+    // may enter. A state with no race at all is not the same as a state you
+    // are barred from, and the board used to say neither.
+    const ballot = (pending && pending.kind === 'declare' ? (pending.open || []) : []).filter((r) => r.state === code);
+    if (ballot.length) t.classList.add('ballot');
+    if (S.sel && ballot.length && !racesInState_all(S.sel).some((r) => r.state === code)) t.classList.add('blocked');
     const here = floorBy[code] || [];
     if (here.length) {
       const dd = el('div','decl');
@@ -340,9 +350,16 @@ function drawMap() {
     if (declaredHere.has(code)) t.classList.add('race');
     const fit = S.sel ? fitIn(S.sel, code) : 0;
     if (fit) t.appendChild(el('div','fit', '+' + fit));
+    const why = !pending || pending.kind !== 'declare' ? ''
+      : !ballot.length ? ' · nothing on the ballot here this year'
+      : !S.sel ? ` · on the ballot: ${ballot.map((r)=>OFFICE_LABEL[r.office]).join(', ')}`
+      : t.classList.contains('blocked')
+        ? ` · ${ballot.map((r)=>OFFICE_LABEL[r.office]).join(', ')} open, but ${S.sel.name} cannot run here — you hold no district in ${code} and ${code} is not their home state`
+        : ` · ${S.sel.name} can run: ${racesInState_all(S.sel).filter((r)=>r.state===code).map((r)=>OFFICE_LABEL[r.office]).join(', ')}`;
     t.title = `${code} — lean ${lean>0?'R+':lean<0?'D+':''}${Math.abs(lean)||'even'}`
       + (fit ? ` · ${S.sel.name} matches ${fit} of your district's demographics` : '')
-      + (here.length ? ` · declared here: ${here.map((r)=>G.players[r.player].name + ' (' + r.party + ')').join(', ')}` : '');
+      + (here.length ? ` · declared here: ${here.map((r)=>G.players[r.player].name + ' (' + r.party + ')').join(', ')}` : '')
+      + why;
     m.appendChild(t);
   }
 }

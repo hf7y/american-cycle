@@ -81,6 +81,11 @@ button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--brass);out
 .st.contested{border-color:var(--brass);border-width:2px}
 /* Demographic overlap between the selected card and your district here. */
 .st .fit{position:absolute;top:1px;left:2px;font-family:var(--mono);font-size:8px;font-weight:600;color:var(--good)}
+/* Why a state does not respond. Three different situations used to render
+   identically -- nothing on the ballot, a race you cannot enter, and a race
+   you already took -- so a player had to invent a rule to explain it. */
+.st.ballot{background-image:linear-gradient(to bottom,rgba(138,109,34,.16),transparent 42%)}
+.st.blocked{opacity:.5;outline:1px dashed var(--rule);outline-offset:-3px}
 
 /* cards ------------------------------------------------------------------- */
 #hand{display:flex;gap:8px;overflow-x:auto;padding:4px 0 8px}
