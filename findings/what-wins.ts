@@ -51,30 +51,30 @@ export const finding: Finding = {
     + '(engine/rules/scoring.ts)?',
 
   headline:
-    'The presidency and the Senate lead, and the governorship has closed most of the gap since '
-    + '`resignToRun` and `oddYearGovernors` shipped (hf7y/american-cycle#141). Winners hold 2.9x '
-    + 'the Senate seats and 6.0x the presidencies of everyone else; governorships, at 2.0x, now '
-    + 'sit close behind the Senate ratio rather than at 0.89x below parity. House seats have moved too '
-    + '(0.69x, up from 0.13x) but stay the one office where holding it does not help you win: it '
-    + 'scores 1, expires every two years, grants no hand size, and arrives attached to a district '
-    + 'card that is itself ballast. The governorship reversal is the launchpad opening, not the '
-    + 'office changing: only 21.9% of gubernatorial elections fall in a presidential year, and a '
-    + 'governor could reach the presidency only in the cycle its term expired until `resignToRun` '
-    + 'existed. hf7y/american-cycle#26 measured the remaining lever, a lean push for governors '
-    + 'winning with the state\'s existing tilt, and found no further effect on top of the '
-    + 'stepping-stone alone.',
-  stampedAt: '2026-09-04T10:35:36Z',
-  stampedOn: '3089e90',
+    'Re-measured for hf7y/american-cycle#13, which asked for a dedicated pass rather than a byproduct '
+    + 'number after `tuned.json` and `as-written-plus.json` both moved to `victory: \'amendment\'` '
+    + '(hf7y/american-cycle#145). The ranking is unchanged -- presidency, then Senate, then '
+    + 'governorships, with House seats still the one office anti-correlated with winning -- but the '
+    + 'presidency\'s lead has come in hard, 15x down to 7.3x, and House seats have drifted up from '
+    + '0.27x to 0.54x. Senate and the two "held by the winner" counts still hold within tolerance. '
+    + 'Nothing here pins the drop on the ending change specifically rather than the district-identity '
+    + 'fixes landed in the same window (hf7y/american-cycle#27, #40) -- both moved before this stamp -- '
+    + 'so this restamp records that the ratio moved, not why. See '
+    + 'hf7y/american-cycle#50 / `findings/amendment-victory-dominance.ts` for the companion measurement: '
+    + 'the amendment ending does not fix the dominance hole this office question keeps colliding with, '
+    + 'it relocates it again, the same way it moved between points and bills.',
+  stampedAt: '2026-09-04T13:35:00Z',
+  stampedOn: '16805ba',
 
   predicate(): Claim[] {
     const s = seatsByOutcome();
     return [
-      { name: 'Senate seats: winner vs everyone else', value: s.senator.ratio, stamped: 3.07, tolerance: 0.7, unit: 'x' },
-      { name: 'House seats: winner vs everyone else', value: s.representative.ratio, stamped: 0.27, tolerance: 0.15, unit: 'x' },
-      { name: 'governorships: winner vs everyone else', value: s.governor.ratio, stamped: 0.91, tolerance: 0.5, unit: 'x' },
-      { name: 'the presidency: winner vs everyone else', value: s.president.ratio, stamped: 15, tolerance: 1.6, unit: 'x' },
-      { name: 'Senate seats held by the winner', value: s.senator.winner, stamped: 10.25, tolerance: 4 },
-      { name: 'House seats held by the winner', value: s.representative.winner, stamped: 1.33, tolerance: 1.5 },
+      { name: 'Senate seats: winner vs everyone else', value: s.senator.ratio, stamped: 2.86, tolerance: 0.7, unit: 'x' },
+      { name: 'House seats: winner vs everyone else', value: s.representative.ratio, stamped: 0.54, tolerance: 0.15, unit: 'x' },
+      { name: 'governorships: winner vs everyone else', value: s.governor.ratio, stamped: 1.44, tolerance: 0.5, unit: 'x' },
+      { name: 'the presidency: winner vs everyone else', value: s.president.ratio, stamped: 7.29, tolerance: 1.6, unit: 'x' },
+      { name: 'Senate seats held by the winner', value: s.senator.winner, stamped: 9.83, tolerance: 4 },
+      { name: 'House seats held by the winner', value: s.representative.winner, stamped: 2.28, tolerance: 1.5 },
     ];
   },
 
