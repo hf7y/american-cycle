@@ -1634,10 +1634,16 @@ function clampInt(v: number, lo: number, hi: number): number { return Math.max(l
  *  so every district crowds out someone to run. */
 function defaultPick(pack: Card[], p: PlayerState): Card {
   const states = new Set(p.districts.map((d) => d.state));
+  // #106 deleted district.synergy, and this ranked districts by it -- so the
+  // draft was choosing on a number that no longer reaches any race. A district
+  // is now worth what its electorate can reward, which is the demographic
+  // overlap with the candidates actually in hand.
+  const mine = new Set(p.hand.flatMap((c) => (c.kind === 'candidate' ? c.identities : [])));
   const value = (c: Card): number => {
     if (c.kind === 'district') {
       const need = Math.max(0, 4 - states.size);
-      return (states.has(c.state) ? 0.5 : 1) * (need > 0 ? 2 + c.synergy : c.synergy - 2);
+      const reach = c.demographics.filter((g) => mine.has(g)).length;
+      return (states.has(c.state) ? 0.5 : 1) * (need > 0 ? 2 + reach : reach - 2);
     }
     return 2 + c.homeStateBonus + c.effects.length;
   };

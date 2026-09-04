@@ -40,7 +40,10 @@ export interface DistrictCard {
   number: number;
   era: number;
   demographics: IdentityTag[];
-  /** printed synergy, applied when the holder runs in this state */
+  /** DEAD as of #106: nothing in the engine reads this. It paid the holder for
+   *  holding rather than for fitting, which is exactly the owner's bonus that
+   *  ruling removed. Kept only so the shipped packs stay one shape; cards added
+   *  after the ruling carry 0. */
   synergy: number;
   note?: string;
 }

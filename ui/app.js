@@ -434,7 +434,7 @@ function inspectState(code) {
               ${d.demographics.map((g) => tag(g)).join(' ')}
               ${d.note ? `<div class="note" style="margin-top:3px">${d.note}</div>` : ''}</td>
           <td style="text-align:right;vertical-align:top">opened by ${who(pi)}<br>
-              <span class="note">synergy +${d.synergy}</span></td></tr>`).join('')}</table>`
+              <span class="note">anyone may run here</span></td></tr>`).join('')}</table>`
       : '<p class="note">None. Without a district card there is no House race here at all.</p>'}
 
     <p class="eyebrow" style="margin-top:14px">Held seats</p>
@@ -492,7 +492,7 @@ function drawHand() {
   for (const d of me.districts) {
     const n = el('div','cc dc');
     n.appendChild(el('div','nm',`${d.state}-${d.number}`));
-    n.appendChild(el('div','mt',`district · synergy +${d.synergy} · ${d.era}`));
+    n.appendChild(el('div','mt',`district · opens a race · ${d.era}`));
     if (d.note) n.appendChild(el('div','bel',d.note));
     const tw = el('div');
     for (const g of d.demographics) tw.appendChild(el('span','tag',g));
