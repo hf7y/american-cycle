@@ -21,7 +21,10 @@ function measure(cfg: Config, cards: Card[], seedBase: number) {
     slots += 1; contested += r.contestedSlotShare;
     const top = Math.max(...r.scores), second = [...r.scores].sort((a, b) => b - a)[1] ?? 0;
     margin += top - second; marginN++;
-    if (r.leadChanges > 0) comeback++;
+    // SIM-BRIEF's comeback: the winner was LAST at the halfway mark, not merely
+    // a game with any lead change (see hf7y/american-cycle#34).
+    const half = r.scoreHistory[Math.floor(r.scoreHistory.length / 2)];
+    if (half && half[r.winner] === Math.min(...half)) comeback++;
     for (const e of r.events) {
       if (e.round !== 'general' || e.office === 'president') continue;
       const inc = e.sides.find((s) => s.modifiers.some((m) => m.source === 'incumbency'));
