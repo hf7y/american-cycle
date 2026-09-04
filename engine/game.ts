@@ -32,7 +32,11 @@ export interface Config {
   resolution: { incumbency: number; identityBonus: number; incumbencyPrimary: number; crossOfficeIncumbency: number;
                 incumbencyHouse?: number; incumbencySenate?: number };
   national: { strongEconomy: number; recession: number; midtermPenalty: number; coattailsWith: number; coattailsAgainst: number };
-  endorsements: { president: number; governorInState: number; senator: number };
+  /** `Count` fields default to 1 (F30-era shipped behaviour) when absent --
+   *  #42: the pip value and how many races that office can back per cycle
+   *  are different knobs, and only the pip value had one. */
+  endorsements: { president: number; governorInState: number; senator: number;
+                  presidentCount?: number; governorCount?: number };
   primaryGeneral: { extremistPrimary: number; extremistGeneral: number; crossBenchPrimaryPenalty: number; billCounterPips: number; crossBenchCap: number;
                     bruisingPrimaryMargin?: number };
   lean: lean.LeanConfig;
@@ -1010,7 +1014,13 @@ export class Game {
    *  The +3 is the single largest modifier in the game and had never been
    *  spent, because nothing ever assigned one. Each endorser backs the
    *  player's most contested primary, which is where an endorsement is worth
-   *  having. */
+   *  having.
+   *
+   *  #42: the pip value and how many races one officeholder can back per
+   *  cycle are separate knobs -- `presidentCount`/`governorCount` default to
+   *  1 (unchanged behaviour) and each unit still targets a distinct
+   *  contested primary, so a count above the player's own number of
+   *  contested primaries goes unused rather than stacking. */
   private assignEndorsements(decls: Declaration[]): void {
     const contenders = (d: Declaration) =>
       decls.filter((o) => o !== d && o.office === d.office && o.state === d.state
@@ -1022,9 +1032,11 @@ export class Game {
         if (seat.holder?.player !== p.id) continue;
         if (p.tapped.has(seat.holder.cardId)) continue;
         if (seat.office === 'president') {
-          endorsers.push({ pips: this.cfg.endorsements.president, cardId: seat.holder.cardId });
+          const count = this.cfg.endorsements.presidentCount ?? 1;
+          for (let k = 0; k < count; k++) endorsers.push({ pips: this.cfg.endorsements.president, cardId: seat.holder.cardId });
         } else if (seat.office === 'governor') {
-          endorsers.push({ pips: this.cfg.endorsements.governorInState, state: seat.state, cardId: seat.holder.cardId });
+          const count = this.cfg.endorsements.governorCount ?? 1;
+          for (let k = 0; k < count; k++) endorsers.push({ pips: this.cfg.endorsements.governorInState, state: seat.state, cardId: seat.holder.cardId });
         } else if (seat.office === 'senator') {
           // Senators do not endorse as a class, because most senators move
           // nothing. The exceptions are ideological validators with national
