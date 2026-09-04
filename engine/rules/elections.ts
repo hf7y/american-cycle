@@ -140,9 +140,12 @@ export function buildModifiers(
   }
 
   if (d.district && d.district.state === ctx.state) {
-    // Synergy is the district's machine and stays whole. §10's named case is
-    // "Joe Manchin wins most of the time, because his card is good and his
-    // district synergy is real" -- diluting that would delete the example.
+    // Synergy is owner-gated: it fires only for the player holding this card,
+    // and a non-owner contesting the same district gets neither it nor the
+    // identity match below. That gate is what hf7y/american-cycle#106 rules
+    // out -- a district confers nothing private before the race resolves --
+    // and hf7y/american-cycle#40 measures the cost of keeping it. Neither is
+    // built yet; this comment describes what the code does, not what is ruled.
     m.push({ source: `district ${d.district.id}`, pips: d.district.synergy });
 
     const shared = d.card.identities.filter((i) => d.district!.demographics.includes(i));
