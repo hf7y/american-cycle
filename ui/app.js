@@ -219,7 +219,6 @@ function phaseWithdraw() {
   $('pull').onclick  = () => { closeModal(); advance({ withdraw:true  }); };
 }
 
-// ---- independent re-declaration (Lieberman 2006) -----------------------------
 function phaseIndependent() {
   const { race } = pending;
   modal(`
