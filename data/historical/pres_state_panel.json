@@ -1,4 +1,5 @@
 {
+ "note": "Evidence, not an engine input -- read only by findings/historical-push.ts (hf7y/american-cycle#51/#52) and sim/ analysis scripts. Nothing in engine/ reads this file; the rule it checks (engine/rules/lean.ts's push) is driven by config, and this panel is what that rule is graded against.",
  "source": {
   "dataset": "MIT Election Data and Science Lab (MEDSL), U.S. presidential returns by state 1976-2016",
   "url": "https://raw.githubusercontent.com/MEDSL/constituency-returns/master/1976-2016-president.csv",
