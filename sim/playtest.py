@@ -5,7 +5,7 @@ The headless generator tests exercise the engine; this exercises the page --
 event wiring, modal flow, rendering. A console error here is a bug a player
 would hit on the first click.
 """
-import os, pathlib, sys
+import os, pathlib, sys, time
 from playwright.sync_api import sync_playwright
 
 HTML = pathlib.Path(__file__).resolve().parent.parent / "ui" / "index.html"
@@ -57,6 +57,12 @@ def check_phases(pg, districts_t0):
         print(f"  {'✓' if happened else '✗'} {name}")
         if not happened:
             phase_failures.append(name)
+
+# #36: no run anywhere has ever produced a wall-clock number; lengths are
+# reported in years. This times one browser game, wall clock, so that number
+# exists at all -- it is one sample, not the median/tail SIM-BRIEF asks for,
+# which needs many seeded runs of this same script.
+start_time = time.monotonic()
 
 with sync_playwright() as pw:
     b = pw.chromium.launch()
@@ -121,6 +127,8 @@ with sync_playwright() as pw:
     pg.screenshot(path=str(SHOT / "shot-board.png"), full_page=True)
     b.close()
 
+elapsed = time.monotonic() - start_time
+print(f"wall clock {elapsed:.1f}s for {cycles} declaration cycles ({elapsed / cycles:.2f}s/cycle)" if cycles else f"wall clock {elapsed:.1f}s")
 print(f"\nseed {SEED} (PLAYTEST_SEED to change)")
 print(f"console errors: {len(errors)}")
 for e in errors[:12]: print("  ✗", e[:200])
