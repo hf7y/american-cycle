@@ -11,7 +11,6 @@
   "resolution": {
     "incumbency": 1,
     "identityBonus": 1,
-    "tieBreak": "even",
     "incumbencyPrimary": 4,
     "crossOfficeIncumbency": 1
   },
@@ -84,8 +83,7 @@
   },
   "draft": {
     "packSize": 15,
-    "districtsPerPack": 5,
-    "refillToHandSize": true
+    "districtsPerPack": 5
   },
   "game": {
     "startYear": 1976,
@@ -97,7 +95,6 @@
     "oddYearGovernors": true
   },
   "placeholders": {
-    "resolution.tieBreak": "The resolution rule says only 'higher total wins'. Even break is what makes edge 0 exactly 50%; a table needs a real rule.",
     "primaryGeneral.extremistPrimary": "Extremism is a primary bonus and a general penalty, and no magnitude was ever printed.",
     "primaryGeneral.extremistGeneral": "as above.",
     "primaryGeneral.crossBenchPrimaryPenalty": "Cross-benching is a primary penalty, and no magnitude was printed.",

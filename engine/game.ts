@@ -29,7 +29,7 @@ import { STATES, BY_CODE, senateUp, governorUp, electors, DC_ELECTORS, type Stat
 export interface Config {
   name: string;
   hand: { base: number; bonusPresident: number; bonusSenator: number; bonusGovernor: number; bonusRepresentative: number };
-  resolution: { incumbency: number; identityBonus: number; incumbencyPrimary: number; crossOfficeIncumbency: number; tieBreak: string;
+  resolution: { incumbency: number; identityBonus: number; incumbencyPrimary: number; crossOfficeIncumbency: number;
                 incumbencyHouse?: number; incumbencySenate?: number };
   national: { strongEconomy: number; recession: number; midtermPenalty: number; coattailsWith: number; coattailsAgainst: number };
   endorsements: { president: number; governorInState: number; senator: number };
@@ -44,7 +44,7 @@ export interface Config {
      *  findings/odd-year-is-the-bill.ts. */
     billFrequency?: 'annual' | 'biennial';
   };
-  draft: { packSize: number; districtsPerPack: number; refillToHandSize: boolean };
+  draft: { packSize: number; districtsPerPack: number };
   /** v0.2 item 1. There is no running tally to configure: these are the
    *  weights the EPILOGUE reads off the board. */
   scoring: ScoringConfig;

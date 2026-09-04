@@ -15,7 +15,7 @@ import { resolveRace, type Side, type Wave } from './resolution.ts';
 import type { RNG } from './rng.ts';
 
 export interface ResolutionConfig {
-  incumbency: number; identityBonus: number; tieBreak: string;
+  incumbency: number; identityBonus: number;
   /** Incumbency in a PRIMARY, which is a different contest: every side is the
    *  same party in the same state, so `Wave` hands them the same national and
    *  state die and only the candidate die differs. A primary is 1d6 vs 1d6,

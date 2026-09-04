@@ -85,8 +85,9 @@ export function resolveRace(a: ResolveArgs): RaceEvent {
   // A player who fields nobody loses; uncontested is an auto-win.
   const ranked = [...scored].sort((x, y) => y.total - x.total);
   let winner = ranked[0].player;
-  // Ties: the doc says only "higher total wins". Placeholder = even break,
-  // which is what makes edge 0 exactly 50%. Flagged in DECISIONS.md as open.
+  // Ties break evenly, a coin flip -- the rule that makes edge 0 exactly
+  // 50%. hf7y/american-cycle#153: this was also a config field nobody read;
+  // the field is gone, the rule stays, stated here instead.
   if (ranked.length > 1 && ranked[0].total === ranked[1].total) {
     winner = a.rng.bool() ? ranked[0].player : ranked[1].player;
   }
