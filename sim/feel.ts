@@ -5,7 +5,7 @@ import { loadConfig, loadPacks, BALANCE_PACKS } from './harness.ts';
 import { Game } from '../engine/game.ts';
 import { AGENTS, options } from './agents.ts';
 import { RNG } from '../engine/rules/rng.ts';
-import { oddsAtEdge } from '../engine/rules/resolution.ts';
+import { oddsAtEdge, primaryOddsAtEdge } from '../engine/rules/resolution.ts';
 
 const cfg = loadConfig(process.argv[2] ?? 'tuned.json');
 const cards = loadPacks(BALANCE_PACKS);
@@ -45,7 +45,9 @@ for (let g = 0; g < GAMES; g++) {
     races++;
     if (e.upset) upsets++;
     const sorted = [...e.sides].sort((a, b) => b.modifierTotal - a.modifierTotal);
-    predicted += 1 - oddsAtEdge(sorted[0].modifierTotal - sorted[1].modifierTotal);
+    const edge = sorted[0].modifierTotal - sorted[1].modifierTotal;
+    const favouriteWinProb = e.round === 'primary' ? primaryOddsAtEdge(edge) : oddsAtEdge(edge);
+    predicted += 1 - favouriteWinProb;
   }
 }
 
