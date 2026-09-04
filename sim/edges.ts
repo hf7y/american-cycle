@@ -28,7 +28,7 @@ console.log('== 1. seat-position win rate, 2-6 players (all Greedy; SIM-BRIEF: >
     if (dev > 3) over.push(p);
     console.log(`  ${p}p: ${b.map((x) => (100 * x).toFixed(1) + '%').join('  ')}  max deviation ${dev.toFixed(1)}pp (SE ${seFor(p).toFixed(1)}pp, n=${N})${dev > 3 ? '  OVER BAR' : ''}`);
   }
-  console.log(over.length ? `  -> over the 3pp bar at: ${over.join('p, ')}p (see #55 for the 3-player case already tracked)` : '  -> every table size clears the bar');
+  console.log(over.length ? `  -> over the 3pp bar at: ${over.join('p, ')}p (see #55 for the 3-player case; #171 covers all five)` : '  -> every table size clears the bar');
 }
 
 // 2. game length by hand size, maxYears lifted so the knob is visible at all.
