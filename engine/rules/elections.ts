@@ -186,7 +186,8 @@ export function buildModifiers(
   if (d.district && d.district.state === ctx.state) {
     const shared = d.card.identities.filter((i) => d.district!.demographics.includes(i));
     if (shared.length) {
-      m.push({ source: `identity: ${shared.join(', ')}`, pips: res.identityBonus * shared.length });
+      const pips = shared.reduce((n, tag) => n + (d.card.identityWeights?.[tag] ?? res.identityBonus), 0);
+      m.push({ source: `identity: ${shared.join(', ')}`, pips });
     }
   }
 

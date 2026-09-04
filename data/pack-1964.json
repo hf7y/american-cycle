@@ -321,8 +321,15 @@
       "identities": [
         "rural",
         "veteran",
-        "business"
+        "business",
+        "union",
+        "urban"
       ],
+      "identityWeights": {
+        "business": 3,
+        "union": -3,
+        "urban": -2
+      },
       "belief": "Voted against the Civil Rights Act on principle",
       "era": 1964,
       "effects": [
