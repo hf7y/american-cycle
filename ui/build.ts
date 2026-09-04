@@ -9,6 +9,7 @@
  */
 import { stripTypeScriptTypes } from 'node:module';
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 
 const ORDER = [
   'engine/states.ts',
@@ -104,7 +105,27 @@ for (const f of readdirSync(new URL('engine/config/', root))) {
   if (f.endsWith('.json')) configs[f.replace(/\.json$/, '')] = JSON.parse(read(`engine/config/${f}`));
 }
 
+/** The build id is a hash of what the bundle is MADE of, not of the commit
+ *  that carries it. A commit SHA cannot work here: the bundle is committed, so
+ *  a page stamped with its own commit is stale by one the instant it lands,
+ *  and `git diff --exit-code ui/index.html` -- the gate that keeps the board
+ *  and the simulator playing the same game -- would fail on every commit
+ *  forever. A content hash is deterministic, so the gate holds, and it moves
+ *  exactly when the game moves.
+ *
+ *  portraits.json is excluded on purpose: 708 KB of faces that change nothing
+ *  about how a game plays. */
+const buildInputs = [
+  ...ORDER.map((f) => sources.get(f)!),
+  read('ui/app.js'),
+  read('ui/index.template.html'),
+  JSON.stringify(packs),
+  JSON.stringify(configs),
+];
+const build = createHash('sha256').update(buildInputs.join('\u0000')).digest('hex').slice(0, 7);
+
 const html = read('ui/index.template.html')
+  .replace('/*__BUILD__*/', `const BUILD = ${JSON.stringify(build)};`)
   .replace('/*__ENGINE__*/', engine)
   .replace('/*__PACKS__*/', `const PACKS = ${JSON.stringify(packs)};`)
   .replace('/*__CONFIGS__*/', `const CONFIGS = ${JSON.stringify(configs)};\nconst PORTRAITS = ${portraits};`)
@@ -144,4 +165,4 @@ if (clash.length) {
 }
 
 writeFileSync(new URL('ui/index.html', root), html);
-console.log(`ui/index.html  ${(html.length / 1024).toFixed(0)} KB`);
+console.log(`ui/index.html  ${(html.length / 1024).toFixed(0)} KB  build ${build}`);

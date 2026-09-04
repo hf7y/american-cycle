@@ -18,7 +18,7 @@ const $ = (id) => document.getElementById(id);
 const el = (t, cls, txt) => { const n = document.createElement(t); if (cls) n.className = cls; if (txt != null) n.textContent = txt; return n; };
 
 let G = null, gen = null, pending = null, S = {
-  sel: null, picks: [], human: 0, opponents: [], cfgName: 'as-written-plus', seed: 1, over: false,
+  sel: null, picks: [], human: 0, opponents: [], cfgName: 'tuned', seed: 1, over: false,
 };
 
 // ---- setup ------------------------------------------------------------------
@@ -51,7 +51,7 @@ const CONFIG_BLURB = {
 
 function setup() {
   const opts = Object.keys(AGENTS).map((k) => `<option value="${k}">${k}</option>`).join('');
-  const cfgs = Object.keys(CONFIGS).map((k) => `<option value="${k}"${k === 'as-written-plus' ? ' selected' : ''}>${k}</option>`).join('');
+  const cfgs = Object.keys(CONFIGS).map((k) => `<option value="${k}"${k === 'tuned' ? ' selected' : ''}>${k}</option>`).join('');
   modal(`
     <h1 style="font-size:26px;letter-spacing:-.01em">American Cycle</h1>
     <p class="note" style="margin:6px 0 16px">Draft real politicians, run them across a decade of elections, and try to
@@ -268,6 +268,7 @@ function render() {
   drawHand();
   drawControls();
   drawFloor();
+  drawFooter();
   $('mapHint').textContent = pending && pending.kind === 'declare'
     ? (S.sel ? 'gold = on the ballot · outlined = your card cannot run there · brass border = contested'
              : 'gold = on the ballot this year · pick a card to see where it can run')
@@ -577,4 +578,62 @@ function gameOver(deckOut) {
 function modal(html){ $('modalBody').innerHTML = html; $('modal').classList.add('on'); }
 function closeModal(){ $('modal').classList.remove('on'); }
 
+// ---- the report loop ----------------------------------------------------------
+// `window.claude` exists only inside the artifact viewer. Served as a local
+// file -- which is how sim/playtest.py loads this page -- there is nothing to
+// reach, so the panel never appears rather than appearing inert.
+//
+// A form, never prompt(): chezz shipped a one-shot prompt() for bug reports and
+// Chrome's popup blocker ate it for enough players that several bug reports
+// were filed about the bug-report button itself.
+let reportDb = null;
+
+async function armReport() {
+  if (typeof window.claude?.use !== 'function') return;
+  // Resolves later than the first synchronous run and unordered against
+  // DOMContentLoaded, so nothing may depend on it having arrived.
+  try { reportDb = await window.claude.use('db'); } catch { reportDb = null; }
+  if (!reportDb) return;
+  $('report').classList.add('on');
+}
+
+function wireReport() {
+  const form = $('reportForm');
+  if (!form) return;
+  form.onsubmit = async (ev) => {
+    ev.preventDefault();
+    const text = $('reportText').value.trim();
+    if (!text) return;
+    if (!reportDb) { $('reportState').textContent = 'Not connected — this did not send.'; return; }
+    const kind = document.querySelector('input[name="reportKind"]:checked').value;
+    $('reportSend').disabled = true;
+    $('reportState').textContent = 'Sending…';
+    try {
+      await reportDb.collection('reports').add({
+        kind, text, build: BUILD,
+        // The repro IS the payload: every input this game was built from, so
+        // the report replays under `npm run sim` and PLAYTEST_SEED.
+        seed: S.seed, cfg: S.cfgName, era: S.startEra ?? null,
+        opponents: S.opponents, year: G ? G.year : null,
+      });
+      $('reportText').value = '';
+      $('reportState').textContent = 'Filed. Thank you.';
+    } catch (e) {
+      // Distinct from success on purpose. A report that vanishes silently is
+      // worse than a button that is visibly broken.
+      $('reportState').textContent = 'Could not send — nothing was saved. Try again later.';
+    } finally {
+      $('reportSend').disabled = false;
+    }
+  };
+}
+
+function drawFooter() {
+  $('footer').textContent = `american-cycle · build ${BUILD}`
+    + (G ? ` · ${S.cfgName} · seed ${S.seed}` : '');
+}
+
+drawFooter();
+wireReport();
+armReport();
 setup();

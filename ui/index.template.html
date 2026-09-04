@@ -92,6 +92,19 @@ button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--brass);out
   border:1px solid var(--brass);border-radius:2px;background:linear-gradient(to right,rgba(138,109,34,.14),transparent)}
 #national.on{display:flex}
 #national .ttl{font-family:var(--display);font-weight:600;font-size:14px}
+/* Report loop. Hidden outright when the page has no db capability -- served
+   as a local file, which is how sim/playtest.py loads it, there is nothing to
+   write to and an inert form is worse than no form. */
+#report{display:none;border:1px solid var(--rule);border-radius:2px;background:var(--card);box-shadow:var(--shadow)}
+#report.on{display:block}
+#report summary{cursor:pointer;padding:9px 12px;font-family:var(--display);font-size:13px;font-weight:600}
+#report summary::marker{color:var(--brass)}
+#report .body{padding:0 12px 12px}
+#report textarea{width:100%;font:inherit;font-size:13px;color:inherit;background:var(--paper);
+  border:1px solid var(--rule);border-radius:2px;padding:7px;resize:vertical}
+#report textarea:focus-visible{outline:2px solid var(--brass);outline-offset:1px}
+.rk{display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer}
+#footer{font-family:var(--mono);font-size:10px;opacity:.75}
 
 /* cards ------------------------------------------------------------------- */
 #hand{display:flex;gap:8px;overflow-x:auto;padding:4px 0 8px}
@@ -196,12 +209,33 @@ label.f{display:flex;flex-direction:column;gap:4px;font-size:12px}
       <header><h2 style="font-size:15px">Election night</h2><span class="eyebrow">as it comes in</span></header>
       <div id="log"></div>
     </section>
+    <details id="report">
+      <summary>Found a bug or have an idea? Tell us as you play</summary>
+      <div class="body">
+        <form id="reportForm">
+          <div class="row" style="gap:14px;margin-bottom:8px">
+            <label class="rk"><input type="radio" name="reportKind" value="bug" checked> Bug</label>
+            <label class="rk"><input type="radio" name="reportKind" value="idea"> Idea</label>
+          </div>
+          <textarea id="reportText" rows="3" placeholder="What happened, or what should happen instead?"
+                    aria-label="Describe the bug or idea"></textarea>
+          <div class="row" style="margin-top:8px;align-items:center">
+            <button class="btn" type="submit" id="reportSend">Send</button>
+            <span class="note" id="reportState"></span>
+          </div>
+        </form>
+        <p class="note" style="margin-top:8px">The seed, rules, era and year ride along, so a report is a game
+          somebody can replay rather than a description of one.</p>
+      </div>
+    </details>
+    <p class="note" id="footer" style="text-align:right"></p>
   </div>
 </div>
 
 <div id="modal"><div id="modalBox"><div id="modalBody"></div></div></div>
 
 <script>
+/*__BUILD__*/
 /*__PACKS__*/
 /*__CONFIGS__*/
 </script>
