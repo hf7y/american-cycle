@@ -252,6 +252,50 @@ export class WideAndEmpty extends Base {
   withdraw(v: WithdrawalView): boolean { return v.contenders > 0; }
 }
 
+/** hf7y/american-cycle#33: the board is 76-92% walkovers (#77) and #10 asks
+ *  what that does to lean. This agent tries to find out by farming it on
+ *  purpose -- never counter-declares, and drops any option someone else has
+ *  already committed to THIS phase rather than merely deprioritising it. */
+export class WalkoverFarmer extends Base {
+  declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[] {
+    const contested = new Set(pending.map(raceKey));
+    const o = options(v, open, this.cfg).filter((x) => !contested.has(raceKey(x.d)));
+    return pickDistinct(o.sort(byEdge), this.budget(v));
+  }
+  withdraw(v: WithdrawalView): boolean { return v.contenders > 0; }
+}
+
+/** hf7y/american-cycle#33: stack every positive-feedback loop this engine
+ *  has on purpose, in one agent, rather than the one-loop-at-a-time agents
+ *  above -- incumbency (defend everything held), the Launchpad stepping
+ *  stone (odd-year governor to Senate), coattails (hold the presidency),
+ *  and bill-authorship scoring (House seats, always vote yes, veto against
+ *  a hostile chamber). F22 says the only brake on runaway is table
+ *  politics; this is the agent that tests whether the rules supply one. */
+export class RunawayMaximiser extends Base {
+  declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[] {
+    const heldAny = new Set(v.seats.filter((s) => s.holder?.player === v.me).map((s) => s.holder!.cardId));
+    const heldGov = new Set(v.seats.filter((s) => s.office === 'governor' && s.holder?.player === v.me)
+      .map((s) => s.holder!.cardId));
+    const o = counterDeclare(options(v, open, this.cfg), pending, v.me, 2).map((x) => {
+      let bonus = 0;
+      if (heldAny.has(x.d.card.id)) bonus += 6;                          // defend every seat you hold
+      if (x.office === 'governor' && v.year % 2 !== 0) bonus += 6;       // odd-year governorships: cheap ground
+      if (x.office === 'senator' && heldGov.has(x.d.card.id)) bonus += 6; // step a sitting governor up
+      if (x.office === 'representative') bonus += 4;                     // House seats author bills
+      if (x.office === 'president') bonus += 3;                          // coattails compound while you hold it
+      return { ...x, edge: x.edge + bonus };
+    });
+    return pickDistinct(o.sort(byEdge), this.budget(v) + 2);
+  }
+  voteBill(): boolean { return true; }
+  proposeG(): number { return this.cfg.economy.gMax; }
+  veto(v: GameView, _g: number): boolean {
+    const pres = v.seats.find((s) => s.office === 'president' && s.holder);
+    return pres?.holder?.player === v.me;
+  }
+}
+
 export class SenateFlood extends Base {
   declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[] {
     const o = counterDeclare(options(v, open, this.cfg), pending, v.me, 2);
@@ -472,6 +516,8 @@ export const AGENTS: Record<string, new (cfg: Config, rng: RNG) => Agent> = {
   Greedy: class extends GreedyAgent { constructor(c: Config, r: RNG) { super('Greedy', c, r); } },
   Lookahead: class extends LookaheadAgent { constructor(c: Config, r: RNG) { super('Lookahead', c, r); } },
   WideAndEmpty: class extends WideAndEmpty { constructor(c: Config, r: RNG) { super('WideAndEmpty', c, r); } },
+  WalkoverFarmer: class extends WalkoverFarmer { constructor(c: Config, r: RNG) { super('WalkoverFarmer', c, r); } },
+  RunawayMaximiser: class extends RunawayMaximiser { constructor(c: Config, r: RNG) { super('RunawayMaximiser', c, r); } },
   SenateFlood: class extends SenateFlood { constructor(c: Config, r: RNG) { super('SenateFlood', c, r); } },
   HouseFarm: class extends HouseFarm { constructor(c: Config, r: RNG) { super('HouseFarm', c, r); } },
   HeterodoxSpecialist: class extends HeterodoxSpecialist { constructor(c: Config, r: RNG) { super('HeterodoxSpecialist', c, r); } },
