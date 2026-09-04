@@ -1580,6 +1580,13 @@ function runRace(a             ) {
                                                                           
                              
                                        
+                                                                            
+                                                                          
+                                                                             
+                                                                              
+                                                                           
+                                             
+                                                  
                                                                    
                                 
                                                                           
@@ -1611,9 +1618,11 @@ function runRace(a             ) {
                                                        
                                                                    
                                                                                                       
+                                        
+                                                                                                      
                                                                       
 
-                                                                                                         
+                                                                                                                                
 
 /** The two year-gates, defined ONCE because they were written twice and drifted.
  *  `tick` billed biennially and ran odd-year governor races; `interactiveTick`
@@ -2733,6 +2742,18 @@ class Game {
     return winner.card.party;
   }
 
+  /** hf7y/american-cycle#96: Lieberman 2006 -- whether a card that is about to
+   *  contest a primary would run as an independent in THIS race if it lost.
+   *  Asked before the primary's own die is drawn, same footing as `withdraw`,
+   *  so it shares that view rather than a result nobody can see yet. The
+   *  human's answer was collected earlier, in `electionsInteractive`; here it
+   *  is only looked up. */
+          decideIndependent(d             , others               , ctx             , human        )          {
+    if (d.player === human) return this.humanIndependentDecisions.get(raceKeyOf(d) + '|' + d.card.id) ?? false;
+    const mods = buildModifiers(d, ctx, 'primary', this.cfg.resolution, this.cfg.national, this.cfg.primaryGeneral);
+    return this.agents[d.player].declareIndependent?.(withdrawalView(d, mods, 'primary', ctx, others)) ?? false;
+  }
+
           runPrimaries(group               , ctx             , wave      , human = -1)                {
     const byParty = new Map                      ();
     for (const d of group) {
@@ -2743,6 +2764,10 @@ class Game {
     for (const [party, cands] of byParty) {
       if (party === 'I') { winners.push(...cands); continue; }  // independents skip the primary
       if (cands.length === 1) { winners.push(cands[0]); continue; }
+      // Decided now, before the primary's own die is drawn -- a card cannot
+      // see its own loss coming, only that it might lose.
+      const wantsIndependent = new Map(cands.map((d) =>
+        [d.card.id, this.decideIndependent(d, cands.filter((o) => o !== d), ctx, human)]         ));
       const out = runRace({
         ctx, round: 'primary', declarations: cands, wave, rng: this.rng,
         res: this.cfg.resolution, nat: this.cfg.national, pg: this.cfg.primaryGeneral,
@@ -2760,9 +2785,17 @@ class Game {
         if (threshold !== undefined && !out.event.uncontested && out.event.margin < threshold) w.bruisingPrimary = true;
         winners.push(w);
       }
-      // A primary loss returns the card to hand. Cheap to enter; the cost is
-      // that you revealed it.
-      for (const d of cands) if (d.player !== out.event .winner) this.returnToHand(d);
+      const withdrawnIds = new Set(out.withdrawnCards.map((c) => c.card.id));
+      for (const d of cands) {
+        if (d.player === out.event .winner || withdrawnIds.has(d.card.id)) continue;
+        // A primary loss returns the card to hand -- unless it committed to
+        // run anyway, as itself but under no party's line, in this same
+        // race. `cardById` stays the source of truth for the card's printed
+        // party, so the label reverts the moment the seat or the hand takes
+        // the card back (see `releaseExpiringTerms`, `returnToHand`).
+        if (wantsIndependent.get(d.card.id)) winners.push({ ...d, card: { ...d.card, party: 'I' } });
+        else this.returnToHand(d);
+      }
     }
     return winners;
   }
@@ -2909,6 +2942,7 @@ class Game {
 
           humanDeclarations                = [];
           humanWithdrawals = new Map                 ();
+          humanIndependentDecisions = new Map                 ();
 
   ;       *askBill(human        )                                                                {
     const authorId = leg.author(this.seats);
@@ -2953,12 +2987,14 @@ class Game {
 
     // The withdrawal window, before any die is drawn.
     this.humanWithdrawals.clear();
+    this.humanIndependentDecisions.clear();
     const mineContested = decls.filter((d) => d.player === human)
       .map((d) => ({ d, others: decls.filter((o) => o !== d && sameRace(o, d)) }))
       .filter((x) => x.others.length > 0);
     for (const { d, others } of mineContested) {
       const ctx = this.raceContext(d.office, d.state, d.slot);
-      const round = others.some((o) => o.card.party === d.card.party) ? 'primary' : 'general';
+      const primaryOthers = others.filter((o) => o.card.party === d.card.party);
+      const round = primaryOthers.length > 0 ? 'primary' : 'general';
       const mods = buildModifiers(d, ctx, round, this.cfg.resolution, this.cfg.national, this.cfg.primaryGeneral);
       const a = yield {
         kind: 'withdraw', year: this.year, round,
@@ -2966,6 +3002,18 @@ class Game {
         race: { office: d.office, state: d.state, slot: d.slot, cardName: d.card.name },
       };
       this.humanWithdrawals.set(raceKeyOf(d) + '|' + d.card.id, !!a.withdraw);
+
+      // hf7y/american-cycle#96: decided in the same window as withdrawal, on
+      // the same incomplete information -- only asked when there IS a primary
+      // to lose.
+      if (round === 'primary') {
+        const b = yield {
+          kind: 'independent', year: this.year,
+          view: withdrawalView(d, mods, round, ctx, primaryOthers),
+          race: { office: d.office, state: d.state, slot: d.slot, cardName: d.card.name },
+        };
+        this.humanIndependentDecisions.set(raceKeyOf(d) + '|' + d.card.id, !!b.independent);
+      }
     }
 
     this.resolveDeclared(decls, wave, human);
@@ -3288,6 +3336,16 @@ const byEdge = (a        , b        ) => b.edge - a.edge;
    *  merely an uphill one. */
   withdraw(v                )          {
     return v.contenders > 0 && v.myModifierTotal <= -4;
+  }
+  /** hf7y/american-cycle#96: Lieberman 2006, Murkowski 2010 -- both were
+   *  sitting incumbents facing a real primary fight, not challengers with no
+   *  base to run on. `myModifiers` carries an `incumbency` line only for a
+   *  card that already holds the seat (elections.ts:208), and the same -4
+   *  bound `withdraw` uses marks a primary as genuinely contested rather
+   *  than already lost. */
+  declareIndependent(v                )          {
+    return v.contenders > 0 && v.myModifierTotal > -4
+      && v.myModifiers.some((m) => m.source === 'incumbency');
   }
   proposeG(_v          )         { return 3; }
   /** v0.2 item 4: a politician votes by DISTANCE, not by label.
@@ -3782,6 +3840,7 @@ function advance(answer) {
   render();
   if (pending.kind === 'declare') phaseDeclare();
   else if (pending.kind === 'withdraw') phaseWithdraw();
+  else if (pending.kind === 'independent') phaseIndependent();
   else if (pending.kind === 'bill') phaseBill();
 }
 
@@ -3853,6 +3912,23 @@ function phaseWithdraw() {
     </div>`);
   $('stand').onclick = () => { closeModal(); advance({ withdraw:false }); };
   $('pull').onclick  = () => { closeModal(); advance({ withdraw:true  }); };
+}
+
+// ---- independent re-declaration (Lieberman 2006) -----------------------------
+function phaseIndependent() {
+  const { race } = pending;
+  modal(`
+    <span class="eyebrow">primary · ${race.state} ${OFFICE_LABEL[race.office]}</span>
+    <h2 style="font-size:21px;margin-top:4px">If ${race.cardName} loses this primary, run as an independent?</h2>
+    <p class="note" style="margin:8px 0 12px">Decided now, before the primary's dice are rolled. Committing means that
+      losing the primary does not return the card to your hand -- it stays in this same race under no party's line,
+      forfeiting coattails but keeping what it earned.</p>
+    <div class="row" style="margin-top:16px">
+      <button class="btn" id="party">Stay in the party</button>
+      <button class="btn ghost" id="indep">Run independent if I lose</button>
+    </div>`);
+  $('party').onclick = () => { closeModal(); advance({ independent:false }); };
+  $('indep').onclick = () => { closeModal(); advance({ independent:true  }); };
 }
 
 // ---- the omnibill -----------------------------------------------------------

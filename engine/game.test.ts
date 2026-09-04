@@ -45,11 +45,15 @@ const dist = (o: Partial<DistrictCard>): DistrictCard => ({
 class ScriptedAgent implements Agent {
   name: string;
   private declFn: (v: GameView, open: OpenRace[], pending: PendingPeg[]) => Declaration[];
-  constructor(name: string, declFn?: (v: GameView, open: OpenRace[], pending: PendingPeg[]) => Declaration[]) {
-    this.name = name; this.declFn = declFn ?? (() => []);
+  private indepFn: boolean;
+  constructor(
+    name: string, declFn?: (v: GameView, open: OpenRace[], pending: PendingPeg[]) => Declaration[], indepFn = false,
+  ) {
+    this.name = name; this.declFn = declFn ?? (() => []); this.indepFn = indepFn;
   }
   declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[] { return this.declFn(v, open, pending); }
   withdraw(): boolean { return false; }
+  declareIndependent(): boolean { return this.indepFn; }
   proposeG(): number { return 3; }
   voteBill(): boolean { return false; }
   veto(): boolean { return false; }
@@ -233,6 +237,54 @@ test('#95: a primary won by a narrow margin carries a bruise into the general', 
   const general = g.events.find((e) => e.round === 'general' && e.office === 'representative' && e.state === 'OH');
   assert.ok(general?.sides[0].modifiers.some((m) => m.source === 'bruising primary'),
     'the nominee who barely survived the primary carries the scar into the general');
+});
+
+/** #96: Lieberman 2006 -- a card that loses its own party's primary may
+ *  commit, in the same window `withdraw` uses (before any die is drawn), to
+ *  run anyway as an independent in the SAME race. Both cards commit here, so
+ *  the outcome is deterministic regardless of which one the dice pick: the
+ *  primary's winner reaches the general under its printed party, and the
+ *  loser reaches it too, relabeled 'I', rather than returning to hand. */
+test('#96: a primary loser who committed to run independent appears in the general as an independent, not back in hand', () => {
+  const cfg = loadConfig('as-written-plus.json');
+  const a1 = cand({ id: 'a1', party: 'D', homeState: 'OH' });
+  const a2 = cand({ id: 'a2', party: 'D', homeState: 'OH' });
+  const held5 = dist({ id: 'OH-5', state: 'OH', number: 5 });
+
+  const declareOh5 = (player: number, card: CandidateCard) =>
+    (_v: GameView, open: OpenRace[]) => {
+      const race = open.find((r) => r.office === 'representative' && r.state === 'OH' && r.slot === 5);
+      return race ? [{ player, card, office: 'representative' as const, state: 'OH', slot: 5 }] : [];
+    };
+  const p0 = new ScriptedAgent('p0', declareOh5(0, a1), true);
+  const p1 = new ScriptedAgent('p1', declareOh5(1, a2), true);
+  // A real-size deck, not just the two named cards: refill() recycles the
+  // discard into the talon once it runs dry, and a two-card deck would deal
+  // a1 straight back into a hand within the SAME tick, confusing "returned
+  // to hand by refill" with "returned to hand instead of going independent".
+  const g = new Game([p0, p1], [...structuredClone(CARDS), { kind: 'candidate', ...a1 }, { kind: 'candidate', ...a2 }], cfg, 1);
+  g.players[0].hand = [{ kind: 'candidate', ...a1 }];
+  g.players[1].hand = [{ kind: 'candidate', ...a2 }];
+  g.players[0].districts = [held5]; // a House race only opens where a district card is in play
+  g.players[1].districts = [];
+
+  g.tick();
+
+  const primary = g.events.find((e) => e.round === 'primary' && e.office === 'representative' && e.state === 'OH');
+  assert.ok(primary, 'the primary actually ran, contested by both cards');
+  const loserId = primary!.sides.find((s) => s.player !== primary!.winner)!.cardId;
+  const winnerId = primary!.sides.find((s) => s.player === primary!.winner)!.cardId;
+
+  const general = g.events.find((e) => e.round === 'general' && e.office === 'representative' && e.state === 'OH');
+  assert.ok(general, 'the loser stood, so the general ran rather than going uncontested');
+  assert.equal(general!.sides.length, 2, 'both the primary winner and the committed loser reach the general');
+  const loserSide = general!.sides.find((s) => s.cardId === loserId);
+  assert.equal(loserSide?.party, 'I', 'the primary loser runs relabeled independent, not under the party it lost');
+  const winnerSide = general!.sides.find((s) => s.cardId === winnerId);
+  assert.equal(winnerSide?.party, 'D', 'the primary winner keeps its printed party');
+
+  const bothHands = [...g.players[0].hand, ...g.players[1].hand].map((c) => c.id);
+  assert.ok(!bothHands.includes(loserId), 'the committed loser did not return to hand -- it is on the board instead');
 });
 
 test('capture is a no-op when nobody else holds the contested district', () => {
