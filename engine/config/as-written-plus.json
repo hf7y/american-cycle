@@ -97,9 +97,8 @@
   "game": {
     "startYear": 1976,
     "maxYears": 100,
-    "victory": "bills",
+    "victory": "amendment",
     "deckOutEnds": true,
-    "billTarget": 8,
     "resignToRun": true,
     "oddYearGovernors": true
   },

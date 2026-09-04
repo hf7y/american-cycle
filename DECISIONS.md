@@ -38,8 +38,9 @@ rule instead of citing a section. The last category is the important one — mos
 | Impeachment consumes the omnibill slot | Prices the coup in the currency everyone is accumulating |
 | One macro number, not two | "How the country is doing" is honest. A separate ideological axis was double-counting |
 | **The House is a feeder, not a win route** — *contested, see below* | Ruled 2026-09-01. `HouseFarm` has won 0-0.6% of games in every engine version ever measured, including 0.1% at n=2400; the `what-wins` predicate puts House seats at 0.13x winner-to-field and calls holding them anti-correlated with winning. The House is a stepping stone to higher office and should stop being graded as a failed strategy |
-| **No year cap. `billTarget` is the only length knob** — *amended 2026-09-01, see below* | Ruled 2026-09-01 ("infinity"). With bills as the victory condition the game was measured to end itself: at `maxYears: 10000`, **100% of games terminate** at targets 5/8/12 on both shipped configs, target 8 giving a median of 11-12 years. **That does not reproduce.** `as-written-plus` now ships `maxYears: 100` as a backstop; the amendment records why |
-| **Bills passed is the victory condition** | Ruled 2026-09-01. The backbone; other conditions become options. Works for a scored session or a race to a high score. **Wired 2026-09-01** on `as-written-plus` (`victory: 'bills'`, `billTarget: 8`), the config named because hf7y/american-cycle#50 leaves canonical open |
+| **No year cap. `billTarget` is the only length knob** — *amended 2026-09-01, superseded 2026-09-04, see below* | Ruled 2026-09-01 ("infinity"). With bills as the victory condition the game was measured to end itself: at `maxYears: 10000`, **100% of games terminate** at targets 5/8/12 on both shipped configs, target 8 giving a median of 11-12 years. **That does not reproduce.** `as-written-plus` now ships `maxYears: 100` as a backstop; the amendment records why |
+| ~~Bills passed is the victory condition~~ | **REVERSED 2026-09-04 — see below, hf7y/american-cycle#145** |
+| **Scoring stays points; bills are points among others; the amendment is the ending** | Ruled 2026-09-04, reversing the row above. See below |
 
 ### Amendment, 2026-09-01: the no-cap ruling does not survive measurement
 
@@ -139,6 +140,46 @@ built in `tracks/history.ts` — measured on the historical side now and
 deferred on the sim side to hf7y/american-cycle#91, because that figure is
 deck-sensitive and needs its flag first.
 
+### Reversal, 2026-09-04: the collision above is resolved by moving the ending, not the feeder ruling
+
+Ruled directly on hf7y/american-cycle#145: "the ending is points where bills
+are points and it's triggered by the amendment." This resolves the collision
+the 2026-08-31 correction above measured and named out loud — bills as a
+count-to-target made `BillAuthor`/`HouseFarm` take 90-99% of games, which
+contradicted the House-is-a-feeder ruling under its own numbers. This ruling
+moves the ending, not the feeder row: **`as-written-plus.json` now ships
+`victory: 'amendment'`, not `victory: 'bills'`**, and `billTarget` is gone
+from that config. Scoring itself did not change — `scoring.billOnBooks`
+already counted a bill still on the books as board points, same as it always
+has; only the count-to-a-target win condition is removed.
+
+The amendment ending was not speculative going in: `findings/amendment-is-the-ending.ts`
+(stamped from this ruling) measures the passive pool (`Greedy`, `Lookahead`,
+`SenateFlood`, `HeterodoxSpecialist`, `as-written-plus.json`, `maxYears: 100`,
+n=120) and finds ratification ends **57%** of games outright, the 100-year
+cap still binds **42%** of the time — a real backstop, not a formality — and
+deck-out fires in **0%**, matching the no-cap amendment's finding that
+circulation regrows the talon faster than it empties. No game reports the
+retired bill target as its ending.
+
+**What this does NOT settle**, named directly on #145 and left as open
+questions rather than answered here:
+
+- hf7y/american-cycle#50 — `SenateFlood` wins 40-63% of games under a points
+  ending on `tuned.json`; whether that dominance is a hole in the design or
+  an artefact of that config comes back **live** under this ruling, not
+  resolved by it.
+- hf7y/american-cycle#13 — which offices the winner actually holds
+  (`findings/what-wins.ts`) was measured under the old ending and needs
+  re-measuring under this one. `findings/what-wins.ts`, `findings/runaway-no-brake.ts`,
+  `findings/adversarial-counters.ts`, `findings/impeachment-reachability.ts`,
+  `findings/decay-push-tradeoff.ts` and `findings/contest-vs-walkover.ts` all
+  depend on `as-written-plus.json`'s behavior and will read STALE against
+  their old stamps because the engine genuinely moved under them — that is
+  expected, and restamping any of them is answering #13 or #50 by the back
+  door, not this ruling. Leave them stale until each is deliberately
+  re-measured on its own issue.
+
 ---
 
 ## Cut — do not reintroduce
@@ -179,7 +220,7 @@ Ordered by how much the answer changes the game.
 2. **Base hand size and office bonuses** — the master tuning knob for game length and runaway.
 3. **District synergy magnitudes** — currently unbounded card text with no baseline. Must be tuned against specific historical cases: Manchin holding West Virginia, Collins holding Maine, Edwards holding Louisiana. Open per hf7y/american-cycle#27.
 4. ~~District-to-candidate ratio per pack~~ — **measured, not settled**: `draft.districtsPerPack` was dead (hf7y/american-cycle#87 found it read nowhere) and is now wired into `defaultPick`'s draft heuristic. But swept across its whole range the district count it was assumed to set doesn't move — see hf7y/american-cycle#132, which reopens the actual question: something else pins district holdings near a fixed value per player, and nobody has found what yet.
-5. ~~Victory condition~~ — **settled**, see the Settled table above: bills passed, ruled 2026-09-01, wired on `as-written-plus.json` (`victory: 'bills'`, `billTarget: 8`). hf7y/american-cycle#13 measured the other three candidates failing.
+5. ~~Victory condition~~ — **settled**, see the Settled table above: points, with the amendment as the ending, ruled 2026-09-04 (hf7y/american-cycle#145), reversing the 2026-09-01 bills-passed ruling wired on `as-written-plus.json` (`victory: 'amendment'`). hf7y/american-cycle#13 measured the other three win-condition candidates failing under the earlier ruling and is reopened by this one for the offices question specifically, not the win-condition question.
 6. ~~Governor pushes~~ — **measured, hf7y/american-cycle#26**: `with-lean` moves neither realignment (3.43 vs 3.46 states/game, n=400) nor the governorship's winner-advantage ratio (1.73x vs 1.56x) once `resignToRun`/`oddYearGovernors` are on. Stays `never` on every shipped config; `governors-push.json` remains as the shipped contrast.
 7. ~~Deck-out as the end condition~~ — **settled in part**, see the no-cap amendment above: `maxYears: 100` ships as a length backstop because deck-out itself does not reliably fire (circulation regrows the talon faster than it depletes). Making deck-out itself reachable remains unresolved and is called out there as "the real defect."
 8. **Whether capture is too strong** — parked; reintroduce only if balance requires it.
