@@ -875,7 +875,6 @@
         "urban",
         "hispanic"
       ],
-      "synergy": 2,
       "note": "Brooklyn, redrawn"
     },
     {
@@ -888,7 +887,6 @@
         "black",
         "urban"
       ],
-      "synergy": 2,
       "note": "Harlem"
     },
     {
@@ -901,7 +899,6 @@
         "urban",
         "catholic"
       ],
-      "synergy": 2,
       "note": "San Francisco"
     },
     {
@@ -914,7 +911,6 @@
         "hispanic",
         "urban"
       ],
-      "synergy": 3,
       "note": "East LA, majority-minority"
     },
     {
@@ -927,7 +923,6 @@
         "suburban",
         "business"
       ],
-      "synergy": 1,
       "note": "Central Coast"
     },
     {
@@ -940,7 +935,6 @@
         "black",
         "urban"
       ],
-      "synergy": 3,
       "note": "Dallas, new majority-minority"
     },
     {
@@ -953,7 +947,6 @@
         "black",
         "urban"
       ],
-      "synergy": 2,
       "note": "Houston"
     },
     {
@@ -966,7 +959,6 @@
         "suburban",
         "evangelical"
       ],
-      "synergy": 1,
       "note": "Fort Worth suburbs"
     },
     {
@@ -979,7 +971,6 @@
         "black",
         "urban"
       ],
-      "synergy": 3,
       "note": "Drawn under the Voting Rights Act"
     },
     {
@@ -992,7 +983,6 @@
         "cuban",
         "suburban"
       ],
-      "synergy": 3,
       "note": "Miami-Dade"
     },
     {
@@ -1005,7 +995,6 @@
         "black",
         "rural"
       ],
-      "synergy": 3,
       "note": "The first majority-Black district since Reconstruction"
     },
     {
@@ -1019,7 +1008,6 @@
         "business",
         "evangelical"
       ],
-      "synergy": 2,
       "note": "Gingrich's Cobb County"
     },
     {
@@ -1032,7 +1020,6 @@
         "black",
         "urban"
       ],
-      "synergy": 3,
       "note": "I-85 district"
     },
     {
@@ -1045,7 +1032,6 @@
         "hispanic",
         "urban"
       ],
-      "synergy": 3,
       "note": "Earmuff district"
     },
     {
@@ -1058,7 +1044,6 @@
         "black",
         "urban"
       ],
-      "synergy": 2,
       "note": "South Side"
     },
     {
@@ -1072,7 +1057,6 @@
         "urban",
         "union"
       ],
-      "synergy": 2,
       "note": "Detroit"
     },
     {
@@ -1086,7 +1070,6 @@
         "urban",
         "union"
       ],
-      "synergy": 2,
       "note": "Cleveland"
     },
     {
@@ -1099,7 +1082,6 @@
         "black",
         "urban"
       ],
-      "synergy": 2,
       "note": "West Philadelphia"
     },
     {
@@ -1113,7 +1095,6 @@
         "rural",
         "catholic"
       ],
-      "synergy": 2,
       "note": "Murtha's district"
     },
     {
@@ -1126,7 +1107,6 @@
         "black",
         "rural"
       ],
-      "synergy": 3,
       "note": "Black Belt"
     },
     {
@@ -1139,7 +1119,6 @@
         "black",
         "rural"
       ],
-      "synergy": 3,
       "note": "Delta"
     },
     {
@@ -1153,7 +1132,6 @@
         "urban",
         "catholic"
       ],
-      "synergy": 2,
       "note": "New Orleans"
     },
     {
@@ -1166,7 +1144,6 @@
         "black",
         "rural"
       ],
-      "synergy": 3,
       "note": "Lowcountry"
     },
     {
@@ -1179,7 +1156,6 @@
         "black",
         "urban"
       ],
-      "synergy": 3,
       "note": "Richmond to Norfolk"
     },
     {
@@ -1192,7 +1168,6 @@
         "black",
         "urban"
       ],
-      "synergy": 2,
       "note": "Baltimore"
     },
     {
@@ -1205,7 +1180,6 @@
         "black",
         "urban"
       ],
-      "synergy": 2,
       "note": "Memphis"
     },
     {
@@ -1219,7 +1193,6 @@
         "urban",
         "union"
       ],
-      "synergy": 2,
       "note": "Kansas City"
     },
     {
@@ -1232,7 +1205,6 @@
         "urban",
         "academic"
       ],
-      "synergy": 2,
       "note": "Seattle"
     },
     {
@@ -1245,7 +1217,6 @@
         "urban",
         "academic"
       ],
-      "synergy": 2,
       "note": "Portland"
     },
     {
@@ -1258,7 +1229,6 @@
         "urban",
         "hispanic"
       ],
-      "synergy": 2,
       "note": "Denver"
     },
     {
@@ -1271,7 +1241,6 @@
         "hispanic",
         "rural"
       ],
-      "synergy": 2,
       "note": "South Tucson"
     },
     {
@@ -1284,7 +1253,6 @@
         "hispanic",
         "rural"
       ],
-      "synergy": 2,
       "note": "Northern New Mexico"
     },
     {
@@ -1297,7 +1265,6 @@
         "urban",
         "union"
       ],
-      "synergy": 2,
       "note": "Minneapolis"
     },
     {
@@ -1311,7 +1278,6 @@
         "union",
         "catholic"
       ],
-      "synergy": 2,
       "note": "Milwaukee"
     },
     {
@@ -1324,7 +1290,6 @@
         "farm",
         "rural"
       ],
-      "synergy": 2,
       "note": "Western Iowa"
     },
     {
@@ -1337,7 +1302,6 @@
         "farm",
         "rural"
       ],
-      "synergy": 2,
       "note": "Big First"
     },
     {
@@ -1350,7 +1314,6 @@
         "farm",
         "rural"
       ],
-      "synergy": 2,
       "note": "The Third"
     },
     {
@@ -1363,7 +1326,6 @@
         "rural",
         "evangelical"
       ],
-      "synergy": 2,
       "note": "Eastern Kentucky"
     },
     {
@@ -1376,7 +1338,6 @@
         "union",
         "rural"
       ],
-      "synergy": 2,
       "note": "Coalfields"
     },
     {
@@ -1389,7 +1350,6 @@
         "black",
         "urban"
       ],
-      "synergy": 2,
       "note": "Newark"
     },
     {
@@ -1403,7 +1363,6 @@
         "catholic",
         "union"
       ],
-      "synergy": 2,
       "note": "Boston"
     },
     {
@@ -1416,7 +1375,6 @@
         "urban",
         "catholic"
       ],
-      "synergy": 1,
       "note": "Hartford"
     },
     {

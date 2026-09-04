@@ -141,19 +141,18 @@ export function eligible(card: CandidateCard, state: string, districts: District
 /** A statewide race (president today; a House race is keyed by number and
  *  never calls this) has no single "correct" district to read fit against,
  *  so picking whichever of a player's districts an array happens to yield
- *  first makes a scored modifier depend on draw order (see #112). Summing
- *  synergy and union-ing demographics across every district the player holds
- *  in the state is order-independent by construction: the result is the same
- *  regardless of how `districts` is ordered. Returns undefined exactly when
- *  `eligible`'s district clause would, so callers can treat it as "the
- *  district, if any". */
+ *  first makes a scored modifier depend on draw order (see #112). Union-ing
+ *  demographics across every district the player holds in the state is
+ *  order-independent by construction: the result is the same regardless of
+ *  how `districts` is ordered. Returns undefined exactly when `eligible`'s
+ *  district clause would, so callers can treat it as "the district, if
+ *  any". */
 export function homeDistrict(districts: readonly DistrictCard[], state: string): DistrictCard | undefined {
   const inState = districts.filter((d) => d.state === state);
   if (!inState.length) return undefined;
   return {
     ...inState[0],
     id: inState.map((d) => d.id).sort().join('+'),
-    synergy: inState.reduce((n, d) => n + d.synergy, 0),
     demographics: [...new Set(inState.flatMap((d) => d.demographics))].sort(),
   };
 }
@@ -179,12 +178,12 @@ export function buildModifiers(
     m.push({ source: 'home state', pips: d.card.homeStateBonus });
   }
 
+  // #27: district synergy is deleted -- an ownership-gated bonus cannot
+  // survive #106's ruling that holding a district confers nothing before a
+  // race resolves. Identity match is what remains, and #40 keys it on
+  // whichever district card is in play in this race's slot, not on who
+  // holds it -- the caller supplies `d.district` accordingly.
   if (d.district && d.district.state === ctx.state) {
-    // Synergy is the district's machine and stays whole. The named case is
-    // "Joe Manchin wins most of the time, because his card is good and his
-    // district synergy is real" -- diluting that would delete the example.
-    m.push({ source: `district ${d.district.id}`, pips: d.district.synergy });
-
     const shared = d.card.identities.filter((i) => d.district!.demographics.includes(i));
     if (shared.length) {
       m.push({ source: `identity: ${shared.join(', ')}`, pips: res.identityBonus * shared.length });

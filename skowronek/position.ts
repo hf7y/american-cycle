@@ -121,8 +121,8 @@ export const BILL_CORPUS_ABSENT =
  *  DISTRICT — `lean[state]`. §10: the board tracks DEVIATION from the state's
  *  own baseline, exactly as Cook PVI does, so 0 is that state's normal and not
  *  "purple". Districts proper carry no position: `DistrictCard` is
- *  {id, state, number, era, demographics, synergy} with no partisan field, so
- *  state is the finest granularity the engine actually has.
+ *  {id, state, number, era, demographics} with no partisan field, so state is
+ *  the finest granularity the engine actually has.
  *
  *  COUNTRY — districts weighted by `seatsIn(state, year)`, the apportionment in
  *  force that year. Because lean is a deviation, a country position near 0 is

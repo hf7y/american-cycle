@@ -1668,17 +1668,18 @@ function clampInt(v: number, lo: number, hi: number): number { return Math.max(l
  *  packs are dealt from one shuffled talon with no district/candidate
  *  quota -- so this is that number wired to the nearest live mechanism
  *  that actually sets district-to-candidate ratio: past the target, a
- *  district scores `synergy - 2` rather than `2 + synergy`, which is the
- *  cap on board size (#87 measured the `4` default pinning House races
- *  between 56 and 79 regardless of card-pool size; see
+ *  district scores `-2` rather than `2`, which is the cap on board size
+ *  (#87 measured the `4` default pinning House races between 56 and 79
+ *  regardless of card-pool size; see
  *  sim/scratch-district-threshold-ablation.ts for the swept comparison
- *  that set each shipped config's value). */
+ *  that set each shipped config's value). `synergy` priced this swing too
+ *  until #27 deleted the field; the swing itself is unchanged. */
 function defaultPick(pack: Card[], p: PlayerState, districtGoal: number): Card {
   const states = new Set(p.districts.map((d) => d.state));
   const value = (c: Card): number => {
     if (c.kind === 'district') {
       const need = Math.max(0, districtGoal - states.size);
-      return (states.has(c.state) ? 0.5 : 1) * (need > 0 ? 2 + c.synergy : c.synergy - 2);
+      return (states.has(c.state) ? 0.5 : 1) * (need > 0 ? 2 : -2);
     }
     return 2 + c.homeStateBonus + c.effects.length;
   };

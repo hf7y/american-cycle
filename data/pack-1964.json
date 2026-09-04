@@ -624,7 +624,6 @@
         "rural",
         "farm"
       ],
-      "synergy": 3,
       "note": "Freedom Summer"
     },
     {
@@ -637,7 +636,6 @@
         "black",
         "rural"
       ],
-      "synergy": 3,
       "note": "Selma to Montgomery"
     },
     {
@@ -650,7 +648,6 @@
         "black",
         "urban"
       ],
-      "synergy": 3,
       "note": "Atlanta, the movement's staging ground"
     },
     {
@@ -664,7 +661,6 @@
         "rural",
         "farm"
       ],
-      "synergy": 3,
       "note": "The Corridor"
     },
     {
@@ -678,7 +674,6 @@
         "urban",
         "catholic"
       ],
-      "synergy": 3,
       "note": "New Orleans"
     },
     {
@@ -691,7 +686,6 @@
         "rural",
         "farm"
       ],
-      "synergy": 3,
       "note": "Rayburn's old seat"
     },
     {
@@ -704,7 +698,6 @@
         "hispanic",
         "urban"
       ],
-      "synergy": 3,
       "note": "San Antonio west side"
     },
     {
@@ -717,7 +710,6 @@
         "black",
         "urban"
       ],
-      "synergy": 3,
       "note": "Watts, a year early"
     },
     {
@@ -731,7 +723,6 @@
         "rural",
         "hispanic"
       ],
-      "synergy": 3,
       "note": "The Central Valley"
     },
     {
@@ -744,7 +735,6 @@
         "black",
         "urban"
       ],
-      "synergy": 3,
       "note": "Harlem"
     },
     {
@@ -757,7 +747,6 @@
         "urban",
         "jewish"
       ],
-      "synergy": 3,
       "note": "Upper West Side"
     },
     {
@@ -770,7 +759,6 @@
         "black",
         "urban"
       ],
-      "synergy": 3,
       "note": "Dawson's ward"
     },
     {
@@ -784,7 +772,6 @@
         "union",
         "catholic"
       ],
-      "synergy": 3,
       "note": "Daley's machine"
     },
     {
@@ -798,7 +785,6 @@
         "urban",
         "union"
       ],
-      "synergy": 3,
       "note": "Detroit"
     },
     {
@@ -811,7 +797,6 @@
         "union",
         "catholic"
       ],
-      "synergy": 3,
       "note": "Dearborn and the Rouge"
     },
     {
@@ -825,7 +810,6 @@
         "urban",
         "union"
       ],
-      "synergy": 3,
       "note": "Cleveland"
     },
     {
@@ -838,7 +822,6 @@
         "black",
         "urban"
       ],
-      "synergy": 3,
       "note": "North Philadelphia"
     },
     {
@@ -852,7 +835,6 @@
         "rural",
         "catholic"
       ],
-      "synergy": 3,
       "note": "Johnstown"
     },
     {
@@ -866,7 +848,6 @@
         "catholic",
         "union"
       ],
-      "synergy": 3,
       "note": "Boston wards"
     },
     {
@@ -879,7 +860,6 @@
         "farm",
         "rural"
       ],
-      "synergy": 3,
       "note": "Southern Minnesota"
     },
     {
@@ -892,7 +872,6 @@
         "farm",
         "rural"
       ],
-      "synergy": 3,
       "note": "Corn country"
     },
     {
@@ -905,7 +884,6 @@
         "farm",
         "rural"
       ],
-      "synergy": 3,
       "note": "Wheat"
     },
     {
@@ -918,7 +896,6 @@
         "business",
         "suburban"
       ],
-      "synergy": 2,
       "note": "Phoenix, Goldwater's base"
     },
     {
@@ -931,7 +908,6 @@
         "suburban",
         "veteran"
       ],
-      "synergy": 2,
       "note": "Gold Coast retirees"
     },
     {
@@ -944,7 +920,6 @@
         "suburban",
         "business"
       ],
-      "synergy": 2,
       "note": "Northern Virginia, newly Republican"
     },
     {
@@ -957,7 +932,6 @@
         "academic",
         "urban"
       ],
-      "synergy": 2,
       "note": "The Research Triangle"
     },
     {
@@ -970,7 +944,6 @@
         "rural",
         "evangelical"
       ],
-      "synergy": 3,
       "note": "East Tennessee, Republican since the war"
     },
     {
@@ -983,7 +956,6 @@
         "rural",
         "union"
       ],
-      "synergy": 3,
       "note": "Appalachia"
     },
     {
@@ -996,7 +968,6 @@
         "union",
         "rural"
       ],
-      "synergy": 3,
       "note": "The coalfields"
     },
     {
@@ -1010,7 +981,6 @@
         "black",
         "union"
       ],
-      "synergy": 2,
       "note": "Indianapolis"
     }
   ]

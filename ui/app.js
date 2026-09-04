@@ -178,7 +178,12 @@ function pickRace(state) {
   const card = S.sel;
   const choose = (r) => {
     const me = G.players[S.human];
-    S.picks.push({ player:S.human, card, district: me.districts.find((d)=>d.state===r.state),
+    // #40: a House seat's identity match keys on the district card in play in
+    // that slot, whoever holds it -- see sim/agents.ts's `options()`.
+    const district = r.office === 'representative'
+      ? G.players.flatMap((p) => p.districts).find((d) => d.state === r.state && d.number === r.slot)
+      : me.districts.find((d) => d.state === r.state);
+    S.picks.push({ player:S.human, card, district,
                    office:r.office, state:r.state, slot:r.slot });
     S.sel = null; closeModal(); render();
   };

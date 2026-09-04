@@ -837,7 +837,6 @@
         "rural",
         "catholic"
       ],
-      "synergy": 3,
       "note": "Conor Lamb's Trump district"
     },
     {
@@ -850,7 +849,6 @@
         "suburban",
         "business"
       ],
-      "synergy": 2,
       "note": "Chester County"
     },
     {
@@ -863,7 +861,6 @@
         "suburban",
         "business"
       ],
-      "synergy": 2,
       "note": "Oakland County"
     },
     {
@@ -876,7 +873,6 @@
         "black",
         "urban"
       ],
-      "synergy": 2,
       "note": "Detroit"
     },
     {
@@ -890,7 +886,6 @@
         "union",
         "farm"
       ],
-      "synergy": 3,
       "note": "Driftless, swung 20 points"
     },
     {
@@ -903,7 +898,6 @@
         "black",
         "urban"
       ],
-      "synergy": 2,
       "note": "Milwaukee"
     },
     {
@@ -917,7 +911,6 @@
         "union",
         "farm"
       ],
-      "synergy": 3,
       "note": "The Iron Range, gone red"
     },
     {
@@ -931,7 +924,6 @@
         "academic",
         "business"
       ],
-      "synergy": 3,
       "note": "Twin Cities suburbs, gone blue"
     },
     {
@@ -944,7 +936,6 @@
         "rural",
         "union"
       ],
-      "synergy": 3,
       "note": "Appalachian Ohio, swung 30 points"
     },
     {
@@ -957,7 +948,6 @@
         "suburban",
         "business"
       ],
-      "synergy": 2,
       "note": "Columbus suburbs"
     },
     {
@@ -970,7 +960,6 @@
         "farm",
         "rural"
       ],
-      "synergy": 3,
       "note": "Eastern Iowa, swung hard"
     },
     {
@@ -983,7 +972,6 @@
         "rural",
         "union"
       ],
-      "synergy": 2,
       "note": "Upstate"
     },
     {
@@ -996,7 +984,6 @@
         "hispanic",
         "urban"
       ],
-      "synergy": 3,
       "note": "The Bronx and Queens"
     },
     {
@@ -1010,7 +997,6 @@
         "business",
         "ivy"
       ],
-      "synergy": 3,
       "note": "Houston, Bush to Clinton"
     },
     {
@@ -1023,7 +1009,6 @@
         "hispanic",
         "rural"
       ],
-      "synergy": 3,
       "note": "Laredo, moving right"
     },
     {
@@ -1036,7 +1021,6 @@
         "suburban",
         "business"
       ],
-      "synergy": 2,
       "note": "Dallas suburbs"
     },
     {
@@ -1049,7 +1033,6 @@
         "suburban",
         "business"
       ],
-      "synergy": 3,
       "note": "Orange County, flipped"
     },
     {
@@ -1062,7 +1045,6 @@
         "hispanic",
         "farm"
       ],
-      "synergy": 3,
       "note": "Central Valley"
     },
     {
@@ -1076,7 +1058,6 @@
         "hispanic",
         "suburban"
       ],
-      "synergy": 3,
       "note": "South Florida, moving right"
     },
     {
@@ -1089,7 +1070,6 @@
         "cuban",
         "urban"
       ],
-      "synergy": 3,
       "note": "Miami"
     },
     {
@@ -1103,7 +1083,6 @@
         "business",
         "ivy"
       ],
-      "synergy": 3,
       "note": "Gingrich's old seat, flipped"
     },
     {
@@ -1116,7 +1095,6 @@
         "rural",
         "evangelical"
       ],
-      "synergy": 2,
       "note": "Northwest Georgia"
     },
     {
@@ -1129,7 +1107,6 @@
         "suburban",
         "business"
       ],
-      "synergy": 3,
       "note": "Scottsdale"
     },
     {
@@ -1142,7 +1119,6 @@
         "hispanic",
         "urban"
       ],
-      "synergy": 2,
       "note": "Phoenix"
     },
     {
@@ -1155,7 +1131,6 @@
         "suburban",
         "black"
       ],
-      "synergy": 2,
       "note": "Charlotte"
     },
     {
@@ -1168,7 +1143,6 @@
         "suburban",
         "business"
       ],
-      "synergy": 3,
       "note": "Richmond suburbs"
     },
     {
@@ -1182,7 +1156,6 @@
         "evangelical",
         "veteran"
       ],
-      "synergy": 2,
       "note": "Southwest Virginia"
     },
     {
@@ -1196,7 +1169,6 @@
         "hispanic",
         "business"
       ],
-      "synergy": 3,
       "note": "Aurora"
     },
     {
@@ -1209,7 +1181,6 @@
         "hispanic",
         "suburban"
       ],
-      "synergy": 2,
       "note": "North Las Vegas"
     },
     {
@@ -1223,7 +1194,6 @@
         "business",
         "ivy"
       ],
-      "synergy": 3,
       "note": "Somerset County"
     },
     {
@@ -1236,7 +1206,6 @@
         "suburban",
         "business"
       ],
-      "synergy": 3,
       "note": "DuPage County"
     },
     {
@@ -1249,7 +1218,6 @@
         "rural",
         "union"
       ],
-      "synergy": 2,
       "note": "Southern Illinois"
     },
     {
@@ -1262,7 +1230,6 @@
         "suburban",
         "business"
       ],
-      "synergy": 3,
       "note": "Johnson County"
     },
     {
@@ -1275,7 +1242,6 @@
         "suburban",
         "urban"
       ],
-      "synergy": 2,
       "note": "Oklahoma City"
     },
     {
@@ -1289,7 +1255,6 @@
         "business",
         "veteran"
       ],
-      "synergy": 2,
       "note": "Charleston"
     },
     {
@@ -1302,7 +1267,6 @@
         "suburban",
         "evangelical"
       ],
-      "synergy": 2,
       "note": "Salt Lake suburbs"
     },
     {
@@ -1316,7 +1280,6 @@
         "union",
         "veteran"
       ],
-      "synergy": 3,
       "note": "The Second, gone red"
     },
     {
@@ -1329,7 +1292,6 @@
         "suburban",
         "rural"
       ],
-      "synergy": 2,
       "note": "Manchester"
     },
     {
@@ -1342,7 +1304,6 @@
         "union",
         "rural"
       ],
-      "synergy": 3,
       "note": "Coalfields, gone red"
     },
     {
@@ -1355,7 +1316,6 @@
         "suburban",
         "farm"
       ],
-      "synergy": 2,
       "note": "Lexington"
     },
     {
@@ -1368,7 +1328,6 @@
         "suburban",
         "business"
       ],
-      "synergy": 2,
       "note": "St. Louis suburbs"
     },
     {
@@ -1381,7 +1340,6 @@
         "suburban",
         "academic"
       ],
-      "synergy": 3,
       "note": "Eastside, flipped"
     },
     {

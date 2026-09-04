@@ -25,8 +25,8 @@ export const finding: Finding = {
     + 'median (72) and p90 (119) but its peak (257) crosses it. Uncontested share is 54.5%, well past '
     + "the ~40% line SIM-BRIEF reads as \"players are not fighting each other\" -- consistent with "
     + '#77/#21: most of the real fight is in the primary, which this share does not count.',
-  stampedAt: '2026-09-03T20:30:53-05:00',
-  stampedOn: '6a8e8c1',
+  stampedAt: '2026-09-04T10:35:25Z',
+  stampedOn: '3089e90',
 
   predicate(): Claim[] {
     const cfg = loadConfig('tuned.json');
@@ -39,12 +39,12 @@ export const finding: Finding = {
     for (const seed of seeds) uncontested += playOne(AGENTS, cards, cfg, seed).uncontestedShare;
 
     return [
-      { name: 'decision density: median legal races/player-turn', value: quantile(m.legal, 0.5), stamped: 46, tolerance: 8 },
+      { name: 'decision density: median legal races/player-turn', value: quantile(m.legal, 0.5), stamped: 45, tolerance: 8 },
       { name: 'decision density: turns with no legal move', value: 100 * m.deadTurnShare, stamped: 0, tolerance: 2, unit: '%' },
-      { name: 'board load: median tokens', value: quantile(m.tokens, 0.5), stamped: 72, tolerance: 15 },
-      { name: 'board load: p90 tokens', value: quantile(m.tokens, 0.9), stamped: 119, tolerance: 30 },
-      { name: 'board load: peak tokens', value: Math.max(...m.tokens), stamped: 257, tolerance: 60 },
-      { name: 'uncontested share', value: 100 * uncontested / n, stamped: 54.49, tolerance: 5, unit: '%' },
+      { name: 'board load: median tokens', value: quantile(m.tokens, 0.5), stamped: 87, tolerance: 15 },
+      { name: 'board load: p90 tokens', value: quantile(m.tokens, 0.9), stamped: 139, tolerance: 30 },
+      { name: 'board load: peak tokens', value: Math.max(...m.tokens), stamped: 178, tolerance: 60 },
+      { name: 'uncontested share', value: 100 * uncontested / n, stamped: 66.92, tolerance: 5, unit: '%' },
     ];
   },
 

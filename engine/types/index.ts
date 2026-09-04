@@ -8,10 +8,10 @@ export type IdentityTag =
   | 'farm' | 'business' | 'academic';
 
 /** BUILD-BRIEF Phase 3: a small enumerated set. Anything else is flavor text.
- *  identity bonus, home-state bonus and district synergy are real mechanics,
- *  but each is wired through its own dedicated field -- resolution.identityBonus,
- *  CandidateCard.homeStateBonus, DistrictCard.synergy -- not through this
- *  union, so no literal names them here (hf7y/american-cycle#153). */
+ *  identity bonus and home-state bonus are real mechanics, but each is wired
+ *  through its own dedicated field -- resolution.identityBonus,
+ *  CandidateCard.homeStateBonus -- not through this union, so no literal
+ *  names them here (hf7y/american-cycle#153). */
 export type EffectType = 'extremist' | 'may_endorse' | 'conditional';
 
 export interface CardEffect {
@@ -42,8 +42,6 @@ export interface DistrictCard {
   number: number;
   era: number;
   demographics: IdentityTag[];
-  /** printed synergy, applied when the holder runs in this state */
-  synergy: number;
   note?: string;
 }
 

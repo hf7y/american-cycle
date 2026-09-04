@@ -23,11 +23,19 @@ export function options(v: GameView, open: OpenRace[], cfg: Config): Option[] {
     for (const card of cands) {
       if (r.office !== 'president' && !eligible(card, r.state, me.districts)) continue;
       // A district is identified BY ITS NUMBER, not just its state. Matching
-      // on state alone let
-      // whichever card `find` reached first supply the synergy and the
+      // on state alone let whichever card `find` reached first supply the
       // demographics for a House race in a different district entirely.
+      //
+      // #40: identity match keys on the district card IN PLAY in this race's
+      // slot, whoever holds it -- a House seat has exactly one such card, and
+      // it prices the race whether the declaring player owns it or not.
+      // `eligible` above is the separate entry gate (you may only enter where
+      // you hold presence); this is what the race is worth once you are in
+      // it. Senate/governor/president stay keyed to the player's OWN holdings
+      // -- a statewide race summing fit across every district on the table is
+      // #106, v0.3.
       const district = r.office === 'representative'
-        ? me.districts.find((d) => d.state === r.state && d.number === r.slot)
+        ? v.players.flatMap((p) => p.districts).find((d) => d.state === r.state && d.number === r.slot)
         : me.districts.find((d) => d.state === r.state);
       const d: Declaration = { player: v.me, card, district, office: r.office, state: r.state, slot: r.slot,
         incumbent: r.incumbent?.holder?.cardId === card.id };
