@@ -4,6 +4,13 @@ on:
   push:
     branches: ['**']
   pull_request:
+  schedule:
+    # Daily, full-N. The per-push `findings` job below cuts every predicate's
+    # game count (FINDINGS_SEEDS=12) so pushes stay fast, and at that sample
+    # size two findings read STALE routinely -- so a green push does not mean
+    # a headline is current, only that the wiring runs. hf7y/american-cycle#22.
+    - cron: '17 6 * * *'
+  workflow_dispatch: {}
 
 jobs:
   engine:
@@ -44,6 +51,49 @@ jobs:
           FINDINGS_SEEDS: 12
       - name: every named rule fires at least once
         run: node sim/coverage.ts
+
+  # hf7y/american-cycle#22: the job above cuts every predicate's game count
+  # so pushes stay fast, and at that sample size staleness is routine -- so
+  # its green badge is evidence the wiring runs, not that a headline holds.
+  # This runs the same predicates at their real, full N, on a schedule and on
+  # demand, and surfaces the STALE count in the job summary rather than
+  # leaving it buried in a log nobody reads. It still only FAILS the job on
+  # BROKEN or an unstampable claim, matching CLAUDE.md's own rule that STALE
+  # is information, not failure.
+  findings-full:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: '24' }
+      - run: npm ci || npm install
+      - name: findings at full N
+        run: |
+          set -o pipefail
+          node sim/findings.ts | tee findings-full.log
+      - name: surface the stale count
+        if: always()
+        run: |
+          [ -f findings-full.log ] || exit 0
+          summary_line=$(tail -1 findings-full.log)
+          {
+            echo "### Findings at full N"
+            echo ""
+            echo "$summary_line"
+            echo ""
+            echo '<details><summary>full findings output</summary>'
+            echo ''
+            echo '```'
+            cat findings-full.log
+            echo '```'
+            echo '</details>'
+          } >> "$GITHUB_STEP_SUMMARY"
+          stale=$(echo "$summary_line" | grep -oE '[0-9]+ stale' | grep -oE '^[0-9]+' || true)
+          if [ "${stale:-0}" -gt 0 ]; then
+            echo "::warning title=Findings drifted::${stale} finding(s) are STALE at full N -- a headline no longer matches the engine. See the job summary."
+          fi
 
   board:
     runs-on: ubuntu-latest
