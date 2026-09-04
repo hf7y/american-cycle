@@ -39,8 +39,7 @@ rule instead of citing a section. The last category is the important one — mos
 | One macro number, not two | "How the country is doing" is honest. A separate ideological axis was double-counting |
 | **The House is a feeder, not a win route** — *contested, see below* | Ruled 2026-09-01. `HouseFarm` has won 0-0.6% of games in every engine version ever measured, including 0.1% at n=2400; the `what-wins` predicate puts House seats at 0.13x winner-to-field and calls holding them anti-correlated with winning. The House is a stepping stone to higher office and should stop being graded as a failed strategy |
 | **No year cap. `billTarget` is the only length knob** — *amended 2026-09-01, superseded 2026-09-04, see below* | Ruled 2026-09-01 ("infinity"). With bills as the victory condition the game was measured to end itself: at `maxYears: 10000`, **100% of games terminate** at targets 5/8/12 on both shipped configs, target 8 giving a median of 11-12 years. **That does not reproduce.** `as-written-plus` now ships `maxYears: 100` as a backstop; the amendment records why |
-| ~~Bills passed is the victory condition~~ | **REVERSED 2026-09-04 — see below, hf7y/american-cycle#145** |
-| **Scoring stays points; bills are points among others; the amendment is the ending** | Ruled 2026-09-04, reversing the row above. See below |
+| **Scoring stays points; bills are points among others; the amendment is the ending** — *reverses 2026-09-01's bills-passed ruling* | Ruled 2026-09-04 on hf7y/american-cycle#145, resolving the collision the correction above measured. See above |
 
 ### Amendment, 2026-09-01: the no-cap ruling does not survive measurement
 
@@ -108,7 +107,7 @@ state's lean points against their party, which is era-dependent in a way a
 printed tag cannot be. Manchin reads heterodox in 2018 and perfectly orthodox
 in 1958. `sim/agents.ts`'s `HeterodoxSpecialist` now detects it that way.
 
-**The two rulings above collide, and the collision is measured.** Under a bills victory with no cap, `BillAuthor` and `HouseFarm` take **90-99% of all games** between them (tuned, target 8: 62% / 37%), while `SenateFlood` — which wins 40-63% under points — wins **0%**. Bills are passed by House votes and credited to the largest House bloc, so an ending that counts bills makes the House the game. Whichever ending is counted, the strategy that farms it takes everything: points hands the game to the Senate, bills hand it to the House. The feeder ruling is not true under the ending that was also ruled, and one of the two has to move. See hf7y/american-cycle#13 and hf7y/american-cycle#50.
+**The two rulings above collide, and the collision is measured.** Under a bills victory with no cap, `BillAuthor` and `HouseFarm` take **90-99% of all games** between them (tuned, target 8: 62% / 37%), while `SenateFlood` — which wins 40-63% under points — wins **0%**. Bills are passed by House votes and credited to the largest House bloc, so an ending that counts bills makes the House the game. Whichever ending is counted, the strategy that farms it takes everything: points hands the game to the Senate, bills hand it to the House. The feeder ruling is not true under the ending that was also ruled, and one of the two has to move. **Resolved 2026-09-04 on hf7y/american-cycle#145: the ending moves, not the feeder ruling.** Scoring stays points; bills are points among others (`scoring.billOnBooks` already did this); the **amendment is the ending**. `as-written-plus.json` now ships `victory: 'amendment'`, `billTarget` is gone. `findings/amendment-is-the-ending.ts` (passive pool, no bill-chaser, `maxYears: 100`, n=120): ratification ends **57%** of games, the 100-year cap still binds **42%**, deck-out fires in **0%**. **Not settled by this**: hf7y/american-cycle#50 (`SenateFlood` dominance under points is live again) and hf7y/american-cycle#13 (which offices win, needs re-measuring) — both stay open, and findings keyed to the old ending read STALE against old stamps until each is re-measured on its own issue.
 
 ### Amendment, 2026-09-02: "1 pip = 2 points" is a conversion, not a claim about dispersion
 
@@ -139,26 +138,6 @@ comparison is effective competitiveness — the band hf7y/american-cycle#93
 built in `tracks/history.ts` — measured on the historical side now and
 deferred on the sim side to hf7y/american-cycle#91, because that figure is
 deck-sensitive and needs its flag first.
-
-### Reversal, 2026-09-04: the collision above is resolved by moving the ending, not the feeder ruling
-
-Ruled directly on hf7y/american-cycle#145: scoring stays points, bills become
-points among other points (`scoring.billOnBooks` already did this), and the
-**amendment is the ending** — reversing 2026-09-01's bills-passed ruling,
-which made `BillAuthor`/`HouseFarm` take 90-99% of games and contradicted the
-House-is-a-feeder row above. `as-written-plus.json` now ships
-`victory: 'amendment'`; `billTarget` is gone.
-
-`findings/amendment-is-the-ending.ts` measures the passive pool (no
-bill-chaser seated, `maxYears: 100`, n=120): ratification ends **57%** of
-games, the 100-year cap still binds **42%**, deck-out fires in **0%** — a
-real backstop, not a formality.
-
-**Not settled by this**: hf7y/american-cycle#50 (`SenateFlood` dominance
-under points is live again, not resolved) and hf7y/american-cycle#13 (which
-offices win, needs re-measuring). Findings keyed to `as-written-plus.json`'s
-prior behavior read STALE against old stamps — expected; leave them until
-each is re-measured on its own issue.
 
 ---
 
