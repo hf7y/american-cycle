@@ -4,6 +4,9 @@ on:
   push:
     branches: ['**']
   pull_request:
+  schedule:
+    - cron: '17 6 * * *' # daily full-N recheck, #22
+  workflow_dispatch: {}
 
 jobs:
   engine:
@@ -44,6 +47,41 @@ jobs:
           FINDINGS_SEEDS: 12
       - name: every named rule fires at least once
         run: node sim/coverage.ts
+
+  findings-full: # #22: full N, on a schedule; fails only on BROKEN, per CLAUDE.md
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: '24' }
+      - run: npm ci || npm install
+      - name: findings at full N
+        run: |
+          set -o pipefail
+          node sim/findings.ts | tee findings-full.log
+      - name: surface the stale count
+        if: always()
+        run: |
+          [ -f findings-full.log ] || exit 0
+          summary_line=$(tail -1 findings-full.log)
+          {
+            echo "### Findings at full N"
+            echo ""
+            echo "$summary_line"
+            echo ""
+            echo '<details><summary>full findings output</summary>'
+            echo ''
+            echo '```'
+            cat findings-full.log
+            echo '```'
+            echo '</details>'
+          } >> "$GITHUB_STEP_SUMMARY"
+          stale=$(echo "$summary_line" | grep -oE '[0-9]+ stale' | grep -oE '^[0-9]+' || true)
+          if [ "${stale:-0}" -gt 0 ]; then
+            echo "::warning title=Findings drifted::${stale} finding(s) are STALE at full N -- a headline no longer matches the engine. See the job summary."
+          fi
 
   board:
     runs-on: ubuntu-latest
