@@ -74,10 +74,12 @@ const hasNumericLiteral = (prose: string): boolean => /\d/.test(prose);
 /** Recorded 2026-09-02, the day the guard was built (hf7y/american-cycle#70):
  *  145 numeric-literal placeholders summed across all nine configs (16-17
  *  each), after fixing the two orphan keys (hand.bonus*, game.victory
- *  (ties)) also found by that issue. Lower this as placeholders are
- *  rewritten to drop the numbers they restate; raising it defeats the
- *  guard. */
-const CEILING = 145;
+ *  (ties)) also found by that issue. Lowered to 136 on 2026-09-03 when
+ *  `resolution.tieBreak` -- an unread config field -- was deleted along
+ *  with its placeholder note (hf7y/american-cycle#153). Lower this as
+ *  placeholders are rewritten to drop the numbers they restate; raising it
+ *  defeats the guard. */
+const CEILING = 136;
 
 test('placeholder prose carries no numeric literal, and the count never rises', () => {
   let total = 0;

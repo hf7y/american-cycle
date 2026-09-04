@@ -123,7 +123,7 @@ export function census(events: RaceEvent[]): Decl[] {
 const hasIncumbency = (s: RaceEvent['sides'][number]) => s.modifiers.some((m) => m.source === 'incumbency');
 
 /** Re-decide one race with `cardId` shifted by delta, same dice. Returns that
- *  side's win probability; tieBreak is "even", so a tie is 1/n. */
+ *  side's win probability; ties break evenly, so a tie is 1/n. */
 function winProb(e: RaceEvent, cardId: string, delta: number): number {
   const tot = (s: RaceEvent['sides'][number]) => s.total + (s.cardId === cardId ? delta : 0);
   const best = Math.max(...e.sides.map(tot));
