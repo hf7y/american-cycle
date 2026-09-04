@@ -24,14 +24,7 @@ def start(pg):
     pg.fill("#sseed", str(SEED))
     pg.click("#go")
 
-# #35: the only assertion below this used to be that the setup modal opened --
-# proof the page did not crash, not that a single rule fired. `G` is a plain
-# page global (ui/build.ts concatenates everything into un-moduled <script>
-# tags), so the same object app.js renders from is readable straight out of
-# the browser: no separate instrumentation to fall out of sync with the game.
 def check_phases(pg, districts_t0):
-    """Read the live G off the page after a completed game and confirm each
-    major phase actually happened, not just that dice were fillable."""
     end = pg.evaluate("""() => ({
       stats: G.stats,
       leanMap: G.leanMap,
@@ -50,10 +43,6 @@ def check_phases(pg, districts_t0):
 
     held = set(end["heldCardIds"])
     ever_won = {e["winnerCardId"] for e in end["events"] if e["winnerCardId"]}
-    # A card that has won a race before and now sits in a hand instead of on a
-    # seat got there by a term ending, not by declaring -- declaring is the
-    # only other way a card leaves a hand, and a card mid-declaration is not
-    # sitting idle in one.
     expired_to_hand = bool((ever_won - held) & set(end["handCardIds"]))
 
     phases = {
