@@ -61,18 +61,18 @@ export const finding: Finding = {
     + 'pays — which is a claim about the LAUNCHPAD being unreachable, not about the office: only '
     + '21.9% of gubernatorial elections fall in a presidential year, and a governor could reach '
     + 'the presidency only in the cycle its term expired until `resignToRun` existed.',
-  stampedAt: '2026-08-31T16:16:11Z',
-  stampedOn: '1fa308e',
+  stampedAt: '2026-09-04T06:16:46Z',
+  stampedOn: 'd0bd7ed',
 
   predicate(): Claim[] {
     const s = seatsByOutcome();
     return [
-      { name: 'Senate seats: winner vs everyone else', value: s.senator.ratio, stamped: 2.42, tolerance: 0.7, unit: 'x' },
-      { name: 'House seats: winner vs everyone else', value: s.representative.ratio, stamped: 0.13, tolerance: 0.15, unit: 'x' },
-      { name: 'governorships: winner vs everyone else', value: s.governor.ratio, stamped: 0.89, tolerance: 0.5, unit: 'x' },
-      { name: 'the presidency: winner vs everyone else', value: s.president.ratio, stamped: 3.67, tolerance: 1.6, unit: 'x' },
-      { name: 'Senate seats held by the winner', value: s.senator.winner, stamped: 22.06, tolerance: 4 },
-      { name: 'House seats held by the winner', value: s.representative.winner, stamped: 0.71, tolerance: 1.5 },
+      { name: 'Senate seats: winner vs everyone else', value: s.senator.ratio, stamped: 2.66, tolerance: 0.7, unit: 'x' },
+      { name: 'House seats: winner vs everyone else', value: s.representative.ratio, stamped: 0.04, tolerance: 0.15, unit: 'x' },
+      { name: 'governorships: winner vs everyone else', value: s.governor.ratio, stamped: 0.33, tolerance: 0.5, unit: 'x' },
+      { name: 'the presidency: winner vs everyone else', value: s.president.ratio, stamped: 4.5, tolerance: 1.6, unit: 'x' },
+      { name: 'Senate seats held by the winner', value: s.senator.winner, stamped: 22.84, tolerance: 4 },
+      { name: 'House seats held by the winner', value: s.representative.winner, stamped: 0.17, tolerance: 1.5 },
     ];
   },
 

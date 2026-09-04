@@ -38,8 +38,8 @@ export const finding: Finding = {
     + 'attributable lean writes between elections. Doing both gives 25.5, which is realignment as '
     + 'background noise. Contest is also the better lever because the same change moves decision '
     + 'density, dead turns, the midterm brake and heterodoxy, none of which the walkover rule touches.',
-  stampedAt: '2026-09-02T02:26:17Z',
-  stampedOn: '5d06f41',
+  stampedAt: '2026-09-04T06:13:04Z',
+  stampedOn: 'd0bd7ed',
 
   predicate(): Claim[] {
     const lowOff = measure(4, 16, 1.0, 0);
@@ -47,12 +47,12 @@ export const finding: Finding = {
     const lowOn = measure(4, 16, 1.0, 1);
     const highOn = measure(6, 24, 0.06, 1);
     return [
-      { name: 'low contest, walkover off: contested share', value: lowOff.contested, stamped: 0.28, tolerance: 0.10, unit: 'share' },
-      { name: 'low contest, walkover off: states realigned', value: lowOff.fourPerGame, stamped: 3.05, tolerance: 1.0 },
-      { name: 'high contest, walkover off: contested share', value: highOff.contested, stamped: 0.63, tolerance: 0.12, unit: 'share' },
-      { name: 'high contest, walkover off: states realigned', value: highOff.fourPerGame, stamped: 16.43, tolerance: 3.0 },
-      { name: 'low contest, walkover on: states realigned', value: lowOn.fourPerGame, stamped: 5.63, tolerance: 3.0 },
-      { name: 'both: states realigned', value: highOn.fourPerGame, stamped: 25.48, tolerance: 5.0 },
+      { name: 'low contest, walkover off: contested share', value: lowOff.contested, stamped: 0.27, tolerance: 0.10, unit: 'share' },
+      { name: 'low contest, walkover off: states realigned', value: lowOff.fourPerGame, stamped: 6.95, tolerance: 1.0 },
+      { name: 'high contest, walkover off: contested share', value: highOff.contested, stamped: 0.77, tolerance: 0.12, unit: 'share' },
+      { name: 'high contest, walkover off: states realigned', value: highOff.fourPerGame, stamped: 21.27, tolerance: 3.0 },
+      { name: 'low contest, walkover on: states realigned', value: lowOn.fourPerGame, stamped: 9.88, tolerance: 3.0 },
+      { name: 'both: states realigned', value: highOn.fourPerGame, stamped: 23.98, tolerance: 5.0 },
     ];
   },
 

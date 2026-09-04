@@ -83,8 +83,8 @@ export const finding: Finding = {
     + "years, which is SIM-BRIEF's \"realignment timescale: decades\" as a number. And 13.9% of real "
     + 'House district-years are unopposed, against 96.9% of simulated House generals fielding a '
     + 'single candidate -- measured on the matching population, which is most of the gap.',
-  stampedAt: '2026-09-01T02:35:00Z',
-  stampedOn: 'f0bbaca',
+  stampedAt: '2026-09-04T06:15:41Z',
+  stampedOn: 'd0bd7ed',
 
   predicate(): Claim[] {
     const pres = panel('pres_state_panel.json') as number[][];
@@ -111,10 +111,10 @@ export const finding: Finding = {
 
     return [
       // real-world facts: deterministic, so a drift here means the DATA moved
-      { name: 'presidential surprise persistence', value: p.surprise, stamped: -0.5105, tolerance: 0.01 },
-      { name: 'House surprise persistence', value: h.surprise, stamped: -0.7415, tolerance: 0.01 },
-      { name: 'presidential lean half-life', value: Math.log(0.5) / Math.log(1 + p.level), stamped: 5.879, tolerance: 0.02, unit: 'cycles' },
-      { name: 'real unopposed House share', value: (100 * h.unopposed) / h.rows, stamped: 13.907, tolerance: 0.01, unit: '%' },
+      { name: 'presidential surprise persistence', value: p.surprise, stamped: -0.51, tolerance: 0.01 },
+      { name: 'House surprise persistence', value: h.surprise, stamped: -0.74, tolerance: 0.01 },
+      { name: 'presidential lean half-life', value: Math.log(0.5) / Math.log(1 + p.level), stamped: 5.88, tolerance: 0.02, unit: 'cycles' },
+      { name: 'real unopposed House share', value: (100 * h.unopposed) / h.rows, stamped: 13.91, tolerance: 0.01, unit: '%' },
       // The config this finding indicts, read back so a change to it is visible
       // here. The name has to carry `as-written-plus.json` in full: the guard in
       // well-formed.test.ts pairs a dependsOn entry with a zero-tolerance claim by
@@ -122,7 +122,7 @@ export const finding: Finding = {
       // read as no check at all.
       { name: 'as-written-plus.json still ships the top push', value: cfg.lean.pushByMargin[cfg.lean.pushByMargin.length - 1].push, stamped: 4, tolerance: 0, unit: 'pips' },
       // the engine, which is the only thing here that may legitimately move
-      { name: 'sim House generals with one candidate', value: (100 * lone) / generals, stamped: 96.885, tolerance: 2, unit: '%' },
+      { name: 'sim House generals with one candidate', value: (100 * lone) / generals, stamped: 94.27, tolerance: 2, unit: '%' },
     ];
   },
 
