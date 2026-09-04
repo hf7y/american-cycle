@@ -1480,8 +1480,7 @@
    "era": 2016,
    "demographics": [
     "suburban",
-    "academic",
-    "ivy"
+    "academic"
    ],
    "synergy": 0,
    "note": "the Route 128 belt"
@@ -1495,7 +1494,6 @@
    "demographics": [
     "suburban",
     "academic",
-    "ivy",
     "business"
    ],
    "synergy": 0,
