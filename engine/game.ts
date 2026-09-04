@@ -130,7 +130,7 @@ export interface Agent {
 }
 
 export type UiRequest =
-  | { kind: 'declare'; year: number; open: OpenRace[] }
+  | { kind: 'declare'; year: number; open: OpenRace[]; pending: PendingPeg[] }
   | { kind: 'withdraw'; year: number; round: 'primary' | 'general';
       view: WithdrawalView; race: { office: Office; state: string; slot?: number; cardName: string } }
   | { kind: 'bill'; year: number; isAuthor: boolean; votes: boolean };
@@ -1382,7 +1382,6 @@ export class Game {
     }
   }
 
-  private humanDeclarations: Declaration[] = [];
   private humanWithdrawals = new Map<string, boolean>();
 
   private *askBill(human: number): Generator<UiRequest, { g?: number; yes?: boolean }, UiAnswer> {
@@ -1399,13 +1398,12 @@ export class Game {
   }
 
   private *electionsInteractive(human: number): Generator<UiRequest, void, UiAnswer> {
-    // Collect every declaration first, so the human can see the pegs go down.
+    // Every declaration is collected before any die is drawn, so the pegs go
+    // down in rotation and the human sees the ones placed ahead of theirs.
     const wave = new Wave(this.rng);
     const open = this.openRaces();
     this.releaseExpiringTerms(open);
     this.releaseHolders();
-    const answer = yield { kind: 'declare', year: this.year, open };
-    this.humanDeclarations = answer.declarations ?? [];
     const decls: Declaration[] = [];
     const pending: PendingPeg[] = [];
     // Math.floor matters: in an ODD year `year / 2` is fractional, so the
@@ -1413,7 +1411,16 @@ export class Game {
     // odd-year governor races were allowed to run.
     const order = this.players.map((_, i) => (i + Math.floor(this.year / 2)) % this.players.length);
     for (const i of order) {
-      const mine = i === human ? this.humanDeclarations : this.agents[i].declare(this.view(i), open, pending);
+      // The yield sits INSIDE the rotation, which is the whole point: it used
+      // to sit above this loop, so the human's declarations were fixed before
+      // any opponent moved and every agent then declared while reading them.
+      // That made the human permanently first -- the exact tax §8's rotating
+      // order exists to prevent -- and blind, while `pending` was handed to
+      // every agent. Yielding here gives the human their slot and the same
+      // pegs, and nothing more.
+      const mine = i === human
+        ? (yield { kind: 'declare', year: this.year, open, pending: [...pending] }).declarations ?? []
+        : this.agents[i].declare(this.view(i), open, pending);
       this.stats.decisions.push(mine.length);
       for (const d of mine) {
         const p = this.players[i];

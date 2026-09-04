@@ -147,6 +147,9 @@ function advance(answer) {
 // ---- declaration ------------------------------------------------------------
 function phaseDeclare() {
   S.picks = []; S.sel = null;
+  // Placed ahead of us in this cycle's rotation. The engine hands every agent
+  // the same list; before this it withheld it from the human alone.
+  S.floor = pending.pending || [];
   const open = pending.open;
   const me = G.players[S.human];
   const eligibleFor = (card) => open.filter((r) =>
@@ -263,11 +266,50 @@ function render() {
   drawMap();
   drawHand();
   drawControls();
+  drawFloor();
+}
+
+/** How many of the card's identities match the district you hold in this
+ *  state -- the `identityBonus` term, which is otherwise invisible until the
+ *  withdrawal window and absent entirely from a walkover. */
+function fitIn(card, state) {
+  const d = G.players[S.human].districts.find((x) => x.state === state);
+  if (!d || !card) return 0;
+  return card.identities.filter((i) => d.demographics.includes(i)).length;
+}
+
+function drawFloor() {
+  const f = $('floor'); f.replaceChildren();
+  const rows = (S.floor || []);
+  if (!rows.length && !S.picks.length) {
+    f.appendChild(el('p','note', pending && pending.kind === 'declare'
+      ? 'You are first in the rotation this cycle. Nothing is on the floor yet.'
+      : 'Nothing declared.'));
+    return;
+  }
+  const line = (colour, who, txt, party) => {
+    const n = el('div','le');
+    n.innerHTML = `<span class="yr" style="color:${colour}">${who}</span> ${txt}`
+      + (party ? ` <span class="tag">${party}</span>` : '');
+    f.appendChild(n);
+  };
+  for (const r of rows) {
+    line(PLAYER_COLORS[r.player], G.players[r.player].name,
+         `${r.state} ${OFFICE_LABEL[r.office]}${r.slot && r.office==='representative' ? ' '+r.slot : ''}`, r.party);
+  }
+  for (const p of S.picks) {
+    line(PLAYER_COLORS[S.human], 'You',
+         `${p.state} ${OFFICE_LABEL[p.office]}${p.slot && p.office==='representative' ? ' '+p.slot : ''} — ${p.card.name}`, p.card.party);
+  }
+  $('floorHint').textContent = `${rows.length} ahead of you · ${S.picks.length} yours`;
 }
 
 function drawMap() {
   const m = $('map'); m.replaceChildren();
   const declaredHere = new Set(S.picks.map((p)=>p.state));
+  // Opponent pegs already on the floor, by state.
+  const floorBy = {};
+  for (const r of (S.floor || [])) (floorBy[r.state] = floorBy[r.state] || []).push(r);
   const openStates = new Set();
   if (pending && pending.kind === 'declare' && S.sel) for (const r of racesInState_all(S.sel)) openStates.add(r.state);
   for (const [code,[c,r]] of Object.entries(TILES)) {
@@ -285,9 +327,22 @@ function drawMap() {
     t.appendChild(pips);
     const held = G.seats.find((s)=>s.state===code && s.holder && (s.office==='senator'||s.office==='governor'));
     if (held){ const pg = el('div','peg'); pg.style.background = PLAYER_COLORS[held.holder.player]; t.appendChild(pg); }
+    const here = floorBy[code] || [];
+    if (here.length) {
+      const dd = el('div','decl');
+      for (const r of here) { const i = el('i'); i.style.background = PLAYER_COLORS[r.player]; dd.appendChild(i); }
+      t.appendChild(dd);
+      // Contested means someone else is already here -- with your own peg down
+      // too, or with a card you could still send. That is the attack signal.
+      if (here.length > 1 || declaredHere.has(code)) t.classList.add('contested');
+    }
     if (openStates.has(code)) { t.classList.add('act'); t.onclick = () => pickRace(code); }
     if (declaredHere.has(code)) t.classList.add('race');
-    t.title = `${code} — lean ${lean>0?'R+':lean<0?'D+':''}${Math.abs(lean)||'even'}`;
+    const fit = S.sel ? fitIn(S.sel, code) : 0;
+    if (fit) t.appendChild(el('div','fit', '+' + fit));
+    t.title = `${code} — lean ${lean>0?'R+':lean<0?'D+':''}${Math.abs(lean)||'even'}`
+      + (fit ? ` · ${S.sel.name} matches ${fit} of your district's demographics` : '')
+      + (here.length ? ` · declared here: ${here.map((r)=>G.players[r.player].name + ' (' + r.party + ')').join(', ')}` : '');
     m.appendChild(t);
   }
 }

@@ -74,6 +74,13 @@ button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--brass);out
 .st .pip{width:3px;height:3px;border-radius:50%}
 .st .peg{position:absolute;top:2px;right:2px;width:6px;height:6px;border-radius:50%;border:1px solid var(--card)}
 .st.race::after{content:"";position:absolute;inset:0;border:2px solid var(--brass);border-radius:1px;pointer-events:none}
+/* Declarations already on the floor this cycle. The seat-holder peg sits
+   top-right; these sit bottom-left so a state can show both at once. */
+.st .decl{position:absolute;bottom:2px;left:2px;display:flex;gap:1px;max-width:calc(100% - 4px);flex-wrap:wrap}
+.st .decl i{width:4px;height:4px;border-radius:1px;display:block}
+.st.contested{border-color:var(--brass);border-width:2px}
+/* Demographic overlap between the selected card and your district here. */
+.st .fit{position:absolute;top:1px;left:2px;font-family:var(--mono);font-size:8px;font-weight:600;color:var(--good)}
 
 /* cards ------------------------------------------------------------------- */
 #hand{display:flex;gap:8px;overflow-x:auto;padding:4px 0 8px}
@@ -166,6 +173,10 @@ label.f{display:flex;flex-direction:column;gap:4px;font-size:12px}
     </section>
   </div>
   <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+    <section class="panel">
+      <header><h2 style="font-size:15px">The floor</h2><span class="eyebrow" id="floorHint">who has declared, in rotation</span></header>
+      <div class="body"><div id="floor"></div></div>
+    </section>
     <section class="panel">
       <header><h2 style="font-size:15px">Standings</h2><span class="eyebrow" id="cfgName">—</span></header>
       <div class="body"><div class="scores" id="scores"></div></div>
