@@ -58,10 +58,6 @@ def check_phases(pg, districts_t0):
         if not happened:
             phase_failures.append(name)
 
-# #36: no run anywhere has ever produced a wall-clock number; lengths are
-# reported in years. This times one browser game, wall clock, so that number
-# exists at all -- it is one sample, not the median/tail SIM-BRIEF asks for,
-# which needs many seeded runs of this same script.
 start_time = time.monotonic()
 
 with sync_playwright() as pw:
