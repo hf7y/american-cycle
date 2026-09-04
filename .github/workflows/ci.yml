@@ -42,6 +42,8 @@ jobs:
         run: node sim/findings.ts
         env:
           FINDINGS_SEEDS: 12
+      - name: every named rule fires at least once
+        run: node sim/coverage.ts
 
   board:
     runs-on: ubuntu-latest
