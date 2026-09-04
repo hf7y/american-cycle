@@ -153,7 +153,7 @@ function phaseDeclare() {
   const open = pending.open;
   const me = G.players[S.human];
   const eligibleFor = (card) => open.filter((r) =>
-    r.office === 'president' || eligible(card, r.state, me.districts));
+    r.office === 'president' || eligible(card, r.state, me.districts, r.office));
   S.eligibleFor = eligibleFor;
   $('handHint').textContent = `${G.year} — pick a card, then a state`;
   ticker(`${G.year}: declarations are open.`);
@@ -459,7 +459,7 @@ function racesInState_all(card){
   const me = G.players[S.human];
   const taken = new Set(S.picks.map(uiRaceKey));
   return (pending.open||[]).filter((r)=>
-    (r.office==='president' || eligible(card, r.state, me.districts)) && !taken.has(uiRaceKey(r)));
+    (r.office==='president' || eligible(card, r.state, me.districts, r.office)) && !taken.has(uiRaceKey(r)));
 }
 
 function drawHand() {

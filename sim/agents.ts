@@ -20,7 +20,7 @@ export function options(v: GameView, open: OpenRace[], cfg: Config): Option[] {
   const out: Option[] = [];
   for (const r of open) {
     for (const card of cands) {
-      if (r.office !== 'president' && !eligible(card, r.state, me.districts)) continue;
+      if (r.office !== 'president' && !eligible(card, r.state, me.districts, r.office)) continue;
       // §15 identifies a district BY ITS NUMBER. Matching on state alone let
       // whichever card `find` reached first supply the synergy and the
       // demographics for a House race in a different district entirely.

@@ -74,6 +74,17 @@ export interface RaceContext {
   economyMod: number;
   /** set once the presidential general has resolved, for down-ballot coattails */
   presidentialWinner?: Party;
+  /** The electorate this race runs in front of, as demographic tags. #106:
+   *  "once a district card is in play, its demographics are public and any
+   *  player contesting that district competes for the fit, equally." It hangs
+   *  on the CONTEXT rather than on the declaration for exactly that reason --
+   *  a declaration carried the declarer's own holding, so fit was a property
+   *  of ownership rather than of candidate x place.
+   *
+   *  A House race reads the district card in play in its slot. A statewide
+   *  race reads every district in play in that state, because a state's
+   *  character is the districts it contains and nothing else prints one. */
+  demographics?: string[];
   /** v0.2 item 9: pips of exogenous shock this year, 0 in a quiet one. Falls
    *  on incumbents, scaled by `Declaration.power`. */
   shock?: number;
@@ -111,10 +122,18 @@ export interface Declaration {
   power?: number;
 }
 
-/** §5: district cards gate all races. You may run only where you hold a
- *  district card, or where your candidate is a native. This is the brake on
- *  wide-and-empty play. */
-export function eligible(card: CandidateCard, state: string, districts: DistrictCard[]): boolean {
+/** Who may declare. #106: holding a district card buys that district's
+ *  EXISTENCE, not exclusive access to it -- "once a district is open, ANY
+ *  player may declare into it". A House race only exists where a district card
+ *  is in play, so the race being on the ballot is itself the permission.
+ *
+ *  Statewide races are unchanged and still gate on presence: you hold a
+ *  district somewhere in the state, or your candidate is a native. That is
+ *  what remains of §5's brake on wide-and-empty play. */
+export function eligible(
+  card: CandidateCard, state: string, districts: DistrictCard[], office?: Office,
+): boolean {
+  if (office === 'representative') return true;
   return card.homeState === state || districts.some((d) => d.state === state);
 }
 
@@ -139,16 +158,13 @@ export function buildModifiers(
     m.push({ source: 'home state', pips: d.card.homeStateBonus });
   }
 
-  if (d.district && d.district.state === ctx.state) {
-    // Synergy is owner-gated: it fires only for the player holding this card,
-    // and a non-owner contesting the same district gets neither it nor the
-    // identity match below. That gate is what hf7y/american-cycle#106 rules
-    // out -- a district confers nothing private before the race resolves --
-    // and hf7y/american-cycle#40 measures the cost of keeping it. Neither is
-    // built yet; this comment describes what the code does, not what is ruled.
-    m.push({ source: `district ${d.district.id}`, pips: d.district.synergy });
-
-    const shared = d.card.identities.filter((i) => d.district!.demographics.includes(i));
+  // #106: no owner's bonus. `district.synergy` was the only modifier that paid
+  // for holding a card rather than for fitting a place, so it is gone and the
+  // demographic match is the whole of what a district does. Measured against
+  // the returns, that match is the half worth keeping: district tags predict a
+  // seat's real two-party share at r^2 = 0.46 out of sample.
+  if (ctx.demographics?.length) {
+    const shared = d.card.identities.filter((i) => ctx.demographics!.includes(i));
     if (shared.length) {
       m.push({ source: `identity: ${shared.join(', ')}`, pips: res.identityBonus * shared.length });
     }
@@ -217,8 +233,11 @@ export function buildModifiers(
       // §5: "John Bel Edwards is pro-life, which reads as a bonus in Catholic
       // districts." An identity condition is a claim about the DISTRICT being
       // run in, not about the candidate -- without this the effect fires in
-      // every race and the condition is decorative.
-      if (w.identity && !d.district?.demographics.includes(w.identity)) continue;
+      // every race and the condition is decorative. It read the DECLARER'S own
+      // district card, so the same claim about the same place paid one player
+      // and not another; #106 makes it the race's electorate, like every other
+      // demographic term.
+      if (w.identity && !ctx.demographics?.includes(w.identity)) continue;
       m.push({ source: e.note ?? 'card text', pips: e.pips });
     }
   }

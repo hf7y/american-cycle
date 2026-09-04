@@ -91,19 +91,24 @@ test('lean applies once, to the party it favours (§10)', () => {
 });
 
 test('the midterm penalty reaches everyone; a local card outruns it (§9)', () => {
-  // Manchin's insulation was a printed tag and is now the ordinary arithmetic
-  // of a big personal vote: he takes the -2 like anyone else and survives it
-  // on home state plus district synergy.
+  // Manchin's insulation was a printed tag, then district synergy, and is now
+  // the ordinary arithmetic of a big personal vote: he takes the -2 like
+  // anyone else and survives it on home state plus a demographic match anyone
+  // running in that electorate could also claim (#106).
+  //
+  // The numbers are the shipped ones. joe-manchin-2016 is homeStateBonus 3,
+  // identities [rural, business]; every WV district in every pack prints
+  // [union, rural]. So `rural` matches and `business` does not.
   const manchin: Declaration = {
     player: 0, state: 'WV', office: 'senator',
-    district: dist({ id: 'WV-1', state: 'WV', synergy: 3 }),
-    card: cand({ id: 'manchin', party: 'D', homeState: 'WV', homeStateBonus: 2 }),
+    card: cand({ id: 'manchin', party: 'D', homeState: 'WV', homeStateBonus: 3,
+                 identities: ['rural', 'business'] }),
   };
-  const c = ctx({ state: 'WV', isMidterm: true, presidentParty: 'D' });
+  const c = ctx({ state: 'WV', isMidterm: true, presidentParty: 'D', demographics: ['union', 'rural'] });
   const mods = buildModifiers(manchin, c, 'general', res, nat, pg);
   assert.ok(mods.some((m) => m.source === 'midterm'), 'the tide is not shed');
   const side = { player: 0, cardId: 'manchin', party: 'D' as const, modifiers: mods };
-  assert.equal(resolution.modifierTotal(side), 3, 'home state 2 + synergy 3 - midterm 2');
+  assert.equal(resolution.modifierTotal(side), 2, 'home state 3 + rural 1 - midterm 2');
 });
 
 test('coattails run in reverse in hostile states, with no extra rule (§9)', () => {

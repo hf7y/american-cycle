@@ -964,7 +964,7 @@ export class Game {
       for (const d of mine) {
         const p = this.players[i];
         if (!p.hand.some((c) => c.kind === 'candidate' && c.id === d.card.id)) continue;
-        if (d.office !== 'president' && !eligible(d.card, d.state, p.districts)) continue;
+        if (d.office !== 'president' && !eligible(d.card, d.state, p.districts, d.office)) continue;
         decls.push({ ...d, player: i });
         pending.push({ player: i, office: d.office, state: d.state, slot: d.slot, party: d.card.party });
       }
@@ -1126,7 +1126,20 @@ export class Game {
       economyMod: econ.economyModifier(this.economy, this.cfg.economy, this.cfg.national.strongEconomy, this.cfg.national.recession),
       presidentialWinner,
       shock: this.shockPips,
+      demographics: this.electorate(office, state, slot),
     };
+  }
+
+  /** #106: the electorate a race runs in front of, read off the district cards
+   *  in play and NOT off the declaring player's holdings. A House race is its
+   *  own district; a statewide race is every district in play in that state,
+   *  because the districts are the only place a state's character is printed. */
+  private electorate(office: Office, state: string, slot: number | undefined): string[] {
+    const inPlay = this.districtsInPlay().filter((d) => d.state === state);
+    if (office === 'representative') {
+      return inPlay.find((d) => d.number === slot)?.demographics ?? [];
+    }
+    return [...new Set(inPlay.flatMap((d) => d.demographics))];
   }
 
   /** §11: nomination is a national primary, so only two cards reach the general
@@ -1438,7 +1451,7 @@ export class Game {
       for (const d of mine) {
         const p = this.players[i];
         if (!p.hand.some((c) => c.kind === 'candidate' && c.id === d.card.id)) continue;
-        if (d.office !== 'president' && !eligible(d.card, d.state, p.districts)) continue;
+        if (d.office !== 'president' && !eligible(d.card, d.state, p.districts, d.office)) continue;
         decls.push({ ...d, player: i });
         pending.push({ player: i, office: d.office, state: d.state, slot: d.slot, party: d.card.party });
       }
