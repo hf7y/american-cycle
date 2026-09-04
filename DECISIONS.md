@@ -142,43 +142,23 @@ deck-sensitive and needs its flag first.
 
 ### Reversal, 2026-09-04: the collision above is resolved by moving the ending, not the feeder ruling
 
-Ruled directly on hf7y/american-cycle#145: "the ending is points where bills
-are points and it's triggered by the amendment." This resolves the collision
-the 2026-08-31 correction above measured and named out loud — bills as a
-count-to-target made `BillAuthor`/`HouseFarm` take 90-99% of games, which
-contradicted the House-is-a-feeder ruling under its own numbers. This ruling
-moves the ending, not the feeder row: **`as-written-plus.json` now ships
-`victory: 'amendment'`, not `victory: 'bills'`**, and `billTarget` is gone
-from that config. Scoring itself did not change — `scoring.billOnBooks`
-already counted a bill still on the books as board points, same as it always
-has; only the count-to-a-target win condition is removed.
+Ruled directly on hf7y/american-cycle#145: scoring stays points, bills become
+points among other points (`scoring.billOnBooks` already did this), and the
+**amendment is the ending** — reversing 2026-09-01's bills-passed ruling,
+which made `BillAuthor`/`HouseFarm` take 90-99% of games and contradicted the
+House-is-a-feeder row above. `as-written-plus.json` now ships
+`victory: 'amendment'`; `billTarget` is gone.
 
-The amendment ending was not speculative going in: `findings/amendment-is-the-ending.ts`
-(stamped from this ruling) measures the passive pool (`Greedy`, `Lookahead`,
-`SenateFlood`, `HeterodoxSpecialist`, `as-written-plus.json`, `maxYears: 100`,
-n=120) and finds ratification ends **57%** of games outright, the 100-year
-cap still binds **42%** of the time — a real backstop, not a formality — and
-deck-out fires in **0%**, matching the no-cap amendment's finding that
-circulation regrows the talon faster than it empties. No game reports the
-retired bill target as its ending.
+`findings/amendment-is-the-ending.ts` measures the passive pool (no
+bill-chaser seated, `maxYears: 100`, n=120): ratification ends **57%** of
+games, the 100-year cap still binds **42%**, deck-out fires in **0%** — a
+real backstop, not a formality.
 
-**What this does NOT settle**, named directly on #145 and left as open
-questions rather than answered here:
-
-- hf7y/american-cycle#50 — `SenateFlood` wins 40-63% of games under a points
-  ending on `tuned.json`; whether that dominance is a hole in the design or
-  an artefact of that config comes back **live** under this ruling, not
-  resolved by it.
-- hf7y/american-cycle#13 — which offices the winner actually holds
-  (`findings/what-wins.ts`) was measured under the old ending and needs
-  re-measuring under this one. `findings/what-wins.ts`, `findings/runaway-no-brake.ts`,
-  `findings/adversarial-counters.ts`, `findings/impeachment-reachability.ts`,
-  `findings/decay-push-tradeoff.ts` and `findings/contest-vs-walkover.ts` all
-  depend on `as-written-plus.json`'s behavior and will read STALE against
-  their old stamps because the engine genuinely moved under them — that is
-  expected, and restamping any of them is answering #13 or #50 by the back
-  door, not this ruling. Leave them stale until each is deliberately
-  re-measured on its own issue.
+**Not settled by this**: hf7y/american-cycle#50 (`SenateFlood` dominance
+under points is live again, not resolved) and hf7y/american-cycle#13 (which
+offices win, needs re-measuring). Findings keyed to `as-written-plus.json`'s
+prior behavior read STALE against old stamps — expected; leave them until
+each is re-measured on its own issue.
 
 ---
 
