@@ -80,7 +80,7 @@ export const finding: Finding = {
     + "attach a weight to. That is #164's complaint from the other side: the arithmetic now works, and "
     + 'the taxonomy is still what caps it.',
   stampedAt: '2026-09-04T21:56:03Z',
-  stampedOn: '8461e68',
+  stampedOn: '8b1b49a',
 
   predicate(): Claim[] {
     const cfg = loadConfig('as-written-plus.json');
