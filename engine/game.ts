@@ -107,6 +107,13 @@ export interface Agent {
    *  engine/rules/elections.test.ts ("the withdrawal window closes before
    *  any die is rolled"). */
   withdraw(v: WithdrawalView): boolean;
+  /** hf7y/american-cycle#96: Lieberman 2006 -- a card that is about to lose
+   *  its own party's primary may commit, now, to run as an independent in
+   *  the SAME race if it does. Decided on the same incomplete information as
+   *  `withdraw` (no dice drawn, no primary result known yet), which is why it
+   *  shares `WithdrawalView` rather than a result the card cannot see yet.
+   *  Omit for the default: never take it. */
+  declareIndependent?(v: WithdrawalView): boolean;
   /** the omnibill's single number, 1..6, negative for austerity */
   proposeG(v: GameView): number;
   /** v0.2 item 4: the bill's position. Omit for the default, which is the
@@ -138,9 +145,11 @@ export type UiRequest =
   | { kind: 'declare'; year: number; open: OpenRace[] }
   | { kind: 'withdraw'; year: number; round: 'primary' | 'general';
       view: WithdrawalView; race: { office: Office; state: string; slot?: number; cardName: string } }
+  | { kind: 'independent'; year: number;
+      view: WithdrawalView; race: { office: Office; state: string; slot?: number; cardName: string } }
   | { kind: 'bill'; year: number; isAuthor: boolean; votes: boolean };
 
-export interface UiAnswer { declarations?: Declaration[]; withdraw?: boolean; g?: number; yes?: boolean }
+export interface UiAnswer { declarations?: Declaration[]; withdraw?: boolean; independent?: boolean; g?: number; yes?: boolean }
 
 /** The two year-gates, defined ONCE because they were written twice and drifted.
  *  `tick` billed biennially and ran odd-year governor races; `interactiveTick`
@@ -1260,6 +1269,18 @@ export class Game {
     return winner.card.party;
   }
 
+  /** hf7y/american-cycle#96: Lieberman 2006 -- whether a card that is about to
+   *  contest a primary would run as an independent in THIS race if it lost.
+   *  Asked before the primary's own die is drawn, same footing as `withdraw`,
+   *  so it shares that view rather than a result nobody can see yet. The
+   *  human's answer was collected earlier, in `electionsInteractive`; here it
+   *  is only looked up. */
+  private decideIndependent(d: Declaration, others: Declaration[], ctx: RaceContext, human: number): boolean {
+    if (d.player === human) return this.humanIndependentDecisions.get(raceKeyOf(d) + '|' + d.card.id) ?? false;
+    const mods = buildModifiers(d, ctx, 'primary', this.cfg.resolution, this.cfg.national, this.cfg.primaryGeneral);
+    return this.agents[d.player].declareIndependent?.(withdrawalView(d, mods, 'primary', ctx, others)) ?? false;
+  }
+
   private runPrimaries(group: Declaration[], ctx: RaceContext, wave: Wave, human = -1): Declaration[] {
     const byParty = new Map<Party, Declaration[]>();
     for (const d of group) {
@@ -1270,6 +1291,10 @@ export class Game {
     for (const [party, cands] of byParty) {
       if (party === 'I') { winners.push(...cands); continue; }  // independents skip the primary
       if (cands.length === 1) { winners.push(cands[0]); continue; }
+      // Decided now, before the primary's own die is drawn -- a card cannot
+      // see its own loss coming, only that it might lose.
+      const wantsIndependent = new Map(cands.map((d) =>
+        [d.card.id, this.decideIndependent(d, cands.filter((o) => o !== d), ctx, human)] as const));
       const out = runRace({
         ctx, round: 'primary', declarations: cands, wave, rng: this.rng,
         res: this.cfg.resolution, nat: this.cfg.national, pg: this.cfg.primaryGeneral,
@@ -1287,9 +1312,17 @@ export class Game {
         if (threshold !== undefined && !out.event.uncontested && out.event.margin < threshold) w.bruisingPrimary = true;
         winners.push(w);
       }
-      // A primary loss returns the card to hand. Cheap to enter; the cost is
-      // that you revealed it.
-      for (const d of cands) if (d.player !== out.event!.winner) this.returnToHand(d);
+      const withdrawnIds = new Set(out.withdrawnCards.map((c) => c.card.id));
+      for (const d of cands) {
+        if (d.player === out.event!.winner || withdrawnIds.has(d.card.id)) continue;
+        // A primary loss returns the card to hand -- unless it committed to
+        // run anyway, as itself but under no party's line, in this same
+        // race. `cardById` stays the source of truth for the card's printed
+        // party, so the label reverts the moment the seat or the hand takes
+        // the card back (see `releaseExpiringTerms`, `returnToHand`).
+        if (wantsIndependent.get(d.card.id)) winners.push({ ...d, card: { ...d.card, party: 'I' } });
+        else this.returnToHand(d);
+      }
     }
     return winners;
   }
@@ -1436,6 +1469,7 @@ export class Game {
 
   private humanDeclarations: Declaration[] = [];
   private humanWithdrawals = new Map<string, boolean>();
+  private humanIndependentDecisions = new Map<string, boolean>();
 
   private *askBill(human: number): Generator<UiRequest, { g?: number; yes?: boolean }, UiAnswer> {
     const authorId = leg.author(this.seats);
@@ -1480,12 +1514,14 @@ export class Game {
 
     // The withdrawal window, before any die is drawn.
     this.humanWithdrawals.clear();
+    this.humanIndependentDecisions.clear();
     const mineContested = decls.filter((d) => d.player === human)
       .map((d) => ({ d, others: decls.filter((o) => o !== d && sameRace(o, d)) }))
       .filter((x) => x.others.length > 0);
     for (const { d, others } of mineContested) {
       const ctx = this.raceContext(d.office, d.state, d.slot);
-      const round = others.some((o) => o.card.party === d.card.party) ? 'primary' : 'general';
+      const primaryOthers = others.filter((o) => o.card.party === d.card.party);
+      const round = primaryOthers.length > 0 ? 'primary' : 'general';
       const mods = buildModifiers(d, ctx, round, this.cfg.resolution, this.cfg.national, this.cfg.primaryGeneral);
       const a = yield {
         kind: 'withdraw', year: this.year, round,
@@ -1493,6 +1529,18 @@ export class Game {
         race: { office: d.office, state: d.state, slot: d.slot, cardName: d.card.name },
       };
       this.humanWithdrawals.set(raceKeyOf(d) + '|' + d.card.id, !!a.withdraw);
+
+      // hf7y/american-cycle#96: decided in the same window as withdrawal, on
+      // the same incomplete information -- only asked when there IS a primary
+      // to lose.
+      if (round === 'primary') {
+        const b = yield {
+          kind: 'independent', year: this.year,
+          view: withdrawalView(d, mods, round, ctx, primaryOthers),
+          race: { office: d.office, state: d.state, slot: d.slot, cardName: d.card.name },
+        };
+        this.humanIndependentDecisions.set(raceKeyOf(d) + '|' + d.card.id, !!b.independent);
+      }
     }
 
     this.resolveDeclared(decls, wave, human);
