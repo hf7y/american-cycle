@@ -86,6 +86,12 @@ button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--brass);out
    you already took -- so a player had to invent a rule to explain it. */
 .st.ballot{background-image:linear-gradient(to bottom,rgba(138,109,34,.16),transparent 42%)}
 .st.blocked{opacity:.5;outline:1px dashed var(--rule);outline-offset:-3px}
+/* The presidency is the one race with no tile -- its state is "US" -- so it
+   needs a home of its own or it cannot be entered at all. */
+#national{display:none;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;padding:8px 10px;
+  border:1px solid var(--brass);border-radius:2px;background:linear-gradient(to right,rgba(138,109,34,.14),transparent)}
+#national.on{display:flex}
+#national .ttl{font-family:var(--display);font-weight:600;font-size:14px}
 
 /* cards ------------------------------------------------------------------- */
 #hand{display:flex;gap:8px;overflow-x:auto;padding:4px 0 8px}
@@ -170,7 +176,7 @@ label.f{display:flex;flex-direction:column;gap:4px;font-size:12px}
   <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
     <section class="panel">
       <header><h2 style="font-size:15px">The map</h2><span class="eyebrow" id="mapHint">deviation from each state's own baseline</span></header>
-      <div class="body"><div id="map"></div></div>
+      <div class="body"><div id="national"></div><div id="map"></div></div>
     </section>
     <section class="panel">
       <header><h2 style="font-size:15px">Your hand</h2><span class="eyebrow" id="handHint">—</span></header>

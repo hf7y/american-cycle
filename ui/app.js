@@ -263,6 +263,7 @@ function render() {
     return n;
   }));
 
+  drawNational();
   drawMap();
   drawHand();
   drawControls();
@@ -308,6 +309,36 @@ function drawFloor() {
   $('floorHint').textContent = `${rows.length} ahead of you · ${S.picks.length} yours`;
 }
 
+/** The presidency has no tile: `openRaces()` gives it `state: 'US'` and the
+ *  map is built from TILES, so for as long as the board has existed the one
+ *  race everything else feeds into could not be entered. */
+function drawNational() {
+  const n = $('national'); n.replaceChildren(); n.classList.remove('on');
+  if (!pending || pending.kind !== 'declare') return;
+  const race = (pending.open || []).find((r) => r.office === 'president');
+  if (!race) return;
+  n.classList.add('on');
+  n.appendChild(el('span','ttl','The presidency is on the ballot'));
+  const already = S.picks.find((p) => p.office === 'president');
+  const onFloor = (S.floor || []).filter((r) => r.office === 'president');
+  if (already) {
+    n.appendChild(el('span','note',`You are running ${already.card.name}.`));
+  } else if (S.sel) {
+    const b = el('button','btn', `Run ${S.sel.name}`);
+    b.onclick = () => {
+      S.picks.push({ player:S.human, card:S.sel, office:'president', state:'US' });
+      S.sel = null; render();
+    };
+    n.appendChild(b);
+  } else {
+    n.appendChild(el('span','note','Any card may run. Pick one from your hand.'));
+  }
+  if (onFloor.length) {
+    n.appendChild(el('span','note',
+      `Already declared: ${onFloor.map((r)=>`${G.players[r.player].name} (${r.party})`).join(', ')}.`));
+  }
+}
+
 function drawMap() {
   const m = $('map'); m.replaceChildren();
   const declaredHere = new Set(S.picks.map((p)=>p.state));
@@ -346,7 +377,12 @@ function drawMap() {
       // too, or with a card you could still send. That is the attack signal.
       if (here.length > 1 || declaredHere.has(code)) t.classList.add('contested');
     }
+    // A tile has two jobs now: declare into it, and read it. Declaring wins
+    // the click when it is available, so inspection gets the long-press-free
+    // fallback of a right-click plus a click on any tile you cannot enter.
+    t.oncontextmenu = (ev) => { ev.preventDefault(); inspectState(code); };
     if (openStates.has(code)) { t.classList.add('act'); t.onclick = () => pickRace(code); }
+    else t.onclick = () => inspectState(code);
     if (declaredHere.has(code)) t.classList.add('race');
     const fit = S.sel ? fitIn(S.sel, code) : 0;
     if (fit) t.appendChild(el('div','fit', '+' + fit));
@@ -363,6 +399,61 @@ function drawMap() {
     m.appendChild(t);
   }
 }
+/** Everything the board knows about one state, in one place: who holds what,
+ *  which districts are in play and what electorate they carry, and who has
+ *  already declared here this cycle. The demographics were previously
+ *  readable only on your own district cards, so an opponent's district was a
+ *  peg with no information attached. */
+function inspectState(code) {
+  const lean = G.leanMap[code] || 0;
+  const seats = G.seats.filter((s) => s.state === code && s.holder);
+  const districts = [];
+  for (const [pi, p] of G.players.entries())
+    for (const d of p.districts) if (d.state === code) districts.push({ d, pi });
+  const floorHere = (S.floor || []).filter((r) => r.state === code);
+  const mine = S.picks.filter((p) => p.state === code);
+  const ballot = (pending && pending.kind === 'declare' ? (pending.open || []) : []).filter((r) => r.state === code);
+
+  const tag = (t, cls) => `<span class="tag${cls ? ' ' + cls : ''}">${t}</span>`;
+  const who = (i) => `<b style="color:${PLAYER_COLORS[i]}">${G.players[i].name}</b>`;
+
+  modal(`
+    <span class="eyebrow">${code} — lean ${lean > 0 ? 'R+' : lean < 0 ? 'D+' : ''}${Math.abs(lean) || 'even'}</span>
+    <h2 style="font-size:22px;margin-top:4px">${code}</h2>
+
+    <p class="eyebrow" style="margin-top:14px">On the ballot ${G.year}</p>
+    ${ballot.length
+      ? `<p>${ballot.map((r) => `${OFFICE_LABEL[r.office]}${r.slot && r.office === 'representative' ? ' ' + r.slot : ''}`).join(' · ')}</p>`
+      : '<p class="note">Nothing. No Senate class is up, no governorship falls, and no district card is in play here.</p>'}
+
+    <p class="eyebrow" style="margin-top:14px">Districts in play</p>
+    ${districts.length
+      ? `<table class="stack">${districts.map(({ d, pi }) => `<tr>
+          <td><b>${d.state}-${d.number}</b> <span class="note">${d.era}</span><br>
+              ${d.demographics.map((g) => tag(g)).join(' ')}
+              ${d.note ? `<div class="note" style="margin-top:3px">${d.note}</div>` : ''}</td>
+          <td style="text-align:right;vertical-align:top">opened by ${who(pi)}<br>
+              <span class="note">synergy +${d.synergy}</span></td></tr>`).join('')}</table>`
+      : '<p class="note">None. Without a district card there is no House race here at all.</p>'}
+
+    <p class="eyebrow" style="margin-top:14px">Held seats</p>
+    ${seats.length
+      ? `<table class="stack">${seats.map((s) => `<tr><td>${OFFICE_LABEL[s.office]}${s.slot && s.office === 'representative' ? ' ' + s.slot : ''}</td>
+          <td style="text-align:right">${who(s.holder.player)} <span class="note">${s.holder.party}</span></td></tr>`).join('')}</table>`
+      : '<p class="note">Nobody holds anything here.</p>'}
+
+    ${floorHere.length || mine.length ? `<p class="eyebrow" style="margin-top:14px">Declared this cycle</p>
+      <table class="stack">
+        ${floorHere.map((r) => `<tr><td>${OFFICE_LABEL[r.office]}${r.slot && r.office === 'representative' ? ' ' + r.slot : ''}</td>
+          <td style="text-align:right">${who(r.player)} ${tag(r.party)}</td></tr>`).join('')}
+        ${mine.map((p) => `<tr><td>${OFFICE_LABEL[p.office]}${p.slot && p.office === 'representative' ? ' ' + p.slot : ''}</td>
+          <td style="text-align:right">${who(S.human)} ${p.card.name} ${tag(p.card.party)}</td></tr>`).join('')}
+      </table>` : ''}
+
+    <div class="row" style="margin-top:18px"><button class="btn ghost" id="closeInspect">Close</button></div>`);
+  $('closeInspect').onclick = closeModal;
+}
+
 function racesInState_all(card){
   const me = G.players[S.human];
   const taken = new Set(S.picks.map(uiRaceKey));

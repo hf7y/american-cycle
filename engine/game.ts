@@ -349,6 +349,19 @@ export class Game {
     return (mine / held.length) * this.players.length;
   }
 
+  /** A district entering play OPENS a House race that did not exist before it,
+   *  so the House map grows silently unless somebody says so. Both draw paths
+   *  route through here for that reason. */
+  private take(p: PlayerState, c: Card, announce = false): void {
+    if (c.kind === 'district') {
+      p.districts.push(c);
+      // Announced on the mid-game refill only. The opening draft deals every
+      // starting district at once, and fifty lines before the first year is
+      // not news -- the state inspector carries the opening map instead.
+      if (announce) this.log.push(`${this.year}: ${c.state}-${c.number} enters play [${c.demographics.join(', ')}] — ${p.name}`);
+    } else p.hand.push(c);
+  }
+
   private draw(p: PlayerState, n: number): void {
     for (let i = 0; i < n; i++) {
       if (!this.talon.length) {
@@ -359,7 +372,7 @@ export class Game {
         else return;                                 // §14: the deck-out ending
       }
       const c = this.talon.pop()!;
-      if (c.kind === 'district') p.districts.push(c); else p.hand.push(c);
+      this.take(p, c, true);
     }
   }
 
@@ -404,7 +417,7 @@ export class Game {
           if (!c) return;
           const p = this.players[i];
           if (this.held(p) >= this.handSize(p)) { this.discard.push(c); return; }
-          if (c.kind === 'district') p.districts.push(c); else p.hand.push(c);
+          this.take(p, c);
         });
         // pass the remainder around the table
         packs.unshift(packs.pop()!);
