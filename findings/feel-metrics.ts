@@ -7,7 +7,11 @@ import type { Claim, Finding } from './types.ts';
 /** SIM-BRIEF Part 3 and Part 5's feel bands (hf7y/american-cycle#34), promoted
  *  from sim/feel.ts's print-only instrument to a guarded predicate -- the same
  *  drift that let #49's swinginess claim move 2.5pp -> 4.5pp unnoticed applies
- *  to every metric here, because none of them was asserted anywhere. */
+ *  to every metric here, because none of them was asserted anywhere. Swinginess
+ *  itself joins the predicate here (hf7y/american-cycle#53): sim/feel.ts was
+ *  also conflating it with 3+ candidate races, where oddsAtEdge/primaryOddsAtEdge's
+ *  closed-form two-side odds understate the true upset chance (any non-favourite
+ *  side can win, not just the modifier runner-up) -- scoped to two-side races now. */
 const AGENTS = ['Greedy', 'Lookahead', 'SenateFlood', 'HeterodoxSpecialist'];
 const SEED_BASE = 300000;
 
@@ -15,17 +19,21 @@ export const finding: Finding = {
   id: 'feel-metrics',
   dependsOn: [],
   question:
-    "SIM-BRIEF's feel bands -- decision density, dead turns, board load, uncontested share -- "
-    + 'are measured by sim/feel.ts but nothing fails when any of them leaves its band. Do they hold, '
-    + 'on the shipped tuned.json?',
+    "SIM-BRIEF's feel bands -- decision density, dead turns, board load, uncontested share, "
+    + 'swinginess against the odds table -- are measured by sim/feel.ts but nothing fails when any '
+    + 'of them leaves its band. Do they hold, on the shipped tuned.json?',
 
   headline:
-    "Two of four bands fail on tuned.json. Decision density's median (46 legal races per player-turn) "
+    "Two of five bands fail on tuned.json. Decision density's median (46 legal races per player-turn) "
     + "sits far past SIM-BRIEF's own paralysis line of 25 -- turns with zero legal moves are 0.0%, so "
     + 'the excess is choice, not deadlock. Board load stays under the 200-token failure line at the '
     + 'median (72) and p90 (119) but its peak (257) crosses it. Uncontested share is 54.5%, well past '
     + "the ~40% line SIM-BRIEF reads as \"players are not fighting each other\" -- consistent with "
-    + '#77/#21: most of the real fight is in the primary, which this share does not count.',
+    + '#77/#21: most of the real fight is in the primary, which this share does not count. Swinginess, '
+    + 'scoped to two-side races (the odds table is not defined for a 3+ candidate field), holds: the '
+    + 'favourite loses 33.3% of the time against a table-predicted 31.4%, a 1.9pp gap plausibly inside '
+    + "the noise the shared per-cycle national/state dice (engine/rules/resolution.ts's Wave) induce "
+    + 'across only 40 games.',
   stampedAt: '2026-09-05T06:59:03Z',
   stampedOn: '2021e16',
 
@@ -53,6 +61,8 @@ export const finding: Finding = {
       { name: 'board load: peak tokens', value: Math.max(...m.tokens), stamped: 246, tolerance: 60 },
       { name: 'uncontested share', value: 100 * uncontested / n, stamped: 67.81, tolerance: 5, unit: '%' },
       { name: 'uncontested share, ALL_PACKS', value: 100 * uncontestedAll / n, stamped: 71.66, tolerance: 5, unit: '%' },
+      { name: 'swinginess: observed upset rate, two-side races', value: 100 * m.upsets / m.races, stamped: 33.3, tolerance: 4, unit: '%' },
+      { name: 'swinginess: predicted upset rate (odds table), two-side races', value: 100 * m.predicted / m.races, stamped: 31.41, tolerance: 4, unit: '%' },
     ];
   },
 
@@ -62,6 +72,9 @@ export const finding: Finding = {
     const deadTurns = v('decision density: turns with no legal move');
     const peak = v('board load: peak tokens');
     const uncontested = v('uncontested share');
+    const observedUpsets = v('swinginess: observed upset rate, two-side races');
+    const predictedUpsets = v('swinginess: predicted upset rate (odds table), two-side races');
+    const swingGap = Math.abs(observedUpsets - predictedUpsets);
     const deck = deckSensitivity([
       { pool: 'four-pack', value: uncontested },
       { pool: 'all-seven', value: v('uncontested share, ALL_PACKS') },
@@ -81,6 +94,9 @@ export const finding: Finding = {
       uncontested > 40
         ? `and ${uncontested.toFixed(1)}% of races are uncontested, past the ~40% line where players are reading as not fighting each other`
         : 'and uncontested share stays under the ~40% line',
+      swingGap > 5
+        ? `and swinginess (two-side races) is off the odds table by ${swingGap.toFixed(1)}pp -- observed ${observedUpsets.toFixed(1)}% vs predicted ${predictedUpsets.toFixed(1)}%`
+        : `and swinginess tracks the odds table (two-side races): observed ${observedUpsets.toFixed(1)}% vs predicted ${predictedUpsets.toFixed(1)}%`,
       deck.sensitive
         ? `and uncontested share is itself deck-sensitive (hf7y/american-cycle#91): ${deck.byPool['four-pack'].toFixed(1)}% four-pack vs ${deck.byPool['all-seven'].toFixed(1)}% all-seven`
         : 'and uncontested share held stable between the four-pack and all-seven decks (hf7y/american-cycle#91)',
