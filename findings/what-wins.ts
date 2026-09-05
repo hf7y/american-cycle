@@ -63,18 +63,18 @@ export const finding: Finding = {
     + 'hf7y/american-cycle#50 / `findings/amendment-victory-dominance.ts` for the companion measurement: '
     + 'the amendment ending does not fix the dominance hole this office question keeps colliding with, '
     + 'it relocates it again, the same way it moved between points and bills.',
-  stampedAt: '2026-09-04T13:35:00Z',
-  stampedOn: '16805ba',
+  stampedAt: '2026-09-05T03:42:19Z',
+  stampedOn: '218542b',
 
   predicate(): Claim[] {
     const s = seatsByOutcome();
     return [
-      { name: 'Senate seats: winner vs everyone else', value: s.senator.ratio, stamped: 2.86, tolerance: 0.7, unit: 'x' },
-      { name: 'House seats: winner vs everyone else', value: s.representative.ratio, stamped: 0.54, tolerance: 0.15, unit: 'x' },
-      { name: 'governorships: winner vs everyone else', value: s.governor.ratio, stamped: 1.44, tolerance: 0.5, unit: 'x' },
-      { name: 'the presidency: winner vs everyone else', value: s.president.ratio, stamped: 7.29, tolerance: 1.6, unit: 'x' },
-      { name: 'Senate seats held by the winner', value: s.senator.winner, stamped: 9.83, tolerance: 4 },
-      { name: 'House seats held by the winner', value: s.representative.winner, stamped: 2.28, tolerance: 1.5 },
+      { name: 'Senate seats: winner vs everyone else', value: s.senator.ratio, stamped: 2.2, tolerance: 0.7, unit: 'x' },
+      { name: 'House seats: winner vs everyone else', value: s.representative.ratio, stamped: 0.51, tolerance: 0.15, unit: 'x' },
+      { name: 'governorships: winner vs everyone else', value: s.governor.ratio, stamped: 0.96, tolerance: 0.5, unit: 'x' },
+      { name: 'the presidency: winner vs everyone else', value: s.president.ratio, stamped: 15, tolerance: 1.6, unit: 'x' },
+      { name: 'Senate seats held by the winner', value: s.senator.winner, stamped: 8.42, tolerance: 4 },
+      { name: 'House seats held by the winner', value: s.representative.winner, stamped: 2.25, tolerance: 1.5 },
     ];
   },
 

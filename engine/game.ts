@@ -306,6 +306,17 @@ export class Game {
   private shockPips = 0;
   private agents: Agent[];
   private scoreHistory: number[][] = [];
+  /** hf7y/american-cycle#171/#55: declare/refill order rotates by
+   *  `floor(year/2)`, which is a pure function of the CALENDAR, not the
+   *  seed -- every game that starts in the same year puts the same seat
+   *  first in cycle 1, the one cycle before anything has compounded, and the
+   *  rotation's later cancellation never catches up. Confirmed by construction:
+   *  shifting `startYear` by one election cycle (so the parity of
+   *  `floor(startYear/2)` flips) flips which seat leads a 2-player table,
+   *  58/42 to 44/56 (`sim/scratch-startyear-parity-probe.ts`). One offset
+   *  drawn once per game, from the game's own seed, breaks the tie between
+   *  calendar and seed without touching the rotation itself. */
+  private readonly cycleOffset: number;
 
   /** Every candidate by id, so a seated member can be handed back to their
    *  player when the term runs out. Seats store a cardId, not the card.
@@ -319,6 +330,7 @@ export class Game {
     this.year = cfg.game.startYear;
     this.economy = econ.newEconomy(cfg.economy);
     this.players = agents.map((a, i) => ({ id: i, name: a.name, hand: [], districts: [], score: 0, tapped: new Set() }));
+    this.cycleOffset = this.rng.int(this.players.length);
     for (const s of STATES) this.leanMap[s.code] = 0;
     // Refill packs draw from later years, so a game beginning in 1976
     // is playing 2010s cards by year ten. The talon is therefore era-ordered,
@@ -987,8 +999,10 @@ export class Game {
     // cycle so going last is not a permanent tax.
     // Math.floor matters: in an ODD year `year / 2` is fractional, so the
     // rotation produced a fractional agent index and crashed the moment
-    // odd-year governor races were allowed to run.
-    const order = this.players.map((_, i) => (i + Math.floor(this.year / 2)) % this.players.length);
+    // odd-year governor races were allowed to run. `cycleOffset` (see field
+    // comment) is what keeps cycle 1 from always seating the same player
+    // first.
+    const order = this.players.map((_, i) => (i + Math.floor(this.year / 2) + this.cycleOffset) % this.players.length);
     for (const i of order) {
       const mine = this.agents[i].declare(this.view(i), open, pending);
       this.stats.decisions.push(mine.length);
@@ -1508,8 +1522,10 @@ export class Game {
     const pending: PendingPeg[] = [];
     // Math.floor matters: in an ODD year `year / 2` is fractional, so the
     // rotation produced a fractional agent index and crashed the moment
-    // odd-year governor races were allowed to run.
-    const order = this.players.map((_, i) => (i + Math.floor(this.year / 2)) % this.players.length);
+    // odd-year governor races were allowed to run. `cycleOffset` (see field
+    // comment) is what keeps cycle 1 from always seating the same player
+    // first.
+    const order = this.players.map((_, i) => (i + Math.floor(this.year / 2) + this.cycleOffset) % this.players.length);
     for (const i of order) {
       const mine = i === human ? this.humanDeclarations : this.agents[i].declare(this.view(i), open, pending);
       this.stats.decisions.push(mine.length);
@@ -1566,7 +1582,7 @@ export class Game {
    *  Presence is scarce and must be purchased in the draft, so hand size
    *  caps TOTAL cards held; a district you keep is a candidate you do not. */
   private refill(): void {
-    const start = Math.floor(this.year / 2) % this.players.length;
+    const start = (Math.floor(this.year / 2) + this.cycleOffset) % this.players.length;
     for (let k = 0; k < this.players.length; k++) {
       const p = this.players[(start + k) % this.players.length];
       const want = this.handSize(p) - p.hand.length - p.districts.length;
