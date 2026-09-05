@@ -296,6 +296,22 @@
     },
     {
       "kind": "candidate",
+      "id": "richard-shelby-1996",
+      "name": "Richard Shelby",
+      "party": "R",
+      "homeState": "AL",
+      "homeStateBonus": 2,
+      "identities": [
+        "rural",
+        "business"
+      ],
+      "belief": "The switch made the seat safer, not weaker",
+      "era": 1996,
+      "effects": [],
+      "succeeds": "richard-shelby-1992"
+    },
+    {
+      "kind": "candidate",
       "id": "charles-rangel-1992",
       "name": "Charles Rangel",
       "party": "D",
@@ -429,6 +445,22 @@
       "belief": "Switched to the GOP in 1995",
       "era": 1992,
       "effects": []
+    },
+    {
+      "kind": "candidate",
+      "id": "ben-nighthorse-campbell-1995",
+      "name": "Ben Nighthorse Campbell",
+      "party": "R",
+      "homeState": "CO",
+      "homeStateBonus": 2,
+      "identities": [
+        "veteran",
+        "rural"
+      ],
+      "belief": "Rode the switch to a deeper red seat",
+      "era": 1995,
+      "effects": [],
+      "succeeds": "ben-nighthorse-campbell-1992"
     },
     {
       "kind": "candidate",
