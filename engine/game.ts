@@ -38,7 +38,7 @@ export interface Config {
   endorsements: { president: number; governorInState: number; senator: number;
                   presidentCount?: number; governorCount?: number };
   primaryGeneral: { extremistPrimary: number; extremistGeneral: number; crossBenchPrimaryPenalty: number; billCounterPips: number; crossBenchCap: number;
-                    bruisingPrimaryMargin?: number };
+                    bruisingPrimaryMargin?: number; extremistEnvironmentPips?: number };
   lean: lean.LeanConfig;
   economy: econ.EconomyConfig;
   legislature: leg.LegislatureConfig & {

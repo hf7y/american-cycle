@@ -74,6 +74,16 @@ export interface PrimaryGeneralConfig {
    *  `game.ts`'s `runPrimaries`, which sets `Declaration.bruisingPrimary`. */
   bruisingPrimaryMargin?: number;
   bruisingPrimaryPips?: number;
+  /** #24: `extremistPrimary` was static -- purity and electability trade
+   *  differently by how much danger the party is in (2020 Democrats picked
+   *  the electable one; 2010 Republicans, riding a wave, did not and lost
+   *  winnable Senate seats). Scales `extremistPrimary` by the same national
+   *  tide the general branch already reads (`nat.midtermPenalty` and
+   *  `ctx.economyMod`), mirrored for the party that does not hold the
+   *  presidency since the tide is zero-sum between the two. Unset behaves
+   *  exactly as before the split -- no shipped config sets it yet; #24 asks
+   *  for measurement before belief. */
+  extremistEnvironmentPips?: number;
 }
 
 export interface RaceContext {
@@ -214,7 +224,20 @@ export function buildModifiers(
 
   if (round === 'primary') {
     if (d.endorsements) m.push({ source: 'endorsements', pips: d.endorsements });
-    if (hasEffect(d.card, 'extremist')) m.push({ source: 'extremist (primary)', pips: pg.extremistPrimary });
+    if (hasEffect(d.card, 'extremist')) {
+      let pips = pg.extremistPrimary;
+      // #24: how favourable the national tide is for the PRESIDENT's party,
+      // the same two signals the general branch reads -- mirrored for the
+      // party that does not hold the presidency, since a midterm or a
+      // recession that hurts one party helps the other by the same amount.
+      if (pg.extremistEnvironmentPips && partySign !== 0 && ctx.presidentParty) {
+        const presidentSign = ctx.presidentParty === 'R' ? 1 : -1;
+        const tide = (ctx.isMidterm ? nat.midtermPenalty : 0) + ctx.economyMod;
+        const partyTide = partySign === presidentSign ? tide : -tide;
+        pips += Math.round(pg.extremistEnvironmentPips * partyTide);
+      }
+      m.push({ source: 'extremist (primary)', pips });
+    }
     if (d.crossBench) {
       const n = Math.min(d.crossBench, pg.crossBenchCap);
       m.push({ source: `cross-benched ×${n}`, pips: pg.crossBenchPrimaryPenalty * n });

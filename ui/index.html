@@ -1224,6 +1224,16 @@ function boardScores(cfg               , b           )           {
                                                                               
                                  
                                
+                                                                         
+                                                                           
+                                                                          
+                                                                            
+                                                                     
+                                                                      
+                                                                          
+                                                                            
+                                       
+                                    
  
 
                               
@@ -1364,7 +1374,20 @@ function buildModifiers(
 
   if (round === 'primary') {
     if (d.endorsements) m.push({ source: 'endorsements', pips: d.endorsements });
-    if (hasEffect(d.card, 'extremist')) m.push({ source: 'extremist (primary)', pips: pg.extremistPrimary });
+    if (hasEffect(d.card, 'extremist')) {
+      let pips = pg.extremistPrimary;
+      // #24: how favourable the national tide is for the PRESIDENT's party,
+      // the same two signals the general branch reads -- mirrored for the
+      // party that does not hold the presidency, since a midterm or a
+      // recession that hurts one party helps the other by the same amount.
+      if (pg.extremistEnvironmentPips && partySign !== 0 && ctx.presidentParty) {
+        const presidentSign = ctx.presidentParty === 'R' ? 1 : -1;
+        const tide = (ctx.isMidterm ? nat.midtermPenalty : 0) + ctx.economyMod;
+        const partyTide = partySign === presidentSign ? tide : -tide;
+        pips += Math.round(pg.extremistEnvironmentPips * partyTide);
+      }
+      m.push({ source: 'extremist (primary)', pips });
+    }
     if (d.crossBench) {
       const n = Math.min(d.crossBench, pg.crossBenchCap);
       m.push({ source: `cross-benched ×${n}`, pips: pg.crossBenchPrimaryPenalty * n });
@@ -1530,7 +1553,7 @@ function runRace(a             ) {
                                                                               
                                                                     
                                                                                                                                                          
-                                                     
+                                                                                        
                         
                               
                                         

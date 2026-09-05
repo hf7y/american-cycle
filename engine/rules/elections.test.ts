@@ -198,3 +198,41 @@ test('a bruising primary win carries a worse general stack than an unopposed one
   assert.ok(!buildModifiers(bruised, ctx({}), 'primary', res, nat, pg).some((m) => m.source === 'bruising primary'),
     'the counter is read in the general only -- see Declaration.bruisingPrimary');
 });
+
+test('#24: extremistEnvironmentPips unset leaves the primary bonus flat, as before', () => {
+  const extremist: Declaration = { player: 0, card: cand({ effects: [{ type: 'extremist' }] }), office: 'senator', state: 'OH' };
+  const badTide = ctx({ isMidterm: true, presidentParty: 'D', economyMod: -2 });
+  const mods = buildModifiers(extremist, badTide, 'primary', res, nat, pg);
+  assert.equal(mods.find((m) => m.source === 'extremist (primary)')?.pips, pg.extremistPrimary,
+    'no config ships the knob yet, so the tide must not reach the primary bonus');
+});
+
+test('#24: once set, a bad national tide shrinks the extremist bonus for the president\'s own party', () => {
+  const withKnob: PrimaryGeneralConfig = { ...pg, extremistEnvironmentPips: 1 };
+  const extremist: Declaration = { player: 0, card: cand({ party: 'D', effects: [{ type: 'extremist' }] }), office: 'senator', state: 'OH' };
+  // D holds the presidency, and midterm + recession both hurt the president's party.
+  const badTide = ctx({ isMidterm: true, presidentParty: 'D', economyMod: -2 });
+  const mods = buildModifiers(extremist, badTide, 'primary', res, nat, withKnob);
+  const pips = mods.find((m) => m.source === 'extremist (primary)')?.pips;
+  assert.ok(pips! < pg.extremistPrimary, 'in danger, the electorate should favour electability over purity');
+});
+
+test('#24: the same bad tide for the president\'s party is a GOOD tide for the opposition, mirrored', () => {
+  const withKnob: PrimaryGeneralConfig = { ...pg, extremistEnvironmentPips: 1 };
+  const oppositionExtremist: Declaration = { player: 0, card: cand({ party: 'R', effects: [{ type: 'extremist' }] }), office: 'senator', state: 'OH' };
+  // D holds the presidency and is struggling -- the mirror image favours R.
+  const badTideForD = ctx({ isMidterm: true, presidentParty: 'D', economyMod: -2 });
+  const mods = buildModifiers(oppositionExtremist, badTideForD, 'primary', res, nat, withKnob);
+  const pips = mods.find((m) => m.source === 'extremist (primary)')?.pips;
+  assert.ok(pips! > pg.extremistPrimary,
+    '2010: Republicans, riding a wave against a struggling incumbent party, tolerated more extremism, not less');
+});
+
+test('#24: an independent card reads no environment term -- there is no presidency to hold or oppose', () => {
+  const withKnob: PrimaryGeneralConfig = { ...pg, extremistEnvironmentPips: 1 };
+  const independentExtremist: Declaration = { player: 0, card: cand({ party: 'I', effects: [{ type: 'extremist' }] }), office: 'senator', state: 'OH' };
+  const badTide = ctx({ isMidterm: true, presidentParty: 'D', economyMod: -2 });
+  const mods = buildModifiers(independentExtremist, badTide, 'primary', res, nat, withKnob);
+  assert.equal(mods.find((m) => m.source === 'extremist (primary)')?.pips, pg.extremistPrimary,
+    'partySign is 0 for an independent, so the tide has no party to attach to');
+});
