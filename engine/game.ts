@@ -275,6 +275,12 @@ export interface GameResult {
    *  a rule that can only ever blame the minority has encoded incumbency by
    *  accident, and only `wasMajority` can tell the two apart. */
   shutdownBlame: { year: number; party: Party; wasMajority: boolean }[];
+  /** hf7y/american-cycle#101: a seat converting party off-cycle, with no
+   *  election, because its holder played a `succeeds` card -- Shelby (1994),
+   *  Campbell (1995), Thurmond in reverse (1964). `from`/`to` are the
+   *  predecessor's and successor's parties, so a run can tell a genuine flip
+   *  from a same-party succession. */
+  successions: { year: number; office: Office; state: string; slot?: number; from: Party; to: Party }[];
 }
 
 export class Game {
@@ -292,6 +298,7 @@ export class Game {
   bills: EnactedBill[] = [];
   amendments: Amendment[] = [];
   shutdownBlame: { year: number; party: Party; wasMajority: boolean }[] = [];
+  successions: { year: number; office: Office; state: string; slot?: number; from: Party; to: Party }[] = [];
   log: string[] = [];
   stats = { billsPassed: 0, billsAttempted: 0, crossBench: 0, impeachments: 0, rateRises: 0,
             decisions: [] as number[],
@@ -1374,6 +1381,37 @@ export class Game {
     }
   }
 
+  /** hf7y/american-cycle#101: a seat converts party off-cycle, with no
+   *  election, when its own holder plays the card that succeeds them --
+   *  Shelby and Campbell switching to the GOP after 1994, Thurmond doing the
+   *  same in reverse in 1964. `fillVacancy`'s neighbour: both are a seat
+   *  changing hands (or colour) with no die rolled, driven by a card in hand
+   *  rather than an election result.
+   *
+   *  RULED with no gate (#101): no lean or incumbency precondition, and
+   *  `since` is left untouched rather than reset, so the switcher keeps
+   *  running as the incumbent it already was. An ungated flip is a runaway
+   *  lever -- see hf7y/american-cycle#84, open on exactly that -- and this is
+   *  deliberately the place that measures it rather than pre-empts it. */
+  private convertSuccessions(): void {
+    for (const seat of this.seats) {
+      if (!seat.holder) continue;
+      const p = this.players[seat.holder.player];
+      const successor = p.hand.find((c) => c.kind === 'candidate' && c.succeeds === seat.holder!.cardId) as
+        (CandidateCard & { kind: 'candidate' }) | undefined;
+      if (!successor) continue;
+      const predecessor = this.cardById.get(seat.holder.cardId);
+      p.hand = p.hand.filter((c) => c.id !== successor.id);
+      this.successions.push({
+        year: this.year, office: seat.office, state: seat.state, slot: seat.slot,
+        from: seat.holder.party, to: successor.party,
+      });
+      this.log.push(`${this.year}: ${successor.name} succeeds ${predecessor?.name ?? seat.holder.cardId} `
+        + `in ${seat.state}${seat.slot ? `-${seat.slot}` : ''}, as ${successor.party}`);
+      seat.holder = { ...seat.holder, cardId: successor.id, party: successor.party };
+    }
+  }
+
   /** Governors appoint Senate vacancies, placing a card from hand with
    *  no election. A vacancy arises here the way it does in life: a sitting
    *  senator wins a different office and leaves the seat behind. The governor
@@ -1463,6 +1501,7 @@ export class Game {
    *  "the withdrawal window closes before any die is rolled"). */
   *interactiveTick(human: number): Generator<UiRequest, void, UiAnswer> {
     for (const p of this.players) p.tapped.clear();
+    this.convertSuccessions();
     if (isBillYear(this.cfg, this.year) && !this.impeachment() && !this.convention()) {
       this.omnibillInteractive(human, yield* this.askBill(human));
     }
@@ -1625,6 +1664,7 @@ export class Game {
   /** One annual tick. */
   tick(): void {
     for (const p of this.players) p.tapped.clear();      // 1. action phase
+    this.convertSuccessions();
     const billYear = isBillYear(this.cfg, this.year);
     // The year's legislating slot, now three-way: a removal, a convention
     // call, or a bill. Wanting the ending is a decision taken INSTEAD of
@@ -1718,6 +1758,7 @@ export class Game {
       billsOnBooks: this.bills.filter((b) => b.repealedIn === undefined).length,
       billsRepealed: this.stats.billsRepealed,
       shutdownBlame: this.shutdownBlame,
+      successions: this.successions,
     };
   }
 }

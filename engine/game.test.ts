@@ -416,6 +416,61 @@ test('a Senate seat vacated mid-term is filled by appointment from the state’s
     'the appointed card leaves the governor’s hand');
 });
 
+// --------------------------------------------------- off-cycle succession (#101)
+
+test('a held seat converts party off-cycle when its holder plays the card that succeeds it', () => {
+  const cfg = loadConfig('as-written-plus.json');
+  // `resignToRun` (on in every shipped config) mirrors EVERY seat holder's
+  // card back into hand each election year, by design -- so it would put
+  // `succ-r` right back in hand after the swap, for the same reason it does
+  // that for any other incumbent, and this test would misread that as a
+  // failure to convert. Off, to isolate the conversion itself.
+  cfg.game.resignToRun = false;
+  const predecessor = cand({ id: 'pred-d', name: 'Pat Predecessor', party: 'D' });
+  const successor = cand({ id: 'succ-r', name: 'Sam Successor', party: 'R', succeeds: 'pred-d' });
+  const g = new Game([new ScriptedAgent('a'), new ScriptedAgent('b')],
+    [{ kind: 'candidate', ...predecessor }, { kind: 'candidate', ...successor }], cfg, 1);
+  g.seats = [{ office: 'senator', state: 'OH', slot: 2, senateClass: 2, holder: { cardId: 'pred-d', player: 0, party: 'D', since: 1970 } }];
+  g.players[0].hand = [{ kind: 'candidate', ...successor }];
+  g.players[0].districts = [];
+  g.players[1].hand = [];
+  g.players[1].districts = [];
+
+  g.tick();
+
+  const seat = g.seats.find((s) => s.office === 'senator' && s.state === 'OH');
+  assert.equal(seat?.holder?.cardId, 'succ-r', 'the successor card is now the holder');
+  assert.equal(seat?.holder?.party, 'R', 'the seat’s party follows the successor');
+  assert.equal(seat?.holder?.player, 0, 'the same player keeps the seat -- a conversion, not a transfer');
+  assert.equal(seat?.holder?.since, 1970, 'ruled no gate: `since` is left untouched, not reset to run as a non-incumbent');
+  assert.ok(!g.players[0].hand.some((c) => c.kind === 'candidate' && c.id === 'succ-r'),
+    'the successor card leaves hand once played');
+  assert.deepEqual(g.successions, [{ year: cfg.game.startYear, office: 'senator', state: 'OH', slot: 2, from: 'D', to: 'R' }],
+    'the swap is recorded so a finding can measure it without scraping the log');
+});
+
+test('a succession is inert unless the same player holds both the seat and the successor', () => {
+  const cfg = loadConfig('as-written-plus.json');
+  const predecessor = cand({ id: 'pred-d2', name: 'Pat Predecessor', party: 'D' });
+  const successor = cand({ id: 'succ-r2', name: 'Sam Successor', party: 'R', succeeds: 'pred-d2' });
+  const g = new Game([new ScriptedAgent('a'), new ScriptedAgent('b')],
+    [{ kind: 'candidate', ...predecessor }, { kind: 'candidate', ...successor }], cfg, 1);
+  g.seats = [{ office: 'senator', state: 'OH', slot: 2, senateClass: 2, holder: { cardId: 'pred-d2', player: 0, party: 'D', since: 1970 } }];
+  g.players[0].hand = [];
+  g.players[0].districts = [];
+  // The successor card is drawn by the OTHER player -- not the one who holds the seat.
+  g.players[1].hand = [{ kind: 'candidate', ...successor }];
+  g.players[1].districts = [];
+
+  g.tick();
+
+  const seat = g.seats.find((s) => s.office === 'senator' && s.state === 'OH');
+  assert.equal(seat?.holder?.cardId, 'pred-d2', 'no swap: the card the seat would need sits in the wrong hand');
+  assert.equal(g.successions.length, 0);
+  assert.ok(g.players[1].hand.some((c) => c.kind === 'candidate' && c.id === 'succ-r2'),
+    'the card nobody could use for a swap is otherwise an ordinary card -- it stays in hand, playable in a race');
+});
+
 // ---------------------------------------------------------- era-ordered talon
 
 test('a hand that stays inside the first era’s pool never draws a later one', () => {
