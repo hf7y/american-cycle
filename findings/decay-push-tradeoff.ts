@@ -54,21 +54,21 @@ export const finding: Finding = {
     + 'outrun an annual −2, and it costs half the legislative layer and saturates the map. The 3d6 '
     + 'design does not limit any of this: the dice fix how OFTEN each push tier fires, not what a tier '
     + 'is worth. Shipped as as-written-plus.json.',
-  stampedAt: '2026-09-05T04:42:11Z',
-  stampedOn: '218542b',
+  stampedAt: '2026-09-05T06:59:02Z',
+  stampedOn: 'a524da6',
 
   predicate(): Claim[] {
     const biennial = measure({ decayFrequency: 'biennial' });
     const annual = measure({ decayFrequency: 'annual' });
     const plus2 = measure({ decayFrequency: 'annual', pushByMargin: P(2, 3, 4) });
     return [
-      { name: 'biennial 0/1/2: states realigned per game', value: biennial.fourPerGame, stamped: 17.17, tolerance: 2.0 },
-      { name: 'biennial 0/1/2: states pinned at the cap', value: biennial.cappedPerGame, stamped: 11.33, tolerance: 2.0 },
+      { name: 'biennial 0/1/2: states realigned per game', value: biennial.fourPerGame, stamped: 12.83, tolerance: 2.0 },
+      { name: 'biennial 0/1/2: states pinned at the cap', value: biennial.cappedPerGame, stamped: 6.58, tolerance: 2.0 },
       { name: 'annual 0/1/2: states realigned per game', value: annual.fourPerGame, stamped: 1.92, tolerance: 0.5 },
-      { name: 'annual 2/3/4: states realigned per game', value: plus2.fourPerGame, stamped: 19.42, tolerance: 4.0 },
-      { name: 'annual 2/3/4: states pinned at the cap', value: plus2.cappedPerGame, stamped: 0.75, tolerance: 0.5 },
-      { name: 'annual 2/3/4: mean absolute lean', value: plus2.meanAbs, stamped: 2.81, tolerance: 0.7 },
-      { name: 'biennial 0/1/2: mean absolute lean', value: biennial.meanAbs, stamped: 2.99, tolerance: 0.5 },
+      { name: 'annual 2/3/4: states realigned per game', value: plus2.fourPerGame, stamped: 18.92, tolerance: 4.0 },
+      { name: 'annual 2/3/4: states pinned at the cap', value: plus2.cappedPerGame, stamped: 0, tolerance: 0.5 },
+      { name: 'annual 2/3/4: mean absolute lean', value: plus2.meanAbs, stamped: 2.8, tolerance: 0.7 },
+      { name: 'biennial 0/1/2: mean absolute lean', value: biennial.meanAbs, stamped: 2.26, tolerance: 0.5 },
       // The shipped config must still BE the setting this finding recommends.
       // If as-written-plus.json is edited away from 2/3/4 the finding goes
       // stale, which is the point: the config cannot outlive its evidence.

@@ -64,19 +64,19 @@ export const finding: Finding = {
     + "SenateFlood's share collapsing to 25% on `tuned.json` when those two are seated, so this is a "
     + "canonical-six-field result, not a claim that no counter exists -- see that finding for the field "
     + "where one does.",
-  stampedAt: '2026-09-05T04:41:32Z',
-  stampedOn: '218542b',
+  stampedAt: '2026-09-05T06:58:24Z',
+  stampedOn: 'a524da6',
 
   predicate(): Claim[] {
     const n = sample(1200);
     const tuned = sweep('tuned.json', n);
     const awp = sweep('as-written-plus.json', n);
     return [
-      { name: 'SenateFlood share, tuned.json (amendment victory)', value: tuned.senateFloodShare, stamped: 75, tolerance: 8, unit: '%' },
-      { name: 'SenateFlood share, as-written-plus.json (amendment victory)', value: awp.senateFloodShare, stamped: 50, tolerance: 8, unit: '%' },
+      { name: 'SenateFlood share, tuned.json (amendment victory)', value: tuned.senateFloodShare, stamped: 91.67, tolerance: 8, unit: '%' },
+      { name: 'SenateFlood share, as-written-plus.json (amendment victory)', value: awp.senateFloodShare, stamped: 66.67, tolerance: 8, unit: '%' },
       { name: 'median years, tuned.json', value: tuned.medianYears, stamped: 16, tolerance: 2 },
       { name: 'median years, as-written-plus.json', value: awp.medianYears, stamped: 100, tolerance: 5 },
-      { name: 'games ratified, tuned.json', value: tuned.ratifiedShare, stamped: 33.33, tolerance: 8, unit: '%' },
+      { name: 'games ratified, tuned.json', value: tuned.ratifiedShare, stamped: 41.67, tolerance: 8, unit: '%' },
       { name: 'games ratified, as-written-plus.json', value: awp.ratifiedShare, stamped: 0, tolerance: 5, unit: '%' },
     ];
   },

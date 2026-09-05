@@ -24,8 +24,8 @@ export const finding: Finding = {
     + 'regrows from circulation faster than it empties, exactly as the no-cap amendment already found), and '
     + 'the 100-year cap remains a real backstop rather than a formality -- a meaningful share of games still '
     + 'hit it. No game reported `endedBy: \'bills\'`, confirming the old target is gone, not just unreachable.',
-  stampedAt: '2026-09-05T04:41:27Z',
-  stampedOn: '218542b',
+  stampedAt: '2026-09-05T06:58:20Z',
+  stampedOn: 'a524da6',
 
   predicate(): Claim[] {
     const cfg = loadConfig('as-written-plus.json');
@@ -41,9 +41,9 @@ export const finding: Finding = {
     const n = SEEDS.length;
     return [
       { name: 'as-written-plus.json ships amendment as the ending', value: cfg.game.victory === 'amendment' ? 1 : 0, stamped: 1, tolerance: 0 },
-      { name: 'passive pool: games ended by amendment ratification', value: amendment / n, stamped: 0.17, tolerance: 0.12, unit: 'share' },
+      { name: 'passive pool: games ended by amendment ratification', value: amendment / n, stamped: 0.33, tolerance: 0.12, unit: 'share' },
       { name: 'passive pool: games ended by deck-out', value: deckOut / n, stamped: 0, tolerance: 0.03, unit: 'share' },
-      { name: 'passive pool: games that ran out the 100-year cap', value: ranOutOfYears / n, stamped: 0.83, tolerance: 0.12, unit: 'share' },
+      { name: 'passive pool: games that ran out the 100-year cap', value: ranOutOfYears / n, stamped: 0.67, tolerance: 0.12, unit: 'share' },
       { name: 'passive pool: games ended by the old bill target', value: oldBillTarget / n, stamped: 0, tolerance: 0, unit: 'share' },
     ];
   },

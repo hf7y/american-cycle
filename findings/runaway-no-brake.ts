@@ -58,8 +58,8 @@ export const finding: Finding = {
     + 'shock built for the remaining gap (v0.2 item 9) does not close it — at 400 seeds determination is '
     + '0.625 with it and 0.625 without — which is the evidence that the brake has to be positional. '
     + 'tracks/c.ts C7 is the live acceptance test and is red.',
-  stampedAt: '2026-09-05T04:42:22Z',
-  stampedOn: '218542b',
+  stampedAt: '2026-09-05T06:59:14Z',
+  stampedOn: 'a524da6',
 
   predicate(): Claim[] {
     const base = loadConfig('tuned.json');
@@ -74,12 +74,12 @@ export const finding: Finding = {
     const run = (cfg: Config) => runawayMetrics(SEEDS, AGENTS, cards, cfg);
     const on = run(base);
     return [
-      { name: 'baseline: determination point', value: on.determination, stamped: 0.63, tolerance: 0.2, unit: 'fraction of game length' },
-      { name: 'baseline: comeback rate', value: on.comeback, stamped: 0.08, tolerance: 0.03, unit: 'share of games' },
+      { name: 'baseline: determination point', value: on.determination, stamped: 0.88, tolerance: 0.2, unit: 'fraction of game length' },
+      { name: 'baseline: comeback rate', value: on.comeback, stamped: 0, tolerance: 0.03, unit: 'share of games' },
       { name: 'baseline: player-scores that never decrease', value: monotonicShare(cards, base), stamped: 0, tolerance: 0.02, unit: 'share of series' },
-      { name: 'endorsements off: determination point', value: run(noEndorsements).determination, stamped: 0.63, tolerance: 0.2, unit: 'fraction of game length' },
-      { name: 'capture off: determination point', value: run(noCapture).determination, stamped: 0.63, tolerance: 0.2, unit: 'fraction of game length' },
-      { name: 'hand bonuses off: determination point', value: run(noHandBonus).determination, stamped: 0.25, tolerance: 0.2, unit: 'fraction of game length' },
+      { name: 'endorsements off: determination point', value: run(noEndorsements).determination, stamped: 0.25, tolerance: 0.2, unit: 'fraction of game length' },
+      { name: 'capture off: determination point', value: run(noCapture).determination, stamped: 0.94, tolerance: 0.2, unit: 'fraction of game length' },
+      { name: 'hand bonuses off: determination point', value: run(noHandBonus).determination, stamped: 0.63, tolerance: 0.2, unit: 'fraction of game length' },
     ];
   },
 

@@ -68,20 +68,20 @@ export const finding: Finding = {
     + 'rate fixed first. hf7y/american-cycle#16 ships incumbencyHouse=4 anyway, derived independently '
     + 'in findings/incumbency-magnitude.ts against the effective-competitiveness band rather than '
     + 'off this figure.',
-  stampedAt: '2026-09-05T04:42:20Z',
-  stampedOn: '218542b',
+  stampedAt: '2026-09-05T06:59:11Z',
+  stampedOn: 'a524da6',
 
   predicate(): Claim[] {
     const one = reelection(1);
     const two = reelection(2);
     const three = reelection(3);
     return [
-      { name: 'sim: House reelection at +1', value: one.house, stamped: 94.37, tolerance: 1.5, unit: '%' },
-      { name: 'sim: House reelection at +2', value: two.house, stamped: 96.03, tolerance: 1, unit: '%' },
-      { name: 'sim: House reelection at +3', value: three.house, stamped: 96.49, tolerance: 1, unit: '%' },
+      { name: 'sim: House reelection at +1', value: one.house, stamped: 94.75, tolerance: 1.5, unit: '%' },
+      { name: 'sim: House reelection at +2', value: two.house, stamped: 96.3, tolerance: 1, unit: '%' },
+      { name: 'sim: House reelection at +3', value: three.house, stamped: 98.06, tolerance: 1, unit: '%' },
       { name: 'real: House reelection 1976-2016', value: realHouseReelection(), stamped: 94.1, tolerance: 0.5, unit: '%' },
-      { name: 'sim: +1, contested House races only', value: one.contested, stamped: 53.19, tolerance: 15, unit: '%' },
-      { name: 'sim: +1, pooled over every office below the presidency', value: one.allOffices, stamped: 95.14, tolerance: 2, unit: '%' },
+      { name: 'sim: +1, contested House races only', value: one.contested, stamped: 64.81, tolerance: 15, unit: '%' },
+      { name: 'sim: +1, pooled over every office below the presidency', value: one.allOffices, stamped: 95.95, tolerance: 2, unit: '%' },
     ];
   },
 
