@@ -49,7 +49,15 @@ export function feelMetrics(seeds: number[], agentNames: string[], cards: Card[]
       game.tick();
     }
     for (const e of game.events) {
-      if (e.uncontested || e.sides.length < 2) continue;
+      // oddsAtEdge/primaryOddsAtEdge are closed-form two-side dice odds
+      // (resolution.test.ts guards them as exactly that); applying either to
+      // a 3+ candidate field silently understates the true upset chance,
+      // since ANY non-favourite side can beat the leader, not just the
+      // modifier runner-up the edge is computed against. Scoping to
+      // sides.length === 2 keeps this a like-for-like check against the
+      // table that actually exists, rather than conflating it with the
+      // undefined multi-candidate case.
+      if (e.uncontested || e.sides.length !== 2) continue;
       races++;
       if (e.upset) upsets++;
       const sorted = [...e.sides].sort((a, b) => b.modifierTotal - a.modifierTotal);
@@ -78,6 +86,6 @@ if (import.meta.filename === process.argv[1]) {
   console.log(`  turns with NO legal move: ${(100 * m.deadTurnShare).toFixed(1)}%   [brief wants near zero]`);
   console.log('\nBOARD LOAD  (pegs + lean counters on the board at once)');
   console.log(`  median ${quantile(m.tokens, 0.5)}   p90 ${quantile(m.tokens, 0.9)}   peak ${Math.max(...m.tokens)}   [brief: 200 means the token economy failed]`);
-  console.log('\nSWINGINESS  (favourite loses, against what the odds table predicts)');
+  console.log('\nSWINGINESS  (favourite loses, against what the odds table predicts; two-side races only)');
   console.log(`  observed ${(100 * m.upsets / m.races).toFixed(1)}%   predicted ${(100 * m.predicted / m.races).toFixed(1)}%   over ${m.races} contested races`);
 }
