@@ -306,6 +306,12 @@ export class Game {
   private shockPips = 0;
   private agents: Agent[];
   private scoreHistory: number[][] = [];
+  /** Counts actual elections() calls, not calendar years: `isElectionYear`
+   *  skips most odd years, so the rotation below has to advance once per
+   *  election held, not once per year on the clock, or the shift barely
+   *  moves and a table of two never rotates at all (year is always even on
+   *  a mandatory election year, so `year % 2` never changes). */
+  private electionCycle = 0;
 
   /** Every candidate by id, so a seated member can be handed back to their
    *  player when the term runs out. Seats store a cardId, not the card.
@@ -983,12 +989,20 @@ export class Game {
     this.releaseHolders();
     const decls: Declaration[] = [];
     const pending: PendingPeg[] = [];
-    // Declaration is sequential around the table, and the order rotates each
-    // cycle so going last is not a permanent tax.
-    // Math.floor matters: in an ODD year `year / 2` is fractional, so the
-    // rotation produced a fractional agent index and crashed the moment
-    // odd-year governor races were allowed to run.
-    const order = this.players.map((_, i) => (i + Math.floor(this.year / 2)) % this.players.length);
+    // Declaration is sequential around the table, and the order rotates every
+    // ELECTION so going last is not a permanent tax. It used to key on
+    // `Math.floor(this.year / 2)` -- calendar year, not elections held. Most
+    // years are not election years (`isElectionYear` skips most odd ones), and
+    // on the mandatory even years `year` is constant mod 2 -- a 2-player table
+    // never rotated at all. Even where it did move, a fixed year and a fixed
+    // election calendar don't line up 1:1, so the shift landed on some values
+    // more often than others -- the uninvestigated remainder of
+    // hf7y/american-cycle#55 and #171's seat bias at 3/5/6 players. Counting
+    // elections actually held, rather than years elapsed, rotates on every
+    // one of them and spreads as evenly as the table size allows (verified
+    // against sim/scratch-seat-bias-*.ts).
+    this.electionCycle++;
+    const order = this.players.map((_, i) => (i + this.electionCycle) % this.players.length);
     for (const i of order) {
       const mine = this.agents[i].declare(this.view(i), open, pending);
       this.stats.decisions.push(mine.length);
@@ -1506,10 +1520,13 @@ export class Game {
     this.humanDeclarations = answer.declarations ?? [];
     const decls: Declaration[] = [];
     const pending: PendingPeg[] = [];
-    // Math.floor matters: in an ODD year `year / 2` is fractional, so the
-    // rotation produced a fractional agent index and crashed the moment
-    // odd-year governor races were allowed to run.
-    const order = this.players.map((_, i) => (i + Math.floor(this.year / 2)) % this.players.length);
+    // Rotates every election -- see the headless `elections()` above for why
+    // this counts elections held rather than `Math.floor(this.year / 2)`.
+    // Kept in step with it: the two paths must agree on whose turn it is, or
+    // a human and a headless replay of the same seed would declare in
+    // different orders.
+    this.electionCycle++;
+    const order = this.players.map((_, i) => (i + this.electionCycle) % this.players.length);
     for (const i of order) {
       const mine = i === human ? this.humanDeclarations : this.agents[i].declare(this.view(i), open, pending);
       this.stats.decisions.push(mine.length);
@@ -1566,7 +1583,10 @@ export class Game {
    *  Presence is scarce and must be purchased in the draft, so hand size
    *  caps TOTAL cards held; a district you keep is a candidate you do not. */
   private refill(): void {
-    const start = Math.floor(this.year / 2) % this.players.length;
+    // Same counter as the declaration order above -- refill always follows
+    // an election in the same cycle, so it reuses that cycle's shift rather
+    // than incrementing again.
+    const start = this.electionCycle % this.players.length;
     for (let k = 0; k < this.players.length; k++) {
       const p = this.players[(start + k) % this.players.length];
       const want = this.handSize(p) - p.hand.length - p.districts.length;
