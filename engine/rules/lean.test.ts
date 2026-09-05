@@ -90,6 +90,53 @@ test('flat +1 pushes are the pathology the design doc says they are', () => {
   }
 });
 
+/** hf7y/american-cycle#51: `pushKeyedOn: 'surprise'` isolates the part of a
+ *  margin that is not already explained by the state's own standing lean.
+ *  Undefined/`'margin'` must reproduce every assertion above unchanged --
+ *  those tests never set the field, so this is really a check that the
+ *  new branch is genuinely opt-in. */
+test('surprise-keyed: a result matching what the lean already predicts is not new information', () => {
+  const surprise: LeanConfig = { ...cfg, pushKeyedOn: 'surprise' };
+  // R is already up 3 in OH (from a prior push); a `total`-margin-4 R win is
+  // exactly what a lean of 3 would produce on its own (elections.ts bakes
+  // `Math.abs(cur)` into R's own modifier total), so the surprise is 1, not 4.
+  const map = { OH: 3 };
+  applyPush(map, surprise, 'OH', 'R', 'senator', 4);
+  assert.equal(map.OH, 3, 'surprise 1 falls in the 0-push bucket, same as a margin-keyed squeaker');
+});
+
+test('surprise-keyed: a result BELOW what the lean predicted floors at zero, it does not reverse', () => {
+  const surprise: LeanConfig = { ...cfg, pushKeyedOn: 'surprise' };
+  // R is up 6 in a state that should be posting R margins near 6 on lean
+  // alone; winning by only 2 means R underperformed the standing lean by 4.
+  // #51 measured real returns reverting there, but there is no calibrated
+  // pip magnitude for it (hf7y/american-cycle#11), so this must not push D.
+  const map = { WY: 6 };
+  applyPush(map, surprise, 'WY', 'R', 'senator', 2);
+  assert.equal(map.WY, 6, 'an underperformance floors at zero surprise, it does not push the other way');
+});
+
+test('surprise-keyed: an identical margin every cycle stops compounding once the lean catches up', () => {
+  // Contrast with 'sustained blowouts must produce a durable lean' above,
+  // which asserts the OPPOSITE outcome (map.OH >= 4, and margin-keyed
+  // actually saturates at maxLean) for the exact same fixture. That is the
+  // tension #51's ruling is still waiting on -- see the `pushKeyedOn` comment
+  // in lean.ts -- so this is deliberately not the default.
+  const surprise: LeanConfig = { ...cfg, pushKeyedOn: 'surprise' };
+  const marginKeyed = { OH: 0 };
+  const surpriseKeyed = { OH: 0 };
+  for (let cycle = 0; cycle < 8; cycle++) {
+    decay(marginKeyed, cfg, 1976 + cycle * 2);
+    decay(marginKeyed, cfg, 1977 + cycle * 2);
+    applyPush(marginKeyed, cfg, 'OH', 'R', 'senator', 4);
+    decay(surpriseKeyed, surprise, 1976 + cycle * 2);
+    decay(surpriseKeyed, surprise, 1977 + cycle * 2);
+    applyPush(surpriseKeyed, surprise, 'OH', 'R', 'senator', 4);
+  }
+  assert.equal(marginKeyed.OH, 8, 'margin-keyed: eight identical blowouts pin the map at the cap');
+  assert.equal(surpriseKeyed.OH, 2, 'surprise-keyed: the same eight blowouts settle at a small steady state instead');
+});
+
 test('the honeymoon counter is placed and then decays away', () => {
   const lean = { OH: 0, CA: 0 };
   honeymoon(lean, cfg, ['OH', 'CA'], 'D');

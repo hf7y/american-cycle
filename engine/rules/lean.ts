@@ -26,6 +26,26 @@ export interface LeanConfig {
    *  claim that the Senate's lean push is what makes it dominant can be
    *  tested by moving the House above it. Default is `PRIORITY`, below. */
   priority?: Office[];
+  /** hf7y/american-cycle#51, RULED 2026-09-02: real returns key next-cycle
+   *  movement on SURPRISE -- how far a result beat what the state's own
+   *  standing lean already predicted -- not on the race's raw margin. A safe
+   *  state posts the same blowout every cycle because it is safe, not because
+   *  anything moved, and keying on raw margin charges it the top push
+   *  forever, which is the most likely cause of the pinning-at-the-cap
+   *  `as-written-plus.json` already notes. `'surprise'` isolates the part of
+   *  the margin that is NEW information; omitted/`'margin'` keeps the shipped
+   *  behaviour.
+   *
+   *  Not the default yet. A fixed, unvarying margin every cycle -- exactly
+   *  what `lean.test.ts`'s "sustained blowouts must produce a durable lean"
+   *  fixture holds constant to isolate the decay/push arithmetic -- reads as
+   *  zero surprise after the first cycle under this key, so that invariant
+   *  and this ruling assert opposite things about the identical fixture.
+   *  Real play never holds marginPips exactly constant (dice vary every
+   *  cycle), so the conflict is in the test's abstraction, not necessarily in
+   *  play -- but resolving which invariant wins is the call #51 is still
+   *  waiting on, not something to pick silently by flipping the default. */
+  pushKeyedOn?: 'margin' | 'surprise';
 }
 
 export function sign(p: Party): number { return p === 'R' ? 1 : p === 'D' ? -1 : 0; }
@@ -51,17 +71,25 @@ export function nationalizedRace<T extends { office: Office }>(races: T[], order
 export function applyPush(
   lean: Lean, cfg: LeanConfig, state: string, winner: Party, office: Office, marginPips: number,
 ): number {
+  const cur = lean[state] ?? 0;
   if (office === 'governor') {
     if (cfg.governorPushes === 'never') return 0;
     // 'with-lean': a governor pushes only when winning WITH the existing lean,
     // never against it ("the alternative under test" -- see lean.test.ts).
-    const cur = lean[state] ?? 0;
     if (cur === 0 || Math.sign(cur) !== sign(winner)) return 0;
   }
-  const push = pushForMargin(cfg, marginPips) * sign(winner);
-  const before = lean[state] ?? 0;
-  lean[state] = clampLean(before + push, cfg.maxLean);
-  return lean[state] - before;
+  // `elections.ts` already bakes `cur`'s own magnitude into the favoured
+  // side's modifier total (the "state lean" modifier), so subtracting the
+  // signed contribution back out isolates the part of marginPips that is new
+  // information -- see `pushKeyedOn` above. Floored at zero: a result BELOW
+  // what the lean predicted is itself informative (#51 measured real returns
+  // reverting there), but there is no calibrated pip magnitude for that yet
+  // -- hf7y/american-cycle#11 declined to fix a pips<->real-points mapping --
+  // so it reads as "no new information" rather than pushing on a guess.
+  const keyed = cfg.pushKeyedOn === 'surprise' ? Math.max(0, marginPips - sign(winner) * cur) : marginPips;
+  const push = pushForMargin(cfg, keyed) * sign(winner);
+  lean[state] = clampLean(cur + push, cfg.maxLean);
+  return lean[state] - cur;
 }
 
 /** A FLAT move, unscaled by any margin — v0.2 items 7 and 8.
