@@ -209,8 +209,11 @@ test('winning a House race captures the underlying district card, by number', ()
 /** #95: McCarthy lost New Hampshire 1968 and the strong showing was the
  *  event. Two same-party cards contest one race, so the loser returns to
  *  hand and the winner reaches the general alone -- an unopposed general run
- *  by a nominee who only barely survived their own primary. Seed 1 rolls a
- *  1-pip primary margin, comfortably under `bruisingPrimaryMargin` (3). */
+ *  by a nominee who only barely survived their own primary. Seed 2 rolls a
+ *  1-pip primary margin, comfortably under `bruisingPrimaryMargin` (3).
+ *  hf7y/american-cycle#171's `cycleOffset` fix draws one extra RNG value per
+ *  game, which reshuffles which seed lands which margin -- seed 1 (pinned
+ *  before that fix) now rolls 3, not 1. */
 test('#95: a primary won by a narrow margin carries a bruise into the general', () => {
   const cfg = loadConfig('as-written-plus.json');
   const a1 = cand({ id: 'a1', homeState: 'OH' });
@@ -225,7 +228,7 @@ test('#95: a primary won by a narrow margin carries a bruise into the general', 
     const race = open.find((r) => r.office === 'representative' && r.state === 'OH' && r.slot === 5);
     return race ? [{ player: 1, card: a2, office: 'representative', state: 'OH', slot: 5 }] : [];
   });
-  const g = new Game([p0, p1], [{ kind: 'candidate', ...a1 }, { kind: 'candidate', ...a2 }], cfg, 1);
+  const g = new Game([p0, p1], [{ kind: 'candidate', ...a1 }, { kind: 'candidate', ...a2 }], cfg, 2);
   g.players[0].hand = [{ kind: 'candidate', ...a1 }];
   g.players[1].hand = [{ kind: 'candidate', ...a2 }];
   g.players[0].districts = [held5];
