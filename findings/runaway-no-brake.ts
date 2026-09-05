@@ -68,7 +68,7 @@ export const finding: Finding = {
     + 'this specific measurement on the current engine; it may have been specific to the pre-#180 config or a '
     + 'different agent set. tracks/c.ts C7 is the live acceptance test and is red.',
   stampedAt: '2026-09-05T09:40:00Z',
-  stampedOn: '2ac936b',
+  stampedOn: '421c296',
 
   predicate(): Claim[] {
     const base = loadConfig('tuned.json');
