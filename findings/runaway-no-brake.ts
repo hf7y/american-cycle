@@ -59,7 +59,7 @@ export const finding: Finding = {
     + '0.625 with it and 0.625 without — which is the evidence that the brake has to be positional. '
     + 'tracks/c.ts C7 is the live acceptance test and is red.',
   stampedAt: '2026-09-05T06:59:14Z',
-  stampedOn: 'a524da6',
+  stampedOn: '2021e16',
 
   predicate(): Claim[] {
     const base = loadConfig('tuned.json');

@@ -68,7 +68,7 @@ export const finding: Finding = {
     + 'contested race won by forty, so the two distributions are partly the same phenomenon in '
     + 'different clothes; the gap narrows and does not close.',
   stampedAt: '2026-09-05T06:59:12Z',
-  stampedOn: 'a524da6',
+  stampedOn: '2021e16',
 
   predicate(): Claim[] {
     const sim = simMargins();

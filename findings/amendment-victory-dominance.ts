@@ -65,7 +65,7 @@ export const finding: Finding = {
     + "canonical-six-field result, not a claim that no counter exists -- see that finding for the field "
     + "where one does.",
   stampedAt: '2026-09-05T06:58:24Z',
-  stampedOn: 'a524da6',
+  stampedOn: '2021e16',
 
   predicate(): Claim[] {
     const n = sample(1200);

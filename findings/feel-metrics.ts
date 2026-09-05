@@ -26,7 +26,7 @@ export const finding: Finding = {
     + "the ~40% line SIM-BRIEF reads as \"players are not fighting each other\" -- consistent with "
     + '#77/#21: most of the real fight is in the primary, which this share does not count.',
   stampedAt: '2026-09-05T06:59:03Z',
-  stampedOn: 'a524da6',
+  stampedOn: '2021e16',
 
   predicate(): Claim[] {
     const cfg = loadConfig('tuned.json');

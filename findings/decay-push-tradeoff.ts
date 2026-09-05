@@ -55,7 +55,7 @@ export const finding: Finding = {
     + 'design does not limit any of this: the dice fix how OFTEN each push tier fires, not what a tier '
     + 'is worth. Shipped as as-written-plus.json.',
   stampedAt: '2026-09-05T06:59:02Z',
-  stampedOn: 'a524da6',
+  stampedOn: '2021e16',
 
   predicate(): Claim[] {
     const biennial = measure({ decayFrequency: 'biennial' });

@@ -64,7 +64,7 @@ export const finding: Finding = {
     + 'the amendment ending does not fix the dominance hole this office question keeps colliding with, '
     + 'it relocates it again, the same way it moved between points and bills.',
   stampedAt: '2026-09-05T06:59:14Z',
-  stampedOn: 'a524da6',
+  stampedOn: '2021e16',
 
   predicate(): Claim[] {
     const s = seatsByOutcome();

@@ -40,7 +40,7 @@ export const finding: Finding = {
     + 'background noise. Contest is also the better lever because the same change moves decision '
     + 'density, dead turns, the midterm brake and heterodoxy, none of which the walkover rule touches.',
   stampedAt: '2026-09-05T06:58:35Z',
-  stampedOn: 'a524da6',
+  stampedOn: '2021e16',
 
   predicate(): Claim[] {
     const lowOff = measure(4, 16, 1.0, 0);

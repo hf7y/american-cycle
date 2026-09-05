@@ -54,7 +54,7 @@ export const finding: Finding = {
     + 'transitive" acceptance bar #75 named is not demonstrated by these two agents as built, even '
     + 'though the underlying thesis (an unexercised rule is an exploit) holds.',
   stampedAt: '2026-09-05T06:58:18Z',
-  stampedOn: 'a524da6',
+  stampedOn: '2021e16',
 
   predicate(): Claim[] {
     const DUEL_N = sample(250);
