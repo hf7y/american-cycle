@@ -160,7 +160,7 @@ test('baseline.json ships the #16/#93-derived House/Senate incumbency levels', (
   assert.equal(buildModifiers(house, ctx({ office: 'representative' }), 'general', res, nat, pg)
     .find((m) => m.source === 'incumbency')?.pips, 4, 'see findings/incumbency-magnitude.ts');
   assert.equal(buildModifiers(senate, ctx({ office: 'senator' }), 'general', res, nat, pg)
-    .find((m) => m.source === 'incumbency')?.pips, 1, "the robust 3-pip gap #16 established, off the derived House level");
+    .find((m) => m.source === 'incumbency')?.pips, 2, "hf7y/american-cycle#53's Senate panel replaces #16's assumed 3-pip gap with a measured one");
 });
 
 test('a per-office incumbency override, once set, wins over the flat value -- and only for that office', () => {
