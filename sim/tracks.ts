@@ -15,11 +15,14 @@
  *  unchanged, which is the whole reason these are not `findings/`.
  */
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
-import { loadConfig, loadPacks, playOne, ALL_PACKS } from './harness.ts';
+import { loadConfig, loadPacks, playOne, ALL_PACKS, BALANCE_PACKS } from './harness.ts';
 import { B } from '../tracks/b.ts';
 import { C } from '../tracks/c.ts';
 import { D } from '../tracks/d.ts';
-import { CAPABILITY_NOTE, probe, type Capabilities, type Measure, type TrackCtx, type TrackItem } from '../tracks/types.ts';
+import {
+  CAPABILITY_NOTE, deckSensitivity, probe,
+  type Capabilities, type Measure, type TrackCtx, type TrackItem,
+} from '../tracks/types.ts';
 
 const arg = (flag: string, dflt: string): string => {
   const i = process.argv.indexOf(flag);
@@ -65,6 +68,85 @@ if (process.argv.includes('--diff')) {
   for (const [label, f] of [['left', a], ['right', b]] as const) {
     const missing = caps(f);
     if (missing.length) console.log(`\n  ${label} build could not be asked: ${missing.join(', ')}`);
+  }
+  process.exit(0);
+}
+
+// --deck-sweep — hf7y/american-cycle#91's "multi-pool run". Plays the WHOLE
+// suite once per named era-pack pool, on identical config/agents/seeds, and
+// flags every measure whose value (not its bar) moves more under a different
+// deck than `deckSensitivity`'s threshold allows. This is the mechanism the
+// issue asked for instead of a hand-typed annotation: nobody has to remember
+// to re-check a measure after the card pool changes, because this recomputes
+// the verdict from scratch every run.
+if (process.argv.includes('--deck-sweep')) {
+  const configName = arg('--config', 'tuned.json');
+  const games = Number(arg('--games', '80'));
+  const only = arg('--track', '');
+  const agents = arg('--agents', 'Greedy,Lookahead,HouseFarm,SenateFlood').split(',');
+  const cfg = loadConfig(configName);
+  const seeds = Array.from({ length: games }, (_, i) => 7000 + i);
+
+  // `all` is the shipped default (hf7y/american-cycle#74); `balance` is the
+  // four-era subset several balance scripts settled on before that issue,
+  // and the one #91's own audit measured against `all` to find the swings
+  // above. Both are named constants in harness.ts so this cannot drift onto
+  // a third, unnamed list the way #74 found roundrobin.ts had.
+  const POOLS: Record<string, string[]> = { all: ALL_PACKS, balance: BALANCE_PACKS };
+  const byPool = new Map<string, Map<string, number>>();
+
+  for (const [poolName, packList] of Object.entries(POOLS)) {
+    const cards = loadPacks(packList);
+    const runs = seeds.map((s) => playOne(agents, cards, cfg, s));
+    const can = probe(runs[0] as unknown as Record<string, unknown>, cfg as unknown as Record<string, unknown>);
+    const ctx: TrackCtx = { cards, cfg, configName, agents, seeds, runs, can };
+    const values = new Map<string, number>();
+    for (const item of [...B, ...C, ...D] as TrackItem[]) {
+      if (only && item.track !== only) continue;
+      if (item.notRun || !item.run) continue;
+      if ((item.needs ?? []).some((k) => !can[k])) continue;
+      let measures: Measure[];
+      try { measures = await item.run(ctx); }
+      catch (e) { console.error(`  [${poolName}] ${item.id} CRASHED — ${(e as Error).message}`); continue; }
+      for (const m of measures) values.set(`${item.id} :: ${m.name}`, m.value);
+    }
+    byPool.set(poolName, values);
+    console.error(`[${poolName}] ${packList.length} eras, ${cards.length} cards — done`);
+  }
+
+  const poolNames = Object.keys(POOLS);
+  const keys = new Set<string>();
+  for (const m of byPool.values()) for (const k of m.keys()) keys.add(k);
+
+  const rows = [...keys].map((key) => {
+    const present = poolNames
+      .map((pool) => ({ pool, value: byPool.get(pool)!.get(key) }))
+      .filter((x): x is { pool: string; value: number } => x.value !== undefined);
+    return { key, present, sensitivity: present.length > 1 ? deckSensitivity(present) : undefined };
+  }).filter((r) => r.sensitivity)
+    .sort((a, b) => b.sensitivity!.maxRelativeDeviation - a.sensitivity!.maxRelativeDeviation);
+
+  console.log(`\ndeck-sensitivity sweep — ${poolNames.map((p) => `${p} (${POOLS[p].length} eras)`).join(' vs ')}\n`);
+  for (const { key, sensitivity } of rows) {
+    const s = sensitivity!;
+    const values = poolNames.filter((p) => p in s.byPool).map((p) => `${p}=${s.byPool[p].toFixed(3)}`).join('  ');
+    console.log(`  [${s.sensitive ? 'DECK-SENSITIVE' : 'stable        '}] ${key.padEnd(58)} ${values}`
+      + `  (max rel dev ${(100 * s.maxRelativeDeviation).toFixed(1)}%)`);
+  }
+  const sensitive = rows.filter((r) => r.sensitivity!.sensitive);
+  console.log(`\n${sensitive.length} of ${rows.length} measures present in more than one pool move more than `
+    + `the deck-sensitivity threshold; a measure present in only one pool cannot be judged and is omitted above.`);
+  if (sensitive.length) console.log(sensitive.map((r) => `  - ${r.key}`).join('\n'));
+
+  const emit = arg('--emit', '');
+  if (emit) {
+    mkdirSync(new URL('../reports/', import.meta.url), { recursive: true });
+    const path = emit.startsWith('/') ? emit : new URL(`../${emit}`, import.meta.url).pathname;
+    writeFileSync(path, JSON.stringify({
+      config: configName, agents, games, pools: POOLS,
+      rows: rows.map((r) => ({ key: r.key, ...r.sensitivity })),
+    }, null, 2) + '\n');
+    console.error(`wrote ${path}`);
   }
   process.exit(0);
 }

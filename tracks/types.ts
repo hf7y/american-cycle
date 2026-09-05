@@ -58,6 +58,52 @@ export type Oracle =
   /** set in tracks/, by whoever wrote the item, after seeing the data */
   | 'authored-here';
 
+/** THE THIRD PROVENANCE AXIS, alongside `Oracle` and `TrackItem.calibrated`.
+ *  `oracle` says where a passing bar came from; `calibrated` says whether the
+ *  measured value depends on a tuned knob. Neither says whether the value
+ *  depends on which ERA-PACK LIST ran it — hf7y/american-cycle#91, which found
+ *  score monotonicity stable at 0.758-0.810 across decks differing 5x in size,
+ *  while the same suite's determination point swung 0.23-0.34 (+/-33%
+ *  relative) and 3-player seat bias swung from 1.17pp to 7.18pp OVER its own
+ *  3pp bar depending only on which packs loaded.
+ *
+ *  DELIBERATELY NOT A STATIC FIELD like `calibrated`. A hand-authored
+ *  "this one is deck-sensitive" string rots exactly like a stamped headline
+ *  does — #91's own ask is "answered by re-running across pack sets rather
+ *  than asserted, so it cannot rot." So this is a function over measured
+ *  values, called by whoever re-runs a track or finding against more than one
+ *  pool (`sim/tracks.ts --deck-sweep` does this for every Track B/C/D item at
+ *  once), not a claim anyone types in by hand. */
+export interface DeckSensitivity {
+  /** the pool this value came from, to the value measured under it */
+  byPool: Record<string, number>;
+  /** (max - min) over the mean absolute value across pools. Relative, not
+   *  absolute, because a measure near zero (e.g. a rare-event rate) and one
+   *  near one (e.g. a share) cannot share an absolute bar. */
+  maxRelativeDeviation: number;
+  /** `maxRelativeDeviation` clears the threshold */
+  sensitive: boolean;
+}
+
+/** 15% relative deviation is authored here, not derived: it is close to the
+ *  gap between #91's own "robust" example (score monotonicity, ~6.7%
+ *  relative) and its "not robust" ones (determination ~39%, contest rate
+ *  ~36%), so it separates the two without needing every measure to carry a
+ *  hand-picked tolerance the way a `findings/` Claim does. */
+export function deckSensitivity(
+  byPool: { pool: string; value: number }[],
+  threshold = 0.15,
+): DeckSensitivity {
+  const values = byPool.map((x) => x.value);
+  const scale = mean(values.map(Math.abs)) || 1;
+  const maxRelativeDeviation = (Math.max(...values) - Math.min(...values)) / scale;
+  return {
+    byPool: Object.fromEntries(byPool.map((x) => [x.pool, x.value])),
+    maxRelativeDeviation,
+    sensitive: maxRelativeDeviation > threshold,
+  };
+}
+
 export interface Measure {
   name: string;
   value: number;
