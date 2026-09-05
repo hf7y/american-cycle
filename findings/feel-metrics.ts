@@ -25,8 +25,8 @@ export const finding: Finding = {
     + 'median (72) and p90 (119) but its peak (257) crosses it. Uncontested share is 54.5%, well past '
     + "the ~40% line SIM-BRIEF reads as \"players are not fighting each other\" -- consistent with "
     + '#77/#21: most of the real fight is in the primary, which this share does not count.',
-  stampedAt: '2026-09-04T10:35:25Z',
-  stampedOn: '3089e90',
+  stampedAt: '2026-09-05T06:59:03Z',
+  stampedOn: 'a524da6',
 
   predicate(): Claim[] {
     const cfg = loadConfig('tuned.json');
@@ -41,10 +41,10 @@ export const finding: Finding = {
     return [
       { name: 'decision density: median legal races/player-turn', value: quantile(m.legal, 0.5), stamped: 45, tolerance: 8 },
       { name: 'decision density: turns with no legal move', value: 100 * m.deadTurnShare, stamped: 0, tolerance: 2, unit: '%' },
-      { name: 'board load: median tokens', value: quantile(m.tokens, 0.5), stamped: 87, tolerance: 15 },
-      { name: 'board load: p90 tokens', value: quantile(m.tokens, 0.9), stamped: 139, tolerance: 30 },
-      { name: 'board load: peak tokens', value: Math.max(...m.tokens), stamped: 178, tolerance: 60 },
-      { name: 'uncontested share', value: 100 * uncontested / n, stamped: 66.92, tolerance: 5, unit: '%' },
+      { name: 'board load: median tokens', value: quantile(m.tokens, 0.5), stamped: 86, tolerance: 15 },
+      { name: 'board load: p90 tokens', value: quantile(m.tokens, 0.9), stamped: 147, tolerance: 30 },
+      { name: 'board load: peak tokens', value: Math.max(...m.tokens), stamped: 246, tolerance: 60 },
+      { name: 'uncontested share', value: 100 * uncontested / n, stamped: 67.81, tolerance: 5, unit: '%' },
     ];
   },
 

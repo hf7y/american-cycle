@@ -10,6 +10,8 @@
   },
   "resolution": {
     "incumbency": 1,
+    "incumbencyHouse": 4,
+    "incumbencySenate": 1,
     "identityBonus": 1,
     "incumbencyPrimary": 4,
     "crossOfficeIncumbency": 1

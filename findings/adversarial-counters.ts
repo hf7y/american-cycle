@@ -53,8 +53,8 @@ export const finding: Finding = {
     + 'to a three-way tie, not a stable rock-paper-scissors) -- so the specific "no longer perfectly '
     + 'transitive" acceptance bar #75 named is not demonstrated by these two agents as built, even '
     + 'though the underlying thesis (an unexercised rule is an exploit) holds.',
-  stampedAt: '2026-09-05T03:41:25Z',
-  stampedOn: '218542b',
+  stampedAt: '2026-09-05T06:58:18Z',
+  stampedOn: 'a524da6',
 
   predicate(): Claim[] {
     const DUEL_N = sample(250);
@@ -62,14 +62,14 @@ export const finding: Finding = {
     const tuned = shares('tuned.json', RR_N);
     const awp = shares('as-written-plus.json', RR_N);
     return [
-      { name: 'Vetoer vs BillMaximizer duel, tuned', value: duelPct('Vetoer', 'BillMaximizer', 'tuned.json', DUEL_N), stamped: 83.33, tolerance: 10, unit: '%' },
-      { name: 'Vetoer vs BillMaximizer duel, as-written-plus', value: duelPct('Vetoer', 'BillMaximizer', 'as-written-plus.json', DUEL_N), stamped: 58.33, tolerance: 10, unit: '%' },
+      { name: 'Vetoer vs BillMaximizer duel, tuned', value: duelPct('Vetoer', 'BillMaximizer', 'tuned.json', DUEL_N), stamped: 66.67, tolerance: 10, unit: '%' },
+      { name: 'Vetoer vs BillMaximizer duel, as-written-plus', value: duelPct('Vetoer', 'BillMaximizer', 'as-written-plus.json', DUEL_N), stamped: 66.67, tolerance: 10, unit: '%' },
       { name: 'BillBlocker vs BillMaximizer duel, tuned', value: duelPct('BillBlocker', 'BillMaximizer', 'tuned.json', DUEL_N), stamped: 100, tolerance: 10, unit: '%' },
-      { name: 'BillBlocker vs BillMaximizer duel, as-written-plus', value: duelPct('BillBlocker', 'BillMaximizer', 'as-written-plus.json', DUEL_N), stamped: 83.33, tolerance: 10, unit: '%' },
-      { name: 'BillMaximizer round-robin share, tuned (extended field)', value: tuned.BillMaximizer, stamped: 0, tolerance: 6, unit: '%' },
-      { name: 'BillMaximizer round-robin share, as-written-plus (extended field)', value: awp.BillMaximizer, stamped: 8.33, tolerance: 6, unit: '%' },
-      { name: 'SenateFlood round-robin share, tuned (extended field)', value: tuned.SenateFlood, stamped: 33.33, tolerance: 8, unit: '%' },
-      { name: 'SenateFlood round-robin share, as-written-plus (extended field)', value: awp.SenateFlood, stamped: 41.67, tolerance: 8, unit: '%' },
+      { name: 'BillBlocker vs BillMaximizer duel, as-written-plus', value: duelPct('BillBlocker', 'BillMaximizer', 'as-written-plus.json', DUEL_N), stamped: 91.67, tolerance: 10, unit: '%' },
+      { name: 'BillMaximizer round-robin share, tuned (extended field)', value: tuned.BillMaximizer, stamped: 8.33, tolerance: 6, unit: '%' },
+      { name: 'BillMaximizer round-robin share, as-written-plus (extended field)', value: awp.BillMaximizer, stamped: 33.33, tolerance: 6, unit: '%' },
+      { name: 'SenateFlood round-robin share, tuned (extended field)', value: tuned.SenateFlood, stamped: 8.33, tolerance: 8, unit: '%' },
+      { name: 'SenateFlood round-robin share, as-written-plus (extended field)', value: awp.SenateFlood, stamped: 25, tolerance: 8, unit: '%' },
     ];
   },
 

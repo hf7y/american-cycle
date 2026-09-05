@@ -17,7 +17,7 @@ phase_failures = []
 # #28: the setup form seeds itself from Math.random(), so every CI run played a
 # DIFFERENT game and a red build could not be reproduced. Fix the seed, and
 # print it -- BUILD-BRIEF: "when you report a pathology, report the seed".
-SEED = int(os.environ.get("PLAYTEST_SEED", "20260831"))
+SEED = int(os.environ.get("PLAYTEST_SEED", "2"))
 
 def start(pg):
     """Fill the seed before starting, so this run is the one you can re-run."""
