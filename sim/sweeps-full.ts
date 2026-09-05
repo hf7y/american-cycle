@@ -72,7 +72,10 @@ sweep('Senate hand bonus', 'runaway', [0, 1, 2],
   (m) => `determination ${pct(m.det)}  lead changes ${m.leads.toFixed(1)}  winning margin ${m.margin.toFixed(0).padStart(3)}`);
 
 sweep('incumbency value', 'incumbent reelection vs 94.1% real', [1, 2, 3],
-  (c, v) => { c.resolution.incumbency = Number(v); },
+  // #16 shipped incumbencyHouse/incumbencySenate on tuned.json, which now
+  // outrank this flat field for House/Senate races -- clear them so the
+  // swept value still reaches the offices this sweep measures.
+  (c, v) => { c.resolution.incumbency = Number(v); c.resolution.incumbencyHouse = undefined; c.resolution.incumbencySenate = undefined; },
   (m) => `incumbent reelection ${pct(m.incumbency)}   [real House 94.1%]`);
 
 sweep('midterm penalty', "whether the presidency's brake binds", [-1, -2, -3, -4],

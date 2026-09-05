@@ -30,7 +30,10 @@ function reelection(incumbency: number, seeds = sample(60)) {
   const cards = loadPacks(['1932', '1964', '1976', '1992', '2008', '2016', '2024']);
   const cfg = {
     ...base,
-    resolution: { ...base.resolution, incumbency },
+    // #16 shipped per-office overrides on `base` (tuned.json) since this
+    // finding was stamped; clear them so the swept flat value still governs
+    // House races the way this finding's whole premise requires.
+    resolution: { ...base.resolution, incumbency, incumbencyHouse: undefined, incumbencySenate: undefined },
     game: { ...base.game, startYear: 1932 },
   };
   let ran = 0, held = 0, ranC = 0, heldC = 0, ranAll = 0, heldAll = 0;
@@ -56,28 +59,29 @@ export const finding: Finding = {
 
   headline:
     'It cannot be read off this board, and the reading that said it could was counting the wrong '
-    + 'races. The HOUSE reelection rate at +1 is 98.8% against a real 94.1% — nearly five points '
-    + 'high, not one — and +2 and +3 only walk it further up, to 99.4% and 99.7%. What lands on the '
-    + 'benchmark is the rate POOLED over every office below the presidency, 94.05% against 94.1%, '
-    + 'and that agreement is a coincidence of averaging: it folds the Senate and the governorships '
-    + 'into a number then reported against a House-only figure. The real result is underneath. '
-    + 'Strip the walkovers and contested incumbents hold 78%, so the 98.8% is measuring how few '
-    + 'incumbents are challenged rather than what +1 is worth, and the intended calibration check '
-    + 'cannot be run until the contest rate is fixed.',
-  stampedAt: '2026-09-03T22:09:47Z',
-  stampedOn: 'eb1d185',
+    + 'races. The HOUSE reelection rate at +1 is 94.4% against a real 94.1% — a near-exact match, '
+    + 'and a coincidence: strip the walkovers and contested incumbents hold only 53%, so the pooled '
+    + 'figure is measuring how few incumbents are challenged, not what +1 is worth. +2 and +3 push '
+    + 'it further up regardless, to 96.0% and 96.5%. Pooling over every office below the presidency '
+    + 'lands at 95.1%, the same coincidence one level up. The intended calibration check — what a '
+    + 'contested incumbent should hold — still cannot be run off this number; it needs the contest '
+    + 'rate fixed first. hf7y/american-cycle#16 ships incumbencyHouse=4 anyway, derived independently '
+    + 'in findings/incumbency-magnitude.ts against the effective-competitiveness band rather than '
+    + 'off this figure.',
+  stampedAt: '2026-09-05T04:42:20Z',
+  stampedOn: '218542b',
 
   predicate(): Claim[] {
     const one = reelection(1);
     const two = reelection(2);
     const three = reelection(3);
     return [
-      { name: 'sim: House reelection at +1', value: one.house, stamped: 99.26, tolerance: 1.5, unit: '%' },
-      { name: 'sim: House reelection at +2', value: two.house, stamped: 99.71, tolerance: 1, unit: '%' },
-      { name: 'sim: House reelection at +3', value: three.house, stamped: 99.38, tolerance: 1, unit: '%' },
+      { name: 'sim: House reelection at +1', value: one.house, stamped: 94.37, tolerance: 1.5, unit: '%' },
+      { name: 'sim: House reelection at +2', value: two.house, stamped: 96.03, tolerance: 1, unit: '%' },
+      { name: 'sim: House reelection at +3', value: three.house, stamped: 96.49, tolerance: 1, unit: '%' },
       { name: 'real: House reelection 1976-2016', value: realHouseReelection(), stamped: 94.1, tolerance: 0.5, unit: '%' },
-      { name: 'sim: +1, contested House races only', value: one.contested, stamped: 75, tolerance: 15, unit: '%' },
-      { name: 'sim: +1, pooled over every office below the presidency', value: one.allOffices, stamped: 99.26, tolerance: 2, unit: '%' },
+      { name: 'sim: +1, contested House races only', value: one.contested, stamped: 53.19, tolerance: 15, unit: '%' },
+      { name: 'sim: +1, pooled over every office below the presidency', value: one.allOffices, stamped: 95.14, tolerance: 2, unit: '%' },
     ];
   },
 

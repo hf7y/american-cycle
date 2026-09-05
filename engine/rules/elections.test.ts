@@ -143,14 +143,24 @@ test('coattails run in reverse in hostile states, with no extra rule', () => {
 });
 
 test('a per-office incumbency override falls back to the flat value when unset', () => {
+  const flat: ResolutionConfig = { ...res, incumbencyHouse: undefined, incumbencySenate: undefined };
   const house: Declaration = { player: 0, card: cand({}), office: 'representative', state: 'OH', incumbent: true };
   const senate: Declaration = { player: 0, card: cand({}), office: 'senator', state: 'OH', incumbent: true };
-  const houseMods = buildModifiers(house, ctx({ office: 'representative' }), 'general', res, nat, pg);
-  const senateMods = buildModifiers(senate, ctx({ office: 'senator' }), 'general', res, nat, pg);
-  assert.equal(houseMods.find((m) => m.source === 'incumbency')?.pips, res.incumbency,
-    'no incumbencyHouse set on baseline.json, so the House falls back to the flat value');
-  assert.equal(senateMods.find((m) => m.source === 'incumbency')?.pips, res.incumbency,
-    'same fallback for the Senate -- #16 ships the field before it ships a new number');
+  const houseMods = buildModifiers(house, ctx({ office: 'representative' }), 'general', flat, nat, pg);
+  const senateMods = buildModifiers(senate, ctx({ office: 'senator' }), 'general', flat, nat, pg);
+  assert.equal(houseMods.find((m) => m.source === 'incumbency')?.pips, flat.incumbency,
+    'with no per-office override, the House falls back to the flat value');
+  assert.equal(senateMods.find((m) => m.source === 'incumbency')?.pips, flat.incumbency,
+    'same fallback for the Senate');
+});
+
+test('baseline.json ships the #16/#93-derived House/Senate incumbency levels', () => {
+  const house: Declaration = { player: 0, card: cand({}), office: 'representative', state: 'OH', incumbent: true };
+  const senate: Declaration = { player: 0, card: cand({}), office: 'senator', state: 'OH', incumbent: true };
+  assert.equal(buildModifiers(house, ctx({ office: 'representative' }), 'general', res, nat, pg)
+    .find((m) => m.source === 'incumbency')?.pips, 4, 'see findings/incumbency-magnitude.ts');
+  assert.equal(buildModifiers(senate, ctx({ office: 'senator' }), 'general', res, nat, pg)
+    .find((m) => m.source === 'incumbency')?.pips, 1, "the robust 3-pip gap #16 established, off the derived House level");
 });
 
 test('a per-office incumbency override, once set, wins over the flat value -- and only for that office', () => {

@@ -68,8 +68,8 @@ export const finding: Finding = {
     + 'The VP backstab, when it has the chance to fire, works: every successful removal at the mixed table saw the '
     + "VP succeed (2 of 2, both configs) -- and never at the stacked table, where no VPBackstab is seated to offer "
     + 'one. F12 is corrected: the rule is not dead code, it is a coalition problem, exactly as designed.',
-  stampedAt: '2026-09-04T10:35:33Z',
-  stampedOn: '3089e90',
+  stampedAt: '2026-09-05T04:42:19Z',
+  stampedOn: '218542b',
 
   predicate(): Claim[] {
     const claims: Claim[] = [];
@@ -93,9 +93,9 @@ export const finding: Finding = {
       { name: 'mixed pool, tuned: opposition reaches two-thirds, given an attempt', value: t.mixed.attempts ? t.mixed.removals / t.mixed.attempts : 0,
         stamped: 0.01, tolerance: 0.02, unit: 'share of attempts' },
       { name: 'stacked pool (four Impeachers), tuned: games with an impeachment attempt', value: t.stacked.gamesWithAttempt / N,
-        stamped: 0.42, tolerance: 0.15, unit: 'share of games' },
+        stamped: 0.08, tolerance: 0.15, unit: 'share of games' },
       { name: 'stacked pool (four Impeachers), tuned: opposition reaches two-thirds, given an attempt', value: t.stacked.attempts ? t.stacked.removals / t.stacked.attempts : 0,
-        stamped: 0.09, tolerance: 0.03, unit: 'share of attempts' },
+        stamped: 0, tolerance: 0.03, unit: 'share of attempts' },
       { name: 'mixed pool, as-written-plus: games with an impeachment attempt', value: awp.mixed.gamesWithAttempt / N,
         stamped: 1, tolerance: 0.1, unit: 'share of games' },
       { name: 'mixed pool, as-written-plus: opposition reaches two-thirds, given an attempt', value: awp.mixed.attempts ? awp.mixed.removals / awp.mixed.attempts : 0,
@@ -103,7 +103,7 @@ export const finding: Finding = {
       { name: 'stacked pool (four Impeachers), as-written-plus: games with an impeachment attempt', value: awp.stacked.gamesWithAttempt / N,
         stamped: 0.25, tolerance: 0.15, unit: 'share of games' },
       { name: 'stacked pool (four Impeachers), as-written-plus: opposition reaches two-thirds, given an attempt', value: awp.stacked.attempts ? awp.stacked.removals / awp.stacked.attempts : 0,
-        stamped: 0.33, tolerance: 0.03, unit: 'share of attempts' },
+        stamped: 0, tolerance: 0.03, unit: 'share of attempts' },
     );
     const mixedRemovals = CONFIGS.reduce((a, c) => a + byConfig[c].mixed.removals, 0);
     const mixedSuccessions = CONFIGS.reduce((a, c) => a + byConfig[c].mixed.successions, 0);
