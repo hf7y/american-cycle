@@ -1,0 +1,6600 @@
+{
+ "note": "Evidence, not an engine input -- parallel to house_district_panel.json but for U.S. Senate generals. Nothing in engine/ reads this file.",
+ "source": {
+  "dataset": "MIT Election Data and Science Lab (MEDSL), U.S. Senate constituency returns 1976-2018",
+  "url": "https://raw.githubusercontent.com/MEDSL/constituency-returns/master/1976-2018-senate.csv",
+  "codebook": "https://github.com/MEDSL/constituency-returns/blob/master/codebook-us-senate-1976%E2%80%932018.md",
+  "upstream_source": "Clerk of the U.S. House, \"Statistics of the Congressional Election\"; 2018 from state election offices",
+  "retrieved": "2026-09-05",
+  "sha256": "8ab824d9acca70ad54dc69f9b191c5cea604cd5bbda2f8777e968cf25bada50e",
+  "csv_rows": 3421
+ },
+ "transform": [
+  "Keep stage=\"gen\" and special=FALSE. Group candidate rows by year+state (Senate races are statewide, no district).",
+  "Sum candidatevotes across party lines for the same candidate name (fusion voting -- NY in particular runs one candidate on 4-6 lines), name upper-cased and stripped to A-Z and spaces.",
+  "A candidate is D if ANY of its lines is democrat / democratic-farmer-labor / democratic-npl, R if ANY line is republican -- checked over the full set of a candidate's lines, not the first line encountered, since fusion candidates' major-party line is not always listed first. Candidates carrying both a D and an R line, or neither, are excluded from the two-party totals.",
+  "demName/repName: the normalized name of the top D/R candidate by summed votes, kept (unlike the House panel) so a later pass can name-match the same person across cycles rather than only the party.",
+  "inc: +1 if this state's senate race 6 years earlier (the same class, since regular Senate elections recur on a fixed 6-year cycle per class and no two classes in one state are up in the same year) was won by D, -1 if by R, 0 if there was no such race or it tied."
+ ],
+ "columns": [
+  "year",
+  "state",
+  "dem",
+  "rep",
+  "demName",
+  "repName",
+  "inc"
+ ],
+ "rows": [
+  [
+   1976,
+   "AZ",
+   400334,
+   321236,
+   "DENNIS DECONCINI",
+   "SAM STEIGER",
+   0
+  ],
+  [
+   1976,
+   "CA",
+   3502862,
+   3748973,
+   "JOHN V TUNNEY",
+   "S I SAM HAYAKAWA",
+   0
+  ],
+  [
+   1976,
+   "CT",
+   561018,
+   785683,
+   "GLORIA SCHAFFER",
+   "LOWELL P WEICKER JR",
+   0
+  ],
+  [
+   1976,
+   "DE",
+   98042,
+   125454,
+   "THOMAS C MALONEY",
+   "WILLIAM V ROTH JR",
+   0
+  ],
+  [
+   1976,
+   "FL",
+   1799518,
+   1057886,
+   "LAWTON CHILES",
+   "JOHN GRADY",
+   0
+  ],
+  [
+   1976,
+   "HI",
+   162305,
+   122724,
+   "SPARK M MATSUNAGA",
+   "WILLIAM QUINN",
+   0
+  ],
+  [
+   1976,
+   "IN",
+   868522,
+   1275833,
+   "VANCE HARTKE",
+   "RICHARD G LUGAR",
+   0
+  ],
+  [
+   1976,
+   "MA",
+   1726657,
+   722641,
+   "EDWARD M KENNEDY",
+   "MICHAEL S ROBERTSON",
+   0
+  ],
+  [
+   1976,
+   "MD",
+   772101,
+   530439,
+   "PAUL S SARBANES",
+   "J GLENN BEALL JR",
+   0
+  ],
+  [
+   1976,
+   "ME",
+   292704,
+   193489,
+   "EDMUND S MUSKIE",
+   "ROBERT A G MONKS",
+   0
+  ],
+  [
+   1976,
+   "MI",
+   1831031,
+   1635087,
+   "DONALD W RIEGLE JR",
+   "MARVIN L ESCH",
+   0
+  ],
+  [
+   1976,
+   "MN",
+   1290736,
+   478602,
+   "HUBERT H HUMPHREY",
+   "JERRY BREKKE",
+   0
+  ],
+  [
+   1976,
+   "MO",
+   813571,
+   1090067,
+   "WARREN E HEARNES",
+   "JOHN C DANFORTH",
+   0
+  ],
+  [
+   1976,
+   "MS",
+   554433,
+   0,
+   "JOHN C STENNIS",
+   null,
+   0
+  ],
+  [
+   1976,
+   "MT",
+   206232,
+   115213,
+   "JOHN MELCHER",
+   "STANLEY C BURGER",
+   0
+  ],
+  [
+   1976,
+   "ND",
+   175772,
+   103466,
+   "QUENTIN N BURDICK",
+   "ROBERT STROUP",
+   0
+  ],
+  [
+   1976,
+   "NE",
+   313805,
+   279284,
+   "EDWARD ZORINSKY",
+   "JOHN Y MCCOLLISTER",
+   0
+  ],
+  [
+   1976,
+   "NJ",
+   1681140,
+   1054508,
+   "HARRISON A WILLIAMS JR",
+   "DAVID F NORCROSS",
+   0
+  ],
+  [
+   1976,
+   "NM",
+   176382,
+   234681,
+   "JOSEPH M MONTOYA",
+   "HARRISON JACK SCHMITT",
+   0
+  ],
+  [
+   1976,
+   "NV",
+   127214,
+   63471,
+   "HOWARD W CANNON",
+   "DAVID TOWELL",
+   0
+  ],
+  [
+   1976,
+   "NY",
+   3422594,
+   2836633,
+   "DANIEL PATRICK MOYNIHAN",
+   "JAMES L BUCKLEY",
+   0
+  ],
+  [
+   1976,
+   "OH",
+   1941113,
+   1823774,
+   "HOWARD M METZENBAUM",
+   "ROBERT TAFT JR",
+   0
+  ],
+  [
+   1976,
+   "PA",
+   2126977,
+   2381891,
+   "WILLIAM J GREEN",
+   "H JOHN HEINZ III",
+   0
+  ],
+  [
+   1976,
+   "RI",
+   167665,
+   230329,
+   "RICHARD P LORBER",
+   "JOHN H CHAFEE",
+   0
+  ],
+  [
+   1976,
+   "TN",
+   751180,
+   673231,
+   "JAMES R SASSER",
+   "BILL BROCK",
+   0
+  ],
+  [
+   1976,
+   "TX",
+   2199956,
+   1636370,
+   "LLOYD BENTSEN",
+   "ALAN STEELMAN",
+   0
+  ],
+  [
+   1976,
+   "UT",
+   223948,
+   290221,
+   "FRANK E MOSS",
+   "ORRIN G HATCH",
+   0
+  ],
+  [
+   1976,
+   "VA",
+   596009,
+   0,
+   "E R BUD ZUMWALT",
+   null,
+   0
+  ],
+  [
+   1976,
+   "VT",
+   85682,
+   94481,
+   "THOMAS P SALMON",
+   "ROBERT T STAFFORD",
+   0
+  ],
+  [
+   1976,
+   "WA",
+   1071219,
+   361546,
+   "HENRY M JACKSON",
+   "GEORGE M BROWN",
+   0
+  ],
+  [
+   1976,
+   "WI",
+   1396970,
+   521902,
+   "WILLIAM PROXMIRE",
+   "STANLEY YORK",
+   0
+  ],
+  [
+   1976,
+   "WV",
+   566359,
+   0,
+   "ROBERT C BYRD",
+   null,
+   0
+  ],
+  [
+   1976,
+   "WY",
+   70558,
+   84810,
+   "GALE MCGEE",
+   "MALCOLM WALLOP",
+   0
+  ],
+  [
+   1978,
+   "AK",
+   29574,
+   92783,
+   "DONALD HOBBS",
+   "TED STEVENS",
+   0
+  ],
+  [
+   1978,
+   "AL",
+   547054,
+   0,
+   "HOWELL HEFLIN",
+   null,
+   0
+  ],
+  [
+   1978,
+   "AR",
+   395506,
+   84308,
+   "DAVID PRYOR",
+   "TOM KELLY",
+   0
+  ],
+  [
+   1978,
+   "CO",
+   330148,
+   480801,
+   "FLOYD K HASKELL",
+   "WILLIAM L ARMSTRONG",
+   0
+  ],
+  [
+   1978,
+   "DE",
+   93930,
+   66479,
+   "JOSEPH R BIDEN JR",
+   "JAMES H BAXTER JR",
+   0
+  ],
+  [
+   1978,
+   "GA",
+   536320,
+   108808,
+   "SAM NUNN",
+   "JOHN W STOKES",
+   0
+  ],
+  [
+   1978,
+   "IA",
+   395066,
+   421598,
+   "DICK CLARK",
+   "ROGER W JEPSEN",
+   0
+  ],
+  [
+   1978,
+   "ID",
+   89635,
+   194412,
+   "DWIGHT JENSEN",
+   "JAMES A MCCLURE",
+   0
+  ],
+  [
+   1978,
+   "IL",
+   1448187,
+   1698711,
+   "ALEX SMITH",
+   "CHARLES H PEREY",
+   0
+  ],
+  [
+   1978,
+   "KS",
+   317602,
+   403354,
+   "BILL ROY",
+   "NANCY LANDON KASSEBAUM",
+   0
+  ],
+  [
+   1978,
+   "KY",
+   290730,
+   175766,
+   "WALTER D HUDDLESTON",
+   "LOUIE GUENTHNER JR",
+   0
+  ],
+  [
+   1978,
+   "LA",
+   1,
+   0,
+   "J BENNETT JOHNSTON JR",
+   null,
+   0
+  ],
+  [
+   1978,
+   "MA",
+   1093283,
+   890584,
+   "PAUL E TSONGAS",
+   "EDWARD W BROOKE",
+   0
+  ],
+  [
+   1978,
+   "ME",
+   127327,
+   212294,
+   "WILLIAM D HATHAWAY",
+   "WILLIAM S COHEN",
+   0
+  ],
+  [
+   1978,
+   "MI",
+   1484193,
+   1362165,
+   "CARL LEVIN",
+   "ROBERT P GRIFFIN",
+   0
+  ],
+  [
+   1978,
+   "MN",
+   638375,
+   894092,
+   "WENDELL ANDERSON",
+   "RUDOLPH E BOSCHWITZ",
+   0
+  ],
+  [
+   1978,
+   "MS",
+   187541,
+   267302,
+   "MAURICE DANTIN",
+   "THAD COCHRAN",
+   0
+  ],
+  [
+   1978,
+   "MT",
+   160353,
+   127589,
+   "MAX BAUCUS",
+   "LARRY WILLIAMS",
+   0
+  ],
+  [
+   1978,
+   "NC",
+   516663,
+   619151,
+   "JOHN RANDOLPH INGRAM",
+   "JESSE HELMS",
+   0
+  ],
+  [
+   1978,
+   "NE",
+   334096,
+   159706,
+   "JAMES J EXON",
+   "DONALD EUGENE SHASTEN",
+   0
+  ],
+  [
+   1978,
+   "NH",
+   127945,
+   133745,
+   "THOMAS J MCINTYRE",
+   "GORDON J HUMPHREY",
+   0
+  ],
+  [
+   1978,
+   "NJ",
+   1082960,
+   844200,
+   "BILL BRADLEY",
+   "JEFFREY BELL",
+   0
+  ],
+  [
+   1978,
+   "NM",
+   160045,
+   183442,
+   "TONEY ANAYA",
+   "PETE V DOMENICI",
+   0
+  ],
+  [
+   1978,
+   "OK",
+   493953,
+   247857,
+   "DAVID LYLE BOREN",
+   "ROBERT B KAMM",
+   0
+  ],
+  [
+   1978,
+   "OR",
+   341616,
+   550165,
+   "VERN COOK",
+   "MARK HATFIELD",
+   0
+  ],
+  [
+   1978,
+   "RI",
+   229557,
+   76061,
+   "CLAIBORNE PELL",
+   "JAMES G REYONLDS",
+   0
+  ],
+  [
+   1978,
+   "SC",
+   280146,
+   351917,
+   "CHARLES D RAVENEL",
+   "STROM THURMOND",
+   0
+  ],
+  [
+   1978,
+   "SD",
+   84767,
+   170832,
+   "DON BARNETT",
+   "LARRY PRESSLER",
+   0
+  ],
+  [
+   1978,
+   "TN",
+   466228,
+   642644,
+   "JANE ESKIND",
+   "HOWARD H BAKER",
+   0
+  ],
+  [
+   1978,
+   "TX",
+   1139149,
+   1151376,
+   "ROBERT KRUEGER",
+   "JOHN G TOWER",
+   0
+  ],
+  [
+   1978,
+   "VA",
+   608511,
+   613232,
+   "ANDREW P MILLER",
+   "JOHN WILLIAM WARNER",
+   0
+  ],
+  [
+   1978,
+   "WV",
+   249034,
+   244317,
+   "JENNINGS RANDOLPH",
+   "ARCH A MOORE JR",
+   0
+  ],
+  [
+   1978,
+   "WY",
+   82908,
+   50456,
+   "RAYMOND B WHITAKER",
+   "ALAN KOOI SIMPSON",
+   0
+  ],
+  [
+   1980,
+   "AK",
+   72007,
+   84159,
+   "CLARK S GRUENING",
+   "FRANK H MURKOWSKI",
+   0
+  ],
+  [
+   1980,
+   "AL",
+   610175,
+   650362,
+   "JIM FOLSOM JR",
+   "JEREMIAH DENTON",
+   0
+  ],
+  [
+   1980,
+   "AR",
+   477905,
+   330576,
+   "DALE BUMPERS",
+   "BILL CLARK",
+   0
+  ],
+  [
+   1980,
+   "AZ",
+   422972,
+   432371,
+   "BILL SCHULZ",
+   "BARRY GOLDWATER",
+   0
+  ],
+  [
+   1980,
+   "CA",
+   4704098,
+   3091671,
+   "ALAN CRANSTON",
+   "PAUL GANN",
+   0
+  ],
+  [
+   1980,
+   "CO",
+   590501,
+   571295,
+   "GARY HART",
+   "MARY ESTILL BUCHANAN",
+   0
+  ],
+  [
+   1980,
+   "CT",
+   763969,
+   581884,
+   "CHRISTOPHER J DODD",
+   "JAMES L BUCKLEY",
+   0
+  ],
+  [
+   1980,
+   "FL",
+   1705409,
+   1822460,
+   "BILL GUNTER",
+   "PAULA HAWKINS",
+   0
+  ],
+  [
+   1980,
+   "GA",
+   776143,
+   803686,
+   "HERMAN E TALMADGE",
+   "MACK MATTINGLY",
+   0
+  ],
+  [
+   1980,
+   "HI",
+   224485,
+   53068,
+   "DANIEL K INOUYE",
+   "COOPER BROWN",
+   0
+  ],
+  [
+   1980,
+   "IA",
+   581545,
+   683014,
+   "JOHN CULVER",
+   "CHARLES E GRASSLEY",
+   0
+  ],
+  [
+   1980,
+   "ID",
+   214439,
+   218701,
+   "FRANK CHURCH",
+   "STEVE SYMMS",
+   0
+  ],
+  [
+   1980,
+   "IL",
+   2565302,
+   1946296,
+   "ALAN J DIXON",
+   "DAVID C ONEAL",
+   0
+  ],
+  [
+   1980,
+   "IN",
+   1015962,
+   1182414,
+   "BIRCH BAYH",
+   "DAN QUAYLE",
+   0
+  ],
+  [
+   1980,
+   "KS",
+   340271,
+   598686,
+   "JOHN SIMPSON",
+   "BOB DOLE",
+   0
+  ],
+  [
+   1980,
+   "KY",
+   720891,
+   386029,
+   "WENDELL H FORD",
+   "MARY LOUISE FOUST",
+   0
+  ],
+  [
+   1980,
+   "LA",
+   484770,
+   13739,
+   "RUSSELL B LONG",
+   "JERRY C BARDWELL",
+   0
+  ],
+  [
+   1980,
+   "MD",
+   435118,
+   850970,
+   "EDWARD T CONROY",
+   "CHARLES MCC MATHIAS JR",
+   0
+  ],
+  [
+   1980,
+   "MO",
+   1074859,
+   985399,
+   "THOMAS F EAGLETON",
+   "GENE MCNARY",
+   0
+  ],
+  [
+   1980,
+   "NC",
+   887653,
+   898064,
+   "ROBERT MORGAN",
+   "JOHN P EAST",
+   0
+  ],
+  [
+   1980,
+   "NH",
+   179455,
+   195559,
+   "JOHN A DURKIN",
+   "WARREN RUDMAN",
+   0
+  ],
+  [
+   1980,
+   "NV",
+   92129,
+   144224,
+   "MARY GOJACK",
+   "PAUL LAXALT",
+   0
+  ],
+  [
+   1980,
+   "NY",
+   2618661,
+   2699652,
+   "ELIZABETH HOLTZMAN",
+   "ALFONSE M DAMATO",
+   0
+  ],
+  [
+   1980,
+   "OH",
+   2770786,
+   1137695,
+   "JOHN GLENN",
+   "JAMES E BETTS",
+   0
+  ],
+  [
+   1980,
+   "OK",
+   478283,
+   587252,
+   "ANDY COATS",
+   "DON NICKLES",
+   0
+  ],
+  [
+   1980,
+   "OR",
+   501963,
+   594290,
+   "TED KULONGOSKI",
+   "BOB PACKWOOD",
+   0
+  ],
+  [
+   1980,
+   "PA",
+   2122391,
+   2230404,
+   "PETE FLAHERTY",
+   "ARLEN SPECTER",
+   0
+  ],
+  [
+   1980,
+   "SC",
+   612554,
+   257946,
+   "ERNEST FRITZ HOLLINGS",
+   "MARSHALL MAYS",
+   0
+  ],
+  [
+   1980,
+   "SD",
+   129018,
+   190594,
+   "GEORGE MCGOVERN",
+   "JAMES ABDNOR",
+   0
+  ],
+  [
+   1980,
+   "UT",
+   151454,
+   437675,
+   "DAN BERMAN",
+   "JAKE GARN",
+   0
+  ],
+  [
+   1980,
+   "VT",
+   104176,
+   101421,
+   "PATRICK J LEAHY",
+   "STEWART M LEDBETTER",
+   0
+  ],
+  [
+   1980,
+   "WA",
+   792052,
+   936317,
+   "WARREN G MAGNUSON",
+   "SLADE GORTON",
+   0
+  ],
+  [
+   1980,
+   "WI",
+   1065487,
+   1106311,
+   "GAYLORD A NELSON",
+   "ROBERT W KASTEN JR",
+   0
+  ],
+  [
+   1982,
+   "AZ",
+   411970,
+   291749,
+   "DENNIS DECONCINI",
+   "PETE DUNN",
+   1
+  ],
+  [
+   1982,
+   "CA",
+   3494968,
+   4022565,
+   "EDMUND G BROWN JR",
+   "PETE WILSON",
+   -1
+  ],
+  [
+   1982,
+   "CT",
+   499146,
+   545987,
+   "ANTHONY TOBY MOFFETT",
+   "LOWELL P WEICKER JR",
+   -1
+  ],
+  [
+   1982,
+   "DE",
+   84413,
+   105357,
+   "DAVID N LEVINSON",
+   "WILLIAM V ROTH JR",
+   -1
+  ],
+  [
+   1982,
+   "FL",
+   1637667,
+   1015330,
+   "LAWTON CHILES",
+   "VAN B POOLE",
+   1
+  ],
+  [
+   1982,
+   "HI",
+   245386,
+   52071,
+   "SPARK MATSUNAGA",
+   "CLARENCE J BROWN",
+   1
+  ],
+  [
+   1982,
+   "IN",
+   828400,
+   978301,
+   "FLOYD J FITHIAN",
+   "RICHARD G LUGAR",
+   -1
+  ],
+  [
+   1982,
+   "MA",
+   1247084,
+   784602,
+   "EDWARD M KENNEDY",
+   "RAY SHAMIE",
+   1
+  ],
+  [
+   1982,
+   "MD",
+   707356,
+   407334,
+   "PAUL S SARBANES",
+   "LAWRENCE J HOGAN",
+   1
+  ],
+  [
+   1982,
+   "ME",
+   279819,
+   179882,
+   "GEORGE J MITCHELL",
+   "DAVID F EMERY",
+   1
+  ],
+  [
+   1982,
+   "MI",
+   1728793,
+   1223288,
+   "DONALD W RIEGLE JR",
+   "PHILIP E RUPPE",
+   1
+  ],
+  [
+   1982,
+   "MN",
+   840401,
+   949207,
+   "MARK DAYTON",
+   "DAVE DURENBERGER",
+   1
+  ],
+  [
+   1982,
+   "MO",
+   758629,
+   784876,
+   "HARRIETT WOODS",
+   "JOHN C DANFORTH",
+   -1
+  ],
+  [
+   1982,
+   "MS",
+   414099,
+   230927,
+   "JOHN C STENNIS",
+   "HALEY BARBOUR",
+   1
+  ],
+  [
+   1982,
+   "MT",
+   174861,
+   133789,
+   "JOHN MELCHER",
+   "LARRY WILLIAMS",
+   1
+  ],
+  [
+   1982,
+   "ND",
+   164873,
+   89304,
+   "QUENTIN N BURDICK",
+   "GENE KNORR",
+   1
+  ],
+  [
+   1982,
+   "NE",
+   363350,
+   155760,
+   "EDWARD ZORINSKY",
+   "JIM KECK",
+   1
+  ],
+  [
+   1982,
+   "NJ",
+   1117549,
+   1047626,
+   "FRANK R LAUTENBERG",
+   "MILLICENT FENWICK",
+   1
+  ],
+  [
+   1982,
+   "NM",
+   217682,
+   187128,
+   "JEFF BINGAMAN",
+   "HARRISON H SCHMITT",
+   -1
+  ],
+  [
+   1982,
+   "NV",
+   114720,
+   120377,
+   "HOWARD CANNON",
+   "CHIC HECHT",
+   1
+  ],
+  [
+   1982,
+   "NY",
+   3232146,
+   1696766,
+   "DANIEL P MOYNIHAN",
+   "FLORENCE M SULLIVAN",
+   1
+  ],
+  [
+   1982,
+   "OH",
+   1923767,
+   1396790,
+   "HOWARD M METZENBAUM",
+   "PAUL E PFEIFER",
+   1
+  ],
+  [
+   1982,
+   "PA",
+   1412965,
+   2136418,
+   "CYRIL H WECHT",
+   "JOHN HEINZ",
+   -1
+  ],
+  [
+   1982,
+   "RI",
+   167283,
+   175495,
+   "JULIUS C MICHAELSON",
+   "JOHN H CHAFEE",
+   -1
+  ],
+  [
+   1982,
+   "TN",
+   780113,
+   479642,
+   "JIM SASSER",
+   "ROBIN BEARD",
+   1
+  ],
+  [
+   1982,
+   "TX",
+   1818223,
+   1256759,
+   "LLOYD BENTSEN",
+   "JIM COLLINS",
+   1
+  ],
+  [
+   1982,
+   "UT",
+   219482,
+   309332,
+   "TED WILSON",
+   "ORRIN G HATCH",
+   -1
+  ],
+  [
+   1982,
+   "VA",
+   690839,
+   724571,
+   "RICHARD J DICK DAVIS",
+   "PAUL S TRIBLE JR",
+   1
+  ],
+  [
+   1982,
+   "VT",
+   79340,
+   84449,
+   "JAMES A GUEST",
+   "ROBERT T STAFFORD",
+   -1
+  ],
+  [
+   1982,
+   "WA",
+   943655,
+   332273,
+   "HENRY M JACKSON",
+   "DOUG JEWETT",
+   1
+  ],
+  [
+   1982,
+   "WI",
+   983311,
+   527355,
+   "WILLIAM PROXMIRE",
+   "SCOTT MCCALLUM",
+   1
+  ],
+  [
+   1982,
+   "WV",
+   387170,
+   173910,
+   "ROBERT C BYRD",
+   "CLEVE BENEDICT",
+   1
+  ],
+  [
+   1982,
+   "WY",
+   72466,
+   94725,
+   "RODGER MCDANIEL",
+   "MALCOLM WALLOP",
+   -1
+  ],
+  [
+   1984,
+   "AK",
+   58804,
+   146919,
+   "JOHN E HAVELOCK",
+   "TED STEVENS",
+   -1
+  ],
+  [
+   1984,
+   "AL",
+   860535,
+   498508,
+   "HOWELL HEFLIN",
+   "ALBERT LEE SMITH",
+   1
+  ],
+  [
+   1984,
+   "AR",
+   502341,
+   373615,
+   "DAVID PRYOR",
+   "ED BETHUNE",
+   1
+  ],
+  [
+   1984,
+   "CO",
+   449327,
+   833821,
+   "NANCY DICK",
+   "WILLIAM L BILL ARMSTRONG",
+   -1
+  ],
+  [
+   1984,
+   "DE",
+   147831,
+   98101,
+   "JOSEPH R BIDEN JR",
+   "JOHN M BURRIS",
+   1
+  ],
+  [
+   1984,
+   "GA",
+   1344104,
+   337196,
+   "SAM NUNN",
+   "MIKE HICKS",
+   1
+  ],
+  [
+   1984,
+   "IA",
+   716883,
+   564381,
+   "TOM HARKIN",
+   "ROGER W JEPSEN",
+   -1
+  ],
+  [
+   1984,
+   "ID",
+   105591,
+   293193,
+   "PETER M BUSCH",
+   "JAMES A MCCLURE",
+   -1
+  ],
+  [
+   1984,
+   "IL",
+   2397165,
+   2308039,
+   "PAUL SIMON",
+   "CHARLES H PERCY",
+   -1
+  ],
+  [
+   1984,
+   "KS",
+   211664,
+   757402,
+   "JAMES R MAHER",
+   "NANCY LANDON KASSEBAUM",
+   -1
+  ],
+  [
+   1984,
+   "KY",
+   644990,
+   0,
+   "MITCH MCCONNELL",
+   null,
+   1
+  ],
+  [
+   1984,
+   "LA",
+   1,
+   0,
+   "J BENNETT JOHNSTON JR",
+   null,
+   1
+  ],
+  [
+   1984,
+   "MA",
+   1393150,
+   1136913,
+   "JOHN F KERRY",
+   "RAYMOND SHAMIE",
+   1
+  ],
+  [
+   1984,
+   "ME",
+   142626,
+   404414,
+   "ELIZABETH H MITCHELL",
+   "WILLIAM S COHEN",
+   -1
+  ],
+  [
+   1984,
+   "MI",
+   1915831,
+   1745302,
+   "CARL LEVIN",
+   "JACK LOUSMA",
+   1
+  ],
+  [
+   1984,
+   "MN",
+   852844,
+   1199926,
+   "JOAN ANDERSON GROWE",
+   "RUDY BOSCHWITZ",
+   -1
+  ],
+  [
+   1984,
+   "MS",
+   371926,
+   580314,
+   "WILLIAM F WINTER",
+   "THAD COCHRAN",
+   -1
+  ],
+  [
+   1984,
+   "MT",
+   215704,
+   154308,
+   "MAX BAUCUS",
+   "CHUCK COZZENS",
+   1
+  ],
+  [
+   1984,
+   "NC",
+   1070488,
+   1156768,
+   "JAMES B JIM HUNT JR",
+   "JESSE HELMS",
+   -1
+  ],
+  [
+   1984,
+   "NE",
+   332217,
+   307147,
+   "J J EXON",
+   "NANCY HOCH",
+   1
+  ],
+  [
+   1984,
+   "NH",
+   157447,
+   225828,
+   "NORMAN E DAMOURS",
+   "GORDON J HUMPHREY",
+   -1
+  ],
+  [
+   1984,
+   "NJ",
+   1986644,
+   1080100,
+   "BILL BRADLEY",
+   "MARY V MOCHARY",
+   1
+  ],
+  [
+   1984,
+   "NM",
+   141253,
+   361371,
+   "JUDITH A PRATT",
+   "PETE V DOMENICI",
+   -1
+  ],
+  [
+   1984,
+   "OK",
+   906131,
+   280638,
+   "DAVID BOREN",
+   "WILL E BILL CROZIER",
+   1
+  ],
+  [
+   1984,
+   "OR",
+   406122,
+   808152,
+   "MARGIE HENDRIKSEN",
+   "MARK O HATFIELD",
+   -1
+  ],
+  [
+   1984,
+   "RI",
+   285811,
+   107545,
+   "CLAIBORNE DEB PELL",
+   "BARBARA M LEONARD",
+   1
+  ],
+  [
+   1984,
+   "SC",
+   306982,
+   644815,
+   "MELVIN PURVIS",
+   "STROM THURMOND",
+   -1
+  ],
+  [
+   1984,
+   "SD",
+   80537,
+   235176,
+   "GEORGE V CUNNINGHAM",
+   "LARRY PRESSLER",
+   -1
+  ],
+  [
+   1984,
+   "TN",
+   1000607,
+   557016,
+   "ALBERT GORE JR",
+   "VICTOR ASHE",
+   -1
+  ],
+  [
+   1984,
+   "TX",
+   2202557,
+   3111348,
+   "LLOYD DOGGETT",
+   "PHIL GRAMM",
+   -1
+  ],
+  [
+   1984,
+   "VA",
+   601142,
+   1406194,
+   "EDYTHE C EDIE HARRISON",
+   "JOHN W WARNER",
+   -1
+  ],
+  [
+   1984,
+   "WV",
+   374233,
+   344680,
+   "JAY ROCKEFELLER",
+   "JOHN R RAESE",
+   1
+  ],
+  [
+   1984,
+   "WY",
+   40525,
+   146373,
+   "VICTOR A RYAN",
+   "AL SIMPSON",
+   1
+  ],
+  [
+   1986,
+   "AK",
+   79727,
+   97674,
+   "GLENN OLDS",
+   "FRANK H MURKOWSKI",
+   -1
+  ],
+  [
+   1986,
+   "AL",
+   609360,
+   602537,
+   "RICHARD SHELBY",
+   "JEREMIAH DENTON",
+   -1
+  ],
+  [
+   1986,
+   "AR",
+   433122,
+   262313,
+   "DALE BUMPERS",
+   "ASA HUTCHINSON",
+   1
+  ],
+  [
+   1986,
+   "AZ",
+   340965,
+   521850,
+   "RICHARD KIMBALL",
+   "JOHN MCCAIN",
+   -1
+  ],
+  [
+   1986,
+   "CA",
+   3646672,
+   3541804,
+   "ALAN CRANSTON",
+   "ED ZSCHAU",
+   1
+  ],
+  [
+   1986,
+   "CO",
+   529449,
+   512994,
+   "TIMOTHY E WIRTH",
+   "KEN KRAMER",
+   1
+  ],
+  [
+   1986,
+   "CT",
+   632695,
+   340438,
+   "CHRISTOPHER J DODD",
+   "ROGER W EDDY",
+   1
+  ],
+  [
+   1986,
+   "FL",
+   1877543,
+   1552376,
+   "BOB GRAHAM",
+   "PAULA HAWKINS",
+   -1
+  ],
+  [
+   1986,
+   "GA",
+   623707,
+   601241,
+   "WYCHE FOWLER JR",
+   "MACK MATTINGLY",
+   -1
+  ],
+  [
+   1986,
+   "HI",
+   241887,
+   86910,
+   "DANIEL K INOUYE",
+   "FRANK HUTCHINSON",
+   1
+  ],
+  [
+   1986,
+   "IA",
+   299406,
+   588880,
+   "JOHN O ROEHRICK",
+   "CHARLES E GRASSLEY",
+   -1
+  ],
+  [
+   1986,
+   "ID",
+   185066,
+   196958,
+   "JOHN V EVANS",
+   "STEVE SYMMS",
+   -1
+  ],
+  [
+   1986,
+   "IL",
+   2033783,
+   1053734,
+   "ALAN J DIXON",
+   "JUDY KOEHLER",
+   1
+  ],
+  [
+   1986,
+   "IN",
+   595192,
+   936143,
+   "JILL LYNETTE LONG",
+   "DAN QUAYLE",
+   -1
+  ],
+  [
+   1986,
+   "KS",
+   246664,
+   576902,
+   "GUY MACDONALD",
+   "BOB DOLE",
+   -1
+  ],
+  [
+   1986,
+   "KY",
+   503775,
+   173330,
+   "WENDELL H FORD",
+   "JACKSON M ANDREWS",
+   1
+  ],
+  [
+   1986,
+   "LA",
+   723586,
+   646311,
+   "JOHN B BREAUX",
+   "W HENSON MOORE",
+   1
+  ],
+  [
+   1986,
+   "MD",
+   675225,
+   437411,
+   "BARBARA A MIKULSKI",
+   "LINDA CHAVEZ",
+   -1
+  ],
+  [
+   1986,
+   "MO",
+   699624,
+   777612,
+   "HARRIETT WOODS",
+   "CHRISTOPHER KIT BOND",
+   1
+  ],
+  [
+   1986,
+   "ND",
+   143932,
+   141812,
+   "KENT CONRAD",
+   "MARK ANDREWS",
+   0
+  ],
+  [
+   1986,
+   "NH",
+   79222,
+   154090,
+   "ENDICOTT PEABODY",
+   "WARREN B RUDMAN",
+   -1
+  ],
+  [
+   1986,
+   "NV",
+   130955,
+   116606,
+   "HARRY REID",
+   "JIM SANTINI",
+   -1
+  ],
+  [
+   1986,
+   "NY",
+   1723216,
+   2378197,
+   "MARK GREEN",
+   "ALFONSE M DAMATO",
+   -1
+  ],
+  [
+   1986,
+   "OH",
+   1949208,
+   1171893,
+   "JOHN GLENN",
+   "THOMAS N KINDNESS",
+   1
+  ],
+  [
+   1986,
+   "OK",
+   400230,
+   493436,
+   "JAMES R JONES",
+   "DON NICKLES",
+   -1
+  ],
+  [
+   1986,
+   "OR",
+   375735,
+   656317,
+   "RICK BAUMAN",
+   "BOB PACKWOOD",
+   -1
+  ],
+  [
+   1986,
+   "PA",
+   1448219,
+   1906537,
+   "BOB EDGAR",
+   "ARLEN SPECTER",
+   -1
+  ],
+  [
+   1986,
+   "SC",
+   465500,
+   262886,
+   "ERNEST FRITZ HOLLINGS",
+   "HENRY D MCMASTER",
+   1
+  ],
+  [
+   1986,
+   "SD",
+   152657,
+   143173,
+   "THOMAS A DASCHLE",
+   "JAMES ABDNOR",
+   -1
+  ],
+  [
+   1986,
+   "UT",
+   115523,
+   314608,
+   "CRAIG S OLIVER",
+   "E J JAKE GARN",
+   -1
+  ],
+  [
+   1986,
+   "VT",
+   124123,
+   67798,
+   "PATRICK LEAHY",
+   "DICK SNELLING",
+   1
+  ],
+  [
+   1986,
+   "WA",
+   677471,
+   650931,
+   "BROCK ADAMS",
+   "SLADE GORTON",
+   -1
+  ],
+  [
+   1986,
+   "WI",
+   702963,
+   754573,
+   "EDWARD R GARVEY",
+   "ROBERT W KASTEN JR",
+   -1
+  ],
+  [
+   1988,
+   "AZ",
+   660403,
+   478060,
+   "DENNIS DECONCINI",
+   "KEITH DEGREEN",
+   1
+  ],
+  [
+   1988,
+   "CA",
+   4287253,
+   5143409,
+   "LEO MCCARTHY",
+   "PETE WILSON",
+   -1
+  ],
+  [
+   1988,
+   "CT",
+   688499,
+   678454,
+   "JOE LIEBERMAN",
+   "LOWELL P WEICHER JR",
+   -1
+  ],
+  [
+   1988,
+   "DE",
+   92378,
+   151115,
+   "S B WOO",
+   "WILLIAM V ROTH JR",
+   -1
+  ],
+  [
+   1988,
+   "FL",
+   2016553,
+   2051071,
+   "BUDDY MACKAY",
+   "CONNIE MACK",
+   1
+  ],
+  [
+   1988,
+   "HI",
+   247941,
+   66987,
+   "SPARK MATSUNAGA",
+   "MARIA M HUSTACE",
+   1
+  ],
+  [
+   1988,
+   "IN",
+   668778,
+   1430525,
+   "JACK WICKES",
+   "RICHARD G LUGAR",
+   -1
+  ],
+  [
+   1988,
+   "MA",
+   1693344,
+   884267,
+   "EDWARD M KENNEDY",
+   "JOSEPH D MALONE",
+   1
+  ],
+  [
+   1988,
+   "MD",
+   999166,
+   617537,
+   "PAUL S SARBANES",
+   "ALAN L KEYES",
+   1
+  ],
+  [
+   1988,
+   "ME",
+   452581,
+   104164,
+   "GEORGE J MITCHELL",
+   "JASPER S WYMAN",
+   1
+  ],
+  [
+   1988,
+   "MI",
+   2116865,
+   1348219,
+   "DONALD W RIEGLE JR",
+   "JIM DUNN",
+   1
+  ],
+  [
+   1988,
+   "MN",
+   856694,
+   1176210,
+   "HUBERT H SKIP HUMPHREY III",
+   "DAVE DURENBERGER",
+   -1
+  ],
+  [
+   1988,
+   "MO",
+   660045,
+   1407416,
+   "JEREMIAH W JAY NIXON",
+   "JOHN C DANFORTH",
+   -1
+  ],
+  [
+   1988,
+   "MS",
+   436339,
+   510380,
+   "WAYNE DOWDY",
+   "TRENT LOTT",
+   1
+  ],
+  [
+   1988,
+   "MT",
+   175809,
+   189445,
+   "JOHN MELCHER",
+   "CONRAD BURNS",
+   1
+  ],
+  [
+   1988,
+   "ND",
+   171899,
+   112937,
+   "QUENTIN N BURDICK",
+   "EARL STRINDEN",
+   1
+  ],
+  [
+   1988,
+   "NE",
+   378717,
+   278250,
+   "BOB KERREY",
+   "DAVE KARNES",
+   1
+  ],
+  [
+   1988,
+   "NJ",
+   1599905,
+   1349937,
+   "FRANK R LAUTENBERG",
+   "PETER M DAWKINS",
+   1
+  ],
+  [
+   1988,
+   "NM",
+   321983,
+   186579,
+   "JEFF BINGAMAN",
+   "BILL VALENTINE",
+   1
+  ],
+  [
+   1988,
+   "NV",
+   175548,
+   161336,
+   "RICHARD H BRYAN",
+   "CHIC HECHT",
+   -1
+  ],
+  [
+   1988,
+   "NY",
+   4048649,
+   1875784,
+   "DANIEL PATRICK MOYNIHAN",
+   "ROBERT R MCMILLAN",
+   1
+  ],
+  [
+   1988,
+   "OH",
+   2480038,
+   1872716,
+   "HOWARD M METZENBAUM",
+   "GEORGE V VOINOVICH",
+   1
+  ],
+  [
+   1988,
+   "PA",
+   1416764,
+   2901715,
+   "JOE VIGNOLA",
+   "JOHN HEINZ",
+   -1
+  ],
+  [
+   1988,
+   "RI",
+   180717,
+   217273,
+   "RICHARD A LICHT",
+   "JOHN H CHAFFEE",
+   -1
+  ],
+  [
+   1988,
+   "TN",
+   1020061,
+   541033,
+   "JIM SASSER",
+   "BILL ANDERSEN",
+   1
+  ],
+  [
+   1988,
+   "TX",
+   3149806,
+   2129228,
+   "LLOYD BENTSEN",
+   "BEAU BOULTER",
+   1
+  ],
+  [
+   1988,
+   "UT",
+   203364,
+   430089,
+   "BRIAN H MOSS",
+   "ORRIN G HATCH",
+   -1
+  ],
+  [
+   1988,
+   "VA",
+   1474086,
+   593652,
+   "CHARLES S ROBB",
+   "MAURICE A DAWKINS",
+   -1
+  ],
+  [
+   1988,
+   "VT",
+   71460,
+   163183,
+   "BILL GRAY",
+   "JAMES M JEFFORDS",
+   -1
+  ],
+  [
+   1988,
+   "WA",
+   904183,
+   944359,
+   "MIKE LOWRY",
+   "SLADE GORTON",
+   1
+  ],
+  [
+   1988,
+   "WI",
+   1128625,
+   1030440,
+   "HERBERT H KOHL",
+   "SUSAN ENGELEITER",
+   1
+  ],
+  [
+   1988,
+   "WV",
+   410983,
+   223564,
+   "ROBERT C BYRD",
+   "M JAY WOLFE",
+   1
+  ],
+  [
+   1988,
+   "WY",
+   89821,
+   91143,
+   "JOHN P VINICH",
+   "MALCOLM WALLOP",
+   -1
+  ],
+  [
+   1990,
+   "AK",
+   61152,
+   125806,
+   "MICHAEL BEASLEY",
+   "TED STEVENS",
+   -1
+  ],
+  [
+   1990,
+   "AL",
+   717814,
+   467190,
+   "HOWELL HEFLIN",
+   "BILL CABANISS",
+   1
+  ],
+  [
+   1990,
+   "AR",
+   493910,
+   0,
+   "DAVID H PRYOR",
+   null,
+   1
+  ],
+  [
+   1990,
+   "CO",
+   425746,
+   569048,
+   "JOSIE HEATH",
+   "HANK BROWN",
+   -1
+  ],
+  [
+   1990,
+   "DE",
+   112918,
+   64554,
+   "JOSEPH R BIDEN JR",
+   "M JANE BRADY",
+   1
+  ],
+  [
+   1990,
+   "GA",
+   1033439,
+   0,
+   "SAM NUNN",
+   null,
+   1
+  ],
+  [
+   1990,
+   "IA",
+   535975,
+   446869,
+   "TOM HARKIN",
+   "THOMAS J TAUKE",
+   1
+  ],
+  [
+   1990,
+   "ID",
+   122295,
+   193641,
+   "RON J TWILEGAR",
+   "LARRY E CRAIG",
+   -1
+  ],
+  [
+   1990,
+   "IL",
+   2115377,
+   1135628,
+   "PAUL SIMON",
+   "LYNN MARTIN",
+   1
+  ],
+  [
+   1990,
+   "KS",
+   207491,
+   578605,
+   "DICK WILLIAMS",
+   "NANCY LANDON KASSEBAUM",
+   -1
+  ],
+  [
+   1990,
+   "KY",
+   437976,
+   478034,
+   "G HARVEY SLOANE",
+   "MITCH MCCONNELL",
+   1
+  ],
+  [
+   1990,
+   "LA",
+   1,
+   0,
+   "J BENNETT JOHNSTON",
+   null,
+   1
+  ],
+  [
+   1990,
+   "MA",
+   1321712,
+   992917,
+   "JOHN F KERRY",
+   "JIM RAPPAPORT",
+   1
+  ],
+  [
+   1990,
+   "ME",
+   201053,
+   319167,
+   "NEIL ROLDE",
+   "WILLIAM S COHEN",
+   -1
+  ],
+  [
+   1990,
+   "MI",
+   1471753,
+   1055695,
+   "CARL LEVIN",
+   "BILL SCHUETTE",
+   1
+  ],
+  [
+   1990,
+   "MN",
+   911999,
+   864375,
+   "PAUL DAVID WELLSTONE",
+   "RUDY BOSCHWITZ",
+   -1
+  ],
+  [
+   1990,
+   "MS",
+   0,
+   274244,
+   null,
+   "THAD COCHRAN",
+   -1
+  ],
+  [
+   1990,
+   "MT",
+   217563,
+   93836,
+   "MAX BAUCUS",
+   "ALLEN C KOLSTAD",
+   1
+  ],
+  [
+   1990,
+   "NC",
+   981573,
+   1087331,
+   "HARVEY B GANTT",
+   "JESSE HELMS",
+   -1
+  ],
+  [
+   1990,
+   "NE",
+   349779,
+   243013,
+   "J JAMES EXON",
+   "HAL DAUB",
+   1
+  ],
+  [
+   1990,
+   "NH",
+   91299,
+   189792,
+   "JOHN A DURKIN",
+   "ROBERT C SMITH",
+   -1
+  ],
+  [
+   1990,
+   "NJ",
+   977810,
+   918874,
+   "BILL BRADLEY",
+   "CHRISTINE TODD WHITMAN",
+   1
+  ],
+  [
+   1990,
+   "NM",
+   110033,
+   296712,
+   "TOM R BENAVIDES",
+   "PETE V DOMENICI",
+   -1
+  ],
+  [
+   1990,
+   "OK",
+   735684,
+   148814,
+   "DAVID L BOREN",
+   "STEPHEN JONES",
+   1
+  ],
+  [
+   1990,
+   "OR",
+   507743,
+   590095,
+   "HARRY LONSDALE",
+   "MARK O HATFIELD",
+   -1
+  ],
+  [
+   1990,
+   "RI",
+   225105,
+   138947,
+   "CLAIBORNE PELL",
+   "CLAUDINE SCHNEIDER",
+   1
+  ],
+  [
+   1990,
+   "SC",
+   244112,
+   482032,
+   "BOB CUNNINGHAM",
+   "STROM THURMOND",
+   -1
+  ],
+  [
+   1990,
+   "SD",
+   116727,
+   135682,
+   "TED MUENSTER",
+   "LARRY PRESSLER",
+   -1
+  ],
+  [
+   1990,
+   "TN",
+   530898,
+   233703,
+   "ALBERT GORE JR",
+   "WILLIAM R HAWKINS",
+   1
+  ],
+  [
+   1990,
+   "TX",
+   1429986,
+   2302357,
+   "HUGH PARMER",
+   "PHIL GRAMM",
+   -1
+  ],
+  [
+   1990,
+   "VA",
+   0,
+   876782,
+   null,
+   "JOHN WARNER",
+   -1
+  ],
+  [
+   1990,
+   "WV",
+   276234,
+   128071,
+   "JOHN D ROCKEFELLER IV",
+   "JOHN YODER",
+   1
+  ],
+  [
+   1990,
+   "WY",
+   56848,
+   100784,
+   "KATHY HELLING",
+   "ALAN K SIMPSON",
+   -1
+  ],
+  [
+   1992,
+   "AK",
+   92065,
+   127163,
+   "TONY SMITH",
+   "FRANK H MURKOWSKI",
+   -1
+  ],
+  [
+   1992,
+   "AL",
+   1022698,
+   522015,
+   "RICHARD C SHELBY",
+   "RICHARD SELLERS",
+   1
+  ],
+  [
+   1992,
+   "AR",
+   553635,
+   366373,
+   "DALE BUMPERS",
+   "MIKE HUCKABEE",
+   1
+  ],
+  [
+   1992,
+   "AZ",
+   436321,
+   771395,
+   "CLAIRE SARGENT",
+   "JOHN MCCAIN",
+   -1
+  ],
+  [
+   1992,
+   "CA",
+   5173467,
+   4644182,
+   "BARBARA BOXER",
+   "BRUCE HERSCHENSOHN",
+   1
+  ],
+  [
+   1992,
+   "CO",
+   803725,
+   662893,
+   "BEN NIGHTHORSE CAMPBELL",
+   "TERRY CONSIDINE",
+   1
+  ],
+  [
+   1992,
+   "CT",
+   882569,
+   572036,
+   "CHRISTOPHER J DODD",
+   "BROOK JOHNSON",
+   1
+  ],
+  [
+   1992,
+   "FL",
+   3245565,
+   1716505,
+   "BOB GRAHAM",
+   "BILL GRANT",
+   1
+  ],
+  [
+   1992,
+   "GA",
+   618877,
+   635114,
+   "WYCHE FOWLER JR",
+   "PAUL COVERDELL",
+   1
+  ],
+  [
+   1992,
+   "HI",
+   208266,
+   97928,
+   "DANIEL K INOUYE",
+   "RICK REED",
+   1
+  ],
+  [
+   1992,
+   "IA",
+   351561,
+   899761,
+   "JEAN LLOYDJONES",
+   "CHUCK GRASSLEY",
+   -1
+  ],
+  [
+   1992,
+   "ID",
+   208036,
+   270468,
+   "RICHARD H STALLINGS",
+   "DIRK KEMPTHORNE",
+   -1
+  ],
+  [
+   1992,
+   "IL",
+   2631229,
+   2126833,
+   "CAROL MOSELEYBRAUN",
+   "RICHARD S WILLIAMSON",
+   1
+  ],
+  [
+   1992,
+   "IN",
+   900148,
+   1267972,
+   "JOSEPH H HOGSETT",
+   "DAN COATS",
+   -1
+  ],
+  [
+   1992,
+   "KS",
+   349525,
+   706246,
+   "GLORIA ODELL",
+   "BOB DOLE",
+   -1
+  ],
+  [
+   1992,
+   "KY",
+   836888,
+   476604,
+   "WENDELL H FORD",
+   "DAVID L WILLIAMS",
+   1
+  ],
+  [
+   1992,
+   "LA",
+   1,
+   0,
+   "JOHN B BREAUX",
+   null,
+   1
+  ],
+  [
+   1992,
+   "MD",
+   1307610,
+   533688,
+   "BARBARA A MIKULSKI",
+   "ALAN L KEYES",
+   1
+  ],
+  [
+   1992,
+   "MO",
+   1057967,
+   1221901,
+   "GERI ROTHMANSEROT",
+   "CHRISTOPHER S BOND",
+   -1
+  ],
+  [
+   1992,
+   "NC",
+   1194015,
+   1297892,
+   "TERRY SANFORD",
+   "LAUCH FAIRCLOTH",
+   0
+  ],
+  [
+   1992,
+   "ND",
+   179347,
+   118162,
+   "BYRON L DORGAN",
+   "STEVE SYDNESS",
+   1
+  ],
+  [
+   1992,
+   "NH",
+   234982,
+   249591,
+   "JOHN RAUH",
+   "JUDD GREGG",
+   -1
+  ],
+  [
+   1992,
+   "NV",
+   253150,
+   199413,
+   "HARRY REID",
+   "DEMAR DAHL",
+   1
+  ],
+  [
+   1992,
+   "NY",
+   3086200,
+   3166994,
+   "ROBERT ABRAMS",
+   "ALFONSE DAMATO",
+   -1
+  ],
+  [
+   1992,
+   "OH",
+   2444419,
+   2028300,
+   "JOHN GLENN",
+   "MICHAEL DEWINE",
+   1
+  ],
+  [
+   1992,
+   "OK",
+   494350,
+   757876,
+   "STEVE LEWIS",
+   "DON NICKLES",
+   -1
+  ],
+  [
+   1992,
+   "OR",
+   639851,
+   717455,
+   "LES AUCOIN",
+   "BOB PACKWOOD",
+   -1
+  ],
+  [
+   1992,
+   "PA",
+   2224966,
+   2358125,
+   "LYNN YEAKEL",
+   "ARLEN SPECTER",
+   -1
+  ],
+  [
+   1992,
+   "SC",
+   591030,
+   554175,
+   "ERNEST F HOLLINGS",
+   "TOMMY HARTNETT",
+   1
+  ],
+  [
+   1992,
+   "SD",
+   217095,
+   108733,
+   "THOMAS A DASCHLE",
+   "CHARLENE HAAR",
+   1
+  ],
+  [
+   1992,
+   "UT",
+   301228,
+   420069,
+   "WAYNE OWENS",
+   "ROBERT F BENNETT",
+   -1
+  ],
+  [
+   1992,
+   "VT",
+   154762,
+   123854,
+   "PATRICK J LEAHY",
+   "JAMES H DOUGLAS",
+   1
+  ],
+  [
+   1992,
+   "WA",
+   1197973,
+   1020829,
+   "PATTY MURRAY",
+   "ROD CHANDLER",
+   1
+  ],
+  [
+   1992,
+   "WI",
+   1290662,
+   1129599,
+   "RUSSELL D FEINGOLD",
+   "ROBERT W KASTEN JR",
+   -1
+  ],
+  [
+   1994,
+   "AZ",
+   442510,
+   600999,
+   "SAM COPPERSMITH",
+   "JON KYL",
+   1
+  ],
+  [
+   1994,
+   "CA",
+   3979152,
+   3817025,
+   "DIANNE FEINSTEIN",
+   "MICHAEL HUFFINGTON",
+   -1
+  ],
+  [
+   1994,
+   "CT",
+   723842,
+   334833,
+   "JOSEPH I LIEBERMAN",
+   "JERRY LABRIOLA",
+   1
+  ],
+  [
+   1994,
+   "DE",
+   84540,
+   111074,
+   "CHARLES M OBERLY",
+   "WILLIAM V ROTH JR",
+   -1
+  ],
+  [
+   1994,
+   "FL",
+   1210577,
+   2895200,
+   "HUGH E RODHAM",
+   "CONNIE MACK",
+   -1
+  ],
+  [
+   1994,
+   "HI",
+   256189,
+   86320,
+   "DANIEL K AKAKA",
+   "MARIA M HUSTACE",
+   1
+  ],
+  [
+   1994,
+   "IN",
+   470799,
+   1039625,
+   "JAMES JONTZ",
+   "RICHARD G LUGAR",
+   -1
+  ],
+  [
+   1994,
+   "MA",
+   1265997,
+   894000,
+   "EDWARD M KENNEDY",
+   "W MITT ROMNEY",
+   1
+  ],
+  [
+   1994,
+   "MD",
+   809125,
+   559908,
+   "PAUL S SARBANES",
+   "WILLIAM BROCK",
+   1
+  ],
+  [
+   1994,
+   "ME",
+   186042,
+   308244,
+   "THOMAS H ANDREWS",
+   "OLYMPIA J SNOWE",
+   1
+  ],
+  [
+   1994,
+   "MI",
+   1300960,
+   1578770,
+   "BOBB CARR",
+   "SPENCER ABRAHAM",
+   1
+  ],
+  [
+   1994,
+   "MN",
+   781860,
+   869653,
+   "ANN WYNIA",
+   "ROD GRAMS",
+   -1
+  ],
+  [
+   1994,
+   "MO",
+   633697,
+   1060149,
+   "ALAN WHEAT",
+   "JOHN ASHCROFT",
+   -1
+  ],
+  [
+   1994,
+   "MS",
+   189752,
+   418333,
+   "KEN HARPER",
+   "TRENT LOTT",
+   -1
+  ],
+  [
+   1994,
+   "MT",
+   131845,
+   218542,
+   "JACK MUDD",
+   "CONRAD R BURNS",
+   -1
+  ],
+  [
+   1994,
+   "ND",
+   137157,
+   99390,
+   "KENT CONRAD",
+   "BEN CLAYBURGH",
+   1
+  ],
+  [
+   1994,
+   "NE",
+   317297,
+   260668,
+   "J ROBERT KERREY",
+   "JAN STONEY",
+   1
+  ],
+  [
+   1994,
+   "NJ",
+   1033487,
+   966244,
+   "FRANK R LAUTENBERG",
+   "GARABED CHUCK HAYTAIAN",
+   1
+  ],
+  [
+   1994,
+   "NM",
+   249989,
+   213025,
+   "JEFF BINGAMAN",
+   "COLIN R MCMILLAN",
+   1
+  ],
+  [
+   1994,
+   "NV",
+   193804,
+   156020,
+   "RICHARD H BRYAN",
+   "HAL FURMAN",
+   1
+  ],
+  [
+   1994,
+   "NY",
+   2646541,
+   1988308,
+   "DANIEL PATRICK MOYNIHAN",
+   "BERNADETTE CASTRO",
+   1
+  ],
+  [
+   1994,
+   "OH",
+   1348213,
+   1836556,
+   "JOEL HYATT",
+   "MIKE DEWINE",
+   1
+  ],
+  [
+   1994,
+   "PA",
+   1648481,
+   1735691,
+   "HARRIS WOFFORD",
+   "RICK SANTORUM",
+   -1
+  ],
+  [
+   1994,
+   "RI",
+   122532,
+   222856,
+   "LINDA J KUSHNER",
+   "JOHN H CHAFEE",
+   -1
+  ],
+  [
+   1994,
+   "TN",
+   623164,
+   834226,
+   "JIM SASSER",
+   "BILL FRIST",
+   1
+  ],
+  [
+   1994,
+   "TX",
+   1639615,
+   2604218,
+   "RICHARD FISHER",
+   "KAY BAILEY HUTCHISON",
+   1
+  ],
+  [
+   1994,
+   "UT",
+   146938,
+   357297,
+   "PATRICK A SHEA",
+   "ORRIN G HATCH",
+   -1
+  ],
+  [
+   1994,
+   "VA",
+   938376,
+   882213,
+   "CHARLES S ROBB",
+   "OLIVER L OLLIE NORTH",
+   1
+  ],
+  [
+   1994,
+   "VT",
+   85868,
+   106505,
+   "JAN BACKUS",
+   "JAMES M JEFFORDS",
+   -1
+  ],
+  [
+   1994,
+   "WA",
+   752352,
+   947821,
+   "RON SIMS",
+   "SLADE GORTON",
+   -1
+  ],
+  [
+   1994,
+   "WI",
+   912662,
+   636989,
+   "HERB KOHL",
+   "ROBERT T WELCH",
+   1
+  ],
+  [
+   1994,
+   "WV",
+   290495,
+   130441,
+   "ROBERT C BYRD",
+   "STAN KLOS",
+   1
+  ],
+  [
+   1994,
+   "WY",
+   79287,
+   118754,
+   "MIKE SULLIVAN",
+   "CRAIG THOMAS",
+   -1
+  ],
+  [
+   1996,
+   "AK",
+   23977,
+   177893,
+   "THERESA NANGLE OBERMEYER",
+   "TED STEVENS",
+   -1
+  ],
+  [
+   1996,
+   "AL",
+   681651,
+   786436,
+   "ROGER BEDFORD",
+   "JEFF SESSIONS",
+   1
+  ],
+  [
+   1996,
+   "AR",
+   400241,
+   445942,
+   "WINSTON BRYANT",
+   "Y TIM HUTCHINSON",
+   1
+  ],
+  [
+   1996,
+   "CO",
+   667600,
+   750315,
+   "TOM STRICKLAND",
+   "WAYNE ALLARD",
+   -1
+  ],
+  [
+   1996,
+   "DE",
+   165465,
+   105088,
+   "JOSEPH R BIDEN JR",
+   "RAYMOND J CLATWORTHY",
+   1
+  ],
+  [
+   1996,
+   "GA",
+   1103993,
+   1073969,
+   "MAX CLELAND",
+   "GUY W MILLNER",
+   1
+  ],
+  [
+   1996,
+   "IA",
+   634166,
+   571807,
+   "TOM HARKIN",
+   "JIM LIGHTFOOT",
+   1
+  ],
+  [
+   1996,
+   "ID",
+   198422,
+   283532,
+   "WALT MINNICK",
+   "LARRY E CRAIG",
+   -1
+  ],
+  [
+   1996,
+   "IL",
+   2384028,
+   1728824,
+   "RICHARD J DURBIN",
+   "AL SALVI",
+   1
+  ],
+  [
+   1996,
+   "KS",
+   362380,
+   652677,
+   "SALLY THOMPSON",
+   "PAT ROBERTS",
+   -1
+  ],
+  [
+   1996,
+   "KY",
+   560012,
+   724794,
+   "STEVEN L BESHEAR",
+   "MITCH MCCONNELL",
+   -1
+  ],
+  [
+   1996,
+   "LA",
+   852945,
+   847157,
+   "MARY L LANDRIEU",
+   "LOUIS WOODY JENKINS",
+   1
+  ],
+  [
+   1996,
+   "MA",
+   1334135,
+   1143120,
+   "JOHN F KERRY",
+   "WILLIAM F WELD",
+   1
+  ],
+  [
+   1996,
+   "ME",
+   266226,
+   298422,
+   "JOSEPH E BRENNAN",
+   "SUSAN M COLLINS",
+   -1
+  ],
+  [
+   1996,
+   "MI",
+   2195738,
+   1500106,
+   "CARL LEVIN",
+   "RONNA ROMNEY",
+   1
+  ],
+  [
+   1996,
+   "MN",
+   1098430,
+   901194,
+   "PAUL WELLSTONE",
+   "RUDY BOSCHWITZ",
+   1
+  ],
+  [
+   1996,
+   "MS",
+   240647,
+   624154,
+   "JAMES W BOOTIE HUNT",
+   "THAD COCHRAN",
+   -1
+  ],
+  [
+   1996,
+   "MT",
+   201935,
+   182111,
+   "MAX BAUCUS",
+   "DENNIS REHBERG",
+   1
+  ],
+  [
+   1996,
+   "NC",
+   1173875,
+   1345833,
+   "HARVEY B GANTT",
+   "JESSE HELMS",
+   -1
+  ],
+  [
+   1996,
+   "NE",
+   281904,
+   379933,
+   "BEN NELSON",
+   "CHUCK HAGEL",
+   1
+  ],
+  [
+   1996,
+   "NH",
+   227355,
+   242257,
+   "DICK SWETT",
+   "BOB SMITH",
+   -1
+  ],
+  [
+   1996,
+   "NJ",
+   1519154,
+   1227351,
+   "ROBERT G TORRICELLI",
+   "DICK ZIMMER",
+   1
+  ],
+  [
+   1996,
+   "NM",
+   164356,
+   357171,
+   "ART TRUJILLO",
+   "PETE V DOMENICI",
+   -1
+  ],
+  [
+   1996,
+   "OK",
+   474162,
+   670610,
+   "JIM BOREN",
+   "JAMES M INHOFE",
+   1
+  ],
+  [
+   1996,
+   "OR",
+   624370,
+   677336,
+   "TOM BRUGGERE",
+   "GORDON SMITH",
+   -1
+  ],
+  [
+   1996,
+   "RI",
+   230676,
+   127368,
+   "JACK REED",
+   "NANCY J MAYER",
+   1
+  ],
+  [
+   1996,
+   "SC",
+   510951,
+   619859,
+   "ELLIOT SPRINGS CLOSE",
+   "STROM THURMOND",
+   -1
+  ],
+  [
+   1996,
+   "SD",
+   166533,
+   157954,
+   "TIM JOHNSON",
+   "LARRY PRESSLER",
+   -1
+  ],
+  [
+   1996,
+   "TN",
+   654937,
+   1091554,
+   "HOUSTON GORDON",
+   "FRED THOMPSON",
+   1
+  ],
+  [
+   1996,
+   "TX",
+   2428776,
+   3027680,
+   "VICTOR M MORALES",
+   "PHIL GRAMM",
+   -1
+  ],
+  [
+   1996,
+   "VA",
+   1115982,
+   1235744,
+   "MARK R WARNER",
+   "JOHN W WARNER",
+   -1
+  ],
+  [
+   1996,
+   "WV",
+   456526,
+   139088,
+   "JOHN D ROCKEFELLER IV",
+   "BETTY A BURKS",
+   1
+  ],
+  [
+   1996,
+   "WY",
+   89103,
+   114116,
+   "KATHY KARPAN",
+   "MICHAEL B ENZI",
+   -1
+  ],
+  [
+   1998,
+   "AK",
+   43743,
+   165227,
+   "JOSEPH A JOE SONNEMAN",
+   "FRANK H MURKOWSKI",
+   -1
+  ],
+  [
+   1998,
+   "AL",
+   474568,
+   817973,
+   "CLAYTON SUDDITH",
+   "RICHARD C SHELBY",
+   1
+  ],
+  [
+   1998,
+   "AR",
+   385878,
+   295870,
+   "BLANCHE LAMBERT LINCOLN",
+   "FAY BOOZMAN",
+   1
+  ],
+  [
+   1998,
+   "AZ",
+   275224,
+   696577,
+   "ED RANGER",
+   "JOHN MCCAIN",
+   -1
+  ],
+  [
+   1998,
+   "CA",
+   4410056,
+   3575078,
+   "BARBARA BOXER",
+   "MATT FONG",
+   1
+  ],
+  [
+   1998,
+   "CO",
+   464754,
+   829370,
+   "DOTTIE LAMM",
+   "BEN NIGHTHORSE CAMPBELL",
+   1
+  ],
+  [
+   1998,
+   "CT",
+   628306,
+   312177,
+   "CHRISTOPHER J DODD",
+   "GARY FRANKS",
+   1
+  ],
+  [
+   1998,
+   "FL",
+   2436407,
+   1463755,
+   "BOB GRAHAM",
+   "CHARLIE CRIST",
+   1
+  ],
+  [
+   1998,
+   "GA",
+   791904,
+   918540,
+   "MICHAEL J COLES",
+   "PAUL COVERDELL",
+   -1
+  ],
+  [
+   1998,
+   "HI",
+   315252,
+   70964,
+   "DANIEL K INOUYE",
+   "CRYSTAL YOUNG",
+   1
+  ],
+  [
+   1998,
+   "IA",
+   289049,
+   648480,
+   "DAVID OSTERBERG",
+   "CHARLES E GRASSLEY",
+   -1
+  ],
+  [
+   1998,
+   "ID",
+   107375,
+   262966,
+   "BILL MAUK",
+   "MIKE CRAPO",
+   -1
+  ],
+  [
+   1998,
+   "IL",
+   1610496,
+   1709041,
+   "CAROL MOSELEYBRAUN",
+   "PETER G FITZGERALD",
+   1
+  ],
+  [
+   1998,
+   "IN",
+   1012244,
+   552732,
+   "EVAN BAYH",
+   "PAUL HELMKE",
+   -1
+  ],
+  [
+   1998,
+   "KS",
+   229718,
+   474639,
+   "PAUL FELECIANO JR",
+   "SAM BROWNBACK",
+   -1
+  ],
+  [
+   1998,
+   "KY",
+   563051,
+   569817,
+   "SCOTTY BAESLER",
+   "JIM BUNNING",
+   1
+  ],
+  [
+   1998,
+   "LA",
+   620502,
+   306616,
+   "JOHN B BREAUX",
+   "JIM DONELON",
+   1
+  ],
+  [
+   1998,
+   "MD",
+   1062810,
+   444637,
+   "BARBARA A MIKULSKI",
+   "ROSS Z PIERPONT",
+   1
+  ],
+  [
+   1998,
+   "MO",
+   690208,
+   830625,
+   "JEREMIAH W JAY NIXON",
+   "CHRISTOPHER S BOND",
+   -1
+  ],
+  [
+   1998,
+   "NC",
+   1029237,
+   945943,
+   "JOHN EDWARDS",
+   "LAUCH FAIRCLOTH",
+   -1
+  ],
+  [
+   1998,
+   "ND",
+   134747,
+   75013,
+   "BYRON L DORGAN",
+   "DONNA NALEWAJA",
+   1
+  ],
+  [
+   1998,
+   "NH",
+   88883,
+   213477,
+   "GEORGE CONDODEMETRAKY",
+   "JUDD GREGG",
+   -1
+  ],
+  [
+   1998,
+   "NV",
+   208621,
+   208220,
+   "HARRY REID",
+   "JOHN E ENSIGN",
+   1
+  ],
+  [
+   1998,
+   "NY",
+   2551065,
+   2058988,
+   "CHARLES E SCHUMER",
+   "ALFONSE DAMATO",
+   -1
+  ],
+  [
+   1998,
+   "OH",
+   1482054,
+   1922087,
+   "MARY O BOYLE",
+   "GEORGE V VOINOVICH",
+   1
+  ],
+  [
+   1998,
+   "OK",
+   268898,
+   570682,
+   "DON E CARROLL",
+   "DON NICKLES",
+   -1
+  ],
+  [
+   1998,
+   "OR",
+   682425,
+   377739,
+   "RON WYDEN",
+   "JOHN LIM",
+   -1
+  ],
+  [
+   1998,
+   "PA",
+   1028839,
+   1814180,
+   "BILL LLOYD",
+   "ARLEN SPECTER",
+   -1
+  ],
+  [
+   1998,
+   "SC",
+   563377,
+   488238,
+   "ERNEST F HOLLINGS",
+   "BOB INGLIS",
+   1
+  ],
+  [
+   1998,
+   "SD",
+   162884,
+   95431,
+   "TOM DASCHLE",
+   "RON SCHMIDT",
+   1
+  ],
+  [
+   1998,
+   "UT",
+   163172,
+   316652,
+   "SCOTT LECKMAN",
+   "ROBERT F BENNETT",
+   -1
+  ],
+  [
+   1998,
+   "VT",
+   154567,
+   48051,
+   "PATRICK J LEAHY",
+   "FRED H TUTTLE",
+   1
+  ],
+  [
+   1998,
+   "WA",
+   1103184,
+   785377,
+   "PATTY MURRAY",
+   "LINDA SMITH",
+   1
+  ],
+  [
+   1998,
+   "WI",
+   890059,
+   852272,
+   "RUSSELL D FEINGOLD",
+   "MARK W NEUMANN",
+   1
+  ],
+  [
+   2000,
+   "AZ",
+   0,
+   1108196,
+   null,
+   "JON KYL",
+   -1
+  ],
+  [
+   2000,
+   "CA",
+   5932522,
+   3886853,
+   "DIANNE FEINSTEIN",
+   "TOM CAMPBELL",
+   1
+  ],
+  [
+   2000,
+   "CT",
+   828902,
+   448077,
+   "JOSEPH I LIEBERMAN",
+   "PHIL GIORDANO",
+   1
+  ],
+  [
+   2000,
+   "DE",
+   181566,
+   142891,
+   "THOMAS R CARPER",
+   "WILLIAM V ROTH JR",
+   -1
+  ],
+  [
+   2000,
+   "FL",
+   2989487,
+   2705348,
+   "BILL NELSON",
+   "BILL MCCOLLUM",
+   -1
+  ],
+  [
+   2000,
+   "HI",
+   251215,
+   84701,
+   "DANIEL K AKAKA",
+   "JOHN CARROLL",
+   1
+  ],
+  [
+   2000,
+   "IN",
+   683273,
+   1427944,
+   "DAVID L JOHNSON",
+   "RICHARD G LUGAR",
+   -1
+  ],
+  [
+   2000,
+   "MA",
+   1889494,
+   334341,
+   "EDWARD M KENNEDY",
+   "JACK E ROBINSON III",
+   1
+  ],
+  [
+   2000,
+   "MD",
+   1230013,
+   715178,
+   "PAUL S SARBANES",
+   "PAUL H RAPPAPORT",
+   1
+  ],
+  [
+   2000,
+   "ME",
+   197183,
+   437689,
+   "MARK W LAWRENCE",
+   "OLYMPIA J SNOWE",
+   -1
+  ],
+  [
+   2000,
+   "MI",
+   2061952,
+   1994693,
+   "DEBBIE STABENOW",
+   "SPENCER ABRAHAM",
+   -1
+  ],
+  [
+   2000,
+   "MN",
+   1181553,
+   1047474,
+   "MARK DAYTON",
+   "ROD GRAMS",
+   -1
+  ],
+  [
+   2000,
+   "MO",
+   1191812,
+   1142852,
+   "MEL CARNAHAN",
+   "JOHN ASHCROFT",
+   -1
+  ],
+  [
+   2000,
+   "MS",
+   314090,
+   654941,
+   "TROY D BROWN SR",
+   "TRENT LOTT",
+   -1
+  ],
+  [
+   2000,
+   "MT",
+   194430,
+   208082,
+   "BRIAN SCHWEITZER",
+   "CONRAD BURNS",
+   -1
+  ],
+  [
+   2000,
+   "ND",
+   0,
+   111069,
+   null,
+   "DUANE SAND",
+   1
+  ],
+  [
+   2000,
+   "NE",
+   353093,
+   337977,
+   "BEN NELSON",
+   "DON STENBERG",
+   1
+  ],
+  [
+   2000,
+   "NJ",
+   1511237,
+   1420267,
+   "JON S CORZINE",
+   "BOB FRANKS",
+   1
+  ],
+  [
+   2000,
+   "NM",
+   363744,
+   225517,
+   "JEFF BINGAMAN",
+   "BILL REDMOND",
+   1
+  ],
+  [
+   2000,
+   "NV",
+   238260,
+   330687,
+   "ED BERNSTEIN",
+   "JOHN ENSIGN",
+   1
+  ],
+  [
+   2000,
+   "NY",
+   3747310,
+   2915730,
+   "HILLARY RODHAM CLINTON",
+   "RICK LAZIO",
+   1
+  ],
+  [
+   2000,
+   "OH",
+   1595066,
+   2665512,
+   "TED CELESTE",
+   "MIKE DEWINE",
+   -1
+  ],
+  [
+   2000,
+   "PA",
+   2154908,
+   2481962,
+   "RON KLINK",
+   "RICK SANTORUM",
+   -1
+  ],
+  [
+   2000,
+   "RI",
+   161023,
+   222588,
+   "ROBERT A WEYGAND",
+   "LINCOLN D CHAFEE",
+   -1
+  ],
+  [
+   2000,
+   "TN",
+   621152,
+   1255444,
+   "JEFF CLARK",
+   "BILL FRIST",
+   -1
+  ],
+  [
+   2000,
+   "TX",
+   2025024,
+   4078954,
+   "GENE KELLY",
+   "KAY BAILEY HUTCHISON",
+   -1
+  ],
+  [
+   2000,
+   "UT",
+   242569,
+   504803,
+   "SCOTT N HOWELL",
+   "ORRIN G HATCH",
+   -1
+  ],
+  [
+   2000,
+   "VA",
+   1296093,
+   1420460,
+   "CHARLES S ROBB",
+   "GEORGE F ALLEN",
+   1
+  ],
+  [
+   2000,
+   "VT",
+   73352,
+   189133,
+   "ED FLANAGAN",
+   "JAMES M JEFFORDS",
+   -1
+  ],
+  [
+   2000,
+   "WA",
+   1199437,
+   1197208,
+   "MARIA CANTWELL",
+   "SLADE GORTON",
+   -1
+  ],
+  [
+   2000,
+   "WI",
+   1563238,
+   940744,
+   "HERB KOHL",
+   "JOHN GILLESPIE",
+   1
+  ],
+  [
+   2000,
+   "WV",
+   469215,
+   121635,
+   "ROBERT C BYRD",
+   "DAVID T GALLAHER",
+   1
+  ],
+  [
+   2000,
+   "WY",
+   47087,
+   157622,
+   "MEL LOGAN",
+   "CRAIG THOMAS",
+   -1
+  ],
+  [
+   2002,
+   "AK",
+   24133,
+   179438,
+   "FRANK VONDERSAAR",
+   "TED STEVENS",
+   -1
+  ],
+  [
+   2002,
+   "AL",
+   538878,
+   792561,
+   "SUSAN PARKER",
+   "JEFF SESSIONS",
+   -1
+  ],
+  [
+   2002,
+   "AR",
+   433386,
+   370735,
+   "MARK PRYOR",
+   "TIM HUTCHINSON",
+   -1
+  ],
+  [
+   2002,
+   "CO",
+   648130,
+   717893,
+   "TOM STRICKLAND",
+   "WAYNE ALLARD",
+   -1
+  ],
+  [
+   2002,
+   "DE",
+   135253,
+   94793,
+   "JOSEPH R BIDEN JR",
+   "RAYMOND J CLATWORTHY",
+   1
+  ],
+  [
+   2002,
+   "GA",
+   932422,
+   1071352,
+   "MAX CLELAND",
+   "SAXBY CHAMBLISS",
+   1
+  ],
+  [
+   2002,
+   "IA",
+   554278,
+   447892,
+   "TOM HARKIN",
+   "GREG GANSKE",
+   1
+  ],
+  [
+   2002,
+   "ID",
+   132975,
+   266215,
+   "ALAN BLINKEN",
+   "LARRY E CRAIG",
+   -1
+  ],
+  [
+   2002,
+   "IL",
+   2103766,
+   1325703,
+   "RICHARD J DURBIN",
+   "JIM DURKIN",
+   1
+  ],
+  [
+   2002,
+   "KS",
+   0,
+   641075,
+   null,
+   "PAT ROBERTS",
+   -1
+  ],
+  [
+   2002,
+   "KY",
+   399634,
+   731679,
+   "LOIS COMBS WEINBERG",
+   "MITCH MCCONNELL",
+   -1
+  ],
+  [
+   2002,
+   "LA",
+   1212001,
+   936148,
+   "MARY L LANDRIEU",
+   "SUZANNE HAIK TERRELL",
+   1
+  ],
+  [
+   2002,
+   "MA",
+   1605976,
+   0,
+   "JOHN F KERRY",
+   null,
+   1
+  ],
+  [
+   2002,
+   "ME",
+   209858,
+   295041,
+   "CHELLIE PINGREE",
+   "SUSAN M COLLINS",
+   -1
+  ],
+  [
+   2002,
+   "MI",
+   1896614,
+   1185545,
+   "CARL LEVIN",
+   "ANDREW RACZKOWSKI",
+   1
+  ],
+  [
+   2002,
+   "MN",
+   1067246,
+   1116697,
+   "WALTER F MONDALE",
+   "NORM COLEMAN",
+   1
+  ],
+  [
+   2002,
+   "MS",
+   0,
+   533269,
+   null,
+   "THAD COCHRAN",
+   -1
+  ],
+  [
+   2002,
+   "MT",
+   204853,
+   103611,
+   "MAX BAUCUS",
+   "MIKE TAYLOR",
+   1
+  ],
+  [
+   2002,
+   "NC",
+   1047983,
+   1248664,
+   "ERSKINE B BOWLES",
+   "ELIZABETH H DOLE",
+   -1
+  ],
+  [
+   2002,
+   "NE",
+   70290,
+   397438,
+   "CHARLIE A MATULKA",
+   "CHUCK HAGEL",
+   -1
+  ],
+  [
+   2002,
+   "NH",
+   207478,
+   227229,
+   "JEANNE SHAHEEN",
+   "JOHN E SUNUNU",
+   -1
+  ],
+  [
+   2002,
+   "NJ",
+   1138193,
+   928439,
+   "FRANK R LAUTENBERG",
+   "DOUGLAS R FORRESTER",
+   1
+  ],
+  [
+   2002,
+   "NM",
+   168863,
+   314193,
+   "GLORIA TRISTANI",
+   "PETE V DOMENICI",
+   -1
+  ],
+  [
+   2002,
+   "OK",
+   369789,
+   583579,
+   "DAVID WALTERS",
+   "JAMES M INHOFE",
+   -1
+  ],
+  [
+   2002,
+   "OR",
+   501898,
+   712287,
+   "BILL BRADBURY",
+   "GORDON SMITH",
+   -1
+  ],
+  [
+   2002,
+   "RI",
+   253774,
+   69808,
+   "JACK REED",
+   "ROBERT G TINGLE",
+   1
+  ],
+  [
+   2002,
+   "SC",
+   487359,
+   600010,
+   "ALEX SANDERS",
+   "LINDSEY O GRAHAM",
+   -1
+  ],
+  [
+   2002,
+   "SD",
+   167481,
+   166949,
+   "TIM JOHNSON",
+   "JOHN THUNE",
+   1
+  ],
+  [
+   2002,
+   "TN",
+   728232,
+   891498,
+   "BOB CLEMENT",
+   "LAMAR ALEXANDER",
+   -1
+  ],
+  [
+   2002,
+   "TX",
+   1955758,
+   2496243,
+   "RON KIRK",
+   "JOHN CORNYN",
+   -1
+  ],
+  [
+   2002,
+   "VA",
+   0,
+   1229894,
+   null,
+   "JOHN W WARNER",
+   -1
+  ],
+  [
+   2002,
+   "WV",
+   275281,
+   160902,
+   "JOHN D ROCKEFELLER IV",
+   "JAY WOLFE",
+   1
+  ],
+  [
+   2002,
+   "WY",
+   49570,
+   133710,
+   "JOYCE JANSA CORCORAN",
+   "MICHAEL B ENZI",
+   -1
+  ],
+  [
+   2004,
+   "AK",
+   140424,
+   149773,
+   "TONY KNOWLES",
+   "LISA MURKOWSKI",
+   -1
+  ],
+  [
+   2004,
+   "AL",
+   595018,
+   1242200,
+   "WAYNE SOWELL",
+   "RICHARD C SHELBY",
+   -1
+  ],
+  [
+   2004,
+   "AR",
+   580973,
+   458036,
+   "BLANCHE L LINCOLN",
+   "JIM HOLT",
+   1
+  ],
+  [
+   2004,
+   "AZ",
+   404507,
+   1505372,
+   "STUART STARKY",
+   "JOHN MCCAIN",
+   -1
+  ],
+  [
+   2004,
+   "CA",
+   6955728,
+   4555922,
+   "BARBARA BOXER",
+   "BILL JONES",
+   1
+  ],
+  [
+   2004,
+   "CO",
+   1081188,
+   980668,
+   "KEN SALAZAR",
+   "PETE COORS",
+   -1
+  ],
+  [
+   2004,
+   "CT",
+   945347,
+   457749,
+   "CHRISTOPHER J DODD",
+   "JACK C ORCHULLI",
+   1
+  ],
+  [
+   2004,
+   "FL",
+   3590201,
+   3672864,
+   "BETTY CASTOR",
+   "MEL MARTINEZ",
+   1
+  ],
+  [
+   2004,
+   "GA",
+   1287690,
+   1864202,
+   "DENISE L MAJETTE",
+   "JOHNNY ISAKSON",
+   -1
+  ],
+  [
+   2004,
+   "HI",
+   313629,
+   87172,
+   "DANIEL K INOUYE",
+   "CAM CAVASSO",
+   1
+  ],
+  [
+   2004,
+   "IA",
+   412365,
+   1038175,
+   "ARTHUR SMALL",
+   "CHARLES E GRASSLEY",
+   -1
+  ],
+  [
+   2004,
+   "ID",
+   0,
+   499796,
+   null,
+   "MIKE CRAPO",
+   -1
+  ],
+  [
+   2004,
+   "IL",
+   3597456,
+   1390690,
+   "BARACK OBAMA",
+   "ALAN KEYES",
+   -1
+  ],
+  [
+   2004,
+   "IN",
+   1496976,
+   903913,
+   "EVAN BAYH",
+   "MARVIN SCOTT",
+   1
+  ],
+  [
+   2004,
+   "KS",
+   310337,
+   780863,
+   "LEE JONES",
+   "SAM BROWNBACK",
+   -1
+  ],
+  [
+   2004,
+   "KY",
+   850855,
+   873507,
+   "DANIEL MONGIARDO",
+   "JIM BUNNING",
+   -1
+  ],
+  [
+   2004,
+   "LA",
+   542150,
+   943014,
+   "CHRISTOPHER JOHN",
+   "DAVID VITTER",
+   1
+  ],
+  [
+   2004,
+   "MD",
+   1504691,
+   783055,
+   "BARBARA A MIKULSKI",
+   "E J PIPKIN",
+   1
+  ],
+  [
+   2004,
+   "MO",
+   1158261,
+   1518089,
+   "NANCY FARMER",
+   "CHRISTOPHER S BOND",
+   -1
+  ],
+  [
+   2004,
+   "NC",
+   1632527,
+   1791450,
+   "ERSKINE BOWLES",
+   "RICHARD BURR",
+   1
+  ],
+  [
+   2004,
+   "ND",
+   212143,
+   98553,
+   "BYRON L DORGAN",
+   "MIKE LIFFRIG",
+   1
+  ],
+  [
+   2004,
+   "NH",
+   221549,
+   434847,
+   "DORIS R HADDOCK",
+   "JUDD GREGG",
+   -1
+  ],
+  [
+   2004,
+   "NV",
+   494805,
+   284640,
+   "HARRY REID",
+   "RICHARD ZISER",
+   1
+  ],
+  [
+   2004,
+   "NY",
+   4769824,
+   1625069,
+   "CHARLES E SCHUMER",
+   "HOWARD MILLS",
+   1
+  ],
+  [
+   2004,
+   "OH",
+   1961171,
+   3464356,
+   "ERIC D FINGERHUT",
+   "GEORGE V VOINOVICH",
+   -1
+  ],
+  [
+   2004,
+   "OK",
+   596750,
+   763433,
+   "BRAD CARSON",
+   "TOM COBURN",
+   -1
+  ],
+  [
+   2004,
+   "OR",
+   1128728,
+   565254,
+   "RON WYDEN",
+   "AL KING",
+   1
+  ],
+  [
+   2004,
+   "PA",
+   2334126,
+   2925080,
+   "JOSEPH M HOEFFEL",
+   "ARLEN SPECTER",
+   -1
+  ],
+  [
+   2004,
+   "SC",
+   704384,
+   857167,
+   "INEZ TENENBAUM",
+   "JIM DEMINT",
+   1
+  ],
+  [
+   2004,
+   "SD",
+   193340,
+   197848,
+   "TOM DASCHLE",
+   "JOHN THUNE",
+   1
+  ],
+  [
+   2004,
+   "UT",
+   258955,
+   626640,
+   "R PAUL VAN DAM",
+   "ROBERT F BENNETT",
+   -1
+  ],
+  [
+   2004,
+   "VT",
+   216972,
+   75398,
+   "PATRICK J LEAHY",
+   "JACK MCMULLEN",
+   1
+  ],
+  [
+   2004,
+   "WA",
+   1549708,
+   1204584,
+   "PATTY MURRAY",
+   "GEORGE R NETHERCUTT",
+   1
+  ],
+  [
+   2004,
+   "WI",
+   1632697,
+   1301183,
+   "RUSSEL D FEINGOLD",
+   "TIM MICHELS",
+   1
+  ],
+  [
+   2006,
+   "AZ",
+   664141,
+   814398,
+   "JIM PEDERSON",
+   "JON KYL",
+   -1
+  ],
+  [
+   2006,
+   "CA",
+   5076289,
+   2990822,
+   "DIANNE FEINSTEIN",
+   "RICHARD DICK MOUNTJOY",
+   1
+  ],
+  [
+   2006,
+   "CT",
+   450844,
+   109198,
+   "NED LAMONT",
+   "ALAN SCHLESINGER",
+   1
+  ],
+  [
+   2006,
+   "DE",
+   170567,
+   69734,
+   "THOMAS R CARPER",
+   "JAN TING",
+   1
+  ],
+  [
+   2006,
+   "FL",
+   2890548,
+   1826127,
+   "BILL NELSON",
+   "KATHERINE HARRIS",
+   1
+  ],
+  [
+   2006,
+   "HI",
+   210330,
+   126097,
+   "DANIEL K AKAKA",
+   "CYNTHIA THIELEN",
+   1
+  ],
+  [
+   2006,
+   "IN",
+   0,
+   1171553,
+   null,
+   "RICHARD G LUGAR",
+   -1
+  ],
+  [
+   2006,
+   "MA",
+   1500738,
+   661532,
+   "EDWARD M KENNEDY",
+   "KENNETH G CHASE",
+   1
+  ],
+  [
+   2006,
+   "MD",
+   965477,
+   787182,
+   "BENJAMIN L CARDIN",
+   "MICHAEL S STEELE",
+   1
+  ],
+  [
+   2006,
+   "ME",
+   113131,
+   405596,
+   "JEAN M HAY BRIGHT",
+   "OLYMPIA J SNOWE",
+   -1
+  ],
+  [
+   2006,
+   "MI",
+   2151278,
+   1559597,
+   "DEBBIE STABENOW",
+   "MICHAEL BOUCHARD",
+   1
+  ],
+  [
+   2006,
+   "MN",
+   1278849,
+   835653,
+   "AMY KLOBUCHAR",
+   "MARK R KENNEDY",
+   1
+  ],
+  [
+   2006,
+   "MO",
+   1055255,
+   1006941,
+   "CLAIRE MCCASKILL",
+   "JAMES M TALENT",
+   1
+  ],
+  [
+   2006,
+   "MS",
+   213000,
+   388399,
+   "ERIK R FLEMING",
+   "TRENT LOTT",
+   -1
+  ],
+  [
+   2006,
+   "MT",
+   199845,
+   196283,
+   "JON TESTER",
+   "CONRAD BURNS",
+   -1
+  ],
+  [
+   2006,
+   "ND",
+   150146,
+   64417,
+   "KENT CONRAD",
+   "DWIGHT GROTBERG",
+   -1
+  ],
+  [
+   2006,
+   "NE",
+   378388,
+   213928,
+   "E BENJAMIN NELSON",
+   "PETE RICKETTS",
+   1
+  ],
+  [
+   2006,
+   "NJ",
+   58333,
+   41998,
+   "ROBERT MENENDEZ",
+   "THOMAS H KEAN JR",
+   1
+  ],
+  [
+   2006,
+   "NM",
+   394365,
+   163826,
+   "JEFF BINGAMAN",
+   "ALLEN W MCCULLOCH",
+   1
+  ],
+  [
+   2006,
+   "NV",
+   238796,
+   322501,
+   "JACK CARTER",
+   "JOHN ENSIGN",
+   -1
+  ],
+  [
+   2006,
+   "NY",
+   3008428,
+   1392189,
+   "HILLARY RODHAM CLINTON",
+   "JOHN SPENCER",
+   1
+  ],
+  [
+   2006,
+   "OH",
+   2257369,
+   1761037,
+   "SHERROD BROWN",
+   "MIKE DEWINE",
+   -1
+  ],
+  [
+   2006,
+   "PA",
+   2392984,
+   1684778,
+   "BOB CASEY JR",
+   "RICK SANTORUM",
+   -1
+  ],
+  [
+   2006,
+   "RI",
+   206043,
+   178950,
+   "SHELDON WHITEHOUSE",
+   "LINCOLN CHAFEE",
+   -1
+  ],
+  [
+   2006,
+   "TN",
+   879976,
+   929911,
+   "HAROLD E FORD JR",
+   "BOB CORKER",
+   -1
+  ],
+  [
+   2006,
+   "TX",
+   1555202,
+   2661789,
+   "BARBARA ANN RADNOFSKY",
+   "KAY BAILEY HUTCHISON",
+   -1
+  ],
+  [
+   2006,
+   "UT",
+   177459,
+   356238,
+   "PETE ASHDOWN",
+   "ORRIN G HATCH",
+   -1
+  ],
+  [
+   2006,
+   "VA",
+   1175606,
+   1166277,
+   "JAMES H JIM WEBB JR",
+   "GEORGE ALLEN",
+   -1
+  ],
+  [
+   2006,
+   "VT",
+   0,
+   84924,
+   null,
+   "RICH TARRANT",
+   -1
+  ],
+  [
+   2006,
+   "WA",
+   1184659,
+   832106,
+   "MARIA CANTWELL",
+   "MIKE MCGAVICK",
+   1
+  ],
+  [
+   2006,
+   "WI",
+   1439214,
+   630299,
+   "HERB KOHL",
+   "ROBERT GERALD LORGE",
+   1
+  ],
+  [
+   2006,
+   "WV",
+   159154,
+   47408,
+   "ROBERT C BYRD",
+   "JOHN R RAESE",
+   1
+  ],
+  [
+   2006,
+   "WY",
+   57671,
+   135174,
+   "DALE GROUTAGE",
+   "CRAIG THOMAS",
+   -1
+  ],
+  [
+   2008,
+   "AK",
+   151767,
+   147814,
+   "MARK BEGICH",
+   "TED STEVENS",
+   -1
+  ],
+  [
+   2008,
+   "AL",
+   752391,
+   1305383,
+   "VIVIAN DAVIS FIGURES",
+   "JEFF SESSIONS",
+   -1
+  ],
+  [
+   2008,
+   "AR",
+   804678,
+   0,
+   "MARK L PRYOR",
+   null,
+   1
+  ],
+  [
+   2008,
+   "CO",
+   1230994,
+   990755,
+   "MARK UDALL",
+   "BOB SCHAFFER",
+   -1
+  ],
+  [
+   2008,
+   "DE",
+   257539,
+   140595,
+   "JOSEPH R BIDEN JR",
+   "CHRISTINE ODONNELL",
+   1
+  ],
+  [
+   2008,
+   "GA",
+   909923,
+   1228033,
+   "JIM MARTIN",
+   "SAXBY CHAMBLISS",
+   -1
+  ],
+  [
+   2008,
+   "IA",
+   941665,
+   560006,
+   "TOM HARKIN",
+   "CHRISTOPHER REED",
+   1
+  ],
+  [
+   2008,
+   "ID",
+   219903,
+   371744,
+   "LARRY LAROCCO",
+   "JIM RISCH",
+   -1
+  ],
+  [
+   2008,
+   "IL",
+   3615844,
+   1520621,
+   "RICHARD J DURBIN",
+   "STEVE SAUERBERG",
+   1
+  ],
+  [
+   2008,
+   "KS",
+   441399,
+   727121,
+   "JIM SLATTERY",
+   "PAT ROBERTS",
+   -1
+  ],
+  [
+   2008,
+   "KY",
+   847005,
+   953816,
+   "BRUCE LUNSFORD",
+   "MITCH MCCONNELL",
+   -1
+  ],
+  [
+   2008,
+   "LA",
+   988298,
+   867177,
+   "MARY L LANDRIEU",
+   "JOHN KENNEDY",
+   1
+  ],
+  [
+   2008,
+   "MA",
+   1971974,
+   926044,
+   "JOHN F KERRY",
+   "JEFFREY K BEATTY",
+   1
+  ],
+  [
+   2008,
+   "ME",
+   279510,
+   444300,
+   "THOMAS H ALLEN",
+   "SUSAN M COLLINS",
+   -1
+  ],
+  [
+   2008,
+   "MI",
+   3038386,
+   1641070,
+   "CARL LEVIN",
+   "JACK HOOGENDYK",
+   1
+  ],
+  [
+   2008,
+   "MN",
+   1212629,
+   1212317,
+   "AL FRANKEN",
+   "NORM COLEMAN",
+   -1
+  ],
+  [
+   2008,
+   "MS",
+   480915,
+   766111,
+   "ERIK FLEMING",
+   "THAD COCHRAN",
+   -1
+  ],
+  [
+   2008,
+   "MT",
+   348289,
+   129369,
+   "MAX BAUCUS",
+   "BOB KELLEHER",
+   1
+  ],
+  [
+   2008,
+   "NC",
+   2249311,
+   1887510,
+   "KAY HAGAN",
+   "ELIZABETH DOLE",
+   -1
+  ],
+  [
+   2008,
+   "NE",
+   317456,
+   455854,
+   "SCOTT KLEEB",
+   "MIKE JOHANNS",
+   -1
+  ],
+  [
+   2008,
+   "NH",
+   358438,
+   314403,
+   "JEANNE SHAHEEN",
+   "JOHN E SUNUNU",
+   -1
+  ],
+  [
+   2008,
+   "NJ",
+   1951218,
+   1461025,
+   "FRANK R LAUTENBERG",
+   "DICK ZIMMER",
+   1
+  ],
+  [
+   2008,
+   "NM",
+   505128,
+   318522,
+   "TOM UDALL",
+   "STEVE PEARCE",
+   -1
+  ],
+  [
+   2008,
+   "OK",
+   527736,
+   763375,
+   "ANDREW RICE",
+   "JAMES M INHOFE",
+   -1
+  ],
+  [
+   2008,
+   "OR",
+   864392,
+   805159,
+   "JEFF MERKLEY",
+   "GORDON H SMITH",
+   -1
+  ],
+  [
+   2008,
+   "RI",
+   320644,
+   116174,
+   "JACK REED",
+   "ROBERT G TINGLE",
+   1
+  ],
+  [
+   2008,
+   "SC",
+   790621,
+   1076534,
+   "BOB CONLEY",
+   "LINDSEY GRAHAM",
+   -1
+  ],
+  [
+   2008,
+   "SD",
+   237889,
+   142784,
+   "TIM JOHNSON",
+   "JOEL DYKSTRA",
+   1
+  ],
+  [
+   2008,
+   "TN",
+   767236,
+   1579477,
+   "ROBERT D TUKE",
+   "LAMAR ALEXANDER",
+   -1
+  ],
+  [
+   2008,
+   "TX",
+   3389365,
+   4337469,
+   "RICHARD J RICK NORIEGA",
+   "JOHN CORNYN",
+   -1
+  ],
+  [
+   2008,
+   "VA",
+   2369327,
+   1228830,
+   "MARK R WARNER",
+   "JAMES S JIM GILMORE III",
+   -1
+  ],
+  [
+   2008,
+   "WV",
+   447560,
+   254629,
+   "JOHN D ROCKEFELLER IV",
+   "JAY WOLFE",
+   1
+  ],
+  [
+   2008,
+   "WY",
+   60631,
+   189046,
+   "CHRIS ROTHFUSS",
+   "MICHAEL B ENZI",
+   -1
+  ],
+  [
+   2010,
+   "AK",
+   60045,
+   90839,
+   "SCOTT T MCADAMS",
+   "JOE MILLER",
+   -1
+  ],
+  [
+   2010,
+   "AL",
+   515619,
+   968181,
+   "WILLIAM G BARNES",
+   "RICHARD C SHELBY",
+   -1
+  ],
+  [
+   2010,
+   "AR",
+   288156,
+   451618,
+   "BLANCHE L LINCOLN",
+   "JOHN BOOZMAN",
+   1
+  ],
+  [
+   2010,
+   "AZ",
+   592011,
+   1005615,
+   "RODNEY GLASSMAN",
+   "JOHN MCCAIN",
+   -1
+  ],
+  [
+   2010,
+   "CA",
+   5218441,
+   4217366,
+   "BARBARA BOXER",
+   "CARLY FIORINA",
+   1
+  ],
+  [
+   2010,
+   "CO",
+   851590,
+   822731,
+   "MICHAEL F BENNET",
+   "KEN BUCK",
+   1
+  ],
+  [
+   2010,
+   "CT",
+   636040,
+   498341,
+   "RICHARD BLUMENTHAL",
+   "LINDA E MCMAHON",
+   1
+  ],
+  [
+   2010,
+   "FL",
+   1092936,
+   2645743,
+   "KENDRICK B MEEK",
+   "MARCO RUBIO",
+   -1
+  ],
+  [
+   2010,
+   "GA",
+   996516,
+   1489904,
+   "MICHAEL MIKE THURMOND",
+   "JOHNNY ISAKSON",
+   -1
+  ],
+  [
+   2010,
+   "HI",
+   277228,
+   79939,
+   "DANIEL K INOUYE",
+   "CAM CAVASSO",
+   1
+  ],
+  [
+   2010,
+   "IA",
+   371686,
+   718215,
+   "ROXANNE CONLIN",
+   "CHUCK GRASSLEY",
+   -1
+  ],
+  [
+   2010,
+   "ID",
+   112057,
+   319953,
+   "P TOM SULLIVAN",
+   "MIKE CRAPO",
+   -1
+  ],
+  [
+   2010,
+   "IN",
+   697775,
+   952116,
+   "BRAD ELLSWORTH",
+   "DAN COATS",
+   1
+  ],
+  [
+   2010,
+   "KS",
+   220971,
+   587175,
+   "LISA JOHNSTON",
+   "JERRY MORAN",
+   -1
+  ],
+  [
+   2010,
+   "KY",
+   600052,
+   755706,
+   "JACK CONWAY",
+   "RAND PAUL",
+   -1
+  ],
+  [
+   2010,
+   "LA",
+   476572,
+   715415,
+   "CHARLIE MELANCON",
+   "DAVID VITTER",
+   -1
+  ],
+  [
+   2010,
+   "MD",
+   1140531,
+   655666,
+   "BARBARA MIKULSKI",
+   "ERIC WARGOTZ",
+   1
+  ],
+  [
+   2010,
+   "MO",
+   789736,
+   1054160,
+   "ROBIN CARNAHAN",
+   "ROY BLUNT",
+   -1
+  ],
+  [
+   2010,
+   "NC",
+   1145074,
+   1458046,
+   "ELAINE MARSHALL",
+   "RICHARD BURR",
+   -1
+  ],
+  [
+   2010,
+   "ND",
+   0,
+   181689,
+   null,
+   "JOHN HOEVEN",
+   1
+  ],
+  [
+   2010,
+   "NH",
+   167545,
+   273218,
+   "PAUL W HODES",
+   "KELLY AYOTTE",
+   -1
+  ],
+  [
+   2010,
+   "NV",
+   362785,
+   321361,
+   "HARRY REID",
+   "SHARRON ANGLE",
+   1
+  ],
+  [
+   2010,
+   "NY",
+   3047880,
+   1480423,
+   "CHARLES E SCHUMER",
+   "JAY TOWNSEND",
+   1
+  ],
+  [
+   2010,
+   "OH",
+   1503297,
+   2168742,
+   "LEE FISHER",
+   "ROB PORTMAN",
+   -1
+  ],
+  [
+   2010,
+   "OK",
+   265814,
+   718482,
+   "JIM ROGERS",
+   "THOMAS A COBURN",
+   -1
+  ],
+  [
+   2010,
+   "OR",
+   825507,
+   566199,
+   "RON WYDEN",
+   "JIM HUFFMAN",
+   1
+  ],
+  [
+   2010,
+   "PA",
+   1948716,
+   2028945,
+   "JOE SESTAK",
+   "PAT TOOMEY",
+   -1
+  ],
+  [
+   2010,
+   "SC",
+   364598,
+   810771,
+   "ALVIN M GREENE",
+   "JIM DEMINT",
+   -1
+  ],
+  [
+   2010,
+   "SD",
+   0,
+   227947,
+   null,
+   "JOHN THUNE",
+   -1
+  ],
+  [
+   2010,
+   "UT",
+   191732,
+   360403,
+   "SAM F GRANATO",
+   "MIKE LEE",
+   -1
+  ],
+  [
+   2010,
+   "VT",
+   151281,
+   72699,
+   "PATRICK J LEAHY",
+   "LEN BRITTON",
+   1
+  ],
+  [
+   2010,
+   "WA",
+   1314930,
+   1196164,
+   "PATTY MURRAY",
+   "DINO ROSSI",
+   1
+  ],
+  [
+   2010,
+   "WI",
+   1020958,
+   1125999,
+   "RUSSELL D FEINGOLD",
+   "RON JOHNSON",
+   1
+  ],
+  [
+   2012,
+   "AZ",
+   1036542,
+   1104457,
+   "RICHARD CARMONA",
+   "JEFF FLAKE",
+   -1
+  ],
+  [
+   2012,
+   "CA",
+   7864624,
+   4713887,
+   "DIANNE FEINSTEIN",
+   "ELIZABETH EMKEN",
+   1
+  ],
+  [
+   2012,
+   "CT",
+   828761,
+   651089,
+   "CHRISTOPHER S MURPHY",
+   "LINDA E MCMAHON",
+   1
+  ],
+  [
+   2012,
+   "DE",
+   265415,
+   115700,
+   "THOMAS R CARPER",
+   "KEVIN WADE",
+   1
+  ],
+  [
+   2012,
+   "FL",
+   4523451,
+   3458267,
+   "BILL NELSON",
+   "CONNIE MACK",
+   1
+  ],
+  [
+   2012,
+   "HI",
+   269489,
+   160994,
+   "MAZIE K HIRONO",
+   "LINDA LINGLE",
+   1
+  ],
+  [
+   2012,
+   "IN",
+   1281181,
+   1133621,
+   "JOE DONNELLY",
+   "RICHARD E MOURDOCK",
+   -1
+  ],
+  [
+   2012,
+   "MA",
+   1696346,
+   1458048,
+   "ELIZABETH A WARREN",
+   "SCOTT P BROWN",
+   1
+  ],
+  [
+   2012,
+   "MD",
+   1474028,
+   693291,
+   "BENJAMIN L CARDIN",
+   "DANIEL JOHN BONGINO",
+   1
+  ],
+  [
+   2012,
+   "ME",
+   92900,
+   215399,
+   "CYNTHIA ANN DILL",
+   "CHARLES E SUMMERS JR",
+   -1
+  ],
+  [
+   2012,
+   "MI",
+   2735826,
+   1767386,
+   "DEBBIE STABENOW",
+   "PETE HOEKSTRA",
+   1
+  ],
+  [
+   2012,
+   "MN",
+   1854595,
+   867974,
+   "AMY KLOBUCHAR",
+   "KURT BILLS",
+   1
+  ],
+  [
+   2012,
+   "MO",
+   1494125,
+   1066159,
+   "CLAIRE MCCASKILL",
+   "W TODD AKIN",
+   1
+  ],
+  [
+   2012,
+   "MS",
+   503467,
+   709626,
+   "ALBERT N GORE JR",
+   "ROGER F WICKER",
+   -1
+  ],
+  [
+   2012,
+   "MT",
+   236123,
+   218051,
+   "JON TESTER",
+   "DENNY REHBERG",
+   1
+  ],
+  [
+   2012,
+   "ND",
+   161337,
+   158401,
+   "HEIDI HEITKAMP",
+   "RICK BERG",
+   1
+  ],
+  [
+   2012,
+   "NE",
+   332979,
+   455593,
+   "BOB KERREY",
+   "DEB FISCHER",
+   1
+  ],
+  [
+   2012,
+   "NJ",
+   1987680,
+   1329534,
+   "ROBERT MENENDEZ",
+   "JOE KYRILLOS",
+   1
+  ],
+  [
+   2012,
+   "NM",
+   395717,
+   351260,
+   "MARTIN HEINRICH",
+   "HEATHER A WILSON",
+   1
+  ],
+  [
+   2012,
+   "NV",
+   446080,
+   457656,
+   "SHELLEY BERKLEY",
+   "DEAN HELLER",
+   -1
+  ],
+  [
+   2012,
+   "NY",
+   4808878,
+   1755466,
+   "KIRSTEN E GILLIBRAND",
+   "WENDY LONG",
+   1
+  ],
+  [
+   2012,
+   "OH",
+   2762690,
+   2435712,
+   "SHERROD BROWN",
+   "JOSH MANDEL",
+   1
+  ],
+  [
+   2012,
+   "PA",
+   3021364,
+   2509132,
+   "ROBERT P CASEY JR",
+   "TOM SMITH",
+   1
+  ],
+  [
+   2012,
+   "RI",
+   271034,
+   146222,
+   "SHELDON WHITEHOUSE",
+   "BENJAMIN BARRETT HINCKLEY III",
+   1
+  ],
+  [
+   2012,
+   "TN",
+   705882,
+   1506443,
+   "MARK E CLAYTON",
+   "BOB CORKER",
+   -1
+  ],
+  [
+   2012,
+   "TX",
+   3194927,
+   4440137,
+   "PAUL SADLER",
+   "TED CRUZ",
+   -1
+  ],
+  [
+   2012,
+   "UT",
+   301873,
+   657608,
+   "SCOTT HOWELL",
+   "ORRIN G HATCH",
+   -1
+  ],
+  [
+   2012,
+   "VA",
+   2010067,
+   1785542,
+   "TIMOTHY M KAINE",
+   "GEORGE F ALLEN",
+   1
+  ],
+  [
+   2012,
+   "VT",
+   0,
+   72898,
+   null,
+   "JOHN MACGOVERN",
+   -1
+  ],
+  [
+   2012,
+   "WA",
+   1855493,
+   1213924,
+   "MARIA CANTWELL",
+   "MICHAEL BAUMGARTNER",
+   1
+  ],
+  [
+   2012,
+   "WI",
+   1547104,
+   1380126,
+   "TAMMY BALDWIN",
+   "TOMMY G THOMPSON",
+   1
+  ],
+  [
+   2012,
+   "WV",
+   399898,
+   240787,
+   "JOE MANCHIN III",
+   "JOHN R RAESE",
+   1
+  ],
+  [
+   2012,
+   "WY",
+   53019,
+   185250,
+   "TIM CHESNUT",
+   "JOHN BARRASSO",
+   -1
+  ],
+  [
+   2014,
+   "AK",
+   129431,
+   135445,
+   "MARK BEGICH",
+   "DAN SULLIVAN",
+   1
+  ],
+  [
+   2014,
+   "AL",
+   0,
+   795606,
+   null,
+   "JEFF SESSIONS",
+   -1
+  ],
+  [
+   2014,
+   "AR",
+   334174,
+   478819,
+   "MARK L PRYOR",
+   "TOM COTTON",
+   1
+  ],
+  [
+   2014,
+   "CO",
+   944203,
+   983891,
+   "MARK UDALL",
+   "CORY GARDNER",
+   1
+  ],
+  [
+   2014,
+   "DE",
+   130655,
+   98823,
+   "CHRISTOPHER A COONS",
+   "KEVIN WADE",
+   1
+  ],
+  [
+   2014,
+   "GA",
+   1160811,
+   1358088,
+   "M MICHELLE NUNN",
+   "DAVID A PERDUE",
+   -1
+  ],
+  [
+   2014,
+   "IA",
+   494370,
+   588575,
+   "BRUCE BRALEY",
+   "JONI ERNST",
+   1
+  ],
+  [
+   2014,
+   "ID",
+   151574,
+   285596,
+   "NELS MITCHELL",
+   "JAMES E RISCH",
+   -1
+  ],
+  [
+   2014,
+   "IL",
+   1929637,
+   1538522,
+   "RICHARD J DURBIN",
+   "JAMES D JIM OBERWEIS",
+   1
+  ],
+  [
+   2014,
+   "KS",
+   0,
+   460350,
+   null,
+   "PAT ROBERTS",
+   -1
+  ],
+  [
+   2014,
+   "KY",
+   584698,
+   806787,
+   "ALISON LUNDERGAN GRIMES",
+   "MICH MCCONNELL",
+   -1
+  ],
+  [
+   2014,
+   "LA",
+   1561210,
+   1712379,
+   "MARY L LANDRIEU",
+   "BILL CASSIDY",
+   1
+  ],
+  [
+   2014,
+   "MA",
+   1289944,
+   791950,
+   "EDWARD J MARKEY",
+   "BRIAN J HERR",
+   1
+  ],
+  [
+   2014,
+   "ME",
+   190254,
+   413505,
+   "SHENNA BELLOWS",
+   "SUSAN M COLLINS",
+   -1
+  ],
+  [
+   2014,
+   "MI",
+   1704936,
+   1290199,
+   "GARY C PETERS",
+   "TERRI LYNN LAND",
+   1
+  ],
+  [
+   2014,
+   "MN",
+   1053205,
+   850227,
+   "AL FRANKEN",
+   "MIKE MCFADDEN",
+   1
+  ],
+  [
+   2014,
+   "MS",
+   239439,
+   378481,
+   "TRAVIS W CHILDERS",
+   "THAD COCHRAN",
+   -1
+  ],
+  [
+   2014,
+   "MT",
+   148184,
+   213709,
+   "AMANDA CURTIS",
+   "STEVE DAINES",
+   1
+  ],
+  [
+   2014,
+   "NC",
+   1377651,
+   1423259,
+   "KAY R HAGAN",
+   "THOM TILLIS",
+   1
+  ],
+  [
+   2014,
+   "NE",
+   170127,
+   347636,
+   "DAVE DOMINA",
+   "BEN SASSE",
+   -1
+  ],
+  [
+   2014,
+   "NH",
+   251184,
+   235347,
+   "JEANNE SHAHEEN",
+   "SCOTT P BROWN",
+   1
+  ],
+  [
+   2014,
+   "NJ",
+   1043866,
+   791297,
+   "CORY A BOOKER",
+   "JEFF BELL",
+   1
+  ],
+  [
+   2014,
+   "NM",
+   286409,
+   229097,
+   "TOM UDALL",
+   "ALLEN E WEH",
+   1
+  ],
+  [
+   2014,
+   "OK",
+   234307,
+   558166,
+   "MATT SILVERSTEIN",
+   "JAMES M INHOFE",
+   -1
+  ],
+  [
+   2014,
+   "OR",
+   814537,
+   538847,
+   "JEFF MERKLEY",
+   "MONICA WEHBY",
+   1
+  ],
+  [
+   2014,
+   "RI",
+   223675,
+   92684,
+   "JACK REED",
+   "MARK S ZACCARIA",
+   1
+  ],
+  [
+   2014,
+   "SC",
+   480933,
+   672941,
+   "BRAD HUTTO",
+   "LINDSEY GRAHAM",
+   -1
+  ],
+  [
+   2014,
+   "SD",
+   82456,
+   140741,
+   "RICK WEILAND",
+   "MIKE ROUNDS",
+   1
+  ],
+  [
+   2014,
+   "TN",
+   437848,
+   850087,
+   "GORDON BALL",
+   "LAMAR ALEXANDER",
+   -1
+  ],
+  [
+   2014,
+   "TX",
+   1597387,
+   2861531,
+   "DAVID M ALAMEEL",
+   "JOHN CORNYN",
+   -1
+  ],
+  [
+   2014,
+   "VA",
+   1073667,
+   1055940,
+   "MARK R WARNER",
+   "ED W GILLESPIE",
+   1
+  ],
+  [
+   2014,
+   "WV",
+   156360,
+   281820,
+   "NATALIE TENNANT",
+   "SHELLEY MOORE CAPITO",
+   1
+  ],
+  [
+   2014,
+   "WY",
+   29377,
+   121554,
+   "CHARLIE HARDY",
+   "MICHAEL B ENZI",
+   -1
+  ],
+  [
+   2016,
+   "AK",
+   36200,
+   138149,
+   "RAY METCALFE",
+   "LISA MURKOWSKI",
+   -1
+  ],
+  [
+   2016,
+   "AL",
+   748709,
+   1335104,
+   "RON CRUMPTON",
+   "RICHARD C SHELBY",
+   -1
+  ],
+  [
+   2016,
+   "AR",
+   400602,
+   661984,
+   "CONNER ELDRIDGE",
+   "JOHN BOOZMAN",
+   -1
+  ],
+  [
+   2016,
+   "AZ",
+   1031245,
+   1359267,
+   "ANN KIRKPATRICK",
+   "JOHN MCCAIN",
+   -1
+  ],
+  [
+   2016,
+   "CA",
+   7542753,
+   0,
+   "KAMALA D HARRIS",
+   null,
+   1
+  ],
+  [
+   2016,
+   "CO",
+   1370710,
+   1215318,
+   "MICHAEL F BENNET",
+   "DARRYL GLENN",
+   1
+  ],
+  [
+   2016,
+   "CT",
+   1008714,
+   552621,
+   "RICHARD BLUMENTHAL",
+   "DAN CARTER",
+   1
+  ],
+  [
+   2016,
+   "FL",
+   4122088,
+   4835191,
+   "PATRICK MURPHY",
+   "MARCO RUBIO",
+   -1
+  ],
+  [
+   2016,
+   "GA",
+   1599726,
+   2135806,
+   "JIM BARKSDALE",
+   "JOHNNY ISAKSON",
+   -1
+  ],
+  [
+   2016,
+   "HI",
+   306604,
+   92653,
+   "BRIAN SCHATZ",
+   "JOHN CARROLL",
+   1
+  ],
+  [
+   2016,
+   "IA",
+   549460,
+   926007,
+   "PATTY JUDGE",
+   "CHUCK GRASSLEY",
+   -1
+  ],
+  [
+   2016,
+   "ID",
+   188249,
+   449017,
+   "JERRY STURGILL",
+   "MIKE CRAPO",
+   -1
+  ],
+  [
+   2016,
+   "IL",
+   3012940,
+   2184692,
+   "TAMMY DUCKWORTH",
+   "MARK KIRK",
+   0
+  ],
+  [
+   2016,
+   "IN",
+   1158947,
+   1423991,
+   "EVAN BAYH",
+   "TODD C YOUNG",
+   -1
+  ],
+  [
+   2016,
+   "KS",
+   379740,
+   732376,
+   "PATRICK WIESNER",
+   "JERRY MORAN",
+   -1
+  ],
+  [
+   2016,
+   "KY",
+   813246,
+   1090177,
+   "JIM GRAY",
+   "RAND PAUL",
+   -1
+  ],
+  [
+   2016,
+   "LA",
+   347816,
+   536191,
+   "FOSTER CAMPBELL",
+   "JOHN KENNEDY",
+   -1
+  ],
+  [
+   2016,
+   "MD",
+   1659907,
+   972557,
+   "CHRIS VAN HOLLEN",
+   "KATHY SZELIGA",
+   1
+  ],
+  [
+   2016,
+   "MO",
+   1300200,
+   1378458,
+   "JASON KANDER",
+   "ROY BLUNT",
+   -1
+  ],
+  [
+   2016,
+   "NC",
+   2128165,
+   2395376,
+   "DEBORAH K ROSS",
+   "RICHARD BURR",
+   -1
+  ],
+  [
+   2016,
+   "ND",
+   58116,
+   268788,
+   "ELIOT GLASSHEIM",
+   "JOHN HOEVEN",
+   -1
+  ],
+  [
+   2016,
+   "NH",
+   354649,
+   353632,
+   "MAGGIE HASSAN",
+   "KELLY AYOTTE",
+   -1
+  ],
+  [
+   2016,
+   "NV",
+   521994,
+   495079,
+   "CATHERINE CORTEZ MASTO",
+   "JOSEPH J HECK",
+   1
+  ],
+  [
+   2016,
+   "NY",
+   5221949,
+   2009353,
+   "CHARLES E SCHUMER",
+   "WENDY LONG",
+   1
+  ],
+  [
+   2016,
+   "OH",
+   1996908,
+   3118567,
+   "TED STRICKLAND",
+   "ROB PORTMAN",
+   -1
+  ],
+  [
+   2016,
+   "OK",
+   355911,
+   980892,
+   "MIKE WORKMAN",
+   "JAMES LANKFORD",
+   -1
+  ],
+  [
+   2016,
+   "OR",
+   1105119,
+   651106,
+   "RON WYDEN",
+   "MARK CALLAHAN",
+   1
+  ],
+  [
+   2016,
+   "PA",
+   2865012,
+   2951702,
+   "KATIE MCGINTY",
+   "PATRICK J TOOMEY",
+   -1
+  ],
+  [
+   2016,
+   "SC",
+   757022,
+   1241609,
+   "THOMAS DIXON",
+   "TIM SCOTT",
+   -1
+  ],
+  [
+   2016,
+   "SD",
+   104140,
+   265516,
+   "JAY WILLIAMS",
+   "JOHN R THUNE",
+   -1
+  ],
+  [
+   2016,
+   "UT",
+   301858,
+   760220,
+   "MISTY K SNOW",
+   "MIKE LEE",
+   -1
+  ],
+  [
+   2016,
+   "VT",
+   192243,
+   103637,
+   "PATRICK J LEAHY",
+   "SCOTT MILNE",
+   1
+  ],
+  [
+   2016,
+   "WA",
+   1913979,
+   1329338,
+   "PATTY MURRAY",
+   "CHRIS VANCE",
+   1
+  ],
+  [
+   2016,
+   "WI",
+   1380335,
+   1479471,
+   "RUSS FEINGOLD",
+   "RON JOHNSON",
+   -1
+  ],
+  [
+   2018,
+   "AZ",
+   1191100,
+   1135200,
+   "KYRSTEN SINEMA",
+   "MARTHA MCSALLY",
+   -1
+  ],
+  [
+   2018,
+   "CA",
+   6019422,
+   0,
+   "DIANNE FEINSTEIN",
+   null,
+   1
+  ],
+  [
+   2018,
+   "CT",
+   825579,
+   545717,
+   "CHRISTOPHER S MURPHY",
+   "MATTHEW COREY",
+   1
+  ],
+  [
+   2018,
+   "DE",
+   217385,
+   137127,
+   "THOMAS R CARPER",
+   "ROBERT B ARLETT",
+   1
+  ],
+  [
+   2018,
+   "FL",
+   4089472,
+   4099505,
+   "BILL NELSON",
+   "RICK SCOTT",
+   1
+  ],
+  [
+   2018,
+   "HI",
+   276316,
+   112035,
+   "MAZIE K HIRONO",
+   "RON CURTIS",
+   1
+  ],
+  [
+   2018,
+   "IN",
+   1023553,
+   1158000,
+   "JOE DONNELLY",
+   "MIKE BRAUN",
+   1
+  ],
+  [
+   2018,
+   "MA",
+   1633371,
+   979210,
+   "ELIZABETH A WARREN",
+   "GEOFF DIEHL",
+   1
+  ],
+  [
+   2018,
+   "MD",
+   1491614,
+   697017,
+   "BEN CARDIN",
+   "TONY CAMPBELL",
+   1
+  ],
+  [
+   2018,
+   "ME",
+   66268,
+   223502,
+   "ZAK RINGELSTEIN",
+   "ERIC L BRAKEY",
+   -1
+  ],
+  [
+   2018,
+   "MI",
+   2214478,
+   1938818,
+   "DEBBIE STABENOW",
+   "JOHN JAMES",
+   1
+  ],
+  [
+   2018,
+   "MN",
+   1566174,
+   940437,
+   "AMY KLOBUCHAR",
+   "JIM NEWBERGER",
+   1
+  ],
+  [
+   2018,
+   "MO",
+   1112935,
+   1254927,
+   "CLAIRE MCCASKILL",
+   "JOSH HAWLEY",
+   1
+  ],
+  [
+   2018,
+   "MS",
+   369567,
+   547619,
+   "DAVID BARIA",
+   "ROGER F WICKER",
+   -1
+  ],
+  [
+   2018,
+   "MT",
+   253876,
+   235963,
+   "JON TESTER",
+   "MATT ROSENDALE",
+   1
+  ],
+  [
+   2018,
+   "ND",
+   144376,
+   179720,
+   "HEIDI HEITKAMP",
+   "KEVIN CRAMER",
+   1
+  ],
+  [
+   2018,
+   "NE",
+   269917,
+   403151,
+   "JANE RAYBOULD",
+   "DEB FISCHER",
+   -1
+  ],
+  [
+   2018,
+   "NJ",
+   1711654,
+   1357355,
+   "ROBERT MENENDEZ",
+   "BOB HUGIN",
+   1
+  ],
+  [
+   2018,
+   "NM",
+   376998,
+   212813,
+   "MARTIN T HEINRICH",
+   "MICK RICH",
+   1
+  ],
+  [
+   2018,
+   "NV",
+   490071,
+   441202,
+   "JACKY ROSEN",
+   "DEAN HELLER",
+   -1
+  ],
+  [
+   2018,
+   "NY",
+   4056931,
+   1998220,
+   "KIRSTEN E GILLIBRAND",
+   "CHELE CHIAVACCI FARLEY",
+   1
+  ],
+  [
+   2018,
+   "OH",
+   2355923,
+   2053963,
+   "SHERROD BROWN",
+   "JIM RENACCI",
+   1
+  ],
+  [
+   2018,
+   "PA",
+   2777680,
+   2134848,
+   "ROBERT P CASEY JR",
+   "LOUIS J BARLETTA",
+   1
+  ],
+  [
+   2018,
+   "RI",
+   231477,
+   144421,
+   "SHELDON WHITEHOUSE",
+   "ROBERT G FLANDERS JR",
+   1
+  ],
+  [
+   2018,
+   "TN",
+   985450,
+   1227483,
+   "PHIL BREDESEN",
+   "MARSHA BLACKBURN",
+   -1
+  ],
+  [
+   2018,
+   "TX",
+   4045632,
+   4260553,
+   "BETO OROURKE",
+   "TED CRUZ",
+   -1
+  ],
+  [
+   2018,
+   "UT",
+   328541,
+   665215,
+   "JENNY WILSON",
+   "MITT ROMNEY",
+   -1
+  ],
+  [
+   2018,
+   "VA",
+   1910370,
+   1374313,
+   "TIMOTHY M KAINE",
+   "COREY A STEWART",
+   1
+  ],
+  [
+   2018,
+   "VT",
+   0,
+   74663,
+   null,
+   "LAWRENCE ZUPAN",
+   -1
+  ],
+  [
+   2018,
+   "WA",
+   1803364,
+   1282804,
+   "MARIA CANTWELL",
+   "SUSAN HUTCHISON",
+   1
+  ],
+  [
+   2018,
+   "WI",
+   1472914,
+   1184885,
+   "TAMMY BALDWIN",
+   "LEAH VUKMIR",
+   1
+  ],
+  [
+   2018,
+   "WV",
+   288808,
+   269872,
+   "JOE MANCHIN",
+   "PATRICK MORRISEY",
+   1
+  ],
+  [
+   2018,
+   "WY",
+   61227,
+   136210,
+   "GARY TRAUNER",
+   "JOHN BARRASSO",
+   -1
+  ]
+ ]
+}
