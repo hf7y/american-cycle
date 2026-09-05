@@ -25,7 +25,7 @@ export const finding: Finding = {
     + 'the 100-year cap remains a real backstop rather than a formality -- a meaningful share of games still '
     + 'hit it. No game reported `endedBy: \'bills\'`, confirming the old target is gone, not just unreachable.',
   stampedAt: '2026-09-05T06:58:20Z',
-  stampedOn: 'a524da6',
+  stampedOn: '2021e16',
 
   predicate(): Claim[] {
     const cfg = loadConfig('as-written-plus.json');

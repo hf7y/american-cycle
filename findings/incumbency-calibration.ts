@@ -69,7 +69,7 @@ export const finding: Finding = {
     + 'in findings/incumbency-magnitude.ts against the effective-competitiveness band rather than '
     + 'off this figure.',
   stampedAt: '2026-09-05T06:59:11Z',
-  stampedOn: 'a524da6',
+  stampedOn: '2021e16',
 
   predicate(): Claim[] {
     const one = reelection(1);

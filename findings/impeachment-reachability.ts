@@ -69,7 +69,7 @@ export const finding: Finding = {
     + "VP succeed (2 of 2, both configs) -- and never at the stacked table, where no VPBackstab is seated to offer "
     + 'one. F12 is corrected: the rule is not dead code, it is a coalition problem, exactly as designed.',
   stampedAt: '2026-09-05T06:59:10Z',
-  stampedOn: 'a524da6',
+  stampedOn: '2021e16',
 
   predicate(): Claim[] {
     const claims: Claim[] = [];
