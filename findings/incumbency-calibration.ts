@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
-import { loadConfig, loadPacks, playOne } from '../sim/harness.ts';
+import { loadConfig, loadPacks, playOne, BALANCE_PACKS } from '../sim/harness.ts';
+import { deckSensitivity } from '../tracks/types.ts';
 import { seeds as sample } from './sample.ts';
 import type { Claim, Finding } from './types.ts';
 
@@ -25,9 +26,9 @@ function realHouseReelection(): number {
  *
  *  Config is `tuned` as shipped, including its 16-year cap; only the start year
  *  moves, to keep the era-ordered seven-pack talon in step with the calendar. */
-function reelection(incumbency: number, seeds = sample(60)) {
+function reelection(incumbency: number, packs = ['1932', '1964', '1976', '1992', '2008', '2016', '2024'], seeds = sample(60)) {
   const base = loadConfig('tuned.json');
-  const cards = loadPacks(['1932', '1964', '1976', '1992', '2008', '2016', '2024']);
+  const cards = loadPacks(packs);
   const cfg = {
     ...base,
     // #16 shipped per-office overrides on `base` (tuned.json) since this
@@ -75,6 +76,9 @@ export const finding: Finding = {
     const one = reelection(1);
     const two = reelection(2);
     const three = reelection(3);
+    // hf7y/american-cycle#91: is the headline House reelection figure itself
+    // a property of which era-pack list ran it, same config/agents/seeds?
+    const oneBalance = reelection(1, BALANCE_PACKS);
     return [
       { name: 'sim: House reelection at +1', value: one.house, stamped: 94.75, tolerance: 1.5, unit: '%' },
       { name: 'sim: House reelection at +2', value: two.house, stamped: 96.3, tolerance: 1, unit: '%' },
@@ -82,6 +86,7 @@ export const finding: Finding = {
       { name: 'real: House reelection 1976-2016', value: realHouseReelection(), stamped: 94.1, tolerance: 0.5, unit: '%' },
       { name: 'sim: +1, contested House races only', value: one.contested, stamped: 64.81, tolerance: 15, unit: '%' },
       { name: 'sim: +1, pooled over every office below the presidency', value: one.allOffices, stamped: 95.95, tolerance: 2, unit: '%' },
+      { name: 'sim: House reelection at +1, BALANCE_PACKS', value: oneBalance.house, stamped: 95.19, tolerance: 1.5, unit: '%' },
     ];
   },
 
@@ -91,11 +96,18 @@ export const finding: Finding = {
     const overshoot = v('sim: House reelection at +2') > v('sim: House reelection at +1')
       && v('sim: House reelection at +3') > v('sim: House reelection at +2');
     const walkovers = v('sim: House reelection at +1') - v('sim: +1, contested House races only') > 10;
+    const deck = deckSensitivity([
+      { pool: 'all-seven', value: v('sim: House reelection at +1') },
+      { pool: 'four-pack', value: v('sim: House reelection at +1, BALANCE_PACKS') },
+    ]);
     return [
       Math.abs(gap) <= 1 ? '+1 reproduces the real House rate within a point'
         : `+1 misses the real House rate by ${gap.toFixed(1)} points`,
       overshoot ? '+2 and +3 push it further up' : '+2 and +3 do not rise above it',
       walkovers ? 'and the rate is set by walkovers, not by the modifier' : 'and contested incumbents hold at the same rate',
+      deck.sensitive
+        ? `and the +1 House reelection figure is itself deck-sensitive (hf7y/american-cycle#91): ${deck.byPool['all-seven'].toFixed(1)}% all-seven vs ${deck.byPool['four-pack'].toFixed(1)}% four-pack`
+        : 'and the +1 House reelection figure held stable between the all-seven and four-pack decks (hf7y/american-cycle#91)',
     ].join('; ');
   },
 };

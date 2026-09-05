@@ -1,4 +1,5 @@
-import { loadConfig, loadPacks, playOne, ALL_PACKS } from '../sim/harness.ts';
+import { loadConfig, loadPacks, playOne, ALL_PACKS, BALANCE_PACKS } from '../sim/harness.ts';
+import { deckSensitivity } from '../tracks/types.ts';
 import { seeds as sample } from './sample.ts';
 import type { Claim, Finding } from './types.ts';
 
@@ -8,8 +9,9 @@ import type { Claim, Finding } from './types.ts';
  *  instead of being a different measurement wearing the same name. */
 const STRATEGIES = ['WideAndEmpty', 'SenateFlood', 'HouseFarm', 'HeterodoxSpecialist', 'BillMaximizer', 'EconomyChicken'];
 const cards = loadPacks(ALL_PACKS);
+const cardsBalance = loadPacks(BALANCE_PACKS);
 
-function sweep(configFile: string, n: number) {
+function sweep(configFile: string, n: number, deck = cards) {
   const cfg = loadConfig(configFile);
   const wins: Record<string, number> = Object.fromEntries(STRATEGIES.map((s) => [s, 0]));
   const years: number[] = [];
@@ -17,7 +19,7 @@ function sweep(configFile: string, n: number) {
   for (let i = 0; i < n; i++) {
     // rotate the seating each game so no strategy owns a seat
     const order = STRATEGIES.map((_, k) => STRATEGIES[(k + i) % STRATEGIES.length]);
-    const r = playOne(order, cards, cfg, 9000 + i);
+    const r = playOne(order, deck, cfg, 9000 + i);
     wins[order[r.winner]]++;
     years.push(r.years);
     if (r.endedBy === 'amendment') ratified++;
@@ -71,6 +73,9 @@ export const finding: Finding = {
     const n = sample(1200);
     const tuned = sweep('tuned.json', n);
     const awp = sweep('as-written-plus.json', n);
+    // hf7y/american-cycle#91: is the dominance figure itself a property of
+    // which era-pack list ran the sweep, same config/seeds/field, four eras?
+    const tunedBalance = sweep('tuned.json', n, cardsBalance);
     return [
       { name: 'SenateFlood share, tuned.json (amendment victory)', value: tuned.senateFloodShare, stamped: 91.67, tolerance: 8, unit: '%' },
       { name: 'SenateFlood share, as-written-plus.json (amendment victory)', value: awp.senateFloodShare, stamped: 66.67, tolerance: 8, unit: '%' },
@@ -78,6 +83,7 @@ export const finding: Finding = {
       { name: 'median years, as-written-plus.json', value: awp.medianYears, stamped: 100, tolerance: 5 },
       { name: 'games ratified, tuned.json', value: tuned.ratifiedShare, stamped: 41.67, tolerance: 8, unit: '%' },
       { name: 'games ratified, as-written-plus.json', value: awp.ratifiedShare, stamped: 0, tolerance: 5, unit: '%' },
+      { name: 'SenateFlood share, tuned.json, BALANCE_PACKS (amendment victory)', value: tunedBalance.senateFloodShare, stamped: 91.67, tolerance: 8, unit: '%' },
     ];
   },
 
@@ -86,12 +92,19 @@ export const finding: Finding = {
     const tunedShare = v('SenateFlood share, tuned.json');
     const awpShare = v('SenateFlood share, as-written-plus.json');
     const dominant = (x: number) => x > 40;
+    const deck = deckSensitivity([
+      { pool: 'all-seven', value: tunedShare },
+      { pool: 'four-pack', value: v('SenateFlood share, tuned.json, BALANCE_PACKS') },
+    ]);
     return [
       `SenateFlood ${tunedShare.toFixed(1)}% on tuned.json, ${awpShare.toFixed(1)}% on as-written-plus.json`,
       dominant(tunedShare) && dominant(awpShare)
         ? 'DOMINANT on both shipped configs under the amendment victory, same as under points and under bills -- the hole relocates, it does not close'
         : 'no longer dominant on at least one config',
       `median game length ${v('median years, tuned.json').toFixed(0)}y (tuned) vs ${v('median years, as-written-plus.json').toFixed(0)}y (as-written-plus), both the year cap itself -- this field almost never ratifies (${v('games ratified, tuned.json').toFixed(1)}% / ${v('games ratified, as-written-plus.json').toFixed(1)}%)`,
+      deck.sensitive
+        ? `and the dominance figure is itself deck-sensitive (hf7y/american-cycle#91): ${deck.byPool['all-seven'].toFixed(1)}% all-seven vs ${deck.byPool['four-pack'].toFixed(1)}% four-pack`
+        : 'and the dominance figure held stable between the all-seven and four-pack decks (hf7y/american-cycle#91)',
     ].join('; ');
   },
 };

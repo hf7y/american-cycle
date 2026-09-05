@@ -1,4 +1,5 @@
-import { loadConfig, loadPacks, playOne } from '../sim/harness.ts';
+import { loadConfig, loadPacks, playOne, ALL_PACKS } from '../sim/harness.ts';
+import { deckSensitivity } from '../tracks/types.ts';
 import type { Config } from '../engine/game.ts';
 import type { Card } from '../engine/types/index.ts';
 import { seeds as sample } from './sample.ts';
@@ -53,6 +54,10 @@ export const finding: Finding = {
     // one table, three thresholds — `mixed` is this sweep's 0.6 row
     const cloture50 = measure(MIXED, 0.5, cards, base);
     const cloture67 = measure(MIXED, 2 / 3, cards, base);
+    // hf7y/american-cycle#91: is the headline passage figure itself a
+    // property of which era-pack list ran it, same config/table/seeds, all
+    // seven eras against the four-era subset above?
+    const mixedAll = measure(MIXED, 0.6, loadPacks(ALL_PACKS), base);
     return [
       { name: 'mixed table at 60%: bills pass', value: mixed.pass, stamped: 0.15, tolerance: 0.07, unit: 'share of attempts' },
       { name: 'one BillMaximizer at 60%: bills pass', value: willing.pass, stamped: 0.57, tolerance: 0.12, unit: 'share of attempts' },
@@ -61,6 +66,7 @@ export const finding: Finding = {
       { name: 'mixed table at 67%: bills pass', value: cloture67.pass, stamped: 0.09, tolerance: 0.06, unit: 'share of attempts' },
       { name: 'mixed table: cross-bench votes a game', value: mixed.cross, stamped: 59.67, tolerance: 18 },
       { name: 'four BillMaximizers: cross-bench votes a game', value: allIn.cross, stamped: 131.67, tolerance: 60 },
+      { name: 'mixed table at 60%, ALL_PACKS: bills pass', value: mixedAll.pass, stamped: 0.25, tolerance: 0.07, unit: 'share of attempts' },
     ];
   },
 
@@ -71,6 +77,10 @@ export const finding: Finding = {
     const tableRange = Math.max(...table) - Math.min(...table);
     const thresholdRange = Math.max(...threshold) - Math.min(...threshold);
     const pp = (x: number) => `${(100 * x).toFixed(0)}pp`;
+    const deck = deckSensitivity([
+      { pool: 'four-pack', value: v('mixed table at 60%') },
+      { pool: 'all-seven', value: v('mixed table at 60%, ALL_PACKS') },
+    ]);
     return [
       `changing the table moves passage ${pp(tableRange)}, the threshold ${pp(thresholdRange)}`,
       tableRange > thresholdRange
@@ -79,6 +89,9 @@ export const finding: Finding = {
       v('four BillMaximizers: cross-bench') > 2 * v('mixed table: cross-bench')
         ? 'and it runs on cross-benching, exactly as the filibuster rule intends'
         : 'and cross-benching does not track it',
+      deck.sensitive
+        ? `and the mixed-table passage figure is itself deck-sensitive (hf7y/american-cycle#91): ${pp(deck.byPool['four-pack'])} four-pack vs ${pp(deck.byPool['all-seven'])} all-seven`
+        : 'and the mixed-table passage figure held stable between the four-pack and all-seven decks (hf7y/american-cycle#91), so passage is a property of the table, not the pack list',
     ].join('; ');
   },
 };

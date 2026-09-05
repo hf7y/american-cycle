@@ -1,4 +1,5 @@
-import { loadConfig, loadPacks, playOne } from '../sim/harness.ts';
+import { loadConfig, loadPacks, playOne, BALANCE_PACKS } from '../sim/harness.ts';
+import { deckSensitivity } from '../tracks/types.ts';
 import { seeds as sample } from './sample.ts';
 import type { Claim, Finding } from './types.ts';
 
@@ -14,9 +15,9 @@ const P = (a: number, b: number, c: number) =>
   [{ maxPips: 1, push: a }, { maxPips: 3, push: b }, { maxPips: 99, push: c }];
 
 /** mean |lean| and durable-realignment count for one decay/push pairing */
-function measure(over: Record<string, unknown>, seeds = sample(50)) {
+function measure(over: Record<string, unknown>, packs = ['1932', '1964', '1976', '1992', '2008', '2016', '2024'], seeds = sample(50)) {
   const base = loadConfig('tuned.json');
-  const cards = loadPacks(['1932', '1964', '1976', '1992', '2008', '2016', '2024']);
+  const cards = loadPacks(packs);
   const cfg = {
     ...base,
     game: { ...base.game, startYear: 1932, maxYears: 60, victory: 'points' },
@@ -61,6 +62,9 @@ export const finding: Finding = {
     const biennial = measure({ decayFrequency: 'biennial' });
     const annual = measure({ decayFrequency: 'annual' });
     const plus2 = measure({ decayFrequency: 'annual', pushByMargin: P(2, 3, 4) });
+    // hf7y/american-cycle#91: is the headline "annual 2/3/4" realignment
+    // count itself a property of which era-pack list ran it?
+    const plus2Balance = measure({ decayFrequency: 'annual', pushByMargin: P(2, 3, 4) }, BALANCE_PACKS);
     return [
       { name: 'biennial 0/1/2: states realigned per game', value: biennial.fourPerGame, stamped: 12.83, tolerance: 2.0 },
       { name: 'biennial 0/1/2: states pinned at the cap', value: biennial.cappedPerGame, stamped: 6.58, tolerance: 2.0 },
@@ -74,6 +78,7 @@ export const finding: Finding = {
       // stale, which is the point: the config cannot outlive its evidence.
       { name: 'as-written-plus.json still ships the recommended push table', value: shippedPushTable().reduce((a, b) => a + b, 0), stamped: 9, tolerance: 0 },
       { name: 'as-written-plus.json still ships annual decay', value: loadConfig('as-written-plus.json').lean.decayFrequency === 'annual' ? 1 : 0, stamped: 1, tolerance: 0 },
+      { name: 'annual 2/3/4, BALANCE_PACKS: states realigned per game', value: plus2Balance.fourPerGame, stamped: 18.70, tolerance: 4.0 },
     ];
   },
 
@@ -82,6 +87,10 @@ export const finding: Finding = {
     const rescued = by('annual 2/3/4: states realigned') > by('annual 0/1/2: states realigned') + 2;
     const beatsBiennial = by('annual 2/3/4: states realigned') > by('biennial 0/1/2: states realigned');
     const noSaturation = by('annual 2/3/4: states pinned') < by('biennial 0/1/2: states pinned');
+    const deck = deckSensitivity([
+      { pool: 'all-seven', value: by('annual 2/3/4: states realigned') },
+      { pool: 'four-pack', value: by('annual 2/3/4, BALANCE_PACKS: states realigned') },
+    ]);
     return [
       rescued ? 'raising pushes rescues annual decay' : 'raising pushes does NOT rescue annual decay',
       beatsBiennial ? 'and realigns more than biennial' : 'but realigns less than biennial',
@@ -92,6 +101,9 @@ export const finding: Finding = {
       by('as-written-plus.json still ships the recommended') === 9
         ? 'and the shipped config still matches this evidence'
         : 'BUT the shipped config no longer matches this evidence',
+      deck.sensitive
+        ? `and the annual 2/3/4 realignment count is itself deck-sensitive (hf7y/american-cycle#91): ${deck.byPool['all-seven'].toFixed(1)} all-seven vs ${deck.byPool['four-pack'].toFixed(1)} four-pack`
+        : 'and the annual 2/3/4 realignment count held stable between the all-seven and four-pack decks (hf7y/american-cycle#91)',
     ].join('; ');
   },
 };

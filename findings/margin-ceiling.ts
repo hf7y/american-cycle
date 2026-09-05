@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
-import { loadConfig, loadPacks, playOne } from '../sim/harness.ts';
+import { loadConfig, loadPacks, playOne, BALANCE_PACKS } from '../sim/harness.ts';
+import { deckSensitivity } from '../tracks/types.ts';
 import { seeds as sample } from './sample.ts';
 import type { Claim, Finding } from './types.ts';
 
@@ -31,9 +32,9 @@ function real() {
  *  Config is `tuned` as shipped, including its 16-year cap; only the start year
  *  moves, because the talon is era-ordered oldest-first and a seven-pack pool
  *  deals 1932 cards whatever the calendar says. */
-function simMargins(seeds = sample(60)) {
+function simMargins(packs = ['1932', '1964', '1976', '1992', '2008', '2016', '2024'], seeds = sample(60)) {
   const base = loadConfig('tuned.json');
-  const cards = loadPacks(['1932', '1964', '1976', '1992', '2008', '2016', '2024']);
+  const cards = loadPacks(packs);
   const cfg = { ...base, game: { ...base.game, startYear: 1932 } };
   const pts: number[] = [];
   for (let i = 0; i < seeds; i++) {
@@ -73,6 +74,9 @@ export const finding: Finding = {
   predicate(): Claim[] {
     const sim = simMargins();
     const r = real();
+    // hf7y/american-cycle#91: is the headline median-margin figure itself a
+    // property of which era-pack list ran it, same config/agents/seeds?
+    const simBalance = simMargins(BALANCE_PACKS);
     return [
       { name: 'sim: median House margin', value: sim.median, stamped: 10, tolerance: 3, unit: 'pts' },
       { name: 'real: median House margin', value: r.house_median_abs_margin_pts, stamped: 32.5, tolerance: 0.5, unit: 'pts' },
@@ -80,6 +84,7 @@ export const finding: Finding = {
       { name: 'real: safe seats, 40+ pts', value: r.house_safe_40plus_pct, stamped: 37.5, tolerance: 0.5, unit: '%' },
       { name: 'sim: competitive, under 10 pts', value: sim.competitive, stamped: 49.59, tolerance: 8, unit: '%' },
       { name: 'real: competitive, under 10 pts', value: r.house_competitive_under10_pct, stamped: 13.5, tolerance: 0.5, unit: '%' },
+      { name: 'sim: median House margin, BALANCE_PACKS', value: simBalance.median, stamped: 10, tolerance: 3, unit: 'pts' },
     ];
   },
 
@@ -88,10 +93,17 @@ export const finding: Finding = {
     const compressed = v('sim: median House margin') < v('real: median House margin') / 2;
     const noSafeSeats = v('sim: safe seats, 40+ pts') < v('real: safe seats, 40+ pts') / 10;
     const crowded = v('sim: competitive, under 10 pts') > 2 * v('real: competitive, under 10 pts');
+    const deck = deckSensitivity([
+      { pool: 'all-seven', value: v('sim: median House margin') },
+      { pool: 'four-pack', value: v('sim: median House margin, BALANCE_PACKS') },
+    ]);
     return [
       compressed ? 'the simulated spread is a fraction of the real one' : 'the simulated spread now matches the real one',
       noSafeSeats ? 'safe seats do not occur' : 'safe seats occur',
       crowded ? 'and the mass piles into the competitive tail: a unimodal blob' : 'and the competitive tail is no longer overfull',
+      deck.sensitive
+        ? `and the sim median margin is itself deck-sensitive (hf7y/american-cycle#91): ${deck.byPool['all-seven'].toFixed(1)} all-seven vs ${deck.byPool['four-pack'].toFixed(1)} four-pack pts`
+        : 'and the sim median margin held stable between the all-seven and four-pack decks (hf7y/american-cycle#91)',
     ].join('; ');
   },
 };

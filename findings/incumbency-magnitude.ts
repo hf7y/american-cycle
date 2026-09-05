@@ -12,6 +12,11 @@ function realHouseReelection(): number {
   return f.derived.house_mean_1976_2016;
 }
 
+/** hf7y/american-cycle#91's deck-sensitivity axis does not apply here: every
+ *  claim below is either read from `data/historical/baseline.json` or from
+ *  `tuned.json` as shipped, and none of them plays a game or loads a card
+ *  pool. There is nothing for a second era-pack pool to move. */
+
 /** Smallest integer pip edge whose exact win probability clears `targetPct` --
  *  the same rounding hf7y/american-cycle#16's own table used (93.2% -> 7 pips,
  *  80.6% -> 4 pips: the first edge AT OR ABOVE the target, not the nearest). */

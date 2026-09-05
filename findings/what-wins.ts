@@ -1,7 +1,8 @@
-import { loadConfig, loadPacks } from '../sim/harness.ts';
+import { loadConfig, loadPacks, ALL_PACKS } from '../sim/harness.ts';
 import { AGENTS } from '../sim/agents.ts';
 import { Game } from '../engine/game.ts';
 import { RNG } from '../engine/rules/rng.ts';
+import { deckSensitivity } from '../tracks/types.ts';
 import type { Office } from '../engine/types/index.ts';
 import { seeds as sample } from './sample.ts';
 import type { Claim, Finding } from './types.ts';
@@ -19,9 +20,9 @@ const GAMES = sample(120);
  *  board and not who holds what, so the Game is built here and `g.seats` read
  *  after `run()`.
  */
-function seatsByOutcome() {
+function seatsByOutcome(packs = ['1976', '1992', '2008', '2016']) {
   const cfg = loadConfig('tuned.json');
-  const cards = loadPacks(['1976', '1992', '2008', '2016']);
+  const cards = loadPacks(packs);
   const winner: Record<string, number> = {};
   const rest: Record<string, number> = {};
   for (const o of OFFICES) { winner[o] = 0; rest[o] = 0; }
@@ -68,6 +69,9 @@ export const finding: Finding = {
 
   predicate(): Claim[] {
     const s = seatsByOutcome();
+    // hf7y/american-cycle#91: is the presidency's dominant ratio itself a
+    // property of which era-pack list ran it, same config/agents/seeds?
+    const sAll = seatsByOutcome(ALL_PACKS);
     return [
       { name: 'Senate seats: winner vs everyone else', value: s.senator.ratio, stamped: 2.64, tolerance: 0.7, unit: 'x' },
       { name: 'House seats: winner vs everyone else', value: s.representative.ratio, stamped: 0.43, tolerance: 0.15, unit: 'x' },
@@ -75,19 +79,28 @@ export const finding: Finding = {
       { name: 'the presidency: winner vs everyone else', value: s.president.ratio, stamped: 6, tolerance: 1.6, unit: 'x' },
       { name: 'Senate seats held by the winner', value: s.senator.winner, stamped: 9.08, tolerance: 4 },
       { name: 'House seats held by the winner', value: s.representative.winner, stamped: 2.17, tolerance: 1.5 },
+      { name: 'the presidency, ALL_PACKS: winner vs everyone else', value: sAll.president.ratio, stamped: 15.00, tolerance: 1.6, unit: 'x' },
     ];
   },
 
   verdict(c: Claim[]): string {
     const v = (n: string) => c.find((x) => x.name.startsWith(n))!.value;
+    const exact = (n: string) => c.find((x) => x.name === n)!.value;
     const rank = (['Senate seats:', 'the presidency:', 'governorships:', 'House seats:'] as const)
       .map((n) => `${n.replace(/[:.]/g, '')} ${v(n).toFixed(2)}x`);
+    const deck = deckSensitivity([
+      { pool: 'four-pack', value: exact('the presidency: winner vs everyone else') },
+      { pool: 'all-seven', value: exact('the presidency, ALL_PACKS: winner vs everyone else') },
+    ]);
     return [
       `winner-to-field seat ratios — ${rank.join(', ')}`,
       v('House seats:') < 1 ? 'holding House seats is anti-correlated with winning' : 'House seats no longer lose',
       v('governorships:') < v('Senate seats:') / 1.5
         ? 'and the governorship is not something to plan around'
         : 'and the governorship now pays like the Senate',
+      deck.sensitive
+        ? `and the presidency's ratio is itself deck-sensitive (hf7y/american-cycle#91): ${deck.byPool['four-pack'].toFixed(2)}x four-pack vs ${deck.byPool['all-seven'].toFixed(2)}x all-seven`
+        : "and the presidency's ratio held stable between the four-pack and all-seven decks (hf7y/american-cycle#91)",
     ].join('; ');
   },
 };

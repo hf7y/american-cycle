@@ -1,6 +1,7 @@
-import { loadConfig } from '../sim/harness.ts';
+import { loadConfig, BALANCE_PACKS } from '../sim/harness.ts';
 import { record, markedWin, withDrift, oddsAtEdge1d6, type Portfolio } from '../sim/cross-bench.ts';
 import { oddsAtEdge } from '../engine/rules/resolution.ts';
+import { deckSensitivity } from '../tracks/types.ts';
 import type { Config } from '../engine/game.ts';
 import type { Claim, Finding } from './types.ts';
 
@@ -8,8 +9,8 @@ const GAMES = 50;
 /** the primary is 1d6 vs 1d6, not 3d6 vs 3d6 — see `sim/cross-bench.ts` */
 const PRIMARY_SD = Math.sqrt(2 * 35 / 12);
 
-function arm(base: Config, primary: number) {
-  return record({ ...base, primaryGeneral: { ...base.primaryGeneral, crossBenchPrimaryPenalty: primary } }, GAMES);
+function arm(base: Config, primary: number, packs?: string[]) {
+  return record({ ...base, primaryGeneral: { ...base.primaryGeneral, crossBenchPrimaryPenalty: primary } }, GAMES, undefined, packs);
 }
 
 /** mean score of the more-concentrated half minus the less-concentrated half,
@@ -72,6 +73,9 @@ function measure() {
   }
 
   const atShipped = markedWin(shipped.obs, 'primary');
+  // hf7y/american-cycle#91: is the shipped-penalty primary-win figure itself
+  // a property of which era-pack list ran it, same config/table/seeds?
+  const shippedBalance = arm(base, base.primaryGeneral.crossBenchPrimaryPenalty, BALANCE_PACKS);
   return {
     excessMean: shipped.portfolios.reduce((a, p) => a + p.excess, 0) / shipped.portfolios.length,
     excessGap: split(shipped.portfolios, (p) => p.excess).gap,
@@ -79,6 +83,7 @@ function measure() {
     sharedDice,
     unpricedPrimary: markedWin(unpriced.obs, 'primary').rate,
     shippedPrimary: atShipped.rate,
+    shippedPrimaryBalance: markedWin(shippedBalance.obs, 'primary').rate,
     shippedPips: atShipped.meanPips,
     gapOff: gapAt(shipped),
     purpleShare: purple / live,
@@ -141,6 +146,7 @@ export const finding: Finding = {
       // --- the scaled primary penalty is too strong ---
       { name: 'lone cross-bencher wins the primary, unpriced', value: 100 * m.unpricedPrimary, stamped: 54.88, tolerance: 7, unit: '%' },
       { name: 'lone cross-bencher wins the primary, at the shipped penalty', value: 100 * m.shippedPrimary, stamped: 36.78, tolerance: 7, unit: '%' },
+      { name: 'lone cross-bencher wins the primary, at the shipped penalty, BALANCE_PACKS', value: 100 * m.shippedPrimaryBalance, stamped: 35.90, tolerance: 7, unit: '%' },
       { name: 'mean pips the primary penalty applies, in PRIMARY SDs', value: m.shippedPips / PRIMARY_SD, stamped: 0.85, tolerance: 0.5 },
 
       // --- why a signed general term was measured and then cut ---
@@ -159,8 +165,13 @@ export const finding: Finding = {
 
   verdict(c: Claim[]): string {
     const v = (n: string) => c.find((x) => x.name.startsWith(n))!.value;
+    const exact = (n: string) => c.find((x) => x.name === n)!.value;
     const shift = v('lone cross-bencher wins the primary, at the shipped')
       - v('lone cross-bencher wins the primary, unpriced');
+    const deck = deckSensitivity([
+      { pool: 'all-seven', value: exact('lone cross-bencher wins the primary, at the shipped penalty') },
+      { pool: 'four-pack', value: exact('lone cross-bencher wins the primary, at the shipped penalty, BALANCE_PACKS') },
+    ]);
     return [
       Math.abs(v('mean excess party concentration')) < 0.02
         ? 'portfolios are party-random: no mechanic hardens the player, so hardening does not emerge from strategy'
@@ -183,6 +194,9 @@ export const finding: Finding = {
       v('as-written-plus.json still ships crossBenchPrimaryPenalty') === -1
         ? 'and the shipped config still matches this evidence'
         : 'BUT the shipped config no longer matches this evidence',
+      deck.sensitive
+        ? `and the shipped-penalty primary-win figure is itself deck-sensitive (hf7y/american-cycle#91): ${deck.byPool['all-seven'].toFixed(1)}% all-seven vs ${deck.byPool['four-pack'].toFixed(1)}% four-pack`
+        : 'and the shipped-penalty primary-win figure held stable between the all-seven and four-pack decks (hf7y/american-cycle#91)',
     ].join('; ');
   },
 };

@@ -80,11 +80,11 @@ const leanSign = (p: Party | undefined) => (p === 'R' ? 1 : p === 'D' ? -1 : 0);
 
 /** Play `games` under `cfg`, recording every race with the counters and state
  *  lean in force when it ran, plus each player's final portfolio. */
-export function record(cfg: Config, games: number, seed0 = 3300000): { obs: Obs[]; portfolios: Portfolio[] } {
+export function record(cfg: Config, games: number, seed0 = 3300000, packs = PACKS): { obs: Obs[]; portfolios: Portfolio[] } {
   if (cfg.lean.decayFrequency !== 'annual' || cfg.lean.decayPerTick !== 1) {
     throw new Error('lean reconstruction assumes annual decay of 1');
   }
-  const cards = loadPacks(PACKS);
+  const cards = loadPacks(packs);
   const obs: Obs[] = [];
   const portfolios: Portfolio[] = [];
   for (let i = 0; i < games; i++) {

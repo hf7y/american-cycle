@@ -1,9 +1,11 @@
-import { loadConfig, loadPacks, ALL_PACKS } from '../sim/harness.ts';
+import { loadConfig, loadPacks, ALL_PACKS, BALANCE_PACKS } from '../sim/harness.ts';
 import { duel, roundRobin } from '../sim/roundrobin.ts';
+import { deckSensitivity } from '../tracks/types.ts';
 import { seeds as sample } from './sample.ts';
 import type { Claim, Finding } from './types.ts';
 
 const cards = loadPacks(ALL_PACKS);
+const cardsBalance = loadPacks(BALANCE_PACKS);
 
 /** hf7y/american-cycle#75's specimen: `Base.veto` only fires under split
  *  government and `voteBill` never denies cloture outright, so no shipped
@@ -16,9 +18,9 @@ const EXTENDED_FIELD = [
   'HouseFarm', 'WideAndEmpty', 'Vetoer', 'BillBlocker',
 ];
 
-function shares(configFile: string, n: number): Record<string, number> {
+function shares(configFile: string, n: number, deck = cards): Record<string, number> {
   const cfg = loadConfig(configFile);
-  const { wins, games } = roundRobin(EXTENDED_FIELD, cards, cfg, n);
+  const { wins, games } = roundRobin(EXTENDED_FIELD, deck, cfg, n);
   const out: Record<string, number> = {};
   for (const name of EXTENDED_FIELD) out[name] = (100 * (wins[name] ?? 0)) / games;
   return out;
@@ -61,6 +63,9 @@ export const finding: Finding = {
     const RR_N = sample(300);
     const tuned = shares('tuned.json', RR_N);
     const awp = shares('as-written-plus.json', RR_N);
+    // hf7y/american-cycle#91: is SenateFlood's field-topping share on `tuned`
+    // itself a property of which era-pack list ran the round robin?
+    const tunedBalance = shares('tuned.json', RR_N, cardsBalance);
     return [
       { name: 'Vetoer vs BillMaximizer duel, tuned', value: duelPct('Vetoer', 'BillMaximizer', 'tuned.json', DUEL_N), stamped: 66.67, tolerance: 10, unit: '%' },
       { name: 'Vetoer vs BillMaximizer duel, as-written-plus', value: duelPct('Vetoer', 'BillMaximizer', 'as-written-plus.json', DUEL_N), stamped: 66.67, tolerance: 10, unit: '%' },
@@ -70,6 +75,7 @@ export const finding: Finding = {
       { name: 'BillMaximizer round-robin share, as-written-plus (extended field)', value: awp.BillMaximizer, stamped: 33.33, tolerance: 6, unit: '%' },
       { name: 'SenateFlood round-robin share, tuned (extended field)', value: tuned.SenateFlood, stamped: 8.33, tolerance: 8, unit: '%' },
       { name: 'SenateFlood round-robin share, as-written-plus (extended field)', value: awp.SenateFlood, stamped: 25, tolerance: 8, unit: '%' },
+      { name: 'SenateFlood round-robin share, tuned, BALANCE_PACKS (extended field)', value: tunedBalance.SenateFlood, stamped: 36.67, tolerance: 8, unit: '%' },
     ];
   },
 
@@ -81,6 +87,10 @@ export const finding: Finding = {
       && v('BillBlocker vs BillMaximizer duel, as-written-plus') > 50;
     const billMaximizerCollapsed = v('BillMaximizer round-robin share, tuned (extended field)') < (100 / EXTENDED_FIELD.length)
       && v('BillMaximizer round-robin share, as-written-plus (extended field)') < (100 / EXTENDED_FIELD.length);
+    const deck = deckSensitivity([
+      { pool: 'all-seven', value: v('SenateFlood round-robin share, tuned (extended field)') },
+      { pool: 'four-pack', value: v('SenateFlood round-robin share, tuned, BALANCE_PACKS (extended field)') },
+    ]);
     return [
       blockerWinsBoth ? 'BillBlocker beats BillMaximizer on both configs' : 'BillBlocker does not beat BillMaximizer on both configs -- recheck',
       vetoerWinsTuned && !vetoerWinsAwp ? 'Vetoer beats BillMaximizer on tuned but loses on as-written-plus -- the exploit is config-dependent, not universal'
@@ -89,6 +99,9 @@ export const finding: Finding = {
       billMaximizerCollapsed
         ? 'BillMaximizer sits below fair share in the extended-field round robin on both configs -- its dominance is gone independent of which new agent tops the field'
         : 'BillMaximizer still holds above fair share in at least one extended-field round robin -- recheck',
+      deck.sensitive
+        ? `and SenateFlood's tuned share is itself deck-sensitive (hf7y/american-cycle#91): ${deck.byPool['all-seven'].toFixed(1)}% all-seven vs ${deck.byPool['four-pack'].toFixed(1)}% four-pack`
+        : "and SenateFlood's tuned share held stable across pools (hf7y/american-cycle#91), so this is not a property of the pack list",
     ].join('; ');
   },
 };
