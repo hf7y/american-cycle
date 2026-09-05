@@ -7,7 +7,14 @@ import type { Claim, Finding } from './types.ts';
  *  problem is the demographic taxonomy, not the arithmetic." The 1964 pack
  *  only carries one district card per state it names (30 cards, 24 states),
  *  so this checks what the falsifier can actually be run against, not all
- *  fifty -- and says so rather than quietly narrowing the claim. */
+ *  fifty -- and says so rather than quietly narrowing the claim.
+ *
+ *  hf7y/american-cycle#91's deck-sensitivity axis does not apply here: the
+ *  falsifier is specifically about the 1964 pack's own district cards, not a
+ *  measure taken from whichever era-pack list happened to be loaded. There is
+ *  no second pool to compare against -- swapping in another era's districts
+ *  would answer a different question, not re-run this one on a different
+ *  deck. */
 const PACK_STATES_WON = new Set(['AL', 'AZ', 'GA', 'LA', 'MS', 'SC']);
 
 function classify(res: { identityBonus: number }, nat: unknown, pg: { extremistGeneral: number }) {

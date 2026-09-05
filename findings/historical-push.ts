@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
-import { loadConfig, loadPacks, playOne } from '../sim/harness.ts';
+import { loadConfig, loadPacks, playOne, BALANCE_PACKS } from '../sim/harness.ts';
+import { deckSensitivity } from '../tracks/types.ts';
 import type { Claim, Finding } from './types.ts';
 
 /** The push rule (engine/rules/lean.ts) asserts a state "realigns when someone
@@ -110,6 +111,17 @@ export const finding: Finding = {
       }
     }
 
+    // hf7y/american-cycle#91: is the sim-side House walkover share itself a
+    // property of which era-pack list ran it, same config/agents/seeds?
+    const cardsBalance = loadPacks(BALANCE_PACKS);
+    let loneBalance = 0, generalsBalance = 0;
+    for (let i = 0; i < N; i++) {
+      for (const e of playOne(['Greedy', 'Random', 'Lookahead'], cardsBalance, cfg, 900000 + i).events) {
+        if (e.round !== 'general' || e.office !== 'representative') continue;
+        generalsBalance++; if (e.uncontested) loneBalance++;
+      }
+    }
+
     return [
       // real-world facts: deterministic, so a drift here means the DATA moved
       { name: 'presidential surprise persistence', value: p.surprise, stamped: -0.5105, tolerance: 0.01 },
@@ -124,11 +136,17 @@ export const finding: Finding = {
       { name: 'as-written-plus.json still ships the top push', value: cfg.lean.pushByMargin[cfg.lean.pushByMargin.length - 1].push, stamped: 4, tolerance: 0, unit: 'pips' },
       // the engine, which is the only thing here that may legitimately move
       { name: 'sim House generals with one candidate', value: (100 * lone) / generals, stamped: 96.885, tolerance: 2, unit: '%' },
+      { name: 'sim House generals with one candidate, BALANCE_PACKS', value: (100 * loneBalance) / generalsBalance, stamped: 95.79, tolerance: 2, unit: '%' },
     ];
   },
 
   verdict(c: Claim[]): string {
     const v = (n: string) => c.find((x) => x.name.startsWith(n))!.value;
+    const exact = (n: string) => c.find((x) => x.name === n)!.value;
+    const deck = deckSensitivity([
+      { pool: 'all-seven', value: exact('sim House generals with one candidate') },
+      { pool: 'four-pack', value: exact('sim House generals with one candidate, BALANCE_PACKS') },
+    ]);
     // The null is EXACT, not simulated. If a unit's deviation is a fixed
     // baseline plus iid noise, surprise is e_t and next-cycle movement is
     // e_{t+1} - e_t, so the slope is Cov(e_{t+1}-e_t, e_t)/Var(e_t) = -1. The
@@ -144,6 +162,9 @@ export const finding: Finding = {
       `presidential surprises persist ${(pres / house).toFixed(1)}x as strongly as House ones (${pres.toFixed(2)} vs ${house.toFixed(2)} from the null), so one push table cannot serve both`,
       `lean half-life ${v('presidential lean').toFixed(2)} cycles`,
       `and ${v('sim House generals').toFixed(1)}% of simulated House generals have a single candidate against ${v('real unopposed').toFixed(1)}% unopposed in reality`,
+      deck.sensitive
+        ? `and the sim-side walkover share is itself deck-sensitive (hf7y/american-cycle#91): ${deck.byPool['all-seven'].toFixed(1)}% all-seven vs ${deck.byPool['four-pack'].toFixed(1)}% four-pack`
+        : 'and the sim-side walkover share held stable between the all-seven and four-pack decks (hf7y/american-cycle#91)',
     ].join('; ');
   },
 };

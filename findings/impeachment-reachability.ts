@@ -1,7 +1,8 @@
 import { Game } from '../engine/game.ts';
 import { RNG } from '../engine/rules/rng.ts';
 import { AGENTS } from '../sim/agents.ts';
-import { loadConfig, loadPacks, ALL_PACKS } from '../sim/harness.ts';
+import { loadConfig, loadPacks, ALL_PACKS, BALANCE_PACKS } from '../sim/harness.ts';
+import { deckSensitivity } from '../tracks/types.ts';
 import { seeds as sample } from './sample.ts';
 import type { Claim, Finding } from './types.ts';
 
@@ -14,6 +15,7 @@ import type { Claim, Finding } from './types.ts';
  *  rival's ticket, then remove them) actually work. */
 const N = sample(200);
 const CARDS = loadPacks(ALL_PACKS);
+const CARDS_BALANCE = loadPacks(BALANCE_PACKS);
 const CONFIGS = ['tuned.json', 'as-written-plus.json'];
 /** One `Impeacher` and one `VPBackstab` at an otherwise-ordinary table -- the
  *  pool named in the claim, per the issue's own acceptance bar. */
@@ -28,14 +30,14 @@ interface Tally { attempts: number; removals: number; successions: number; games
  *  or succeeds, and a further line when a VP succeeds -- the same channel
  *  `sim/coverage.ts` reads for the same reason: nothing needs plumbing to a
  *  `GameResult` field that would only ever be read here. */
-function tally(pool: string[], configName: string, base: number): Tally {
+function tally(pool: string[], configName: string, base: number, cards = CARDS): Tally {
   const cfg = loadConfig(configName);
   const t: Tally = { attempts: 0, removals: 0, successions: 0, gamesWithAttempt: 0, gamesWithSuccess: 0 };
   for (let i = 0; i < N; i++) {
     const seed = base + i;
     const rng = new RNG(seed);
     const agents = pool.map((n) => new AGENTS[n](cfg, rng));
-    const g = new Game(agents, CARDS, cfg, seed);
+    const g = new Game(agents, cards, cfg, seed);
     g.run();
     const fails = g.log.filter((l) => l.includes('impeachment fails,')).length;
     const removals = g.log.filter((l) => l.includes('the president is removed,')).length;
@@ -80,6 +82,10 @@ export const finding: Finding = {
         stacked: tally(STACKED, c, 4300000),
       };
     }
+    // hf7y/american-cycle#91: is the bottleneck figure (opposition reaches
+    // two-thirds, mixed pool, tuned) itself a property of which era-pack
+    // list ran it, same config/pool/seeds, four eras against all seven?
+    const mixedBalance = tally(MIXED, 'tuned.json', 4200000, CARDS_BALANCE);
     // Unrolled rather than looped over CONFIGS: sim/findings.ts's --restamp
     // matches `name: '...'` as a literal string against the SOURCE file, so a
     // templated `${label}` name can never be found and can never be
@@ -104,6 +110,8 @@ export const finding: Finding = {
         stamped: 0.33, tolerance: 0.15, unit: 'share of games' },
       { name: 'stacked pool (four Impeachers), as-written-plus: opposition reaches two-thirds, given an attempt', value: awp.stacked.attempts ? awp.stacked.removals / awp.stacked.attempts : 0,
         stamped: 0.15, tolerance: 0.03, unit: 'share of attempts' },
+      { name: 'mixed pool, tuned, BALANCE_PACKS: opposition reaches two-thirds, given an attempt', value: mixedBalance.attempts ? mixedBalance.removals / mixedBalance.attempts : 0,
+        stamped: 0.01, tolerance: 0.02, unit: 'share of attempts' },
     );
     const mixedRemovals = CONFIGS.reduce((a, c) => a + byConfig[c].mixed.removals, 0);
     const mixedSuccessions = CONFIGS.reduce((a, c) => a + byConfig[c].mixed.successions, 0);
@@ -124,6 +132,10 @@ export const finding: Finding = {
     const mixedSuccessRate = (v('mixed pool, tuned: opposition reaches two-thirds, given an attempt') + v('mixed pool, as-written-plus: opposition reaches two-thirds, given an attempt')) / 2;
     const stackedSuccessRate = (v('stacked pool (four Impeachers), tuned: opposition reaches two-thirds, given an attempt') + v('stacked pool (four Impeachers), as-written-plus: opposition reaches two-thirds, given an attempt')) / 2;
     const vpWorks = v('mixed pool, pooled across configs: VP succeeds, given a removal') > 0;
+    const deck = deckSensitivity([
+      { pool: 'all-seven', value: v('mixed pool, tuned: opposition reaches two-thirds, given an attempt') },
+      { pool: 'four-pack', value: v('mixed pool, tuned, BALANCE_PACKS: opposition reaches two-thirds, given an attempt') },
+    ]);
     return [
       mixedAttemptRate > 0.5
         ? `a mover forces a vote in most games at an ordinary-sized table (~${(100 * mixedAttemptRate).toFixed(0)}%)`
@@ -134,6 +146,9 @@ export const finding: Finding = {
       vpWorks
         ? 'and the VP backstab works when it gets the chance -- succession follows every removal it is present for'
         : 'and the VP backstab does not reliably succeed even when a removal happens',
+      deck.sensitive
+        ? `and the bottleneck figure is itself deck-sensitive (hf7y/american-cycle#91): ${(100 * deck.byPool['all-seven']).toFixed(1)}% all-seven vs ${(100 * deck.byPool['four-pack']).toFixed(1)}% four-pack`
+        : 'and the bottleneck figure held stable between the all-seven and four-pack decks (hf7y/american-cycle#91)',
     ].join('; ');
   },
 };

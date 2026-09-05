@@ -1,11 +1,13 @@
-import { loadConfig, loadPacks, playOne } from '../sim/harness.ts';
+import { loadConfig, loadPacks, playOne, BALANCE_PACKS } from '../sim/harness.ts';
 import { withDistrictFraction } from '../sim/sweeps.ts';
+import { deckSensitivity } from '../tracks/types.ts';
 import { seeds as sample } from './sample.ts';
 import type { Claim, Finding } from './types.ts';
 
-function measure(players: number, hand: number, frac: number, uncontestedPush: number, seeds = sample(40)) {
+function measure(players: number, hand: number, frac: number, uncontestedPush: number,
+                 packs = ['1932', '1964', '1976', '1992', '2008', '2016', '2024'], seeds = sample(40)) {
   const base = loadConfig('tuned.json');
-  const all = loadPacks(['1932', '1964', '1976', '1992', '2008', '2016', '2024']);
+  const all = loadPacks(packs);
   const cards = withDistrictFraction(all, frac, 3);
   const cfg = {
     ...base, hand: { ...base.hand, base: hand },
@@ -47,6 +49,9 @@ export const finding: Finding = {
     const highOff = measure(6, 24, 0.06, 0);
     const lowOn = measure(4, 16, 1.0, 1);
     const highOn = measure(6, 24, 0.06, 1);
+    // hf7y/american-cycle#91: is the headline "high contest, walkover off"
+    // realignment count itself a property of which era-pack list ran it?
+    const highOffBalance = measure(6, 24, 0.06, 0, BALANCE_PACKS);
     return [
       { name: 'low contest, walkover off: contested share', value: lowOff.contested, stamped: 0.27, tolerance: 0.10, unit: 'share' },
       { name: 'low contest, walkover off: states realigned', value: lowOff.fourPerGame, stamped: 4.67, tolerance: 1.0 },
@@ -54,6 +59,7 @@ export const finding: Finding = {
       { name: 'high contest, walkover off: states realigned', value: highOff.fourPerGame, stamped: 19, tolerance: 3.0 },
       { name: 'low contest, walkover on: states realigned', value: lowOn.fourPerGame, stamped: 13.42, tolerance: 3.0 },
       { name: 'both: states realigned', value: highOn.fourPerGame, stamped: 29.08, tolerance: 5.0 },
+      { name: 'high contest, walkover off, BALANCE_PACKS: states realigned', value: highOffBalance.fourPerGame, stamped: 13.62, tolerance: 3.0 },
     ];
   },
 
@@ -62,10 +68,17 @@ export const finding: Finding = {
     const contestWorks = v('high contest, walkover off: states') >= 3;
     const walkoverWorks = v('low contest, walkover on: states') >= 3;
     const bothExcessive = v('both: states') > v('high contest, walkover off: states') * 1.8;
+    const deck = deckSensitivity([
+      { pool: 'all-seven', value: v('high contest, walkover off: states') },
+      { pool: 'four-pack', value: v('high contest, walkover off, BALANCE_PACKS: states') },
+    ]);
     return [
       contestWorks ? 'contest alone realigns the map' : 'contest alone does NOT realign the map',
       walkoverWorks ? 'the walkover rule alone also does' : 'the walkover rule alone does not',
       bothExcessive ? 'and together they overshoot' : 'and together they do not overshoot',
+      deck.sensitive
+        ? `and "contest alone" realignment is itself deck-sensitive (hf7y/american-cycle#91): ${deck.byPool['all-seven'].toFixed(1)} all-seven vs ${deck.byPool['four-pack'].toFixed(1)} four-pack`
+        : 'and "contest alone" realignment held stable between the all-seven and four-pack decks (hf7y/american-cycle#91)',
     ].join('; ');
   },
 };

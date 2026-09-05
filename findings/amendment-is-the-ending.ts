@@ -1,4 +1,5 @@
-import { loadConfig, loadPacks, playOne } from '../sim/harness.ts';
+import { loadConfig, loadPacks, playOne, ALL_PACKS } from '../sim/harness.ts';
+import { deckSensitivity } from '../tracks/types.ts';
 import { seeds as sample } from './sample.ts';
 import type { Claim, Finding } from './types.ts';
 
@@ -39,12 +40,18 @@ export const finding: Finding = {
       else oldBillTarget++;
     }
     const n = SEEDS.length;
+    // hf7y/american-cycle#91: is the ratification share itself a property of
+    // which era-pack list ran it, same config/agents/seeds, all seven eras?
+    const cardsAll = loadPacks(ALL_PACKS);
+    let amendmentAll = 0;
+    for (const seed of SEEDS) if (playOne(AGENTS, cardsAll, cfg, seed).endedBy === 'amendment') amendmentAll++;
     return [
       { name: 'as-written-plus.json ships amendment as the ending', value: cfg.game.victory === 'amendment' ? 1 : 0, stamped: 1, tolerance: 0 },
       { name: 'passive pool: games ended by amendment ratification', value: amendment / n, stamped: 0.33, tolerance: 0.12, unit: 'share' },
       { name: 'passive pool: games ended by deck-out', value: deckOut / n, stamped: 0, tolerance: 0.03, unit: 'share' },
       { name: 'passive pool: games that ran out the 100-year cap', value: ranOutOfYears / n, stamped: 0.67, tolerance: 0.12, unit: 'share' },
       { name: 'passive pool: games ended by the old bill target', value: oldBillTarget / n, stamped: 0, tolerance: 0, unit: 'share' },
+      { name: 'passive pool, ALL_PACKS: games ended by amendment ratification', value: amendmentAll / n, stamped: 0.23, tolerance: 0.12, unit: 'share' },
     ];
   },
 
@@ -54,11 +61,18 @@ export const finding: Finding = {
     const deckOut = v('passive pool: games ended by deck-out');
     const ranOut = v('passive pool: games that ran out');
     const oldTarget = v('passive pool: games ended by the old bill target');
+    const deck = deckSensitivity([
+      { pool: 'four-pack', value: amendment },
+      { pool: 'all-seven', value: v('passive pool, ALL_PACKS: games ended by amendment') },
+    ]);
     return [
       `amendment ends ${(amendment * 100).toFixed(0)}% of games`,
       deckOut < 0.05 ? 'deck-out essentially never fires, matching the no-cap amendment' : `deck-out fires in ${(deckOut * 100).toFixed(0)}%, more than expected`,
       `the 100-year cap still binds ${(ranOut * 100).toFixed(0)}% of the time, so it remains a real backstop, not a formality`,
       oldTarget === 0 ? 'and no game ends on the retired bill target' : `and ${(oldTarget * 100).toFixed(0)}% still end on the retired bill target -- the config change did not take`,
+      deck.sensitive
+        ? `and ratification share is itself deck-sensitive (hf7y/american-cycle#91): ${(100 * deck.byPool['four-pack']).toFixed(0)}% four-pack vs ${(100 * deck.byPool['all-seven']).toFixed(0)}% all-seven`
+        : 'and ratification share held stable between the four-pack and all-seven decks (hf7y/american-cycle#91)',
     ].join('; ');
   },
 };

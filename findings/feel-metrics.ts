@@ -1,5 +1,6 @@
-import { loadConfig, loadPacks, playOne, BALANCE_PACKS } from '../sim/harness.ts';
+import { loadConfig, loadPacks, playOne, ALL_PACKS, BALANCE_PACKS } from '../sim/harness.ts';
 import { feelMetrics, quantile } from '../sim/feel.ts';
+import { deckSensitivity } from '../tracks/types.ts';
 import { seeds as sample } from './sample.ts';
 import type { Claim, Finding } from './types.ts';
 
@@ -38,6 +39,12 @@ export const finding: Finding = {
     let uncontested = 0;
     for (const seed of seeds) uncontested += playOne(AGENTS, cards, cfg, seed).uncontestedShare;
 
+    // hf7y/american-cycle#91: is uncontested share itself a property of
+    // which era-pack list ran it, same config/agents/seeds, all seven eras?
+    const cardsAll = loadPacks(ALL_PACKS);
+    let uncontestedAll = 0;
+    for (const seed of seeds) uncontestedAll += playOne(AGENTS, cardsAll, cfg, seed).uncontestedShare;
+
     return [
       { name: 'decision density: median legal races/player-turn', value: quantile(m.legal, 0.5), stamped: 45, tolerance: 8 },
       { name: 'decision density: turns with no legal move', value: 100 * m.deadTurnShare, stamped: 0, tolerance: 2, unit: '%' },
@@ -45,6 +52,7 @@ export const finding: Finding = {
       { name: 'board load: p90 tokens', value: quantile(m.tokens, 0.9), stamped: 147, tolerance: 30 },
       { name: 'board load: peak tokens', value: Math.max(...m.tokens), stamped: 246, tolerance: 60 },
       { name: 'uncontested share', value: 100 * uncontested / n, stamped: 67.81, tolerance: 5, unit: '%' },
+      { name: 'uncontested share, ALL_PACKS', value: 100 * uncontestedAll / n, stamped: 71.66, tolerance: 5, unit: '%' },
     ];
   },
 
@@ -54,6 +62,10 @@ export const finding: Finding = {
     const deadTurns = v('decision density: turns with no legal move');
     const peak = v('board load: peak tokens');
     const uncontested = v('uncontested share');
+    const deck = deckSensitivity([
+      { pool: 'four-pack', value: uncontested },
+      { pool: 'all-seven', value: v('uncontested share, ALL_PACKS') },
+    ]);
     return [
       densityMedian > 25
         ? `decision density's median is ${densityMedian.toFixed(0)}, past SIM-BRIEF's paralysis line of 25`
@@ -69,6 +81,9 @@ export const finding: Finding = {
       uncontested > 40
         ? `and ${uncontested.toFixed(1)}% of races are uncontested, past the ~40% line where players are reading as not fighting each other`
         : 'and uncontested share stays under the ~40% line',
+      deck.sensitive
+        ? `and uncontested share is itself deck-sensitive (hf7y/american-cycle#91): ${deck.byPool['four-pack'].toFixed(1)}% four-pack vs ${deck.byPool['all-seven'].toFixed(1)}% all-seven`
+        : 'and uncontested share held stable between the four-pack and all-seven decks (hf7y/american-cycle#91)',
     ].join('; ');
   },
 };

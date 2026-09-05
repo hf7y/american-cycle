@@ -1,5 +1,6 @@
-import { loadConfig, loadPacks, playOne } from '../sim/harness.ts';
+import { loadConfig, loadPacks, playOne, BALANCE_PACKS } from '../sim/harness.ts';
 import { withDistrictFraction } from '../sim/sweeps.ts';
+import { deckSensitivity } from '../tracks/types.ts';
 import { seeds as sample } from './sample.ts';
 import type { Claim, Finding } from './types.ts';
 
@@ -18,10 +19,9 @@ const TARGET = 60;
  *
  *  Config is `tuned` as shipped, including its 16-year cap; only the start year
  *  moves, to keep the era-ordered seven-pack talon in step with the calendar. */
-function contested(hand: number, districtFraction: number, seeds = sample(40)): number {
+function contested(hand: number, districtFraction: number, packs = ['1932', '1964', '1976', '1992', '2008', '2016', '2024'], seeds = sample(40)): number {
   const base = loadConfig('tuned.json');
-  const cards = withDistrictFraction(
-    loadPacks(['1932', '1964', '1976', '1992', '2008', '2016', '2024']), districtFraction, 3);
+  const cards = withDistrictFraction(loadPacks(packs), districtFraction, 3);
   const cfg = { ...base, hand: { ...base.hand, base: hand }, game: { ...base.game, startYear: 1932 } };
   let share = 0;
   for (let i = 0; i < seeds; i++) {
@@ -52,6 +52,9 @@ export const finding: Finding = {
   predicate(): Claim[] {
     // the hand sweep and the district sweep cross at hand 16, districts 0.15,
     // which is therefore one claim serving both orderings
+    // hf7y/american-cycle#91: is the crossing point itself a property of
+    // which era-pack list ran it, same config/agents/seeds, four eras?
+    const balancePoint = contested(16, 0.15, BALANCE_PACKS);
     return [
       { name: 'hand 8, districts 0.15', value: contested(8, 0.15), stamped: 37.84, tolerance: 3, unit: '%' },
       { name: 'hand 16, districts 0.15', value: contested(16, 0.15), stamped: 47.72, tolerance: 3, unit: '%' },
@@ -59,6 +62,7 @@ export const finding: Finding = {
       { name: 'hand 16, districts 0.06', value: contested(16, 0.06), stamped: 48.9, tolerance: 3, unit: '%' },
       { name: 'hand 16, districts 0.40', value: contested(16, 0.4), stamped: 44.48, tolerance: 3, unit: '%' },
       { name: 'hand 16, districts 1.00', value: contested(16, 1), stamped: 32.75, tolerance: 3, unit: '%' },
+      { name: 'hand 16, districts 0.15, BALANCE_PACKS', value: balancePoint, stamped: 47.65, tolerance: 3, unit: '%' },
     ];
   },
 
@@ -69,10 +73,17 @@ export const finding: Finding = {
     const bySupply = rising([v('hand 16, districts 1.00'), v('hand 16, districts 0.40'),
                              v('hand 16, districts 0.15'), v('hand 16, districts 0.06')]);
     const short = c.filter((x) => x.value < TARGET).length;
+    const deck = deckSensitivity([
+      { pool: 'all-seven', value: v('hand 16, districts 0.15') },
+      { pool: 'four-pack', value: v('hand 16, districts 0.15, BALANCE_PACKS') },
+    ]);
     return [
       byHand ? 'contest rises monotonically with hand size' : 'contest is NOT monotone in hand size',
       bySupply ? 'and falls monotonically as district supply rises' : 'and is NOT monotone in district supply',
       short === c.length ? `every configuration is short of the ${TARGET}% target` : `${c.length - short} of ${c.length} configurations reach ${TARGET}%`,
+      deck.sensitive
+        ? `and the crossing point is itself deck-sensitive (hf7y/american-cycle#91): ${deck.byPool['all-seven'].toFixed(1)}% all-seven vs ${deck.byPool['four-pack'].toFixed(1)}% four-pack`
+        : 'and the crossing point held stable between the all-seven and four-pack decks (hf7y/american-cycle#91)',
     ].join('; ');
   },
 };
