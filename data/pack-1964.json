@@ -587,6 +587,21 @@
     },
     {
       "kind": "candidate",
+      "id": "strom-thurmond-1954",
+      "name": "Strom Thurmond",
+      "party": "D",
+      "homeState": "SC",
+      "homeStateBonus": 4,
+      "identities": [
+        "rural",
+        "veteran"
+      ],
+      "belief": "Elected by write-in, running against his own party's machine",
+      "era": 1954,
+      "effects": []
+    },
+    {
+      "kind": "candidate",
       "id": "strom-thurmond-1964",
       "name": "Strom Thurmond",
       "party": "R",
@@ -599,6 +614,7 @@
       ],
       "belief": "Switched parties over the bill",
       "era": 1964,
+      "succeeds": "strom-thurmond-1954",
       "effects": [
         {
           "type": "extremist"

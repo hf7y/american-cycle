@@ -151,7 +151,7 @@ These were considered in design and rejected. Each has a plausible-sounding case
 
 **Issue polarity flips and party realignment tracks.** Cut. Realignment is encoded in state counters and in which cards happen to be good, not in a tracked platform object.
 
-**The "Evolve" action for changing positions over time.** The Obama gay-marriage case was the motivating example. Solved instead with card text plus one counter. No action, no track, no marker movement.
+**The "Evolve" action for changing positions over time.** The Obama gay-marriage case was the motivating example. Solved instead with card text plus one counter. No action, no track, no marker movement. This does NOT cut a second printed card for the same person (hf7y/american-cycle#101, `CandidateCard.succeeds`): that is a card converting a seat it already sits on, off-cycle, with no action, no track and no marker -- the same shape as the fix this line names, not the thing it cuts.
 
 **Ratchet vs pendulum issue tracks.** Cut with the rest of the issue system.
 

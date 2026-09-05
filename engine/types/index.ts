@@ -39,6 +39,11 @@ export interface CandidateCard {
   era: number;
   effects: CardEffect[];
   portrait?: string;
+  /** hf7y/american-cycle#101: this card's id is the predecessor whose seat it
+   *  converts, off-cycle, the moment its holder can play this card -- the
+   *  Shelby/Campbell/Thurmond shape, a party (or position) switch that skips
+   *  an election entirely. Unset for every ordinary card. */
+  succeeds?: string;
 }
 
 export interface DistrictCard {
