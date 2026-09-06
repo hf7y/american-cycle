@@ -18,7 +18,7 @@ const CASES: [IdentityTag[], IdentityTag[]][] = [
   [['union', 'urban'], ['union', 'rural']],
   [['union', 'urban'], ['union', 'urban']],
   [['union', 'urban', 'black'], ['union']],
-  [['farm', 'rural'], ['business', 'suburban', 'ivy']],
+  [['farm', 'rural'], ['catholic', 'suburban', 'hispanic']],
   [[], ['union']],
   [['union'], []],
   [[], []],

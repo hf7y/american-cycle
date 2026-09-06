@@ -12,9 +12,7 @@
       "homeStateBonus": 1,
       "identities": [
         "black",
-        "urban",
-        "ivy",
-        "academic"
+        "urban"
       ],
       "belief": "Hope and change",
       "era": 2008,
@@ -28,7 +26,6 @@
       "homeState": "NY",
       "homeStateBonus": 1,
       "identities": [
-        "ivy",
         "suburban"
       ],
       "belief": "Ready on day one",
@@ -71,8 +68,7 @@
       "homeState": "NM",
       "homeStateBonus": 2,
       "identities": [
-        "hispanic",
-        "business"
+        "hispanic"
       ],
       "belief": "Governor and diplomat",
       "era": 2008,
@@ -86,8 +82,7 @@
       "homeState": "CT",
       "homeStateBonus": 2,
       "identities": [
-        "catholic",
-        "ivy"
+        "catholic"
       ],
       "belief": "Banking chairman",
       "era": 2008,
@@ -131,7 +126,6 @@
       "homeState": "VA",
       "homeStateBonus": 2,
       "identities": [
-        "veteran",
         "rural"
       ],
       "belief": "Reagan's Navy Secretary",
@@ -175,8 +169,7 @@
       "homeState": "OH",
       "homeStateBonus": 2,
       "identities": [
-        "union",
-        "academic"
+        "union"
       ],
       "belief": "Against the trade deals",
       "era": 2008,
@@ -250,8 +243,7 @@
       "homeStateBonus": 1,
       "identities": [
         "black",
-        "urban",
-        "veteran"
+        "urban"
       ],
       "belief": "Ways and Means",
       "era": 2008,
@@ -266,8 +258,7 @@
       "homeStateBonus": 1,
       "identities": [
         "jewish",
-        "urban",
-        "ivy"
+        "urban"
       ],
       "belief": "Financial services",
       "era": 2008,
@@ -281,8 +272,7 @@
       "homeState": "WI",
       "homeStateBonus": 2,
       "identities": [
-        "jewish",
-        "academic"
+        "jewish"
       ],
       "belief": "The only no vote on the Patriot Act",
       "era": 2008,
@@ -296,8 +286,7 @@
       "homeState": "MN",
       "homeStateBonus": 2,
       "identities": [
-        "suburban",
-        "ivy"
+        "suburban"
       ],
       "belief": "Prosecutor from the Iron Range",
       "era": 2008,
@@ -310,9 +299,7 @@
       "party": "D",
       "homeState": "VA",
       "homeStateBonus": 2,
-      "identities": [
-        "business"
-      ],
+      "identities": [],
       "belief": "Governor who won rural Virginia",
       "era": 2008,
       "effects": []
@@ -325,8 +312,7 @@
       "homeState": "NC",
       "homeStateBonus": 2,
       "identities": [
-        "suburban",
-        "business"
+        "suburban"
       ],
       "belief": "Rode the wave",
       "era": 2008,
@@ -340,8 +326,7 @@
       "homeState": "MN",
       "homeStateBonus": 1,
       "identities": [
-        "jewish",
-        "academic"
+        "jewish"
       ],
       "belief": "Won by 312 votes",
       "era": 2008,
@@ -369,10 +354,7 @@
       "party": "R",
       "homeState": "AZ",
       "homeStateBonus": 2,
-      "identities": [
-        "veteran",
-        "business"
-      ],
+      "identities": [],
       "belief": "Maverick",
       "era": 2008,
       "effects": []
@@ -404,9 +386,7 @@
       "homeState": "MA",
       "homeStateBonus": 1,
       "identities": [
-        "evangelical",
-        "business",
-        "ivy"
+        "evangelical"
       ],
       "belief": "Turnaround artist",
       "era": 2008,
@@ -450,7 +430,6 @@
       "homeState": "TN",
       "homeStateBonus": 2,
       "identities": [
-        "business",
         "rural"
       ],
       "belief": "Actor and senator",
@@ -464,10 +443,7 @@
       "party": "R",
       "homeState": "TX",
       "homeStateBonus": 1,
-      "identities": [
-        "business",
-        "veteran"
-      ],
+      "identities": [],
       "belief": "End the Fed",
       "era": 2008,
       "effects": [
@@ -483,9 +459,7 @@
       "party": "R",
       "homeState": "KY",
       "homeStateBonus": 2,
-      "identities": [
-        "business"
-      ],
+      "identities": [],
       "belief": "The minority leader",
       "era": 2008,
       "effects": []
@@ -498,8 +472,7 @@
       "homeState": "OH",
       "homeStateBonus": 2,
       "identities": [
-        "catholic",
-        "business"
+        "catholic"
       ],
       "belief": "Country club conservative",
       "era": 2008,
@@ -514,8 +487,7 @@
       "homeStateBonus": 2,
       "identities": [
         "jewish",
-        "suburban",
-        "business"
+        "suburban"
       ],
       "belief": "Young Gun",
       "era": 2008,
@@ -529,7 +501,6 @@
       "homeState": "SC",
       "homeStateBonus": 2,
       "identities": [
-        "veteran",
         "evangelical"
       ],
       "belief": "McCain's wingman",
@@ -544,7 +515,6 @@
       "homeState": "ME",
       "homeStateBonus": 3,
       "identities": [
-        "business",
         "suburban"
       ],
       "belief": "The last split ticket",
@@ -558,9 +528,7 @@
       "party": "R",
       "homeState": "ME",
       "homeStateBonus": 3,
-      "identities": [
-        "business"
-      ],
+      "identities": [],
       "belief": "Voted for the stimulus in committee",
       "era": 2008,
       "effects": []
@@ -588,7 +556,6 @@
       "homeState": "NE",
       "homeStateBonus": 2,
       "identities": [
-        "veteran",
         "rural"
       ],
       "belief": "Republican against the war",
@@ -602,10 +569,7 @@
       "party": "R",
       "homeState": "IN",
       "homeStateBonus": 2,
-      "identities": [
-        "business",
-        "ivy"
-      ],
+      "identities": [],
       "belief": "Nunn-Lugar",
       "era": 2008,
       "effects": []
@@ -618,8 +582,7 @@
       "homeState": "SC",
       "homeStateBonus": 2,
       "identities": [
-        "evangelical",
-        "business"
+        "evangelical"
       ],
       "belief": "Ideological validator",
       "era": 2008,
@@ -642,8 +605,7 @@
       "homeState": "OK",
       "homeStateBonus": 2,
       "identities": [
-        "evangelical",
-        "business"
+        "evangelical"
       ],
       "belief": "Dr. No",
       "era": 2008,
@@ -676,8 +638,7 @@
       "homeState": "FL",
       "homeStateBonus": 2,
       "identities": [
-        "suburban",
-        "business"
+        "suburban"
       ],
       "belief": "Hugged the president",
       "era": 2008,
@@ -691,8 +652,7 @@
       "homeState": "LA",
       "homeStateBonus": 2,
       "identities": [
-        "evangelical",
-        "ivy"
+        "evangelical"
       ],
       "belief": "Rhodes scholar governor",
       "era": 2008,
@@ -721,7 +681,6 @@
       "homeState": "MS",
       "homeStateBonus": 2,
       "identities": [
-        "business",
         "rural"
       ],
       "belief": "The lobbyist governor",
@@ -765,10 +724,7 @@
       "party": "R",
       "homeState": "NH",
       "homeStateBonus": 2,
-      "identities": [
-        "business",
-        "ivy"
-      ],
+      "identities": [],
       "belief": "Youngest senator",
       "era": 2008,
       "effects": []
@@ -828,8 +784,7 @@
       "number": 8,
       "era": 2008,
       "demographics": [
-        "urban",
-        "academic"
+        "urban"
       ],
       "note": "San Francisco"
     },
@@ -852,8 +807,7 @@
       "number": 50,
       "era": 2008,
       "demographics": [
-        "suburban",
-        "business"
+        "suburban"
       ],
       "note": "North San Diego County"
     },
@@ -876,8 +830,7 @@
       "number": 22,
       "era": 2008,
       "demographics": [
-        "suburban",
-        "business"
+        "suburban"
       ],
       "note": "Sugar Land"
     },
@@ -949,8 +902,7 @@
       "number": 15,
       "era": 2008,
       "demographics": [
-        "suburban",
-        "academic"
+        "suburban"
       ],
       "note": "Columbus suburbs"
     },
@@ -962,8 +914,7 @@
       "era": 2008,
       "demographics": [
         "suburban",
-        "hispanic",
-        "business"
+        "hispanic"
       ],
       "note": "Northern Virginia"
     },
@@ -999,8 +950,7 @@
       "era": 2008,
       "demographics": [
         "rural",
-        "evangelical",
-        "veteran"
+        "evangelical"
       ],
       "note": "Western North Carolina"
     },
@@ -1135,8 +1085,7 @@
       "era": 2008,
       "demographics": [
         "farm",
-        "rural",
-        "veteran"
+        "rural"
       ],
       "note": "Eastern Kansas"
     },
@@ -1160,8 +1109,7 @@
       "era": 2008,
       "demographics": [
         "rural",
-        "evangelical",
-        "veteran"
+        "evangelical"
       ],
       "note": "Montgomery"
     },
@@ -1197,9 +1145,7 @@
       "number": 1,
       "era": 2008,
       "demographics": [
-        "suburban",
-        "business",
-        "veteran"
+        "suburban"
       ],
       "note": "Lowcountry"
     },
@@ -1247,8 +1193,7 @@
       "era": 2008,
       "demographics": [
         "rural",
-        "suburban",
-        "business"
+        "suburban"
       ],
       "note": "Eastern Shore"
     },
@@ -1259,8 +1204,7 @@
       "number": 7,
       "era": 2008,
       "demographics": [
-        "suburban",
-        "business"
+        "suburban"
       ],
       "note": "Central Jersey"
     },
@@ -1271,8 +1215,7 @@
       "number": 4,
       "era": 2008,
       "demographics": [
-        "suburban",
-        "business"
+        "suburban"
       ],
       "note": "Fairfield County"
     },
@@ -1283,8 +1226,7 @@
       "number": 8,
       "era": 2008,
       "demographics": [
-        "suburban",
-        "academic"
+        "suburban"
       ],
       "note": "Eastside"
     },
@@ -1296,21 +1238,11 @@
       "homeState": "CT",
       "homeStateBonus": 2,
       "identities": [
-        "jewish",
-        "ivy"
+        "jewish"
       ],
       "belief": "Lost the primary, won the general",
       "era": 2008,
-      "effects": [
-        {
-          "type": "conditional",
-          "pips": 2,
-          "when": {
-            "identity": "veteran"
-          },
-          "note": "an unstable basket: hawkish credit"
-        }
-      ]
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -1320,8 +1252,7 @@
       "homeState": "VT",
       "homeStateBonus": 3,
       "identities": [
-        "jewish",
-        "academic"
+        "jewish"
       ],
       "belief": "Caucuses with the Democrats",
       "era": 2008,
