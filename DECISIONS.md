@@ -167,8 +167,6 @@ These were considered in design and rejected. Each has a plausible-sounding case
 
 **A Fed with appointments, interest rates, inflation, and unemployment as separate systems.** Collapsed to one accumulated-spending track and a 2d6 roll-under.
 
-**Retiring general-election losers, as a deck-out drain.** Measured at 1.43 losses/year against the 604-card pool — 422 years to empty it. Improves a number (`expelled`, 0.00 today) without changing an outcome (hf7y/american-cycle#144). Revisit only after hf7y/american-cycle#90 shrinks the pool.
-
 **The governing rule:** *if it cannot be a token on a card or a counter on the board, it does not exist.* When in doubt, apply this and cut.
 
 ---
@@ -183,7 +181,7 @@ Ordered by how much the answer changes the game.
 4. ~~District-to-candidate ratio per pack~~ — **measured, not settled**: `draft.districtsPerPack` was dead (hf7y/american-cycle#87 found it read nowhere) and is now wired into `defaultPick`'s draft heuristic. But swept across its whole range the district count it was assumed to set doesn't move — see hf7y/american-cycle#132, which reopens the actual question: something else pins district holdings near a fixed value per player, and nobody has found what yet.
 5. ~~Victory condition~~ — **settled**, see the Settled table above: points, with the amendment as the ending, ruled 2026-09-04 (hf7y/american-cycle#145), reversing the 2026-09-01 bills-passed ruling wired on `as-written-plus.json` (`victory: 'amendment'`). hf7y/american-cycle#13 measured the other three win-condition candidates failing under the earlier ruling and is reopened by this one for the offices question specifically, not the win-condition question.
 6. ~~Governor pushes~~ — **measured, hf7y/american-cycle#26**: `with-lean` moves neither realignment (3.43 vs 3.46 states/game, n=400) nor the governorship's winner-advantage ratio (1.73x vs 1.56x) once `resignToRun`/`oddYearGovernors` are on. Stays `never` on every shipped config; `governors-push.json` remains as the shipped contrast.
-7. ~~Deck-out as the end condition~~ — **settled in part**, see the no-cap amendment above: `maxYears: 100` ships as a length backstop because deck-out itself does not reliably fire (circulation regrows the talon faster than it depletes). Retiring general-election losers to force it was considered and cut (hf7y/american-cycle#144, see Cut above) — the pool is too large for any drain rate to matter. Making deck-out itself reachable remains unresolved pending hf7y/american-cycle#90's pool resizing.
+7. ~~Deck-out as the end condition~~ — **settled**, hf7y/american-cycle#144: deck-out is decorative and the year cap is the real ending, not a backstop for it. Retiring general-election losers was considered as the drain to make deck-out fire and cut — 1.43 losses/year against the 604-card pool is 422 years to empty it, improving `expelled` (0.00 today) without changing an outcome. Revisit only if hf7y/american-cycle#90 shrinks the pool.
 8. **Whether capture is too strong** — parked; reintroduce only if balance requires it.
 
 If an implementation question is not answered by the design doc, **it is probably on this list.** Add to it rather than inventing a rule, and note the placeholder you used.
