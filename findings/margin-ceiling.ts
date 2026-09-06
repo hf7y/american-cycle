@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { loadConfig, loadPacks, playOne, BALANCE_PACKS } from '../sim/harness.ts';
+import { effectiveCompetitiveness } from '../tracks/history.ts';
 import { deckSensitivity } from '../tracks/types.ts';
 import { seeds as sample } from './sample.ts';
 import type { Claim, Finding } from './types.ts';
@@ -17,6 +18,23 @@ function real() {
     };
   };
   return f.derived;
+}
+
+/** #146, option 2: the honest counterpart to a CONTESTED-only sim, read
+ *  straight off `house_district_panel.json` rather than `baseline.json`'s
+ *  derived stats (which fold unopposed races in at their ~100-point margin
+ *  and so are not comparable to a sample that excludes walkovers). */
+function realContested() {
+  const url = new URL('../data/historical/house_district_panel.json', import.meta.url);
+  const rows = (JSON.parse(readFileSync(url, 'utf8')) as { rows: [number, string, number, number, number, number][] }).rows;
+  const pts = rows
+    .map(([, , , d, r]) => (d === 0 || r === 0 || d + r === 0 ? undefined : (100 * Math.abs(d - r)) / (d + r)))
+    .filter((m): m is number => m !== undefined)
+    .sort((a, b) => a - b);
+  return {
+    median: pts[Math.floor(pts.length / 2)],
+    competitive: (100 * pts.filter((p) => p < 10).length) / pts.length,
+  };
 }
 
 /** Every CONTESTED House general over `seeds` games, as a margin in POINTS —
@@ -37,9 +55,13 @@ function simMargins(packs = ['1932', '1964', '1976', '1992', '2008', '2016', '20
   const cards = loadPacks(packs);
   const cfg = { ...base, game: { ...base.game, startYear: 1932 } };
   const pts: number[] = [];
+  let generals = 0, walkovers = 0;
   for (let i = 0; i < seeds; i++) {
     for (const e of playOne(['Greedy', 'Lookahead', 'SenateFlood', 'HeterodoxSpecialist'], cards, cfg as never, 1030000 + i).events) {
-      if (e.office === 'representative' && e.round === 'general' && !e.uncontested) pts.push(2 * Math.abs(e.margin));
+      if (e.office !== 'representative' || e.round !== 'general') continue;
+      generals++;
+      if (e.uncontested) walkovers++;
+      else pts.push(2 * Math.abs(e.margin));
     }
   }
   pts.sort((a, b) => a - b);
@@ -48,6 +70,7 @@ function simMargins(packs = ['1932', '1964', '1976', '1992', '2008', '2016', '20
     median: pts[Math.floor(pts.length / 2)],
     safe: pct((p) => p >= 40),
     competitive: pct((p) => p < 10),
+    walkoverShare: (100 * walkovers) / generals,
   };
 }
 
@@ -67,13 +90,17 @@ export const finding: Finding = {
     + 'points a pip the game cannot express a 40-point win at all. The one qualification in the '
     + "sim's favour is that it encodes a safe seat as a WALKOVER where reality encodes it as a "
     + 'contested race won by forty, so the two distributions are partly the same phenomenon in '
-    + 'different clothes; the gap narrows and does not close.',
+    + 'different clothes; the gap narrows and does not close. hf7y/american-cycle#146 ships the '
+    + 'like-for-like reading alongside this one, unreplaced: 90.5% sim walkover share against a real '
+    + '39.5% (unopposed-or-40pp), and the CONTESTED-only distributions on both sides.',
   stampedAt: '2026-09-05T06:59:12Z',
   stampedOn: '2021e16',
 
   predicate(): Claim[] {
     const sim = simMargins();
     const r = real();
+    const rc = realContested();
+    const safeSeat = effectiveCompetitiveness(40);
     // hf7y/american-cycle#91: is the headline median-margin figure itself a
     // property of which era-pack list ran it, same config/agents/seeds?
     const simBalance = simMargins(BALANCE_PACKS);
@@ -85,6 +112,14 @@ export const finding: Finding = {
       { name: 'sim: competitive, under 10 pts', value: sim.competitive, stamped: 49.59, tolerance: 8, unit: '%' },
       { name: 'real: competitive, under 10 pts', value: r.house_competitive_under10_pct, stamped: 13.5, tolerance: 0.5, unit: '%' },
       { name: 'sim: median House margin, BALANCE_PACKS', value: simBalance.median, stamped: 10, tolerance: 3, unit: 'pts' },
+      // hf7y/american-cycle#146, option 2: PARALLEL to the rows above, not a
+      // replacement -- a walkover IS this game's safe seat, so the honest
+      // comparison is walkover-share against the real unopposed-or-blowout
+      // share, and CONTESTED-only distribution against CONTESTED-only.
+      { name: 'sim: House generals, walkover share', value: sim.walkoverShare, stamped: 90.52, tolerance: 5, unit: '%' },
+      { name: 'real: House generals, safe seat (unopposed or margin>=40pp)', value: 100 * safeSeat.share, stamped: 39.46, tolerance: 0.5, unit: '%' },
+      { name: 'real: median House margin, CONTESTED only', value: rc.median, stamped: 29.63, tolerance: 0.5, unit: 'pts' },
+      { name: 'real: competitive, under 10 pts, CONTESTED only', value: rc.competitive, stamped: 15.27, tolerance: 0.5, unit: '%' },
     ];
   },
 
@@ -97,6 +132,8 @@ export const finding: Finding = {
       { pool: 'all-seven', value: v('sim: median House margin') },
       { pool: 'four-pack', value: v('sim: median House margin, BALANCE_PACKS') },
     ]);
+    const likeForLike = v('sim: House generals, walkover share') > 2 * v('real: House generals, safe seat (unopposed or margin>=40pp)');
+    const contestedCompressed = v('sim: median House margin') < v('real: median House margin, CONTESTED only') / 2;
     return [
       compressed ? 'the simulated spread is a fraction of the real one' : 'the simulated spread now matches the real one',
       noSafeSeats ? 'safe seats do not occur' : 'safe seats occur',
@@ -104,6 +141,12 @@ export const finding: Finding = {
       deck.sensitive
         ? `and the sim median margin is itself deck-sensitive (hf7y/american-cycle#91): ${deck.byPool['all-seven'].toFixed(1)} all-seven vs ${deck.byPool['four-pack'].toFixed(1)} four-pack pts`
         : 'and the sim median margin held stable between the all-seven and four-pack decks (hf7y/american-cycle#91)',
+      likeForLike
+        ? `and read like-for-like (hf7y/american-cycle#146) the game still over-forfeits: ${v('sim: House generals, walkover share').toFixed(1)}% walkover share against a real ${v('real: House generals, safe seat (unopposed or margin>=40pp)').toFixed(1)}% unopposed-or-blowout`
+        : 'and read like-for-like (hf7y/american-cycle#146) the walkover share no longer dwarfs the real safe-seat share',
+      contestedCompressed
+        ? `and even restricted to CONTESTED races only the sim spread stays a fraction of the real one: ${v('sim: median House margin').toFixed(1)} vs ${v('real: median House margin, CONTESTED only').toFixed(1)} pts`
+        : 'and restricted to CONTESTED races only the sim spread now matches the real one',
     ].join('; ');
   },
 };
