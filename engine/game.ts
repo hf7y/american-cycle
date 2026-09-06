@@ -146,7 +146,7 @@ export interface Agent {
 }
 
 export type UiRequest =
-  | { kind: 'declare'; year: number; open: OpenRace[] }
+  | { kind: 'declare'; year: number; open: OpenRace[]; pending: PendingPeg[] }
   | { kind: 'withdraw'; year: number; round: 'primary' | 'general';
       view: WithdrawalView; race: { office: Office; state: string; slot?: number; cardName: string } }
   | { kind: 'independent'; year: number;
@@ -1550,13 +1550,11 @@ export class Game {
   }
 
   private *electionsInteractive(human: number): Generator<UiRequest, void, UiAnswer> {
-    // Collect every declaration first, so the human can see the pegs go down.
+    // The human declares in rotation, seeing the same pegs every agent does (#149).
     const wave = new Wave(this.rng);
     const open = this.openRaces();
     this.releaseExpiringTerms(open);
     this.releaseHolders();
-    const answer = yield { kind: 'declare', year: this.year, open };
-    this.humanDeclarations = answer.declarations ?? [];
     const decls: Declaration[] = [];
     const pending: PendingPeg[] = [];
     // Math.floor matters: in an ODD year `year / 2` is fractional, so the
@@ -1566,7 +1564,13 @@ export class Game {
     // first.
     const order = this.players.map((_, i) => (i + Math.floor(this.year / 2) + this.cycleOffset) % this.players.length);
     for (const i of order) {
-      const mine = i === human ? this.humanDeclarations : this.agents[i].declare(this.view(i), open, pending);
+      let mine: Declaration[];
+      if (i === human) {
+        const answer = yield { kind: 'declare', year: this.year, open, pending: [...pending] };
+        mine = this.humanDeclarations = answer.declarations ?? [];
+      } else {
+        mine = this.agents[i].declare(this.view(i), open, pending);
+      }
       this.stats.decisions.push(mine.length);
       for (const d of mine) {
         const p = this.players[i];

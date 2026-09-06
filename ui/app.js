@@ -294,6 +294,11 @@ function drawMap() {
   const declaredHere = new Set(S.picks.map((p)=>p.state));
   const openStates = new Set();
   if (pending && pending.kind === 'declare' && S.sel) for (const r of racesInState_all(S.sel)) openStates.add(r.state);
+  const opponentPegs = new Map();
+  if (pending && pending.kind === 'declare') for (const pg of pending.pending || []) {
+    if (!opponentPegs.has(pg.state)) opponentPegs.set(pg.state, []);
+    opponentPegs.get(pg.state).push(pg);
+  }
   for (const [code,[c,r]] of Object.entries(TILES)) {
     const t = el('div','st');
     t.style.gridColumn = c+1; t.style.gridRow = r+1;
@@ -309,6 +314,16 @@ function drawMap() {
     t.appendChild(pips);
     const held = G.seats.find((s)=>s.state===code && s.holder && (s.office==='senator'||s.office==='governor'));
     if (held){ const pg = el('div','peg'); pg.style.background = PLAYER_COLORS[held.holder.player]; t.appendChild(pg); }
+    const opp = opponentPegs.get(code);
+    if (opp){
+      const row = el('div','opp-pegs');
+      for (const pg of opp.slice(0,4)) {
+        const dot = el('div','opp-peg'); dot.style.background = PLAYER_COLORS[pg.player];
+        dot.title = `${OFFICE_LABEL[pg.office]} declared`;
+        row.appendChild(dot);
+      }
+      t.appendChild(row);
+    }
     if (openStates.has(code)) { t.classList.add('act'); t.onclick = () => pickRace(code); }
     if (declaredHere.has(code)) t.classList.add('race');
     t.title = `${code} — lean ${lean>0?'R+':lean<0?'D+':''}${Math.abs(lean)||'even'}`;
