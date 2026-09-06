@@ -497,6 +497,82 @@ test('once the first era is exhausted, the draft moves into the next one', () =>
   assert.ok(eras.has(2008), '1976 alone could not fill 135 cards, so 2008 had to be reached');
 });
 
+// -------------------------------------------------------- #106: redistricting
+
+/** #106 change 4, `districtSupersession`: CA-8 is the issue's own clearest
+ *  example of a seat that carries different demographics across eras. Built
+ *  synthetically here (real CA-8 cards would need era-1992's own huge pool
+ *  drafted around them to force the sequencing) but the shape is exactly
+ *  what the pack files carry: same state and number, a later era, different
+ *  demographics.
+ *
+ *  Single player, packSize 1 for a fully deterministic draft order, hand
+ *  base 2: era 1976 supplies exactly a district and a candidate, so the
+ *  initial draft fills the hand from 1976 alone and era 1992's card is left
+ *  untouched in the era queue. Winning the House race empties the candidate's
+ *  hand slot in the same tick `refill()` runs, which is what reaches into
+ *  1992 and admits the superseding card. */
+test('#106: a later-era district card discards the seat\'s earlier one, under the flag', () => {
+  const ca8_1976 = dist({ id: 'CA-8-1976', state: 'CA', number: 8, era: 1976, demographics: ['urban', 'black'] });
+  const ca8_1992 = dist({ id: 'CA-8-1992', state: 'CA', number: 8, era: 1992, demographics: ['urban', 'catholic'] });
+  const filler = cand({ id: 'filler', era: 1976 });
+
+  const declFn = (v: GameView, open: OpenRace[]): Declaration[] => {
+    const held = v.players[0].hand.find((c) => c.kind === 'candidate') as CandidateCard | undefined;
+    const race = open.find((r) => r.office === 'representative' && r.state === 'CA' && r.slot === 8);
+    return held && race ? [{ player: 0, card: held, office: 'representative', state: 'CA', slot: 8 }] : [];
+  };
+  const agent = new ScriptedAgent('solo', declFn);
+
+  const cfg = loadConfig('as-written-plus.json');
+  cfg.hand = { ...cfg.hand, base: 2, bonusPresident: 0, bonusSenator: 0, bonusGovernor: 0, bonusRepresentative: 0 };
+  cfg.draft = { ...cfg.draft, packSize: 1 };
+  cfg.game = { ...cfg.game, districtSupersession: true };
+
+  const g = new Game([agent], [
+    { kind: 'district', ...ca8_1976 }, { kind: 'candidate', ...filler }, { kind: 'district', ...ca8_1992 },
+  ], cfg, 1);
+
+  assert.deepEqual(g.players[0].districts.map((d) => d.id), ['CA-8-1976'],
+    'the initial draft fills the 2-card hand from 1976 alone; 1992 is untouched');
+
+  g.tick();
+
+  assert.deepEqual(g.players[0].districts.map((d) => d.id), ['CA-8-1992'],
+    'winning the race frees the hand slot refill() uses to reach 1992, which supersedes 1976');
+  assert.ok(g.discard.some((c) => c.kind === 'district' && c.id === 'CA-8-1976'),
+    'the superseded card is discarded, not handed to anyone');
+  const seat = g.seats.find((s) => s.office === 'representative' && s.state === 'CA' && s.slot === 8);
+  assert.equal(seat?.holder?.player, 0, 'ownership of the SEAT is unaffected -- supersession only replaces the card');
+});
+
+test('#106: districtSupersession off (default) leaves an earlier era\'s card in play', () => {
+  const ca8_1976 = dist({ id: 'CA-8-1976', state: 'CA', number: 8, era: 1976, demographics: ['urban', 'black'] });
+  const ca8_1992 = dist({ id: 'CA-8-1992', state: 'CA', number: 8, era: 1992, demographics: ['urban', 'catholic'] });
+  const filler = cand({ id: 'filler', era: 1976 });
+
+  const declFn = (v: GameView, open: OpenRace[]): Declaration[] => {
+    const held = v.players[0].hand.find((c) => c.kind === 'candidate') as CandidateCard | undefined;
+    const race = open.find((r) => r.office === 'representative' && r.state === 'CA' && r.slot === 8);
+    return held && race ? [{ player: 0, card: held, office: 'representative', state: 'CA', slot: 8 }] : [];
+  };
+  const agent = new ScriptedAgent('solo', declFn);
+
+  const cfg = loadConfig('as-written-plus.json');
+  cfg.hand = { ...cfg.hand, base: 2, bonusPresident: 0, bonusSenator: 0, bonusGovernor: 0, bonusRepresentative: 0 };
+  cfg.draft = { ...cfg.draft, packSize: 1 };
+  // districtSupersession left unset -- the default.
+
+  const g = new Game([agent], [
+    { kind: 'district', ...ca8_1976 }, { kind: 'candidate', ...filler }, { kind: 'district', ...ca8_1992 },
+  ], cfg, 1);
+
+  g.tick();
+
+  const ids = g.players[0].districts.map((d) => d.id).sort();
+  assert.deepEqual(ids, ['CA-8-1976', 'CA-8-1992'], 'off by default, both eras\' cards coexist -- nothing displaces the older one');
+});
+
 // -------------------------------------------------------- the shipped configs
 
 /** #32's specific complaint: `three-terms.json` ships a victory condition

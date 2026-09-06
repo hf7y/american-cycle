@@ -108,6 +108,13 @@ export interface Declaration {
   player: number;
   card: CandidateCard;
   district?: DistrictCard;
+  /** #106 change 3, behind `statewideFitSums`: every district card in play in
+   *  this race's state, for a Senate or governor race that prices fit against
+   *  the sum rather than one player's own first match. When set, this
+   *  supersedes `district` in `buildModifiers`'s identity-fit block. Unset
+   *  for a House race, which already keys on the one district card in its
+   *  slot via `district`. */
+  districts?: DistrictCard[];
   office: Office;
   state: string;
   slot?: number;
@@ -143,8 +150,19 @@ export interface Declaration {
 
 /** District cards gate all races. You may run only where you hold a
  *  district card, or where your candidate is a native. This is the brake on
- *  wide-and-empty play (see elections.test.ts). */
-export function eligible(card: CandidateCard, state: string, districts: DistrictCard[]): boolean {
+ *  wide-and-empty play (see elections.test.ts).
+ *
+ *  `house` is #106 change 1: pass it only for a House race under the
+ *  `districtLevelEligibility` flag, and eligibility tightens to the exact
+ *  district (state AND number) rather than merely the state -- holding OH-3
+ *  no longer lets you declare in OH-9. Senate, governor and president are
+ *  unaffected either way; #106's ruling scopes the tightening to the House. */
+export function eligible(
+  card: CandidateCard, state: string, districts: DistrictCard[], house?: number,
+): boolean {
+  if (house !== undefined) {
+    return card.homeState === state || districts.some((d) => d.state === state && d.number === house);
+  }
   return card.homeState === state || districts.some((d) => d.state === state);
 }
 
@@ -193,7 +211,23 @@ export function buildModifiers(
   // race resolves. Identity match is what remains, and #40 keys it on
   // whichever district card is in play in this race's slot, not on who
   // holds it -- the caller supplies `d.district` accordingly.
-  if (d.district && d.district.state === ctx.state) {
+  if (d.districts && d.districts.length) {
+    // #106 change 3: a statewide race sums fit across every district card in
+    // play in the state -- a player adds, a player does not average. Each
+    // district contributes independently, so three districts sharing one tag
+    // are worth three times what one is, unlike the single-district branch
+    // below which counts a shared tag once no matter how it is phrased.
+    let total = 0;
+    const hit: string[] = [];
+    for (const district of d.districts) {
+      if (district.state !== ctx.state) continue;
+      const shared = d.card.identities.filter((i) => district.demographics.includes(i));
+      if (!shared.length) continue;
+      total += shared.reduce((n, tag) => n + (d.card.identityWeights?.[tag] ?? res.identityBonus), 0);
+      hit.push(`${district.id}: ${shared.join(', ')}`);
+    }
+    if (total) m.push({ source: `identity (statewide): ${hit.join('; ')}`, pips: total });
+  } else if (d.district && d.district.state === ctx.state) {
     const shared = d.card.identities.filter((i) => d.district!.demographics.includes(i));
     if (shared.length) {
       const pips = shared.reduce((n, tag) => n + (d.card.identityWeights?.[tag] ?? res.identityBonus), 0);

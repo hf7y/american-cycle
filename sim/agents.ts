@@ -21,7 +21,8 @@ export function options(v: GameView, open: OpenRace[], cfg: Config): Option[] {
   const out: Option[] = [];
   for (const r of open) {
     for (const card of cands) {
-      if (r.office !== 'president' && !eligible(card, r.state, me.districts)) continue;
+      const house = cfg.game.districtLevelEligibility && r.office === 'representative' ? r.slot : undefined;
+      if (r.office !== 'president' && !eligible(card, r.state, me.districts, house)) continue;
       // A district is identified BY ITS NUMBER, not just its state. Matching
       // on state alone let whichever card `find` reached first supply the
       // demographics for a House race in a different district entirely.
@@ -31,13 +32,17 @@ export function options(v: GameView, open: OpenRace[], cfg: Config): Option[] {
       // it prices the race whether the declaring player owns it or not.
       // `eligible` above is the separate entry gate (you may only enter where
       // you hold presence); this is what the race is worth once you are in
-      // it. Senate/governor/president stay keyed to the player's OWN holdings
-      // -- a statewide race summing fit across every district on the table is
-      // #106, v0.3.
+      // it. Senate/governor default to the player's OWN first-found holding;
+      // #106 change 3 (`statewideFitSums`) instead sums fit across every
+      // district card any player has in play in the state.
+      const statewide = cfg.game.statewideFitSums
+        && (r.office === 'senator' || r.office === 'governor')
+        ? v.players.flatMap((p) => p.districts).filter((dd) => dd.state === r.state)
+        : undefined;
       const district = r.office === 'representative'
         ? v.players.flatMap((p) => p.districts).find((d) => d.state === r.state && d.number === r.slot)
-        : me.districts.find((d) => d.state === r.state);
-      const d: Declaration = { player: v.me, card, district, office: r.office, state: r.state, slot: r.slot,
+        : statewide ? undefined : me.districts.find((d) => d.state === r.state);
+      const d: Declaration = { player: v.me, card, district, districts: statewide, office: r.office, state: r.state, slot: r.slot,
         incumbent: r.incumbent?.holder?.cardId === card.id };
       const ctx = {
         year: v.year, office: r.office, state: r.state, slot: r.slot,
@@ -327,7 +332,9 @@ export class HeterodoxSpecialist extends Base {
       const against = Math.sign(lean) === (x.d.card.party === 'R' ? -1 : 1);
       const fit = x.d.district
         ? x.d.card.identities.filter((i) => x.d.district!.demographics.includes(i)).length
-        : 0;
+        : x.d.districts
+          ? x.d.districts.reduce((n, dd) => n + x.d.card.identities.filter((i) => dd.demographics.includes(i)).length, 0)
+          : 0;
       const local = fit > 0 || x.d.card.homeState === x.d.state;
       return { ...x, edge: x.edge + (local && against ? 6 : local ? 2 : 0) };
     });
