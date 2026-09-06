@@ -12,13 +12,18 @@ import type { Claim, Finding } from './types.ts';
  *  call. This finding is the full-game evidence for whoever makes it -- does
  *  the mechanism actually relieve the cap-pinning #51 named as the reason for
  *  the ruling, in real play rather than in an isolated fixture? */
-function measure(pushKeyedOn: 'margin' | 'surprise', packs = ALL_PACKS, seeds = sample(50)) {
+function measure(
+  pushKeyedOn: 'margin' | 'surprise',
+  packs = ALL_PACKS,
+  seeds = sample(50),
+  pushByMargin?: { maxPips: number; push: number }[],
+) {
   const base = loadConfig('tuned.json');
   const cards = loadPacks(packs);
   const cfg = {
     ...base,
     game: { ...base.game, startYear: 1932, maxYears: 60, victory: 'points' },
-    lean: { ...base.lean, uncontestedPush: 1, pushKeyedOn },
+    lean: { ...base.lean, uncontestedPush: 1, pushKeyedOn, ...(pushByMargin ? { pushByMargin } : {}) },
   };
   let abs = 0, n = 0, four = 0, cap = 0, games = 0;
   for (let i = 0; i < seeds; i++) {
@@ -32,6 +37,18 @@ function measure(pushKeyedOn: 'margin' | 'surprise', packs = ALL_PACKS, seeds = 
   }
   return { meanAbs: abs / n, fourPerGame: four / games, cappedPerGame: cap / games };
 }
+
+/** #51's open sub-question, once the mechanism shipped opt-in: can the push
+ *  table be RE-TUNED for the surprise scale to recover more of the
+ *  realignment lost above, without giving back the cap relief that was the
+ *  point of keying on surprise at all? Bump only the table's first bucket --
+ *  0 -> 1 for surprise <=1 pip, everything else held at tuned.json's shipped
+ *  values -- because hf7y/american-cycle#10's own sweep found the margin-keyed
+ *  table is governed by whether a NARROW result pushes at all, not by the top
+ *  of the table. If that asymmetry is a property of the push mechanism itself
+ *  rather than of which quantity it is keyed on, the same one-bucket bump
+ *  should reproduce it here too. */
+const BUMPED_FIRST_BUCKET = [{ maxPips: 1, push: 1 }, { maxPips: 3, push: 1 }, { maxPips: 99, push: 2 }];
 
 export const finding: Finding = {
   id: 'surprise-keyed-push',
@@ -47,7 +64,11 @@ export const finding: Finding = {
     + '2.32 to 1.15, while realigned states (|lean|>=4) fall from 12.42 to 3.80 -- so the mechanism trades '
     + 'away most of the realignment the margin-keyed table produces along with the saturation, not just '
     + 'the saturation alone. The cap relief is itself deck-sensitive (hf7y/american-cycle#91: 1.76 '
-    + 'all-seven vs 1.08 four-pack pinned/game) though the direction holds either way. That tradeoff, not '
+    + 'all-seven vs 1.08 four-pack pinned/game) though the direction holds either way. And the tradeoff '
+    + "cannot be retuned away: bumping only the surprise-scale table's <=1pip bucket from 0 to 1 (holding "
+    + 'the rest at the shipped margin-scale values) sends pinning to 7.44/game, almost back to margin-keyed\'s '
+    + '6.34 -- the same first-bucket sensitivity hf7y/american-cycle#10 measured on the margin scale is a '
+    + 'property of the push mechanism itself, not of which quantity it is keyed on. That tradeoff, not '
     + 'just whether the mechanism works, is what the still-open ruling has to weigh.',
   stampedAt: '2026-09-05T18:00:00Z',
   stampedOn: 'bd9ff01',
@@ -56,6 +77,7 @@ export const finding: Finding = {
     const margin = measure('margin');
     const surprise = measure('surprise');
     const surpriseBalance = measure('surprise', BALANCE_PACKS);
+    const surpriseBumped = measure('surprise', ALL_PACKS, sample(50), BUMPED_FIRST_BUCKET);
     return [
       { name: 'margin-keyed: states pinned at the cap', value: margin.cappedPerGame, stamped: 6.34, tolerance: 1.2 },
       { name: 'surprise-keyed: states pinned at the cap', value: surprise.cappedPerGame, stamped: 1.76, tolerance: 0.6 },
@@ -66,6 +88,11 @@ export const finding: Finding = {
       // hf7y/american-cycle#91: is the surprise-keyed cap relief itself a
       // property of which era-pack list ran it?
       { name: 'surprise-keyed, BALANCE_PACKS: states pinned at the cap', value: surpriseBalance.cappedPerGame, stamped: 1.08, tolerance: 0.5 },
+      // #51's retuning sub-question: bump only the surprise-scale table's
+      // first bucket (0 -> 1 for <=1 pip surprise) and see whether the cap
+      // relief survives.
+      { name: 'surprise-keyed, first bucket bumped: states pinned at the cap', value: surpriseBumped.cappedPerGame, stamped: 7.44, tolerance: 1.5 },
+      { name: 'surprise-keyed, first bucket bumped: states realigned per game', value: surpriseBumped.fourPerGame, stamped: 12.68, tolerance: 2.5 },
     ];
   },
 
@@ -76,6 +103,12 @@ export const finding: Finding = {
       { pool: 'all-seven', value: by('surprise-keyed: states pinned') },
       { pool: 'four-pack', value: by('surprise-keyed, BALANCE_PACKS: states pinned') },
     ]);
+    const bumpedPinned = by('surprise-keyed, first bucket bumped: states pinned');
+    const marginPinned = by('margin-keyed: states pinned');
+    const shippedPinned = by('surprise-keyed: states pinned');
+    // "close to margin-keyed" means the bump gave back most of the gap the
+    // unmodified surprise key closed, not that it matches exactly.
+    const bumpReproducesSaturation = (marginPinned - bumpedPinned) < (marginPinned - shippedPinned) * 0.5;
     return [
       relievesCap
         ? `surprise-keying relieves the cap (${by('surprise-keyed: states pinned').toFixed(2)} vs ${by('margin-keyed: states pinned').toFixed(2)} pinned/game)`
@@ -87,6 +120,9 @@ export const finding: Finding = {
       deck.sensitive
         ? `and the cap relief is itself deck-sensitive (hf7y/american-cycle#91): ${deck.byPool['all-seven'].toFixed(2)} all-seven vs ${deck.byPool['four-pack'].toFixed(2)} four-pack`
         : 'and the cap relief held stable between the all-seven and four-pack decks (hf7y/american-cycle#91)',
+      bumpReproducesSaturation
+        ? `and the tradeoff cannot be retuned away -- bumping only the table's <=1pip bucket from 0 to 1 pushes pinning back to ${bumpedPinned.toFixed(2)}/game, most of the way to margin-keyed's ${marginPinned.toFixed(2)}, the same first-bucket sensitivity hf7y/american-cycle#10 found on the margin scale`
+        : `but the table CAN be retuned without giving back the cap relief -- bumping the <=1pip bucket only moved pinning to ${bumpedPinned.toFixed(2)}/game, still well clear of margin-keyed's ${marginPinned.toFixed(2)}`,
     ].join('; ');
   },
 };
