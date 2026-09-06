@@ -28,7 +28,6 @@ narrow leader can never close alone.
 | `skowronek/` | the regime suite: compass, observation, checks, controls, report |
 | `data/historical/` | MIT election returns, as evidence to validate against |
 | `ui/` | the playable board; `node ui/build.ts` bundles it |
-| `docs/rules.html` | the rules reference, generated from `engine/` by `node docs/build.ts` — never hand-edited |
 
 ## Findings are predicates, not prose
 
