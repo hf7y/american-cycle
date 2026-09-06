@@ -1267,6 +1267,13 @@ function boardScores(cfg               , b           )           {
                                                                             
                                        
                                     
+                                                                             
+                                                                              
+                                                                          
+                                                                 
+                                                                            
+                                          
+                            
  
 
                               
@@ -1586,7 +1593,7 @@ function runRace(a             ) {
                                                                               
                                                                     
                                                                                                                                                          
-                                                                                        
+                                                                                                                   
                         
                               
                                         
@@ -1618,7 +1625,24 @@ function runRace(a             ) {
                                      
                                                                                 
                                                          
-                                  
+                                
+                                                                           
+                                                                        
+                                                                          
+                                                                         
+                                                                           
+                                                                            
+                                                                            
+                                                                             
+                                                                           
+                                                                        
+                                                                             
+                                                                        
+                                                                           
+                                                                             
+                                                                          
+                        
+                                                                 
  
 
                               
@@ -3376,6 +3400,24 @@ function defaultPick(pack        , p             , districtGoal        )       {
 
                                                                  
 
+/** hf7y/american-cycle#15: what party a card could run under, once
+ *  `game.partyChoice` opens the question at all. Unset/'printed' returns the
+ *  card unchanged -- one variant, no bonus, byte-identical to the mechanism
+ *  before this issue. The two open arms return BOTH labels as competing
+ *  options rather than picking one here: `options` scores each independently
+ *  and `pickDistinct` (below) keeps only the higher-edge one per physical
+ *  card, so no agent needs to know party choice exists -- the same
+ *  highest-edge-wins policy every agent already runs makes the pick. `'I'`
+ *  cards (the sore-loser conversion `game.ts`'s `runPrimaries` already does)
+ *  are left alone; free choice is a D/R question. */
+function partyVariants(card               , cfg        )                                           {
+  const mode = cfg.game.partyChoice;
+  if (!mode || mode === 'printed' || card.party === 'I') return [{ card, bonus: 0 }];
+  const flipped                = { ...card, party: card.party === 'R' ? 'D' : 'R' };
+  const printedBonus = mode === 'printedAffinity' ? (cfg.primaryGeneral.printedPartyPips ?? 0) : 0;
+  return [{ card, bonus: printedBonus }, { card: flipped, bonus: 0 }];
+}
+
 /** Every legal declaration this player could make, with its modifier edge.
  *  Agents differ only in how they score and cap this list. */
 function options(v          , open            , cfg        )           {
@@ -3400,37 +3442,39 @@ function options(v          , open            , cfg        )           {
       const district = r.office === 'representative'
         ? v.players.flatMap((p) => p.districts).find((d) => d.state === r.state && d.number === r.slot)
         : me.districts.find((d) => d.state === r.state);
-      const d              = { player: v.me, card, district, office: r.office, state: r.state, slot: r.slot,
-        incumbent: r.incumbent?.holder?.cardId === card.id };
-      const ctx = {
-        year: v.year, office: r.office, state: r.state, slot: r.slot,
-        lean: v.lean[r.state] ?? 0, isMidterm: v.isMidterm, isPresidentialYear: v.isPresidentialYear,
-        presidentParty: v.presidentParty,
-        // Was a stub 0 -- an agent could see everything else in RaceContext
-        // but not the economy, though it is a visible board track and
-        // `v.economy` already carries it. #39, ruled 2026-09-02: "a visible
-        // track agents cannot read is a bug unless someone says otherwise."
-        economyMod: economyModifier(v.economy, cfg.economy, cfg.national.strongEconomy, cfg.national.recession),
-      };
-      let edge        ;
-      if (r.office === 'president') {
-        // The presidency is not run in a place, so its stack cannot be read off
-        // one board square. It is fifty state races, so value it by the mean
-        // edge across the states this player actually holds -- otherwise the
-        // office scores 0 against a House seat's +5 and no agent ever runs.
-        const states = [...new Set(me.districts.map((x) => x.state))];
-        const each = states.map((st) => {
-          const sctx = { ...ctx, state: st, lean: v.lean[st] ?? 0 };
-          const sd = { ...d, state: st, district: homeDistrict(me.districts, st) };
-          return buildModifiers(sd, sctx, 'general', cfg.resolution, cfg.national, cfg.primaryGeneral)
+      for (const { card: pcard, bonus } of partyVariants(card, cfg)) {
+        const d              = { player: v.me, card: pcard, district, office: r.office, state: r.state, slot: r.slot,
+          incumbent: r.incumbent?.holder?.cardId === card.id };
+        const ctx = {
+          year: v.year, office: r.office, state: r.state, slot: r.slot,
+          lean: v.lean[r.state] ?? 0, isMidterm: v.isMidterm, isPresidentialYear: v.isPresidentialYear,
+          presidentParty: v.presidentParty,
+          // Was a stub 0 -- an agent could see everything else in RaceContext
+          // but not the economy, though it is a visible board track and
+          // `v.economy` already carries it. #39, ruled 2026-09-02: "a visible
+          // track agents cannot read is a bug unless someone says otherwise."
+          economyMod: economyModifier(v.economy, cfg.economy, cfg.national.strongEconomy, cfg.national.recession),
+        };
+        let edge        ;
+        if (r.office === 'president') {
+          // The presidency is not run in a place, so its stack cannot be read off
+          // one board square. It is fifty state races, so value it by the mean
+          // edge across the states this player actually holds -- otherwise the
+          // office scores 0 against a House seat's +5 and no agent ever runs.
+          const states = [...new Set(me.districts.map((x) => x.state))];
+          const each = states.map((st) => {
+            const sctx = { ...ctx, state: st, lean: v.lean[st] ?? 0 };
+            const sd = { ...d, state: st, district: homeDistrict(me.districts, st) };
+            return buildModifiers(sd, sctx, 'general', cfg.resolution, cfg.national, cfg.primaryGeneral)
+              .reduce((n, m) => n + m.pips, 0);
+          });
+          edge = each.length ? each.reduce((n, x) => n + x, 0) / each.length : 0;
+        } else {
+          edge = buildModifiers(d, ctx, 'general', cfg.resolution, cfg.national, cfg.primaryGeneral)
             .reduce((n, m) => n + m.pips, 0);
-        });
-        edge = each.length ? each.reduce((n, x) => n + x, 0) / each.length : 0;
-      } else {
-        edge = buildModifiers(d, ctx, 'general', cfg.resolution, cfg.national, cfg.primaryGeneral)
-          .reduce((n, m) => n + m.pips, 0);
+        }
+        out.push({ d, office: r.office, edge: edge + bonus });
       }
-      out.push({ d, office: r.office, edge });
     }
   }
   return out;
