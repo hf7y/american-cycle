@@ -17,7 +17,18 @@
       ],
       "belief": "A new way forward",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "black": {
+          "source": "hand-assigned"
+        },
+        "hispanic": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -31,7 +42,12 @@
       ],
       "belief": "Stepped aside in July",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "catholic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -45,7 +61,12 @@
       ],
       "belief": "Coach from the Iron Range",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -60,7 +81,15 @@
       ],
       "belief": "Won by fifteen in a tied state",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "jewish": {
+          "source": "hand-assigned"
+        },
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -74,7 +103,12 @@
       ],
       "belief": "Fix the damn roads",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -89,7 +123,15 @@
       ],
       "belief": "Lost at last",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "farm": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -103,7 +145,12 @@
       ],
       "belief": "Lost at last",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -117,7 +164,12 @@
       ],
       "belief": "Ran ahead of the ticket",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "hispanic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -131,7 +183,12 @@
       ],
       "belief": "Held Michigan by a point",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -145,7 +202,12 @@
       ],
       "belief": "Held Wisconsin",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -160,7 +222,15 @@
       ],
       "belief": "Governor of a state that votes 30 points the other way",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "evangelical": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -176,7 +246,18 @@
       ],
       "belief": "Ebenezer's pastor",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "black": {
+          "source": "hand-assigned"
+        },
+        "evangelical": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -190,7 +271,12 @@
       ],
       "belief": "Astronaut",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -205,7 +291,15 @@
       ],
       "belief": "Hoodie in the Senate",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -220,7 +314,15 @@
       ],
       "belief": "The leader",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "black": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -239,7 +341,15 @@
         {
           "type": "extremist"
         }
-      ]
+      ],
+      "provenance": {
+        "hispanic": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -262,7 +372,12 @@
           "pips": 2,
           "note": "an ideological validator with a national following"
         }
-      ]
+      ],
+      "provenance": {
+        "jewish": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -276,7 +391,12 @@
       ],
       "belief": "Still an independent",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -294,7 +414,12 @@
         {
           "type": "extremist"
         }
-      ]
+      ],
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -312,7 +437,12 @@
         {
           "type": "extremist"
         }
-      ]
+      ],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -326,7 +456,12 @@
       ],
       "belief": "Ran to the end of the primaries",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "evangelical": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -340,7 +475,12 @@
       ],
       "belief": "Won Florida by nineteen",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "evangelical": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -354,7 +494,12 @@
       ],
       "belief": "Won on schools",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -368,7 +513,12 @@
       ],
       "belief": "Certified, and survived",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -383,7 +533,15 @@
       ],
       "belief": "Old-guard governor",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "catholic": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -397,7 +555,12 @@
       ],
       "belief": "Still there",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -411,7 +574,12 @@
       ],
       "belief": "Still there",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -438,7 +606,15 @@
       ],
       "belief": "Held Texas by nine",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "hispanic": {
+          "source": "hand-assigned"
+        },
+        "evangelical": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -457,7 +633,15 @@
         {
           "type": "extremist"
         }
-      ]
+      ],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "evangelical": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -472,7 +656,15 @@
       ],
       "belief": "Speaker by exhaustion",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "evangelical": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -487,7 +679,15 @@
       ],
       "belief": "Appointed, then elected",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "black": {
+          "source": "hand-assigned"
+        },
+        "evangelical": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -501,7 +701,12 @@
       ],
       "belief": "Lost by eleven running twenty ahead of the ticket",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -515,7 +720,12 @@
       ],
       "belief": "Won by forty in a state that voted blue by thirty",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -541,7 +751,12 @@
       ],
       "belief": "Beat Sherrod Brown",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "hispanic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -559,7 +774,12 @@
         {
           "type": "extremist"
         }
-      ]
+      ],
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -573,7 +793,12 @@
       ],
       "belief": "Won by twenty-eight",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "evangelical": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -585,7 +810,15 @@
         "suburban",
         "union"
       ],
-      "note": "Lehigh Valley, decided by a point"
+      "note": "Lehigh Valley, decided by a point",
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -597,7 +830,15 @@
         "union",
         "rural"
       ],
-      "note": "Scranton"
+      "note": "Scranton",
+      "provenance": {
+        "union": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -608,7 +849,12 @@
       "demographics": [
         "suburban"
       ],
-      "note": "Lansing"
+      "note": "Lansing",
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -620,7 +866,15 @@
         "black",
         "urban"
       ],
-      "note": "Detroit"
+      "note": "Detroit",
+      "provenance": {
+        "black": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -633,7 +887,18 @@
         "farm",
         "union"
       ],
-      "note": "Driftless, gone red"
+      "note": "Driftless, gone red",
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "farm": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -645,7 +910,15 @@
         "suburban",
         "hispanic"
       ],
-      "note": "Tucson suburbs"
+      "note": "Tucson suburbs",
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        },
+        "hispanic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -657,7 +930,15 @@
         "hispanic",
         "suburban"
       ],
-      "note": "Henderson"
+      "note": "Henderson",
+      "provenance": {
+        "hispanic": {
+          "source": "hand-assigned"
+        },
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -670,7 +951,18 @@
         "black",
         "hispanic"
       ],
-      "note": "Gwinnett"
+      "note": "Gwinnett",
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        },
+        "black": {
+          "source": "hand-assigned"
+        },
+        "hispanic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -682,7 +974,15 @@
         "black",
         "rural"
       ],
-      "note": "The northeast, redrawn"
+      "note": "The northeast, redrawn",
+      "provenance": {
+        "black": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -694,7 +994,15 @@
         "hispanic",
         "rural"
       ],
-      "note": "The Valley, moving right"
+      "note": "The Valley, moving right",
+      "provenance": {
+        "hispanic": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -706,7 +1014,15 @@
         "hispanic",
         "rural"
       ],
-      "note": "McAllen, flipped"
+      "note": "McAllen, flipped",
+      "provenance": {
+        "hispanic": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -718,7 +1034,15 @@
         "hispanic",
         "farm"
       ],
-      "note": "Central Valley"
+      "note": "Central Valley",
+      "provenance": {
+        "hispanic": {
+          "source": "hand-assigned"
+        },
+        "farm": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -730,7 +1054,15 @@
         "hispanic",
         "farm"
       ],
-      "note": "Bakersfield"
+      "note": "Bakersfield",
+      "provenance": {
+        "hispanic": {
+          "source": "hand-assigned"
+        },
+        "farm": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -741,7 +1073,12 @@
       "demographics": [
         "suburban"
       ],
-      "note": "Hudson Valley"
+      "note": "Hudson Valley",
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -753,7 +1090,15 @@
         "suburban",
         "jewish"
       ],
-      "note": "Nassau County, flipped"
+      "note": "Nassau County, flipped",
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        },
+        "jewish": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -765,7 +1110,15 @@
         "cuban",
         "urban"
       ],
-      "note": "Miami, gone red"
+      "note": "Miami, gone red",
+      "provenance": {
+        "cuban": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -777,7 +1130,15 @@
         "union",
         "rural"
       ],
-      "note": "Toledo"
+      "note": "Toledo",
+      "provenance": {
+        "union": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -788,7 +1149,12 @@
       "demographics": [
         "suburban"
       ],
-      "note": "Fredericksburg"
+      "note": "Fredericksburg",
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -800,7 +1166,15 @@
         "hispanic",
         "suburban"
       ],
-      "note": "Adams County, the closest in the country"
+      "note": "Adams County, the closest in the country",
+      "provenance": {
+        "hispanic": {
+          "source": "hand-assigned"
+        },
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -812,7 +1186,15 @@
         "suburban",
         "farm"
       ],
-      "note": "Des Moines"
+      "note": "Des Moines",
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        },
+        "farm": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -824,7 +1206,15 @@
         "rural",
         "union"
       ],
-      "note": "The Second, red for a decade"
+      "note": "The Second, red for a decade",
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -835,7 +1225,12 @@
       "demographics": [
         "rural"
       ],
-      "note": "At-large"
+      "note": "At-large",
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -848,7 +1243,18 @@
         "union",
         "farm"
       ],
-      "note": "The Iron Range"
+      "note": "The Iron Range",
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        },
+        "farm": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -860,7 +1266,15 @@
         "union",
         "rural"
       ],
-      "note": "Gone entirely"
+      "note": "Gone entirely",
+      "provenance": {
+        "union": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -872,7 +1286,15 @@
         "suburban",
         "farm"
       ],
-      "note": "Lexington"
+      "note": "Lexington",
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        },
+        "farm": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -884,7 +1306,15 @@
         "rural",
         "farm"
       ],
-      "note": "Western Montana"
+      "note": "Western Montana",
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "farm": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -896,7 +1326,15 @@
         "hispanic",
         "rural"
       ],
-      "note": "Southern New Mexico"
+      "note": "Southern New Mexico",
+      "provenance": {
+        "hispanic": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -908,7 +1346,15 @@
         "suburban",
         "farm"
       ],
-      "note": "Bend to Salem"
+      "note": "Bend to Salem",
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        },
+        "farm": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -920,7 +1366,15 @@
         "rural",
         "union"
       ],
-      "note": "Southwest Washington, flipped"
+      "note": "Southwest Washington, flipped",
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -931,7 +1385,12 @@
       "demographics": [
         "suburban"
       ],
-      "note": "Somerset"
+      "note": "Somerset",
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     }
   ]
 }
