@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { tallyBill, impeach, author, majorityParty, authorCandidates, resolveAuthorVote } from './legislature.ts';
+import { tallyBill, impeach, author, majorityParty, authorCandidates, resolveAuthorVote, proposeAmendment } from './legislature.ts';
 import type { LegislatureConfig, Vote } from './legislature.ts';
 import type { Seat, Party } from '../types/index.ts';
 import { RNG } from './rng.ts';
@@ -73,6 +73,19 @@ test('impeachment needs two-thirds of the Senate', () => {
   const seats = bench([], Array(9).fill('D'));
   assert.ok(!impeach(cfg, seats, 5));
   assert.ok(impeach(cfg, seats, 6), 'six of nine is two-thirds');
+});
+
+test('hf7y/american-cycle#86: a congressional amendment proposal needs two-thirds of BOTH chambers', () => {
+  const seats = bench(Array(9).fill('D'), Array(9).fill('D'));
+  assert.ok(proposeAmendment(cfg, seats, 6, 6), 'six of nine is exactly two-thirds in both chambers');
+  assert.ok(!proposeAmendment(cfg, seats, 5, 9), 'five of nine falls short in the House even with a unanimous Senate');
+  assert.ok(!proposeAmendment(cfg, seats, 9, 5), 'five of nine falls short in the Senate even with a unanimous House');
+  assert.ok(!proposeAmendment(cfg, seats, 5, 5), 'five of nine clears neither chamber');
+});
+
+test('hf7y/american-cycle#86: an empty chamber never proposes, same guard as impeach/tallyBill', () => {
+  const seats = bench([], Array(9).fill('D'));
+  assert.ok(!proposeAmendment(cfg, seats, 0, 9), 'no House seats means no House vote to clear');
 });
 
 test('authorship goes to the largest bloc of the majority House party', () => {

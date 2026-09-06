@@ -81,6 +81,7 @@
     "senatePassage": 0.6,
     "vetoOverride": 0.6666666666666666,
     "impeachThreshold": 0.6666666666666666,
+    "amendmentProposal": 0.6666666666666666,
     "scorePerYesVote": 1,
     "majorityMultiplier": 2,
     "reactionGoodOnRollAtLeast": 4,

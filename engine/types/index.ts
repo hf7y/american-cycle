@@ -132,10 +132,15 @@ export interface EnactedBill {
 export interface Amendment {
   id: string;
   proposer: number;
+  /** hf7y/american-cycle#86: which Article V path proposed this. The
+   *  ratification stage below is route-agnostic and does not read this --
+   *  it exists so a finding can tell the 33-0 historical routes apart. */
+  route: 'convention' | 'congress';
   /** the demographic/issue content, drawn from the existing tag vocabulary */
   tags: IdentityTag[];
   calledIn: number;
-  /** states that voted to call the convention */
+  /** states that voted to call the convention. Empty for a congressional
+   *  proposal -- that route has no state-calling step. */
   called: string[];
   /** states that have ratified and survived the challenge */
   ratified: string[];

@@ -39,6 +39,10 @@ export interface LegislatureConfig {
    *  exactly like any other bill -- there is no repeal-specific code path,
    *  which is what lets an opposite-fit bill net out a prior one's counters. */
   billLeanPips?: number;
+  /** hf7y/american-cycle#86's ruling: Article V's congressional route,
+   *  two-thirds of both the House and the Senate. Printed, not tuned --
+   *  the same fraction as `vetoOverride` and `impeachThreshold`. */
+  amendmentProposal: number;
 }
 
 /** The counter goes on the CARD, so a vote must name the card that cast it.
@@ -186,4 +190,15 @@ export function tallyBill(
 export function impeach(cfg: LegislatureConfig, seats: Seat[], yesVotes: number): boolean {
   const { senate } = chambers(seats);
   return atLeast(yesVotes, senate.length, cfg.impeachThreshold);
+}
+
+/** hf7y/american-cycle#86's ruling: the congressional route to a proposed
+ *  amendment. Two-thirds of the House AND two-thirds of the Senate --
+ *  Article V gives the president no role, so there is no presentment and
+ *  no veto stage to reuse from `tallyBill` here, only the two chamber
+ *  thresholds. */
+export function proposeAmendment(cfg: LegislatureConfig, seats: Seat[], houseYes: number, senateYes: number): boolean {
+  const { house, senate } = chambers(seats);
+  return atLeast(houseYes, house.length, cfg.amendmentProposal)
+    && atLeast(senateYes, senate.length, cfg.amendmentProposal);
 }

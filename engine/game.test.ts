@@ -21,7 +21,7 @@ import type { Declaration } from './rules/elections.ts';
 import { RNG } from './rules/rng.ts';
 import { AGENTS } from '../sim/agents.ts';
 import { STATES, BY_CODE, senateUp, electors, totalElectors, DC_ELECTORS } from './states.ts';
-import type { Card, CandidateCard, DistrictCard } from './types/index.ts';
+import type { Card, CandidateCard, DistrictCard, Party, Seat } from './types/index.ts';
 
 const loadConfig = (name: string): Config =>
   JSON.parse(readFileSync(new URL(`./config/${name}`, import.meta.url), 'utf8')) as Config;
@@ -469,6 +469,69 @@ test('a succession is inert unless the same player holds both the seat and the s
   assert.equal(g.successions.length, 0);
   assert.ok(g.players[1].hand.some((c) => c.kind === 'candidate' && c.id === 'succ-r2'),
     'the card nobody could use for a swap is otherwise an ordinary card -- it stays in hand, playable in a race');
+});
+
+// ------------------------------------------------ congressional amendment (#86)
+
+const houseSeat = (i: number, state: string, player: number, party: Party): Seat =>
+  ({ office: 'representative', state, slot: i, holder: { cardId: `h-${state}-${i}`, player, party, since: 1970 } });
+const senateSeat = (i: number, state: string, player: number, party: Party): Seat =>
+  ({ office: 'senator', state, senateClass: 1, holder: { cardId: `s-${state}-${i}`, player, party, since: 1970 } });
+
+test('hf7y/american-cycle#86: Congress proposes an amendment by chamber vote, with no presentment to the president', () => {
+  const cfg = loadConfig('as-written-plus.json');
+  const district = dist({ id: 'OH-1', state: 'OH', number: 1, demographics: ['union'] });
+  const g = new Game([new ScriptedAgent('house'), new ScriptedAgent('president')],
+    [{ kind: 'district', ...district }], cfg, 1);
+  g.seats = [
+    ...Array.from({ length: 9 }, (_, i) => houseSeat(i, 'OH', 0, 'D')),
+    ...Array.from({ length: 9 }, (_, i) => senateSeat(i, 'OH', 0, 'D')),
+  ];
+  g.players[0].hand = [];
+  g.players[0].districts = [{ ...district }];
+  g.players[1].hand = [];
+  g.players[1].districts = [];
+  // A hostile Senate-minority president -- Article V has no role for the
+  // office to reject this with, unlike the omnibill's veto.
+  g.president = { player: 1, cardId: 'pres-r', party: 'R', since: 1970 };
+  g.year = cfg.game.startYear + cfg.game.maxYears / 2; // past the "wanting the ending" gate
+
+  g.tick();
+
+  assert.equal(g.amendments.length, 1, 'a congressional proposal enters play unanimously, unanimity clears two-thirds of both chambers');
+  assert.equal(g.amendments[0].route, 'congress');
+  assert.equal(g.amendments[0].proposer, 0, 'the pen-holder moves it');
+  assert.deepEqual(g.amendments[0].called, [], 'no state-calling step for this route');
+  assert.equal(g.log.some((l) => l.includes('vetoed') || l.includes('veto')), false,
+    'no veto path is ever consulted for a congressional proposal');
+});
+
+test('hf7y/american-cycle#86: a divided Congress fails to reach two-thirds, and the failed attempt spends the year like every other §12 option', () => {
+  const cfg = loadConfig('as-written-plus.json');
+  const district = dist({ id: 'OH-1', state: 'OH', number: 1, demographics: ['union'] });
+  const g = new Game([new ScriptedAgent('majority'), new ScriptedAgent('minority')],
+    [{ kind: 'district', ...district }], cfg, 1);
+  // 5 of 9 in each chamber (55.6%) is short of the two-thirds bar (66.7%).
+  // The minority's seats sit in TX, where no district card carries any
+  // demographics -- `tags.distance` reads that as no position at all (not
+  // agreement), so their vote falls back to party, and R is not the
+  // majority party.
+  g.seats = [
+    ...Array.from({ length: 5 }, (_, i) => houseSeat(i, 'OH', 0, 'D')),
+    ...Array.from({ length: 4 }, (_, i) => houseSeat(i, 'TX', 1, 'R')),
+    ...Array.from({ length: 5 }, (_, i) => senateSeat(i, 'OH', 0, 'D')),
+    ...Array.from({ length: 4 }, (_, i) => senateSeat(i, 'TX', 1, 'R')),
+  ];
+  g.players[0].hand = []; g.players[0].districts = [{ ...district }];
+  g.players[1].hand = []; g.players[1].districts = []; // no districts of its own, votes fall to party
+  g.year = cfg.game.startYear + cfg.game.maxYears / 2;
+
+  g.tick();
+
+  assert.equal(g.amendments.length, 0,
+    'five of nine falls short of two-thirds in both chambers, and a failed attempt spends the year like impeachment/convention already do');
+  assert.ok(g.log.some((l) => l.includes('congressional amendment proposal fails')),
+    'the attempt is logged even on failure');
 });
 
 // ---------------------------------------------------------- era-ordered talon
