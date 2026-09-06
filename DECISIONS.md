@@ -33,6 +33,7 @@ rule instead of citing a section. The last category is the important one — mos
 | Districts gate all races | The brake on wide-and-empty play. Presence must be purchased in the draft |
 | District cards are captured on a win, not politicians | Models inheriting the machine; keeps the talon alive; makes the map genuinely contested |
 | ~~Heterodoxy ignores national *modifiers*, not the national die~~ | **CUT 2026-08-31 — see below** |
+| `extremist`: +2 in the primary, -2 in the general | Unlike heterodox, both halves are correctly priced when they fire (hf7y/american-cycle#159, `findings/extremist-pricing.ts`): the primary bonus is contested by construction and tracks the odds table (68.1% observed vs 71.3% predicted at +2, 2d6); the general penalty only meets a contested race 31.9% of the time, but there it also tracks the odds table (35.9% vs 32.1% at -2, 3d6). The defect this closes was that the tag had no entry here at all, not that its magnitude was wrong |
 | Endorsements are primary-only | The general effect is coattails, already modelled. A general endorsement double-counts |
 | Governors never push lean | Falls out of the nationalization priority rule; Baker/Hogan/Scott are the evidence |
 | Impeachment consumes the omnibill slot | Prices the coup in the currency everyone is accumulating |
