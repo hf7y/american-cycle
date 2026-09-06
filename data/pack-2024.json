@@ -41,9 +41,7 @@
       "homeState": "MN",
       "homeStateBonus": 1,
       "identities": [
-        "rural",
-        "veteran",
-        "academic"
+        "rural"
       ],
       "belief": "Coach from the Iron Range",
       "era": 2024,
@@ -72,8 +70,7 @@
       "homeState": "MI",
       "homeStateBonus": 1,
       "identities": [
-        "suburban",
-        "ivy"
+        "suburban"
       ],
       "belief": "Fix the damn roads",
       "era": 2024,
@@ -102,8 +99,7 @@
       "homeState": "OH",
       "homeStateBonus": 2,
       "identities": [
-        "union",
-        "academic"
+        "union"
       ],
       "belief": "Lost at last",
       "era": 2024,
@@ -117,8 +113,7 @@
       "homeState": "AZ",
       "homeStateBonus": 2,
       "identities": [
-        "hispanic",
-        "veteran"
+        "hispanic"
       ],
       "belief": "Ran ahead of the ticket",
       "era": 2024,
@@ -132,8 +127,7 @@
       "homeState": "MI",
       "homeStateBonus": 2,
       "identities": [
-        "suburban",
-        "ivy"
+        "suburban"
       ],
       "belief": "Held Michigan by a point",
       "era": 2024,
@@ -147,7 +141,6 @@
       "homeState": "WI",
       "homeStateBonus": 2,
       "identities": [
-        "academic",
         "urban"
       ],
       "belief": "Held Wisconsin",
@@ -193,7 +186,6 @@
       "homeState": "AZ",
       "homeStateBonus": 1,
       "identities": [
-        "veteran",
         "suburban"
       ],
       "belief": "Astronaut",
@@ -224,8 +216,7 @@
       "homeStateBonus": 0,
       "identities": [
         "black",
-        "urban",
-        "ivy"
+        "urban"
       ],
       "belief": "The leader",
       "era": 2024,
@@ -258,8 +249,7 @@
       "homeState": "VT",
       "homeStateBonus": 2,
       "identities": [
-        "jewish",
-        "academic"
+        "jewish"
       ],
       "belief": "Still an independent",
       "era": 2024,
@@ -282,7 +272,6 @@
       "homeState": "ME",
       "homeStateBonus": 2,
       "identities": [
-        "business",
         "rural"
       ],
       "belief": "Still an independent",
@@ -297,7 +286,6 @@
       "homeState": "FL",
       "homeStateBonus": 0,
       "identities": [
-        "business",
         "urban"
       ],
       "belief": "Won the popular vote",
@@ -316,8 +304,6 @@
       "homeState": "OH",
       "homeStateBonus": 1,
       "identities": [
-        "veteran",
-        "ivy",
         "rural"
       ],
       "belief": "Hillbilly Elegy",
@@ -336,7 +322,6 @@
       "homeState": "SC",
       "homeStateBonus": 1,
       "identities": [
-        "business",
         "evangelical"
       ],
       "belief": "Ran to the end of the primaries",
@@ -351,8 +336,6 @@
       "homeState": "FL",
       "homeStateBonus": 1,
       "identities": [
-        "veteran",
-        "ivy",
         "evangelical"
       ],
       "belief": "Won Florida by nineteen",
@@ -367,7 +350,6 @@
       "homeState": "VA",
       "homeStateBonus": 2,
       "identities": [
-        "business",
         "suburban"
       ],
       "belief": "Won on schools",
@@ -382,8 +364,7 @@
       "homeState": "GA",
       "homeStateBonus": 2,
       "identities": [
-        "rural",
-        "business"
+        "rural"
       ],
       "belief": "Certified, and survived",
       "era": 2024,
@@ -412,7 +393,6 @@
       "homeState": "ME",
       "homeStateBonus": 3,
       "identities": [
-        "business",
         "suburban"
       ],
       "belief": "Still there",
@@ -427,7 +407,6 @@
       "homeState": "AK",
       "homeStateBonus": 3,
       "identities": [
-        "business",
         "rural"
       ],
       "belief": "Still there",
@@ -441,9 +420,7 @@
       "party": "R",
       "homeState": "KY",
       "homeStateBonus": 1,
-      "identities": [
-        "business"
-      ],
+      "identities": [],
       "belief": "Stepped down as leader",
       "era": 2024,
       "effects": []
@@ -457,8 +434,7 @@
       "homeStateBonus": 1,
       "identities": [
         "hispanic",
-        "evangelical",
-        "ivy"
+        "evangelical"
       ],
       "belief": "Held Texas by nine",
       "era": 2024,
@@ -507,8 +483,7 @@
       "homeStateBonus": 1,
       "identities": [
         "black",
-        "evangelical",
-        "business"
+        "evangelical"
       ],
       "belief": "Appointed, then elected",
       "era": 2024,
@@ -522,7 +497,6 @@
       "homeState": "MD",
       "homeStateBonus": 2,
       "identities": [
-        "business",
         "suburban"
       ],
       "belief": "Lost by eleven running twenty ahead of the ticket",
@@ -537,7 +511,6 @@
       "homeState": "VT",
       "homeStateBonus": 3,
       "identities": [
-        "business",
         "rural"
       ],
       "belief": "Won by forty in a state that voted blue by thirty",
@@ -551,10 +524,7 @@
       "party": "R",
       "homeState": "NH",
       "homeStateBonus": 2,
-      "identities": [
-        "business",
-        "ivy"
-      ],
+      "identities": [],
       "belief": "Four terms in a purple state",
       "era": 2024,
       "effects": []
@@ -567,8 +537,7 @@
       "homeState": "OH",
       "homeStateBonus": 1,
       "identities": [
-        "hispanic",
-        "business"
+        "hispanic"
       ],
       "belief": "Beat Sherrod Brown",
       "era": 2024,
@@ -582,7 +551,6 @@
       "homeState": "AZ",
       "homeStateBonus": 1,
       "identities": [
-        "business",
         "suburban"
       ],
       "belief": "Lost twice",
@@ -601,8 +569,7 @@
       "homeState": "AR",
       "homeStateBonus": 2,
       "identities": [
-        "evangelical",
-        "business"
+        "evangelical"
       ],
       "belief": "Won by twenty-eight",
       "era": 2024,
@@ -639,8 +606,7 @@
       "number": 7,
       "era": 2024,
       "demographics": [
-        "suburban",
-        "academic"
+        "suburban"
       ],
       "note": "Lansing"
     },
@@ -773,8 +739,7 @@
       "number": 17,
       "era": 2024,
       "demographics": [
-        "suburban",
-        "business"
+        "suburban"
       ],
       "note": "Hudson Valley"
     },
@@ -821,8 +786,7 @@
       "number": 7,
       "era": 2024,
       "demographics": [
-        "suburban",
-        "veteran"
+        "suburban"
       ],
       "note": "Fredericksburg"
     },
@@ -858,8 +822,7 @@
       "era": 2024,
       "demographics": [
         "rural",
-        "union",
-        "veteran"
+        "union"
       ],
       "note": "The Second, red for a decade"
     },
@@ -870,8 +833,7 @@
       "number": 1,
       "era": 2024,
       "demographics": [
-        "rural",
-        "veteran"
+        "rural"
       ],
       "note": "At-large"
     },
@@ -967,8 +929,7 @@
       "number": 7,
       "era": 2024,
       "demographics": [
-        "suburban",
-        "business"
+        "suburban"
       ],
       "note": "Somerset"
     }

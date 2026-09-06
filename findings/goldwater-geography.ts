@@ -26,9 +26,13 @@ function classify(res: { identityBonus: number }, nat: unknown, pg: { extremistG
     import('../engine/types/index.ts').DistrictCard[];
   const states = [...new Set(districts.map((d) => d.state))].sort();
 
-  // The pre-#41 card: same effects, but identities/weights as they shipped
-  // before this issue -- no union/urban entries, no identityWeights at all.
-  const flatCard = { ...goldwater, identities: ['rural', 'veteran', 'business'] as const, identityWeights: undefined };
+  // The flat-mechanic comparison card: same identities as the card actually
+  // ships today, minus the signed weights -- isolates what signing the
+  // weights buys, holding the tag list constant. (Previously reconstructed
+  // the literal pre-#41 tag list, which included `veteran`/`business`; both
+  // are retired now, hf7y/american-cycle#162/#164, so that reconstruction no
+  // longer names a vocabulary the engine has.)
+  const flatCard = { ...goldwater, identityWeights: undefined };
 
   const totalFor = (card: typeof goldwater) => {
     const out = new Map<string, number>();
@@ -70,32 +74,33 @@ export const finding: Finding = {
   dependsOn: ['as-written-plus.json'],
   question:
     "#41's falsifier: does giving Barry Goldwater's 1964 card signed per-tag identity weights "
-    + "(union -3, urban -2, business +3, on top of the unweighted rural/veteran he already carried) "
-    + 'separate the states his card favours from the states it does not, better than the single flat '
-    + 'identityBonus every card shared before this issue?',
+    + "(union -3, urban -2, on top of the unweighted rural he already carried) separate the states "
+    + 'his card favours from the states it does not, better than the single flat identityBonus every '
+    + 'card shared before this issue?',
 
   headline:
-    "Better, not solved. Scored against the 24 states pack-1964.json actually carries a district "
-    + 'card for (of the real 50 -- six of them are Goldwater\'s historical wins, eighteen are losses), '
-    + 'the signed-weight card classifies 17/24 correctly against the flat card\'s 13/24 -- a coin flip. '
-    + 'All of the gain is on the LOSS side: the union/urban penalty correctly turns Rust Belt states '
-    + '(OH, IN, IL, MI, MA, PA) negative where the flat +1-per-tag mechanic read them as neutral-to-'
-    + 'positive, taking loss-state specificity from 9/18 to 13/18. It does nothing for recall on the '
-    + 'states he actually won: GA and LA are missed under BOTH mechanics, because their only district '
-    + "card in the pack is tagged `urban` (representing Atlanta/New Orleans) with no `rural` alongside "
-    + 'it, so a white-backlash rural vote that carried the state has no matching demographic tag to '
-    + "attach a weight to. That is #164's complaint from the other side: the arithmetic now works, and "
-    + 'the taxonomy is still what caps it.',
-  stampedAt: '2026-09-04T21:56:03Z',
-  stampedOn: '8b1b49a',
+    "Better, not solved -- and stronger since ivy/veteran/business/academic were cut (hf7y/american-"
+    + "cycle#162, #164). Scored against the 24 states pack-1964.json actually carries a district card "
+    + 'for (of the real 50 -- six of them are Goldwater\'s historical wins, eighteen are losses), the '
+    + "signed-weight card classifies 18/24 correctly against the flat card's 13/24. All of the gain is "
+    + 'on the LOSS side: the union/urban penalty correctly turns Rust Belt states (OH, IN, IL, MI, MA, '
+    + 'PA) negative where the flat +1-per-tag mechanic read them as neutral-to-positive, taking '
+    + 'loss-state specificity from 9/18 to 14/18. It does nothing for recall on the states he actually '
+    + 'won: GA and LA are missed under BOTH mechanics, because their only district card in the pack is '
+    + "tagged `urban` (representing Atlanta/New Orleans) with no `rural` alongside it, so a "
+    + 'white-backlash rural vote that carried the state has no matching demographic tag to attach a '
+    + "weight to. That is #164's complaint from the other side: the arithmetic now works, and the "
+    + 'taxonomy is still what caps it.',
+  stampedAt: '2026-09-06T07:00:00Z',
+  stampedOn: '3ad72d2',
 
   predicate(): Claim[] {
     const cfg = loadConfig('as-written-plus.json');
     const { signedScore, flatScore, n } = classify(cfg.resolution, cfg.national, cfg.primaryGeneral);
     return [
-      { name: 'signed weights: states classified correctly (of 24 in the pack)', value: signedScore.correct, stamped: 17, tolerance: 0 },
+      { name: 'signed weights: states classified correctly (of 24 in the pack)', value: signedScore.correct, stamped: 18, tolerance: 0 },
       { name: 'flat identityBonus: states classified correctly (of 24 in the pack)', value: flatScore.correct, stamped: 13, tolerance: 0 },
-      { name: 'signed weights: loss states correctly read negative (of 18)', value: signedScore.lostCorrect, stamped: 13, tolerance: 0 },
+      { name: 'signed weights: loss states correctly read negative (of 18)', value: signedScore.lostCorrect, stamped: 14, tolerance: 0 },
       { name: 'flat identityBonus: loss states correctly read negative (of 18)', value: flatScore.lostCorrect, stamped: 9, tolerance: 0 },
       { name: 'signed weights: win states correctly read positive (of 6)', value: signedScore.wonCorrect, stamped: 4, tolerance: 0 },
       { name: 'flat identityBonus: win states correctly read positive (of 6)', value: flatScore.wonCorrect, stamped: 4, tolerance: 0 },

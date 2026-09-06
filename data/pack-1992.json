@@ -12,8 +12,7 @@
       "homeStateBonus": 2,
       "identities": [
         "evangelical",
-        "rural",
-        "ivy"
+        "rural"
       ],
       "belief": "Tough on crime, ends welfare as we know it",
       "era": 1992,
@@ -36,7 +35,6 @@
       "homeState": "TN",
       "homeStateBonus": 2,
       "identities": [
-        "ivy",
         "rural"
       ],
       "belief": "Environment before it polled",
@@ -51,8 +49,7 @@
       "homeState": "MA",
       "homeStateBonus": 2,
       "identities": [
-        "catholic",
-        "business"
+        "catholic"
       ],
       "belief": "Pro-business Democrat",
       "era": 1992,
@@ -100,7 +97,6 @@
       "homeState": "NE",
       "homeStateBonus": 2,
       "identities": [
-        "veteran",
         "rural"
       ],
       "belief": "Medal of Honor",
@@ -116,8 +112,7 @@
       "homeStateBonus": 2,
       "identities": [
         "catholic",
-        "urban",
-        "ivy"
+        "urban"
       ],
       "belief": "A tale of two cities",
       "era": 1992,
@@ -145,7 +140,6 @@
       "homeState": "GA",
       "homeStateBonus": 2,
       "identities": [
-        "veteran",
         "rural"
       ],
       "belief": "Defense conservative",
@@ -161,7 +155,6 @@
       "homeStateBonus": 2,
       "identities": [
         "rural",
-        "veteran",
         "evangelical"
       ],
       "belief": "HOPE scholarships",
@@ -192,8 +185,7 @@
       "homeStateBonus": 1,
       "identities": [
         "jewish",
-        "urban",
-        "business"
+        "urban"
       ],
       "belief": "Mayor during the assassinations",
       "era": 1992,
@@ -222,7 +214,6 @@
       "homeState": "MN",
       "homeStateBonus": 2,
       "identities": [
-        "academic",
         "union"
       ],
       "belief": "The democratic wing of the Democratic Party",
@@ -272,8 +263,7 @@
       "homeStateBonus": 2,
       "identities": [
         "rural",
-        "catholic",
-        "business"
+        "catholic"
       ],
       "belief": "My vote cannot be bought but it can be rented",
       "era": 1992,
@@ -287,8 +277,7 @@
       "homeState": "AL",
       "homeStateBonus": 2,
       "identities": [
-        "rural",
-        "business"
+        "rural"
       ],
       "belief": "Switched parties in 1994",
       "era": 1992,
@@ -302,8 +291,7 @@
       "homeState": "AL",
       "homeStateBonus": 2,
       "identities": [
-        "rural",
-        "business"
+        "rural"
       ],
       "belief": "The switch made the seat safer, not weaker",
       "era": 1996,
@@ -319,8 +307,7 @@
       "homeStateBonus": 1,
       "identities": [
         "black",
-        "urban",
-        "veteran"
+        "urban"
       ],
       "belief": "Harlem's chairman",
       "era": 1992,
@@ -394,9 +381,7 @@
       "homeState": "NY",
       "homeStateBonus": 1,
       "identities": [
-        "catholic",
-        "ivy",
-        "academic"
+        "catholic"
       ],
       "belief": "Defining deviancy down",
       "era": 1992,
@@ -409,10 +394,7 @@
       "party": "D",
       "homeState": "NJ",
       "homeStateBonus": 2,
-      "identities": [
-        "ivy",
-        "business"
-      ],
+      "identities": [],
       "belief": "Tax reform and basketball",
       "era": 1992,
       "effects": []
@@ -439,7 +421,6 @@
       "homeState": "CO",
       "homeStateBonus": 2,
       "identities": [
-        "veteran",
         "rural"
       ],
       "belief": "Switched to the GOP in 1995",
@@ -454,7 +435,6 @@
       "homeState": "CO",
       "homeStateBonus": 2,
       "identities": [
-        "veteran",
         "rural"
       ],
       "belief": "Rode the switch to a deeper red seat",
@@ -469,10 +449,7 @@
       "party": "D",
       "homeState": "PA",
       "homeStateBonus": 2,
-      "identities": [
-        "academic",
-        "ivy"
-      ],
+      "identities": [],
       "belief": "Health care as a right",
       "era": 1992,
       "effects": []
@@ -484,11 +461,7 @@
       "party": "R",
       "homeState": "TX",
       "homeStateBonus": 2,
-      "identities": [
-        "veteran",
-        "business",
-        "ivy"
-      ],
+      "identities": [],
       "belief": "Read my lips",
       "era": 1992,
       "effects": []
@@ -520,7 +493,6 @@
       "homeState": "KS",
       "homeStateBonus": 2,
       "identities": [
-        "veteran",
         "rural",
         "farm"
       ],
@@ -535,10 +507,7 @@
       "party": "R",
       "homeState": "GA",
       "homeStateBonus": 2,
-      "identities": [
-        "academic",
-        "business"
-      ],
+      "identities": [],
       "belief": "Contract with America",
       "era": 1992,
       "effects": [
@@ -554,10 +523,7 @@
       "party": "R",
       "homeState": "TX",
       "homeStateBonus": 2,
-      "identities": [
-        "academic",
-        "business"
-      ],
+      "identities": [],
       "belief": "Gramm-Rudman",
       "era": 1992,
       "effects": [
@@ -574,7 +540,6 @@
       "homeState": "NY",
       "homeStateBonus": 1,
       "identities": [
-        "veteran",
         "urban"
       ],
       "belief": "Bleeding-heart conservative",
@@ -612,10 +577,7 @@
       "party": "R",
       "homeState": "AZ",
       "homeStateBonus": 2,
-      "identities": [
-        "veteran",
-        "business"
-      ],
+      "identities": [],
       "belief": "Keating Five survivor",
       "era": 1992,
       "effects": []
@@ -643,8 +605,7 @@
       "homeState": "UT",
       "homeStateBonus": 2,
       "identities": [
-        "evangelical",
-        "business"
+        "evangelical"
       ],
       "belief": "Worked with Kennedy",
       "era": 1992,
@@ -672,10 +633,7 @@
       "party": "R",
       "homeState": "NJ",
       "homeStateBonus": 2,
-      "identities": [
-        "business",
-        "ivy"
-      ],
+      "identities": [],
       "belief": "Cut taxes thirty percent",
       "era": 1992,
       "effects": []
@@ -687,10 +645,7 @@
       "party": "R",
       "homeState": "MA",
       "homeStateBonus": 2,
-      "identities": [
-        "ivy",
-        "business"
-      ],
+      "identities": [],
       "belief": "Fiscally conservative, socially liberal",
       "era": 1992,
       "effects": []
@@ -702,10 +657,7 @@
       "party": "R",
       "homeState": "CA",
       "homeStateBonus": 1,
-      "identities": [
-        "veteran",
-        "business"
-      ],
+      "identities": [],
       "belief": "Proposition 187",
       "era": 1992,
       "effects": []
@@ -717,10 +669,7 @@
       "party": "R",
       "homeState": "IN",
       "homeStateBonus": 2,
-      "identities": [
-        "business",
-        "ivy"
-      ],
+      "identities": [],
       "belief": "Nunn-Lugar",
       "era": 1992,
       "effects": []
@@ -733,8 +682,7 @@
       "homeState": "WY",
       "homeStateBonus": 3,
       "identities": [
-        "rural",
-        "veteran"
+        "rural"
       ],
       "belief": "Wyoming humor",
       "era": 1992,
@@ -783,7 +731,6 @@
       "homeStateBonus": 3,
       "identities": [
         "rural",
-        "veteran",
         "evangelical"
       ],
       "belief": "Still there",
@@ -801,9 +748,7 @@
       "party": "R",
       "homeState": "TX",
       "homeStateBonus": 2,
-      "identities": [
-        "business"
-      ],
+      "identities": [],
       "belief": "Texas treasurer",
       "era": 1992,
       "effects": []
@@ -815,10 +760,7 @@
       "party": "R",
       "homeState": "RI",
       "homeStateBonus": 2,
-      "identities": [
-        "ivy",
-        "veteran"
-      ],
+      "identities": [],
       "belief": "Environmental Republican",
       "era": 1992,
       "effects": []
@@ -831,8 +773,7 @@
       "homeState": "VT",
       "homeStateBonus": 2,
       "identities": [
-        "rural",
-        "ivy"
+        "rural"
       ],
       "belief": "Left the party in 2001",
       "era": 1992,
@@ -845,9 +786,7 @@
       "party": "R",
       "homeState": "ME",
       "homeStateBonus": 2,
-      "identities": [
-        "business"
-      ],
+      "identities": [],
       "belief": "Centrist dealmaker",
       "era": 1992,
       "effects": []
@@ -860,8 +799,7 @@
       "homeState": "WI",
       "homeStateBonus": 2,
       "identities": [
-        "rural",
-        "business"
+        "rural"
       ],
       "belief": "Welfare reform laboratory",
       "era": 1992,
@@ -875,8 +813,7 @@
       "homeState": "MI",
       "homeStateBonus": 2,
       "identities": [
-        "rural",
-        "business"
+        "rural"
       ],
       "belief": "Cut the income tax",
       "era": 1992,
@@ -952,8 +889,7 @@
       "number": 22,
       "era": 1992,
       "demographics": [
-        "suburban",
-        "business"
+        "suburban"
       ],
       "note": "Central Coast"
     },
@@ -1037,7 +973,6 @@
       "era": 1992,
       "demographics": [
         "suburban",
-        "business",
         "evangelical"
       ],
       "note": "Gingrich's Cobb County"
@@ -1234,8 +1169,7 @@
       "number": 7,
       "era": 1992,
       "demographics": [
-        "urban",
-        "academic"
+        "urban"
       ],
       "note": "Seattle"
     },
@@ -1246,8 +1180,7 @@
       "number": 3,
       "era": 1992,
       "demographics": [
-        "urban",
-        "academic"
+        "urban"
       ],
       "note": "Portland"
     },
@@ -1416,10 +1349,7 @@
       "party": "I",
       "homeState": "CT",
       "homeStateBonus": 3,
-      "identities": [
-        "ivy",
-        "business"
-      ],
+      "identities": [],
       "belief": "Won the governorship as A Connecticut Party",
       "era": 1992,
       "effects": []
@@ -1431,10 +1361,7 @@
       "party": "I",
       "homeState": "TX",
       "homeStateBonus": 2,
-      "identities": [
-        "business",
-        "veteran"
-      ],
+      "identities": [],
       "belief": "Nineteen percent and no electoral votes",
       "era": 1992,
       "effects": [

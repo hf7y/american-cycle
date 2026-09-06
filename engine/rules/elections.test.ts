@@ -119,17 +119,17 @@ test('the midterm penalty reaches everyone; a local card outruns it', () => {
   // on home state plus identity match against his district.
   const manchin: Declaration = {
     player: 0, state: 'WV', office: 'senator',
-    district: dist({ id: 'WV-1', state: 'WV', demographics: ['rural', 'union', 'veteran'] }),
+    district: dist({ id: 'WV-1', state: 'WV', demographics: ['rural', 'union'] }),
     card: cand({
       id: 'manchin', party: 'D', homeState: 'WV', homeStateBonus: 2,
-      identities: ['rural', 'union', 'veteran'],
+      identities: ['rural', 'union'],
     }),
   };
   const c = ctx({ state: 'WV', isMidterm: true, presidentParty: 'D' });
   const mods = buildModifiers(manchin, c, 'general', res, nat, pg);
   assert.ok(mods.some((m) => m.source === 'midterm'), 'the tide is not shed');
   const side = { player: 0, cardId: 'manchin', party: 'D' as const, modifiers: mods };
-  assert.equal(resolution.modifierTotal(side), 3, 'home state 2 + identity match 3 (res.identityBonus 1 x 3) - midterm 2');
+  assert.equal(resolution.modifierTotal(side), 2, 'home state 2 + identity match 2 (res.identityBonus 1 x 2) - midterm 2');
 });
 
 test('coattails run in reverse in hostile states, with no extra rule', () => {

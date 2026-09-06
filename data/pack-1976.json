@@ -12,8 +12,7 @@
       "homeStateBonus": 3,
       "identities": [
         "evangelical",
-        "rural",
-        "veteran"
+        "rural"
       ],
       "belief": "Born-again peanut farmer; runs as an outsider",
       "era": 1976,
@@ -41,8 +40,7 @@
       "homeState": "MN",
       "homeStateBonus": 3,
       "identities": [
-        "union",
-        "academic"
+        "union"
       ],
       "belief": "The Happy Warrior",
       "era": 1976,
@@ -56,9 +54,7 @@
       "homeState": "WA",
       "homeStateBonus": 3,
       "identities": [
-        "union",
-        "veteran",
-        "business"
+        "union"
       ],
       "belief": "Hawk abroad, liberal at home",
       "era": 1976,
@@ -162,8 +158,7 @@
       "homeState": "MA",
       "homeStateBonus": 3,
       "identities": [
-        "catholic",
-        "ivy"
+        "catholic"
       ],
       "belief": "National health insurance",
       "era": 1976,
@@ -198,9 +193,7 @@
       "party": "D",
       "homeState": "OH",
       "homeStateBonus": 3,
-      "identities": [
-        "veteran"
-      ],
+      "identities": [],
       "belief": "The astronaut",
       "era": 1976,
       "effects": []
@@ -212,10 +205,7 @@
       "party": "D",
       "homeState": "TX",
       "homeStateBonus": 3,
-      "identities": [
-        "business",
-        "veteran"
-      ],
+      "identities": [],
       "belief": "Conservative on money",
       "era": 1976,
       "effects": []
@@ -228,9 +218,7 @@
       "homeState": "NY",
       "homeStateBonus": 2,
       "identities": [
-        "catholic",
-        "ivy",
-        "academic"
+        "catholic"
       ],
       "belief": "Social scientist in the Senate",
       "era": 1976,
@@ -258,8 +246,7 @@
       "homeState": "KY",
       "homeStateBonus": 3,
       "identities": [
-        "rural",
-        "business"
+        "rural"
       ],
       "belief": "Tobacco and coal",
       "era": 1976,
@@ -273,8 +260,7 @@
       "homeState": "AR",
       "homeStateBonus": 3,
       "identities": [
-        "rural",
-        "veteran"
+        "rural"
       ],
       "belief": "Country lawyer",
       "era": 1976,
@@ -288,7 +274,6 @@
       "homeState": "GA",
       "homeStateBonus": 3,
       "identities": [
-        "veteran",
         "rural"
       ],
       "belief": "Defense conservative",
@@ -303,8 +288,7 @@
       "homeState": "MS",
       "homeStateBonus": 4,
       "identities": [
-        "rural",
-        "veteran"
+        "rural"
       ],
       "belief": "Armed Services chairman",
       "era": 1976,
@@ -337,8 +321,7 @@
       "homeState": "LA",
       "homeStateBonus": 4,
       "identities": [
-        "rural",
-        "business"
+        "rural"
       ],
       "belief": "Wrote the tax code",
       "era": 1976,
@@ -351,9 +334,7 @@
       "party": "D",
       "homeState": "IL",
       "homeStateBonus": 2,
-      "identities": [
-        "ivy"
-      ],
+      "identities": [],
       "belief": "Reform liberal",
       "era": 1976,
       "effects": []
@@ -381,8 +362,7 @@
       "homeStateBonus": 2,
       "identities": [
         "black",
-        "urban",
-        "academic"
+        "urban"
       ],
       "belief": "My faith in the Constitution is whole",
       "era": 1976,
@@ -413,8 +393,7 @@
       "homeStateBonus": 2,
       "identities": [
         "black",
-        "urban",
-        "veteran"
+        "urban"
       ],
       "belief": "Antiwar left",
       "era": 1976,
@@ -476,9 +455,7 @@
       "party": "D",
       "homeState": "CO",
       "homeStateBonus": 2,
-      "identities": [
-        "ivy"
-      ],
+      "identities": [],
       "belief": "New generation of Democrats",
       "era": 1976,
       "effects": []
@@ -536,8 +513,7 @@
       "homeStateBonus": 3,
       "identities": [
         "farm",
-        "rural",
-        "ivy"
+        "rural"
       ],
       "belief": "Liberal in a farm state",
       "era": 1976,
@@ -550,9 +526,7 @@
       "party": "D",
       "homeState": "CA",
       "homeStateBonus": 2,
-      "identities": [
-        "academic"
-      ],
+      "identities": [],
       "belief": "Party organizer",
       "era": 1976,
       "effects": []
@@ -565,8 +539,7 @@
       "homeState": "WI",
       "homeStateBonus": 3,
       "identities": [
-        "farm",
-        "ivy"
+        "farm"
       ],
       "belief": "The Golden Fleece Award",
       "era": 1976,
@@ -580,8 +553,7 @@
       "homeState": "SC",
       "homeStateBonus": 3,
       "identities": [
-        "rural",
-        "veteran"
+        "rural"
       ],
       "belief": "Hunger in America",
       "era": 1976,
@@ -595,8 +567,7 @@
       "homeState": "FL",
       "homeStateBonus": 3,
       "identities": [
-        "rural",
-        "veteran"
+        "rural"
       ],
       "belief": "Walkin' Lawton",
       "era": 1976,
@@ -609,10 +580,7 @@
       "party": "R",
       "homeState": "MI",
       "homeStateBonus": 3,
-      "identities": [
-        "veteran",
-        "business"
-      ],
+      "identities": [],
       "belief": "A Ford, not a Lincoln",
       "era": 1976,
       "effects": []
@@ -625,7 +593,6 @@
       "homeState": "CA",
       "homeStateBonus": 3,
       "identities": [
-        "business",
         "evangelical"
       ],
       "belief": "A time for choosing",
@@ -644,7 +611,6 @@
       "homeState": "KS",
       "homeStateBonus": 3,
       "identities": [
-        "veteran",
         "rural",
         "farm"
       ],
@@ -659,10 +625,7 @@
       "party": "R",
       "homeState": "NY",
       "homeStateBonus": 2,
-      "identities": [
-        "business",
-        "ivy"
-      ],
+      "identities": [],
       "belief": "Eastern establishment",
       "era": 1976,
       "effects": []
@@ -674,9 +637,7 @@
       "party": "R",
       "homeState": "TN",
       "homeStateBonus": 3,
-      "identities": [
-        "business"
-      ],
+      "identities": [],
       "belief": "What did the president know",
       "era": 1976,
       "effects": []
@@ -688,10 +649,7 @@
       "party": "R",
       "homeState": "IL",
       "homeStateBonus": 3,
-      "identities": [
-        "business",
-        "ivy"
-      ],
+      "identities": [],
       "belief": "Corporate moderate",
       "era": 1976,
       "effects": []
@@ -705,8 +663,7 @@
       "homeStateBonus": 2,
       "identities": [
         "jewish",
-        "urban",
-        "ivy"
+        "urban"
       ],
       "belief": "Liberal Republican",
       "era": 1976,
@@ -721,8 +678,7 @@
       "homeStateBonus": 3,
       "identities": [
         "black",
-        "urban",
-        "veteran"
+        "urban"
       ],
       "belief": "First elected since Reconstruction",
       "era": 1976,
@@ -736,9 +692,7 @@
       "homeState": "AZ",
       "homeStateBonus": 4,
       "identities": [
-        "rural",
-        "veteran",
-        "business"
+        "rural"
       ],
       "belief": "Extremism in defense of liberty",
       "era": 1976,
@@ -755,10 +709,7 @@
       "party": "R",
       "homeState": "TX",
       "homeStateBonus": 3,
-      "identities": [
-        "veteran",
-        "business"
-      ],
+      "identities": [],
       "belief": "Built the Texas GOP",
       "era": 1976,
       "effects": []
@@ -772,7 +723,6 @@
       "homeStateBonus": 4,
       "identities": [
         "rural",
-        "veteran",
         "evangelical"
       ],
       "belief": "Switched parties and stayed",
@@ -809,10 +759,7 @@
       "party": "R",
       "homeState": "IN",
       "homeStateBonus": 3,
-      "identities": [
-        "business",
-        "ivy"
-      ],
+      "identities": [],
       "belief": "Mayor of Indianapolis",
       "era": 1976,
       "effects": []
@@ -824,10 +771,7 @@
       "party": "R",
       "homeState": "PA",
       "homeStateBonus": 3,
-      "identities": [
-        "business",
-        "ivy"
-      ],
+      "identities": [],
       "belief": "Moderate on labor",
       "era": 1976,
       "effects": []
@@ -839,9 +783,7 @@
       "party": "R",
       "homeState": "TN",
       "homeStateBonus": 3,
-      "identities": [
-        "business"
-      ],
+      "identities": [],
       "belief": "Rebuilt the party",
       "era": 1976,
       "effects": []
@@ -853,9 +795,7 @@
       "party": "R",
       "homeState": "OR",
       "homeStateBonus": 3,
-      "identities": [
-        "business"
-      ],
+      "identities": [],
       "belief": "Pro-choice Republican",
       "era": 1976,
       "effects": []
@@ -868,8 +808,7 @@
       "homeState": "OR",
       "homeStateBonus": 3,
       "identities": [
-        "evangelical",
-        "academic"
+        "evangelical"
       ],
       "belief": "Antiwar Republican",
       "era": 1976,
@@ -882,10 +821,7 @@
       "party": "R",
       "homeState": "CT",
       "homeStateBonus": 3,
-      "identities": [
-        "ivy",
-        "business"
-      ],
+      "identities": [],
       "belief": "Watergate committee maverick",
       "era": 1976,
       "effects": []
@@ -898,7 +834,6 @@
       "homeState": "NJ",
       "homeStateBonus": 3,
       "identities": [
-        "ivy",
         "urban"
       ],
       "belief": "Liberal on civil rights",
@@ -928,8 +863,7 @@
       "homeState": "NV",
       "homeStateBonus": 3,
       "identities": [
-        "catholic",
-        "business"
+        "catholic"
       ],
       "belief": "Reagan's best friend",
       "era": 1976,
@@ -943,8 +877,7 @@
       "homeState": "NY",
       "homeStateBonus": 2,
       "identities": [
-        "catholic",
-        "ivy"
+        "catholic"
       ],
       "belief": "Elected on the Conservative line",
       "era": 1976,
@@ -962,8 +895,7 @@
       "homeState": "MO",
       "homeStateBonus": 3,
       "identities": [
-        "evangelical",
-        "ivy"
+        "evangelical"
       ],
       "belief": "Ordained priest",
       "era": 1976,
@@ -977,8 +909,7 @@
       "homeState": "UT",
       "homeStateBonus": 3,
       "identities": [
-        "evangelical",
-        "business"
+        "evangelical"
       ],
       "belief": "Labor law opponent",
       "era": 1976,
@@ -991,9 +922,7 @@
       "party": "R",
       "homeState": "CA",
       "homeStateBonus": 2,
-      "identities": [
-        "academic"
-      ],
+      "identities": [],
       "belief": "Semanticist college president",
       "era": 1976,
       "effects": []
@@ -1005,10 +934,7 @@
       "party": "R",
       "homeState": "MA",
       "homeStateBonus": 3,
-      "identities": [
-        "ivy",
-        "veteran"
-      ],
+      "identities": [],
       "belief": "Resigned rather than fire Cox",
       "era": 1976,
       "effects": []
@@ -1020,10 +946,7 @@
       "party": "R",
       "homeState": "DE",
       "homeStateBonus": 3,
-      "identities": [
-        "business",
-        "ivy"
-      ],
+      "identities": [],
       "belief": "Half of Kemp-Roth",
       "era": 1976,
       "effects": []
@@ -1035,10 +958,7 @@
       "party": "R",
       "homeState": "AK",
       "homeStateBonus": 4,
-      "identities": [
-        "veteran",
-        "business"
-      ],
+      "identities": [],
       "belief": "Alaska's appropriator",
       "era": 1976,
       "effects": []
@@ -1066,7 +986,6 @@
       "homeState": "MD",
       "homeStateBonus": 3,
       "identities": [
-        "ivy",
         "urban"
       ],
       "belief": "Civil rights Republican",
@@ -1081,8 +1000,7 @@
       "homeState": "VT",
       "homeStateBonus": 3,
       "identities": [
-        "rural",
-        "veteran"
+        "rural"
       ],
       "belief": "Education and the environment",
       "era": 1976,
@@ -1193,8 +1111,7 @@
       "number": 5,
       "era": 1976,
       "demographics": [
-        "urban",
-        "academic"
+        "urban"
       ],
       "note": "San Francisco"
     },
@@ -1218,8 +1135,7 @@
       "number": 35,
       "era": 1976,
       "demographics": [
-        "suburban",
-        "business"
+        "suburban"
       ],
       "note": "Orange County"
     },
@@ -1266,8 +1182,7 @@
       "number": 7,
       "era": 1976,
       "demographics": [
-        "suburban",
-        "business"
+        "suburban"
       ],
       "note": "West Houston"
     },
@@ -1291,8 +1206,7 @@
       "number": 5,
       "era": 1976,
       "demographics": [
-        "union",
-        "business"
+        "union"
       ],
       "note": "Grand Rapids"
     },
@@ -1414,8 +1328,7 @@
       "number": 9,
       "era": 1976,
       "demographics": [
-        "suburban",
-        "veteran"
+        "suburban"
       ],
       "note": "Tampa"
     },
@@ -1610,8 +1523,7 @@
       "homeState": "VA",
       "homeStateBonus": 3,
       "identities": [
-        "rural",
-        "business"
+        "rural"
       ],
       "belief": "Left the party and held the seat",
       "era": 1976,
@@ -1625,9 +1537,7 @@
       "homeState": "MN",
       "homeStateBonus": 2,
       "identities": [
-        "catholic",
-        "academic",
-        "ivy"
+        "catholic"
       ],
       "belief": "Ran outside both parties",
       "era": 1976,

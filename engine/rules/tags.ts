@@ -1,8 +1,11 @@
 /** Tag space — v0.2 items 4, 5 and 6.
  *
  *  `IdentityTag` already carried the game's only vocabulary of interest:
- *  fifteen values, on `CandidateCard.identities` and `DistrictCard.demographics`.
- *  Bills were the gap — the omnibill is a single spending magnitude G with no
+ *  eleven values, on `CandidateCard.identities` and `DistrictCard.demographics`
+ *  -- `ivy`, `veteran`, `business` and `academic` were cut (hf7y/american-cycle
+ *  #162, #164): biography typed as if it were geography, oversupplied on
+ *  candidates in exactly the proportion the place tags were oversupplied on
+ *  districts. Bills were the gap — the omnibill is a single spending magnitude G with no
  *  position at all, which is what `BILL_POSITION_ABSENT` records. Giving bills
  *  tags puts every artefact in the game into ONE space, and coalition synergy
  *  is then just distance in it: a bloc concentrated in one tag region passes
@@ -23,8 +26,8 @@ import type { CandidateCard, IdentityTag, Party, Seat } from '../types/index.ts'
 
 export const TAGS: readonly IdentityTag[] = [
   'catholic', 'evangelical', 'jewish', 'black', 'hispanic', 'cuban',
-  'union', 'veteran', 'rural', 'suburban', 'urban', 'ivy',
-  'farm', 'business', 'academic',
+  'union', 'rural', 'suburban', 'urban',
+  'farm',
 ];
 const INDEX = new Map(TAGS.map((t, i) => [t, i]));
 

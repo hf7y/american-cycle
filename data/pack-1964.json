@@ -11,8 +11,7 @@
       "homeState": "TX",
       "homeStateBonus": 4,
       "identities": [
-        "rural",
-        "business"
+        "rural"
       ],
       "belief": "We shall overcome",
       "era": 1964,
@@ -26,8 +25,7 @@
       "homeState": "MN",
       "homeStateBonus": 4,
       "identities": [
-        "union",
-        "academic"
+        "union"
       ],
       "belief": "Out of the shadow of states' rights",
       "era": 1964,
@@ -41,8 +39,7 @@
       "homeState": "NY",
       "homeStateBonus": 3,
       "identities": [
-        "catholic",
-        "ivy"
+        "catholic"
       ],
       "belief": "Carpetbagger who won",
       "era": 1964,
@@ -71,8 +68,7 @@
       "homeState": "MT",
       "homeStateBonus": 4,
       "identities": [
-        "catholic",
-        "academic"
+        "catholic"
       ],
       "belief": "Ran the Senate quietly",
       "era": 1964,
@@ -86,7 +82,6 @@
       "homeState": "OR",
       "homeStateBonus": 4,
       "identities": [
-        "academic",
         "rural"
       ],
       "belief": "One of two votes against the Gulf of Tonkin",
@@ -105,9 +100,7 @@
       "homeState": "AR",
       "homeStateBonus": 4,
       "identities": [
-        "rural",
-        "ivy",
-        "academic"
+        "rural"
       ],
       "belief": "Internationalist, segregationist",
       "era": 1964,
@@ -121,8 +114,7 @@
       "homeState": "MS",
       "homeStateBonus": 5,
       "identities": [
-        "rural",
-        "veteran"
+        "rural"
       ],
       "belief": "Armed Services",
       "era": 1964,
@@ -136,8 +128,7 @@
       "homeState": "LA",
       "homeStateBonus": 5,
       "identities": [
-        "rural",
-        "business"
+        "rural"
       ],
       "belief": "Huey's son, and the tax code",
       "era": 1964,
@@ -151,8 +142,7 @@
       "homeState": "MN",
       "homeStateBonus": 4,
       "identities": [
-        "catholic",
-        "academic"
+        "catholic"
       ],
       "belief": "Not yet in revolt",
       "era": 1964,
@@ -165,10 +155,7 @@
       "party": "D",
       "homeState": "FL",
       "homeStateBonus": 4,
-      "identities": [
-        "business",
-        "veteran"
-      ],
+      "identities": [],
       "belief": "Kennedy's friend on the right",
       "era": 1964,
       "effects": []
@@ -181,8 +168,7 @@
       "homeState": "NC",
       "homeStateBonus": 5,
       "identities": [
-        "rural",
-        "ivy"
+        "rural"
       ],
       "belief": "Country lawyer against the bill",
       "era": 1964,
@@ -226,7 +212,6 @@
       "homeState": "TX",
       "homeStateBonus": 4,
       "identities": [
-        "business",
         "rural"
       ],
       "belief": "Wounded in Dallas",
@@ -260,8 +245,7 @@
       "homeState": "AZ",
       "homeStateBonus": 5,
       "identities": [
-        "rural",
-        "business"
+        "rural"
       ],
       "belief": "Fifty-six years in Congress",
       "era": 1964,
@@ -320,13 +304,10 @@
       "homeStateBonus": 5,
       "identities": [
         "rural",
-        "veteran",
-        "business",
         "union",
         "urban"
       ],
       "identityWeights": {
-        "business": 3,
         "union": -3,
         "urban": -2
       },
@@ -358,10 +339,7 @@
       "party": "R",
       "homeState": "NY",
       "homeStateBonus": 3,
-      "identities": [
-        "business",
-        "ivy"
-      ],
+      "identities": [],
       "belief": "The eastern establishment loses",
       "era": 1964,
       "effects": []
@@ -373,10 +351,7 @@
       "party": "R",
       "homeState": "PA",
       "homeStateBonus": 4,
-      "identities": [
-        "business",
-        "ivy"
-      ],
+      "identities": [],
       "belief": "The late alternative",
       "era": 1964,
       "effects": []
@@ -389,8 +364,7 @@
       "homeState": "MI",
       "homeStateBonus": 4,
       "identities": [
-        "evangelical",
-        "business"
+        "evangelical"
       ],
       "belief": "Walked out of the convention",
       "era": 1964,
@@ -404,8 +378,7 @@
       "homeState": "IL",
       "homeStateBonus": 4,
       "identities": [
-        "rural",
-        "business"
+        "rural"
       ],
       "belief": "Delivered the Republican votes for the bill",
       "era": 1964,
@@ -419,21 +392,11 @@
       "homeState": "ME",
       "homeStateBonus": 5,
       "identities": [
-        "rural",
-        "business"
+        "rural"
       ],
       "belief": "Declaration of Conscience",
       "era": 1964,
-      "effects": [
-        {
-          "type": "conditional",
-          "pips": 2,
-          "when": {
-            "identity": "veteran"
-          },
-          "note": "Declaration of Conscience"
-        }
-      ]
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -444,8 +407,7 @@
       "homeStateBonus": 3,
       "identities": [
         "jewish",
-        "urban",
-        "ivy"
+        "urban"
       ],
       "belief": "Liberal Republican in full",
       "era": 1964,
@@ -458,9 +420,7 @@
       "party": "R",
       "homeState": "CA",
       "homeStateBonus": 3,
-      "identities": [
-        "business"
-      ],
+      "identities": [],
       "belief": "Whipped the bill through",
       "era": 1964,
       "effects": []
@@ -473,7 +433,6 @@
       "homeState": "NJ",
       "homeStateBonus": 4,
       "identities": [
-        "ivy",
         "urban"
       ],
       "belief": "Civil rights Republican",
@@ -487,10 +446,7 @@
       "party": "R",
       "homeState": "TX",
       "homeStateBonus": 4,
-      "identities": [
-        "veteran",
-        "business"
-      ],
+      "identities": [],
       "belief": "The first of the new southern Republicans",
       "era": 1964,
       "effects": []
@@ -532,10 +488,7 @@
       "party": "R",
       "homeState": "CA",
       "homeStateBonus": 3,
-      "identities": [
-        "veteran",
-        "business"
-      ],
+      "identities": [],
       "belief": "Between defeats",
       "era": 1964,
       "effects": []
@@ -547,10 +500,7 @@
       "party": "R",
       "homeState": "MA",
       "homeStateBonus": 4,
-      "identities": [
-        "ivy",
-        "veteran"
-      ],
+      "identities": [],
       "belief": "Won a primary he did not enter",
       "era": 1964,
       "effects": []
@@ -562,10 +512,7 @@
       "party": "R",
       "homeState": "IL",
       "homeStateBonus": 4,
-      "identities": [
-        "business",
-        "ivy"
-      ],
+      "identities": [],
       "belief": "Corporate moderate",
       "era": 1964,
       "effects": []
@@ -578,7 +525,6 @@
       "homeState": "PA",
       "homeStateBonus": 4,
       "identities": [
-        "ivy",
         "urban"
       ],
       "belief": "Eastern moderate leadership",
@@ -593,8 +539,7 @@
       "homeState": "SC",
       "homeStateBonus": 4,
       "identities": [
-        "rural",
-        "veteran"
+        "rural"
       ],
       "belief": "Elected by write-in, running against his own party's machine",
       "era": 1954,
@@ -609,7 +554,6 @@
       "homeStateBonus": 5,
       "identities": [
         "rural",
-        "veteran",
         "evangelical"
       ],
       "belief": "Switched parties over the bill",
@@ -629,8 +573,7 @@
       "homeState": "NY",
       "homeStateBonus": 3,
       "identities": [
-        "urban",
-        "ivy"
+        "urban"
       ],
       "belief": "Fun City liberal",
       "era": 1964,
@@ -916,7 +859,6 @@
       "number": 1,
       "era": 1964,
       "demographics": [
-        "business",
         "suburban"
       ],
       "note": "Phoenix, Goldwater's base"
@@ -928,8 +870,7 @@
       "number": 4,
       "era": 1964,
       "demographics": [
-        "suburban",
-        "veteran"
+        "suburban"
       ],
       "note": "Gold Coast retirees"
     },
@@ -940,8 +881,7 @@
       "number": 8,
       "era": 1964,
       "demographics": [
-        "suburban",
-        "business"
+        "suburban"
       ],
       "note": "Northern Virginia, newly Republican"
     },
@@ -952,7 +892,6 @@
       "number": 4,
       "era": 1964,
       "demographics": [
-        "academic",
         "urban"
       ],
       "note": "The Research Triangle"
