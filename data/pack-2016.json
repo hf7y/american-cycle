@@ -11,7 +11,6 @@
       "homeState": "NY",
       "homeStateBonus": 0,
       "identities": [
-        "ivy",
         "suburban"
       ],
       "belief": "Stronger together",
@@ -26,8 +25,7 @@
       "homeState": "VT",
       "homeStateBonus": 2,
       "identities": [
-        "jewish",
-        "academic"
+        "jewish"
       ],
       "belief": "Political revolution",
       "era": 2016,
@@ -64,10 +62,7 @@
       "party": "D",
       "homeState": "MA",
       "homeStateBonus": 1,
-      "identities": [
-        "academic",
-        "ivy"
-      ],
+      "identities": [],
       "belief": "The consumer bureau",
       "era": 2016,
       "effects": [
@@ -85,8 +80,7 @@
       "homeStateBonus": 1,
       "identities": [
         "black",
-        "urban",
-        "ivy"
+        "urban"
       ],
       "belief": "Newark mayor",
       "era": 2016,
@@ -116,8 +110,7 @@
       "homeState": "WV",
       "homeStateBonus": 3,
       "identities": [
-        "rural",
-        "business"
+        "rural"
       ],
       "belief": "Shot the cap-and-trade bill",
       "era": 2016,
@@ -175,8 +168,7 @@
       "homeState": "OH",
       "homeStateBonus": 2,
       "identities": [
-        "union",
-        "academic"
+        "union"
       ],
       "belief": "The last statewide Democrat",
       "era": 2016,
@@ -214,8 +206,7 @@
       "homeState": "MN",
       "homeStateBonus": 1,
       "identities": [
-        "suburban",
-        "ivy"
+        "suburban"
       ],
       "belief": "Won every county once",
       "era": 2016,
@@ -230,8 +221,7 @@
       "homeStateBonus": 3,
       "identities": [
         "catholic",
-        "rural",
-        "veteran"
+        "rural"
       ],
       "belief": "Pro-life, pro-Medicaid",
       "era": 2016,
@@ -269,8 +259,7 @@
       "homeState": "MT",
       "homeStateBonus": 3,
       "identities": [
-        "rural",
-        "business"
+        "rural"
       ],
       "belief": "Won as Trump carried the state",
       "era": 2016,
@@ -300,8 +289,7 @@
       "homeStateBonus": 0,
       "identities": [
         "jewish",
-        "urban",
-        "ivy"
+        "urban"
       ],
       "belief": "The leader",
       "era": 2016,
@@ -315,7 +303,6 @@
       "homeState": "WI",
       "homeStateBonus": 1,
       "identities": [
-        "academic",
         "urban"
       ],
       "belief": "Held Wisconsin",
@@ -346,7 +333,6 @@
       "homeStateBonus": 2,
       "identities": [
         "catholic",
-        "veteran",
         "union"
       ],
       "belief": "Won a Trump district",
@@ -385,7 +371,6 @@
       "homeState": "NY",
       "homeStateBonus": 0,
       "identities": [
-        "business",
         "urban"
       ],
       "belief": "Make America great again",
@@ -405,8 +390,7 @@
       "homeStateBonus": 1,
       "identities": [
         "hispanic",
-        "evangelical",
-        "ivy"
+        "evangelical"
       ],
       "belief": "The shutdown",
       "era": 2016,
@@ -439,8 +423,7 @@
       "homeState": "OH",
       "homeStateBonus": 2,
       "identities": [
-        "catholic",
-        "business"
+        "catholic"
       ],
       "belief": "Expanded Medicaid",
       "era": 2016,
@@ -455,7 +438,6 @@
       "homeStateBonus": 1,
       "identities": [
         "evangelical",
-        "business",
         "hispanic"
       ],
       "belief": "Please clap",
@@ -470,8 +452,7 @@
       "homeState": "IN",
       "homeStateBonus": 1,
       "identities": [
-        "evangelical",
-        "business"
+        "evangelical"
       ],
       "belief": "Christian, conservative, Republican",
       "era": 2016,
@@ -485,8 +466,7 @@
       "homeState": "WI",
       "homeStateBonus": 2,
       "identities": [
-        "catholic",
-        "business"
+        "catholic"
       ],
       "belief": "The budget",
       "era": 2016,
@@ -499,9 +479,7 @@
       "party": "R",
       "homeState": "KY",
       "homeStateBonus": 1,
-      "identities": [
-        "business"
-      ],
+      "identities": [],
       "belief": "Held the seat open",
       "era": 2016,
       "effects": []
@@ -514,7 +492,6 @@
       "homeState": "ME",
       "homeStateBonus": 3,
       "identities": [
-        "business",
         "suburban"
       ],
       "belief": "The only split ticket in 2020",
@@ -529,7 +506,6 @@
       "homeState": "AK",
       "homeStateBonus": 3,
       "identities": [
-        "business",
         "rural"
       ],
       "belief": "Won on a write-in",
@@ -543,10 +519,7 @@
       "party": "R",
       "homeState": "MA",
       "homeStateBonus": 3,
-      "identities": [
-        "business",
-        "ivy"
-      ],
+      "identities": [],
       "belief": "Most popular governor in America",
       "era": 2016,
       "effects": []
@@ -559,7 +532,6 @@
       "homeState": "MD",
       "homeStateBonus": 3,
       "identities": [
-        "business",
         "suburban"
       ],
       "belief": "Won Maryland twice",
@@ -574,7 +546,6 @@
       "homeState": "VT",
       "homeStateBonus": 3,
       "identities": [
-        "business",
         "rural"
       ],
       "belief": "Won Vermont as it voted Democratic",
@@ -589,9 +560,7 @@
       "homeState": "NE",
       "homeStateBonus": 2,
       "identities": [
-        "evangelical",
-        "academic",
-        "ivy"
+        "evangelical"
       ],
       "belief": "Never Trump, mostly",
       "era": 2016,
@@ -605,8 +574,7 @@
       "homeState": "AZ",
       "homeStateBonus": 2,
       "identities": [
-        "evangelical",
-        "business"
+        "evangelical"
       ],
       "belief": "Conscience of a conservative",
       "era": 2016,
@@ -620,7 +588,6 @@
       "homeState": "KY",
       "homeStateBonus": 1,
       "identities": [
-        "business",
         "evangelical"
       ],
       "belief": "Libertarian caucus of one",
@@ -639,8 +606,6 @@
       "homeState": "AR",
       "homeStateBonus": 2,
       "identities": [
-        "veteran",
-        "ivy",
         "evangelical"
       ],
       "belief": "Harvard and the infantry",
@@ -659,8 +624,7 @@
       "homeState": "MO",
       "homeStateBonus": 2,
       "identities": [
-        "evangelical",
-        "ivy"
+        "evangelical"
       ],
       "belief": "Big tech populist",
       "era": 2016,
@@ -678,7 +642,6 @@
       "homeState": "SC",
       "homeStateBonus": 2,
       "identities": [
-        "business",
         "evangelical"
       ],
       "belief": "Took down the flag",
@@ -693,7 +656,6 @@
       "homeState": "TX",
       "homeStateBonus": 1,
       "identities": [
-        "business",
         "hispanic"
       ],
       "belief": "Governor of Texas",
@@ -708,8 +670,6 @@
       "homeState": "FL",
       "homeStateBonus": 1,
       "identities": [
-        "veteran",
-        "ivy",
         "evangelical"
       ],
       "belief": "Won by 32,000 votes",
@@ -724,8 +684,7 @@
       "homeState": "GA",
       "homeStateBonus": 2,
       "identities": [
-        "rural",
-        "business"
+        "rural"
       ],
       "belief": "Certified the count",
       "era": 2016,
@@ -738,10 +697,7 @@
       "party": "R",
       "homeState": "OH",
       "homeStateBonus": 1,
-      "identities": [
-        "business",
-        "ivy"
-      ],
+      "identities": [],
       "belief": "Trade negotiator",
       "era": 2016,
       "effects": []
@@ -754,7 +710,6 @@
       "homeState": "PA",
       "homeStateBonus": 1,
       "identities": [
-        "business",
         "catholic"
       ],
       "belief": "Voted to convict",
@@ -769,7 +724,6 @@
       "homeState": "CA",
       "homeStateBonus": 1,
       "identities": [
-        "business",
         "suburban"
       ],
       "belief": "The leader",
@@ -784,7 +738,6 @@
       "homeState": "NY",
       "homeStateBonus": 1,
       "identities": [
-        "ivy",
         "rural",
         "suburban"
       ],
@@ -819,7 +772,6 @@
       "homeState": "TX",
       "homeStateBonus": 1,
       "identities": [
-        "veteran",
         "suburban"
       ],
       "belief": "The eyepatch",
@@ -846,8 +798,7 @@
       "number": 6,
       "era": 2016,
       "demographics": [
-        "suburban",
-        "business"
+        "suburban"
       ],
       "note": "Chester County"
     },
@@ -858,8 +809,7 @@
       "number": 11,
       "era": 2016,
       "demographics": [
-        "suburban",
-        "business"
+        "suburban"
       ],
       "note": "Oakland County"
     },
@@ -920,9 +870,7 @@
       "number": 3,
       "era": 2016,
       "demographics": [
-        "suburban",
-        "academic",
-        "business"
+        "suburban"
       ],
       "note": "Twin Cities suburbs, gone blue"
     },
@@ -945,8 +893,7 @@
       "number": 12,
       "era": 2016,
       "demographics": [
-        "suburban",
-        "business"
+        "suburban"
       ],
       "note": "Columbus suburbs"
     },
@@ -988,19 +935,6 @@
     },
     {
       "kind": "district",
-      "id": "TX-7-2016",
-      "state": "TX",
-      "number": 7,
-      "era": 2016,
-      "demographics": [
-        "suburban",
-        "business",
-        "ivy"
-      ],
-      "note": "Houston, Bush to Clinton"
-    },
-    {
-      "kind": "district",
       "id": "TX-28-2016",
       "state": "TX",
       "number": 28,
@@ -1018,8 +952,7 @@
       "number": 32,
       "era": 2016,
       "demographics": [
-        "suburban",
-        "business"
+        "suburban"
       ],
       "note": "Dallas suburbs"
     },
@@ -1030,8 +963,7 @@
       "number": 45,
       "era": 2016,
       "demographics": [
-        "suburban",
-        "business"
+        "suburban"
       ],
       "note": "Orange County, flipped"
     },
@@ -1074,19 +1006,6 @@
     },
     {
       "kind": "district",
-      "id": "GA-6-2016",
-      "state": "GA",
-      "number": 6,
-      "era": 2016,
-      "demographics": [
-        "suburban",
-        "business",
-        "ivy"
-      ],
-      "note": "Gingrich's old seat, flipped"
-    },
-    {
-      "kind": "district",
       "id": "GA-14-2016",
       "state": "GA",
       "number": 14,
@@ -1104,8 +1023,7 @@
       "number": 6,
       "era": 2016,
       "demographics": [
-        "suburban",
-        "business"
+        "suburban"
       ],
       "note": "Scottsdale"
     },
@@ -1140,8 +1058,7 @@
       "number": 7,
       "era": 2016,
       "demographics": [
-        "suburban",
-        "business"
+        "suburban"
       ],
       "note": "Richmond suburbs"
     },
@@ -1153,8 +1070,7 @@
       "era": 2016,
       "demographics": [
         "rural",
-        "evangelical",
-        "veteran"
+        "evangelical"
       ],
       "note": "Southwest Virginia"
     },
@@ -1166,8 +1082,7 @@
       "era": 2016,
       "demographics": [
         "suburban",
-        "hispanic",
-        "business"
+        "hispanic"
       ],
       "note": "Aurora"
     },
@@ -1185,26 +1100,12 @@
     },
     {
       "kind": "district",
-      "id": "NJ-7-2016",
-      "state": "NJ",
-      "number": 7,
-      "era": 2016,
-      "demographics": [
-        "suburban",
-        "business",
-        "ivy"
-      ],
-      "note": "Somerset County"
-    },
-    {
-      "kind": "district",
       "id": "IL-6-2016",
       "state": "IL",
       "number": 6,
       "era": 2016,
       "demographics": [
-        "suburban",
-        "business"
+        "suburban"
       ],
       "note": "DuPage County"
     },
@@ -1227,8 +1128,7 @@
       "number": 3,
       "era": 2016,
       "demographics": [
-        "suburban",
-        "business"
+        "suburban"
       ],
       "note": "Johnson County"
     },
@@ -1251,9 +1151,7 @@
       "number": 1,
       "era": 2016,
       "demographics": [
-        "suburban",
-        "business",
-        "veteran"
+        "suburban"
       ],
       "note": "Charleston"
     },
@@ -1277,8 +1175,7 @@
       "era": 2016,
       "demographics": [
         "rural",
-        "union",
-        "veteran"
+        "union"
       ],
       "note": "The Second, gone red"
     },
@@ -1325,8 +1222,7 @@
       "number": 2,
       "era": 2016,
       "demographics": [
-        "suburban",
-        "business"
+        "suburban"
       ],
       "note": "St. Louis suburbs"
     },
@@ -1337,8 +1233,7 @@
       "number": 8,
       "era": 2016,
       "demographics": [
-        "suburban",
-        "academic"
+        "suburban"
       ],
       "note": "Eastside, flipped"
     },
@@ -1350,7 +1245,6 @@
       "homeState": "ME",
       "homeStateBonus": 3,
       "identities": [
-        "business",
         "rural"
       ],
       "belief": "Independent by habit, not by accident",
@@ -1365,8 +1259,7 @@
       "homeState": "UT",
       "homeStateBonus": 1,
       "identities": [
-        "evangelical",
-        "ivy"
+        "evangelical"
       ],
       "belief": "Ran to deny a majority",
       "era": 2016,

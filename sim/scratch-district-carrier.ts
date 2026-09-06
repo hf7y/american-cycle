@@ -220,7 +220,7 @@ function main(): void {
   const Ain: Carrier = (u) => sure(feOf(u));
 
   // ---- B: an era-keyed demographics table, fitted from the panel, LOO by district
-  const TAGS: IdentityTag[] = ['catholic', 'evangelical', 'jewish', 'black', 'hispanic', 'cuban', 'union', 'veteran', 'rural', 'suburban', 'urban', 'ivy', 'farm', 'business', 'academic'];
+  const TAGS: IdentityTag[] = ['catholic', 'evangelical', 'jewish', 'black', 'hispanic', 'cuban', 'union', 'rural', 'suburban', 'urban', 'farm'];
   const byEra = new Map<string, (DistrictCard & { unit: string })[]>();
   for (const d of districts) { const le = d.unit.split('|')[1]; if (!byEra.has(le)) byEra.set(le, []); byEra.get(le)!.push(d); }
   /** tag -> mean district effect over the era's cards carrying it, `drop` excluded. */

@@ -4,8 +4,7 @@ export type Round = 'primary' | 'general';
 
 export type IdentityTag =
   | 'catholic' | 'evangelical' | 'jewish' | 'black' | 'hispanic' | 'cuban'
-  | 'union' | 'veteran' | 'rural' | 'suburban' | 'urban' | 'ivy'
-  | 'farm' | 'business' | 'academic';
+  | 'union' | 'rural' | 'suburban' | 'urban' | 'farm';
 
 /** BUILD-BRIEF Phase 3: a small enumerated set. Anything else is flavor text.
  *  identity bonus and home-state bonus are real mechanics, but each is wired

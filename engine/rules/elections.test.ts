@@ -119,10 +119,10 @@ test('the midterm penalty reaches everyone; a local card outruns it', () => {
   // on home state plus identity match against his district.
   const manchin: Declaration = {
     player: 0, state: 'WV', office: 'senator',
-    district: dist({ id: 'WV-1', state: 'WV', demographics: ['rural', 'union', 'veteran'] }),
+    district: dist({ id: 'WV-1', state: 'WV', demographics: ['rural', 'union', 'farm'] }),
     card: cand({
       id: 'manchin', party: 'D', homeState: 'WV', homeStateBonus: 2,
-      identities: ['rural', 'union', 'veteran'],
+      identities: ['rural', 'union', 'farm'],
     }),
   };
   const c = ctx({ state: 'WV', isMidterm: true, presidentParty: 'D' });
