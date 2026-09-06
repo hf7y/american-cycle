@@ -4183,12 +4183,6 @@ const SOLITAIRE_BLURB = {
   RunawayMaximiser:'Very gentle 1v1. You should win about 85% of these.',
   WalkoverFarmer:'Gentle 1v1. You should win about 77% of these.',
 };
-// #46: which of the seventeen give a fair 1v1, not just the field's fair
-// share. Tiers read off SOLITAIRE_BLURB's own measured win rates
-// (findings/board-opponent-fitness.ts, #205/#209) -- fair is the 40-60%
-// human-win band, the same band that finding calls out by name. Greedy has
-// no separate 1v1 measurement (it IS the human proxy the others are duelled
-// against), so it's grouped fair by that construction.
 const SOLITAIRE_TIER = {
   Greedy:'fair', HeterodoxSpecialist:'fair', EconomyChicken:'fair', Vetoer:'fair',
   Lookahead:'hard', BillBlocker:'hard', Impeacher:'hard', VPBackstab:'hard', SenateFlood:'hard', Launchpad:'hard',
@@ -4209,9 +4203,6 @@ const CONFIG_BLURB = {
 
 function setup() {
   const opts = Object.keys(AGENTS).map((k) => `<option value="${k}">${k}</option>`).join('');
-  // s1 doubles as the true-1v1 seat when s2/s3 stay blank, so group it by
-  // SOLITAIRE_TIER instead of the flat list s2/s3 use -- the picker itself
-  // now shows which of the seventeen are a fair fight alone.
   const s1Opts = ['fair', 'gentle', 'hard'].map((tier) => {
     const names = Object.keys(AGENTS).filter((k) => SOLITAIRE_TIER[k] === tier);
     if (!names.length) return '';
