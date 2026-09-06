@@ -179,7 +179,9 @@ function phaseDeclare() {
   const open = pending.open;
   const me = G.players[S.human];
   const eligibleFor = (card) => open.filter((r) =>
-    r.office === 'president' || eligible(card, r.state, me.districts));
+    r.office === 'president'
+    || eligible(card, r.state, me.districts,
+                G.cfg.game.districtLevelEligibility && r.office === 'representative' ? r.slot : undefined));
   S.eligibleFor = eligibleFor;
   $('handHint').textContent = `${G.year} — pick a card, then a state`;
   ticker(`${G.year}: declarations are open.`);
@@ -203,10 +205,13 @@ function pickRace(state) {
   const card = S.sel;
   const choose = (r) => {
     const me = G.players[S.human];
+    const statewide = G.cfg.game.statewideFitSums && (r.office === 'senator' || r.office === 'governor')
+      ? G.players.flatMap((p) => p.districts).filter((d) => d.state === r.state)
+      : undefined;
     const district = r.office === 'representative'
       ? G.players.flatMap((p) => p.districts).find((d) => d.state === r.state && d.number === r.slot)
-      : me.districts.find((d) => d.state === r.state);
-    S.picks.push({ player:S.human, card, district,
+      : statewide ? undefined : me.districts.find((d) => d.state === r.state);
+    S.picks.push({ player:S.human, card, district, districts:statewide,
                    office:r.office, state:r.state, slot:r.slot });
     S.sel = null; closeModal(); render();
   };
@@ -355,7 +360,10 @@ function racesInState_all(card){
   const me = G.players[S.human];
   const taken = new Set(S.picks.map(uiRaceKey));
   return (pending.open||[]).filter((r)=>
-    (r.office==='president' || eligible(card, r.state, me.districts)) && !taken.has(uiRaceKey(r)));
+    (r.office==='president'
+     || eligible(card, r.state, me.districts,
+                 G.cfg.game.districtLevelEligibility && r.office === 'representative' ? r.slot : undefined))
+    && !taken.has(uiRaceKey(r)));
 }
 
 function drawHand() {

@@ -87,7 +87,31 @@ export interface Config {
            *  object (DECISIONS.md's cut "issue polarity flips" item), only a
            *  per-declaration choice among options `sim/agents.ts` already
            *  scores. */
-          partyChoice?: 'printed' | 'printedAffinity' | 'free' };
+          partyChoice?: 'printed' | 'printedAffinity' | 'free';
+          /** #106 change 1: a House race gates on the DISTRICT you hold (state
+           *  AND number), not merely the state. Off by default, `eligible()`
+           *  keeps letting a player who holds any district in a state declare
+           *  into every House race there -- which #77 measured as 45.6 races
+           *  legal per player, 42% of the board. This tightens House entry
+           *  only; Senate, governor and president keep the state-level test
+           *  (per #106's ruling). Measure against #77 before shipping on. */
+          districtLevelEligibility?: boolean;
+          /** #106 change 3: a Senate or governor race prices identity fit
+           *  against the SUM of every district card in play in that state,
+           *  not just the declaring player's own first match. `stateposition`
+           *  already computes the public-map quantity for bill voting;
+           *  election resolution never read it (see elections.ts). Off by
+           *  default preserves the single-district reading. */
+          statewideFitSums?: boolean;
+          /** #106 change 4: redistricting. When a district card for a seat
+           *  (same state + number) enters play from a LATER era than one
+           *  already held, the older card is discarded -- the district's
+           *  demographics change under the sitting member, who was matched to
+           *  the old electorate. Ownership does not transfer; the newer card
+           *  is drafted normally and the seat is simply contestable under new
+           *  demographics. Off by default, an older district card is never
+           *  displaced. */
+          districtSupersession?: boolean };
 }
 
 export interface PlayerState {
@@ -416,7 +440,7 @@ export class Game {
         else return;                                 // the deck-out ending
       }
       const c = this.talon.pop()!;
-      if (c.kind === 'district') p.districts.push(c); else p.hand.push(c);
+      if (c.kind === 'district') this.admitDistrict(p, c); else p.hand.push(c);
     }
   }
 
@@ -466,7 +490,7 @@ export class Game {
           if (!c) return;
           const p = this.players[i];
           if (this.held(p) >= this.handSize(p)) { this.discard.push(c); return; }
-          if (c.kind === 'district') p.districts.push(c); else p.hand.push(c);
+          if (c.kind === 'district') this.admitDistrict(p, c); else p.hand.push(c);
         });
         // pass the remainder around the table
         packs.unshift(packs.pop()!);
@@ -673,6 +697,36 @@ export class Game {
    *  the engine has: `DistrictCard` carries demographics, states do not. */
   private districtsInPlay(): DistrictCard[] {
     return this.players.flatMap((p) => p.districts);
+  }
+
+  /** A district card enters play -- the one place `p.districts.push` happens.
+   *  #106 change 4, behind `districtSupersession`: 50 of 186 seats appear in
+   *  more than one era pack with different demographics (CA-8 runs
+   *  urban/black/union -> urban/catholic -> urban/academic), and a newer card
+   *  for the same seat (same state AND number, a higher `era`) supersedes an
+   *  older one already held. The older card is discarded -- not handed to
+   *  whoever holds the new one, since holding confers nothing before a race
+   *  resolves (#106) -- and the district is simply contested under the new
+   *  demographics once someone plays into it. Off by default, an older card
+   *  is never displaced and 30 of those 50 seats never see their demographics
+   *  actually change under the sitting member. */
+  private admitDistrict(p: PlayerState, c: Card & { kind: 'district' }): void {
+    if (this.cfg.game.districtSupersession) {
+      // Discard recycles into the talon once it and the era queue both run
+      // dry, so an older seat card can in principle be drawn again after a
+      // newer one already superseded it once. At most one era's card for a
+      // seat is ever live -- if that already-superseded card resurfaces,
+      // discard it on arrival instead of un-superseding the newer one.
+      const newer = this.districtsInPlay().find((d) => d.state === c.state && d.number === c.number && d.era > c.era);
+      if (newer) { this.discard.push(c); return; }
+      for (const q of this.players) {
+        const stale = q.districts.filter((d) => d.state === c.state && d.number === c.number && d.era < c.era);
+        if (!stale.length) continue;
+        q.districts = q.districts.filter((d) => !stale.includes(d));
+        this.discard.push(...stale.map((d) => ({ kind: 'district' as const, ...d })));
+      }
+    }
+    p.districts.push(c);
   }
 
   /** The tag position of one player's own coalition -- the districts they
@@ -1033,7 +1087,8 @@ export class Game {
       for (const d of mine) {
         const p = this.players[i];
         if (!p.hand.some((c) => c.kind === 'candidate' && c.id === d.card.id)) continue;
-        if (d.office !== 'president' && !eligible(d.card, d.state, p.districts)) continue;
+        const house = this.cfg.game.districtLevelEligibility && d.office === 'representative' ? d.slot : undefined;
+        if (d.office !== 'president' && !eligible(d.card, d.state, p.districts, house)) continue;
         decls.push({ ...d, player: i });
         pending.push({ player: i, office: d.office, state: d.state, slot: d.slot, party: d.card.party });
       }
@@ -1595,7 +1650,8 @@ export class Game {
       for (const d of mine) {
         const p = this.players[i];
         if (!p.hand.some((c) => c.kind === 'candidate' && c.id === d.card.id)) continue;
-        if (d.office !== 'president' && !eligible(d.card, d.state, p.districts)) continue;
+        const house = this.cfg.game.districtLevelEligibility && d.office === 'representative' ? d.slot : undefined;
+        if (d.office !== 'president' && !eligible(d.card, d.state, p.districts, house)) continue;
         decls.push({ ...d, player: i });
         pending.push({ player: i, office: d.office, state: d.state, slot: d.slot, party: d.card.party });
       }
