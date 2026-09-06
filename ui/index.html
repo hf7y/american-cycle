@@ -807,6 +807,40 @@ function author(seats        )                     {
   return best;
 }
 
+/** hf7y/american-cycle#83's ruling: authorship is a chamber vote, not a
+ *  byproduct of bloc size. `author` above is the old heuristic's outright
+ *  pick; this is the full field it used to pick from unopposed -- every
+ *  player holding at least one House seat of the majority party, since only
+ *  they can plausibly carry a bill through the chamber they'd be writing
+ *  for. */
+function authorCandidates(seats        )           {
+  const maj = majorityParty(seats, 'representative');
+  if (!maj) return [];
+  const players = new Set        ();
+  for (const s of seats) if (s.office === 'representative' && s.holder?.party === maj) players.add(s.holder.player);
+  return [...players].sort((a, b) => a - b);
+}
+
+/** One vote per House seat, plurality wins. A tie keeps `author`'s own
+ *  answer if it is among the tied (the largest bloc is the natural
+ *  tiebreak, not a coin flip), else the lowest player id -- deterministic,
+ *  because the tie is over whole seats, not a fractional threshold the way
+ *  `tallyBill`'s passage checks are. */
+function resolveAuthorVote(candidates          , choices          , frontrunner                    )                     {
+  if (candidates.length === 0) return undefined;
+  if (candidates.length === 1) return candidates[0];
+  const tally = new Map                ();
+  for (const c of choices) if (candidates.includes(c)) tally.set(c, (tally.get(c) ?? 0) + 1);
+  let best           = [], top = -1;
+  for (const c of candidates) {
+    const v = tally.get(c) ?? 0;
+    if (v > top) { top = v; best = [c]; } else if (v === top) best.push(c);
+  }
+  if (best.length === 1) return best[0];
+  if (frontrunner !== undefined && best.includes(frontrunner)) return frontrunner;
+  return best[0]; // candidates is built in ascending player-id order
+}
+
 function tallyBill(
   cfg                   , seats        , votes        , g        ,
   president                                              ,
@@ -1756,6 +1790,14 @@ function runRace(a             ) {
                                                                         
                                                  
                                                                                  
+                                                                         
+                                                                           
+                                                                           
+                                                                        
+                                                                          
+                                                                         
+                  
+                                                           
                                                                             
                                                                             
                                         
@@ -2336,6 +2378,40 @@ class Game {
       .slice(0, this.cfg.legislature.tagsPerBill ?? 2).map(([t]) => t);
   }
 
+  /** hf7y/american-cycle#83's ruling. Replaces `leg.author`'s outright pick
+   *  with a chamber vote among `leg.authorCandidates`. Behaviour-preserving
+   *  under every scripted agent shipped today -- none override
+   *  `chooseAuthor`, so the default reproduces `leg.author`'s own bloc-size
+   *  tally exactly: only a candidate's OWN majority-party seats self-vote
+   *  (a candidate's minority-party seats, if their delegation is mixed,
+   *  default to the frontrunner like anyone else's) and every other seat
+   *  defaults to the largest bloc. Checked empirically against
+   *  `tracks/c.ts` C9, not just argued: letting a candidate's minority-party
+   *  seats also self-vote inflated multi-author games from <1% to 5% purely
+   *  from mixed-delegation players, before this was scoped to majority-party
+   *  seats only. The vote is real machinery, not a no-op dressed up as one:
+   *  a future agent that trades its seats' votes to a co-partisan rival
+   *  changes who holds the pen, which is what makes this the precondition
+   *  hf7y/american-cycle#86 gates its amendment-proposal path on. */
+          resolveAuthor()                     {
+    const candidates = leg.authorCandidates(this.seats);
+    if (candidates.length <= 1) return candidates[0];
+    const frontrunner = leg.author(this.seats);
+    const maj = leg.majorityParty(this.seats, 'representative');
+    const { house } = leg.chambers(this.seats);
+    const choices = house.map((s) => {
+      const player = s.holder .player;
+      const custom = this.agents[player].chooseAuthor;
+      if (custom) return custom(this.view(player), candidates);
+      return this.defaultChooseAuthor(player, s.holder .party === maj, candidates, frontrunner);
+    });
+    return leg.resolveAuthorVote(candidates, choices, frontrunner);
+  }
+
+          defaultChooseAuthor(player        , isMajoritySeat         , candidates          , frontrunner                    )         {
+    return isMajoritySeat && candidates.includes(player) ? player : (frontrunner ?? candidates[0]);
+  }
+
   /** v0.2 item 2's default: repeal the furthest thing on the books that
    *  somebody else wrote. Deterministic, so a repeal is a consequence of the
    *  board rather than of a die -- and it fires only when the corpus actually
@@ -2501,7 +2577,7 @@ class Game {
 
   // ---- annual tick step 2-3: the omnibill -----------------------------------
           omnibill(human = -1, humanG         , humanYes          )       {
-    const authorId = leg.author(this.seats);
+    const authorId = this.resolveAuthor();
     if (authorId === undefined) return;
     this.stats.billsAttempted++;
     const view = this.view(authorId);
@@ -3201,7 +3277,7 @@ class Game {
           humanIndependentDecisions = new Map                 ();
 
   ;       *askBill(human        )                                                                {
-    const authorId = leg.author(this.seats);
+    const authorId = this.resolveAuthor();
     if (authorId === undefined) return {};
     const holdsSeat = this.seats.some((s) => s.holder?.player === human && (s.office === 'senator' || s.office === 'representative'));
     if (authorId !== human && !holdsSeat) return {};
@@ -4039,7 +4115,7 @@ const AGENTS                                                       = {
 // ---- namespace imports, rebuilt ----
 const lean = { sign, pushForMargin, nationalizedRace, applyPush, nudge, decay, honeymoon };
 const econ = { newEconomy, walk, spend, fedCheck, shockCheck, rateRiseOdds, economyModifier };
-const leg = { chambers, majorityParty, author, tallyBill, impeach };
+const leg = { chambers, majorityParty, author, authorCandidates, resolveAuthorVote, tallyBill, impeach };
 const amend = { supportPips, stateBacks, needed, blockers, overlaps };
 const tags = { TAGS, EMPTY, isEmpty, weights, distance, centroid, partyPosition, stateposition };
 

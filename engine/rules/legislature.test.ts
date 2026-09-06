@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { tallyBill, impeach, author, majorityParty } from './legislature.ts';
+import { tallyBill, impeach, author, majorityParty, authorCandidates, resolveAuthorVote } from './legislature.ts';
 import type { LegislatureConfig, Vote } from './legislature.ts';
 import type { Seat, Party } from '../types/index.ts';
 import { RNG } from './rng.ts';
@@ -79,4 +79,43 @@ test('authorship goes to the largest bloc of the majority House party', () => {
   const seats = bench(['D', 'D', 'D', 'R'], [], [7, 7, 9, 3]);
   assert.equal(majorityParty(seats, 'representative'), 'D');
   assert.equal(author(seats), 7, 'two D seats beats one');
+});
+
+test('hf7y/american-cycle#83: authorCandidates is every player in the majority-party bloc, not just the biggest', () => {
+  const seats = bench(['D', 'D', 'D', 'R'], [], [7, 7, 9, 3]);
+  assert.deepEqual(authorCandidates(seats), [7, 9], 'player 3 holds the lone R seat and is not a D-majority candidate');
+});
+
+test('hf7y/american-cycle#83: the chamber vote reaches the old outright pick when nobody contests it', () => {
+  const seats = bench(['D', 'D', 'D', 'R'], [], [7, 7, 9, 3]);
+  const candidates = authorCandidates(seats);
+  const frontrunner = author(seats)!;
+  // every default voter (see Game.defaultChooseAuthor) votes for themselves
+  // if eligible, else the frontrunner -- seat 2 (player 9) and the R seat
+  // (player 3, ineligible) both default to the frontrunner.
+  const choices = [frontrunner, frontrunner, frontrunner];
+  assert.equal(resolveAuthorVote(candidates, choices, frontrunner), frontrunner);
+});
+
+test('hf7y/american-cycle#83: a rival bloc can win the vote outright', () => {
+  const seats = bench(Array(5).fill('D'), [], [1, 1, 1, 2, 2]);
+  const candidates = authorCandidates(seats); // [1, 2], player 1 has the larger bloc
+  assert.deepEqual(candidates, [1, 2]);
+  assert.equal(author(seats), 1);
+  // three seats vote for player 2 despite player 1's larger bloc
+  assert.equal(resolveAuthorVote(candidates, [2, 2, 2, 2, 1], 1), 2);
+});
+
+test('hf7y/american-cycle#83: a tied vote keeps the frontrunner rather than the lowest id', () => {
+  const seats = bench(Array(4).fill('D'), [], [9, 9, 5, 5]); // two equal-size D blocs, frontrunner is NOT the lower id
+  const candidates = authorCandidates(seats);
+  assert.deepEqual(candidates, [5, 9]);
+  const frontrunner = author(seats); // insertion-order tiebreak sees player 9's bloc first
+  assert.equal(frontrunner, 9);
+  assert.equal(resolveAuthorVote(candidates, [9, 9, 5, 5], frontrunner), frontrunner, 'a 2-2 vote tie keeps the frontrunner, not the lowest id by coincidence');
+});
+
+test('hf7y/american-cycle#83: no majority party means no candidates and no author', () => {
+  assert.deepEqual(authorCandidates([]), []);
+  assert.equal(resolveAuthorVote([], [], undefined), undefined);
 });

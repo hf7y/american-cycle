@@ -167,6 +167,14 @@ export interface Agent {
   /** v0.2 item 2: repeal instead of legislating. Returns a bill id from
    *  `books`. Omit for the default heuristic. */
   proposeRepeal?(v: GameView, books: readonly EnactedBill[]): string | undefined;
+  /** hf7y/american-cycle#83's ruling: the pen is a chamber vote, not the
+   *  largest bloc automatically. Called once per House seat you hold, with
+   *  every player holding at least one House seat of the majority party as
+   *  `candidates`; return which of them should author this year's bill.
+   *  Omit for the default: vote for yourself if you are a candidate, else
+   *  the largest bloc -- the same answer this issue's old heuristic gave
+   *  outright. */
+  chooseAuthor?(v: GameView, candidates: number[]): number;
   /** v0.2 item 3: call a constitutional convention, which spends the year's
    *  legislating exactly as impeachment does. Returns the amendment's tags.
    *  Omit for the default heuristic. */
@@ -747,6 +755,40 @@ export class Game {
       .slice(0, this.cfg.legislature.tagsPerBill ?? 2).map(([t]) => t);
   }
 
+  /** hf7y/american-cycle#83's ruling. Replaces `leg.author`'s outright pick
+   *  with a chamber vote among `leg.authorCandidates`. Behaviour-preserving
+   *  under every scripted agent shipped today -- none override
+   *  `chooseAuthor`, so the default reproduces `leg.author`'s own bloc-size
+   *  tally exactly: only a candidate's OWN majority-party seats self-vote
+   *  (a candidate's minority-party seats, if their delegation is mixed,
+   *  default to the frontrunner like anyone else's) and every other seat
+   *  defaults to the largest bloc. Checked empirically against
+   *  `tracks/c.ts` C9, not just argued: letting a candidate's minority-party
+   *  seats also self-vote inflated multi-author games from <1% to 5% purely
+   *  from mixed-delegation players, before this was scoped to majority-party
+   *  seats only. The vote is real machinery, not a no-op dressed up as one:
+   *  a future agent that trades its seats' votes to a co-partisan rival
+   *  changes who holds the pen, which is what makes this the precondition
+   *  hf7y/american-cycle#86 gates its amendment-proposal path on. */
+  private resolveAuthor(): number | undefined {
+    const candidates = leg.authorCandidates(this.seats);
+    if (candidates.length <= 1) return candidates[0];
+    const frontrunner = leg.author(this.seats);
+    const maj = leg.majorityParty(this.seats, 'representative');
+    const { house } = leg.chambers(this.seats);
+    const choices = house.map((s) => {
+      const player = s.holder!.player;
+      const custom = this.agents[player].chooseAuthor;
+      if (custom) return custom(this.view(player), candidates);
+      return this.defaultChooseAuthor(player, s.holder!.party === maj, candidates, frontrunner);
+    });
+    return leg.resolveAuthorVote(candidates, choices, frontrunner);
+  }
+
+  private defaultChooseAuthor(player: number, isMajoritySeat: boolean, candidates: number[], frontrunner: number | undefined): number {
+    return isMajoritySeat && candidates.includes(player) ? player : (frontrunner ?? candidates[0]);
+  }
+
   /** v0.2 item 2's default: repeal the furthest thing on the books that
    *  somebody else wrote. Deterministic, so a repeal is a consequence of the
    *  board rather than of a die -- and it fires only when the corpus actually
@@ -912,7 +954,7 @@ export class Game {
 
   // ---- annual tick step 2-3: the omnibill -----------------------------------
   private omnibill(human = -1, humanG?: number, humanYes?: boolean): void {
-    const authorId = leg.author(this.seats);
+    const authorId = this.resolveAuthor();
     if (authorId === undefined) return;
     this.stats.billsAttempted++;
     const view = this.view(authorId);
@@ -1612,7 +1654,7 @@ export class Game {
   private humanIndependentDecisions = new Map<string, boolean>();
 
   private *askBill(human: number): Generator<UiRequest, { g?: number; yes?: boolean }, UiAnswer> {
-    const authorId = leg.author(this.seats);
+    const authorId = this.resolveAuthor();
     if (authorId === undefined) return {};
     const holdsSeat = this.seats.some((s) => s.holder?.player === human && (s.office === 'senator' || s.office === 'representative'));
     if (authorId !== human && !holdsSeat) return {};
