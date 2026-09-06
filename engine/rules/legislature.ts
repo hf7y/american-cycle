@@ -89,6 +89,40 @@ export function author(seats: Seat[]): number | undefined {
   return best;
 }
 
+/** hf7y/american-cycle#83's ruling: authorship is a chamber vote, not a
+ *  byproduct of bloc size. `author` above is the old heuristic's outright
+ *  pick; this is the full field it used to pick from unopposed -- every
+ *  player holding at least one House seat of the majority party, since only
+ *  they can plausibly carry a bill through the chamber they'd be writing
+ *  for. */
+export function authorCandidates(seats: Seat[]): number[] {
+  const maj = majorityParty(seats, 'representative');
+  if (!maj) return [];
+  const players = new Set<number>();
+  for (const s of seats) if (s.office === 'representative' && s.holder?.party === maj) players.add(s.holder.player);
+  return [...players].sort((a, b) => a - b);
+}
+
+/** One vote per House seat, plurality wins. A tie keeps `author`'s own
+ *  answer if it is among the tied (the largest bloc is the natural
+ *  tiebreak, not a coin flip), else the lowest player id -- deterministic,
+ *  because the tie is over whole seats, not a fractional threshold the way
+ *  `tallyBill`'s passage checks are. */
+export function resolveAuthorVote(candidates: number[], choices: number[], frontrunner: number | undefined): number | undefined {
+  if (candidates.length === 0) return undefined;
+  if (candidates.length === 1) return candidates[0];
+  const tally = new Map<number, number>();
+  for (const c of choices) if (candidates.includes(c)) tally.set(c, (tally.get(c) ?? 0) + 1);
+  let best: number[] = [], top = -1;
+  for (const c of candidates) {
+    const v = tally.get(c) ?? 0;
+    if (v > top) { top = v; best = [c]; } else if (v === top) best.push(c);
+  }
+  if (best.length === 1) return best[0];
+  if (frontrunner !== undefined && best.includes(frontrunner)) return frontrunner;
+  return best[0]; // candidates is built in ascending player-id order
+}
+
 export function tallyBill(
   cfg: LegislatureConfig, seats: Seat[], votes: Vote[], g: number,
   president: { player: number; party: Party } | undefined,
