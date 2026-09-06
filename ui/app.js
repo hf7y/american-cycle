@@ -60,6 +60,12 @@ const SOLITAIRE_BLURB = {
   RunawayMaximiser:'Very gentle 1v1. You should win about 85% of these.',
   WalkoverFarmer:'Gentle 1v1. You should win about 77% of these.',
 };
+const SOLITAIRE_TIER = {
+  Greedy:'fair', HeterodoxSpecialist:'fair', EconomyChicken:'fair', Vetoer:'fair',
+  Lookahead:'hard', BillBlocker:'hard', Impeacher:'hard', VPBackstab:'hard', SenateFlood:'hard', Launchpad:'hard',
+  HouseFarm:'gentle', WideAndEmpty:'gentle', BillAuthor:'gentle', RunawayMaximiser:'gentle', WalkoverFarmer:'gentle', BillMaximizer:'gentle', Random:'gentle',
+};
+const SOLITAIRE_TIER_LABEL = { fair:'Fair 1v1 (40–60% for you)', gentle:'Gentle 1v1 (favors you)', hard:'Hard 1v1 (favors the agent)' };
 const CONFIG_BLURB = {
   tuned:'The playable tuning. Bigger hand, thinner district supply — the settings that actually produce a contested board.',
   baseline:'The design doc as corrected: biennial decay, margin-based pushes, hand 12.',
@@ -74,6 +80,11 @@ const CONFIG_BLURB = {
 
 function setup() {
   const opts = Object.keys(AGENTS).map((k) => `<option value="${k}">${k}</option>`).join('');
+  const s1Opts = ['fair', 'gentle', 'hard'].map((tier) => {
+    const names = Object.keys(AGENTS).filter((k) => SOLITAIRE_TIER[k] === tier);
+    if (!names.length) return '';
+    return `<optgroup label="${SOLITAIRE_TIER_LABEL[tier]}">${names.map((k) => `<option value="${k}">${k}</option>`).join('')}</optgroup>`;
+  }).join('');
   const cfgs = Object.keys(CONFIGS).map((k) => `<option value="${k}"${k === 'as-written-plus' ? ' selected' : ''}>${k}</option>`).join('');
   modal(`
     <h1 style="font-size:26px;letter-spacing:-.01em">American Cycle</h1>
@@ -81,7 +92,7 @@ function setup() {
       leave the map different from how you found it. You are one faction among several — you hold cards of
       both parties, and so does everyone else.</p>
     <div class="setup-grid">
-      <label class="f">Opponent<select id="s1"><option value="">— none: solitaire —</option>${opts}</select><span class="note" id="b1"></span></label>
+      <label class="f">Opponent<select id="s1"><option value="">— none: solitaire —</option>${s1Opts}</select><span class="note" id="b1"></span></label>
       <label class="f">Second opponent<select id="s2"><option value="">— none —</option>${opts}</select><span class="note" id="b2"></span></label>
       <label class="f">Third opponent<select id="s3"><option value="">— none —</option>${opts}</select><span class="note" id="b3"></span></label>
       <label class="f">Rules<select id="scfg">${cfgs}</select><span class="note" id="bcfg"></span></label>
