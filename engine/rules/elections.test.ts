@@ -79,6 +79,72 @@ test('district cards gate all races', () => {
   assert.ok(eligible(ohio, 'CA', [dist({ id: 'CA-3', state: 'CA' })]), 'presence is purchased in the draft');
 });
 
+/** #106 change 1: `districtLevelEligibility` is the caller passing a `house`
+ *  slot. Untouched (no 4th argument), eligibility stays state-level -- a
+ *  non-native holding any district in a state may still enter every House
+ *  race there, which is the pre-#106 behaviour #77 measured. */
+test('#106: district-level House eligibility -- OH-3 does not buy entry to OH-9', () => {
+  const outsider = cand({ homeState: 'CA' });
+  const oh3 = dist({ id: 'OH-3', state: 'OH', number: 3 });
+  assert.ok(eligible(outsider, 'OH', [oh3]), 'state-level gate (no house arg): any district in the state suffices');
+  assert.ok(eligible(outsider, 'OH', [oh3], 3), 'district-level gate: holding OH-3 admits OH-3');
+  assert.ok(!eligible(outsider, 'OH', [oh3], 9), 'district-level gate: holding OH-3 does not admit OH-9');
+});
+
+test('#106: a favourite son may run in their home district with no district card at all', () => {
+  const native = cand({ homeState: 'OH' });
+  assert.ok(eligible(native, 'OH', [], 9), 'homeState alone clears the district-level gate');
+});
+
+/** #106 change 2/3: two players contesting the same opened district both
+ *  receive identity fit against its demographics -- neither the caller's
+ *  ownership of the card nor which of them is asked matters, only `d.district`
+ *  (or, for a statewide sum, `d.districts`) does. */
+test('#106: two candidates contesting the same district both price the same fit, regardless of who holds the card', () => {
+  const cd = dist({ id: 'OH-9', state: 'OH', number: 9, demographics: ['union', 'catholic'] });
+  const home = { player: 0, card: cand({ identities: ['union'] }), district: cd, office: 'senator' as const, state: 'OH' };
+  const away = { player: 1, card: cand({ id: 'b', identities: ['union'] }), district: cd, office: 'senator' as const, state: 'OH' };
+  const homeMods = buildModifiers(home, ctx({}), 'general', res, nat, pg);
+  const awayMods = buildModifiers(away, ctx({}), 'general', res, nat, pg);
+  assert.equal(homeMods.find((m) => m.source.startsWith('identity'))?.pips,
+    awayMods.find((m) => m.source.startsWith('identity'))?.pips,
+    'the district card in play prices the race, not who is holding it');
+});
+
+/** #106 change 3: a statewide race sums fit across EVERY district card on the
+ *  table in that state -- a player adds, a player does not average. */
+test('#106: statewideFitSums adds fit across every district in the state, not just one', () => {
+  const urban = dist({ id: 'OH-3', state: 'OH', number: 3, demographics: ['urban'] });
+  const urban2 = dist({ id: 'OH-9', state: 'OH', number: 9, demographics: ['urban'] });
+  const rural = dist({ id: 'OH-14', state: 'OH', number: 14, demographics: ['rural'] });
+  const candidate = cand({ identities: ['urban'] });
+
+  const single: Declaration = { player: 0, card: candidate, district: urban, office: 'senator', state: 'OH' };
+  const singleMods = buildModifiers(single, ctx({}), 'general', res, nat, pg);
+  assert.equal(singleMods.find((m) => m.source.startsWith('identity'))?.pips, res.identityBonus,
+    'reading one district prices the match once');
+
+  const summed: Declaration = { player: 0, card: candidate, districts: [urban, urban2, rural], office: 'senator', state: 'OH' };
+  const summedMods = buildModifiers(summed, ctx({}), 'general', res, nat, pg);
+  assert.equal(summedMods.find((m) => m.source.startsWith('identity'))?.pips, res.identityBonus * 2,
+    'two of three districts share urban -- a sum counts both, the third contributes nothing');
+
+  const outOfState: Declaration = { player: 0, card: candidate, districts: [urban, dist({ id: 'CA-1', state: 'CA', demographics: ['urban'] })], office: 'senator', state: 'OH' };
+  const outMods = buildModifiers(outOfState, ctx({}), 'general', res, nat, pg);
+  assert.equal(outMods.find((m) => m.source.startsWith('identity'))?.pips, res.identityBonus,
+    'a district card from another state on the same list does not contribute');
+});
+
+test('#106: districts (sum mode) takes priority over a single district on the same Declaration', () => {
+  const decoy = dist({ id: 'OH-1', state: 'OH', demographics: ['rural'] });
+  const real = dist({ id: 'OH-3', state: 'OH', demographics: ['urban'] });
+  const candidate = cand({ identities: ['urban'] });
+  const d: Declaration = { player: 0, card: candidate, district: decoy, districts: [real], office: 'senator', state: 'OH' };
+  const mods = buildModifiers(d, ctx({}), 'general', res, nat, pg);
+  assert.equal(mods.find((m) => m.source.startsWith('identity'))?.pips, res.identityBonus,
+    'the sum list is authoritative when present, per its own doc comment');
+});
+
 /** #112: a statewide race has no single correct district to read fit
  *  against, so `homeDistrict` must not depend on which of a player's
  *  districts an array happens to yield first. */

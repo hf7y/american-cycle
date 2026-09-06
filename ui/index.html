@@ -1298,6 +1298,13 @@ function boardScores(cfg               , b           )           {
                  
                       
                           
+                                                                              
+                                                                              
+                                                                      
+                                                                           
+                                                                          
+                             
+                             
                  
                 
                 
@@ -1333,8 +1340,19 @@ function boardScores(cfg               , b           )           {
 
 /** District cards gate all races. You may run only where you hold a
  *  district card, or where your candidate is a native. This is the brake on
- *  wide-and-empty play (see elections.test.ts). */
-function eligible(card               , state        , districts                )          {
+ *  wide-and-empty play (see elections.test.ts).
+ *
+ *  `house` is #106 change 1: pass it only for a House race under the
+ *  `districtLevelEligibility` flag, and eligibility tightens to the exact
+ *  district (state AND number) rather than merely the state -- holding OH-3
+ *  no longer lets you declare in OH-9. Senate, governor and president are
+ *  unaffected either way; #106's ruling scopes the tightening to the House. */
+function eligible(
+  card               , state        , districts                , house         ,
+)          {
+  if (house !== undefined) {
+    return card.homeState === state || districts.some((d) => d.state === state && d.number === house);
+  }
   return card.homeState === state || districts.some((d) => d.state === state);
 }
 
@@ -1383,7 +1401,23 @@ function buildModifiers(
   // race resolves. Identity match is what remains, and #40 keys it on
   // whichever district card is in play in this race's slot, not on who
   // holds it -- the caller supplies `d.district` accordingly.
-  if (d.district && d.district.state === ctx.state) {
+  if (d.districts && d.districts.length) {
+    // #106 change 3: a statewide race sums fit across every district card in
+    // play in the state -- a player adds, a player does not average. Each
+    // district contributes independently, so three districts sharing one tag
+    // are worth three times what one is, unlike the single-district branch
+    // below which counts a shared tag once no matter how it is phrased.
+    let total = 0;
+    const hit           = [];
+    for (const district of d.districts) {
+      if (district.state !== ctx.state) continue;
+      const shared = d.card.identities.filter((i) => district.demographics.includes(i));
+      if (!shared.length) continue;
+      total += shared.reduce((n, tag) => n + (d.card.identityWeights?.[tag] ?? res.identityBonus), 0);
+      hit.push(`${district.id}: ${shared.join(', ')}`);
+    }
+    if (total) m.push({ source: `identity (statewide): ${hit.join('; ')}`, pips: total });
+  } else if (d.district && d.district.state === ctx.state) {
     const shared = d.card.identities.filter((i) => d.district .demographics.includes(i));
     if (shared.length) {
       const pips = shared.reduce((n, tag) => n + (d.card.identityWeights?.[tag] ?? res.identityBonus), 0);
@@ -1642,7 +1676,31 @@ function runRace(a             ) {
                                                                              
                                                                           
                         
-                                                                 
+                                                               
+                                                                               
+                                                                             
+                                                                              
+                                                                             
+                                                                           
+                                                                            
+                                                                             
+                                             
+                                                                          
+                                                                           
+                                                                              
+                                                                       
+                                                                          
+                                                               
+                                     
+                                                                           
+                                                                         
+                                                                         
+                                                                              
+                                                                             
+                                                                              
+                                                                           
+                           
+                                           
  
 
                               
@@ -1971,7 +2029,7 @@ class Game {
         else return;                                 // the deck-out ending
       }
       const c = this.talon.pop() ;
-      if (c.kind === 'district') p.districts.push(c); else p.hand.push(c);
+      if (c.kind === 'district') this.admitDistrict(p, c); else p.hand.push(c);
     }
   }
 
@@ -2021,7 +2079,7 @@ class Game {
           if (!c) return;
           const p = this.players[i];
           if (this.held(p) >= this.handSize(p)) { this.discard.push(c); return; }
-          if (c.kind === 'district') p.districts.push(c); else p.hand.push(c);
+          if (c.kind === 'district') this.admitDistrict(p, c); else p.hand.push(c);
         });
         // pass the remainder around the table
         packs.unshift(packs.pop() );
@@ -2228,6 +2286,36 @@ class Game {
    *  the engine has: `DistrictCard` carries demographics, states do not. */
           districtsInPlay()                 {
     return this.players.flatMap((p) => p.districts);
+  }
+
+  /** A district card enters play -- the one place `p.districts.push` happens.
+   *  #106 change 4, behind `districtSupersession`: 50 of 186 seats appear in
+   *  more than one era pack with different demographics (CA-8 runs
+   *  urban/black/union -> urban/catholic -> urban/academic), and a newer card
+   *  for the same seat (same state AND number, a higher `era`) supersedes an
+   *  older one already held. The older card is discarded -- not handed to
+   *  whoever holds the new one, since holding confers nothing before a race
+   *  resolves (#106) -- and the district is simply contested under the new
+   *  demographics once someone plays into it. Off by default, an older card
+   *  is never displaced and 30 of those 50 seats never see their demographics
+   *  actually change under the sitting member. */
+          admitDistrict(p             , c                             )       {
+    if (this.cfg.game.districtSupersession) {
+      // Discard recycles into the talon once it and the era queue both run
+      // dry, so an older seat card can in principle be drawn again after a
+      // newer one already superseded it once. At most one era's card for a
+      // seat is ever live -- if that already-superseded card resurfaces,
+      // discard it on arrival instead of un-superseding the newer one.
+      const newer = this.districtsInPlay().find((d) => d.state === c.state && d.number === c.number && d.era > c.era);
+      if (newer) { this.discard.push(c); return; }
+      for (const q of this.players) {
+        const stale = q.districts.filter((d) => d.state === c.state && d.number === c.number && d.era < c.era);
+        if (!stale.length) continue;
+        q.districts = q.districts.filter((d) => !stale.includes(d));
+        this.discard.push(...stale.map((d) => ({ kind: 'district'         , ...d })));
+      }
+    }
+    p.districts.push(c);
   }
 
   /** The tag position of one player's own coalition -- the districts they
@@ -2588,7 +2676,8 @@ class Game {
       for (const d of mine) {
         const p = this.players[i];
         if (!p.hand.some((c) => c.kind === 'candidate' && c.id === d.card.id)) continue;
-        if (d.office !== 'president' && !eligible(d.card, d.state, p.districts)) continue;
+        const house = this.cfg.game.districtLevelEligibility && d.office === 'representative' ? d.slot : undefined;
+        if (d.office !== 'president' && !eligible(d.card, d.state, p.districts, house)) continue;
         decls.push({ ...d, player: i });
         pending.push({ player: i, office: d.office, state: d.state, slot: d.slot, party: d.card.party });
       }
@@ -3150,7 +3239,8 @@ class Game {
       for (const d of mine) {
         const p = this.players[i];
         if (!p.hand.some((c) => c.kind === 'candidate' && c.id === d.card.id)) continue;
-        if (d.office !== 'president' && !eligible(d.card, d.state, p.districts)) continue;
+        const house = this.cfg.game.districtLevelEligibility && d.office === 'representative' ? d.slot : undefined;
+        if (d.office !== 'president' && !eligible(d.card, d.state, p.districts, house)) continue;
         decls.push({ ...d, player: i });
         pending.push({ player: i, office: d.office, state: d.state, slot: d.slot, party: d.card.party });
       }
@@ -3426,7 +3516,8 @@ function options(v          , open            , cfg        )           {
   const out           = [];
   for (const r of open) {
     for (const card of cands) {
-      if (r.office !== 'president' && !eligible(card, r.state, me.districts)) continue;
+      const house = cfg.game.districtLevelEligibility && r.office === 'representative' ? r.slot : undefined;
+      if (r.office !== 'president' && !eligible(card, r.state, me.districts, house)) continue;
       // A district is identified BY ITS NUMBER, not just its state. Matching
       // on state alone let whichever card `find` reached first supply the
       // demographics for a House race in a different district entirely.
@@ -3436,14 +3527,18 @@ function options(v          , open            , cfg        )           {
       // it prices the race whether the declaring player owns it or not.
       // `eligible` above is the separate entry gate (you may only enter where
       // you hold presence); this is what the race is worth once you are in
-      // it. Senate/governor/president stay keyed to the player's OWN holdings
-      // -- a statewide race summing fit across every district on the table is
-      // #106, v0.3.
+      // it. Senate/governor default to the player's OWN first-found holding;
+      // #106 change 3 (`statewideFitSums`) instead sums fit across every
+      // district card any player has in play in the state.
+      const statewide = cfg.game.statewideFitSums
+        && (r.office === 'senator' || r.office === 'governor')
+        ? v.players.flatMap((p) => p.districts).filter((dd) => dd.state === r.state)
+        : undefined;
       const district = r.office === 'representative'
         ? v.players.flatMap((p) => p.districts).find((d) => d.state === r.state && d.number === r.slot)
-        : me.districts.find((d) => d.state === r.state);
+        : statewide ? undefined : me.districts.find((d) => d.state === r.state);
       for (const { card: pcard, bonus } of partyVariants(card, cfg)) {
-        const d              = { player: v.me, card: pcard, district, office: r.office, state: r.state, slot: r.slot,
+        const d              = { player: v.me, card: pcard, district, districts: statewide, office: r.office, state: r.state, slot: r.slot,
           incumbent: r.incumbent?.holder?.cardId === card.id };
         const ctx = {
           year: v.year, office: r.office, state: r.state, slot: r.slot,
@@ -3734,7 +3829,9 @@ class HeterodoxSpecialist extends Base {
       const against = Math.sign(lean) === (x.d.card.party === 'R' ? -1 : 1);
       const fit = x.d.district
         ? x.d.card.identities.filter((i) => x.d.district .demographics.includes(i)).length
-        : 0;
+        : x.d.districts
+          ? x.d.districts.reduce((n, dd) => n + x.d.card.identities.filter((i) => dd.demographics.includes(i)).length, 0)
+          : 0;
       const local = fit > 0 || x.d.card.homeState === x.d.state;
       return { ...x, edge: x.edge + (local && against ? 6 : local ? 2 : 0) };
     });
@@ -4129,7 +4226,9 @@ function phaseDeclare() {
   const open = pending.open;
   const me = G.players[S.human];
   const eligibleFor = (card) => open.filter((r) =>
-    r.office === 'president' || eligible(card, r.state, me.districts));
+    r.office === 'president'
+    || eligible(card, r.state, me.districts,
+                G.cfg.game.districtLevelEligibility && r.office === 'representative' ? r.slot : undefined));
   S.eligibleFor = eligibleFor;
   $('handHint').textContent = `${G.year} — pick a card, then a state`;
   ticker(`${G.year}: declarations are open.`);
@@ -4153,10 +4252,13 @@ function pickRace(state) {
   const card = S.sel;
   const choose = (r) => {
     const me = G.players[S.human];
+    const statewide = G.cfg.game.statewideFitSums && (r.office === 'senator' || r.office === 'governor')
+      ? G.players.flatMap((p) => p.districts).filter((d) => d.state === r.state)
+      : undefined;
     const district = r.office === 'representative'
       ? G.players.flatMap((p) => p.districts).find((d) => d.state === r.state && d.number === r.slot)
-      : me.districts.find((d) => d.state === r.state);
-    S.picks.push({ player:S.human, card, district,
+      : statewide ? undefined : me.districts.find((d) => d.state === r.state);
+    S.picks.push({ player:S.human, card, district, districts:statewide,
                    office:r.office, state:r.state, slot:r.slot });
     S.sel = null; closeModal(); render();
   };
@@ -4305,7 +4407,10 @@ function racesInState_all(card){
   const me = G.players[S.human];
   const taken = new Set(S.picks.map(uiRaceKey));
   return (pending.open||[]).filter((r)=>
-    (r.office==='president' || eligible(card, r.state, me.districts)) && !taken.has(uiRaceKey(r)));
+    (r.office==='president'
+     || eligible(card, r.state, me.districts,
+                 G.cfg.game.districtLevelEligibility && r.office === 'representative' ? r.slot : undefined))
+    && !taken.has(uiRaceKey(r)));
 }
 
 function drawHand() {
