@@ -294,8 +294,7 @@ function drawMap() {
   const declaredHere = new Set(S.picks.map((p)=>p.state));
   const openStates = new Set();
   if (pending && pending.kind === 'declare' && S.sel) for (const r of racesInState_all(S.sel)) openStates.add(r.state);
-  // Opponent pegs already placed this cycle, ahead of the human in the
-  // rotation -- the information #149 found withheld from the player.
+  // pegs placed ahead of the human this cycle -- withheld before #149
   const opponentPegs = new Map();
   if (pending && pending.kind === 'declare') for (const pg of pending.pending || []) {
     if (!opponentPegs.has(pg.state)) opponentPegs.set(pg.state, []);

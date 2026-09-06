@@ -40,12 +40,10 @@ const build = (cfg: Config, seed: number): Agent[] => {
   return NAMES.map((n) => new AGENTS[n](cfg, rng));
 };
 
-/** `human = -1` matches no player, so every seat is driven by its own agent and
- *  the interactive path becomes the headless one: `declare` (#149) now only
- *  yields on the human's own rotation slot, and `askBill`/withdrawal/independent
- *  all return early too, so no request ever fires and no `it.next()` beyond the
- *  first is needed. Leaving the agents in charge of both runs is what makes
- *  them comparable at all. */
+/** `human = -1` matches no player, so every seat is driven by its own agent;
+ *  `declare` (#149) now only yields on the human's rotation slot, so with no
+ *  human it never fires, same for `askBill`/withdrawal/independent -- leaving
+ *  the agents in charge of both runs is what makes them comparable at all. */
 function play(cfg: Config, seed: number, interactive: boolean): string {
   const g = new Game(build(cfg, seed), structuredClone(CARDS), cfg, seed);
   for (let y = 0; y < YEARS; y++) {

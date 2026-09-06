@@ -1550,8 +1550,7 @@ export class Game {
   }
 
   private *electionsInteractive(human: number): Generator<UiRequest, void, UiAnswer> {
-    // The human declares in their own rotation slot, on the same pegs-so-far
-    // every agent receives -- not blind, and not always first. See #149.
+    // The human declares in rotation, seeing the same pegs every agent does (#149).
     const wave = new Wave(this.rng);
     const open = this.openRaces();
     this.releaseExpiringTerms(open);
