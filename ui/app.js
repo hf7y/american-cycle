@@ -62,8 +62,8 @@ function setup() {
       leave the map different from how you found it. You are one faction among several — you hold cards of
       both parties, and so does everyone else.</p>
     <div class="setup-grid">
-      <label class="f">Opponent<select id="s1">${opts}</select><span class="note" id="b1"></span></label>
-      <label class="f">Second opponent<select id="s2">${opts}</select><span class="note" id="b2"></span></label>
+      <label class="f">Opponent<select id="s1"><option value="">— none: solitaire —</option>${opts}</select><span class="note" id="b1"></span></label>
+      <label class="f">Second opponent<select id="s2"><option value="">— none —</option>${opts}</select><span class="note" id="b2"></span></label>
       <label class="f">Third opponent<select id="s3"><option value="">— none —</option>${opts}</select><span class="note" id="b3"></span></label>
       <label class="f">Rules<select id="scfg">${cfgs}</select><span class="note" id="bcfg"></span></label>
     </div>
@@ -85,7 +85,9 @@ function setup() {
   // ordinary player wins 8%, which is a bad first game.
   $('s1').value = 'Greedy'; $('s2').value = 'HouseFarm'; $('s3').value = 'Random';
   const sync = () => {
-    for (const [sel, out] of [['s1','b1'],['s2','b2'],['s3','b3']]) {
+    $('b1').textContent = $('s1').value ? (OPPONENT_BLURB[$('s1').value] || '')
+      : 'Solitaire: no rival at the table. Nothing contests you, so nothing stops you either.';
+    for (const [sel, out] of [['s2','b2'],['s3','b3']]) {
       $(out).textContent = $(sel).value ? (OPPONENT_BLURB[$(sel).value] || '') : '';
     }
     $('bcfg').textContent = CONFIG_BLURB[$('scfg').value] || '';
@@ -118,7 +120,8 @@ function start() {
   G = new Game(agents, cards, cfg, S.seed);
   $('cfgName').textContent = S.cfgName;
   gen = G.interactiveTick(S.human);
-  logLine(G.year, `<b>${S.opponents.length + 1} factions take the table.</b> Rules: ${S.cfgName}. Seed ${S.seed}.`, true);
+  const n = S.opponents.length + 1;
+  logLine(G.year, `<b>${n === 1 ? 'Solitaire: one faction takes the table.' : `${n} factions take the table.`}</b> Rules: ${S.cfgName}. Seed ${S.seed}.`, true);
   advance();
 }
 
