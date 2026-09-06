@@ -64,19 +64,23 @@ export const finding: Finding = {
     + "and does the sim's fired identity-match magnitude move at all as a result?",
 
   headline:
-    'Barely. One candidate card of the full pool carries `identityWeights` -- Goldwater, #41\'s own '
-    + 'falsifier -- so 345 of 346 still fall back to the flat default. Measured over the shipped '
-    + 'agent pool, all seven packs: an identity match now fires in 26.6% of contested generals and '
-    + '57.0% of contested primaries (post-#27\'s district-synergy removal, which #19 was not measured '
-    + 'against), at a mean 1.39 pips across a mean 1.38 shared tags when it fires -- indistinguishable '
-    + "from the pre-#41 flat mechanic, because the pool mostly still IS the pre-#41 flat mechanic. "
-    + 'Closing the gap to #19\'s +4/5 pip target by raising the flat default alone would need '
-    + 'roughly tripling it, and the sample already has a 3-tag simultaneous match: tripling would put '
-    + 'that case at 9 pips, over #41\'s own ~8-pip full-stack ceiling. Same collision #41 flagged, '
-    + 'still unresolved -- re-cutting the pool with signed weights (a per-card content task, not a '
-    + 'code one) is the only way to raise the average without raising that ceiling case too.',
-  stampedAt: '2026-09-05T10:32:00Z',
-  stampedOn: '14ada71',
+    'Barely, and #162/#164\'s tag cut just shrank the pool it fires on. One candidate card of the '
+    + 'full pool carries `identityWeights` -- Goldwater, #41\'s own falsifier -- so 348 of 349 still '
+    + 'fall back to the flat default. Measured over the shipped agent pool, all seven packs: an '
+    + 'identity match now fires in 20.2% of contested generals and 47.4% of contested primaries, '
+    + "down from 26.6%/57.0% before hf7y/american-cycle#162/#164 cut the person-class tags "
+    + '(`ivy`/`veteran`/`business`/`academic`) out of `IdentityTag` entirely -- 62 of 349 candidates '
+    + 'now carry no identity at all, where every one did before. The fired magnitude when a match '
+    + 'DOES land is unchanged, a mean 1.39 pips across a mean 1.39 shared tags -- '
+    + "indistinguishable from the pre-#41 flat mechanic, because the pool mostly still IS the pre-#41 "
+    + 'flat mechanic. Closing the gap to #19\'s +4/5 pip target by raising the flat default alone '
+    + 'would need roughly tripling it, and the sample already has a 3-tag simultaneous match: '
+    + 'tripling would put that case at 9 pips, over #41\'s own ~8-pip full-stack ceiling. Same '
+    + 'collision #41 flagged, still unresolved -- re-cutting the pool with signed weights (a per-card '
+    + 'content task, not a code one) is the only way to raise the average without raising that '
+    + 'ceiling case too, and #164\'s sourcing programme now has fewer tags to re-source from.',
+  stampedAt: '2026-09-06T05:47:00Z',
+  stampedOn: '3ad72d2',
 
   predicate(): Claim[] {
     const seedCount = sample(60);
@@ -84,10 +88,10 @@ export const finding: Finding = {
     const m = matchStats(seedCount);
     return [
       { name: 'candidate cards carrying signed identityWeights, of the full pool', value: roll, stamped: 0.29, tolerance: 0.1, unit: '%' },
-      { name: 'contested generals with an identity match', value: m.generalMatchShare, stamped: 26.6, tolerance: 3, unit: '%' },
-      { name: 'contested primaries with an identity match', value: m.primaryMatchShare, stamped: 57.0, tolerance: 3, unit: '%' },
+      { name: 'contested generals with an identity match', value: m.generalMatchShare, stamped: 20.2, tolerance: 3, unit: '%' },
+      { name: 'contested primaries with an identity match', value: m.primaryMatchShare, stamped: 47.4, tolerance: 3, unit: '%' },
       { name: 'mean pips when an identity match fires', value: m.meanPips, stamped: 1.39, tolerance: 0.3 },
-      { name: 'mean tags shared when an identity match fires', value: m.meanTags, stamped: 1.38, tolerance: 0.3 },
+      { name: 'mean tags shared when an identity match fires', value: m.meanTags, stamped: 1.39, tolerance: 0.3 },
       { name: 'max tags shared simultaneously, this sample', value: m.maxTags, stamped: 3, tolerance: 0 },
     ];
   },
