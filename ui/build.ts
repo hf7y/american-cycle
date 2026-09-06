@@ -9,6 +9,7 @@
  */
 import { stripTypeScriptTypes } from 'node:module';
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 
 const ORDER = [
   'engine/states.ts',
@@ -104,11 +105,21 @@ for (const f of readdirSync(new URL('engine/config/', root))) {
   if (f.endsWith('.json')) configs[f.replace(/\.json$/, '')] = JSON.parse(read(`engine/config/${f}`));
 }
 
-const html = read('ui/index.template.html')
+let html = read('ui/index.template.html')
   .replace('/*__ENGINE__*/', engine)
   .replace('/*__PACKS__*/', `const PACKS = ${JSON.stringify(packs)};`)
   .replace('/*__CONFIGS__*/', `const CONFIGS = ${JSON.stringify(configs)};\nconst PORTRAITS = ${portraits};`)
   .replace('/*__APP__*/', read('ui/app.js'));
+
+/** A content fingerprint, not a commit SHA: CLAUDE.md's gate rebuilds this
+ *  file and diffs it byte-for-byte against what's committed, and a real git
+ *  SHA read at build time would differ between the commit that adds this
+ *  bundle and CI re-deriving it against that same commit -- see #215.
+ *  Hashing the bundle's own fully-substituted text is idempotent under that
+ *  gate and still gives a short, stable value to correlate a bug report
+ *  against a tree state. */
+if (!html.includes('<!--__STAMP__-->')) throw new Error('ui/build.ts: template has no <!--__STAMP__--> placeholder');
+html = html.replace('<!--__STAMP__-->', createHash('sha256').update(html).digest('hex').slice(0, 8));
 
 /** Every <script> block shares one global lexical scope, so a `const` in the
  *  engine and a `const` of the same name in the app collide at parse time and
