@@ -4235,9 +4235,9 @@ function setup() {
   `);
   const eras = Object.keys(PACKS).sort();
   $('sera').innerHTML = eras.map((e) => `<option value="${e}"${e === '1976' ? ' selected' : ''}>${e}</option>`).join('');
-  // Measured default: a player of ordinary skill wins 27% here (fair share is
-  // 25%) and a strong one 70%. Against Lookahead + HouseFarm + Greedy the same
-  // ordinary player wins 8%, which is a bad first game.
+  // Measured default (findings/multiplayer-default-fitness.ts): an ordinary
+  // player wins 37% of 4-player games here, above the 25% fair share -- this
+  // table favors the human, not the reverse.
   $('s1').value = 'Greedy'; $('s2').value = 'HouseFarm'; $('s3').value = 'Random';
   const sync = () => {
     const soloOpponent = $('s1').value && !$('s2').value && !$('s3').value;

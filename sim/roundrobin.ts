@@ -16,6 +16,22 @@ export function duel(a: string, b: string, cards: Card[], cfg: Config, n: number
   return aw / games;
 }
 
+/** One named `proxy` at a table filled out by fixed, distinct `others` --
+ *  the shape of the setup screen's own prefilled table, not a symmetric
+ *  round robin. Rotates which seat the proxy holds so the result is not a
+ *  seat-bias reading of a table this small. */
+export function tableWinRate(proxy: string, others: string[], cards: Card[], cfg: Config, n: number) {
+  const seats = others.length + 1;
+  let wins = 0;
+  for (let i = 0; i < n; i++) {
+    const proxySeat = i % seats;
+    const order = [...others.slice(0, proxySeat), proxy, ...others.slice(proxySeat)];
+    const r = playOne(order, cards, cfg, 7000 + i);
+    if (r.winner === proxySeat) wins++;
+  }
+  return wins / n;
+}
+
 export function seatBias(agent: string, players: number, cards: Card[], cfg: Config, n: number) {
   const wins = new Array(players).fill(0);
   for (let i = 0; i < n; i++) {
