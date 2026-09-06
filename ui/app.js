@@ -201,9 +201,7 @@ function phaseWithdraw() {
   const rows = view.myModifiers.map((m) =>
     `<tr><td>${m.source}${m.national ? ' <span class="note">(national)</span>' : ''}</td>
       <td class="${m.pips>=0?'pos':'neg'}">${m.pips>=0?'+':''}${m.pips}</td></tr>`).join('');
-  const opp = view.opponentCards
-    ? `<p class="note">Revealed against you: ${view.opponentCards.map((o)=>`<b>${o.party}</b>`).join(', ')}.</p>`
-    : `<p class="note">This is a primary. The other cards are face down — you decide without seeing them.</p>`;
+  const opp = `<p class="note">Revealed against you: ${view.opponentCards.map((o)=>`<b>${o.party}</b>`).join(', ')}.</p>`;
   modal(`
     <span class="eyebrow">${round} · ${race.state} ${OFFICE_LABEL[race.office]}</span>
     <h2 style="font-size:21px;margin-top:4px">Withdraw ${race.cardName}?</h2>
@@ -212,8 +210,7 @@ function phaseWithdraw() {
     ${opp}
     <table class="stack" style="margin:12px 0">${rows || '<tr><td>no modifiers</td><td>0</td></tr>'}
       <tr class="tot"><td>your stack</td><td>${view.myModifierTotal>=0?'+':''}${view.myModifierTotal}</td></tr></table>
-    <p class="note">Withdrawing returns the card to your hand and hands them the seat. Standing risks the card:
-      a primary loss returns it, a general loss discards it.</p>
+    <p class="note">Withdrawing returns the card to your hand and hands them the seat. Standing risks the card: a loss discards it.</p>
     <div class="row" style="margin-top:16px">
       <button class="btn" id="stand">Stand</button>
       <button class="btn ghost" id="pull">Withdraw</button>

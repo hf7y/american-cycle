@@ -27,8 +27,8 @@ rule instead of citing a section. The last category is the important one — mos
 | 1 pip = 2 points of margin | Anchors every number to real political science; makes the odds table mentally computable |
 | 3d6, split national / state / candidate | Each die names its source of error and generates narrative for free. **The "same distribution as undifferentiated 3d6" half of this is false in a primary** — see below |
 | Dice are error, modifiers are the point estimate | Lets a player say "I'm up 8, that's 75%." A dice-heavy alternative makes cards feel like noise |
-| Withdrawal closes before the deciding information | The only thing making cards actually die. Break this and the bench never depletes |
-| Primary loss to hand, general loss to discard | Primaries cheap to enter, cost is card reveal. Generals are where attrition happens |
+| Withdrawal closes before the deciding information, and does not open in a primary | The only thing making cards actually die (break this and the bench never depletes) — and a primary loss returns the card either way, so withdrawing there is strictly dominated (hf7y/american-cycle#160) |
+| Primary loss to hand, general loss to discard | Primaries cheap to enter; the intended cost was card reveal, but reveal is not modelled — nothing records or prices having been seen (hf7y/american-cycle#160). Generals are where attrition happens |
 | Neutral lean means the state's *home* baseline, not purple | Board tracks deviation only. No state needs a printed number. Same logic as Cook PVI |
 | Districts gate all races | The brake on wide-and-empty play. Presence must be purchased in the draft |
 | District cards are captured on a win, not politicians | Models inheriting the machine; keeps the talon alive; makes the map genuinely contested |
