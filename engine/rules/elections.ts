@@ -84,6 +84,13 @@ export interface PrimaryGeneralConfig {
    *  exactly as before the split -- no shipped config sets it yet; #24 asks
    *  for measurement before belief. */
   extremistEnvironmentPips?: number;
+  /** hf7y/american-cycle#15's arm A ("printed affinity"): the edge bonus for
+   *  declaring a card under its OWN printed `CandidateCard.party` rather than
+   *  the other one, once `game.partyChoice` opens the choice at all. Only
+   *  read by `sim/agents.ts`'s `options()` when `partyChoice ===
+   *  'printedAffinity'` -- arm B ('free') and the unset default ('printed',
+   *  no choice offered) never read it. */
+  printedPartyPips?: number;
 }
 
 export interface RaceContext {

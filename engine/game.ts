@@ -38,7 +38,7 @@ export interface Config {
   endorsements: { president: number; governorInState: number; senator: number;
                   presidentCount?: number; governorCount?: number };
   primaryGeneral: { extremistPrimary: number; extremistGeneral: number; crossBenchPrimaryPenalty: number; billCounterPips: number; crossBenchCap: number;
-                    bruisingPrimaryMargin?: number; extremistEnvironmentPips?: number };
+                    bruisingPrimaryMargin?: number; extremistEnvironmentPips?: number; printedPartyPips?: number };
   lean: lean.LeanConfig;
   economy: econ.EconomyConfig;
   legislature: leg.LegislatureConfig & {
@@ -70,7 +70,24 @@ export interface Config {
           oddYearGovernors?: boolean;
           /** may an office-holder stand for a different seat mid-term, vacating
            *  the one it holds the moment it declares? */
-          resignToRun?: boolean };
+          resignToRun?: boolean;
+          /** hf7y/american-cycle#15, RULED 2026-09-02: party stops being a
+           *  printed fact and becomes a choice at declaration, behind a
+           *  two-arm experiment graded on historical fidelity rather than
+           *  balance. Undefined/'printed' keeps the shipped behaviour --
+           *  every declaration runs under `CandidateCard.party` exactly as
+           *  printed. 'printedAffinity' (arm A) lets a declarer enter under
+           *  either party, with `primaryGeneral.printedPartyPips` rewarding
+           *  the printed one -- history is a thumb on the scale, not a wall.
+           *  'free' (arm B) lets either party through with no bonus either
+           *  way -- state lean and party-position fit (already read off
+           *  whichever party is chosen, see `readPosition`) are what decide.
+           *  Neither arm changes WHO is on the ballot, only which party
+           *  label a card runs under -- there is still no tracked platform
+           *  object (DECISIONS.md's cut "issue polarity flips" item), only a
+           *  per-declaration choice among options `sim/agents.ts` already
+           *  scores. */
+          partyChoice?: 'printed' | 'printedAffinity' | 'free' };
 }
 
 export interface PlayerState {
