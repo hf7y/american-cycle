@@ -1,0 +1,120 @@
+<!-- GENERATED FILE'S SOURCE. Prose below is hand-written; every number and
+     table is a placeholder token filled in by docs/build.ts from the engine
+     itself. Do not type a value into this file -- if a number belongs here,
+     teach docs/build.ts to read it out of engine/, the way #68 asks.
+
+     HTML, not Markdown: hf7y/etalon's prose guard prices every committed .md
+     file as prose against a shrink-only ratchet, the same way ui/index.html
+     is exempt from it while docs/*.md would not be -- see docs/build.ts. -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>american-cycle: rules reference</title>
+<style>
+  body{margin:0 auto;max-width:760px;padding:32px 20px 80px;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+    line-height:1.5;color:#1a1a1a;background:#fdfcf9}
+  h1{font-size:26px;margin:0 0 4px}
+  h2{font-size:19px;margin:36px 0 8px;border-bottom:1px solid #ddd;padding-bottom:4px}
+  h3{font-size:15px;margin:20px 0 6px}
+  em.gen{display:block;color:#666;font-size:13px;margin-bottom:24px}
+  table{border-collapse:collapse;margin:12px 0 18px;font-size:14px}
+  th,td{border:1px solid #ccc;padding:4px 10px;text-align:left}
+  th{background:#f0eee8}
+  code{background:#f0eee8;padding:1px 4px;border-radius:2px;font-size:13px}
+</style>
+</head>
+<body>
+<h1>american-cycle: rules reference</h1>
+<em class="gen">Generated from the engine (config <code>as-written-plus</code>) by
+<code>node docs/build.ts</code>. Never edit <code>docs/rules.html</code> by hand
+&mdash; edit <code>docs/rules.template.html</code> or the engine, then regenerate.
+If a number here is wrong, the engine is wrong, not the prose.</em>
+
+<p>A player is a <b>faction</b>, not a party: your hand holds cards of both
+<code>D</code> and <code>R</code>, and you choose which races to enter and
+which party to run each candidate under. Fifty states' worth of races come up
+on a fixed cycle; you can only afford to contest a fraction of them, so the
+game is about choosing which fraction.</p>
+
+<h2>The turn</h2>
+<p>Each year: draft a pack of candidate and district cards, declare candidates
+into open races, a window to withdraw before the dice are visible, elections
+resolve, the legislature votes on the year's omnibill, and lean decays toward
+zero everywhere. Your hand holds <b>16</b> cards at the start of a
+cycle under <code>as-written-plus</code> &mdash; far fewer than the races on
+the board, which is why most of them go uncontested.</p>
+
+<h2>How a race resolves</h2>
+<p>Every race rolls three six-sided dice per side: <b>national</b> (shared by
+every race your party runs that year &mdash; a wave), <b>state</b> (shared by
+every race your party runs in that state), and <b>candidate</b> (yours
+alone). Add a flat modifier total from your cards, highest sum wins.</p>
+<p>A <b>general</b> election rolls the candidate die once per side. A
+<b>primary</b> shares its national and state die between both sides (same
+party, same state), so only the candidate die differs between them &mdash;
+and it rolls twice, not once, so no modifier gap is a certain thing.</p>
+<p>Win probability by modifier edge (the gap between the two sides' flat
+totals, before dice):</p>
+
+<h3>General election</h3>
+<table><tr><th>modifier edge (pips)</th><th>win probability</th></tr><tr><td>+0</td><td>50.0%</td></tr><tr><td>+1</td><td>59.2%</td></tr><tr><td>+2</td><td>67.9%</td></tr><tr><td>+3</td><td>75.7%</td></tr><tr><td>+4</td><td>82.5%</td></tr><tr><td>+5</td><td>87.9%</td></tr><tr><td>+6</td><td>92.1%</td></tr><tr><td>+7</td><td>95.2%</td></tr><tr><td>+8</td><td>97.2%</td></tr></table>
+
+<h3>Primary</h3>
+<table><tr><th>modifier edge (pips)</th><th>win probability</th></tr><tr><td>+0</td><td>50.0%</td></tr><tr><td>+1</td><td>61.0%</td></tr><tr><td>+2</td><td>71.3%</td></tr><tr><td>+3</td><td>80.1%</td></tr><tr><td>+4</td><td>87.2%</td></tr><tr><td>+5</td><td>92.4%</td></tr><tr><td>+6</td><td>95.9%</td></tr><tr><td>+7</td><td>98.1%</td></tr><tr><td>+8</td><td>99.2%</td></tr></table>
+
+<p>A primary is decided by a much narrower die than a general, which is why a
+small identity-tag or incumbency edge matters far more in a primary than a
+general &mdash; and why a wide edge in a primary is close to a lock, while the
+same edge in a general still leaves real room for an upset.</p>
+
+<h2>Lean: the map's memory</h2>
+<p>Every state carries a signed <b>lean</b>, deviation from that state's own
+baseline (not from a national 50/50 &mdash; exactly like Cook PVI). Winning a
+race pushes the state's lean toward your party; how far depends on how
+decisively you won it:</p>
+<table><tr><th>winning margin (pips)</th><th>lean push</th></tr><tr><td>0-1</td><td>2</td></tr><tr><td>2-3</td><td>3</td></tr><tr><td>4+</td><td>4</td></tr></table>
+<p>Lean <b>decays</b> one pip per state per year, toward zero, so a state
+only realigns under a sustained run of results, not a single blowout. A newly
+elected president also places a one-pip <b>honeymoon</b> counter in every
+state they carried, gone by the next decay.</p>
+<p>The most nationalized race on the ballot is the one that pushes lean, in
+this order: <b>president &gt; senator &gt; representative &gt; governor</b>. A governor's race never pushes on its
+own &mdash; it only ever rides along when it agrees with the state's existing
+lean, which is why governors of the "wrong" party for their state (a Baker, a
+Hogan) are common and unremarkable.</p>
+
+<h2>Identity and demographics</h2>
+<p>Candidates and districts both carry tags from the same vocabulary, so a
+candidate's fit with a district &mdash; or a bill's fit with a bloc &mdash;
+is just overlap in the same space: <b>catholic, evangelical, jewish, black, hispanic, cuban, union, rural, suburban, urban, farm</b>.</p>
+
+<h2>The legislature</h2>
+<p>One <b>omnibill</b> a year: it needs a House majority and
+60% of the Senate to pass, can be vetoed and overridden at
+66.7%, and an impeachment vote needs 66.7%.
+Passage is scored by yes-vote, doubled for the majority party &mdash; so a
+bill is worth authoring even when you cannot claim it outright.</p>
+
+<h2>Scoring</h2>
+<p>Nothing accumulates. At the end of each year your score is read off what
+you still hold:</p>
+<table><tr><th>what you hold</th><th>points</th></tr><tr><td>the presidency</td><td>5</td></tr><tr><td>a Senate seat</td><td>3</td></tr><tr><td>a governorship</td><td>2</td></tr><tr><td>a House seat</td><td>1</td></tr><tr><td>a bill still on the books</td><td>3</td></tr><tr><td>a state currently leaning your way</td><td>1</td></tr><tr><td>a ratified amendment matching your tags</td><td>2</td></tr><tr><td>a district card you hold</td><td>1</td></tr><tr><td>a card still in your hand</td><td>1</td></tr></table>
+<p>Anything repealed, reversed or unseated scores zero from then on &mdash;
+a score can fall without any decay rule at all.</p>
+
+<h2>Winning</h2>
+<p><code>as-written-plus</code> ships <code>victory: "amendment"</code>. All modes the engine knows:</p><table><tr><th>mode</th><th>what ends the game</th></tr><tr><td><code>points</code></td><td>no earned ending &mdash; play runs out the year cap and the highest score wins.</td></tr><tr><td><code>bills</code></td><td>first player to author 8 enacted bills (config <code>billTarget</code>, default 8).</td></tr><tr><td><code>two-terms</code></td><td>two CONSECUTIVE presidential terms for one player.</td></tr><tr><td><code>three-terms</code></td><td>three presidential terms for one player, need not be consecutive.</td></tr><tr><td><code>parallel</code></td><td>either the bills target (8) or two consecutive terms, whichever a player reaches first.</td></tr><tr><td><code>amendment</code></td><td>the amendment ratifies &mdash; see below. Not a player win: the game ends and the epilogue score decides.</td></tr></table>
+
+<h3>The amendment</h3>
+<p>The one earned ending. On config <code>as-written-plus</code>:
+<b>34 states</b> to call a convention, <b>38
+states</b> to ratify, and <b>13 states</b> to block it
+outright &mdash; so a narrow leader can never close the game alone, and a
+determined minority always has a wall. Ratification does not name a winner
+outright; it ends the game and the epilogue score (above) decides who won.</p>
+
+</body>
+</html>

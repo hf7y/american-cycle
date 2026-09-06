@@ -544,7 +544,9 @@ function pushForMargin(cfg            , marginPips        )         {
 
 /** The most nationalized race on the ballot pushes. Governors never reach
  *  the top of this ordering in an election year, which is why they never push
- *  -- the exclusion falls out of the priority rule rather than being asserted. */
+ *  -- the exclusion falls out of the priority rule rather than being asserted.
+ *  Exported so docs/build.ts (#68) can read the real ordering rather than
+ *  copying it into prose. */
 const PRIORITY           = ['president', 'senator', 'representative', 'governor'];
 
 function nationalizedRace                              (races     , order           = PRIORITY)                {
@@ -4113,7 +4115,7 @@ const AGENTS                                                       = {
 
 
 // ---- namespace imports, rebuilt ----
-const lean = { sign, pushForMargin, nationalizedRace, applyPush, nudge, decay, honeymoon };
+const lean = { sign, pushForMargin, PRIORITY, nationalizedRace, applyPush, nudge, decay, honeymoon };
 const econ = { newEconomy, walk, spend, fedCheck, shockCheck, rateRiseOdds, economyModifier };
 const leg = { chambers, majorityParty, author, authorCandidates, resolveAuthorVote, tallyBill, impeach };
 const amend = { supportPips, stateBacks, needed, blockers, overlaps };

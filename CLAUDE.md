@@ -14,12 +14,10 @@ npx tsc --noEmit
 FINDINGS_DEEP=1 FINDINGS_SEEDS=12 npm test
 FINDINGS_SEEDS=12 node sim/findings.ts     # STALE is information; only BROKEN fails
 node ui/build.ts && git diff --exit-code ui/index.html
+node docs/build.ts && git diff --exit-code docs/rules.html
 ```
 
-The last line matters: `ui/index.html` is the **committed bundle a player
-loads**, so an unrebuilt source change ships a different game than the
-simulator plays. Node 22.18+ or 24 — the repo imports `.ts` directly and
-relies on unflagged type stripping.
+`ui/index.html` is the **committed bundle a player loads**, so an unrebuilt source change ships a different game than the simulator plays; `docs/rules.html` (#68) is the same discipline applied to the rules reference, generated from `engine/` by `docs/build.ts` — edit `docs/rules.template.html` or the engine, never the output — and shipped as HTML rather than Markdown so it costs nothing against the `.prose-ratchet` guard below, the same reason `ui/index.html` is exempt. Node 22.18+ or 24 — the repo imports `.ts` directly and relies on unflagged type stripping.
 
 CI also runs `hf7y/etalon`'s prose guard against `.prose-ratchet` and
 `.state-prose-ratchet`, both shrink-only — reap prose, or encode state in
