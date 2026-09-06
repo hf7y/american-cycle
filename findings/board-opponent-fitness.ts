@@ -4,13 +4,6 @@ import { AGENTS } from '../sim/agents.ts';
 import { seeds as sample } from './sample.ts';
 import type { Claim, Finding } from './types.ts';
 
-/** hf7y/american-cycle#46: ruled IN 2026-09-06 -- the setup screen can now
- *  seat a genuine 1-v-1 opponent (#202), and #46 names this exact gap: no
- *  agent in sim/agents.ts has ever been measured for solo play. Every
- *  existing number in ui/app.js's OPPONENT_BLURB was measured "in the human
- *  seat against Greedy + HouseFarm + Random, over 240 games each" -- a fixed
- *  three-opponent field -- and that text is shown unchanged now that a
- *  player can pick a single agent as the whole opposition. */
 const AGENT_NAMES = Object.keys(AGENTS).filter((n) => n !== 'Greedy');
 
 export const finding: Finding = {

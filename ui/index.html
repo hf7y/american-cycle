@@ -3947,13 +3947,6 @@ const OPPONENT_BLURB = {
   Vetoer:'Strong on some rulesets. Chases the presidency and vetoes every bill while it holds the pen, rather than only under split government.',
   BillBlocker:'Strong. Floods the Senate like SenateFlood, but votes no on everything — denies the 60% cloture threshold outright.',
 };
-// hf7y/american-cycle#46: OPPONENT_BLURB above was measured against a fixed
-// three-opponent field and #202 made a true 1-v-1 table reachable for the
-// first time. findings/board-opponent-fitness.ts re-measured every agent
-// head-to-head against Greedy (this repo's standing proxy for an ordinary
-// player) and found the two do not agree: several agents that read as mild
-// in a four-player game are near-unloseable or near-unwinnable 1v1. This
-// blurb only renders when exactly one opponent is seated.
 const SOLITAIRE_BLURB = {
   Greedy:"Fair fight. You'll win about half of these, one-on-one.",
   Lookahead:'Hardest 1v1 of all sixteen. Wins 79% of the time — this is not a first solitaire game.',
