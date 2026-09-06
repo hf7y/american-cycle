@@ -21,7 +21,7 @@ import type { Declaration } from './rules/elections.ts';
 import { RNG } from './rules/rng.ts';
 import { AGENTS } from '../sim/agents.ts';
 import { STATES, BY_CODE, senateUp, electors, totalElectors, DC_ELECTORS } from './states.ts';
-import type { Card, CandidateCard, DistrictCard } from './types/index.ts';
+import type { Card, CandidateCard, DistrictCard, IdentityTag } from './types/index.ts';
 
 const loadConfig = (name: string): Config =>
   JSON.parse(readFileSync(new URL(`./config/${name}`, import.meta.url), 'utf8')) as Config;
@@ -589,6 +589,69 @@ test('engine/config/three-terms.json actually ends a game on three-terms, not ju
   assert.equal(result.endedBy, 'three-terms');
   assert.equal(result.wonBy, result.winner, 'a victory condition, not a score tie-break, decided this game');
   assert.ok((g.termsBy[result.winner!] ?? 0) >= 3, 'the winner actually holds 3 presidential terms, not fewer');
+});
+
+// ------------------------------------------------------ #86: Congress proposes an amendment
+
+/** Always wants to move an amendment, bypassing `defaultAmendmentTags`'s
+ *  half-game gate -- the point under test is ROUTING (Congress vs the
+ *  convention), not when a mover shows up. */
+class MoveAmendmentAgent extends ScriptedAgent {
+  moveAmendment(): IdentityTag[] { return ['union']; }
+}
+class YesAmendmentAgent extends MoveAmendmentAgent {
+  voteBill(): boolean { return true; }
+}
+
+test('hf7y/american-cycle#86: the House-majority author proposes through Congress, not a convention', () => {
+  const cfg = loadConfig('baseline.json');
+  cfg.amendment = { ...cfg.amendment, enabled: true };
+
+  const author = new YesAmendmentAgent('author');
+  const g = new Game([author], structuredClone(CARDS), cfg, 1);
+  g.year = 1977; // odd: no election in the way of a clean single-tick read
+  g.seats = [
+    { office: 'representative', state: 'OH', slot: 1, holder: { cardId: 'h1', player: 0, party: 'D', since: 1976 } },
+    { office: 'representative', state: 'OH', slot: 2, holder: { cardId: 'h2', player: 0, party: 'D', since: 1976 } },
+    { office: 'senator', state: 'OH', slot: 1, senateClass: 1, holder: { cardId: 's1', player: 0, party: 'D', since: 1976 } },
+  ];
+  g.players[0].hand = [];
+
+  g.tick();
+
+  assert.equal(g.amendments.length, 1, 'the proposal passed -- sole author, unanimous chambers, two-thirds clears trivially');
+  assert.equal(g.amendments[0].proposer, 0);
+  assert.equal(g.amendments[0].calledIn, 1977);
+  assert.ok(g.log.some((l) => l.includes('Congress proposes an amendment')), 'the log names the route');
+  assert.ok(!g.log.some((l) => l.includes('convention')), 'the convention never runs when the mover holds the pen');
+});
+
+test('hf7y/american-cycle#86: a mover who does not hold the pen still goes through the convention, not Congress', () => {
+  const cfg = loadConfig('baseline.json');
+  cfg.amendment = { ...cfg.amendment, enabled: true };
+
+  // Player 0 holds the House majority bloc (the pen); player 1 is the one
+  // whose agent actually wants to move, and holds no seats at all -- the
+  // convention's own dice check doesn't require holding anything.
+  const pen = new ScriptedAgent('pen');
+  const mover = new MoveAmendmentAgent('mover');
+  const g = new Game([pen, mover], structuredClone(CARDS), cfg, 1);
+  g.year = 1977;
+  g.seats = [
+    { office: 'representative', state: 'OH', slot: 1, holder: { cardId: 'h1', player: 0, party: 'D', since: 1976 } },
+    { office: 'senator', state: 'OH', slot: 1, senateClass: 1, holder: { cardId: 's1', player: 0, party: 'D', since: 1976 } },
+  ];
+  g.players[0].hand = [];
+  g.players[1].hand = [];
+
+  g.tick();
+
+  assert.ok(
+    g.log.some((l) => l.includes('convention is called') || l.includes('convention call fails')),
+    'the convention ran (call may succeed or fail on the dice -- routing is what is under test, not the roll)',
+  );
+  assert.ok(!g.log.some((l) => l.includes('Congress proposes') || l.includes('congressional amendment proposal')),
+    'Congress never runs for a mover who does not hold the pen');
 });
 
 // ------------------------------------------------------------- #78: bills write to the board

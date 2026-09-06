@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { tallyBill, impeach, author, majorityParty, authorCandidates, resolveAuthorVote } from './legislature.ts';
+import { tallyBill, impeach, author, majorityParty, authorCandidates, resolveAuthorVote, proposeAmendment } from './legislature.ts';
 import type { LegislatureConfig, Vote } from './legislature.ts';
 import type { Seat, Party } from '../types/index.ts';
 import { RNG } from './rng.ts';
@@ -73,6 +73,27 @@ test('impeachment needs two-thirds of the Senate', () => {
   const seats = bench([], Array(9).fill('D'));
   assert.ok(!impeach(cfg, seats, 5));
   assert.ok(impeach(cfg, seats, 6), 'six of nine is two-thirds');
+});
+
+test("hf7y/american-cycle#86: a congressional amendment proposal needs two-thirds of EACH chamber, not one two-thirds pooled across both", () => {
+  const seats = bench(Array(9).fill('D'), Array(9).fill('D'));
+  const houseOnly = votes(seats, (s) => s.office === 'representative');
+  const out = proposeAmendment(cfg, seats, houseOnly);
+  assert.ok(!out.passed, 'the House alone, unanimous, is not both chambers');
+  assert.equal(out.houseYes, 9);
+  assert.equal(out.senateYes, 0);
+
+  const both = votes(seats, () => true);
+  assert.ok(proposeAmendment(cfg, seats, both).passed);
+});
+
+test('hf7y/american-cycle#86: exactly two-thirds carries it, matching vetoOverride\'s own bar', () => {
+  const seats = bench(Array(9).fill('D'), Array(9).fill('D'));
+  const sixEach = votes(seats, (s) => Number(s.holder!.cardId.slice(1)) < 6);
+  assert.ok(proposeAmendment(cfg, seats, sixEach).passed, 'six of nine is exactly two-thirds in both chambers');
+
+  const fiveEach = votes(seats, (s) => Number(s.holder!.cardId.slice(1)) < 5);
+  assert.ok(!proposeAmendment(cfg, seats, fiveEach).passed, 'five of nine falls short in both chambers');
 });
 
 test('authorship goes to the largest bloc of the majority House party', () => {

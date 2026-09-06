@@ -39,6 +39,11 @@ export interface LegislatureConfig {
    *  exactly like any other bill -- there is no repeal-specific code path,
    *  which is what lets an opposite-fit bill net out a prior one's counters. */
   billLeanPips?: number;
+  /** hf7y/american-cycle#86's ruling: Article V's other proposal route. Two-
+   *  thirds of each chamber, checked independently -- same fraction as
+   *  `vetoOverride`/`impeachThreshold`, because it is the same constitutional
+   *  bar, not a coincidence. */
+  amendmentProposal?: number;
 }
 
 /** The counter goes on the CARD, so a vote must name the card that cast it.
@@ -186,4 +191,25 @@ export function tallyBill(
 export function impeach(cfg: LegislatureConfig, seats: Seat[], yesVotes: number): boolean {
   const { senate } = chambers(seats);
   return atLeast(yesVotes, senate.length, cfg.impeachThreshold);
+}
+
+export interface AmendmentProposalOutcome {
+  passed: boolean;
+  houseYes: number; houseTotal: number;
+  senateYes: number; senateTotal: number;
+}
+
+/** hf7y/american-cycle#86's ruling: Congress proposing an amendment is a
+ *  second Article V path alongside the convention (`amendment.ts`), and it
+ *  is not `tallyBill` with a bigger bar -- there is no G, no veto, and no
+ *  presentment, because the president has no role in Article V at all.
+ *  Two-thirds of each chamber, checked independently, the same shape as
+ *  `impeach` above but on both chambers rather than one. */
+export function proposeAmendment(cfg: LegislatureConfig, seats: Seat[], votes: Vote[]): AmendmentProposalOutcome {
+  const { house, senate } = chambers(seats);
+  const houseYes = votes.filter((v) => v.office === 'representative' && v.yes).length;
+  const senateYes = votes.filter((v) => v.office === 'senator' && v.yes).length;
+  const frac = cfg.amendmentProposal ?? 2 / 3;
+  const passed = atLeast(houseYes, house.length, frac) && atLeast(senateYes, senate.length, frac);
+  return { passed, houseYes, houseTotal: house.length, senateYes, senateTotal: senate.length };
 }
