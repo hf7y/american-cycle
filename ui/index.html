@@ -3947,6 +3947,32 @@ const OPPONENT_BLURB = {
   Vetoer:'Strong on some rulesets. Chases the presidency and vetoes every bill while it holds the pen, rather than only under split government.',
   BillBlocker:'Strong. Floods the Senate like SenateFlood, but votes no on everything — denies the 60% cloture threshold outright.',
 };
+// hf7y/american-cycle#46: OPPONENT_BLURB above was measured against a fixed
+// three-opponent field and #202 made a true 1-v-1 table reachable for the
+// first time. findings/board-opponent-fitness.ts re-measured every agent
+// head-to-head against Greedy (this repo's standing proxy for an ordinary
+// player) and found the two do not agree: several agents that read as mild
+// in a four-player game are near-unloseable or near-unwinnable 1v1. This
+// blurb only renders when exactly one opponent is seated.
+const SOLITAIRE_BLURB = {
+  Greedy:"Fair fight. You'll win about half of these, one-on-one.",
+  Lookahead:'Hardest 1v1 of all sixteen. Wins 79% of the time — this is not a first solitaire game.',
+  Random:'Gentle 1v1. You should win about 73% of these.',
+  HouseFarm:'Very gentle 1v1. You should win about 93% of these.',
+  SenateFlood:'Hard 1v1. Wins about 65% of the time.',
+  HeterodoxSpecialist:'Fair 1v1. You should win about 59% of these.',
+  BillMaximizer:'Very gentle 1v1. You should win about 77% of these.',
+  Impeacher:'Hard 1v1. Wins about 66% of the time.',
+  EconomyChicken:'Fair 1v1. You should win about 54% of these.',
+  WideAndEmpty:'Unloseable 1v1. Should be a losing strategy, and is: it has not won one game in this measurement.',
+  VPBackstab:'Hard 1v1. Wins about 65% of the time.',
+  Launchpad:'Hard 1v1. Wins about 63% of the time.',
+  BillAuthor:'Very gentle 1v1. You should win about 86% of these.',
+  Vetoer:'Fairest 1v1 of all sixteen. You should win about 47% of these.',
+  BillBlocker:'Hardest 1v1 aside from Lookahead. Wins about 78% of the time.',
+  RunawayMaximiser:'Very gentle 1v1. You should win about 85% of these.',
+  WalkoverFarmer:'Gentle 1v1. You should win about 77% of these.',
+};
 const CONFIG_BLURB = {
   tuned:'The playable tuning. Bigger hand, thinner district supply — the settings that actually produce a contested board.',
   baseline:'The design doc as corrected: biennial decay, margin-based pushes, hand 12.',
@@ -3991,8 +4017,10 @@ function setup() {
   // ordinary player wins 8%, which is a bad first game.
   $('s1').value = 'Greedy'; $('s2').value = 'HouseFarm'; $('s3').value = 'Random';
   const sync = () => {
-    $('b1').textContent = $('s1').value ? (OPPONENT_BLURB[$('s1').value] || '')
-      : 'Solitaire: no rival at the table. Nothing contests you, so nothing stops you either.';
+    const soloOpponent = $('s1').value && !$('s2').value && !$('s3').value;
+    $('b1').textContent = !$('s1').value
+      ? 'Solitaire: no rival at the table. Nothing contests you, so nothing stops you either.'
+      : soloOpponent ? (SOLITAIRE_BLURB[$('s1').value] || '') : (OPPONENT_BLURB[$('s1').value] || '');
     for (const [sel, out] of [['s2','b2'],['s3','b3']]) {
       $(out).textContent = $(sel).value ? (OPPONENT_BLURB[$(sel).value] || '') : '';
     }
