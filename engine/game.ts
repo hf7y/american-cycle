@@ -1331,7 +1331,10 @@ export class Game {
       const out = runRace({
         ctx, round: 'primary', declarations: cands, wave, rng: this.rng,
         res: this.cfg.resolution, nat: this.cfg.national, pg: this.cfg.primaryGeneral,
-        decide: (p, v) => this.decideWithdraw(p, v, cands, human),
+        // hf7y/american-cycle#160: a primary loss returns the card to hand
+        // either way, so withdrawing can only forfeit the nomination --
+        // strictly dominated, and the window doesn't open here.
+        decide: () => false,
       });
       for (const w of out.withdrawnCards) this.returnToHand(w);
       if (!out.event) continue;
@@ -1594,12 +1597,17 @@ export class Game {
       const primaryOthers = others.filter((o) => o.card.party === d.card.party);
       const round = primaryOthers.length > 0 ? 'primary' : 'general';
       const mods = buildModifiers(d, ctx, round, this.cfg.resolution, this.cfg.national, this.cfg.primaryGeneral);
-      const a = yield {
-        kind: 'withdraw', year: this.year, round,
-        view: withdrawalView(d, mods, round, ctx, others),
-        race: { office: d.office, state: d.state, slot: d.slot, cardName: d.card.name },
-      };
-      this.humanWithdrawals.set(raceKeyOf(d) + '|' + d.card.id, !!a.withdraw);
+      // hf7y/american-cycle#160: withdrawal is strictly dominated in a
+      // primary -- the card returns to hand on a loss anyway -- so the
+      // window only opens for generals, where a loss costs the discard.
+      if (round === 'general') {
+        const a = yield {
+          kind: 'withdraw', year: this.year, round,
+          view: withdrawalView(d, mods, round, ctx, others),
+          race: { office: d.office, state: d.state, slot: d.slot, cardName: d.card.name },
+        };
+        this.humanWithdrawals.set(raceKeyOf(d) + '|' + d.card.id, !!a.withdraw);
+      }
 
       // hf7y/american-cycle#96: decided in the same window as withdrawal, on
       // the same incomplete information -- only asked when there IS a primary

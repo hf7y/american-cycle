@@ -2876,7 +2876,10 @@ class Game {
       const out = runRace({
         ctx, round: 'primary', declarations: cands, wave, rng: this.rng,
         res: this.cfg.resolution, nat: this.cfg.national, pg: this.cfg.primaryGeneral,
-        decide: (p, v) => this.decideWithdraw(p, v, cands, human),
+        // hf7y/american-cycle#160: a primary loss returns the card to hand
+        // either way, so withdrawing can only forfeit the nomination --
+        // strictly dominated, and the window doesn't open here.
+        decide: () => false,
       });
       for (const w of out.withdrawnCards) this.returnToHand(w);
       if (!out.event) continue;
@@ -3139,12 +3142,17 @@ class Game {
       const primaryOthers = others.filter((o) => o.card.party === d.card.party);
       const round = primaryOthers.length > 0 ? 'primary' : 'general';
       const mods = buildModifiers(d, ctx, round, this.cfg.resolution, this.cfg.national, this.cfg.primaryGeneral);
-      const a = yield {
-        kind: 'withdraw', year: this.year, round,
-        view: withdrawalView(d, mods, round, ctx, others),
-        race: { office: d.office, state: d.state, slot: d.slot, cardName: d.card.name },
-      };
-      this.humanWithdrawals.set(raceKeyOf(d) + '|' + d.card.id, !!a.withdraw);
+      // hf7y/american-cycle#160: withdrawal is strictly dominated in a
+      // primary -- the card returns to hand on a loss anyway -- so the
+      // window only opens for generals, where a loss costs the discard.
+      if (round === 'general') {
+        const a = yield {
+          kind: 'withdraw', year: this.year, round,
+          view: withdrawalView(d, mods, round, ctx, others),
+          race: { office: d.office, state: d.state, slot: d.slot, cardName: d.card.name },
+        };
+        this.humanWithdrawals.set(raceKeyOf(d) + '|' + d.card.id, !!a.withdraw);
+      }
 
       // hf7y/american-cycle#96: decided in the same window as withdrawal, on
       // the same incomplete information -- only asked when there IS a primary
@@ -4096,9 +4104,7 @@ function phaseWithdraw() {
   const rows = view.myModifiers.map((m) =>
     `<tr><td>${m.source}${m.national ? ' <span class="note">(national)</span>' : ''}</td>
       <td class="${m.pips>=0?'pos':'neg'}">${m.pips>=0?'+':''}${m.pips}</td></tr>`).join('');
-  const opp = view.opponentCards
-    ? `<p class="note">Revealed against you: ${view.opponentCards.map((o)=>`<b>${o.party}</b>`).join(', ')}.</p>`
-    : `<p class="note">This is a primary. The other cards are face down — you decide without seeing them.</p>`;
+  const opp = `<p class="note">Revealed against you: ${view.opponentCards.map((o)=>`<b>${o.party}</b>`).join(', ')}.</p>`;
   modal(`
     <span class="eyebrow">${round} · ${race.state} ${OFFICE_LABEL[race.office]}</span>
     <h2 style="font-size:21px;margin-top:4px">Withdraw ${race.cardName}?</h2>
@@ -4107,8 +4113,7 @@ function phaseWithdraw() {
     ${opp}
     <table class="stack" style="margin:12px 0">${rows || '<tr><td>no modifiers</td><td>0</td></tr>'}
       <tr class="tot"><td>your stack</td><td>${view.myModifierTotal>=0?'+':''}${view.myModifierTotal}</td></tr></table>
-    <p class="note">Withdrawing returns the card to your hand and hands them the seat. Standing risks the card:
-      a primary loss returns it, a general loss discards it.</p>
+    <p class="note">Withdrawing returns the card to your hand and hands them the seat. Standing risks the card: a loss discards it.</p>
     <div class="row" style="margin-top:16px">
       <button class="btn" id="stand">Stand</button>
       <button class="btn ghost" id="pull">Withdraw</button>
