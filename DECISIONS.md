@@ -105,20 +105,7 @@ What the tag was labelling survives as a derivation, and is better for it: a
 candidate is off-brand where their identities match the district while the
 state's lean points against their party, which is era-dependent in a way a
 printed tag cannot be. Manchin reads heterodox in 2018 and perfectly orthodox
-in 1958. `sim/agents.ts`'s `HeterodoxSpecialist` now detects it that way.
-
-### Correction, 2026-09-06: `extremist` is priced, and it is not heterodox's mirror
-
-hf7y/american-cycle#159 measured `extremist` (+2 primary / −2 general) on
-the arithmetic above (`findings/extremist-pricing.ts`). It is not
-heterodox's mirror: the issue's own table used heterodox's stale 1d6 primary
-curve, but hf7y/american-cycle#94 widened that die to 2d6, so +2 is 0.59 SD
-against −2's 0.48 SD, not 0.83 vs 0.48. What decides it instead is contest
-rate — extremist primaries run 100% contested (every +2 fires) against 23.8%
-for extremist generals (walkovers waste the −2 three times in four) — so
-holding the tag is a good trade, the reverse of heterodox. Not ruled here:
-whether that near-free upside is the intended shape, or the general penalty
-needs strengthening.
+in 1958. `sim/agents.ts`'s `HeterodoxSpecialist` now detects it that way. **`extremist` (+2 primary / −2 general) is measured and is NOT its mirror** — hf7y/american-cycle#159, `findings/extremist-pricing.ts`: on the CURRENT dice (#94 widened the primary die since #159's own stale-curve table), +2/−2 is 0.59/0.48 SD, and contest rate decides it instead — primaries run 100% contested, generals only 23.8% — so holding the tag is a good trade, the reverse of heterodox. Not ruled: whether the general penalty needs strengthening.
 
 **The two rulings above collide, and the collision is measured.** Under a bills victory with no cap, `BillAuthor` and `HouseFarm` take **90-99% of all games** between them (tuned, target 8: 62% / 37%), while `SenateFlood` — which wins 40-63% under points — wins **0%**. Bills are passed by House votes and credited to the largest House bloc, so an ending that counts bills makes the House the game. Whichever ending is counted, the strategy that farms it takes everything: points hands the game to the Senate, bills hand it to the House. The feeder ruling is not true under the ending that was also ruled, and one of the two has to move. **Resolved 2026-09-04 on hf7y/american-cycle#145: the ending moves, not the feeder ruling.** Scoring stays points; bills are points among others (`scoring.billOnBooks` already did this); the **amendment is the ending**. `as-written-plus.json` now ships `victory: 'amendment'`, `billTarget` is gone. `findings/amendment-is-the-ending.ts` (passive pool, no bill-chaser, `maxYears: 100`, n=120): ratification ends **57%** of games, the 100-year cap still binds **42%**, deck-out fires in **0%**. **Not settled by this**: hf7y/american-cycle#50 (`SenateFlood` dominance under points is live again) and hf7y/american-cycle#13 (which offices win, needs re-measuring) — both stay open, and findings keyed to the old ending read STALE against old stamps until each is re-measured on its own issue.
 
