@@ -104,6 +104,15 @@ jobs:
       - name: the committed board is current
         run: git diff --exit-code ui/index.html
 
+      # #68: the rules reference is emitted from the engine the same way the
+      # board is. A stale committed docs/rules.html would teach a player rules
+      # the engine no longer runs, which is the exact failure that made
+      # design-doc.md worth reaping (DECISIONS.md).
+      - name: build the rules reference
+        run: node docs/build.ts
+      - name: the committed rules reference is current
+        run: git diff --exit-code docs/rules.html
+
       - name: playwright
         run: |
           pip install --quiet playwright

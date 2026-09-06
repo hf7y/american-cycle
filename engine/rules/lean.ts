@@ -57,8 +57,10 @@ export function pushForMargin(cfg: LeanConfig, marginPips: number): number {
 
 /** The most nationalized race on the ballot pushes. Governors never reach
  *  the top of this ordering in an election year, which is why they never push
- *  -- the exclusion falls out of the priority rule rather than being asserted. */
-const PRIORITY: Office[] = ['president', 'senator', 'representative', 'governor'];
+ *  -- the exclusion falls out of the priority rule rather than being asserted.
+ *  Exported so docs/build.ts (#68) can read the real ordering rather than
+ *  copying it into prose. */
+export const PRIORITY: Office[] = ['president', 'senator', 'representative', 'governor'];
 
 export function nationalizedRace<T extends { office: Office }>(races: T[], order: Office[] = PRIORITY): T | undefined {
   for (const office of order) {
