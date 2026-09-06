@@ -41,10 +41,11 @@ const build = (cfg: Config, seed: number): Agent[] => {
 };
 
 /** `human = -1` matches no player, so every seat is driven by its own agent and
- *  the interactive path becomes the headless one plus its yields: `askBill`
- *  returns early and no race is the human's, so the only request is `declare`.
- *  Answering it with nothing leaves the agents in charge of both runs, which is
- *  what makes the two comparable at all. */
+ *  the interactive path becomes the headless one: `declare` (#149) now only
+ *  yields on the human's own rotation slot, and `askBill`/withdrawal/independent
+ *  all return early too, so no request ever fires and no `it.next()` beyond the
+ *  first is needed. Leaving the agents in charge of both runs is what makes
+ *  them comparable at all. */
 function play(cfg: Config, seed: number, interactive: boolean): string {
   const g = new Game(build(cfg, seed), structuredClone(CARDS), cfg, seed);
   for (let y = 0; y < YEARS; y++) {

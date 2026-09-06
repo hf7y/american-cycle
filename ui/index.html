@@ -73,6 +73,8 @@ button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--brass);out
 .st .pips{display:flex;gap:1px;height:4px;margin-top:2px}
 .st .pip{width:3px;height:3px;border-radius:50%}
 .st .peg{position:absolute;top:2px;right:2px;width:6px;height:6px;border-radius:50%;border:1px solid var(--card)}
+.st .opp-pegs{position:absolute;top:2px;left:2px;display:flex;gap:1px}
+.st .opp-peg{width:5px;height:5px;border-radius:1px;border:1px solid var(--card)}
 .st.race::after{content:"";position:absolute;inset:0;border:2px solid var(--brass);border-radius:1px;pointer-events:none}
 
 /* cards ------------------------------------------------------------------- */
@@ -1689,7 +1691,7 @@ function runRace(a             ) {
  
 
                        
-                                                       
+                                                                              
                                                                    
                                                                                                       
                                         
@@ -3093,13 +3095,12 @@ class Game {
   }
 
   ;       *electionsInteractive(human        )                                       {
-    // Collect every declaration first, so the human can see the pegs go down.
+    // The human declares in their own rotation slot, on the same pegs-so-far
+    // every agent receives -- not blind, and not always first. See #149.
     const wave = new Wave(this.rng);
     const open = this.openRaces();
     this.releaseExpiringTerms(open);
     this.releaseHolders();
-    const answer = yield { kind: 'declare', year: this.year, open };
-    this.humanDeclarations = answer.declarations ?? [];
     const decls                = [];
     const pending               = [];
     // Math.floor matters: in an ODD year `year / 2` is fractional, so the
@@ -3109,7 +3110,13 @@ class Game {
     // first.
     const order = this.players.map((_, i) => (i + Math.floor(this.year / 2) + this.cycleOffset) % this.players.length);
     for (const i of order) {
-      const mine = i === human ? this.humanDeclarations : this.agents[i].declare(this.view(i), open, pending);
+      let mine               ;
+      if (i === human) {
+        const answer = yield { kind: 'declare', year: this.year, open, pending: [...pending] };
+        mine = this.humanDeclarations = answer.declarations ?? [];
+      } else {
+        mine = this.agents[i].declare(this.view(i), open, pending);
+      }
       this.stats.decisions.push(mine.length);
       for (const d of mine) {
         const p = this.players[i];
@@ -4183,6 +4190,13 @@ function drawMap() {
   const declaredHere = new Set(S.picks.map((p)=>p.state));
   const openStates = new Set();
   if (pending && pending.kind === 'declare' && S.sel) for (const r of racesInState_all(S.sel)) openStates.add(r.state);
+  // Opponent pegs already placed this cycle, ahead of the human in the
+  // rotation -- the information #149 found withheld from the player.
+  const opponentPegs = new Map();
+  if (pending && pending.kind === 'declare') for (const pg of pending.pending || []) {
+    if (!opponentPegs.has(pg.state)) opponentPegs.set(pg.state, []);
+    opponentPegs.get(pg.state).push(pg);
+  }
   for (const [code,[c,r]] of Object.entries(TILES)) {
     const t = el('div','st');
     t.style.gridColumn = c+1; t.style.gridRow = r+1;
@@ -4198,6 +4212,16 @@ function drawMap() {
     t.appendChild(pips);
     const held = G.seats.find((s)=>s.state===code && s.holder && (s.office==='senator'||s.office==='governor'));
     if (held){ const pg = el('div','peg'); pg.style.background = PLAYER_COLORS[held.holder.player]; t.appendChild(pg); }
+    const opp = opponentPegs.get(code);
+    if (opp){
+      const row = el('div','opp-pegs');
+      for (const pg of opp.slice(0,4)) {
+        const dot = el('div','opp-peg'); dot.style.background = PLAYER_COLORS[pg.player];
+        dot.title = `${OFFICE_LABEL[pg.office]} declared`;
+        row.appendChild(dot);
+      }
+      t.appendChild(row);
+    }
     if (openStates.has(code)) { t.classList.add('act'); t.onclick = () => pickRace(code); }
     if (declaredHere.has(code)) t.classList.add('race');
     t.title = `${code} — lean ${lean>0?'R+':lean<0?'D+':''}${Math.abs(lean)||'even'}`;
