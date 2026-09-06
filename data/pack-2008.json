@@ -16,7 +16,15 @@
       ],
       "belief": "Hope and change",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "black": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -30,7 +38,12 @@
       ],
       "belief": "Ready on day one",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -44,7 +57,12 @@
       ],
       "belief": "Two Americas",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -58,7 +76,12 @@
       ],
       "belief": "Foreign relations chairman",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "catholic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -72,7 +95,12 @@
       ],
       "belief": "Governor and diplomat",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "hispanic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -86,7 +114,12 @@
       ],
       "belief": "Banking chairman",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "catholic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -101,7 +134,15 @@
       ],
       "belief": "First woman Speaker",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "catholic": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -116,7 +157,15 @@
       ],
       "belief": "Pro-life majority leader",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "evangelical": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -130,7 +179,12 @@
       ],
       "belief": "Reagan's Navy Secretary",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -145,7 +199,15 @@
       ],
       "belief": "Flat-top farmer",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "farm": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -159,7 +221,12 @@
       ],
       "belief": "Prosecutor",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -173,7 +240,12 @@
       ],
       "belief": "Against the trade deals",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -188,7 +260,15 @@
       ],
       "belief": "Pro-life Democrat",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "catholic": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -203,7 +283,15 @@
       ],
       "belief": "Blue Dog quarterback",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "evangelical": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -218,7 +306,15 @@
       ],
       "belief": "Recruited the Blue Dogs",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "jewish": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -232,7 +328,12 @@
       ],
       "belief": "The majority leader",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -247,7 +348,15 @@
       ],
       "belief": "Ways and Means",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "black": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -262,7 +371,15 @@
       ],
       "belief": "Financial services",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "jewish": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -276,7 +393,12 @@
       ],
       "belief": "The only no vote on the Patriot Act",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "jewish": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -290,7 +412,12 @@
       ],
       "belief": "Prosecutor from the Iron Range",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -316,7 +443,12 @@
       ],
       "belief": "Rode the wave",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -330,7 +462,12 @@
       ],
       "belief": "Won by 312 votes",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "jewish": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -345,7 +482,15 @@
       ],
       "belief": "Missionary in Honduras",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "catholic": {
+          "source": "hand-assigned"
+        },
+        "hispanic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -376,7 +521,15 @@
         {
           "type": "extremist"
         }
-      ]
+      ],
+      "provenance": {
+        "evangelical": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -390,7 +543,12 @@
       ],
       "belief": "Turnaround artist",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "evangelical": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -405,7 +563,15 @@
       ],
       "belief": "Preacher governor",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "evangelical": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -420,7 +586,15 @@
       ],
       "belief": "America's mayor",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "catholic": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -434,7 +608,12 @@
       ],
       "belief": "Actor and senator",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -476,7 +655,12 @@
       ],
       "belief": "Country club conservative",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "catholic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -491,7 +675,15 @@
       ],
       "belief": "Young Gun",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "jewish": {
+          "source": "hand-assigned"
+        },
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -505,7 +697,12 @@
       ],
       "belief": "McCain's wingman",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "evangelical": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -519,7 +716,12 @@
       ],
       "belief": "The last split ticket",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -546,7 +748,15 @@
       ],
       "belief": "Switched parties in 2009",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "jewish": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -560,7 +770,12 @@
       ],
       "belief": "Republican against the war",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -595,7 +810,12 @@
           "pips": 2,
           "note": "an ideological validator with a national following"
         }
-      ]
+      ],
+      "provenance": {
+        "evangelical": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -613,7 +833,12 @@
         {
           "type": "extremist"
         }
-      ]
+      ],
+      "provenance": {
+        "evangelical": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -628,7 +853,15 @@
       ],
       "belief": "Compassionate conservative",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "evangelical": {
+          "source": "hand-assigned"
+        },
+        "farm": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -642,7 +875,12 @@
       ],
       "belief": "Hugged the president",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -656,7 +894,12 @@
       ],
       "belief": "Rhodes scholar governor",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "evangelical": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -671,7 +914,15 @@
       ],
       "belief": "Sam's Club Republicans",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "evangelical": {
+          "source": "hand-assigned"
+        },
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -685,7 +936,12 @@
       ],
       "belief": "The lobbyist governor",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -700,7 +956,15 @@
       ],
       "belief": "Lost the recount",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "jewish": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -715,7 +979,15 @@
       ],
       "belief": "Deficit hawk",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "catholic": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -739,7 +1011,15 @@
         "black",
         "urban"
       ],
-      "note": "South Side"
+      "note": "South Side",
+      "provenance": {
+        "black": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -751,7 +1031,15 @@
         "urban",
         "catholic"
       ],
-      "note": "North Side"
+      "note": "North Side",
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "catholic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -763,7 +1051,15 @@
         "black",
         "urban"
       ],
-      "note": "Harlem"
+      "note": "Harlem",
+      "provenance": {
+        "black": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -775,7 +1071,15 @@
         "rural",
         "union"
       ],
-      "note": "North Country"
+      "note": "North Country",
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -786,7 +1090,12 @@
       "demographics": [
         "urban"
       ],
-      "note": "San Francisco"
+      "note": "San Francisco",
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -798,7 +1107,15 @@
         "hispanic",
         "urban"
       ],
-      "note": "Downtown LA"
+      "note": "Downtown LA",
+      "provenance": {
+        "hispanic": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -809,7 +1126,12 @@
       "demographics": [
         "suburban"
       ],
-      "note": "North San Diego County"
+      "note": "North San Diego County",
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -821,7 +1143,15 @@
         "hispanic",
         "rural"
       ],
-      "note": "Border district"
+      "note": "Border district",
+      "provenance": {
+        "hispanic": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -832,7 +1162,12 @@
       "demographics": [
         "suburban"
       ],
-      "note": "Sugar Land"
+      "note": "Sugar Land",
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -844,7 +1179,15 @@
         "cuban",
         "suburban"
       ],
-      "note": "Miami-Dade"
+      "note": "Miami-Dade",
+      "provenance": {
+        "cuban": {
+          "source": "hand-assigned"
+        },
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -856,7 +1199,15 @@
         "suburban",
         "jewish"
       ],
-      "note": "Broward-Palm Beach"
+      "note": "Broward-Palm Beach",
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        },
+        "jewish": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -868,7 +1219,15 @@
         "suburban",
         "union"
       ],
-      "note": "Pittsburgh suburbs"
+      "note": "Pittsburgh suburbs",
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -881,7 +1240,18 @@
         "rural",
         "catholic"
       ],
-      "note": "Murtha country"
+      "note": "Murtha country",
+      "provenance": {
+        "union": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "catholic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -893,7 +1263,15 @@
         "black",
         "urban"
       ],
-      "note": "Cincinnati"
+      "note": "Cincinnati",
+      "provenance": {
+        "black": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -904,7 +1282,12 @@
       "demographics": [
         "suburban"
       ],
-      "note": "Columbus suburbs"
+      "note": "Columbus suburbs",
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -916,7 +1299,15 @@
         "suburban",
         "hispanic"
       ],
-      "note": "Northern Virginia"
+      "note": "Northern Virginia",
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        },
+        "hispanic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -928,7 +1319,15 @@
         "rural",
         "evangelical"
       ],
-      "note": "Fighting Ninth"
+      "note": "Fighting Ninth",
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "evangelical": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -940,7 +1339,15 @@
         "black",
         "rural"
       ],
-      "note": "Charlotte to Fayetteville"
+      "note": "Charlotte to Fayetteville",
+      "provenance": {
+        "black": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -952,7 +1359,15 @@
         "rural",
         "evangelical"
       ],
-      "note": "Western North Carolina"
+      "note": "Western North Carolina",
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "evangelical": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -964,7 +1379,15 @@
         "suburban",
         "hispanic"
       ],
-      "note": "Denver suburbs"
+      "note": "Denver suburbs",
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        },
+        "hispanic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -976,7 +1399,15 @@
         "suburban",
         "hispanic"
       ],
-      "note": "Las Vegas suburbs"
+      "note": "Las Vegas suburbs",
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        },
+        "hispanic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -988,7 +1419,15 @@
         "suburban",
         "hispanic"
       ],
-      "note": "Tucson"
+      "note": "Tucson",
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        },
+        "hispanic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1000,7 +1439,15 @@
         "hispanic",
         "urban"
       ],
-      "note": "Albuquerque"
+      "note": "Albuquerque",
+      "provenance": {
+        "hispanic": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1013,7 +1460,18 @@
         "rural",
         "catholic"
       ],
-      "note": "South Bend"
+      "note": "South Bend",
+      "provenance": {
+        "union": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "catholic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1025,7 +1483,15 @@
         "suburban",
         "jewish"
       ],
-      "note": "Oakland County"
+      "note": "Oakland County",
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        },
+        "jewish": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1038,7 +1504,18 @@
         "union",
         "catholic"
       ],
-      "note": "Green Bay"
+      "note": "Green Bay",
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        },
+        "catholic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1050,7 +1527,15 @@
         "suburban",
         "evangelical"
       ],
-      "note": "The Sixth"
+      "note": "The Sixth",
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        },
+        "evangelical": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1062,7 +1547,15 @@
         "farm",
         "suburban"
       ],
-      "note": "Des Moines"
+      "note": "Des Moines",
+      "provenance": {
+        "farm": {
+          "source": "hand-assigned"
+        },
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1075,7 +1568,18 @@
         "rural",
         "evangelical"
       ],
-      "note": "Northern Missouri"
+      "note": "Northern Missouri",
+      "provenance": {
+        "farm": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "evangelical": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1087,7 +1591,15 @@
         "farm",
         "rural"
       ],
-      "note": "Eastern Kansas"
+      "note": "Eastern Kansas",
+      "provenance": {
+        "farm": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1099,7 +1611,15 @@
         "black",
         "suburban"
       ],
-      "note": "DeKalb County"
+      "note": "DeKalb County",
+      "provenance": {
+        "black": {
+          "source": "hand-assigned"
+        },
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1111,7 +1631,15 @@
         "rural",
         "evangelical"
       ],
-      "note": "Montgomery"
+      "note": "Montgomery",
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "evangelical": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1124,7 +1652,18 @@
         "farm",
         "evangelical"
       ],
-      "note": "North Mississippi"
+      "note": "North Mississippi",
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "farm": {
+          "source": "hand-assigned"
+        },
+        "evangelical": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1136,7 +1675,15 @@
         "suburban",
         "evangelical"
       ],
-      "note": "Baton Rouge"
+      "note": "Baton Rouge",
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        },
+        "evangelical": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1147,7 +1694,12 @@
       "demographics": [
         "suburban"
       ],
-      "note": "Lowcountry"
+      "note": "Lowcountry",
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1159,7 +1711,15 @@
         "urban",
         "union"
       ],
-      "note": "Louisville"
+      "note": "Louisville",
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1171,7 +1731,15 @@
         "union",
         "rural"
       ],
-      "note": "Northern West Virginia"
+      "note": "Northern West Virginia",
+      "provenance": {
+        "union": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1183,7 +1751,15 @@
         "suburban",
         "rural"
       ],
-      "note": "Manchester"
+      "note": "Manchester",
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1195,7 +1771,15 @@
         "rural",
         "suburban"
       ],
-      "note": "Eastern Shore"
+      "note": "Eastern Shore",
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1206,7 +1790,12 @@
       "demographics": [
         "suburban"
       ],
-      "note": "Central Jersey"
+      "note": "Central Jersey",
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1217,7 +1806,12 @@
       "demographics": [
         "suburban"
       ],
-      "note": "Fairfield County"
+      "note": "Fairfield County",
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1228,7 +1822,12 @@
       "demographics": [
         "suburban"
       ],
-      "note": "Eastside"
+      "note": "Eastside",
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -1242,7 +1841,12 @@
       ],
       "belief": "Lost the primary, won the general",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "jewish": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -1265,7 +1869,12 @@
           "pips": 2,
           "note": "an ideological validator with a national following"
         }
-      ]
+      ],
+      "provenance": {
+        "jewish": {
+          "source": "hand-assigned"
+        }
+      }
     }
   ]
 }

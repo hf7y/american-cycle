@@ -114,6 +114,36 @@ test('identityWeights keys are live tags the card actually carries', () => {
   }
 });
 
+// ---------------------------------------------------------- provenance
+
+// #164 part 2: a tag with nowhere to record its source is the defect the
+// issue opened on. Every tag on every card needs an entry, hand-assigned
+// or not, or a future sourced/hand-assigned mix has no way to tell them
+// apart.
+test('every identity and demographic tag carries provenance with a source', () => {
+  for (const { file, pack } of packs) {
+    for (const c of pack.cards) {
+      const tags = c.kind === 'candidate' ? c.identities : c.demographics;
+      for (const t of tags) {
+        const p = c.provenance?.[t];
+        assert.ok(p && p.source, `${file}: ${c.id} carries "${t}" with no provenance`);
+      }
+    }
+  }
+});
+
+test('provenance names no tag the card does not carry', () => {
+  for (const { file, pack } of packs) {
+    for (const c of pack.cards) {
+      if (!c.provenance) continue;
+      const tags = c.kind === 'candidate' ? c.identities : c.demographics;
+      for (const t of Object.keys(c.provenance)) {
+        assert.ok(tags.includes(t as never), `${file}: ${c.id} has provenance for "${t}" but does not carry it`);
+      }
+    }
+  }
+});
+
 // ---------------------------------------------------------- stale prose
 
 // #89: pack notes sold a printed `heterodox` tag two commits after it was

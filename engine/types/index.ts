@@ -14,6 +14,15 @@ export type IdentityTag =
  *  names them here (hf7y/american-cycle#153). */
 export type EffectType = 'extremist' | 'may_endorse' | 'conditional';
 
+/** #164 part 2: a tag needs somewhere to say where it came from before any
+ *  sourcing work has anywhere to write to. `vintage` is the underlying
+ *  data's own date (a census year, a returns cycle) -- absent when none
+ *  applies, as it does for every tag today. */
+export interface TagProvenance {
+  source: string;
+  vintage?: string;
+}
+
 export interface CardEffect {
   type: EffectType;
   pips?: number;
@@ -30,6 +39,10 @@ export interface CandidateCard {
   /** printed per card, NOT global -- models the decline of localism */
   homeStateBonus: number;
   identities: IdentityTag[];
+  /** #164 part 2: where each of `identities` came from. Keyed by tag rather
+   *  than parallel to it, since a future sourced/hand-assigned mix will not
+   *  keep both arrays index-aligned. */
+  provenance?: Partial<Record<IdentityTag, TagProvenance>>;
   /** Signed per-tag override of resolution.identityBonus (#41). A tag absent
    *  here still matches at the flat default -- this is what lets one card
    *  price `business` as an asset and another price it as a liability,
@@ -52,6 +65,7 @@ export interface DistrictCard {
   number: number;
   era: number;
   demographics: IdentityTag[];
+  provenance?: Partial<Record<IdentityTag, TagProvenance>>;
   note?: string;
 }
 

@@ -16,7 +16,15 @@
       ],
       "belief": "Born-again peanut farmer; runs as an outsider",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "evangelical": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -30,7 +38,12 @@
       ],
       "belief": "Labor liberal",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -44,7 +57,12 @@
       ],
       "belief": "The Happy Warrior",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -58,7 +76,12 @@
       ],
       "belief": "Hawk abroad, liberal at home",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -72,7 +95,12 @@
       ],
       "belief": "Western conservationist",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -91,7 +119,15 @@
         {
           "type": "extremist"
         }
-      ]
+      ],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "evangelical": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -105,7 +141,12 @@
       ],
       "belief": "Ran the intelligence hearings",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -120,7 +161,15 @@
       ],
       "belief": "Wrote two amendments",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "farm": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -134,7 +183,12 @@
       ],
       "belief": "Clean air and water",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "catholic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -148,7 +202,12 @@
       ],
       "belief": "Master of the rules",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -168,7 +227,12 @@
           "pips": 2,
           "note": "an ideological validator with a national following"
         }
-      ]
+      ],
+      "provenance": {
+        "catholic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -184,7 +248,18 @@
       ],
       "belief": "All politics is local",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "catholic": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -222,7 +297,12 @@
       ],
       "belief": "Social scientist in the Senate",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "catholic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -236,7 +316,12 @@
       ],
       "belief": "Era of limits",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "catholic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -250,7 +335,12 @@
       ],
       "belief": "Tobacco and coal",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -264,7 +354,12 @@
       ],
       "belief": "Country lawyer",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -278,7 +373,12 @@
       ],
       "belief": "Defense conservative",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -292,7 +392,12 @@
       ],
       "belief": "Armed Services chairman",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -311,7 +416,15 @@
         {
           "type": "extremist"
         }
-      ]
+      ],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "farm": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -325,7 +438,12 @@
       ],
       "belief": "Wrote the tax code",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -351,7 +469,12 @@
       ],
       "belief": "Chicago convention scold",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "jewish": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -366,7 +489,15 @@
       ],
       "belief": "My faith in the Constitution is whole",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "black": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -382,7 +513,18 @@
       ],
       "belief": "From the movement to the House",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "black": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "evangelical": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -401,7 +543,15 @@
         {
           "type": "extremist"
         }
-      ]
+      ],
+      "provenance": {
+        "black": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -416,7 +566,15 @@
       ],
       "belief": "Unbought and unbossed",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "black": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -431,7 +589,15 @@
       ],
       "belief": "Chaired the impeachment inquiry",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "catholic": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -446,7 +612,15 @@
       ],
       "belief": "Dropped from a ticket",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "catholic": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -473,7 +647,15 @@
       ],
       "belief": "Prosecutor turned senator",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "catholic": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -487,7 +669,12 @@
       ],
       "belief": "Rode the train home",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "catholic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -502,7 +689,15 @@
       ],
       "belief": "Walked the state",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "farm": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -517,7 +712,15 @@
       ],
       "belief": "Liberal in a farm state",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "farm": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -543,7 +746,12 @@
       ],
       "belief": "The Golden Fleece Award",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "farm": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -557,7 +765,12 @@
       ],
       "belief": "Hunger in America",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -571,7 +784,12 @@
       ],
       "belief": "Walkin' Lawton",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -601,7 +819,12 @@
         {
           "type": "extremist"
         }
-      ]
+      ],
+      "provenance": {
+        "evangelical": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -616,7 +839,15 @@
       ],
       "belief": "Prairie conservative",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "farm": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -667,7 +898,15 @@
       ],
       "belief": "Liberal Republican",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "jewish": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -682,7 +921,15 @@
       ],
       "belief": "First elected since Reconstruction",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "black": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -700,7 +947,12 @@
         {
           "type": "extremist"
         }
-      ]
+      ],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -731,7 +983,15 @@
         {
           "type": "extremist"
         }
-      ]
+      ],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "evangelical": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -750,7 +1010,15 @@
         {
           "type": "extremist"
         }
-      ]
+      ],
+      "provenance": {
+        "evangelical": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -812,7 +1080,12 @@
       ],
       "belief": "Antiwar Republican",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "evangelical": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -838,7 +1111,12 @@
       ],
       "belief": "Liberal on civil rights",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -853,7 +1131,15 @@
       ],
       "belief": "Budget hawk",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "catholic": {
+          "source": "hand-assigned"
+        },
+        "hispanic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -867,7 +1153,12 @@
       ],
       "belief": "Reagan's best friend",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "catholic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -885,7 +1176,12 @@
         {
           "type": "extremist"
         }
-      ]
+      ],
+      "provenance": {
+        "catholic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -899,7 +1195,12 @@
       ],
       "belief": "Ordained priest",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "evangelical": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -913,7 +1214,12 @@
       ],
       "belief": "Labor law opponent",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "evangelical": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -976,7 +1282,15 @@
       ],
       "belief": "Wheat and the farm bill",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "farm": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -990,7 +1304,12 @@
       ],
       "belief": "Civil rights Republican",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -1004,7 +1323,12 @@
       ],
       "belief": "Education and the environment",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1016,7 +1340,15 @@
         "urban",
         "jewish"
       ],
-      "note": "Brooklyn"
+      "note": "Brooklyn",
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "jewish": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1028,7 +1360,15 @@
         "urban",
         "black"
       ],
-      "note": "Manhattan"
+      "note": "Manhattan",
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "black": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1040,7 +1380,15 @@
         "rural",
         "catholic"
       ],
-      "note": "Upstate"
+      "note": "Upstate",
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "catholic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1053,7 +1401,18 @@
         "catholic",
         "union"
       ],
-      "note": "Boston"
+      "note": "Boston",
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "catholic": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1065,7 +1424,15 @@
         "union",
         "catholic"
       ],
-      "note": "Springfield"
+      "note": "Springfield",
+      "provenance": {
+        "union": {
+          "source": "hand-assigned"
+        },
+        "catholic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1077,7 +1444,15 @@
         "urban",
         "black"
       ],
-      "note": "South Side"
+      "note": "South Side",
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "black": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1090,7 +1465,18 @@
         "union",
         "catholic"
       ],
-      "note": "Northwest Chicago"
+      "note": "Northwest Chicago",
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        },
+        "catholic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1102,7 +1488,15 @@
         "rural",
         "farm"
       ],
-      "note": "Downstate"
+      "note": "Downstate",
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "farm": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1113,7 +1507,12 @@
       "demographics": [
         "urban"
       ],
-      "note": "San Francisco"
+      "note": "San Francisco",
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1126,7 +1525,18 @@
         "black",
         "union"
       ],
-      "note": "Oakland"
+      "note": "Oakland",
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "black": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1137,7 +1547,12 @@
       "demographics": [
         "suburban"
       ],
-      "note": "Orange County"
+      "note": "Orange County",
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1149,7 +1564,15 @@
         "hispanic",
         "urban"
       ],
-      "note": "East LA"
+      "note": "East LA",
+      "provenance": {
+        "hispanic": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1161,7 +1584,15 @@
         "black",
         "urban"
       ],
-      "note": "Houston"
+      "note": "Houston",
+      "provenance": {
+        "black": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1173,7 +1604,15 @@
         "hispanic",
         "rural"
       ],
-      "note": "Rio Grande Valley"
+      "note": "Rio Grande Valley",
+      "provenance": {
+        "hispanic": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1184,7 +1623,12 @@
       "demographics": [
         "suburban"
       ],
-      "note": "West Houston"
+      "note": "West Houston",
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1197,7 +1641,18 @@
         "black",
         "union"
       ],
-      "note": "Detroit"
+      "note": "Detroit",
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "black": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1208,7 +1663,12 @@
       "demographics": [
         "union"
       ],
-      "note": "Grand Rapids"
+      "note": "Grand Rapids",
+      "provenance": {
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1221,7 +1681,18 @@
         "black",
         "union"
       ],
-      "note": "Philadelphia"
+      "note": "Philadelphia",
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "black": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1233,7 +1704,15 @@
         "union",
         "catholic"
       ],
-      "note": "Pittsburgh"
+      "note": "Pittsburgh",
+      "provenance": {
+        "union": {
+          "source": "hand-assigned"
+        },
+        "catholic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1245,7 +1724,15 @@
         "rural",
         "evangelical"
       ],
-      "note": "Lancaster"
+      "note": "Lancaster",
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "evangelical": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1258,7 +1745,18 @@
         "black",
         "union"
       ],
-      "note": "Cleveland"
+      "note": "Cleveland",
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "black": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1270,7 +1768,15 @@
         "urban",
         "catholic"
       ],
-      "note": "Cincinnati"
+      "note": "Cincinnati",
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "catholic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1282,7 +1788,15 @@
         "rural",
         "union"
       ],
-      "note": "Appalachian Ohio"
+      "note": "Appalachian Ohio",
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1294,7 +1808,15 @@
         "black",
         "urban"
       ],
-      "note": "Atlanta"
+      "note": "Atlanta",
+      "provenance": {
+        "black": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1307,7 +1829,18 @@
         "evangelical",
         "farm"
       ],
-      "note": "South Georgia"
+      "note": "South Georgia",
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "evangelical": {
+          "source": "hand-assigned"
+        },
+        "farm": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1319,7 +1852,15 @@
         "cuban",
         "urban"
       ],
-      "note": "Miami"
+      "note": "Miami",
+      "provenance": {
+        "cuban": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1330,7 +1871,12 @@
       "demographics": [
         "suburban"
       ],
-      "note": "Tampa"
+      "note": "Tampa",
+      "provenance": {
+        "suburban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1342,7 +1888,15 @@
         "black",
         "rural"
       ],
-      "note": "Black Belt"
+      "note": "Black Belt",
+      "provenance": {
+        "black": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1355,7 +1909,18 @@
         "rural",
         "farm"
       ],
-      "note": "Delta"
+      "note": "Delta",
+      "provenance": {
+        "black": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "farm": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1368,7 +1933,18 @@
         "urban",
         "catholic"
       ],
-      "note": "New Orleans"
+      "note": "New Orleans",
+      "provenance": {
+        "black": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "catholic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1380,7 +1956,15 @@
         "urban",
         "union"
       ],
-      "note": "Minneapolis"
+      "note": "Minneapolis",
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1392,7 +1976,15 @@
         "farm",
         "rural"
       ],
-      "note": "Western Minnesota"
+      "note": "Western Minnesota",
+      "provenance": {
+        "farm": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1404,7 +1996,15 @@
         "farm",
         "rural"
       ],
-      "note": "Des Moines"
+      "note": "Des Moines",
+      "provenance": {
+        "farm": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1416,7 +2016,15 @@
         "farm",
         "rural"
       ],
-      "note": "Big First"
+      "note": "Big First",
+      "provenance": {
+        "farm": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1428,7 +2036,15 @@
         "union",
         "rural"
       ],
-      "note": "Coalfields"
+      "note": "Coalfields",
+      "provenance": {
+        "union": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1440,7 +2056,15 @@
         "rural",
         "evangelical"
       ],
-      "note": "Eastern Kentucky"
+      "note": "Eastern Kentucky",
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "evangelical": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1452,7 +2076,15 @@
         "hispanic",
         "rural"
       ],
-      "note": "Tucson"
+      "note": "Tucson",
+      "provenance": {
+        "hispanic": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1464,7 +2096,15 @@
         "urban",
         "union"
       ],
-      "note": "Seattle"
+      "note": "Seattle",
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1476,7 +2116,15 @@
         "urban",
         "black"
       ],
-      "note": "Newark"
+      "note": "Newark",
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "black": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1489,7 +2137,18 @@
         "catholic",
         "union"
       ],
-      "note": "New Haven"
+      "note": "New Haven",
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "catholic": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1501,7 +2160,15 @@
         "evangelical",
         "rural"
       ],
-      "note": "Northern Utah"
+      "note": "Northern Utah",
+      "provenance": {
+        "evangelical": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -1513,7 +2180,15 @@
         "black",
         "rural"
       ],
-      "note": "Lowcountry"
+      "note": "Lowcountry",
+      "provenance": {
+        "black": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -1527,7 +2202,12 @@
       ],
       "belief": "Left the party and held the seat",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -1545,7 +2225,12 @@
         {
           "type": "extremist"
         }
-      ]
+      ],
+      "provenance": {
+        "catholic": {
+          "source": "hand-assigned"
+        }
+      }
     }
   ]
 }

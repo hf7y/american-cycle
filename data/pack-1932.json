@@ -15,7 +15,12 @@
       ],
       "belief": "Bold, persistent experimentation",
       "era": 1932,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -30,7 +35,15 @@
       ],
       "belief": "Not worth a bucket of warm spit",
       "era": 1932,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "farm": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -45,7 +58,15 @@
       ],
       "belief": "The Happy Warrior of the sidewalks",
       "era": 1932,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "catholic": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -59,7 +80,12 @@
       ],
       "belief": "Free trade above all",
       "era": 1932,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -86,7 +112,15 @@
           },
           "note": "every man a king: rural bonus"
         }
-      ]
+      ],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "evangelical": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -101,7 +135,15 @@
       ],
       "belief": "Wrote the labor act",
       "era": 1932,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -115,7 +157,12 @@
       ],
       "belief": "Hated the New Deal from the right",
       "era": 1932,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -130,7 +177,15 @@
       ],
       "belief": "Ran Finance for the South",
       "era": 1932,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "farm": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -144,7 +199,12 @@
       ],
       "belief": "Majority leader from a one-party state",
       "era": 1932,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -159,7 +219,15 @@
       ],
       "belief": "Rural electrification",
       "era": 1932,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "farm": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -173,7 +241,12 @@
       ],
       "belief": "Pay-as-you-go conservatism",
       "era": 1932,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -188,7 +261,15 @@
       ],
       "belief": "Progressive, then isolationist",
       "era": 1932,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -202,7 +283,12 @@
       ],
       "belief": "The Veep in waiting",
       "era": 1932,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -226,7 +312,15 @@
           },
           "note": "the wages act: union bonus"
         }
-      ]
+      ],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "evangelical": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -245,7 +339,15 @@
         {
           "type": "extremist"
         }
-      ]
+      ],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "farm": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -259,7 +361,12 @@
       ],
       "belief": "Assistant president",
       "era": 1932,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -286,7 +393,15 @@
       ],
       "belief": "Counted every county",
       "era": 1932,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "catholic": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -300,7 +415,12 @@
       ],
       "belief": "First woman in a cabinet",
       "era": 1932,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -316,7 +436,18 @@
       ],
       "belief": "Built the Chicago machine",
       "era": 1932,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "catholic": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -343,7 +474,15 @@
       ],
       "belief": "First vice president of Native descent",
       "era": 1932,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "farm": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -357,7 +496,12 @@
       ],
       "belief": "The Lion of Idaho, and an isolationist",
       "era": 1932,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -381,7 +525,15 @@
           },
           "note": "the TVA: farm bonus"
         }
-      ]
+      ],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "farm": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -395,7 +547,12 @@
       ],
       "belief": "Progressive and isolationist",
       "era": 1932,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -409,7 +566,12 @@
       ],
       "belief": "Progressive by inheritance",
       "era": 1932,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -436,7 +598,15 @@
       ],
       "belief": "Farm relief twice vetoed",
       "era": 1932,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "farm": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -452,7 +622,18 @@
       ],
       "belief": "The Little Flower",
       "era": 1932,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "catholic": {
+          "source": "hand-assigned"
+        },
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -467,7 +648,15 @@
       ],
       "belief": "Carried two states",
       "era": 1932,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "farm": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -493,7 +682,12 @@
       ],
       "belief": "Half of the tariff",
       "era": 1932,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "evangelical": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -523,7 +717,12 @@
       ],
       "belief": "Dry to the last",
       "era": 1932,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -561,7 +760,12 @@
       ],
       "belief": "Old guard floor leader",
       "era": 1932,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "candidate",
@@ -575,7 +779,12 @@
       ],
       "belief": "Conservation Republican",
       "era": 1932,
-      "effects": []
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -588,7 +797,18 @@
         "catholic",
         "union"
       ],
-      "note": "Lower East Side"
+      "note": "Lower East Side",
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "catholic": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -600,7 +820,15 @@
         "urban",
         "jewish"
       ],
-      "note": "Harlem and up"
+      "note": "Harlem and up",
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "jewish": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -612,7 +840,15 @@
         "rural",
         "farm"
       ],
-      "note": "Upstate dairy"
+      "note": "Upstate dairy",
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "farm": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -625,7 +861,18 @@
         "union",
         "catholic"
       ],
-      "note": "Back of the Yards"
+      "note": "Back of the Yards",
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        },
+        "catholic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -637,7 +884,15 @@
         "urban",
         "black"
       ],
-      "note": "The Black Belt, newly Democratic"
+      "note": "The Black Belt, newly Democratic",
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "black": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -649,7 +904,15 @@
         "farm",
         "rural"
       ],
-      "note": "Downstate"
+      "note": "Downstate",
+      "provenance": {
+        "farm": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -662,7 +925,18 @@
         "union",
         "catholic"
       ],
-      "note": "Philadelphia wards"
+      "note": "Philadelphia wards",
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        },
+        "catholic": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -674,7 +948,15 @@
         "union",
         "rural"
       ],
-      "note": "Anthracite country"
+      "note": "Anthracite country",
+      "provenance": {
+        "union": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -687,7 +969,18 @@
         "catholic",
         "union"
       ],
-      "note": "South Boston"
+      "note": "South Boston",
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "catholic": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -699,7 +992,15 @@
         "urban",
         "union"
       ],
-      "note": "Detroit, before the UAW"
+      "note": "Detroit, before the UAW",
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -712,7 +1013,18 @@
         "union",
         "black"
       ],
-      "note": "Cleveland"
+      "note": "Cleveland",
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        },
+        "black": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -725,7 +1037,18 @@
         "catholic",
         "union"
       ],
-      "note": "Pendergast's Kansas City"
+      "note": "Pendergast's Kansas City",
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "catholic": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -737,7 +1060,15 @@
         "rural",
         "farm"
       ],
-      "note": "Rayburn's Fourth"
+      "note": "Rayburn's Fourth",
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "farm": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -750,7 +1081,18 @@
         "rural",
         "farm"
       ],
-      "note": "The Valley"
+      "note": "The Valley",
+      "provenance": {
+        "hispanic": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "farm": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -763,7 +1105,18 @@
         "evangelical",
         "farm"
       ],
-      "note": "Long's parishes"
+      "note": "Long's parishes",
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "evangelical": {
+          "source": "hand-assigned"
+        },
+        "farm": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -776,7 +1129,18 @@
         "rural",
         "farm"
       ],
-      "note": "The Delta"
+      "note": "The Delta",
+      "provenance": {
+        "black": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "farm": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -788,7 +1152,15 @@
         "rural",
         "farm"
       ],
-      "note": "North Alabama hill country"
+      "note": "North Alabama hill country",
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "farm": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -800,7 +1172,15 @@
         "urban",
         "black"
       ],
-      "note": "Atlanta"
+      "note": "Atlanta",
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        },
+        "black": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -812,7 +1192,15 @@
         "rural",
         "farm"
       ],
-      "note": "The Byrd organisation"
+      "note": "The Byrd organisation",
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "farm": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -824,7 +1212,15 @@
         "rural",
         "union"
       ],
-      "note": "The Tennessee Valley"
+      "note": "The Tennessee Valley",
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -836,7 +1232,15 @@
         "rural",
         "union"
       ],
-      "note": "Harlan County"
+      "note": "Harlan County",
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -848,7 +1252,15 @@
         "union",
         "rural"
       ],
-      "note": "The coalfields"
+      "note": "The coalfields",
+      "provenance": {
+        "union": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -860,7 +1272,15 @@
         "farm",
         "rural"
       ],
-      "note": "Wheat, and dust"
+      "note": "Wheat, and dust",
+      "provenance": {
+        "farm": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -872,7 +1292,15 @@
         "farm",
         "rural"
       ],
-      "note": "The Platte"
+      "note": "The Platte",
+      "provenance": {
+        "farm": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -884,7 +1312,15 @@
         "farm",
         "rural"
       ],
-      "note": "Farm Holiday country"
+      "note": "Farm Holiday country",
+      "provenance": {
+        "farm": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -897,7 +1333,18 @@
         "rural",
         "union"
       ],
-      "note": "Farmer-Labor"
+      "note": "Farmer-Labor",
+      "provenance": {
+        "farm": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        },
+        "union": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -909,7 +1356,15 @@
         "farm",
         "rural"
       ],
-      "note": "La Follette's base"
+      "note": "La Follette's base",
+      "provenance": {
+        "farm": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -921,7 +1376,15 @@
         "farm",
         "rural"
       ],
-      "note": "Nonpartisan League"
+      "note": "Nonpartisan League",
+      "provenance": {
+        "farm": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -933,7 +1396,15 @@
         "union",
         "rural"
       ],
-      "note": "Butte and the mines"
+      "note": "Butte and the mines",
+      "provenance": {
+        "union": {
+          "source": "hand-assigned"
+        },
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     },
     {
       "kind": "district",
@@ -944,7 +1415,12 @@
       "demographics": [
         "urban"
       ],
-      "note": "Los Angeles"
+      "note": "Los Angeles",
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     }
   ]
 }
