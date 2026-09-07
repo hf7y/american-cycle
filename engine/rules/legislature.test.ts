@@ -147,3 +147,15 @@ test('hf7y/american-cycle#83: no majority party means no candidates and no autho
   assert.deepEqual(authorCandidates([]), []);
   assert.equal(resolveAuthorVote([], [], undefined), undefined);
 });
+
+test('hf7y/american-cycle#86: a three-way plurality with nobody over half is also "no pen to win"', () => {
+  // 4 D, 4 R, 2 I -- D is the plurality leader (majorityParty picks a
+  // winner on every held seat, ties included) but holds 4 of 10, not a
+  // true majority. congressionalPropose's fallback to a convention (#86)
+  // reads this function as "is there a House majority", so it must say no
+  // here, not hand D a pen it was never elected to hold outright.
+  const house: Party[] = [...Array(4).fill('D'), ...Array(4).fill('R'), ...Array(2).fill('I')];
+  const seats = bench(house, []);
+  assert.equal(majorityParty(seats, 'representative'), 'D', 'plurality leader is still named');
+  assert.deepEqual(authorCandidates(seats), [], 'but a 4-of-10 plurality is not a pen to win');
+});
