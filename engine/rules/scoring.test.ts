@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { boardScores, type BoardView, type ScoringConfig } from './scoring.ts';
 import type { EnactedBill, Seat } from '../types/index.ts';
+import type { Lean } from './lean.ts';
 
 const cfg: ScoringConfig = {
   billOnBooks: 3, leanCounter: 1,
@@ -14,12 +15,43 @@ const empty = (n = 2): BoardView => ({
   identitiesOf: () => undefined,
 });
 
-test('a repealed bill scores zero — the epilogue rule, not an exception to it', () => {
+test('authorship credit pays once at passage and repeal does not claw it back (#111)', () => {
   const bills: EnactedBill[] = [
     { id: 'b1', year: 1980, g: 3, author: 0, tags: ['union'] },
     { id: 'b2', year: 1982, g: 3, author: 0, tags: ['farm'], repealedIn: 1984 },
   ];
-  assert.deepEqual(boardScores(cfg, { ...empty(), bills }), [3, 0]);
+  assert.deepEqual(boardScores(cfg, { ...empty(), bills }), [6, 0], 'both bills pay their author, repealed or not');
+});
+
+test('#111: an opposite-fit bill nets the board effect to zero, but does not claw back either author’s credit', () => {
+  // Mirrors engine/game.test.ts's #78 two-tick case: player 1's bill fully
+  // cancels player 0's push on OH via the ORDINARY passage path, no repeal
+  // object involved. The board effect washes out; authorship does not.
+  const bills: EnactedBill[] = [
+    { id: 'b1', year: 1977, g: 3, author: 0, tags: ['union'] },
+    { id: 'b2', year: 1979, g: 3, author: 1, tags: ['union'] },
+  ];
+  const lean: Lean = { OH: 0 };
+  const s = boardScores(cfg, { ...empty(), bills, lean });
+  assert.deepEqual(s, [3, 3], 'both authors keep their billOnBooks credit even though OH nets to a wash');
+});
+
+test('#111 acceptance: forty bills, all countered, still reads as a wasted career -- through leanCounter, not billOnBooks', () => {
+  // #111's acceptance item 4, literally: a career of forty bills every one of
+  // which got countered should read as a wasted career. Under the new rule it
+  // does NOT read as zero -- the author keeps a flat credit for having passed
+  // them -- but the durable board legacy (leanCounter) a legislating career is
+  // actually FOR is gone, which is the comparison this test makes explicit.
+  const bills: EnactedBill[] = Array.from({ length: 40 }, (_, i) => (
+    { id: `b${i}`, year: 1900 + i, g: 3, author: 0, tags: ['union'] }
+  ));
+  const seats: Seat[] = [{ office: 'senator', state: 'OH', slot: 1,
+    holder: { cardId: 'x', player: 0, party: 'D', since: 1900 } }];
+  const stood = boardScores(cfg, { ...empty(), bills, seats, lean: { OH: -8 } });
+  const countered = boardScores(cfg, { ...empty(), bills, seats, lean: { OH: 0 } });
+  assert.equal(stood[0] - countered[0], 8, 'losing the board effect costs exactly the lean counters it carried, and nothing else');
+  assert.equal(countered[0], 40 * cfg.billOnBooks + cfg.office.senator,
+    'the forty bills still pay their author in full -- #111 keeps authorship, only the board legacy is gone');
 });
 
 test('an unseated politician scores zero, so the score can FALL', () => {

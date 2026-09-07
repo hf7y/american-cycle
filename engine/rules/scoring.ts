@@ -7,8 +7,13 @@
  *  which is what made the second half of every game an arithmetically
  *  irreversible lead running out the clock.
  *
- *  It also makes "I passed forty bills and they were all repealed" read
- *  correctly, as a wasted career.
+ *  `billOnBooks` is the one deliberate exception, ruled 2026-09-06 on
+ *  hf7y/american-cycle#111: authorship credit is paid once, the year a bill
+ *  passes, and repeal does not claw it back — a member runs on what they
+ *  passed, not on the statute's continued existence. "I passed forty bills
+ *  and they were all repealed" still reads as a wasted career, but through
+ *  `leanCounter` going to zero as the board reverts, not through
+ *  `billOnBooks` — the author keeps the credit for having passed them.
  *
  *  Consequence worth stating: seats need no separate scoring guard. Under
  *  board scoring a player who wins by holding everything has won
@@ -19,7 +24,8 @@ import type { Amendment, Card, DistrictCard, EnactedBill, IdentityTag, Office, P
 import type { Lean } from './lean.ts';
 
 export interface ScoringConfig {
-  /** bills you authored that are still on the books */
+  /** bills you authored, paid once the year they pass — repeal does not
+   *  retract it (hf7y/american-cycle#111) */
   billOnBooks: number;
   /** per lean counter, in states you hold the leading bloc of the leaning party */
   leanCounter: number;
@@ -61,10 +67,11 @@ function leanOwner(b: BoardView, state: string, party: Party): number | undefine
 export function boardScores(cfg: ScoringConfig, b: BoardView): number[] {
   const out = b.players.map(() => 0);
 
-  // Anything repealed, reversed or unseated scores zero — which is the rule,
-  // not an exception to it.
+  // Authorship credit is an event, not a standing condition: it pays once,
+  // at passage, and repeal never retracts it (#111). Everything else below
+  // stays live — reversed or unseated scores zero, which is still the rule.
   for (const bill of b.bills) {
-    if (bill.repealedIn === undefined && out[bill.author] !== undefined) out[bill.author] += cfg.billOnBooks;
+    if (out[bill.author] !== undefined) out[bill.author] += cfg.billOnBooks;
   }
 
   for (const s of b.seats) {
