@@ -10,7 +10,7 @@
  */
 import type {
   Amendment, CandidateCard, Card, DistrictCard, EnactedBill, IdentityTag,
-  Office, Party, RaceEvent, Seat,
+  Modifier, Office, Party, RaceEvent, Seat,
 } from './types/index.ts';
 import { RNG } from './rules/rng.ts';
 import { Wave } from './rules/resolution.ts';
@@ -1302,6 +1302,27 @@ export class Game {
       presidentialWinner,
       shock: this.shockPips,
     };
+  }
+
+  /** #161's hover surface: previews `buildModifiers`'s stack before a
+   *  declaration is made, missing only `endorsements`/`bruisingPrimary` --
+   *  those depend on what other players do this cycle. Reads general-round
+   *  rates, since whether a primary even fires depends on who else declares
+   *  here before the turn ends. */
+  previewModifiers(player: number, card: CandidateCard, office: Office, state: string, slot?: number,
+                    district?: DistrictCard, districts?: DistrictCard[]): Modifier[] {
+    const ctx = this.raceContext(office, state, slot);
+    const seat = this.seatFor(office, state, slot);
+    const d: Declaration = {
+      player, card, office, state, slot, district, districts,
+      incumbent: !!seat && seat.holder?.cardId === card.id,
+    };
+    this.readCounters(d);
+    this.readPosition(d);
+    const held = this.seats.find((st) => st.holder?.cardId === card.id
+      && !(st.office === office && st.state === state && st.slot === slot));
+    d.heldOffice = held?.office;
+    return buildModifiers(d, ctx, 'general', this.cfg.resolution, this.cfg.national, this.cfg.primaryGeneral);
   }
 
   /** Nomination is a national primary, so only two cards reach the general

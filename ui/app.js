@@ -209,20 +209,28 @@ function racesInState(state) {
   return S.eligibleFor(S.sel).filter((r) => r.state === state && !taken.has(uiRaceKey(r)));
 }
 
+// The district fit `buildModifiers` would price for race `r` -- shared by
+// the real declaration and the hover preview, so neither can drift from
+// the other.
+function districtFitFor(r) {
+  const me = G.players[S.human];
+  const statewide = G.cfg.game.statewideFitSums && (r.office === 'senator' || r.office === 'governor')
+    ? G.players.flatMap((p) => p.districts).filter((d) => d.state === r.state)
+    : undefined;
+  const district = r.office === 'representative'
+    ? G.players.flatMap((p) => p.districts).find((d) => d.state === r.state && d.number === r.slot)
+    : statewide ? undefined : me.districts.find((d) => d.state === r.state);
+  return { district, districts: statewide };
+}
+
 function pickRace(state) {
   if (!S.sel) { ticker('Choose a candidate first.'); return; }
   const rs = racesInState(state);
   if (!rs.length) return;
   const card = S.sel;
   const choose = (r) => {
-    const me = G.players[S.human];
-    const statewide = G.cfg.game.statewideFitSums && (r.office === 'senator' || r.office === 'governor')
-      ? G.players.flatMap((p) => p.districts).filter((d) => d.state === r.state)
-      : undefined;
-    const district = r.office === 'representative'
-      ? G.players.flatMap((p) => p.districts).find((d) => d.state === r.state && d.number === r.slot)
-      : statewide ? undefined : me.districts.find((d) => d.state === r.state);
-    S.picks.push({ player:S.human, card, district, districts:statewide,
+    const { district, districts } = districtFitFor(r);
+    S.picks.push({ player:S.human, card, district, districts,
                    office:r.office, state:r.state, slot:r.slot });
     S.sel = null; closeModal(); render();
   };
@@ -234,6 +242,35 @@ function pickRace(state) {
     $('rr').appendChild(b);
   }
 }
+
+// ---- race preview -----------------------------------------------------------
+// #161 item 1: the withdrawal stack's arithmetic, one hover before a
+// declaration rather than only after, in the 3.6% of races that ever open
+// a withdrawal window.
+function showRacePreview(state, atEl) {
+  const rs = racesInState(state);
+  if (!rs.length) return;
+  const card = S.sel;
+  const sections = rs.map((r) => {
+    const { district, districts } = districtFitFor(r);
+    const mods = G.previewModifiers(S.human, card, r.office, r.state, r.slot, district, districts);
+    const total = mods.reduce((n, m) => n + m.pips, 0);
+    const rows = mods.map((m) =>
+      `<tr><td>${m.source}</td><td class="${m.pips>=0?'pos':'neg'}">${m.pips>=0?'+':''}${m.pips}</td></tr>`).join('');
+    const label = `${OFFICE_LABEL[r.office]}${r.slot && r.office==='representative' ? ' '+r.slot : ''}`;
+    return `<h4>${label}</h4><table class="stack">${rows || '<tr><td>no modifiers</td><td>0</td></tr>'}
+      <tr class="tot"><td>if it reaches the general</td><td>${total>=0?'+':''}${total}</td></tr></table>`;
+  });
+  const p = $('racePreview');
+  p.innerHTML = sections.join('<div style="height:6px"></div>');
+  p.classList.add('on');
+  const box = atEl.getBoundingClientRect();
+  const pw = p.offsetWidth || 220;
+  const left = Math.min(window.innerWidth - pw - 8, box.right + 8);
+  p.style.left = `${Math.max(8, left)}px`;
+  p.style.top = `${Math.max(8, box.top)}px`;
+}
+function hideRacePreview() { $('racePreview').classList.remove('on'); }
 
 // ---- withdrawal window ------------------------------------------------------
 function phaseWithdraw() {
@@ -308,6 +345,7 @@ function majorityOf(seats, office) {
 // ---- rendering --------------------------------------------------------------
 function render() {
   if (!G) return;
+  hideRacePreview();
   $('cYear').textContent = G.year;
   const e = G.economy;
   $('cEcon').textContent = e.level > 1 ? `+${e.level} boom` : e.level < -1 ? `${e.level} slump` : `${e.level>=0?'+':''}${e.level} flat`;
@@ -362,7 +400,11 @@ function drawMap() {
       }
       t.appendChild(row);
     }
-    if (openStates.has(code)) { t.classList.add('act'); t.onclick = () => pickRace(code); }
+    if (openStates.has(code)) {
+      t.classList.add('act'); t.onclick = () => pickRace(code);
+      t.onmouseenter = () => showRacePreview(code, t);
+      t.onmouseleave = hideRacePreview;
+    }
     if (declaredHere.has(code)) t.classList.add('race');
     t.title = `${code} — lean ${lean>0?'R+':lean<0?'D+':''}${Math.abs(lean)||'even'}`;
     m.appendChild(t);
