@@ -869,7 +869,8 @@
       "note": "Detroit",
       "provenance": {
         "black": {
-          "source": "hand-assigned"
+          "source": "census-acs5yr-2022",
+          "vintage": "2022"
         },
         "urban": {
           "source": "hand-assigned"
@@ -916,7 +917,8 @@
           "source": "hand-assigned"
         },
         "hispanic": {
-          "source": "hand-assigned"
+          "source": "census-acs5yr-2022",
+          "vintage": "2022"
         }
       }
     },
@@ -933,7 +935,8 @@
       "note": "Henderson",
       "provenance": {
         "hispanic": {
-          "source": "hand-assigned"
+          "source": "census-acs5yr-2022",
+          "vintage": "2022"
         },
         "suburban": {
           "source": "hand-assigned"
@@ -957,10 +960,12 @@
           "source": "hand-assigned"
         },
         "black": {
-          "source": "hand-assigned"
+          "source": "census-acs5yr-2022",
+          "vintage": "2022"
         },
         "hispanic": {
-          "source": "hand-assigned"
+          "source": "census-acs5yr-2022",
+          "vintage": "2022"
         }
       }
     },
@@ -977,7 +982,8 @@
       "note": "The northeast, redrawn",
       "provenance": {
         "black": {
-          "source": "hand-assigned"
+          "source": "census-acs5yr-2022",
+          "vintage": "2022"
         },
         "rural": {
           "source": "hand-assigned"
@@ -997,7 +1003,8 @@
       "note": "The Valley, moving right",
       "provenance": {
         "hispanic": {
-          "source": "hand-assigned"
+          "source": "census-acs5yr-2022",
+          "vintage": "2022"
         },
         "rural": {
           "source": "hand-assigned"
@@ -1017,7 +1024,8 @@
       "note": "McAllen, flipped",
       "provenance": {
         "hispanic": {
-          "source": "hand-assigned"
+          "source": "census-acs5yr-2022",
+          "vintage": "2022"
         },
         "rural": {
           "source": "hand-assigned"
@@ -1037,7 +1045,8 @@
       "note": "Central Valley",
       "provenance": {
         "hispanic": {
-          "source": "hand-assigned"
+          "source": "census-acs5yr-2022",
+          "vintage": "2022"
         },
         "farm": {
           "source": "hand-assigned"
@@ -1057,7 +1066,8 @@
       "note": "Bakersfield",
       "provenance": {
         "hispanic": {
-          "source": "hand-assigned"
+          "source": "census-acs5yr-2022",
+          "vintage": "2022"
         },
         "farm": {
           "source": "hand-assigned"
@@ -1088,7 +1098,8 @@
       "era": 2024,
       "demographics": [
         "suburban",
-        "jewish"
+        "jewish",
+        "hispanic"
       ],
       "note": "Nassau County, flipped",
       "provenance": {
@@ -1097,6 +1108,10 @@
         },
         "jewish": {
           "source": "hand-assigned"
+        },
+        "hispanic": {
+          "source": "census-acs5yr-2022",
+          "vintage": "2022"
         }
       }
     },
@@ -1108,7 +1123,8 @@
       "era": 2024,
       "demographics": [
         "cuban",
-        "urban"
+        "urban",
+        "hispanic"
       ],
       "note": "Miami, gone red",
       "provenance": {
@@ -1117,6 +1133,10 @@
         },
         "urban": {
           "source": "hand-assigned"
+        },
+        "hispanic": {
+          "source": "census-acs5yr-2022",
+          "vintage": "2022"
         }
       }
     },
@@ -1169,7 +1189,8 @@
       "note": "Adams County, the closest in the country",
       "provenance": {
         "hispanic": {
-          "source": "hand-assigned"
+          "source": "census-acs5yr-2022",
+          "vintage": "2022"
         },
         "suburban": {
           "source": "hand-assigned"
@@ -1329,7 +1350,8 @@
       "note": "Southern New Mexico",
       "provenance": {
         "hispanic": {
-          "source": "hand-assigned"
+          "source": "census-acs5yr-2022",
+          "vintage": "2022"
         },
         "rural": {
           "source": "hand-assigned"
