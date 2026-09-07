@@ -16,6 +16,7 @@
  *  gates it the way it gates the bundle").
  */
 import { readFileSync, writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { oddsAtEdge, primaryOddsAtEdge } from '../engine/rules/resolution.ts';
 import { TAGS } from '../engine/rules/tags.ts';
 import { PRIORITY } from '../engine/rules/lean.ts';
@@ -127,6 +128,18 @@ for (const [key, value] of Object.entries(substitutions)) {
   if (!out.includes(token)) throw new Error(`docs/build.ts: template has no ${token} placeholder -- unused substitution`);
   out = out.split(token).join(value);
 }
+
+/** A content fingerprint, not a commit SHA: CI verifies this file by
+ *  rebuilding it and diffing byte-for-byte against what's committed, and a
+ *  real git SHA read at build time would differ between the commit that adds
+ *  this output and CI re-deriving it against that same commit -- see #215.
+ *  Hashing the document's own fully-substituted text is idempotent under
+ *  that gate and still gives a short, stable value to correlate a report
+ *  against a tree state. */
+const fingerprintToken = '{{BUILD_FINGERPRINT}}';
+if (!out.includes(fingerprintToken)) throw new Error(`docs/build.ts: template has no ${fingerprintToken} placeholder -- unused substitution`);
+out = out.split(fingerprintToken).join(createHash('sha256').update(out).digest('hex').slice(0, 8));
+
 const leftover = out.match(/\{\{[A-Z_]+\}\}/);
 if (leftover) throw new Error(`docs/build.ts: ${leftover[0]} in template has no substitution`);
 

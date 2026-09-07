@@ -35,6 +35,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
 .eyebrow{font-family:var(--display);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+#buildStamp{text-align:center;padding:10px;font-family:var(--mono);font-size:11px;color:var(--ink-2);opacity:.6}
 
 /* chyron ------------------------------------------------------------------ */
 #chyron{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;align-items:stretch;gap:0;
@@ -178,6 +179,8 @@ label.f{display:flex;flex-direction:column;gap:4px;font-size:12px}
 </div>
 
 <div id="modal"><div id="modalBox"><div id="modalBody"></div></div></div>
+
+<footer id="buildStamp">build <!--__STAMP__--></footer>
 
 <script>
 /*__PACKS__*/
