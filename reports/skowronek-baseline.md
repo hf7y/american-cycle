@@ -1,6 +1,6 @@
 # Skowronek suite — does american-cycle produce political time?
 
-Run 2026-09-07T11:42:03Z on `aebde8b`.
+Run 2026-09-07T14:51:24Z on `ac2df43`.
 
 Regenerate with:
 
@@ -69,8 +69,7 @@ settlement object does not exist, most verdicts are `BLOCKED`, which is an *unde
   - First missing: strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable.
   - Control: none yet: the instrument does not exist to be controlled.
 - **DISJUNCTION** — blocked by `STRAIN_RISE`, `EFFICACY_DROP`.
-  - First missing: strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable.
-  - Control: none yet: the instrument does not exist to be controlled.
+  - Same first-missing precondition as **RECONSTRUCTION**.
 
 ### Controls
 
@@ -258,14 +257,11 @@ Never evaluated: STRAIN_RISE, EFFICACY_DROP are missing, so no window could be c
   - First missing: the country position random-walks around its own baseline; no persistent regime forms
   - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
 - **PREEMPTION** — blocked by `SETTLEMENT_FORMATION`.
-  - First missing: the country position random-walks around its own baseline; no persistent regime forms
-  - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
+  - Same first-missing precondition as **ARTICULATION**.
 - **RECONSTRUCTION** — blocked by `SETTLEMENT_FORMATION`, `SETTLEMENT_MOVEMENT`, `STRAIN_RISE`.
-  - First missing: the country position random-walks around its own baseline; no persistent regime forms
-  - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
+  - Same first-missing precondition as **ARTICULATION**.
 - **DISJUNCTION** — blocked by `SETTLEMENT_FORMATION`, `SETTLEMENT_MOVEMENT`, `STRAIN_RISE`, `EFFICACY_DROP`.
-  - First missing: the country position random-walks around its own baseline; no persistent regime forms
-  - Control: C1: the detector fires on a synthetic 20-year regime and not on white noise.
+  - Same first-missing precondition as **ARTICULATION**.
 
 ### Controls
 
@@ -459,8 +455,7 @@ Never evaluated: SETTLEMENT_FORMATION, SETTLEMENT_MOVEMENT, STRAIN_RISE, EFFICAC
   - First missing: strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable.
   - Control: none yet: the instrument does not exist to be controlled.
 - **DISJUNCTION** — blocked by `STRAIN_RISE`, `EFFICACY_DROP`.
-  - First missing: strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable.
-  - Control: none yet: the instrument does not exist to be controlled.
+  - Same first-missing precondition as **RECONSTRUCTION**.
 
 ### Controls
 
@@ -650,8 +645,7 @@ Never evaluated: STRAIN_RISE, EFFICACY_DROP are missing, so no window could be c
   - First missing: strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable.
   - Control: none yet: the instrument does not exist to be controlled.
 - **DISJUNCTION** — blocked by `STRAIN_RISE`, `EFFICACY_DROP`.
-  - First missing: strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable.
-  - Control: none yet: the instrument does not exist to be controlled.
+  - Same first-missing precondition as **RECONSTRUCTION**.
 
 ### Controls
 
@@ -841,8 +835,7 @@ Never evaluated: STRAIN_RISE, EFFICACY_DROP are missing, so no window could be c
   - First missing: strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable.
   - Control: none yet: the instrument does not exist to be controlled.
 - **DISJUNCTION** — blocked by `STRAIN_RISE`, `EFFICACY_DROP`.
-  - First missing: strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable.
-  - Control: none yet: the instrument does not exist to be controlled.
+  - Same first-missing precondition as **RECONSTRUCTION**.
 
 ### Controls
 
@@ -1031,11 +1024,9 @@ Never evaluated: STRAIN_RISE, EFFICACY_DROP are missing, so no window could be c
   - Control: C2: |lean| rises in election years and never in non-election years, on the same runs.
 - **PREEMPTION** — preconditions met; see the verdict table.
 - **RECONSTRUCTION** — blocked by `SETTLEMENT_MOVEMENT`, `STRAIN_RISE`.
-  - First missing: nothing writes lean outside an election: |lean| never rose in a non-election year, in which bills were passing. Legislation reaches only economy.accumulatedG (engine/rules/legislature.ts, economy.ts)
-  - Control: C2: |lean| rises in election years and never in non-election years, on the same runs.
+  - Same first-missing precondition as **ARTICULATION**.
 - **DISJUNCTION** — blocked by `SETTLEMENT_MOVEMENT`, `STRAIN_RISE`, `EFFICACY_DROP`.
-  - First missing: nothing writes lean outside an election: |lean| never rose in a non-election year, in which bills were passing. Legislation reaches only economy.accumulatedG (engine/rules/legislature.ts, economy.ts)
-  - Control: C2: |lean| rises in election years and never in non-election years, on the same runs.
+  - Same first-missing precondition as **ARTICULATION**.
 
 ### Controls
 
@@ -1227,8 +1218,7 @@ Never evaluated: SETTLEMENT_MOVEMENT, STRAIN_RISE, EFFICACY_DROP are missing, so
   - First missing: strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable.
   - Control: none yet: the instrument does not exist to be controlled.
 - **DISJUNCTION** — blocked by `STRAIN_RISE`, `EFFICACY_DROP`.
-  - First missing: strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable.
-  - Control: none yet: the instrument does not exist to be controlled.
+  - Same first-missing precondition as **RECONSTRUCTION**.
 
 ### Controls
 
@@ -1418,8 +1408,7 @@ Never evaluated: STRAIN_RISE, EFFICACY_DROP are missing, so no window could be c
   - First missing: strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable.
   - Control: none yet: the instrument does not exist to be controlled.
 - **DISJUNCTION** — blocked by `STRAIN_RISE`, `EFFICACY_DROP`.
-  - First missing: strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable.
-  - Control: none yet: the instrument does not exist to be controlled.
+  - Same first-missing precondition as **RECONSTRUCTION**.
 
 ### Controls
 
@@ -1609,8 +1598,7 @@ Never evaluated: STRAIN_RISE, EFFICACY_DROP are missing, so no window could be c
   - First missing: strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable.
   - Control: none yet: the instrument does not exist to be controlled.
 - **DISJUNCTION** — blocked by `STRAIN_RISE`, `EFFICACY_DROP`.
-  - First missing: strain is the distance between a settlement and the country. Its two preconditions were met at v0.2 -- Game.bills is the corpus and TAG_COMPASS places a bill -- but no detector assembles the settlement from them yet. Unbuilt, not unbuildable.
-  - Control: none yet: the instrument does not exist to be controlled.
+  - Same first-missing precondition as **RECONSTRUCTION**.
 
 ### Controls
 
