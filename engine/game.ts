@@ -1768,16 +1768,27 @@ export class Game {
    *  whose colour is not its own party -- and which party they DO carry is
    *  the direction of the defection. */
   private readCounters(d: Declaration): void {
-    const rec = this.billCounters.get(d.card.id);
-    d.billRecord = rec?.record ?? 0;
+    const rec = this.cardRecord(d.card.id, d.card.party);
+    d.billRecord = rec.billRecord;
+    d.crossBench = rec.crossBench;
+    d.crossBenchToward = rec.crossBenchToward;
+  }
+
+  /** #161 item 2: the same tallies `readCounters`/`readPosition` write onto a
+   *  Declaration, exposed read-only so the UI can show a hand card's record --
+   *  a politician's accumulated cross-bench votes, bill record and off-position
+   *  votes -- before it is ever played into a race, not only once withdrawal
+   *  asks. Public for the same reason `withdrawalView` is: the page has no
+   *  other way to reach a private map keyed by card id. */
+  cardRecord(cardId: string, party: Party): { crossBench: number; crossBenchToward?: Party; billRecord: number; offDistrict: number } {
+    const rec = this.billCounters.get(cardId);
     let cross = 0, toward: Party | undefined, most = 0;
     for (const [colour, n] of Object.entries(rec?.counters ?? {}) as [Party, number][]) {
-      if (colour === d.card.party) continue;
+      if (colour === party) continue;
       cross += n;
       if (n > most) { most = n; toward = colour; }
     }
-    d.crossBench = cross;
-    d.crossBenchToward = toward;
+    return { crossBench: cross, crossBenchToward: toward, billRecord: rec?.record ?? 0, offDistrict: this.offDistrict.get(cardId) ?? 0 };
   }
 
   /** Bill-vote counters, by card id. */
