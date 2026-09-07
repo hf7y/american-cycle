@@ -31,6 +31,14 @@ export interface LegislatureConfig {
   /** v0.2 item 7: flat lean pips against every senator who voted to convict,
    *  and the same toward the acquitted president's party. */
   impeachBackfirePips?: number;
+  /** hf7y/american-cycle#84 arm 2: scale `impeachBackfirePips` by strain --
+   *  the tag-space distance between the enacted-bill corpus still on the
+   *  books and the country's own demographic centroid (`Game.strain`,
+   *  engine/game.ts). A government far out ahead of the country it governs
+   *  is the vulnerable-leader case; a failed removal attempt against one
+   *  lands harder than the flat number assumes. Off by default -- unset
+   *  reproduces the flat backfire exactly. */
+  impeachBackfireStrainScaled?: boolean;
   /** v0.2 item 8: flat lean pips against the party blamed for a shutdown. */
   shutdownPips?: number;
   /** #78's ruling: a passed bill places a counter, this many flat lean pips

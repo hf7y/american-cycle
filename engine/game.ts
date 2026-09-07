@@ -945,11 +945,31 @@ export class Game {
    *  EVERYONE WHO VOTED TO IMPEACH EATS IT, not the filer -- filers are not
    *  tracked, and this makes impeachment a trap you can bait an opponent into. */
   private backfire(forRemoval: Seat[], targetParty: Party): void {
-    const pips = this.cfg.legislature.impeachBackfirePips ?? 0;
+    const base = this.cfg.legislature.impeachBackfirePips ?? 0;
+    if (!base) return;
+    // hf7y/american-cycle#84 arm 2: scale by strain when asked; an
+    // unmeasurable strain (no bills on the books, or no district tags in
+    // play) falls back to the flat number rather than silently zeroing it.
+    const scale = this.cfg.legislature.impeachBackfireStrainScaled ? (this.strain() ?? 1) : 1;
+    const pips = Math.round(base * scale);
     if (!pips) return;
     for (const s of forRemoval) lean.nudge(this.leanMap, this.cfg.lean, s.state, s.holder!.party, -pips);
     const target = new Set(this.seats.filter((s) => s.holder?.party === targetParty).map((s) => s.state));
     for (const st of target) lean.nudge(this.leanMap, this.cfg.lean, st, targetParty, pips);
+  }
+
+  /** hf7y/american-cycle#84 arm 2: the tag-space distance between the
+   *  SETTLEMENT -- the enacted-bill corpus still on the books, i.e. what the
+   *  government has actually done -- and the COUNTRY -- every district card
+   *  in play, i.e. who it governs. Undefined when either side carries no
+   *  tags (no bills passed yet, or no district demographics on the table),
+   *  which is not the same as zero strain. */
+  private strain(): number | undefined {
+    const settlement = tags.centroid(
+      this.bills.filter((b) => b.repealedIn === undefined).map((b) => tags.weights(b.tags)),
+    );
+    const country = tags.centroid(this.districtsInPlay().map((d) => tags.weights(d.demographics)));
+    return tags.distance(settlement, country);
   }
 
   // ---- annual tick step 2-3: the omnibill -----------------------------------
@@ -1289,6 +1309,13 @@ export class Game {
     d.partyFit = tags.distance(mine, party);
     d.offDistrict = this.offDistrict.get(d.card.id) ?? 0;
     d.power = this.powerOf(d.player);
+    // hf7y/american-cycle#84 arm 1: the region a positional shock discredits
+    // is the GOVERNING party's own officeholder centroid, the same actor the
+    // economy modifier above already blames.
+    if (this.cfg.economy.positionalShock && this.president) {
+      const governing = tags.partyPosition(this.seats, this.cardById, this.president.party);
+      d.shockFit = tags.distance(mine, governing);
+    }
   }
 
   private raceContext(office: Office, state: string, slot: number | undefined, presidentialWinner?: Party): RaceContext {
@@ -1301,6 +1328,7 @@ export class Game {
       economyMod: econ.economyModifier(this.economy, this.cfg.economy, this.cfg.national.strongEconomy, this.cfg.national.recession),
       presidentialWinner,
       shock: this.shockPips,
+      positionalShock: this.cfg.economy.positionalShock,
     };
   }
 

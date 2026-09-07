@@ -107,8 +107,12 @@ export interface RaceContext {
   /** set once the presidential general has resolved, for down-ballot coattails */
   presidentialWinner?: Party;
   /** v0.2 item 9: pips of exogenous shock this year, 0 in a quiet one. Falls
-   *  on incumbents, scaled by `Declaration.power`. */
+   *  on incumbents, scaled by `Declaration.power` -- or, under
+   *  `positionalShock`, by `Declaration.shockFit`. */
   shock?: number;
+  /** hf7y/american-cycle#84 arm 1: when true, the shock block below reads
+   *  `Declaration.shockFit` instead of `Declaration.power`. */
+  positionalShock?: boolean;
 }
 
 export interface Declaration {
@@ -149,6 +153,12 @@ export interface Declaration {
   /** v0.2 item 9: the player's share of held seats over its fair share, so
    *  1 is an average faction. The shock is proportional to power held. */
   power?: number;
+  /** hf7y/american-cycle#84 arm 1: distance in [0,1] between this card's
+   *  tags and the governing party's CURRENT officeholder centroid, read only
+   *  under `RaceContext.positionalShock`. Undefined when either side carries
+   *  no tags (including no sitting president) -- not distance 0, and the
+   *  shock block below scores that as no penalty rather than a perfect hit. */
+  shockFit?: number;
   /** Set by `game.ts`'s `runPrimaries` when this card won its primary by
    *  fewer than `PrimaryGeneralConfig.bruisingPrimaryMargin` pips (#95). Read
    *  once, in the general round only -- a primary loser never reaches here. */
@@ -299,9 +309,15 @@ export function buildModifiers(
     // v0.2 item 9: the cheap shock. It falls on the people in office and it
     // falls hardest on whoever holds most of them, which is the only brake in
     // the design that reads a player's total position rather than one race.
+    // hf7y/american-cycle#84 arm 1: under `positionalShock` it falls instead
+    // on whoever sits nearest the governing coalition's own tag centroid --
+    // nothing to do with how many seats they hold.
     if (ctx.shock && d.incumbent) {
-      const pips = -Math.round(ctx.shock * (d.power ?? 1));
-      if (pips) m.push({ source: 'shock', pips });
+      const scale = ctx.positionalShock
+        ? (d.shockFit === undefined ? 0 : 1 - d.shockFit)
+        : (d.power ?? 1);
+      const pips = -Math.round(ctx.shock * scale);
+      if (pips) m.push({ source: ctx.positionalShock ? 'positional shock' : 'shock', pips });
     }
 
     // National modifiers -- the tide, never the noise.

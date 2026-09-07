@@ -207,6 +207,25 @@ test('#44: midterm and economy are flagged national; nothing else is', () => {
   assert.equal(mods.find((m) => m.source === 'home state')?.national, undefined);
 });
 
+test('hf7y/american-cycle#84 arm 1: the ordinary shock scales by power held, not position', () => {
+  const d: Declaration = { player: 0, card: cand({}), office: 'senator', state: 'OH', incumbent: true, power: 2 };
+  const mods = buildModifiers(d, ctx({ shock: 3 }), 'general', res, nat, pg);
+  assert.equal(mods.find((m) => m.source === 'shock')?.pips, -6, 'pips scale by power held under the ordinary shock');
+});
+
+test('hf7y/american-cycle#84 arm 1: the positional shock scales by nearness instead, and ignores power', () => {
+  const c = ctx({ shock: 4, positionalShock: true });
+  const near: Declaration = { player: 0, card: cand({}), office: 'senator', state: 'OH', incumbent: true, power: 5, shockFit: 0 };
+  const far: Declaration = { player: 0, card: cand({}), office: 'senator', state: 'OH', incumbent: true, power: 5, shockFit: 1 };
+  const unmeasured: Declaration = { player: 0, card: cand({}), office: 'senator', state: 'OH', incumbent: true, power: 5 };
+  assert.equal(buildModifiers(near, c, 'general', res, nat, pg).find((m) => m.source === 'positional shock')?.pips, -4,
+    'distance 0 -- sitting exactly on the discredited position -- takes the full hit, not scaled by power 5');
+  assert.equal(buildModifiers(far, c, 'general', res, nat, pg).some((m) => m.source.includes('shock')), false,
+    'distance 1 rounds to zero pips, so no modifier is pushed at all');
+  assert.equal(buildModifiers(unmeasured, c, 'general', res, nat, pg).some((m) => m.source.includes('shock')), false,
+    'no shockFit (no tags on either side) reads as no penalty, not a fabricated worst case');
+});
+
 test('coattails run in reverse in hostile states, with no extra rule', () => {
   const base = { player: 0, office: 'senator' as const, state: 'OH' };
   const dem = { ...base, card: cand({ party: 'D' as const }) };

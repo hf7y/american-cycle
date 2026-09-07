@@ -22,6 +22,16 @@ export interface EconomyConfig {
   shockOnRollAtMost?: number;
   /** pips against an incumbent of average power. Scaled by power held. */
   shockPips?: number;
+  /** hf7y/american-cycle#84 arm 1: replaces the "scaled by power held" rule
+   *  above with "scaled by nearness, in tag space, to the governing party's
+   *  own officeholder centroid" -- shocks discredit POSITIONS, not raw seat
+   *  share. A leader whose coalition sits tightly in one region of tag space
+   *  is close to that centroid and pays close to full `shockPips`; a
+   *  diverse coalition dilutes its own centroid and nobody sits near it. See
+   *  `Declaration.shockFit` (engine/rules/elections.ts) for the distance and
+   *  `Game.readPosition` (engine/game.ts) for where it is computed. Off by
+   *  default -- unset reproduces the power-scaled shock exactly. */
+  positionalShock?: boolean;
 }
 
 export interface Economy { level: number; accumulatedG: number; lastRateRise?: number; }
