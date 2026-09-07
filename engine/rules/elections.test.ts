@@ -198,6 +198,15 @@ test('the midterm penalty reaches everyone; a local card outruns it', () => {
   assert.equal(resolution.modifierTotal(side), 2, 'home state 2 + identity match 2 (res.identityBonus 1 x 2) - midterm 2');
 });
 
+test('#44: midterm and economy are flagged national; nothing else is', () => {
+  const d: Declaration = { player: 0, card: cand({ homeStateBonus: 2 }), office: 'senator', state: 'OH' };
+  const c = ctx({ state: 'OH', isMidterm: true, presidentParty: 'D', economyMod: -2 });
+  const mods = buildModifiers(d, c, 'general', res, nat, pg);
+  assert.equal(mods.find((m) => m.source === 'midterm')?.national, true);
+  assert.equal(mods.find((m) => m.source === 'economy')?.national, true);
+  assert.equal(mods.find((m) => m.source === 'home state')?.national, undefined);
+});
+
 test('coattails run in reverse in hostile states, with no extra rule', () => {
   const base = { player: 0, office: 'senator' as const, state: 'OH' };
   const dem = { ...base, card: cand({ party: 'D' as const }) };

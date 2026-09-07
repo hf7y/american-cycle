@@ -314,6 +314,7 @@ function render() {
   $('cG').textContent = `G${e.accumulatedG} · ${(100*rateRiseOdds(e.accumulatedG)).toFixed(0)}% tighten`;
   const pres = G.president;
   $('cPres').textContent = pres ? `${pres.party} · ${G.players[pres.player].name}` : 'vacant';
+  $('cCycle').textContent = G.year % 4 === 2 ? 'midterm' : G.year % 4 === 0 ? 'presidential' : 'off-year';
 
   $('scores').replaceChildren(...G.players.map((p,i) => {
     const n = el('span','sc'+(i===S.human?' me':''), `${p.name} ${p.score}`);

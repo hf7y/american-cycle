@@ -306,8 +306,8 @@ export function buildModifiers(
 
     // National modifiers -- the tide, never the noise.
     if (ctx.presidentParty === d.card.party) {
-      if (ctx.isMidterm) m.push({ source: 'midterm', pips: nat.midtermPenalty });
-      if (ctx.economyMod) m.push({ source: 'economy', pips: ctx.economyMod });
+      if (ctx.isMidterm) m.push({ source: 'midterm', pips: nat.midtermPenalty, national: true });
+      if (ctx.economyMod) m.push({ source: 'economy', pips: ctx.economyMod, national: true });
     }
     if (ctx.isPresidentialYear && ctx.presidentialWinner && d.office !== 'president' && partySign !== 0) {
       // Turnout coattails: +1 down-ballot in states leaning your way, -1

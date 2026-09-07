@@ -85,6 +85,8 @@ export interface Seat {
 export interface Modifier {
   source: string;
   pips: number;
+  /** #44: the tide's known half (economy, midterm) -- unlike the die. */
+  national?: boolean;
 }
 
 export interface DiceRoll {
