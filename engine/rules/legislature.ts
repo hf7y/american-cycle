@@ -94,12 +94,24 @@ export function author(seats: Seat[]): number | undefined {
  *  pick; this is the full field it used to pick from unopposed -- every
  *  player holding at least one House seat of the majority party, since only
  *  they can plausibly carry a bill through the chamber they'd be writing
- *  for. */
+ *  for.
+ *
+ *  `majorityParty` names the plurality leader (a tie is broken by iteration
+ *  order, not left unanswered) -- fine for the scoring bonus it was written
+ *  for, but hf7y/american-cycle#86's "no House majority party" fallback to a
+ *  convention means an actual majority, over half the held seats, or that
+ *  route is dead code: with only two parties seated a 435-ish odd-sized
+ *  House always hands someone 218, so the fallback could never trigger. A
+ *  third party's seats (or wartime vacancies) can deny anyone that half,
+ *  which is the "no pen to win" this function is named for. */
 export function authorCandidates(seats: Seat[]): number[] {
+  const { house } = chambers(seats);
   const maj = majorityParty(seats, 'representative');
   if (!maj) return [];
   const players = new Set<number>();
-  for (const s of seats) if (s.office === 'representative' && s.holder?.party === maj) players.add(s.holder.player);
+  let majCount = 0;
+  for (const s of house) if (s.holder!.party === maj) { players.add(s.holder!.player); majCount++; }
+  if (majCount * 2 <= house.length) return [];
   return [...players].sort((a, b) => a - b);
 }
 
