@@ -187,3 +187,24 @@ export function impeach(cfg: LegislatureConfig, seats: Seat[], yesVotes: number)
   const { senate } = chambers(seats);
   return atLeast(yesVotes, senate.length, cfg.impeachThreshold);
 }
+
+export interface AmendmentProposalOutcome {
+  houseYes: number; houseTotal: number;
+  senateYes: number; senateTotal: number;
+  passed: boolean;
+}
+
+/** hf7y/american-cycle#86's ruling: the route 33 of 33 ratified amendments
+ *  actually took. Two-thirds of each chamber, and no presentment -- Article V
+ *  gives the president no role in a proposal, so there is no veto to skip
+ *  around, only the two chamber votes. `fraction` is `AmendmentConfig.callFraction`:
+ *  Article V spends the same two-thirds bar on calling a convention and on a
+ *  congressional proposal, so this reuses it rather than printing a second
+ *  copy of the same constant. */
+export function proposeAmendment(fraction: number, seats: Seat[], votes: Vote[]): AmendmentProposalOutcome {
+  const { house, senate } = chambers(seats);
+  const houseYes = votes.filter((v) => v.office === 'representative' && v.yes).length;
+  const senateYes = votes.filter((v) => v.office === 'senator' && v.yes).length;
+  const passed = atLeast(houseYes, house.length, fraction) && atLeast(senateYes, senate.length, fraction);
+  return { houseYes, houseTotal: house.length, senateYes, senateTotal: senate.length, passed };
+}
