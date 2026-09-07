@@ -18,8 +18,9 @@
  *  Resolution uses machinery the engine already has: the governorship,
  *  district cards, and partisan lean on a state, against a die.
  */
-import type { IdentityTag } from '../types/index.ts';
+import type { IdentityTag, Seat } from '../types/index.ts';
 import type { RNG } from './rng.ts';
+import { atLeast, chambers, type Vote } from './legislature.ts';
 
 export interface AmendmentConfig {
   /** off leaves v0.1's endings in force, which is how the two are compared */
@@ -27,6 +28,11 @@ export interface AmendmentConfig {
   /** Article V: two-thirds to call, three-quarters to ratify */
   callFraction: number;
   ratifyFraction: number;
+  /** hf7y/american-cycle#86's ruling: the ordinary path. Article V gives
+   *  Congress two-thirds of each chamber to propose directly, no convention
+   *  needed -- the route all 27 ratified amendments actually used. Not a
+   *  tuning knob, same as `callFraction`/`ratifyFraction` above. */
+  congressFraction: number;
   /** how long ratification stays open. Others act during this window — it is
    *  the last-shot phase where everyone not winning tries to find thirteen
    *  states. */
@@ -97,3 +103,14 @@ export const blockers = (cfg: AmendmentConfig, states: number): number =>
 
 export const overlaps = (tags: readonly IdentityTag[], demographics: readonly IdentityTag[]): boolean =>
   tags.some((t) => demographics.includes(t));
+
+/** hf7y/american-cycle#86's ruling: Congress proposing directly, gated on
+ *  two-thirds of each chamber the same way `tallyBill`'s veto override is --
+ *  except Article V gives the president no role in a proposal, so unlike a
+ *  bill there is no presentment and nothing to skip around a veto for. */
+export function congressProposes(cfg: AmendmentConfig, seats: Seat[], votes: readonly Vote[]): boolean {
+  const { house, senate } = chambers(seats);
+  const houseYes = votes.filter((v) => v.office === 'representative' && v.yes).length;
+  const senateYes = votes.filter((v) => v.office === 'senator' && v.yes).length;
+  return atLeast(houseYes, house.length, cfg.congressFraction) && atLeast(senateYes, senate.length, cfg.congressFraction);
+}

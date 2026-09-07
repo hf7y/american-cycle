@@ -9,7 +9,7 @@ import type { RNG } from './rng.ts';
  *  Every threshold comparison goes through this so a chamber that exactly
  *  meets a bar is never rejected by floating point. */
 const EPS = 1e-9;
-const atLeast = (part: number, whole: number, frac: number) => whole > 0 && part / whole >= frac - EPS;
+export const atLeast = (part: number, whole: number, frac: number) => whole > 0 && part / whole >= frac - EPS;
 const moreThan = (part: number, whole: number, frac: number) => whole > 0 && part / whole > frac + EPS;
 
 export interface LegislatureConfig {

@@ -146,10 +146,17 @@ export interface EnactedBill {
 export interface Amendment {
   id: string;
   proposer: number;
+  /** hf7y/american-cycle#86's ruling: 'congress' is the ordinary path (two-
+   *  thirds of each chamber, the route all 27 ratified amendments actually
+   *  used); 'convention' is v0.2 item 3's original state-called route, kept
+   *  live but not the default any shipped agent reaches for -- Article V's
+   *  convention route has never once been used in 237 years. */
+  route: 'congress' | 'convention';
   /** the demographic/issue content, drawn from the existing tag vocabulary */
   tags: IdentityTag[];
   calledIn: number;
-  /** states that voted to call the convention */
+  /** states that voted to call the convention. Empty for a 'congress' route
+   *  proposal -- Congress does not poll the states to propose. */
   called: string[];
   /** states that have ratified and survived the challenge */
   ratified: string[];
