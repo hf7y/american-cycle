@@ -20,7 +20,10 @@ import { mkdirSync, readdirSync, writeFileSync } from 'node:fs';
 import { loadConfig, loadPacks, ALL_PACKS } from './harness.ts';
 import { observeRun } from '../skowronek/observe.ts';
 import { eraChecks, quadrantCoverage, mean } from '../skowronek/checks.ts';
-import { leanWriterControl, powerControl, preconditions, syntheticControl } from '../skowronek/controls.ts';
+import {
+  leanWriterControl, powerControl, preconditions, syntheticControl, syntheticControlSimplex,
+} from '../skowronek/controls.ts';
+import { COMPASS } from '../skowronek/position.ts';
 import { renderReport, type ConfigReport } from '../skowronek/report.ts';
 
 const arg = (flag: string, dflt: string): string => {
@@ -42,6 +45,10 @@ const seeds = Array.from({ length: games }, (_, i) => 5000 + i);
 // C1 is a property of the code, not of any config, so it runs once.
 const c1 = syntheticControl();
 if (!c1.passed) console.error('WARNING: C1 failed — the formation instrument is not live.');
+// C1-TAG only applies once the compass in force actually has dim > 1 (#92) —
+// running it under LEAN_COMPASS would be validating a deadband no check reads.
+const c1tag = COMPASS.dim > 1 ? syntheticControlSimplex(COMPASS.dim) : undefined;
+if (c1tag && !c1tag.passed) console.error('WARNING: C1-TAG failed — the simplex formation instrument is not live.');
 
 const reports: ConfigReport[] = [];
 for (const name of configs) {
@@ -68,7 +75,7 @@ for (const name of configs) {
     games,
     meanGameYears: mean(runs.map((r) => r.years.length)),
     checks,
-    controls: [c1.check, c2.check, c3.check],
+    controls: [c1.check, ...(c1tag ? [c1tag.check] : []), c2.check, c3.check],
     quadrants: quadrantCoverage(runs, pre),
     pre,
   });

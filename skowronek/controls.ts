@@ -22,10 +22,10 @@
 import { RNG } from '../engine/rules/rng.ts';
 import type { RunObs } from './observe.ts';
 import {
-  measure, mean, powerWindows, regimeRuns, varianceRatio,
+  measure, mean, powerWindows, principalAxis, regimeRuns, regimeThresholdFor, varianceRatio,
   REGIME_THRESHOLD, type Check, type PreconditionState,
 } from './checks.ts';
-import { BILL_CORPUS_ABSENT, BILL_POSITION_ABSENT } from './position.ts';
+import { BILL_CORPUS_ABSENT, BILL_POSITION_ABSENT, sub, zero, type Position } from './position.ts';
 
 /** C1 — the formation/duration instrument, on three series with known answers. */
 export function syntheticControl(): { check: Check; passed: boolean } {
@@ -71,6 +71,84 @@ export function syntheticControl(): { check: Check; passed: boolean } {
           + 'walk. Persistence is read from run length; VR is reported as description only.'
         : 'THE INSTRUMENT IS BROKEN. Every formation and duration number in this report is uninterpretable; '
           + 'fix this before reading anything else.',
+    },
+  };
+}
+
+/** C1-TAG — the same instrument-liveness question as C1, re-derived for a
+ *  `dim > 1` compass (hf7y/american-cycle#92). `TAG_COMPASS` positions sit on
+ *  the tag simplex, not a lean-counter line, so C1's ±2 step and 0.25
+ *  deadband do not carry over unmodified. This builds the analogous step
+ *  regime / random walk / white noise IN the simplex (dimension `dim`,
+ *  default `TAG_COMPASS.dim`), runs them through the same principal-axis
+ *  projection `countrySeries` would use at `dim > 1`, and checks
+ *  `regimeThresholdFor(dim)` against C1's own pass criteria: the regime run
+ *  must be long, longer than white noise's, and white noise must mean-revert.
+ *
+ *  The step points are two disjoint one-hot tag vectors — the same points
+ *  `regimeThresholdFor` uses to derive the deadband, so this control is
+ *  checking the derivation against the numbers it produced, not a fresh pair.
+ *  Noise/walk are built by moving a small fixed mass between two random tags
+ *  and renormalising, which is the simplex-preserving analogue of the ±1 d6
+ *  step C1 uses on the lean line. */
+export function syntheticControlSimplex(dim: number): { check: Check; passed: boolean; threshold: number } {
+  const n = 40;
+  const step = 0.05;
+  const pointA: Position = zero(dim); pointA[0] = 1;
+  const pointB: Position = zero(dim); pointB[1] = 1;
+  const threshold = regimeThresholdFor(dim);
+
+  const rng = new RNG(20260901);
+  const jiggle = (p: Position): Position => {
+    const i = Math.floor(rng.d6() / 6 * dim) % dim;
+    const j = (i + 1 + Math.floor(rng.d6() / 6 * (dim - 1))) % dim;
+    const out = [...p];
+    const delta = Math.min(step, out[i]);
+    out[i] -= delta; out[j] += delta;
+    return out;
+  };
+
+  const regimePts: Position[] = Array.from({ length: n }, (_, i) => (i < n / 2 ? pointA : pointB));
+  const walkPts: Position[] = []; let w = pointA;
+  for (let i = 0; i < n; i++) { w = jiggle(w); walkPts.push(w); }
+  const noisePts: Position[] = Array.from({ length: n }, () => jiggle(pointA));
+
+  const project = (pts: Position[]): number[] => {
+    const axis = principalAxis(pts);
+    const start = pts[0];
+    return pts.map((p) => sub(p, start).reduce((s, v, i) => s + v * axis[i], 0));
+  };
+  const regimeSeries = project(regimePts);
+  const walkSeries = project(walkPts);
+  const noiseSeries = project(noisePts);
+
+  const longest = (xs: number[]) => Math.max(0, ...regimeRuns(xs, threshold));
+  const m = {
+    'derived deadband': { value: threshold, n: 1, se: 0, unit: 'simplex distance' },
+    'synthetic regime: longest run': { value: longest(regimeSeries), n: 1, se: 0, unit: 'years' },
+    'synthetic regime: variance ratio': { value: varianceRatio(regimeSeries, 4), n: 1, se: 0 },
+    'random walk: longest run': { value: longest(walkSeries), n: 1, se: 0, unit: 'years' },
+    'random walk: variance ratio': { value: varianceRatio(walkSeries, 4), n: 1, se: 0 },
+    'white noise: longest run': { value: longest(noiseSeries), n: 1, se: 0, unit: 'years' },
+    'white noise: variance ratio': { value: varianceRatio(noiseSeries, 4), n: 1, se: 0 },
+  };
+  const passed = m['synthetic regime: longest run'].value >= 15
+    && m['synthetic regime: longest run'].value > m['white noise: longest run'].value
+    && m['white noise: variance ratio'].value < 1;
+  return {
+    passed,
+    threshold,
+    check: {
+      id: 'control-instrument-liveness-simplex',
+      question: 'C1-TAG: with a dim>1 compass, does the principal-axis projection see a settlement that is there by construction?',
+      measures: m,
+      verdict: passed ? 'HEALTHY' : 'UNHEALTHY',
+      note: passed
+        ? `Deadband ${threshold.toFixed(4)} (regimeThresholdFor(${dim}), C1's own 1/8 deadband:swing ratio `
+          + 'applied to the distance between two one-hot tag vectors) separates a built 20-year regime from '
+          + 'white noise on the principal-axis projection, the same separation C1 established for LEAN_COMPASS.'
+        : `THE INSTRUMENT IS BROKEN for a dim=${dim} compass at deadband ${threshold.toFixed(4)}. Every `
+          + 'formation and duration number under that compass is uninterpretable until this is fixed.',
     },
   };
 }
