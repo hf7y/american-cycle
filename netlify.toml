@@ -1,0 +1,14 @@
+# #143: Netlify must build the bundle from source, never serve the committed
+# one -- the CI gate on ui/index.html and docs/rules.html exists precisely
+# because a stale committed bundle can drift from the engine (#29, #60), and
+# deploying from source makes that drift impossible at the deploy boundary
+# too, rather than opening a second place for it to happen.
+[build]
+  command = "node ui/build.ts && node docs/build.ts && mkdir -p site && cp ui/index.html site/index.html && cp docs/rules.html site/rules.html"
+  publish = "site"
+
+[build.environment]
+  NODE_VERSION = "24"
+
+[functions]
+  directory = "netlify/functions"

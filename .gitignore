@@ -3,3 +3,4 @@ reports/*.csv
 reports/raw/
 __pycache__/
 .claude/trash/
+/site/
