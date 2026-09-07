@@ -304,9 +304,7 @@ export function buildModifiers(
       if (pips) m.push({ source: 'shock', pips });
     }
 
-    // National modifiers -- the tide, never the noise. Both are read off
-    // board state visible before the dice: `national: true` is #44's reveal
-    // schedule, marking these as knowable ahead of the die that is not.
+    // National modifiers -- the tide, never the noise.
     if (ctx.presidentParty === d.card.party) {
       if (ctx.isMidterm) m.push({ source: 'midterm', pips: nat.midtermPenalty, national: true });
       if (ctx.economyMod) m.push({ source: 'economy', pips: ctx.economyMod, national: true });

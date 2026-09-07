@@ -85,11 +85,7 @@ export interface Seat {
 export interface Modifier {
   source: string;
   pips: number;
-  /** #44: the known half of the national tide -- economy and midterm are
-   *  read off board state a player can already see, unlike the national die,
-   *  which stays hidden until the dice are actually rolled. The UI has
-   *  rendered this flag since the table first shipped (`ui/app.js`'s
-   *  withdrawal window); nothing ever set it until now. */
+  /** #44: the tide's known half (economy, midterm) -- unlike the die. */
   national?: boolean;
 }
 

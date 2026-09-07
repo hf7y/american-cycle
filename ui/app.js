@@ -314,9 +314,6 @@ function render() {
   $('cG').textContent = `G${e.accumulatedG} · ${(100*rateRiseOdds(e.accumulatedG)).toFixed(0)}% tighten`;
   const pres = G.president;
   $('cPres').textContent = pres ? `${pres.party} · ${G.players[pres.player].name}` : 'vacant';
-  // #44: the known half of the national tide, on the board continuously
-  // rather than only inside a withdrawal window -- a midterm year is fixed
-  // the moment the year is, same rule as engine/game.ts's raceContext.
   $('cCycle').textContent = G.year % 4 === 2 ? 'midterm' : G.year % 4 === 0 ? 'presidential' : 'off-year';
 
   $('scores').replaceChildren(...G.players.map((p,i) => {

@@ -198,9 +198,6 @@ test('the midterm penalty reaches everyone; a local card outruns it', () => {
   assert.equal(resolution.modifierTotal(side), 2, 'home state 2 + identity match 2 (res.identityBonus 1 x 2) - midterm 2');
 });
 
-/** #44: the national tide's known half is flagged so the withdrawal window
- *  (ui/app.js's `m.national` check) can show it apart from the die that is
- *  still hidden -- everything else in the stack stays unflagged. */
 test('#44: midterm and economy are flagged national; nothing else is', () => {
   const d: Declaration = { player: 0, card: cand({ homeStateBonus: 2 }), office: 'senator', state: 'OH' };
   const c = ctx({ state: 'OH', isMidterm: true, presidentParty: 'D', economyMod: -2 });
