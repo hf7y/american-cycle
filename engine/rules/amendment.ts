@@ -24,7 +24,10 @@ import type { RNG } from './rng.ts';
 export interface AmendmentConfig {
   /** off leaves v0.1's endings in force, which is how the two are compared */
   enabled: boolean;
-  /** Article V: two-thirds to call, three-quarters to ratify */
+  /** Article V: two-thirds to call a convention OR to propose in Congress
+   *  (hf7y/american-cycle#86 -- `leg.proposeAmendment` reuses this same
+   *  fraction rather than printing a second copy of the same constant),
+   *  three-quarters to ratify */
   callFraction: number;
   ratifyFraction: number;
   /** how long ratification stays open. Others act during this window — it is

@@ -844,9 +844,66 @@ export class Game {
     return t.length ? { player: best, tags: t } : undefined;
   }
 
+  /** hf7y/american-cycle#86's ruling: the ordinary path, gated on
+   *  hf7y/american-cycle#83's pen -- the House-authorship vote is the
+   *  precondition, so only the player who won it can move a proposal here.
+   *  Two-thirds of each chamber votes on the proposal directly (`leg.
+   *  proposeAmendment`); the ratification stage that follows is
+   *  route-agnostic and untouched (`ratify()`, below).
+   *
+   *  This is why the convention stays rare without a printed probability:
+   *  it is tried below ONLY when there is no pen to win in the first place
+   *  (`resolveAuthor` finds no House majority party), which the shipped
+   *  packs make an uncommon shape of chamber. Every other bill year that
+   *  doesn't reach two-thirds here simply proposes nothing, same as most
+   *  real Congresses in most real years -- it does not fall through to a
+   *  convention, which would make the state route the common one instead of
+   *  the one the record never used. Returns true when the year was spent,
+   *  same contract as `convention()` and `impeachment()`. */
+  private congressionalPropose(): boolean {
+    if (!this.cfg.amendment.enabled) return false;
+    if (this.amendments.some((a) => a.ratifiedIn === undefined && a.failedIn === undefined)) return false;
+    const authorId = this.resolveAuthor();
+    if (authorId === undefined) return false;
+
+    const view = this.view(authorId);
+    const proposedTags = this.agents[authorId].moveAmendment?.(view, undefined)
+      ?? this.defaultBillTags(authorId).slice(0, this.cfg.amendment.tagsPerAmendment);
+    if (!proposedTags.length) return false;
+
+    const votes: leg.Vote[] = [];
+    for (const s of this.seats) {
+      if (!s.holder || (s.office !== 'senator' && s.office !== 'representative')) continue;
+      // Reuses the bill-vote hook: a proposal is voted the same way a bill
+      // is, by fit between the seat's district and the tags on offer. `g` is
+      // spending and has no referent here, so agents that key off it (e.g.
+      // EconomyChicken) see `g === 0`, their own "nothing to spend" case.
+      const yes = this.agents[s.holder.player].voteBill(this.view(s.holder.player), 0, s, proposedTags);
+      votes.push({ player: s.holder.player, party: s.holder.party, office: s.office, yes, cardId: s.holder.cardId });
+    }
+
+    const out = leg.proposeAmendment(this.cfg.amendment.callFraction, this.seats, votes);
+    if (!out.passed) {
+      this.log.push(`${this.year}: the amendment proposal fails in Congress, ${out.houseYes}/${out.houseTotal} H, ${out.senateYes}/${out.senateTotal} S`);
+      return true;
+    }
+
+    this.amendments.push({
+      id: `a${this.year}`, proposer: authorId, tags: proposedTags,
+      calledIn: this.year, called: [], ratified: [], rescinded: [],
+    });
+    this.log.push(`${this.year}: Congress proposes an amendment on [${proposedTags.join(', ')}], ${out.houseYes}/${out.houseTotal} H, ${out.senateYes}/${out.senateTotal} S`);
+    return true;
+  }
+
   /** Calling a convention spends the year's legislating, exactly as
    *  impeachment does: wanting the ending is a decision taken INSTEAD of
-   *  governing, not alongside it. Returns true when the year was spent. */
+   *  governing, not alongside it. Returns true when the year was spent.
+   *
+   *  Reached only when hf7y/american-cycle#86's ordinary path above found no
+   *  pen to award -- states filling a vacuum Congress itself cannot act
+   *  from, which is what keeps this the rare route in a game where it
+   *  otherwise never lost that footing to try. */
   private convention(): boolean {
     if (!this.cfg.amendment.enabled) return false;
     if (this.amendments.some((a) => a.ratifiedIn === undefined && a.failedIn === undefined)) return false;
@@ -1619,7 +1676,7 @@ export class Game {
   *interactiveTick(human: number): Generator<UiRequest, void, UiAnswer> {
     for (const p of this.players) p.tapped.clear();
     this.convertSuccessions();
-    if (isBillYear(this.cfg, this.year) && !this.impeachment() && !this.convention()) {
+    if (isBillYear(this.cfg, this.year) && !this.impeachment() && !this.congressionalPropose() && !this.convention()) {
       this.omnibillInteractive(human, yield* this.askBill(human));
     }
     this.ratify();
@@ -1640,7 +1697,20 @@ export class Game {
     // called from `run()` alone, so a browser game ran to the year cap however
     // many bills anyone authored. Set here rather than returned so the existing
     // generator signature holds; the driver reads `wonBy`.
-    if (this.wonBy === undefined) {
+    //
+    // `run()` never calls `victor()` once `this.endedBy` is already set --
+    // `if (this.endedBy) break;` above its own call -- because an amendment
+    // ratifying is itself an ending, and it names no winner (v0.2 item 3's own
+    // rule: ratification stops the clock without naming one). This path had
+    // dropped that guard, so a game `ratify()` had just ended by amendment
+    // still asked `victor()` and could hand it a `bills`-target winner anyway
+    // -- surfaced by hf7y/american-cycle#86, which makes ratifying reachable
+    // through an ordinary chamber vote rather than only the rare, harder
+    // convention route, so this path actually gets exercised now instead of
+    // sitting dead on the one config where both endings compete for the same
+    // game (`engine/victory.test.ts`, "both paths agree on who won and when",
+    // seed 7777).
+    if (this.wonBy === undefined && !this.endedBy) {
       this.wonBy = this.victor();
       // `endedBy` was set by `run()` alone, so the browser could ratify an
       // amendment or reach a bill target and keep playing. Both paths now
@@ -1793,10 +1863,10 @@ export class Game {
     for (const p of this.players) p.tapped.clear();      // 1. action phase
     this.convertSuccessions();
     const billYear = isBillYear(this.cfg, this.year);
-    // The year's legislating slot, now three-way: a removal, a convention
-    // call, or a bill. Wanting the ending is a decision taken INSTEAD of
-    // legislating.
-    if (billYear && !this.impeachment() && !this.convention()) this.omnibill();   // 2-3.
+    // The year's legislating slot, now four-way: a removal, a congressional
+    // amendment proposal, a convention call, or a bill. Wanting the ending is
+    // a decision taken INSTEAD of legislating.
+    if (billYear && !this.impeachment() && !this.congressionalPropose() && !this.convention()) this.omnibill();   // 2-3.
     this.ratify();
     const fed = econ.fedCheck(this.economy, this.cfg.economy, this.rng);  // 4.
     // Logged in BOTH paths. The interactive tick logged this and the headless

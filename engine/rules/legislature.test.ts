@@ -1,6 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { tallyBill, impeach, author, majorityParty, authorCandidates, resolveAuthorVote } from './legislature.ts';
+import {
+  tallyBill, impeach, author, majorityParty, authorCandidates, resolveAuthorVote, proposeAmendment,
+} from './legislature.ts';
 import type { LegislatureConfig, Vote } from './legislature.ts';
 import type { Seat, Party } from '../types/index.ts';
 import { RNG } from './rng.ts';
@@ -67,6 +69,32 @@ test('the veto stands unless two-thirds of both chambers override', () => {
 
   const over = tallyBill(cfg, seats, all, 3, { player: 1, party: 'R' }, true, { house: 6, senate: 7 }, new RNG(4));
   assert.ok(over.overridden && over.passed, 'two-thirds of both carries it over the veto');
+});
+
+test('hf7y/american-cycle#86: a congressional amendment proposal needs two-thirds of EACH chamber, not two-thirds overall', () => {
+  const seats = bench(Array(6).fill('D'), [...Array(6).fill('D'), ...Array(4).fill('R')]);
+  // House is unanimous (6/6, easily two-thirds); Senate is 6/10, short of 2/3.
+  const short = votes(seats, (s) => s.office === 'representative' || s.holder!.party === 'D');
+  const out = proposeAmendment(2 / 3, seats, short);
+  assert.equal(out.houseYes, 6);
+  assert.equal(out.senateYes, 6);
+  assert.ok(!out.passed, 'a chamber-wide combined tally would clear 2/3 (12/16); voted per chamber it does not');
+
+  const withTwoR = votes(seats, (s) =>
+    s.office === 'representative' || s.holder!.party === 'D' || ['s6', 's7'].includes(s.holder!.cardId));
+  const passed = proposeAmendment(2 / 3, seats, withTwoR);
+  assert.equal(passed.senateYes, 8);
+  assert.ok(passed.passed, 'eight of ten senators is two-thirds');
+});
+
+test('hf7y/american-cycle#86: no presentment -- a proposal has no veto to skip, only the two chamber votes', () => {
+  // A unanimous chamber pair passes with no president, no veto arg, and no
+  // reaction/score machinery: proposeAmendment's return type carries none of
+  // tallyBill's g/vetoed/scores fields.
+  const seats = bench(Array(6).fill('D'), Array(6).fill('D'));
+  const out = proposeAmendment(2 / 3, seats, votes(seats, () => true));
+  assert.ok(out.passed);
+  assert.deepEqual(Object.keys(out).sort(), ['houseTotal', 'houseYes', 'passed', 'senateTotal', 'senateYes']);
 });
 
 test('impeachment needs two-thirds of the Senate', () => {
