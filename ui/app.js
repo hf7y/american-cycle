@@ -495,10 +495,6 @@ function modal(html){ $('modalBody').innerHTML = html; $('modal').classList.add(
 function closeModal(){ $('modal').classList.remove('on'); }
 
 // ---- report loop --------------------------------------------------------
-// #143: the report IS the repro, not a description of one -- this game is
-// fully seeded, so the state a player was in is exactly {seed, cfgName,
-// startEra, opponents, year}, and replaying it is `npm run sim` or
-// sim/playtest.py with that seed, not a human trying to describe a board.
 function buildStamp() {
   return ($('buildStamp')?.textContent || '').replace(/^build\s+/, '').split('·')[0].trim();
 }

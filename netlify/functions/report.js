@@ -1,15 +1,3 @@
-/** #143: the write half of the report loop. A Netlify Function holding
- *  GITHUB_TOKEN in env, filing a real issue on this repo -- the token never
- *  reaches the page. Zach's ruling on the write endpoint (#143, 2026-09-06):
- *  "open, plaintext password, or cookie... chezz shipped one and it's fine" --
- *  pick the cheapest thing that stops a drive-by crawler, not an auth model.
- *  The cheapest thing here is a honeypot field the form never shows a human:
- *  a filled one is silently accepted and dropped, never filed.
- *
- *  The state block is a re-runnable game, not a description of one: this
- *  game is fully seeded (seed, cfgName, startEra, opponents, year), so the
- *  report IS the repro rather than an approximation of it (see #143's body).
- */
 export const handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: JSON.stringify({ ok: false, error: 'method not allowed' }) };
@@ -21,8 +9,6 @@ export const handler = async (event) => {
 
   const { kind, message, honeypot, seed, cfgName, startEra, opponents, year, buildStamp } = body;
 
-  // A human never fills this field; a bot filling every input on the form does.
-  // Accept and drop rather than reject, so a crawler gets no signal either way.
   if (honeypot) return { statusCode: 200, body: JSON.stringify({ ok: true }) };
 
   if (typeof message !== 'string' || !message.trim()) {
