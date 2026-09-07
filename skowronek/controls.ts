@@ -83,12 +83,20 @@ export function syntheticControl(): { check: Check; passed: boolean } {
  *  it" with "they played elections differently" — and the RNG stream diverges
  *  the moment passage differs, so even the same seed is not the same game.
  *
- *  This test needs no second pool and has no confound. §7 gates races on
- *  `isElectionYear`. In a NON-election year no race resolves, so the only lean
- *  writer that can run is `decay`, which moves every state strictly toward zero
- *  (engine/rules/lean.ts). Therefore |lean[state]| must be non-increasing that
- *  year. If |lean| never rises in a non-election year — while bills are passing
- *  in those same years — then nothing legislative writes to the board.
+ *  This test needs no second pool and has no confound. §7 gates federal races
+ *  on `isElectionYear`, and #232 found that `isElectionYear` alone can no
+ *  longer split the series: #173's historically-accurate `governorUp` makes
+ *  some state's off-cycle governor race resolve in literally every odd year
+ *  1932-2040, so `isElectionYear` is `true` for 100% of years under every
+ *  shipped config (`oddYearGovernors: true` everywhere). That race still
+ *  cannot WRITE lean unless `cfg.lean.governorPushes === 'with-lean'`
+ *  (`'never'` on every config but `governors-push.json` — see `applyPush`),
+ *  so `YearObs.electionCanWriteLean` is the gate this control actually needs:
+ *  a year where it is `false` has decay as the only possible lean writer
+ *  (engine/rules/lean.ts), which moves every state strictly toward zero.
+ *  Therefore |lean[state]| must be non-increasing that year. If |lean| never
+ *  rises in such a year — while bills are passing in those same years — then
+ *  nothing legislative writes to the board.
  *
  *  The positive control is the same detector on election years, where pushes
  *  and the honeymoon DO add counters. If it fires there and is silent in
@@ -108,7 +116,7 @@ export function leanWriterControl(runs: RunObs[]): { check: Check; movementDetec
       for (const st of Object.keys(cur.lean)) {
         if (Math.abs(cur.lean[st]) > Math.abs(prev.lean[st] ?? 0) + EPS) rose++;
       }
-      if (cur.isElection) { electionYears++; electionRises += rose; }
+      if (cur.electionCanWriteLean) { electionYears++; electionRises += rose; }
       else {
         offYears++; offRises += rose;
         bills += cur.billsPassedCum - prev.billsPassedCum;
@@ -120,6 +128,13 @@ export function leanWriterControl(runs: RunObs[]): { check: Check; movementDetec
 
   const detectorLive = electionRises > 0;
   const movementDetected = offRises > 0;
+  // #232: a config with `governorPushes: 'with-lean'` (only `governors-push.json`
+  // ships this) makes an off-cycle governor race a lean writer, and #173's real
+  // schedule gives every odd year one -- so `electionCanWriteLean` is `true` in
+  // 100% of that config's years too, and `offYears` is genuinely zero. That is
+  // "no sample", not "sampled and found nothing"; reporting it as UNHEALTHY would
+  // repeat the exact ambiguity this file's header warns against.
+  const noOffYears = offYears === 0;
 
   return {
     movementDetected,
@@ -132,17 +147,22 @@ export function leanWriterControl(runs: RunObs[]): { check: Check; movementDetec
         'bills passed in non-election years': measure(offBills, 'per game'),
         'non-election bill years per game': measure(offBillYears, 'years'),
       },
-      verdict: movementDetected ? 'HEALTHY' : 'UNHEALTHY',
+      verdict: noOffYears ? 'BLOCKED' : movementDetected ? 'HEALTHY' : 'UNHEALTHY',
       note: !detectorLive
         ? 'THE DETECTOR IS DEAD: |lean| never rose even in an election year, so its silence off-season proves '
           + 'nothing. Do not read C2.'
-        : movementDetected
-          ? 'Lean rises in years with no election, so some non-electoral mechanism writes to the board and a '
-            + 'legislative settlement channel is at least possible.'
-          : 'The detector fires in election years and is silent in every non-election year, while bills pass '
-            + 'in those same years. So legislation cannot write to the settlement board at all: lean is '
-            + 'election-only (applyPush, honeymoon, decay). This is CANNOT ACT as a property of the rules, '
-            + 'not of any agent\'s choices — no pool, however maximising, can move it.',
+        : noOffYears
+          ? 'THIS CONFIG HAS NO NON-ELECTION YEARS TO SAMPLE: `governorPushes: \'with-lean\'` makes an '
+            + 'off-cycle governor race a lean writer, and one resolves in every odd year (#232), so '
+            + '`electionCanWriteLean` is true 100% of the time under this config. C2 cannot be evaluated here '
+            + '— read it on a `governorPushes: \'never\'` config instead.'
+          : movementDetected
+            ? 'Lean rises in years with no election, so some non-electoral mechanism writes to the board and a '
+              + 'legislative settlement channel is at least possible.'
+            : 'The detector fires in election years and is silent in every non-election year, while bills pass '
+              + 'in those same years. So legislation cannot write to the settlement board at all: lean is '
+              + 'election-only (applyPush, honeymoon, decay). This is CANNOT ACT as a property of the rules, '
+              + 'not of any agent\'s choices — no pool, however maximising, can move it.',
     },
   };
 }
