@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { tallyBill, impeach, author, majorityParty, authorCandidates, resolveAuthorVote } from './legislature.ts';
+import { tallyBill, impeach, author, majorityParty, authorCandidates, resolveAuthorVote, proposesAmendment } from './legislature.ts';
 import type { LegislatureConfig, Vote } from './legislature.ts';
 import type { Seat, Party } from '../types/index.ts';
 import { RNG } from './rng.ts';
@@ -73,6 +73,13 @@ test('impeachment needs two-thirds of the Senate', () => {
   const seats = bench([], Array(9).fill('D'));
   assert.ok(!impeach(cfg, seats, 5));
   assert.ok(impeach(cfg, seats, 6), 'six of nine is two-thirds');
+});
+
+test('a congressional amendment proposal needs the SAME fraction in BOTH chambers', () => {
+  const seats = bench(Array(9).fill('D'), Array(9).fill('D'));
+  assert.ok(!proposesAmendment(seats, 5, 9, 2 / 3), 'five of nine House votes is not two-thirds');
+  assert.ok(!proposesAmendment(seats, 6, 5, 2 / 3), 'the House clears it but the Senate does not');
+  assert.ok(proposesAmendment(seats, 6, 6, 2 / 3), 'six of nine clears two-thirds in both');
 });
 
 test('authorship goes to the largest bloc of the majority House party', () => {

@@ -187,3 +187,13 @@ export function impeach(cfg: LegislatureConfig, seats: Seat[], yesVotes: number)
   const { senate } = chambers(seats);
   return atLeast(yesVotes, senate.length, cfg.impeachThreshold);
 }
+
+/** hf7y/american-cycle#86's ruling: Congress proposing an amendment is the
+ *  ordinary route, the state convention the rare one. The same fraction is
+ *  required of BOTH chambers and there is no presentment -- Article V gives
+ *  the president no role in proposing an amendment, unlike an ordinary
+ *  bill. */
+export function proposesAmendment(seats: Seat[], houseYes: number, senateYes: number, fraction: number): boolean {
+  const { house, senate } = chambers(seats);
+  return atLeast(houseYes, house.length, fraction) && atLeast(senateYes, senate.length, fraction);
+}

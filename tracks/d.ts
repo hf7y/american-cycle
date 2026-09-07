@@ -266,7 +266,18 @@ const d5: TrackItem = {
  *  years, so ~1.2 per sixteen. The game cannot reach that: ratification STOPS
  *  the clock, so no game can record more than one. Reported as
  *  characterization, never as a target — grading it would be grading the
- *  ending rule under another name. */
+ *  ending rule under another name.
+ *
+ *  hf7y/american-cycle#86 GAVE THE PROPOSAL STAGE AN OWN ORACLE, for the
+ *  congressional route only. Congress sent seven amendments to the states in
+ *  the 79 years since 1947, ~1.4 per sixteen-year game — a real historical
+ *  rate, unlike the convention route's zero. Reported alongside the
+ *  convention-call rate, not folded into it: the two routes have different
+ *  historical referents (one real, one counterfactual), and ratification
+ *  itself stays route-agnostic (`ratify()` is unchanged by #86), so it is
+ *  still graded on the combined `all` below. The congressional rate is
+ *  characterization here too, not yet a gate — calibrating `congressFraction`
+ *  against it is a separate pass, not assumed by shipping the mechanism. */
 const d6: TrackItem = {
   id: 'D6-amendment-rate',
   track: 'D',
@@ -278,6 +289,8 @@ const d6: TrackItem = {
     + 'configs are the out-of-sample test, and they are reported below rather than tuned to match.',
   run({ runs }): Measure[] {
     const all = runs.flatMap((r) => r.amendments);
+    const congress = all.filter((a) => a.route === 'congress');
+    const convention = all.filter((a) => a.route === 'convention');
     const ratified = all.filter((a) => a.ratifiedIn !== undefined);
     const years = runs.reduce((n, r) => n + r.years, 0);
     // The ERA case: how far short does a failure get? 35 of 38 is the model.
@@ -285,7 +298,9 @@ const d6: TrackItem = {
     const shortfall = failed.map((a) => a.ratified.length);
     return [
       { name: 'ratification given proposal', value: share(ratified.length, all.length), unit: 'share of conventions', n: all.length },
-      { name: 'conventions called a game', value: all.length / runs.length, n: runs.length },
+      { name: 'conventions called a game', value: convention.length / runs.length, n: runs.length },
+      { name: 'congressional proposals a game', value: congress.length / runs.length, n: runs.length },
+      { name: 'congressional proposals per 16 game-years', value: years ? 16 * congress.length / years : 0, n: runs.length },
       { name: 'amendments per 16 game-years', value: years ? 16 * ratified.length / years : 0, n: runs.length },
       { name: 'failed amendments: mean states reached', value: mean(shortfall), unit: 'of 38 needed', n: failed.length },
     ];

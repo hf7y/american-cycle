@@ -152,6 +152,8 @@
   },
   "amendment": {
     "enabled": true,
+    "congressionalProposal": true,
+    "congressFraction": 0.6666666666666666,
     "callFraction": 0.6666666666666666,
     "ratifyFraction": 0.75,
     "windowYears": 8,

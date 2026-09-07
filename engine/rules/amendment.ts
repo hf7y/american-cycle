@@ -24,6 +24,13 @@ import type { RNG } from './rng.ts';
 export interface AmendmentConfig {
   /** off leaves v0.1's endings in force, which is how the two are compared */
   enabled: boolean;
+  /** hf7y/american-cycle#86's ruling: the congressional route is the ordinary
+   *  path, the state convention stays live but rare. Both routes feed the
+   *  same `ratify()` -- only the proposal stage differs. */
+  congressionalProposal: boolean;
+  /** two-thirds of the House AND two-thirds of the Senate, no presentment --
+   *  Article V gives the president no role in proposing an amendment. */
+  congressFraction: number;
   /** Article V: two-thirds to call, three-quarters to ratify */
   callFraction: number;
   ratifyFraction: number;

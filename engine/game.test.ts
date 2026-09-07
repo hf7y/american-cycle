@@ -695,3 +695,69 @@ test('#78: a second bill on the same tags, passed once the House flips, nets the
     'OH nets fully back to baseline: the D push (3 pips) overtakes the R remainder (2), then decays -1 toward zero');
   assert.equal(g.leanMap.TX, -2, 'TX has no earlier push to net against, so the same D bill just moves it, ordinarily');
 });
+
+// -------------------------------------------------- #86: the congressional amendment route
+
+test('#86: two-thirds of BOTH chambers proposes an amendment through Congress, no state calling involved', () => {
+  const cfg = loadConfig('as-written-plus.json');
+  cfg.amendment = { ...cfg.amendment, congressionalProposal: true, congressFraction: 2 / 3 };
+  cfg.game = { ...cfg.game, oddYearGovernors: false }; // isolate from an election tick, exactly like the #78 tests
+
+  const r = new BillYesAgent('r'), d = new BillYesAgent('d');
+  const g = new Game([r, d], structuredClone(CARDS), cfg, 1);
+  g.year = cfg.game.startYear + cfg.game.maxYears / 2 + 1; // past defaultAmendmentTags' halfway gate, odd
+  g.seats = [
+    { office: 'representative', state: 'OH', slot: 1, holder: { cardId: 'h1', player: 0, party: 'R', since: 1976 } },
+    { office: 'representative', state: 'OH', slot: 2, holder: { cardId: 'h2', player: 0, party: 'R', since: 1976 } },
+    { office: 'representative', state: 'OH', slot: 3, holder: { cardId: 'h3', player: 0, party: 'R', since: 1976 } },
+    { office: 'senator', state: 'OH', slot: 1, senateClass: 1, holder: { cardId: 's1', player: 0, party: 'R', since: 1976 } },
+    { office: 'representative', state: 'TX', slot: 1, holder: { cardId: 'h4', player: 1, party: 'D', since: 1976 } },
+    { office: 'senator', state: 'TX', slot: 1, senateClass: 1, holder: { cardId: 's2', player: 1, party: 'D', since: 1976 } },
+  ];
+  g.players[0].hand = [];
+  g.players[0].districts = [dist({ id: 'OH-1', state: 'OH', number: 1, demographics: ['union'] })];
+  g.players[1].hand = [];
+  g.players[1].districts = [];
+
+  g.tick();
+
+  assert.equal(g.bills.length, 0, 'the year was spent seeking the ending, not on the omnibill');
+  assert.equal(g.amendments.length, 1);
+  assert.equal(g.amendments[0].route, 'congress');
+  assert.deepEqual(g.amendments[0].called, [], 'Congress proposes -- no state ever votes to call anything');
+  assert.deepEqual(g.amendments[0].tags, ['union'], 'the mover’s own coalition, exactly as the convention route already picks it');
+});
+
+test('#86: the SAME fraction is required of both chambers -- a House supermajority with no Senate one still fails, and Congress still legislates that year', () => {
+  const cfg = loadConfig('as-written-plus.json');
+  cfg.amendment = { ...cfg.amendment, congressionalProposal: true, congressFraction: 2 / 3 };
+  // Isolates this test to Congress's own bar: a failed proposal does NOT
+  // spend the year (see congressionalAmendment's own comment), so without
+  // this the SAME mover's ask would fall through to a real, RNG-driven
+  // convention call this same tick. callFraction > 1 makes that call
+  // deterministically fail its OWN needed() bar regardless of the dice, so
+  // the omnibill assertion below is not a coin flip.
+  cfg.amendment.callFraction = 1.5;
+  cfg.game = { ...cfg.game, oddYearGovernors: false };
+
+  const majority = new BillYesAgent('r'), minority = new ScriptedAgent('d'); // ScriptedAgent.voteBill defaults to false
+  const g = new Game([majority, minority], structuredClone(CARDS), cfg, 1);
+  g.year = cfg.game.startYear + cfg.game.maxYears / 2 + 1;
+  g.seats = [
+    { office: 'representative', state: 'OH', slot: 1, holder: { cardId: 'h1', player: 0, party: 'R', since: 1976 } },
+    { office: 'representative', state: 'OH', slot: 2, holder: { cardId: 'h2', player: 0, party: 'R', since: 1976 } },
+    { office: 'representative', state: 'OH', slot: 3, holder: { cardId: 'h3', player: 0, party: 'R', since: 1976 } },
+    { office: 'senator', state: 'OH', slot: 1, senateClass: 1, holder: { cardId: 's1', player: 0, party: 'R', since: 1976 } },
+    { office: 'senator', state: 'TX', slot: 1, senateClass: 1, holder: { cardId: 's2', player: 1, party: 'D', since: 1976 } },
+    { office: 'senator', state: 'CA', slot: 1, senateClass: 1, holder: { cardId: 's3', player: 1, party: 'D', since: 1976 } },
+  ];
+  g.players[0].hand = [];
+  g.players[0].districts = [dist({ id: 'OH-1', state: 'OH', number: 1, demographics: ['union'] })];
+  g.players[1].hand = [];
+  g.players[1].districts = [];
+
+  g.tick();
+
+  assert.equal(g.amendments.length, 0, 'three of three House votes clears two-thirds, but one of three Senate votes does not');
+  assert.equal(g.bills.length, 0, 'Congress fell through to the (rigged-to-fail) convention call, which DOES still spend the year on its own failure');
+});

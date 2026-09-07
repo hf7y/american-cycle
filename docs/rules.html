@@ -29,7 +29,7 @@
 <body>
 <h1>american-cycle: rules reference</h1>
 <em class="gen">Generated from the engine (config <code>as-written-plus</code>, build
-<code>e73cafcc</code>) by <code>node docs/build.ts</code>. Never
+<code>fdc24d2b</code>) by <code>node docs/build.ts</code>. Never
 edit <code>docs/rules.html</code> by hand &mdash; edit
 <code>docs/rules.template.html</code> or the engine, then regenerate.
 If a number here is wrong, the engine is wrong, not the prose.</em>
@@ -110,12 +110,17 @@ a score can fall without any decay rule at all.</p>
 <p><code>as-written-plus</code> ships <code>victory: "amendment"</code>. All modes the engine knows:</p><table><tr><th>mode</th><th>what ends the game</th></tr><tr><td><code>points</code></td><td>no earned ending &mdash; play runs out the year cap and the highest score wins.</td></tr><tr><td><code>bills</code></td><td>first player to author 8 enacted bills (config <code>billTarget</code>, default 8).</td></tr><tr><td><code>two-terms</code></td><td>two CONSECUTIVE presidential terms for one player.</td></tr><tr><td><code>three-terms</code></td><td>three presidential terms for one player, need not be consecutive.</td></tr><tr><td><code>parallel</code></td><td>either the bills target (8) or two consecutive terms, whichever a player reaches first.</td></tr><tr><td><code>amendment</code></td><td>the amendment ratifies &mdash; see below. Not a player win: the game ends and the epilogue score decides.</td></tr></table>
 
 <h3>The amendment</h3>
-<p>The one earned ending. On config <code>as-written-plus</code>:
-<b>34 states</b> to call a convention, <b>38
-states</b> to ratify, and <b>13 states</b> to block it
-outright &mdash; so a narrow leader can never close the game alone, and a
-determined minority always has a wall. Ratification does not name a winner
-outright; it ends the game and the epilogue score (above) decides who won.</p>
+<p>The one earned ending, proposed either of two ways. On config
+<code>as-written-plus</code>, the ordinary route is Congress: <b>66.7%
+of the House and 66.7% of the Senate</b>, with no
+presentment to the president &mdash; Article V gives the president no role
+in proposing an amendment. The rare route is a state convention:
+<b>34 states</b> to call one. Either way, ratification needs
+<b>38 states</b>, and <b>13 states</b>
+block it outright &mdash; so a narrow leader can never close the game alone,
+and a determined minority always has a wall. Ratification does not name a
+winner outright; it ends the game and the epilogue score (above) decides who
+won.</p>
 
 </body>
 </html>

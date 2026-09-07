@@ -4,7 +4,7 @@ import { blockers, needed, stateBacks, supportPips, type AmendmentConfig } from 
 import { RNG } from './rng.ts';
 
 const cfg: AmendmentConfig = {
-  enabled: true, callFraction: 2 / 3, ratifyFraction: 0.75, windowYears: 8,
+  enabled: true, congressionalProposal: true, congressFraction: 2 / 3, callFraction: 2 / 3, ratifyFraction: 0.75, windowYears: 8,
   dice: 2, target: 6, rescindTarget: 11, governorPips: 2, districtPips: 2, leanPips: 1,
   tagsPerAmendment: 2, failurePush: 1,
 };

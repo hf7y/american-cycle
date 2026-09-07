@@ -148,10 +148,15 @@ export interface EnactedBill {
 export interface Amendment {
   id: string;
   proposer: number;
+  /** hf7y/american-cycle#86: which proposal stage produced this -- 'congress'
+   *  (two-thirds of both chambers, no presentment) or 'convention' (two-
+   *  thirds of the states). Ratification afterward is route-agnostic. */
+  route: 'congress' | 'convention';
   /** the demographic/issue content, drawn from the existing tag vocabulary */
   tags: IdentityTag[];
   calledIn: number;
-  /** states that voted to call the convention */
+  /** states that voted to call the convention. Empty for the congressional
+   *  route -- Congress proposes, no state calls anything. */
   called: string[];
   /** states that have ratified and survived the challenge */
   ratified: string[];

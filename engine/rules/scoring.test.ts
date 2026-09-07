@@ -81,7 +81,7 @@ test('a ratified amendment pays every matching board, with no premium for the pr
   ];
   const b: BoardView = {
     ...empty(), seats,
-    amendments: [{ id: 'a1', proposer: 0, tags: ['union'], calledIn: 1980,
+    amendments: [{ id: 'a1', proposer: 0, route: 'convention', tags: ['union'], calledIn: 1980,
                    called: [], ratified: [], rescinded: [], ratifiedIn: 1988 }],
     identitiesOf: () => ['union'],
   };

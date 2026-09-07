@@ -844,18 +844,65 @@ export class Game {
     return t.length ? { player: best, tags: t } : undefined;
   }
 
+  /** Which player wants an amendment now, and what it says -- shared by both
+   *  proposal routes. Congress and the states differ only in how a mover's
+   *  ask is approved, not in who asks or what for. */
+  private amendmentMove(): { player: number; tags: IdentityTag[] } | undefined {
+    for (let i = 0; i < this.players.length; i++) {
+      const t = this.agents[i].moveAmendment?.(this.view(i), undefined);
+      if (t?.length) return { player: i, tags: t };
+    }
+    return this.defaultAmendmentTags();
+  }
+
+  /** hf7y/american-cycle#86's ruling: the congressional route is the
+   *  ordinary path, so it is tried before the state convention every bill
+   *  year. Two-thirds of the House and two-thirds of the Senate propose,
+   *  with no presentment -- Article V gives the president no role. Reuses
+   *  `voteBill` for the yes/no itself, exactly as the ruling asked for: a
+   *  proposal vote is a vote like any other, only the bar and the missing
+   *  veto differ.
+   *
+   *  A FAILED proposal does NOT spend the year, unlike impeachment and the
+   *  convention call. Those two are a player's own deliberate choice to
+   *  pursue the ending instead of governing; a stalled two-thirds vote is
+   *  Congress failing to do something extraordinary, not choosing to do
+   *  nothing -- the same chamber that falls short of a supermajority still
+   *  passes ordinary bills on an ordinary majority, and the convention route
+   *  still gets its (rare) chance the same year. Measured: reusing
+   *  impeachment/convention's always-spends-the-year rule here made the
+   *  convention route not just rare but UNREACHABLE, collapsing the
+   *  amendment-is-the-ending finding's ratification share to zero -- see
+   *  the PR for the before/after. Returns true only on an actual proposal. */
+  private congressionalAmendment(): boolean {
+    if (!this.cfg.amendment.enabled || !this.cfg.amendment.congressionalProposal) return false;
+    if (this.amendments.some((a) => a.ratifiedIn === undefined && a.failedIn === undefined)) return false;
+    const move = this.amendmentMove();
+    if (!move) return false;
+
+    const { house, senate } = leg.chambers(this.seats);
+    const yes = (s: Seat) => this.agents[s.holder!.player].voteBill(this.view(s.holder!.player), 0, s, move.tags);
+    const houseYes = house.filter(yes).length;
+    const senateYes = senate.filter(yes).length;
+    if (!leg.proposesAmendment(this.seats, houseYes, senateYes, this.cfg.amendment.congressFraction)) {
+      this.log.push(`${this.year}: a congressional amendment proposal falls short, ${houseYes}/${house.length} H, ${senateYes}/${senate.length} S -- Congress still legislates`);
+      return false;
+    }
+    this.amendments.push({
+      id: `a${this.year}`, proposer: move.player, route: 'congress', tags: move.tags,
+      calledIn: this.year, called: [], ratified: [], rescinded: [],
+    });
+    this.log.push(`${this.year}: Congress proposes an amendment on [${move.tags.join(', ')}], ${houseYes}/${house.length} H, ${senateYes}/${senate.length} S`);
+    return true;
+  }
+
   /** Calling a convention spends the year's legislating, exactly as
    *  impeachment does: wanting the ending is a decision taken INSTEAD of
    *  governing, not alongside it. Returns true when the year was spent. */
   private convention(): boolean {
     if (!this.cfg.amendment.enabled) return false;
     if (this.amendments.some((a) => a.ratifiedIn === undefined && a.failedIn === undefined)) return false;
-    let move: { player: number; tags: IdentityTag[] } | undefined;
-    for (let i = 0; i < this.players.length; i++) {
-      const t = this.agents[i].moveAmendment?.(this.view(i), undefined);
-      if (t?.length) { move = { player: i, tags: t }; break; }
-    }
-    move ??= this.defaultAmendmentTags();
+    const move = this.amendmentMove();
     if (!move) return false;
 
     const cfg = this.cfg.amendment;
@@ -866,7 +913,7 @@ export class Game {
       return true;
     }
     this.amendments.push({
-      id: `a${this.year}`, proposer: move.player, tags: move.tags,
+      id: `a${this.year}`, proposer: move.player, route: 'convention', tags: move.tags,
       calledIn: this.year, called, ratified: [], rescinded: [],
     });
     this.log.push(`${this.year}: a convention is called on [${move.tags.join(', ')}], ${called.length} states`);
@@ -1619,7 +1666,7 @@ export class Game {
   *interactiveTick(human: number): Generator<UiRequest, void, UiAnswer> {
     for (const p of this.players) p.tapped.clear();
     this.convertSuccessions();
-    if (isBillYear(this.cfg, this.year) && !this.impeachment() && !this.convention()) {
+    if (isBillYear(this.cfg, this.year) && !this.impeachment() && !this.congressionalAmendment() && !this.convention()) {
       this.omnibillInteractive(human, yield* this.askBill(human));
     }
     this.ratify();
@@ -1793,10 +1840,12 @@ export class Game {
     for (const p of this.players) p.tapped.clear();      // 1. action phase
     this.convertSuccessions();
     const billYear = isBillYear(this.cfg, this.year);
-    // The year's legislating slot, now three-way: a removal, a convention
-    // call, or a bill. Wanting the ending is a decision taken INSTEAD of
-    // legislating.
-    if (billYear && !this.impeachment() && !this.convention()) this.omnibill();   // 2-3.
+    // The year's legislating slot, now four-way: a removal, a congressional
+    // amendment proposal, a convention call, or a bill. Wanting the ending is
+    // a decision taken INSTEAD of legislating. #86: Congress is tried before
+    // the convention because it is the ordinary route, the convention the
+    // rare one.
+    if (billYear && !this.impeachment() && !this.congressionalAmendment() && !this.convention()) this.omnibill();   // 2-3.
     this.ratify();
     const fed = econ.fedCheck(this.economy, this.cfg.economy, this.rng);  // 4.
     // Logged in BOTH paths. The interactive tick logged this and the headless

@@ -117,6 +117,7 @@ const substitutions: Record<string, string> = {
   IMPEACH_THRESHOLD: pct(cfg.legislature.impeachThreshold, 1),
   SCORING_TABLE: scoringTable(cfg),
   VICTORY_TABLE: victoryTable(GAME_TS, cfg),
+  AMENDMENT_CONGRESS: pct(cfg.amendment.congressFraction, 1),
   AMENDMENT_CALL: String(amendmentCall),
   AMENDMENT_RATIFY: String(amendmentRatify),
   AMENDMENT_BLOCK: String(amendmentBlock),
