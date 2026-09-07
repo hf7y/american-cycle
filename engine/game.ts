@@ -1304,11 +1304,8 @@ export class Game {
     };
   }
 
-  /** #161's hover surface: previews `buildModifiers`'s stack before a
-   *  declaration is made, missing only `endorsements`/`bruisingPrimary` --
-   *  those depend on what other players do this cycle. Reads general-round
-   *  rates, since whether a primary even fires depends on who else declares
-   *  here before the turn ends. */
+  /** #161: previews `buildModifiers` pre-declaration, at general-round rates
+   *  since a primary might not even fire yet. */
   previewModifiers(player: number, card: CandidateCard, office: Office, state: string, slot?: number,
                     district?: DistrictCard, districts?: DistrictCard[]): Modifier[] {
     const ctx = this.raceContext(office, state, slot);

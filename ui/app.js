@@ -209,9 +209,7 @@ function racesInState(state) {
   return S.eligibleFor(S.sel).filter((r) => r.state === state && !taken.has(uiRaceKey(r)));
 }
 
-// The district fit `buildModifiers` would price for race `r` -- shared by
-// the real declaration and the hover preview, so neither can drift from
-// the other.
+// The district fit for race `r`, shared by pickRace and the hover preview.
 function districtFitFor(r) {
   const me = G.players[S.human];
   const statewide = G.cfg.game.statewideFitSums && (r.office === 'senator' || r.office === 'governor')
@@ -243,10 +241,7 @@ function pickRace(state) {
   }
 }
 
-// ---- race preview -----------------------------------------------------------
-// #161 item 1: the withdrawal stack's arithmetic, one hover before a
-// declaration rather than only after, in the 3.6% of races that ever open
-// a withdrawal window.
+// #161 item 1: the withdrawal stack, one hover before a declaration.
 function showRacePreview(state, atEl) {
   const rs = racesInState(state);
   if (!rs.length) return;
