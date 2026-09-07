@@ -22,6 +22,13 @@ export interface EconomyConfig {
   shockOnRollAtMost?: number;
   /** pips against an incumbent of average power. Scaled by power held. */
   shockPips?: number;
+  /** v0.3, hf7y/american-cycle#84 arm 1. REPLACES power-proportional
+   *  distribution with a positional one when true: the shock discredits a
+   *  random axis of tag space instead of hitting every incumbent alike, so a
+   *  coalition concentrated on that axis is maximally exposed and a diverse
+   *  one is not. Same roll decides WHETHER a shock fires; this only changes
+   *  WHO it falls on. See engine/rules/elections.ts's shock modifier. */
+  shockPositional?: boolean;
 }
 
 export interface Economy { level: number; accumulatedG: number; lastRateRise?: number; }

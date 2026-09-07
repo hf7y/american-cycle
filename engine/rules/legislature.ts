@@ -31,6 +31,11 @@ export interface LegislatureConfig {
   /** v0.2 item 7: flat lean pips against every senator who voted to convict,
    *  and the same toward the acquitted president's party. */
   impeachBackfirePips?: number;
+  /** v0.3, hf7y/american-cycle#84 arm 2. When true, `impeachBackfirePips`
+   *  becomes a ceiling scaled down by how far the removal coalition's tag
+   *  position sits from the target party's -- see engine/game.ts's
+   *  `backfire()`. */
+  backfirePositional?: boolean;
   /** v0.2 item 8: flat lean pips against the party blamed for a shutdown. */
   shutdownPips?: number;
   /** #78's ruling: a passed bill places a counter, this many flat lean pips

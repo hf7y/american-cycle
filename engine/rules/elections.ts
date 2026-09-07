@@ -13,6 +13,7 @@ import type {
 } from '../types/index.ts';
 import { resolveRace, type Side, type Wave } from './resolution.ts';
 import type { RNG } from './rng.ts';
+import * as tags from './tags.ts';
 
 export interface ResolutionConfig {
   incumbency: number; identityBonus: number;
@@ -107,8 +108,14 @@ export interface RaceContext {
   /** set once the presidential general has resolved, for down-ballot coattails */
   presidentialWinner?: Party;
   /** v0.2 item 9: pips of exogenous shock this year, 0 in a quiet one. Falls
-   *  on incumbents, scaled by `Declaration.power`. */
+   *  on incumbents, scaled by `Declaration.power` -- unless `shockRegion` is
+   *  set, in which case it scales by tag-space nearness instead (v0.3 #84
+   *  arm 1). */
   shock?: number;
+  /** v0.3, hf7y/american-cycle#84 arm 1: this year's shocked axis of tag
+   *  space, set only under `economy.shockPositional` on a year the shock
+   *  fires. Presence, not `shock`, selects which distribution applies. */
+  shockRegion?: tags.TagWeights;
 }
 
 export interface Declaration {
@@ -299,8 +306,20 @@ export function buildModifiers(
     // v0.2 item 9: the cheap shock. It falls on the people in office and it
     // falls hardest on whoever holds most of them, which is the only brake in
     // the design that reads a player's total position rather than one race.
+    //
+    // v0.3 #84 arm 1: under `shockRegion`, it falls hardest on whoever's tags
+    // sit nearest the shocked axis instead -- a positional read, not a power
+    // one. A candidate with no tag position is not exposed (typed absence,
+    // not distance 0): the shock cannot discredit a position nobody holds.
     if (ctx.shock && d.incumbent) {
-      const pips = -Math.round(ctx.shock * (d.power ?? 1));
+      let pips: number;
+      if (ctx.shockRegion) {
+        const mine = tags.weights(d.card.identities);
+        const dist = tags.distance(mine, ctx.shockRegion);
+        pips = dist === undefined ? 0 : -Math.round(ctx.shock * (1 - dist));
+      } else {
+        pips = -Math.round(ctx.shock * (d.power ?? 1));
+      }
       if (pips) m.push({ source: 'shock', pips });
     }
 

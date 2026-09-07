@@ -6,6 +6,7 @@ import { RNG } from './rng.ts';
 import { buildModifiers, eligible, homeDistrict, runRace, withdrawalView } from './elections.ts';
 import type { Declaration, RaceContext, NationalConfig, PrimaryGeneralConfig, ResolutionConfig } from './elections.ts';
 import type { CandidateCard, DistrictCard } from '../types/index.ts';
+import * as tags from './tags.ts';
 import cfg from '../config/baseline.json' with { type: 'json' };
 
 const res = cfg.resolution as ResolutionConfig;
@@ -320,4 +321,40 @@ test('#24: an independent card reads no environment term -- there is no presiden
   const mods = buildModifiers(independentExtremist, badTide, 'primary', res, nat, withKnob);
   assert.equal(mods.find((m) => m.source === 'extremist (primary)')?.pips, pg.extremistPrimary,
     'partySign is 0 for an independent, so the tide has no party to attach to');
+});
+
+/** v0.2 item 9 baseline, locked in before touching the shock block for #84
+ *  arm 1 -- without `shockRegion`, the shock must still scale by power alone. */
+test('the flat shock scales by power and ignores identities when no region is shocked', () => {
+  const d: Declaration = { player: 0, card: cand({ identities: ['rural'] }), office: 'senator', state: 'OH', incumbent: true, power: 2 };
+  const mods = buildModifiers(d, ctx({ shock: 3 }), 'general', res, nat, pg);
+  assert.equal(mods.find((m) => m.source === 'shock')?.pips, -6);
+});
+
+/** v0.3, hf7y/american-cycle#84 arm 1: a positional shock reads
+ *  `Declaration.card.identities` against `ctx.shockRegion`, not power. */
+test('a positional shock hits an incumbent who shares the shocked axis, and spares one who does not', () => {
+  const region = tags.weights(['rural']);
+  const onAxis: Declaration = { player: 0, card: cand({ identities: ['rural'] }), office: 'senator', state: 'OH', incumbent: true, power: 1 };
+  const offAxis: Declaration = { player: 1, card: cand({ identities: ['urban'] }), office: 'senator', state: 'OH', incumbent: true, power: 1 };
+  const context = ctx({ shock: 4, shockRegion: region });
+  const onMods = buildModifiers(onAxis, context, 'general', res, nat, pg);
+  const offMods = buildModifiers(offAxis, context, 'general', res, nat, pg);
+  assert.equal(onMods.find((m) => m.source === 'shock')?.pips, -4, 'identical tags to the shocked region: full pips');
+  assert.equal(offMods.find((m) => m.source === 'shock'), undefined, 'disjoint tags: no exposure at all');
+});
+
+test('a positional shock does not fabricate exposure for a candidate with no tag position', () => {
+  const region = tags.weights(['rural']);
+  const untagged: Declaration = { player: 0, card: cand({ identities: [] }), office: 'senator', state: 'OH', incumbent: true, power: 1 };
+  const mods = buildModifiers(untagged, ctx({ shock: 4, shockRegion: region }), 'general', res, nat, pg);
+  assert.equal(mods.find((m) => m.source === 'shock'), undefined,
+    'no tags is not distance 0 -- the shock cannot discredit a position nobody holds');
+});
+
+test('a positional shock never fires on a non-incumbent, same as the flat one', () => {
+  const region = tags.weights(['rural']);
+  const challenger: Declaration = { player: 0, card: cand({ identities: ['rural'] }), office: 'senator', state: 'OH', incumbent: false };
+  const mods = buildModifiers(challenger, ctx({ shock: 4, shockRegion: region }), 'general', res, nat, pg);
+  assert.equal(mods.find((m) => m.source === 'shock'), undefined);
 });

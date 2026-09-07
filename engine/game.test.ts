@@ -21,7 +21,7 @@ import type { Declaration } from './rules/elections.ts';
 import { RNG } from './rules/rng.ts';
 import { AGENTS } from '../sim/agents.ts';
 import { STATES, BY_CODE, senateUp, electors, totalElectors, DC_ELECTORS } from './states.ts';
-import type { Card, CandidateCard, DistrictCard } from './types/index.ts';
+import type { Card, CandidateCard, DistrictCard, IdentityTag, Seat } from './types/index.ts';
 
 const loadConfig = (name: string): Config =>
   JSON.parse(readFileSync(new URL(`./config/${name}`, import.meta.url), 'utf8')) as Config;
@@ -694,4 +694,71 @@ test('#78: a second bill on the same tags, passed once the House flips, nets the
   assert.equal(g.leanMap.OH, 0,
     'OH nets fully back to baseline: the D push (3 pips) overtakes the R remainder (2), then decays -1 toward zero');
   assert.equal(g.leanMap.TX, -2, 'TX has no earlier push to net against, so the same D bill just moves it, ordinarily');
+});
+
+// --------------------------------------------------- impeachment backfire (#84)
+
+/** Always moves to impeach and votes yes for exactly the card ids it was
+ *  built with -- used on both sides of a failed conviction so the SAME
+ *  scripted behaviour seats yes- and no-voting senators regardless of which
+ *  player holds which seat. */
+class ImpeachAgent extends ScriptedAgent {
+  private yes: Set<string>;
+  constructor(name: string, yes: Set<string>) { super(name); this.yes = yes; }
+  moveImpeach(): boolean { return true; }
+  voteImpeach(_v: GameView, seat: Seat): boolean { return this.yes.has(seat.holder!.cardId); }
+}
+
+/** A failed conviction, 3 of 5 senators (short of #84's 2/3), so
+ *  `Game.backfire` always fires. Three R senators vote yes with
+ *  `removalIdentities`; two D senators (the president's own party, its
+ *  position under `tags.partyPosition`) hold `['catholic']` throughout, so
+ *  only the removal side's tags vary between calls. */
+function backfireScenario(positional: boolean, removalIdentities: IdentityTag[]): Record<string, number> {
+  const cfg = loadConfig('as-written-plus.json');
+  cfg.legislature = { ...cfg.legislature, impeachBackfirePips: 4, backfirePositional: positional };
+  cfg.amendment = { ...cfg.amendment, enabled: false };
+
+  const agent = new ImpeachAgent('impeacher', new Set(['r1', 'r2', 'r3']));
+  const g = new Game([agent, agent], structuredClone(CARDS), cfg, 1);
+  g.year = 1977; // odd: no election this tick, isolating the backfire's own push
+  g.president = { player: 1, cardId: 'pres-d', party: 'D', since: 1976 };
+  g.seats = [
+    { office: 'senator', state: 'OH', slot: 1, senateClass: 1, holder: { cardId: 'r1', player: 0, party: 'R', since: 1976 } },
+    { office: 'senator', state: 'MI', slot: 1, senateClass: 1, holder: { cardId: 'r2', player: 0, party: 'R', since: 1976 } },
+    { office: 'senator', state: 'PA', slot: 1, senateClass: 1, holder: { cardId: 'r3', player: 0, party: 'R', since: 1976 } },
+    { office: 'senator', state: 'CA', slot: 1, senateClass: 1, holder: { cardId: 'd1', player: 1, party: 'D', since: 1976 } },
+    { office: 'senator', state: 'NY', slot: 1, senateClass: 1, holder: { cardId: 'd2', player: 1, party: 'D', since: 1976 } },
+  ];
+  g.players[0].hand = []; g.players[0].districts = [];
+  g.players[1].hand = []; g.players[1].districts = [];
+  g.cardById.set('r1', cand({ id: 'r1', party: 'R', identities: removalIdentities }));
+  g.cardById.set('r2', cand({ id: 'r2', party: 'R', identities: removalIdentities }));
+  g.cardById.set('r3', cand({ id: 'r3', party: 'R', identities: removalIdentities }));
+  g.cardById.set('d1', cand({ id: 'd1', party: 'D', identities: ['catholic'] }));
+  g.cardById.set('d2', cand({ id: 'd2', party: 'D', identities: ['catholic'] }));
+
+  g.tick();
+  return { ...g.leanMap };
+}
+
+test('#84 arm 2: a positional backfire is a no-op when the removal coalition shares the target party’s own tags', () => {
+  const positional = backfireScenario(true, ['catholic']);
+  const flat = backfireScenario(false, ['catholic']);
+  for (const st of ['OH', 'MI', 'PA', 'CA', 'NY']) {
+    assert.equal(positional[st], 0, `${st}: distance 0 to the target party scales the backfire to nothing`);
+    assert.notEqual(flat[st], 0, `${st}: the flat rule ignores tags entirely and still backfires`);
+  }
+});
+
+test('#84 arm 2: a positional backfire reproduces the flat pips exactly when the removal coalition is tag-disjoint from the target', () => {
+  const positional = backfireScenario(true, ['rural']);
+  const flat = backfireScenario(false, ['rural']);
+  assert.deepEqual(positional, flat, 'distance 1 scales the ceiling by 1 -- the same number the flat rule always uses');
+});
+
+test('#84 arm 2: a positional backfire falls back to the flat pips when the removal coalition carries no tag position', () => {
+  const positional = backfireScenario(true, []);
+  const flat = backfireScenario(false, []);
+  assert.deepEqual(positional, flat, 'no tags is not distance 0 -- an unmeasurable coalition gets the flat, un-scaled pips');
 });

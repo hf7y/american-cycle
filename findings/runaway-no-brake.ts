@@ -7,6 +7,12 @@ import { seeds as sample } from './sample.ts';
 import type { Claim, Finding } from './types.ts';
 
 const AGENTS = ['Greedy', 'Lookahead', 'SenateFlood', 'HeterodoxSpecialist'];
+/** hf7y/american-cycle#30/F12: nobody in `AGENTS` implements `moveImpeach`,
+ *  so impeachment (and therefore `backfire()`) never fires against that pool
+ *  -- measuring #84 arm 2 there would repeat F12's own mistake of measuring
+ *  the agent pool instead of the rule. Reusing #30's own MIXED pool, the one
+ *  named against its issue's acceptance bar, rather than inventing a new one. */
+const IMPEACH_AGENTS = ['Impeacher', 'VPBackstab', 'Greedy', 'Lookahead'];
 /** SIM-BRIEF's determination point is the first year the current leader is the
  *  eventual winner in more than 80% of games, as a fraction of game length. On
  *  a 16-year game that quantises to 1/16, and across six independent 120-game
@@ -14,6 +20,11 @@ const AGENTS = ['Greedy', 'Lookahead', 'SenateFlood', 'HeterodoxSpecialist'];
  *  tolerances below are +/-0.2 — three years — which is wider than that jitter
  *  and still narrower than the gap to the healthy band. */
 const SEEDS = Array.from({ length: sample(120) }, (_, i) => 1030400 + i);
+/** hf7y/american-cycle#84's own acceptance bar: `C7-runaway-bars` quantises to
+ *  1/maxYears, so it names 200+ seeds specifically, wider than the 120 above.
+ *  A disjoint seed range from `SEEDS`, so the three-arm table below is never
+ *  quietly re-using the same games the ablations already ran. */
+const SEEDS_200 = Array.from({ length: sample(200) }, (_, i) => 5030400 + i);
 
 /** Share of player-score series that never fall over a whole game.
  *
@@ -66,7 +77,16 @@ export const finding: Finding = {
     + "both the shipped all-seven-era pack and the four-era subset several balance scripts use — so #91's own "
     + "table (which found determination the most deck-sensitive stamped claim in the suite) does not describe "
     + 'this specific measurement on the current engine; it may have been specific to the pre-#180 config or a '
-    + 'different agent set. tracks/c.ts C7 is the live acceptance test and is red.',
+    + 'different agent set. tracks/c.ts C7 is the live acceptance test and is red. '
+    + "hf7y/american-cycle#84's ruled three-arm table, 200 seeds each: NEITHER built brake reaches the band "
+    + 'alone. Positional shock (replacing the flat one, discrediting a random tag-space axis instead of every '
+    + 'incumbent alike) moves determination from 0.625 to 0.875 on the AGENTS pool -- overshooting PAST the '
+    + "band the same direction incumbency-off does. Positional impeachment backfire (scaling #84's flat ceiling "
+    + "by the removal coalition's tag-distance from the target party) needs an impeachment-capable pool "
+    + '(hf7y/american-cycle#30/F12: AGENTS never moves it) and, measured on that pool, leaves determination '
+    + 'exactly where its own baseline already sits, 0.875 with or without it. Per the ruling itself: neither '
+    + 'reaching the band is a result, and the next move is to argue with the 75-85% bar rather than build a '
+    + 'third brake.',
   stampedAt: '2026-09-05T09:40:00Z',
   stampedOn: '421c296',
 
@@ -89,6 +109,26 @@ export const finding: Finding = {
     };
     const run = (cfg: Config, deck: Card[] = cards) => runawayMetrics(SEEDS, AGENTS, deck, cfg);
     const on = run(base);
+
+    // hf7y/american-cycle#84's ruled 2026-09-02 three-arm measurement: two
+    // brake CANDIDATES, each replacing the mechanism it's built on (not
+    // stacking with it), run alone against the same baseline. `base` already
+    // ships the flat shock (shockPips) and flat backfire (impeachBackfirePips)
+    // this issue's own ruling calls arm 3 -- so "both off" is the existing
+    // baseline claims above, not a fourth config here.
+    const positionalShock: Config = { ...base, economy: { ...base.economy, shockPositional: true } };
+    const positionalBackfire: Config = { ...base, legislature: { ...base.legislature, backfirePositional: true } };
+    const run200 = (cfg: Config, agents: string[] = AGENTS) => runawayMetrics(SEEDS_200, agents, cards, cfg);
+    // Arm 1 reads AGENTS -- the shock fires unconditionally off a die roll,
+    // nobody needs to move it. Arm 2 needs IMPEACH_AGENTS (see its own
+    // comment, hf7y/american-cycle#30/F12), so it gets its OWN baseline on
+    // the same pool -- comparing it to arm 1's AGENTS-pool baseline would
+    // repeat F12's mistake in the opposite direction.
+    const base200 = run200(base);
+    const shock200 = run200(positionalShock);
+    const base200Impeach = run200(base, IMPEACH_AGENTS);
+    const backfire200 = run200(positionalBackfire, IMPEACH_AGENTS);
+
     return [
       { name: 'baseline: determination point', value: on.determination, stamped: 0.63, tolerance: 0.2, unit: 'fraction of game length' },
       { name: 'baseline: comeback rate', value: on.comeback, stamped: 0.03, tolerance: 0.04, unit: 'share of games' },
@@ -101,6 +141,17 @@ export const finding: Finding = {
       { name: 'capture off: determination point', value: run(noCapture).determination, stamped: 0.63, tolerance: 0.2, unit: 'fraction of game length' },
       { name: 'hand bonuses off: determination point', value: run(noHandBonus).determination, stamped: 0.63, tolerance: 0.2, unit: 'fraction of game length' },
       { name: 'incumbency off: determination point', value: run(noIncumbency).determination, stamped: 0.88, tolerance: 0.2, unit: 'fraction of game length' },
+      // hf7y/american-cycle#84's three-arm table, 200 seeds each (its own
+      // bar), stamped fresh here -- these claims have no prior measurement
+      // to restamp against.
+      { name: '#84 arm 3 (both off, AGENTS, 200 seeds): determination point', value: base200.determination, stamped: 0.625, tolerance: 0.2, unit: 'fraction of game length' },
+      { name: '#84 arm 3 (both off, AGENTS, 200 seeds): comeback rate', value: base200.comeback, stamped: 0.05, tolerance: 0.04, unit: 'share of games' },
+      { name: '#84 arm 1 (positional shock, AGENTS, 200 seeds): determination point', value: shock200.determination, stamped: 0.875, tolerance: 0.2, unit: 'fraction of game length' },
+      { name: '#84 arm 1 (positional shock, AGENTS, 200 seeds): comeback rate', value: shock200.comeback, stamped: 0.05, tolerance: 0.04, unit: 'share of games' },
+      { name: '#84 arm 3b (both off, IMPEACH_AGENTS, 200 seeds): determination point', value: base200Impeach.determination, stamped: 0.875, tolerance: 0.2, unit: 'fraction of game length' },
+      { name: '#84 arm 3b (both off, IMPEACH_AGENTS, 200 seeds): comeback rate', value: base200Impeach.comeback, stamped: 0.065, tolerance: 0.04, unit: 'share of games' },
+      { name: '#84 arm 2 (positional backfire, IMPEACH_AGENTS, 200 seeds): determination point', value: backfire200.determination, stamped: 0.875, tolerance: 0.2, unit: 'fraction of game length' },
+      { name: '#84 arm 2 (positional backfire, IMPEACH_AGENTS, 200 seeds): comeback rate', value: backfire200.comeback, stamped: 0.055, tolerance: 0.04, unit: 'share of games' },
     ];
   },
 
@@ -123,6 +174,18 @@ export const finding: Finding = {
       { pool: 'four-pack', value: v('baseline: determination') },
       { pool: 'all-seven', value: v('ALL_PACKS: baseline determination') },
     ]);
+    // hf7y/american-cycle#84's own three-arm table: each brake candidate run
+    // ALONE against its own matching baseline (arm 2 needs IMPEACH_AGENTS --
+    // see that pool's own comment -- so it gets its own baseline, arm 3b,
+    // rather than being compared to arm 3's AGENTS-pool number).
+    const arm3 = bandOf(v('#84 arm 3 (both off, AGENTS, 200 seeds): determination'));
+    const arm1 = bandOf(v('#84 arm 1 (positional shock, AGENTS, 200 seeds): determination'));
+    const arm3b = bandOf(v('#84 arm 3b (both off, IMPEACH_AGENTS, 200 seeds): determination'));
+    const arm2 = bandOf(v('#84 arm 2 (positional backfire, IMPEACH_AGENTS, 200 seeds): determination'));
+    const armLine = (label: string, band: typeof arm1, det: number) =>
+      band === 'healthy'
+        ? `${label} reaches the healthy band alone (${(100 * det).toFixed(0)}%)`
+        : `${label} does not reach it alone (${(100 * det).toFixed(0)}%, ${band === 'early' ? 'still too early' : 'past it'})`;
     return [
       baseBand === 'healthy'
         ? 'determination sits inside the healthy 75-85% band'
@@ -147,6 +210,12 @@ export const finding: Finding = {
           + `a ${(100 * deck.maxRelativeDeviation).toFixed(0)}% relative swing on the same config, agents and seeds`
         : 'and determination held stable between the four-pack and all-seven decks (hf7y/american-cycle#91), '
           + 'so this headline is not a property of which pack list ran it',
+      `hf7y/american-cycle#84's own 200-seed three-arm table: arm 3 (both off, AGENTS) is ${arm3} `
+        + `(${(100 * v('#84 arm 3 (both off, AGENTS, 200 seeds): determination')).toFixed(0)}%); `
+        + `${armLine('arm 1 (positional shock)', arm1, v('#84 arm 1 (positional shock, AGENTS, 200 seeds): determination'))}; `
+        + `arm 3b (both off, IMPEACH_AGENTS) is ${arm3b} `
+        + `(${(100 * v('#84 arm 3b (both off, IMPEACH_AGENTS, 200 seeds): determination')).toFixed(0)}%); `
+        + armLine('arm 2 (positional backfire)', arm2, v('#84 arm 2 (positional backfire, IMPEACH_AGENTS, 200 seeds): determination')),
     ].join('; ');
   },
 };

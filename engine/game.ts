@@ -360,6 +360,10 @@ export class Game {
   private offDistrict = new Map<string, number>();
   /** v0.2 item 9: pips of shock in force this year, 0 in a quiet one. */
   private shockPips = 0;
+  /** v0.3, hf7y/american-cycle#84 arm 1: the tag-space region this year's
+   *  shock discredits, set only under `economy.shockPositional`. undefined
+   *  in a quiet year or under the flat (power-proportional) distribution. */
+  private shockRegion?: tags.TagWeights;
   private agents: Agent[];
   private scoreHistory: number[][] = [];
   /** hf7y/american-cycle#171/#55: declare/refill order rotates by
@@ -943,13 +947,44 @@ export class Game {
    *  after his first acquittal.
    *
    *  EVERYONE WHO VOTED TO IMPEACH EATS IT, not the filer -- filers are not
-   *  tracked, and this makes impeachment a trap you can bait an opponent into. */
+   *  tracked, and this makes impeachment a trap you can bait an opponent into.
+   *
+   *  v0.3, hf7y/american-cycle#84 arm 2, under `legislature.backfirePositional`:
+   *  the flat pips above become a CEILING, scaled down by
+   *  `tags.distance()` between the removal voters' own coalition and the
+   *  target party's current officeholders. A coalition that looks like the
+   *  target's own (low distance) reads as bipartisan concern and barely
+   *  backfires; one that looks nothing like it (high distance) reads as the
+   *  purely partisan attempt the flat rule already assumed every attempt was,
+   *  and pays close to the full flat pips. Distance undefined (either side
+   *  carries no tag position) falls back to the flat pips rather than
+   *  fabricating a number.
+   *
+   *  NOT skowronek's "strain" (skowronek/checks.ts's `countryDrift`
+   *  comment: strain is a SETTLEMENT's distance from the country, and no
+   *  settlement object exists yet -- that's a separate, unbuilt detector).
+   *  This reads two coalitions' positions against each other, which is a
+   *  narrower and already-buildable question; the issue's own title borrows
+   *  the word informally from the v0.2-item-7 config comment, not from
+   *  skowronek's vocabulary. */
   private backfire(forRemoval: Seat[], targetParty: Party): void {
-    const pips = this.cfg.legislature.impeachBackfirePips ?? 0;
-    if (!pips) return;
+    const base = this.cfg.legislature.impeachBackfirePips ?? 0;
+    if (!base) return;
+    let pips = base;
+    if (this.cfg.legislature.backfirePositional) {
+      const voters = tags.centroid(
+        forRemoval.map((s) => tags.weights(this.cardById.get(s.holder!.cardId)?.identities ?? [])),
+      );
+      const targetPosition = tags.partyPosition(this.seats, this.cardById, targetParty);
+      const d = tags.distance(voters, targetPosition);
+      if (d === undefined) { pips = base; } else {
+        pips = Math.round(base * d);
+        if (!pips) return;
+      }
+    }
     for (const s of forRemoval) lean.nudge(this.leanMap, this.cfg.lean, s.state, s.holder!.party, -pips);
-    const target = new Set(this.seats.filter((s) => s.holder?.party === targetParty).map((s) => s.state));
-    for (const st of target) lean.nudge(this.leanMap, this.cfg.lean, st, targetParty, pips);
+    const targetStates = new Set(this.seats.filter((s) => s.holder?.party === targetParty).map((s) => s.state));
+    for (const st of targetStates) lean.nudge(this.leanMap, this.cfg.lean, st, targetParty, pips);
   }
 
   // ---- annual tick step 2-3: the omnibill -----------------------------------
@@ -1301,6 +1336,7 @@ export class Game {
       economyMod: econ.economyModifier(this.economy, this.cfg.economy, this.cfg.national.strongEconomy, this.cfg.national.recession),
       presidentialWinner,
       shock: this.shockPips,
+      shockRegion: this.shockRegion,
     };
   }
 
@@ -1821,6 +1857,13 @@ export class Game {
   private rollShock(): void {
     this.shockPips = econ.shockCheck(this.cfg.economy, this.rng)
       ? (this.cfg.economy.shockPips ?? 0) : 0;
+    // v0.3, #84 arm 1: a random axis of tag space, not a player's choice --
+    // exogenous, the way stagflation discrediting demand management was not
+    // anyone's move. Rolled from the SAME rng stream every game runs, so a
+    // quiet year (no shock) never advances it and the positional arm stays
+    // reproducible from the seed like everything else here.
+    this.shockRegion = this.shockPips && this.cfg.economy.shockPositional
+      ? tags.weights([this.rng.pick([...tags.TAGS])]) : undefined;
     if (this.shockPips) { this.stats.shocks++; this.log.push(`${this.year}: a shock hits the incumbents`); }
   }
 
