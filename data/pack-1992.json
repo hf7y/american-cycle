@@ -321,7 +321,8 @@
       "effects": [],
       "provenance": {
         "black": {
-          "source": "hand-assigned"
+          "source": "wikidata",
+          "vintage": "2026-09-08"
         },
         "urban": {
           "source": "hand-assigned"
@@ -507,7 +508,8 @@
       "effects": [],
       "provenance": {
         "black": {
-          "source": "hand-assigned"
+          "source": "wikidata",
+          "vintage": "2026-09-08"
         },
         "urban": {
           "source": "hand-assigned"
@@ -625,7 +627,8 @@
       "identities": [],
       "belief": "Tax reform and basketball",
       "era": 1992,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -704,7 +707,8 @@
       "identities": [],
       "belief": "Health care as a right",
       "era": 1992,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -716,7 +720,8 @@
       "identities": [],
       "belief": "Read my lips",
       "era": 1992,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -789,7 +794,8 @@
         {
           "type": "extremist"
         }
-      ]
+      ],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -805,7 +811,8 @@
         {
           "type": "extremist"
         }
-      ]
+      ],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -874,7 +881,8 @@
       "identities": [],
       "belief": "Keating Five survivor",
       "era": 1992,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -959,7 +967,8 @@
       "identities": [],
       "belief": "Cut taxes thirty percent",
       "era": 1992,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -971,7 +980,8 @@
       "identities": [],
       "belief": "Fiscally conservative, socially liberal",
       "era": 1992,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -983,7 +993,8 @@
       "identities": [],
       "belief": "Proposition 187",
       "era": 1992,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -995,7 +1006,8 @@
       "identities": [],
       "belief": "Nunn-Lugar",
       "era": 1992,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -1116,7 +1128,8 @@
       "identities": [],
       "belief": "Texas treasurer",
       "era": 1992,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -1128,7 +1141,8 @@
       "identities": [],
       "belief": "Environmental Republican",
       "era": 1992,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -1162,7 +1176,8 @@
       "identities": [],
       "belief": "Centrist dealmaker",
       "era": 1992,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -2101,7 +2116,8 @@
       "identities": [],
       "belief": "Won the governorship as A Connecticut Party",
       "era": 1992,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -2117,7 +2133,8 @@
         {
           "type": "extremist"
         }
-      ]
+      ],
+      "provenance": {}
     }
   ]
 }

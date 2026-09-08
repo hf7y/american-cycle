@@ -1,0 +1,1840 @@
+{
+  "note": "#164 part 5: candidate ethnicity, sourced from Wikidata P172 (ethnic group). One row per unique candidate NAME (a real person's ethnicity is era-invariant) -- apply matches every pack card by name. `groups` is the raw Wikidata label set; classify() in this file maps it onto black/hispanic/cuban.",
+  "source": {
+    "dataset": "Wikidata",
+    "property": {
+      "P172": "ethnic group"
+    },
+    "matching": "wbsearchentities by exact-label name, accepted only when the result description matches a politician/public-office hint pattern (see POLITICIAN_HINT in this file) -- a precaution against name collisions with unrelated Wikidata entries.",
+    "url": "https://www.wikidata.org/w/api.php",
+    "retrieved": "2026-09-08"
+  },
+  "unmatched": [
+    "Alben Barkley",
+    "Alfonse D'Amato",
+    "Bernie Moreno",
+    "Bob Casey Jr.",
+    "Bourke Hickenlooper",
+    "Charles Rangel",
+    "Ernest Hollings",
+    "Evan McMullin",
+    "Frances Perkins",
+    "Frank Knox",
+    "Franklin D. Roosevelt",
+    "George Romney",
+    "Gerald R. Ford",
+    "H. John Heinz III",
+    "Henry L. Stimson",
+    "Hugo Black",
+    "James A. Farley",
+    "James E. Watson",
+    "James Jeffords",
+    "John Sununu",
+    "Joseph R. Biden",
+    "Joseph T. Robinson",
+    "Margaret Chase Smith",
+    "Morris Udall",
+    "Ogden Mills",
+    "Patrick Moynihan",
+    "Peter Rodino",
+    "Reed Smoot",
+    "Richard B. Russell Jr.",
+    "Robert Dole",
+    "Robert F. Wagner",
+    "Ronald V. Dellums",
+    "Russell Long",
+    "Simeon Fess",
+    "Theodore Bilbo",
+    "Thomas P. O'Neill",
+    "William E. Borah"
+  ],
+  "rows": [
+    {
+      "id": "abraham-ribicoff-1964",
+      "name": "Abraham Ribicoff",
+      "qid": "Q323417",
+      "groups": []
+    },
+    {
+      "id": "adlai-stevenson-iii-1976",
+      "name": "Adlai Stevenson III",
+      "qid": "Q122841",
+      "groups": []
+    },
+    {
+      "id": "al-franken-2008",
+      "name": "Al Franken",
+      "qid": "Q319084",
+      "groups": []
+    },
+    {
+      "id": "al-gore-1992",
+      "name": "Al Gore",
+      "qid": "Q19673",
+      "groups": []
+    },
+    {
+      "id": "al-smith-1932",
+      "name": "Al Smith",
+      "qid": "Q430714",
+      "groups": []
+    },
+    {
+      "id": "alan-cranston-1976",
+      "name": "Alan Cranston",
+      "qid": "Q1994957",
+      "groups": []
+    },
+    {
+      "id": "alan-simpson-1992",
+      "name": "Alan Simpson",
+      "qid": "Q4707771",
+      "groups": []
+    },
+    {
+      "id": "alben-barkley-1932",
+      "name": "Alben Barkley",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "albert-gore-sr-1964",
+      "name": "Albert Gore Sr.",
+      "qid": "Q577160",
+      "groups": []
+    },
+    {
+      "id": "alexandria-ocasio-cortez-2024",
+      "name": "Alexandria Ocasio-Cortez",
+      "qid": "Q55223040",
+      "groups": []
+    },
+    {
+      "id": "alf-landon-1932",
+      "name": "Alf Landon",
+      "qid": "Q665416",
+      "groups": []
+    },
+    {
+      "id": "alfonse-damato-1992",
+      "name": "Alfonse D'Amato",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "amy-klobuchar-2008",
+      "name": "Amy Klobuchar",
+      "qid": "Q22237",
+      "groups": []
+    },
+    {
+      "id": "andrew-young-1976",
+      "name": "Andrew Young",
+      "qid": "Q959635",
+      "groups": [
+        "African Americans"
+      ]
+    },
+    {
+      "id": "andy-beshear-2024",
+      "name": "Andy Beshear",
+      "qid": "Q21572825",
+      "groups": []
+    },
+    {
+      "id": "angus-king-2016",
+      "name": "Angus King",
+      "qid": "Q544464",
+      "groups": []
+    },
+    {
+      "id": "ann-richards-1992",
+      "name": "Ann Richards",
+      "qid": "Q237918",
+      "groups": []
+    },
+    {
+      "id": "anton-cermak-1932",
+      "name": "Anton Cermak",
+      "qid": "Q295318",
+      "groups": [
+        "Czechs"
+      ]
+    },
+    {
+      "id": "arlen-specter-1992",
+      "name": "Arlen Specter",
+      "qid": "Q363055",
+      "groups": []
+    },
+    {
+      "id": "arthur-vandenberg-1932",
+      "name": "Arthur Vandenberg",
+      "qid": "Q4388292",
+      "groups": []
+    },
+    {
+      "id": "barack-obama-2008",
+      "name": "Barack Obama",
+      "qid": "Q76",
+      "groups": [
+        "African Americans"
+      ]
+    },
+    {
+      "id": "barbara-boxer-1992",
+      "name": "Barbara Boxer",
+      "qid": "Q237560",
+      "groups": []
+    },
+    {
+      "id": "barbara-jordan-1976",
+      "name": "Barbara Jordan",
+      "qid": "Q461657",
+      "groups": [
+        "African Americans"
+      ]
+    },
+    {
+      "id": "barney-frank-2008",
+      "name": "Barney Frank",
+      "qid": "Q537287",
+      "groups": []
+    },
+    {
+      "id": "barry-goldwater-1964",
+      "name": "Barry Goldwater",
+      "qid": "Q319129",
+      "groups": []
+    },
+    {
+      "id": "ben-nighthorse-campbell-1992",
+      "name": "Ben Nighthorse Campbell",
+      "qid": "Q816576",
+      "groups": []
+    },
+    {
+      "id": "ben-sasse-2016",
+      "name": "Ben Sasse",
+      "qid": "Q16192221",
+      "groups": []
+    },
+    {
+      "id": "bernie-moreno-2024",
+      "name": "Bernie Moreno",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "bernie-sanders-2008",
+      "name": "Bernie Sanders",
+      "qid": "Q359442",
+      "groups": [
+        "American Jews"
+      ]
+    },
+    {
+      "id": "bill-bradley-1992",
+      "name": "Bill Bradley",
+      "qid": "Q504025",
+      "groups": []
+    },
+    {
+      "id": "bill-brock-1976",
+      "name": "Bill Brock",
+      "qid": "Q456582",
+      "groups": []
+    },
+    {
+      "id": "bill-clinton-1992",
+      "name": "Bill Clinton",
+      "qid": "Q1124",
+      "groups": []
+    },
+    {
+      "id": "bill-richardson-2008",
+      "name": "Bill Richardson",
+      "qid": "Q311782",
+      "groups": []
+    },
+    {
+      "id": "birch-bayh-1964",
+      "name": "Birch Bayh",
+      "qid": "Q864992",
+      "groups": []
+    },
+    {
+      "id": "bob-casey-1992",
+      "name": "Bob Casey",
+      "qid": "Q887841",
+      "groups": []
+    },
+    {
+      "id": "bob-casey-jr-2008",
+      "name": "Bob Casey Jr.",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "bob-dole-1992",
+      "name": "Bob Dole",
+      "qid": "Q319079",
+      "groups": []
+    },
+    {
+      "id": "bob-kerrey-1992",
+      "name": "Bob Kerrey",
+      "qid": "Q39718",
+      "groups": []
+    },
+    {
+      "id": "bob-packwood-1976",
+      "name": "Bob Packwood",
+      "qid": "Q888183",
+      "groups": []
+    },
+    {
+      "id": "bobby-jindal-2008",
+      "name": "Bobby Jindal",
+      "qid": "Q295492",
+      "groups": []
+    },
+    {
+      "id": "bourke-hickenlooper-1964",
+      "name": "Bourke Hickenlooper",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "brian-kemp-2016",
+      "name": "Brian Kemp",
+      "qid": "Q4964973",
+      "groups": []
+    },
+    {
+      "id": "burton-k-wheeler-1932",
+      "name": "Burton K. Wheeler",
+      "qid": "Q711631",
+      "groups": []
+    },
+    {
+      "id": "byron-dorgan-1992",
+      "name": "Byron Dorgan",
+      "qid": "Q555735",
+      "groups": []
+    },
+    {
+      "id": "carl-hayden-1964",
+      "name": "Carl Hayden",
+      "qid": "Q963401",
+      "groups": []
+    },
+    {
+      "id": "carol-moseley-braun-1992",
+      "name": "Carol Moseley Braun",
+      "qid": "Q289396",
+      "groups": [
+        "African Americans"
+      ]
+    },
+    {
+      "id": "carter-glass-1932",
+      "name": "Carter Glass",
+      "qid": "Q1045879",
+      "groups": []
+    },
+    {
+      "id": "catherine-cortez-masto-2016",
+      "name": "Catherine Cortez Masto",
+      "qid": "Q5052604",
+      "groups": []
+    },
+    {
+      "id": "charles-curtis-1932",
+      "name": "Charles Curtis",
+      "qid": "Q271023",
+      "groups": []
+    },
+    {
+      "id": "charles-h-percy-1976",
+      "name": "Charles H. Percy",
+      "qid": "Q1064692",
+      "groups": []
+    },
+    {
+      "id": "charles-l-mcnary-1932",
+      "name": "Charles L. McNary",
+      "qid": "Q2959799",
+      "groups": []
+    },
+    {
+      "id": "charles-mathias-1976",
+      "name": "Charles Mathias",
+      "qid": "Q457455",
+      "groups": []
+    },
+    {
+      "id": "charles-percy-1964",
+      "name": "Charles Percy",
+      "qid": "Q19604920",
+      "groups": []
+    },
+    {
+      "id": "charles-rangel-1992",
+      "name": "Charles Rangel",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "charlie-baker-2016",
+      "name": "Charlie Baker",
+      "qid": "Q5076629",
+      "groups": []
+    },
+    {
+      "id": "charlie-crist-2008",
+      "name": "Charlie Crist",
+      "qid": "Q374693",
+      "groups": []
+    },
+    {
+      "id": "chris-dodd-2008",
+      "name": "Chris Dodd",
+      "qid": "Q319111",
+      "groups": []
+    },
+    {
+      "id": "chris-sununu-2024",
+      "name": "Chris Sununu",
+      "qid": "Q16215583",
+      "groups": []
+    },
+    {
+      "id": "christine-todd-whitman-1992",
+      "name": "Christine Todd Whitman",
+      "qid": "Q435267",
+      "groups": []
+    },
+    {
+      "id": "chuck-hagel-2008",
+      "name": "Chuck Hagel",
+      "qid": "Q381670",
+      "groups": []
+    },
+    {
+      "id": "chuck-schumer-2016",
+      "name": "Chuck Schumer",
+      "qid": "Q380900",
+      "groups": [
+        "Jewish people"
+      ]
+    },
+    {
+      "id": "claire-mccaskill-2008",
+      "name": "Claire McCaskill",
+      "qid": "Q22260",
+      "groups": []
+    },
+    {
+      "id": "clifford-case-1964",
+      "name": "Clifford Case",
+      "qid": "Q5132892",
+      "groups": []
+    },
+    {
+      "id": "conor-lamb-2016",
+      "name": "Conor Lamb",
+      "qid": "Q43387164",
+      "groups": []
+    },
+    {
+      "id": "cordell-hull-1932",
+      "name": "Cordell Hull",
+      "qid": "Q202979",
+      "groups": []
+    },
+    {
+      "id": "cory-booker-2016",
+      "name": "Cory Booker",
+      "qid": "Q1135767",
+      "groups": [
+        "African Americans"
+      ]
+    },
+    {
+      "id": "dale-bumpers-1976",
+      "name": "Dale Bumpers",
+      "qid": "Q881361",
+      "groups": []
+    },
+    {
+      "id": "dan-crenshaw-2016",
+      "name": "Dan Crenshaw",
+      "qid": "Q58301995",
+      "groups": []
+    },
+    {
+      "id": "daniel-patrick-moynihan-1976",
+      "name": "Daniel Patrick Moynihan",
+      "qid": "Q713505",
+      "groups": []
+    },
+    {
+      "id": "david-a-reed-1932",
+      "name": "David A. Reed",
+      "qid": "Q1173516",
+      "groups": []
+    },
+    {
+      "id": "dianne-feinstein-1992",
+      "name": "Dianne Feinstein",
+      "qid": "Q230733",
+      "groups": []
+    },
+    {
+      "id": "dick-clark-1976",
+      "name": "Dick Clark",
+      "qid": "Q2149196",
+      "groups": []
+    },
+    {
+      "id": "dick-gephardt-1992",
+      "name": "Dick Gephardt",
+      "qid": "Q1209677",
+      "groups": []
+    },
+    {
+      "id": "donald-trump-2016",
+      "name": "Donald Trump",
+      "qid": "Q22686",
+      "groups": [
+        "White Americans"
+      ]
+    },
+    {
+      "id": "doug-jones-2016",
+      "name": "Doug Jones",
+      "qid": "Q30122825",
+      "groups": []
+    },
+    {
+      "id": "edmund-muskie-1964",
+      "name": "Edmund Muskie",
+      "qid": "Q319867",
+      "groups": []
+    },
+    {
+      "id": "edward-brooke-1976",
+      "name": "Edward Brooke",
+      "qid": "Q3276635",
+      "groups": []
+    },
+    {
+      "id": "edward-kennedy-1976",
+      "name": "Edward Kennedy",
+      "qid": "Q89025769",
+      "groups": []
+    },
+    {
+      "id": "elise-stefanik-2016",
+      "name": "Elise Stefanik",
+      "qid": "Q18211057",
+      "groups": []
+    },
+    {
+      "id": "elissa-slotkin-2024",
+      "name": "Elissa Slotkin",
+      "qid": "Q30323721",
+      "groups": []
+    },
+    {
+      "id": "elizabeth-warren-2016",
+      "name": "Elizabeth Warren",
+      "qid": "Q434706",
+      "groups": [
+        "White Americans"
+      ]
+    },
+    {
+      "id": "elliot-richardson-1976",
+      "name": "Elliot Richardson",
+      "qid": "Q719808",
+      "groups": []
+    },
+    {
+      "id": "eric-cantor-2008",
+      "name": "Eric Cantor",
+      "qid": "Q497271",
+      "groups": []
+    },
+    {
+      "id": "ernest-hollings-1976",
+      "name": "Ernest Hollings",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "eugene-mccarthy-1964",
+      "name": "Eugene McCarthy",
+      "qid": "Q380550",
+      "groups": []
+    },
+    {
+      "id": "evan-mcmullin-2016",
+      "name": "Evan McMullin",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "everett-dirksen-1964",
+      "name": "Everett Dirksen",
+      "qid": "Q1382002",
+      "groups": []
+    },
+    {
+      "id": "fiorello-la-guardia-1932",
+      "name": "Fiorello La Guardia",
+      "qid": "Q312502",
+      "groups": []
+    },
+    {
+      "id": "frances-perkins-1932",
+      "name": "Frances Perkins",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "frank-church-1976",
+      "name": "Frank Church",
+      "qid": "Q477169",
+      "groups": []
+    },
+    {
+      "id": "frank-knox-1932",
+      "name": "Frank Knox",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "franklin-d-roosevelt-1932",
+      "name": "Franklin D. Roosevelt",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "fred-thompson-2008",
+      "name": "Fred Thompson",
+      "qid": "Q298016",
+      "groups": []
+    },
+    {
+      "id": "gary-hart-1976",
+      "name": "Gary Hart",
+      "qid": "Q919448",
+      "groups": []
+    },
+    {
+      "id": "george-h-w-bush-1992",
+      "name": "George H. W. Bush",
+      "qid": "Q23505",
+      "groups": []
+    },
+    {
+      "id": "george-romney-1964",
+      "name": "George Romney",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "george-smathers-1964",
+      "name": "George Smathers",
+      "qid": "Q719092",
+      "groups": []
+    },
+    {
+      "id": "george-voinovich-1992",
+      "name": "George Voinovich",
+      "qid": "Q529873",
+      "groups": []
+    },
+    {
+      "id": "george-w-norris-1932",
+      "name": "George W. Norris",
+      "qid": "Q435947",
+      "groups": []
+    },
+    {
+      "id": "george-wallace-1964",
+      "name": "George Wallace",
+      "qid": "Q313776",
+      "groups": []
+    },
+    {
+      "id": "gerald-r-ford-1976",
+      "name": "Gerald R. Ford",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "gifford-pinchot-1932",
+      "name": "Gifford Pinchot",
+      "qid": "Q534301",
+      "groups": []
+    },
+    {
+      "id": "glenn-youngkin-2024",
+      "name": "Glenn Youngkin",
+      "qid": "Q100963892",
+      "groups": []
+    },
+    {
+      "id": "greg-abbott-2016",
+      "name": "Greg Abbott",
+      "qid": "Q5605224",
+      "groups": []
+    },
+    {
+      "id": "gretchen-whitmer-2024",
+      "name": "Gretchen Whitmer",
+      "qid": "Q5607720",
+      "groups": []
+    },
+    {
+      "id": "h-john-heinz-iii-1976",
+      "name": "H. John Heinz III",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "hakeem-jeffries-2024",
+      "name": "Hakeem Jeffries",
+      "qid": "Q5640425",
+      "groups": []
+    },
+    {
+      "id": "haley-barbour-2008",
+      "name": "Haley Barbour",
+      "qid": "Q361450",
+      "groups": []
+    },
+    {
+      "id": "harris-wofford-1992",
+      "name": "Harris Wofford",
+      "qid": "Q323511",
+      "groups": []
+    },
+    {
+      "id": "harry-f-byrd-1932",
+      "name": "Harry F. Byrd",
+      "qid": "Q775382",
+      "groups": []
+    },
+    {
+      "id": "harry-f-byrd-jr-1976",
+      "name": "Harry F. Byrd Jr.",
+      "qid": "Q3268711",
+      "groups": []
+    },
+    {
+      "id": "harry-reid-2008",
+      "name": "Harry Reid",
+      "qid": "Q314459",
+      "groups": []
+    },
+    {
+      "id": "heath-shuler-2008",
+      "name": "Heath Shuler",
+      "qid": "Q1592517",
+      "groups": []
+    },
+    {
+      "id": "heidi-heitkamp-2016",
+      "name": "Heidi Heitkamp",
+      "qid": "Q50597",
+      "groups": []
+    },
+    {
+      "id": "henry-cabot-lodge-jr-1964",
+      "name": "Henry Cabot Lodge Jr.",
+      "qid": "Q450984",
+      "groups": []
+    },
+    {
+      "id": "henry-l-stimson-1932",
+      "name": "Henry L. Stimson",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "henry-m-jackson-1976",
+      "name": "Henry M. Jackson",
+      "qid": "Q1345201",
+      "groups": []
+    },
+    {
+      "id": "herbert-hoover-1932",
+      "name": "Herbert Hoover",
+      "qid": "Q35236",
+      "groups": []
+    },
+    {
+      "id": "hillary-clinton-2008",
+      "name": "Hillary Clinton",
+      "qid": "Q6294",
+      "groups": []
+    },
+    {
+      "id": "hiram-johnson-1932",
+      "name": "Hiram Johnson",
+      "qid": "Q143644",
+      "groups": []
+    },
+    {
+      "id": "howard-baker-1976",
+      "name": "Howard Baker",
+      "qid": "Q1337643",
+      "groups": []
+    },
+    {
+      "id": "hubert-humphrey-1964",
+      "name": "Hubert Humphrey",
+      "qid": "Q209989",
+      "groups": [
+        "Norwegian Americans"
+      ]
+    },
+    {
+      "id": "huey-long-1932",
+      "name": "Huey Long",
+      "qid": "Q314384",
+      "groups": []
+    },
+    {
+      "id": "hugh-scott-1964",
+      "name": "Hugh Scott",
+      "qid": "Q467328",
+      "groups": []
+    },
+    {
+      "id": "hugo-black-1932",
+      "name": "Hugo Black",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "j-william-fulbright-1964",
+      "name": "J. William Fulbright",
+      "qid": "Q550255",
+      "groups": []
+    },
+    {
+      "id": "jack-kemp-1992",
+      "name": "Jack Kemp",
+      "qid": "Q357676",
+      "groups": []
+    },
+    {
+      "id": "jacob-javits-1964",
+      "name": "Jacob Javits",
+      "qid": "Q1875906",
+      "groups": []
+    },
+    {
+      "id": "james-a-farley-1932",
+      "name": "James A. Farley",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "james-e-watson-1932",
+      "name": "James E. Watson",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "james-eastland-1976",
+      "name": "James Eastland",
+      "qid": "Q723926",
+      "groups": []
+    },
+    {
+      "id": "james-f-byrnes-1932",
+      "name": "James F. Byrnes",
+      "qid": "Q432726",
+      "groups": []
+    },
+    {
+      "id": "james-jeffords-1992",
+      "name": "James Jeffords",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "james-l-buckley-1976",
+      "name": "James L. Buckley",
+      "qid": "Q1244777",
+      "groups": []
+    },
+    {
+      "id": "jd-vance-2024",
+      "name": "JD Vance",
+      "qid": "Q28935729",
+      "groups": []
+    },
+    {
+      "id": "jeb-bush-2016",
+      "name": "Jeb Bush",
+      "qid": "Q221997",
+      "groups": []
+    },
+    {
+      "id": "jeff-flake-2016",
+      "name": "Jeff Flake",
+      "qid": "Q929581",
+      "groups": []
+    },
+    {
+      "id": "jerry-brown-1976",
+      "name": "Jerry Brown",
+      "qid": "Q152451",
+      "groups": []
+    },
+    {
+      "id": "jesse-helms-1976",
+      "name": "Jesse Helms",
+      "qid": "Q503426",
+      "groups": []
+    },
+    {
+      "id": "jim-demint-2008",
+      "name": "Jim DeMint",
+      "qid": "Q22201",
+      "groups": []
+    },
+    {
+      "id": "jim-webb-2008",
+      "name": "Jim Webb",
+      "qid": "Q532279",
+      "groups": []
+    },
+    {
+      "id": "jimmy-carter-1976",
+      "name": "Jimmy Carter",
+      "qid": "Q23685",
+      "groups": []
+    },
+    {
+      "id": "joe-biden-2008",
+      "name": "Joe Biden",
+      "qid": "Q6279",
+      "groups": []
+    },
+    {
+      "id": "joe-lieberman-2008",
+      "name": "Joe Lieberman",
+      "qid": "Q160157",
+      "groups": []
+    },
+    {
+      "id": "joe-manchin-2016",
+      "name": "Joe Manchin",
+      "qid": "Q538868",
+      "groups": []
+    },
+    {
+      "id": "john-bel-edwards-2016",
+      "name": "John Bel Edwards",
+      "qid": "Q6221385",
+      "groups": []
+    },
+    {
+      "id": "john-boehner-2008",
+      "name": "John Boehner",
+      "qid": "Q11702",
+      "groups": []
+    },
+    {
+      "id": "john-breaux-1992",
+      "name": "John Breaux",
+      "qid": "Q969757",
+      "groups": []
+    },
+    {
+      "id": "john-c-stennis-1964",
+      "name": "John C. Stennis",
+      "qid": "Q1699509",
+      "groups": []
+    },
+    {
+      "id": "john-chafee-1992",
+      "name": "John Chafee",
+      "qid": "Q887338",
+      "groups": []
+    },
+    {
+      "id": "john-connally-1964",
+      "name": "John Connally",
+      "qid": "Q311293",
+      "groups": []
+    },
+    {
+      "id": "john-culver-1976",
+      "name": "John Culver",
+      "qid": "Q433448",
+      "groups": []
+    },
+    {
+      "id": "john-danforth-1976",
+      "name": "John Danforth",
+      "qid": "Q1287554",
+      "groups": []
+    },
+    {
+      "id": "john-edwards-2008",
+      "name": "John Edwards",
+      "qid": "Q217314",
+      "groups": []
+    },
+    {
+      "id": "john-engler-1992",
+      "name": "John Engler",
+      "qid": "Q735182",
+      "groups": []
+    },
+    {
+      "id": "john-fetterman-2024",
+      "name": "John Fetterman",
+      "qid": "Q3181500",
+      "groups": []
+    },
+    {
+      "id": "john-glenn-1976",
+      "name": "John Glenn",
+      "qid": "Q182642",
+      "groups": []
+    },
+    {
+      "id": "john-kasich-2016",
+      "name": "John Kasich",
+      "qid": "Q69319",
+      "groups": [
+        "Croatian Americans",
+        "Czech Americans"
+      ]
+    },
+    {
+      "id": "john-lewis-1992",
+      "name": "John Lewis",
+      "qid": "Q45380",
+      "groups": [
+        "African Americans"
+      ]
+    },
+    {
+      "id": "john-lindsay-1964",
+      "name": "John Lindsay",
+      "qid": "Q666931",
+      "groups": []
+    },
+    {
+      "id": "john-mccain-1992",
+      "name": "John McCain",
+      "qid": "Q10390",
+      "groups": []
+    },
+    {
+      "id": "john-nance-garner-1932",
+      "name": "John Nance Garner",
+      "qid": "Q298991",
+      "groups": []
+    },
+    {
+      "id": "john-sununu-2008",
+      "name": "John Sununu",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "john-tower-1964",
+      "name": "John Tower",
+      "qid": "Q2658030",
+      "groups": []
+    },
+    {
+      "id": "jon-tester-2008",
+      "name": "Jon Tester",
+      "qid": "Q529351",
+      "groups": []
+    },
+    {
+      "id": "joseph-r-biden-1976",
+      "name": "Joseph R. Biden",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "joseph-t-robinson-1932",
+      "name": "Joseph T. Robinson",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "josh-hawley-2016",
+      "name": "Josh Hawley",
+      "qid": "Q23020745",
+      "groups": []
+    },
+    {
+      "id": "josh-shapiro-2024",
+      "name": "Josh Shapiro",
+      "qid": "Q6289368",
+      "groups": []
+    },
+    {
+      "id": "kamala-harris-2016",
+      "name": "Kamala Harris",
+      "qid": "Q10853588",
+      "groups": [
+        "South Asian Americans",
+        "African Americans",
+        "Jamaican Americans",
+        "Tamil Americans",
+        "Indian Americans",
+        "multiracial Americans"
+      ]
+    },
+    {
+      "id": "kari-lake-2024",
+      "name": "Kari Lake",
+      "qid": "Q65600541",
+      "groups": []
+    },
+    {
+      "id": "karl-mundt-1964",
+      "name": "Karl Mundt",
+      "qid": "Q327912",
+      "groups": []
+    },
+    {
+      "id": "kay-bailey-hutchison-1992",
+      "name": "Kay Bailey Hutchison",
+      "qid": "Q239928",
+      "groups": []
+    },
+    {
+      "id": "kay-hagan-2008",
+      "name": "Kay Hagan",
+      "qid": "Q261003",
+      "groups": []
+    },
+    {
+      "id": "kevin-mccarthy-2016",
+      "name": "Kevin McCarthy",
+      "qid": "Q766866",
+      "groups": []
+    },
+    {
+      "id": "larry-hogan-2016",
+      "name": "Larry Hogan",
+      "qid": "Q16731303",
+      "groups": []
+    },
+    {
+      "id": "lawton-chiles-1976",
+      "name": "Lawton Chiles",
+      "qid": "Q744098",
+      "groups": []
+    },
+    {
+      "id": "lindsey-graham-2008",
+      "name": "Lindsey Graham",
+      "qid": "Q22212",
+      "groups": []
+    },
+    {
+      "id": "lisa-murkowski-2016",
+      "name": "Lisa Murkowski",
+      "qid": "Q22360",
+      "groups": []
+    },
+    {
+      "id": "lloyd-bentsen-1976",
+      "name": "Lloyd Bentsen",
+      "qid": "Q455401",
+      "groups": []
+    },
+    {
+      "id": "lowell-weicker-1976",
+      "name": "Lowell Weicker",
+      "qid": "Q881318",
+      "groups": []
+    },
+    {
+      "id": "lyndon-b-johnson-1964",
+      "name": "Lyndon B. Johnson",
+      "qid": "Q9640",
+      "groups": []
+    },
+    {
+      "id": "marco-rubio-2016",
+      "name": "Marco Rubio",
+      "qid": "Q324546",
+      "groups": []
+    },
+    {
+      "id": "margaret-chase-smith-1964",
+      "name": "Margaret Chase Smith",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "mario-cuomo-1992",
+      "name": "Mario Cuomo",
+      "qid": "Q521145",
+      "groups": []
+    },
+    {
+      "id": "marjorie-taylor-greene-2024",
+      "name": "Marjorie Taylor Greene",
+      "qid": "Q98380406",
+      "groups": []
+    },
+    {
+      "id": "mark-hatfield-1976",
+      "name": "Mark Hatfield",
+      "qid": "Q879921",
+      "groups": []
+    },
+    {
+      "id": "mark-kelly-2024",
+      "name": "Mark Kelly",
+      "qid": "Q357510",
+      "groups": []
+    },
+    {
+      "id": "mark-warner-2008",
+      "name": "Mark Warner",
+      "qid": "Q453893",
+      "groups": []
+    },
+    {
+      "id": "marsha-blackburn-2016",
+      "name": "Marsha Blackburn",
+      "qid": "Q458971",
+      "groups": []
+    },
+    {
+      "id": "mike-dewine-2024",
+      "name": "Mike DeWine",
+      "qid": "Q1363468",
+      "groups": []
+    },
+    {
+      "id": "mike-huckabee-2008",
+      "name": "Mike Huckabee",
+      "qid": "Q158813",
+      "groups": []
+    },
+    {
+      "id": "mike-johnson-2024",
+      "name": "Mike Johnson",
+      "qid": "Q19880665",
+      "groups": []
+    },
+    {
+      "id": "mike-mansfield-1964",
+      "name": "Mike Mansfield",
+      "qid": "Q1889152",
+      "groups": []
+    },
+    {
+      "id": "mike-pence-2016",
+      "name": "Mike Pence",
+      "qid": "Q24313",
+      "groups": []
+    },
+    {
+      "id": "millard-tydings-1932",
+      "name": "Millard Tydings",
+      "qid": "Q354099",
+      "groups": []
+    },
+    {
+      "id": "milton-young-1976",
+      "name": "Milton Young",
+      "qid": "Q436433",
+      "groups": []
+    },
+    {
+      "id": "mitch-mcconnell-2008",
+      "name": "Mitch McConnell",
+      "qid": "Q355522",
+      "groups": []
+    },
+    {
+      "id": "mitt-romney-2008",
+      "name": "Mitt Romney",
+      "qid": "Q4496",
+      "groups": []
+    },
+    {
+      "id": "morris-udall-1976",
+      "name": "Morris Udall",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "nancy-kassebaum-1992",
+      "name": "Nancy Kassebaum",
+      "qid": "Q458281",
+      "groups": []
+    },
+    {
+      "id": "nancy-pelosi-1992",
+      "name": "Nancy Pelosi",
+      "qid": "Q170581",
+      "groups": [
+        "Italian Americans"
+      ]
+    },
+    {
+      "id": "nelson-rockefeller-1964",
+      "name": "Nelson Rockefeller",
+      "qid": "Q11237",
+      "groups": []
+    },
+    {
+      "id": "newt-gingrich-1992",
+      "name": "Newt Gingrich",
+      "qid": "Q182788",
+      "groups": []
+    },
+    {
+      "id": "nikki-haley-2016",
+      "name": "Nikki Haley",
+      "qid": "Q11668",
+      "groups": []
+    },
+    {
+      "id": "norm-coleman-2008",
+      "name": "Norm Coleman",
+      "qid": "Q706661",
+      "groups": []
+    },
+    {
+      "id": "ogden-mills-1932",
+      "name": "Ogden Mills",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "olympia-snowe-1992",
+      "name": "Olympia Snowe",
+      "qid": "Q22290",
+      "groups": []
+    },
+    {
+      "id": "orrin-hatch-1976",
+      "name": "Orrin Hatch",
+      "qid": "Q381157",
+      "groups": []
+    },
+    {
+      "id": "pat-buchanan-1992",
+      "name": "Pat Buchanan",
+      "qid": "Q149127",
+      "groups": []
+    },
+    {
+      "id": "pat-harrison-1932",
+      "name": "Pat Harrison",
+      "qid": "Q369437",
+      "groups": []
+    },
+    {
+      "id": "pat-toomey-2016",
+      "name": "Pat Toomey",
+      "qid": "Q971308",
+      "groups": []
+    },
+    {
+      "id": "patrick-leahy-1976",
+      "name": "Patrick Leahy",
+      "qid": "Q59315",
+      "groups": []
+    },
+    {
+      "id": "patrick-moynihan-1992",
+      "name": "Patrick Moynihan",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "paul-laxalt-1976",
+      "name": "Paul Laxalt",
+      "qid": "Q661008",
+      "groups": [
+        "Basque Americans"
+      ]
+    },
+    {
+      "id": "paul-ryan-2016",
+      "name": "Paul Ryan",
+      "qid": "Q203966",
+      "groups": []
+    },
+    {
+      "id": "paul-tsongas-1992",
+      "name": "Paul Tsongas",
+      "qid": "Q283884",
+      "groups": []
+    },
+    {
+      "id": "paul-wellstone-1992",
+      "name": "Paul Wellstone",
+      "qid": "Q731783",
+      "groups": []
+    },
+    {
+      "id": "pete-domenici-1976",
+      "name": "Pete Domenici",
+      "qid": "Q964959",
+      "groups": []
+    },
+    {
+      "id": "pete-wilson-1992",
+      "name": "Pete Wilson",
+      "qid": "Q714909",
+      "groups": []
+    },
+    {
+      "id": "peter-rodino-1976",
+      "name": "Peter Rodino",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "phil-gramm-1992",
+      "name": "Phil Gramm",
+      "qid": "Q2613704",
+      "groups": []
+    },
+    {
+      "id": "phil-scott-2016",
+      "name": "Phil Scott",
+      "qid": "Q7185808",
+      "groups": []
+    },
+    {
+      "id": "philip-hart-1964",
+      "name": "Philip Hart",
+      "qid": "Q2086224",
+      "groups": []
+    },
+    {
+      "id": "rahm-emanuel-2008",
+      "name": "Rahm Emanuel",
+      "qid": "Q298443",
+      "groups": []
+    },
+    {
+      "id": "rand-paul-2016",
+      "name": "Rand Paul",
+      "qid": "Q463557",
+      "groups": []
+    },
+    {
+      "id": "raphael-warnock-2024",
+      "name": "Raphael Warnock",
+      "qid": "Q84146599",
+      "groups": [
+        "African Americans"
+      ]
+    },
+    {
+      "id": "reed-smoot-1932",
+      "name": "Reed Smoot",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "richard-b-russell-jr-1964",
+      "name": "Richard B. Russell Jr.",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "richard-lugar-1976",
+      "name": "Richard Lugar",
+      "qid": "Q363079",
+      "groups": []
+    },
+    {
+      "id": "richard-nixon-1964",
+      "name": "Richard Nixon",
+      "qid": "Q9588",
+      "groups": []
+    },
+    {
+      "id": "richard-shelby-1992",
+      "name": "Richard Shelby",
+      "qid": "Q472254",
+      "groups": []
+    },
+    {
+      "id": "rob-portman-2016",
+      "name": "Rob Portman",
+      "qid": "Q926069",
+      "groups": []
+    },
+    {
+      "id": "robert-byrd-1976",
+      "name": "Robert Byrd",
+      "qid": "Q276524",
+      "groups": []
+    },
+    {
+      "id": "robert-dole-1976",
+      "name": "Robert Dole",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "robert-f-kennedy-1964",
+      "name": "Robert F. Kennedy",
+      "qid": "Q25310",
+      "groups": []
+    },
+    {
+      "id": "robert-f-wagner-1932",
+      "name": "Robert F. Wagner",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "robert-m-la-follette-jr-1932",
+      "name": "Robert M. La Follette Jr.",
+      "qid": "Q377506",
+      "groups": []
+    },
+    {
+      "id": "robert-stafford-1976",
+      "name": "Robert Stafford",
+      "qid": "Q433140",
+      "groups": []
+    },
+    {
+      "id": "ron-desantis-2016",
+      "name": "Ron DeSantis",
+      "qid": "Q3105215",
+      "groups": []
+    },
+    {
+      "id": "ron-paul-2008",
+      "name": "Ron Paul",
+      "qid": "Q15257",
+      "groups": []
+    },
+    {
+      "id": "ron-wyden-1992",
+      "name": "Ron Wyden",
+      "qid": "Q529344",
+      "groups": []
+    },
+    {
+      "id": "ronald-reagan-1976",
+      "name": "Ronald Reagan",
+      "qid": "Q9960",
+      "groups": [
+        "white people"
+      ]
+    },
+    {
+      "id": "ronald-v-dellums-1976",
+      "name": "Ronald V. Dellums",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "ross-perot-1992",
+      "name": "Ross Perot",
+      "qid": "Q313697",
+      "groups": []
+    },
+    {
+      "id": "roy-cooper-2016",
+      "name": "Roy Cooper",
+      "qid": "Q7372694",
+      "groups": []
+    },
+    {
+      "id": "ruben-gallego-2024",
+      "name": "Ruben Gallego",
+      "qid": "Q16218474",
+      "groups": []
+    },
+    {
+      "id": "rudy-giuliani-2008",
+      "name": "Rudy Giuliani",
+      "qid": "Q212648",
+      "groups": []
+    },
+    {
+      "id": "russ-feingold-2008",
+      "name": "Russ Feingold",
+      "qid": "Q356475",
+      "groups": []
+    },
+    {
+      "id": "russell-b-long-1964",
+      "name": "Russell B. Long",
+      "qid": "Q1385418",
+      "groups": []
+    },
+    {
+      "id": "russell-long-1976",
+      "name": "Russell Long",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "s-i-hayakawa-1976",
+      "name": "S. I. Hayakawa",
+      "qid": "Q942027",
+      "groups": []
+    },
+    {
+      "id": "sam-brownback-2008",
+      "name": "Sam Brownback",
+      "qid": "Q317618",
+      "groups": []
+    },
+    {
+      "id": "sam-ervin-1964",
+      "name": "Sam Ervin",
+      "qid": "Q322911",
+      "groups": []
+    },
+    {
+      "id": "sam-nunn-1976",
+      "name": "Sam Nunn",
+      "qid": "Q946305",
+      "groups": []
+    },
+    {
+      "id": "sam-rayburn-1932",
+      "name": "Sam Rayburn",
+      "qid": "Q1378052",
+      "groups": []
+    },
+    {
+      "id": "sarah-huckabee-sanders-2024",
+      "name": "Sarah Huckabee Sanders",
+      "qid": "Q27986907",
+      "groups": []
+    },
+    {
+      "id": "sarah-palin-2008",
+      "name": "Sarah Palin",
+      "qid": "Q43144",
+      "groups": []
+    },
+    {
+      "id": "sherrod-brown-2008",
+      "name": "Sherrod Brown",
+      "qid": "Q381880",
+      "groups": []
+    },
+    {
+      "id": "shirley-chisholm-1976",
+      "name": "Shirley Chisholm",
+      "qid": "Q239657",
+      "groups": [
+        "African Americans",
+        "Barbadian Americans"
+      ]
+    },
+    {
+      "id": "simeon-fess-1932",
+      "name": "Simeon Fess",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "steny-hoyer-2008",
+      "name": "Steny Hoyer",
+      "qid": "Q516515",
+      "groups": []
+    },
+    {
+      "id": "steve-bullock-2016",
+      "name": "Steve Bullock",
+      "qid": "Q24015",
+      "groups": []
+    },
+    {
+      "id": "strom-thurmond-1954",
+      "name": "Strom Thurmond",
+      "qid": "Q324719",
+      "groups": []
+    },
+    {
+      "id": "susan-collins-2008",
+      "name": "Susan Collins",
+      "qid": "Q22279",
+      "groups": []
+    },
+    {
+      "id": "tammy-baldwin-2016",
+      "name": "Tammy Baldwin",
+      "qid": "Q40628",
+      "groups": []
+    },
+    {
+      "id": "ted-cruz-2016",
+      "name": "Ted Cruz",
+      "qid": "Q2036942",
+      "groups": []
+    },
+    {
+      "id": "ted-stevens-1976",
+      "name": "Ted Stevens",
+      "qid": "Q50599",
+      "groups": []
+    },
+    {
+      "id": "theodore-bilbo-1932",
+      "name": "Theodore Bilbo",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "thomas-eagleton-1976",
+      "name": "Thomas Eagleton",
+      "qid": "Q3176929",
+      "groups": []
+    },
+    {
+      "id": "thomas-kuchel-1964",
+      "name": "Thomas Kuchel",
+      "qid": "Q344538",
+      "groups": []
+    },
+    {
+      "id": "thomas-p-oneill-1976",
+      "name": "Thomas P. O'Neill",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "tim-kaine-2008",
+      "name": "Tim Kaine",
+      "qid": "Q359888",
+      "groups": []
+    },
+    {
+      "id": "tim-pawlenty-2008",
+      "name": "Tim Pawlenty",
+      "qid": "Q160181",
+      "groups": []
+    },
+    {
+      "id": "tim-scott-2024",
+      "name": "Tim Scott",
+      "qid": "Q561315",
+      "groups": []
+    },
+    {
+      "id": "tim-walz-2024",
+      "name": "Tim Walz",
+      "qid": "Q2434360",
+      "groups": []
+    },
+    {
+      "id": "tom-coburn-2008",
+      "name": "Tom Coburn",
+      "qid": "Q509093",
+      "groups": []
+    },
+    {
+      "id": "tom-cotton-2016",
+      "name": "Tom Cotton",
+      "qid": "Q3090307",
+      "groups": []
+    },
+    {
+      "id": "tom-harkin-1992",
+      "name": "Tom Harkin",
+      "qid": "Q465617",
+      "groups": []
+    },
+    {
+      "id": "tommy-thompson-1992",
+      "name": "Tommy Thompson",
+      "qid": "Q16751051",
+      "groups": []
+    },
+    {
+      "id": "trent-lott-1992",
+      "name": "Trent Lott",
+      "qid": "Q50608",
+      "groups": []
+    },
+    {
+      "id": "walter-mondale-1976",
+      "name": "Walter Mondale",
+      "qid": "Q49216",
+      "groups": [
+        "Norwegian Americans"
+      ]
+    },
+    {
+      "id": "wayne-morse-1964",
+      "name": "Wayne Morse",
+      "qid": "Q676399",
+      "groups": []
+    },
+    {
+      "id": "wendell-ford-1976",
+      "name": "Wendell Ford",
+      "qid": "Q361139",
+      "groups": []
+    },
+    {
+      "id": "william-e-borah-1932",
+      "name": "William E. Borah",
+      "qid": null,
+      "groups": []
+    },
+    {
+      "id": "william-proxmire-1976",
+      "name": "William Proxmire",
+      "qid": "Q1894476",
+      "groups": []
+    },
+    {
+      "id": "william-roth-1976",
+      "name": "William Roth",
+      "qid": "Q1400609",
+      "groups": []
+    },
+    {
+      "id": "william-scranton-1964",
+      "name": "William Scranton",
+      "qid": "Q880776",
+      "groups": []
+    },
+    {
+      "id": "william-weld-1992",
+      "name": "William Weld",
+      "qid": "Q720242",
+      "groups": []
+    },
+    {
+      "id": "zell-miller-1992",
+      "name": "Zell Miller",
+      "qid": "Q187516",
+      "groups": []
+    }
+  ]
+}
