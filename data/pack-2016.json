@@ -134,7 +134,6 @@
       "homeStateBonus": 1,
       "identities": [
         "black",
-        "hispanic",
         "urban"
       ],
       "identityWeights": {
@@ -146,9 +145,6 @@
       "effects": [],
       "provenance": {
         "black": {
-          "source": "hand-assigned"
-        },
-        "hispanic": {
           "source": "hand-assigned"
         },
         "urban": {
