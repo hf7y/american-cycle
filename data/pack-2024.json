@@ -238,6 +238,9 @@
         "rural",
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 1
+      },
       "belief": "Governor of a state that votes 30 points the other way",
       "era": 2024,
       "effects": [],
@@ -554,6 +557,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Certified, and survived",
       "era": 2024,
       "effects": [],
@@ -650,6 +656,9 @@
         "hispanic",
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "Held Texas by nine",
       "era": 2024,
       "effects": [],
@@ -673,6 +682,9 @@
         "rural",
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "Safe seat, national profile",
       "era": 2024,
       "effects": [

@@ -375,6 +375,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 1
+      },
       "belief": "Polish-American from a Yankee state",
       "era": 1964,
       "effects": [],

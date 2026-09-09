@@ -226,6 +226,9 @@
         "rural",
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 1
+      },
       "belief": "HOPE scholarships",
       "era": 1992,
       "effects": [],

@@ -156,6 +156,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Shot the cap-and-trade bill",
       "era": 2016,
       "effects": [],
@@ -202,6 +205,9 @@
         "farm",
         "rural"
       ],
+      "identityWeights": {
+        "farm": 2
+      },
       "belief": "Energy state Democrat",
       "era": 2016,
       "effects": [],
@@ -327,6 +333,9 @@
         "catholic",
         "rural"
       ],
+      "identityWeights": {
+        "catholic": 1
+      },
       "belief": "Pro-life, pro-Medicaid",
       "era": 2016,
       "effects": [
@@ -381,6 +390,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Won as Trump carried the state",
       "era": 2016,
       "effects": [],
@@ -499,6 +511,10 @@
         "catholic",
         "union"
       ],
+      "identityWeights": {
+        "union": 2,
+        "catholic": 1
+      },
       "belief": "Won a Trump district",
       "era": 2016,
       "effects": [
@@ -580,6 +596,9 @@
         "hispanic",
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "The shutdown",
       "era": 2016,
       "effects": [
@@ -985,6 +1004,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Certified the count",
       "era": 2016,
       "effects": [],

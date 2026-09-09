@@ -40,6 +40,9 @@
       "identities": [
         "union"
       ],
+      "identityWeights": {
+        "union": 1
+      },
       "belief": "Labor liberal",
       "era": 1976,
       "effects": [],
@@ -59,6 +62,9 @@
       "identities": [
         "union"
       ],
+      "identityWeights": {
+        "union": 2
+      },
       "belief": "The Happy Warrior",
       "era": 1976,
       "effects": [],
@@ -191,6 +197,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 1
+      },
       "belief": "Clean air and water",
       "era": 1976,
       "effects": [],
@@ -1142,6 +1151,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 1
+      },
       "belief": "Antiwar Republican",
       "era": 1976,
       "effects": [],
@@ -1257,6 +1269,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "Ordained priest",
       "era": 1976,
       "effects": [],

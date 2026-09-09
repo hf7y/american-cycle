@@ -913,6 +913,9 @@
         "evangelical",
         "farm"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "Compassionate conservative",
       "era": 2008,
       "effects": [],
@@ -954,6 +957,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 1
+      },
       "belief": "Rhodes scholar governor",
       "era": 2008,
       "effects": [],
