@@ -374,6 +374,9 @@
         "rural",
         "suburban"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Attorney general turned governor",
       "era": 2016,
       "effects": [],
@@ -933,6 +936,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 1
+      },
       "belief": "Big tech populist",
       "era": 2016,
       "effects": [

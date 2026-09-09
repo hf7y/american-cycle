@@ -1029,6 +1029,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "The lobbyist governor",
       "era": 2008,
       "effects": [],

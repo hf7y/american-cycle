@@ -64,47 +64,46 @@ export const finding: Finding = {
     + "and does the sim's fired identity-match magnitude move at all as a result?",
 
   headline:
-    'This commit re-cuts 18 more candidate cards, spread across all seven packs, closing out a '
-    + 'specific, well-documented figure per tag: `catholic` (Eugene McCarthy \'76 +2, nine months as '
-    + "a Benedictine novice intending the priesthood before politics; Patrick Moynihan '92 +2, an "
-    + "Irish-Catholic identity central to his career and his own writing on ethnic voting; John "
-    + "Boehner '08 +1 and Paul Ryan '16 +1, both well-documented devout Catholics), `evangelical` "
-    + "(Jim DeMint '08 +2 and Tom Coburn '08 +2, both culture-warrior religious conservatives whose "
-    + "Senate careers were built on that identity), `farm` (Bourke Hickenlooper '64 +2, a trained "
-    + "agricultural engineer and farm economist before politics; Dick Clark '76 +1, famous for "
-    + "walking Iowa farm to farm; Nancy Kassebaum '92 +1, Kansas wheat-farm heritage as Alf Landon's "
-    + "daughter), `rural` (Barry Goldwater '76 +2, the defining Arizona rancher persona; Sam Ervin "
-    + "'64 +2, the 'country lawyer' self-description that became his trademark; Margaret Chase Smith "
-    + "'64 +1, small-town Skowhegan, Maine roots; plus the farm-tagged Hickenlooper/Clark/Kassebaum "
-    + "cards above, all also rural), `suburban` (Steny Hoyer '08 +1, Prince George's County, MD; Amy "
-    + "Klobuchar '08 +1, Hennepin County prosecutor; Elissa Slotkin '24 +1, the archetypal suburban "
-    + "swing-district profile), `urban` (Frances Perkins '32 +2, her Hull House settlement-house "
-    + "years in Chicago; Hugh Scott '64 +1, Philadelphia machine politics), and `union` (Philip Hart "
-    + "'64 +2, a UAW-backed career that earned him 'the conscience of the Senate'). One-hundred-"
-    + 'eighty-seven candidate cards of the full pool (187/349) now carry `identityWeights`, up from '
-    + 'one-hundred-sixty-nine. Measured over the shipped agent pool, all seven packs, full sample: an '
-    + 'identity match now fires in 21.2% of contested generals (up from 19.5%) and 49.1% of contested '
-    + 'primaries (roughly flat, was 49.2%), mean pips 1.84 (flat) and mean tags 1.40 (down from 1.44, '
-    + 'more single-tag matches entering the sample) when a match fires. 162 of 349 still fall back to '
-    + "the flat default (identityBonus 1), and the math from the prior comments still holds: closing "
-    + "the full gap to #19's +4/5 pip target by raising the flat default alone would still need "
-    + 'roughly tripling it, and the sample still has a 3-tag simultaneous match: tripling would put '
-    + "that case at 9 pips, over #41's own ~8-pip full-stack ceiling. Same collision #41 flagged, "
-    + 'still unresolved at this scale -- re-cutting the remaining 162 cards is the same per-card '
-    + 'content task, just eighteen fewer of them.',
-  stampedAt: '2026-09-09T13:10:00Z',
-  stampedOn: '5881f82',
+    'This commit re-cuts 12 more candidate cards, spread across four packs, closing out one '
+    + "well-documented figure per tag: `rural` (Lawton Chiles '76 +2, the 1,003-mile 'Walkin' "
+    + "Lawton' walk across Florida his own campaign persona was built on; Dale Bumpers '76 +1, the "
+    + "'country lawyer' identity his belief text already names; Ben Nighthorse Campbell '92/'95 +2 "
+    + "each, a Northern Cheyenne rancher and champion rodeo rider before politics; John Engler '92 "
+    + "+1, raised working a dairy/beef farm near Beal City, Michigan; Roy Cooper '16 +1, the family "
+    + "tobacco farm in Nash County, NC his own campaigns cite; Haley Barbour '08 +1, Yazoo City in "
+    + "the Mississippi Delta), `catholic` (Paul Laxalt '76 +2, son of a Basque immigrant sheepherder "
+    + "raised in that community's Catholic tradition; Pete Domenici '76 +1, an Italian-Catholic "
+    + "grocer's son in Albuquerque; Patrick Leahy '76 +1, Catholic schooling through Saint Michael's "
+    + "and Georgetown; James L. Buckley '76 +2, from the Buckley family's well-documented "
+    + "traditionalist Catholicism), and `evangelical` (Josh Hawley '16 +1, an evangelical Christian "
+    + 'identity central to his own public writing and speeches). Contested-ethnicity tags '
+    + '(hispanic/black) left untouched on Domenici and any other co-tagged card, same as every prior '
+    + 'commit, gated on #164/#240. One-hundred-ninety-nine candidate cards of the full pool (199/349) '
+    + 'now carry `identityWeights`, up from one-hundred-eighty-seven. Measured over the shipped agent '
+    + 'pool, all seven packs, full sample: an identity match now fires in 20.2% of contested generals '
+    + '(down from 21.2% -- this batch leans rural/catholic, tags that already had heavy coverage, so '
+    + 'the marginal card is more likely to already share a tag with a district that was matching '
+    + 'anyway) and 48.9% of contested primaries (roughly flat, was 49.1%), mean pips 1.88 (up '
+    + 'slightly from 1.84) and mean tags 1.42 (flat) when a match fires. 150 of 349 still fall back '
+    + "to the flat default (identityBonus 1) -- 62 of those carry no identity tag at all and can "
+    + 'never be weighted; the other 88 are candidates for a future commit. The math from the prior '
+    + "comments still holds: closing the full gap to #19's +4/5 pip target by raising the flat "
+    + 'default alone would still need roughly tripling it, and the sample still has a 3-tag '
+    + "simultaneous match: tripling would put that case at 9 pips, over #41's own ~8-pip full-stack "
+    + 'ceiling. Same collision #41 flagged, still unresolved at this scale.',
+  stampedAt: '2026-09-09T16:10:00Z',
+  stampedOn: 'e3a8aed',
 
   predicate(): Claim[] {
     const seedCount = sample(60);
     const roll = rolloutShare();
     const m = matchStats(seedCount);
     return [
-      { name: 'candidate cards carrying signed identityWeights, of the full pool', value: roll, stamped: 53.58, tolerance: 0.2, unit: '%' },
-      { name: 'contested generals with an identity match', value: m.generalMatchShare, stamped: 21.24, tolerance: 3, unit: '%' },
-      { name: 'contested primaries with an identity match', value: m.primaryMatchShare, stamped: 49.11, tolerance: 3, unit: '%' },
-      { name: 'mean pips when an identity match fires', value: m.meanPips, stamped: 1.84, tolerance: 0.3 },
-      { name: 'mean tags shared when an identity match fires', value: m.meanTags, stamped: 1.40, tolerance: 0.3 },
+      { name: 'candidate cards carrying signed identityWeights, of the full pool', value: roll, stamped: 57.02, tolerance: 0.2, unit: '%' },
+      { name: 'contested generals with an identity match', value: m.generalMatchShare, stamped: 20.20, tolerance: 3, unit: '%' },
+      { name: 'contested primaries with an identity match', value: m.primaryMatchShare, stamped: 48.87, tolerance: 3, unit: '%' },
+      { name: 'mean pips when an identity match fires', value: m.meanPips, stamped: 1.88, tolerance: 0.3 },
+      { name: 'mean tags shared when an identity match fires', value: m.meanTags, stamped: 1.42, tolerance: 0.3 },
       { name: 'max tags shared simultaneously, this sample', value: m.maxTags, stamped: 3, tolerance: 0 },
     ];
   },

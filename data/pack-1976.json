@@ -388,6 +388,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Country lawyer",
       "era": 1976,
       "effects": [],
@@ -703,6 +706,9 @@
         "catholic",
         "rural"
       ],
+      "identityWeights": {
+        "catholic": 1
+      },
       "belief": "Prosecutor turned senator",
       "era": 1976,
       "effects": [],
@@ -847,6 +853,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Walkin' Lawton",
       "era": 1976,
       "effects": [],
@@ -1215,6 +1224,9 @@
         "catholic",
         "hispanic"
       ],
+      "identityWeights": {
+        "catholic": 1
+      },
       "belief": "Budget hawk",
       "era": 1976,
       "effects": [],
@@ -1237,6 +1249,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 2
+      },
       "belief": "Reagan's best friend",
       "era": 1976,
       "effects": [],
@@ -1256,6 +1271,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 2
+      },
       "belief": "Elected on the Conservative line",
       "era": 1976,
       "effects": [

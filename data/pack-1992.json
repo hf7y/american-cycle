@@ -668,6 +668,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Switched to the GOP in 1995",
       "era": 1992,
       "effects": [],
@@ -687,6 +690,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Rode the switch to a deeper red seat",
       "era": 1995,
       "effects": [],
@@ -1186,6 +1192,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Cut the income tax",
       "era": 1992,
       "effects": [],
