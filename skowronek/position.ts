@@ -219,5 +219,15 @@ export const TAG_COMPASS: Compass = {
   },
 };
 
-/** The compass in force. One assignment; change it and the whole suite moves. */
-export const COMPASS: Compass = LEAN_COMPASS;
+/** The compass in force. One assignment; change it and the whole suite moves.
+ *
+ *  #92 RULED this swap and #92's own follow-up found the one-line version
+ *  incomplete: `checks.ts`'s `countrySeries`/`countryDrift` assumed a 1-D
+ *  reading and `REGIME_THRESHOLD` was calibrated in lean-counter units. Both
+ *  are now gated on `Compass.dim` -- `principalAxis` supplies the signed
+ *  projection a `dim > 1` compass needs, `regimeThresholdFor` re-derives the
+ *  deadband in simplex-distance units, and `syntheticControlSimplex`
+ *  (controls.ts) is the tag-space C1 that validates the derivation before
+ *  this assignment ships. LEAN_COMPASS's own path is unchanged -- every
+ *  gate above takes the `dim === 1` branch verbatim. */
+export const COMPASS: Compass = TAG_COMPASS;
