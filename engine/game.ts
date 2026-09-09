@@ -360,6 +360,10 @@ export class Game {
   private offDistrict = new Map<string, number>();
   /** v0.2 item 9: pips of shock in force this year, 0 in a quiet one. */
   private shockPips = 0;
+  /** #84: this cycle's shock epicenter under `shockPositional` -- the tag
+   *  position of one currently-held seat, drawn at random. Undefined in a
+   *  quiet cycle, under the cheap shock, or when no held seat carries tags. */
+  private shockEpicenter?: tags.TagWeights;
   private agents: Agent[];
   private scoreHistory: number[][] = [];
   /** hf7y/american-cycle#171/#55: declare/refill order rotates by
@@ -1289,6 +1293,10 @@ export class Game {
     d.partyFit = tags.distance(mine, party);
     d.offDistrict = this.offDistrict.get(d.card.id) ?? 0;
     d.power = this.powerOf(d.player);
+    if (this.shockEpicenter) {
+      const distance = tags.distance(this.shockEpicenter, mine);
+      d.shockExposure = distance === undefined ? 0 : 1 - distance;
+    }
   }
 
   private raceContext(office: Office, state: string, slot: number | undefined, presidentialWinner?: Party): RaceContext {
@@ -1301,6 +1309,7 @@ export class Game {
       economyMod: econ.economyModifier(this.economy, this.cfg.economy, this.cfg.national.strongEconomy, this.cfg.national.recession),
       presidentialWinner,
       shock: this.shockPips,
+      shockPositional: this.cfg.economy.shockPositional,
     };
   }
 
@@ -1822,6 +1831,18 @@ export class Game {
     this.shockPips = econ.shockCheck(this.cfg.economy, this.rng)
       ? (this.cfg.economy.shockPips ?? 0) : 0;
     if (this.shockPips) { this.stats.shocks++; this.log.push(`${this.year}: a shock hits the incumbents`); }
+    // #84: the epicenter is one currently-held seat's tag position, drawn at
+    // random from every seat actually held -- so a faction that concentrates
+    // its seats in one tag region is proportionally more likely to supply the
+    // draw AND to sit near it once drawn, with no separate weighting needed.
+    this.shockEpicenter = undefined;
+    if (this.shockPips && this.cfg.economy.shockPositional) {
+      const positions = this.seats
+        .filter((s) => s.holder)
+        .map((s) => tags.weights(this.cardById.get(s.holder!.cardId)?.identities ?? []))
+        .filter((w) => !tags.isEmpty(w));
+      if (positions.length) this.shockEpicenter = this.rng.pick(positions);
+    }
   }
 
   /** Set when a victory condition fires, so the result can say which. */
