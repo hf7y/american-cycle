@@ -17,6 +17,25 @@
  *                              employment share IS an ACS industry table,
  *                              but "union" and "manufacturing" are not the
  *                              same thing and the existing tag is `union`.
+ *    farm                  -- table C24030's agriculture/forestry/fishing/
+ *                              hunting occupation share IS a clean CD-level
+ *                              pull, but checked against the pack's own 8
+ *                              hand-assigned `farm` districts it does not
+ *                              separate them from the 22 that aren't: MN-8
+ *                              (tagged) sits at 1.58%, below four untagged
+ *                              districts (NC-1 1.98%, WA-3 1.84%, AK-1
+ *                              1.77%, TX-34 1.69%), and OR-5/IA-3 (tagged,
+ *                              2.49%/2.45%) sit below untagged ME-2 (3.34%).
+ *                              No threshold reproduces the existing calls.
+ *                              Modern farm employment is too small a share
+ *                              of any district's workforce, tagged or not,
+ *                              to carry what `farm` is actually meant to
+ *                              flag -- a land-use/cultural character an
+ *                              occupation share doesn't measure. Left
+ *                              hand-assigned; a land-use source (USDA
+ *                              Census of Agriculture, county-level, would
+ *                              need a county-to-CD crosswalk) is a
+ *                              different, bigger pipeline, not this table.
  *    catholic/evangelical/
  *    jewish                -- confirmed unreachable; the census does not
  *                              collect religion, by law.
