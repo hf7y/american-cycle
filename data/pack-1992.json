@@ -394,17 +394,11 @@
       "party": "D",
       "homeState": "AL",
       "homeStateBonus": 2,
-      "identities": [
-        "rural"
-      ],
+      "identities": [],
       "belief": "Switched parties in 1994",
       "era": 1992,
       "effects": [],
-      "provenance": {
-        "rural": {
-          "source": "hand-assigned"
-        }
-      }
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -413,18 +407,12 @@
       "party": "R",
       "homeState": "AL",
       "homeStateBonus": 2,
-      "identities": [
-        "rural"
-      ],
+      "identities": [],
       "belief": "The switch made the seat safer, not weaker",
       "era": 1996,
       "effects": [],
       "succeeds": "richard-shelby-1992",
-      "provenance": {
-        "rural": {
-          "source": "hand-assigned"
-        }
-      }
+      "provenance": {}
     },
     {
       "kind": "candidate",

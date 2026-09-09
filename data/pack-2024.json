@@ -470,17 +470,11 @@
       "party": "R",
       "homeState": "FL",
       "homeStateBonus": 1,
-      "identities": [
-        "evangelical"
-      ],
+      "identities": [],
       "belief": "Won Florida by nineteen",
       "era": 2024,
       "effects": [],
-      "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        }
-      }
+      "provenance": {}
     },
     {
       "kind": "candidate",
