@@ -13,6 +13,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 1
+      },
       "belief": "Stronger together",
       "era": 2016,
       "effects": [],
@@ -32,6 +35,9 @@
       "identities": [
         "jewish"
       ],
+      "identityWeights": {
+        "jewish": 2
+      },
       "belief": "Political revolution",
       "era": 2016,
       "effects": [
@@ -61,6 +67,10 @@
         "catholic",
         "hispanic"
       ],
+      "identityWeights": {
+        "catholic": 1,
+        "hispanic": 1
+      },
       "belief": "Spanish on the trail",
       "era": 2016,
       "effects": [],
@@ -100,6 +110,9 @@
         "black",
         "urban"
       ],
+      "identityWeights": {
+        "black": 2
+      },
       "belief": "Newark mayor",
       "era": 2016,
       "effects": [],
@@ -124,6 +137,10 @@
         "hispanic",
         "urban"
       ],
+      "identityWeights": {
+        "black": 2,
+        "urban": 2
+      },
       "belief": "Attorney general",
       "era": 2016,
       "effects": [],
@@ -149,6 +166,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Shot the cap-and-trade bill",
       "era": 2016,
       "effects": [],
@@ -169,6 +189,9 @@
         "farm",
         "rural"
       ],
+      "identityWeights": {
+        "farm": 2
+      },
       "belief": "Still farming",
       "era": 2016,
       "effects": [],
@@ -192,6 +215,9 @@
         "farm",
         "rural"
       ],
+      "identityWeights": {
+        "farm": 2
+      },
       "belief": "Energy state Democrat",
       "era": 2016,
       "effects": [],
@@ -214,6 +240,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 1
+      },
       "belief": "Ran against the wave",
       "era": 2016,
       "effects": [],
@@ -233,6 +262,9 @@
       "identities": [
         "union"
       ],
+      "identityWeights": {
+        "union": 2
+      },
       "belief": "The last statewide Democrat",
       "era": 2016,
       "effects": [
@@ -262,6 +294,10 @@
         "catholic",
         "union"
       ],
+      "identityWeights": {
+        "catholic": 2,
+        "union": 1
+      },
       "belief": "Held Pennsylvania",
       "era": 2016,
       "effects": [],
@@ -284,6 +320,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 1
+      },
       "belief": "Won every county once",
       "era": 2016,
       "effects": [],
@@ -304,6 +343,9 @@
         "catholic",
         "rural"
       ],
+      "identityWeights": {
+        "catholic": 1
+      },
       "belief": "Pro-life, pro-Medicaid",
       "era": 2016,
       "effects": [
@@ -336,6 +378,9 @@
         "rural",
         "suburban"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Attorney general turned governor",
       "era": 2016,
       "effects": [],
@@ -358,6 +403,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Won as Trump carried the state",
       "era": 2016,
       "effects": [],
@@ -378,6 +426,10 @@
         "catholic",
         "urban"
       ],
+      "identityWeights": {
+        "catholic": 2,
+        "urban": 1
+      },
       "belief": "The Speaker again",
       "era": 2016,
       "effects": [],
@@ -401,6 +453,9 @@
         "jewish",
         "urban"
       ],
+      "identityWeights": {
+        "jewish": 2
+      },
       "belief": "The leader",
       "era": 2016,
       "effects": [],
@@ -423,6 +478,9 @@
       "identities": [
         "urban"
       ],
+      "identityWeights": {
+        "urban": 2
+      },
       "belief": "Held Wisconsin",
       "era": 2016,
       "effects": [],
@@ -443,6 +501,9 @@
         "hispanic",
         "urban"
       ],
+      "identityWeights": {
+        "hispanic": 2
+      },
       "belief": "First Latina senator",
       "era": 2016,
       "effects": [],
@@ -466,6 +527,10 @@
         "catholic",
         "union"
       ],
+      "identityWeights": {
+        "union": 2,
+        "catholic": 1
+      },
       "belief": "Won a Trump district",
       "era": 2016,
       "effects": [
@@ -520,6 +585,9 @@
       "identities": [
         "urban"
       ],
+      "identityWeights": {
+        "urban": -2
+      },
       "belief": "Make America great again",
       "era": 2016,
       "effects": [
@@ -544,6 +612,9 @@
         "hispanic",
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "The shutdown",
       "era": 2016,
       "effects": [
@@ -571,6 +642,9 @@
         "cuban",
         "evangelical"
       ],
+      "identityWeights": {
+        "cuban": 2
+      },
       "belief": "Son of a bartender",
       "era": 2016,
       "effects": [],
@@ -593,6 +667,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 2
+      },
       "belief": "Expanded Medicaid",
       "era": 2016,
       "effects": [],
@@ -635,6 +712,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "Christian, conservative, Republican",
       "era": 2016,
       "effects": [],
@@ -654,6 +734,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 1
+      },
       "belief": "The budget",
       "era": 2016,
       "effects": [],
@@ -704,6 +787,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Won on a write-in",
       "era": 2016,
       "effects": [],
@@ -735,6 +821,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 2
+      },
       "belief": "Won Maryland twice",
       "era": 2016,
       "effects": [],
@@ -754,6 +843,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Won Vermont as it voted Democratic",
       "era": 2016,
       "effects": [],
@@ -773,6 +865,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "Never Trump, mostly",
       "era": 2016,
       "effects": [],
@@ -834,6 +929,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 1
+      },
       "belief": "Harvard and the infantry",
       "era": 2016,
       "effects": [
@@ -857,6 +955,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 1
+      },
       "belief": "Big tech populist",
       "era": 2016,
       "effects": [
@@ -880,6 +981,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 1
+      },
       "belief": "Took down the flag",
       "era": 2016,
       "effects": [],
@@ -937,6 +1041,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Certified the count",
       "era": 2016,
       "effects": [],
@@ -968,6 +1075,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 1
+      },
       "belief": "Voted to convict",
       "era": 2016,
       "effects": [],
@@ -1007,6 +1117,10 @@
         "rural",
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 2,
+        "rural": 1
+      },
       "belief": "Moderate turned loyalist",
       "era": 2016,
       "effects": [],
@@ -1030,6 +1144,10 @@
         "evangelical",
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 2,
+        "evangelical": 1
+      },
       "belief": "Hard right in a red state",
       "era": 2016,
       "effects": [
@@ -1056,6 +1174,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 1
+      },
       "belief": "The eyepatch",
       "era": 2016,
       "effects": [],
@@ -1867,6 +1988,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Independent by habit, not by accident",
       "era": 2016,
       "effects": [],

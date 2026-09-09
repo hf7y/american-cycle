@@ -64,30 +64,56 @@ export const finding: Finding = {
     + "and does the sim's fired identity-match magnitude move at all as a result?",
 
   headline:
-    'Barely. One candidate card of the full pool carries `identityWeights` -- Goldwater, #41\'s own '
-    + 'falsifier -- so 345 of 346 still fall back to the flat default. Measured over the shipped '
-    + 'agent pool, all seven packs: an identity match now fires in 26.6% of contested generals and '
-    + '57.0% of contested primaries (post-#27\'s district-synergy removal, which #19 was not measured '
-    + 'against), at a mean 1.39 pips across a mean 1.38 shared tags when it fires -- indistinguishable '
-    + "from the pre-#41 flat mechanic, because the pool mostly still IS the pre-#41 flat mechanic. "
-    + 'Closing the gap to #19\'s +4/5 pip target by raising the flat default alone would need '
-    + 'roughly tripling it, and the sample already has a 3-tag simultaneous match: tripling would put '
-    + 'that case at 9 pips, over #41\'s own ~8-pip full-stack ceiling. Same collision #41 flagged, '
-    + 'still unresolved -- re-cutting the pool with signed weights (a per-card content task, not a '
-    + 'code one) is the only way to raise the average without raising that ceiling case too.',
-  stampedAt: '2026-09-05T10:32:00Z',
-  stampedOn: '14ada71',
+    'This commit re-cuts 39 more candidate cards (some reused across multiple packs), closing '
+    + 'out most of the remaining pool that carries an identity tag but no override: `rural` (La '
+    + 'Follette Jr., Watson, Pinchot, Udall, Church, Ford, Culver, Stafford, Kerrey, Richards, '
+    + 'Simpson, Lott, Jeffords, Thompson, Edwards, Reid, Shuler, Hagel, Stefanik, DeWine -- '
+    + 'documented small-town/farm/working-rural biography, or, where personal upbringing was '
+    + "urban but the political base was rural (Church's Idaho wilderness/farm coalition, Ford's "
+    + "Owensboro KY good-ol'-boy base, Proxmire's decades of Wisconsin dairy-farmer advocacy), "
+    + 'the coalition basis the Pinchot/FDR precedent already established), `farm` (Culver, '
+    + 'Proxmire), `catholic` (Eagleton, Dodd, Kasich, Toomey, DeWine -- documented personal '
+    + 'upbringing or public faith narrative), `urban` (Eagleton, Mathias, Harris), `evangelical` '
+    + "(Reagan -- 1976 primary courting the same Southern religious-conservative bloc the Nikki "
+    + 'Haley precedent weighted; Lott, Shuler, Graham, Pawlenty, Sasse, Cotton, Blackburn -- '
+    + 'Southern Baptist/evangelical upbringing or public identification), `suburban` (Hagan, '
+    + 'Crist, Pawlenty, Stefanik, Blackburn, Crenshaw, Kelly, Lake), and `black` (Harris, both '
+    + 'her cards -- HBCU/AKA/self-identification central to her campaigns). Same per-card, '
+    + "only-tags-the-card-already-carries methodology as every prior commit. `hispanic` left off "
+    + "both Harris cards (gated on #245, which flags the tag itself as an accuracy problem); "
+    + "`evangelical` left off Harry Reid (he is LDS, same #240 denomination-bucketing gate as "
+    + 'Hatch) -- weighted his `rural` tag only. Two-hundred-sixty-five candidate cards of the '
+    + 'full pool (265/349) now carry `identityWeights`, up from two-hundred-twenty-six. 22 '
+    + 'tagged-but-unweighted cards remain: 10 are prior commits\' already-flagged mismatches or '
+    + 'insufficient-grounding skips (Byrnes, Fulbright, both Longs, both Shelbys, both DeSantis '
+    + 'cards, both Hatch cards); the other 12 are new judgment calls from this pass -- Collins '
+    + '(x3, `suburban`), McCarthy (`suburban`), Jones (`rural`+`evangelical`), Bush '
+    + '(`evangelical`), Hollings (`rural`), and Tsongas (`catholic`) look like tag/bio mismatches, '
+    + 'flagged separately on #164; Flake and McMullin are gated on #240 same as Reid/Hatch (both '
+    + 'LDS); Rand Paul left alone for insufficient grounding, Abbott on the existing hispanic '
+    + 'gate. Measured over the shipped agent pool, all seven packs, full sample: an identity '
+    + 'match now fires in 22.5% of contested generals (up from 20.9%) and 49.7% of contested '
+    + 'primaries (down from 51.3%), mean pips 2.02 (flat) and mean tags 1.40 (flat) when a match '
+    + 'fires. 84 of 349 still fall back to the flat default (identityBonus 1) -- 62 of those carry '
+    + 'no identity tag at all and can never be weighted; the other 22 are the judgment-call/gate '
+    + "cases above. The math from the prior comments still holds: closing the full gap to #19's "
+    + '+4/5 pip target by raising the flat default alone would still need roughly tripling it, and '
+    + "the sample still has a 3-tag simultaneous match: tripling would put that case at 9 pips, "
+    + "over #41's own ~8-pip full-stack ceiling. Same collision #41 flagged, still unresolved at "
+    + 'this scale.',
+  stampedAt: '2026-09-09T17:44:00Z',
+  stampedOn: '8bf6f9a',
 
   predicate(): Claim[] {
     const seedCount = sample(60);
     const roll = rolloutShare();
     const m = matchStats(seedCount);
     return [
-      { name: 'candidate cards carrying signed identityWeights, of the full pool', value: roll, stamped: 0.29, tolerance: 0.1, unit: '%' },
-      { name: 'contested generals with an identity match', value: m.generalMatchShare, stamped: 26.6, tolerance: 3, unit: '%' },
-      { name: 'contested primaries with an identity match', value: m.primaryMatchShare, stamped: 57.0, tolerance: 3, unit: '%' },
-      { name: 'mean pips when an identity match fires', value: m.meanPips, stamped: 1.39, tolerance: 0.3 },
-      { name: 'mean tags shared when an identity match fires', value: m.meanTags, stamped: 1.38, tolerance: 0.3 },
+      { name: 'candidate cards carrying signed identityWeights, of the full pool', value: roll, stamped: 75.93, tolerance: 0.2, unit: '%' },
+      { name: 'contested generals with an identity match', value: m.generalMatchShare, stamped: 22.50, tolerance: 3, unit: '%' },
+      { name: 'contested primaries with an identity match', value: m.primaryMatchShare, stamped: 49.69, tolerance: 3, unit: '%' },
+      { name: 'mean pips when an identity match fires', value: m.meanPips, stamped: 2.02, tolerance: 0.3 },
+      { name: 'mean tags shared when an identity match fires', value: m.meanTags, stamped: 1.4, tolerance: 0.3 },
       { name: 'max tags shared simultaneously, this sample', value: m.maxTags, stamped: 3, tolerance: 0 },
     ];
   },

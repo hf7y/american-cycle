@@ -15,6 +15,10 @@
         "hispanic",
         "urban"
       ],
+      "identityWeights": {
+        "black": 2,
+        "urban": 2
+      },
       "belief": "A new way forward",
       "era": 2024,
       "effects": [],
@@ -40,6 +44,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 2
+      },
       "belief": "Stepped aside in July",
       "era": 2024,
       "effects": [],
@@ -59,6 +66,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Coach from the Iron Range",
       "era": 2024,
       "effects": [],
@@ -79,6 +89,9 @@
         "jewish",
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 2
+      },
       "belief": "Won by fifteen in a tied state",
       "era": 2024,
       "effects": [],
@@ -101,6 +114,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 1
+      },
       "belief": "Fix the damn roads",
       "era": 2024,
       "effects": [],
@@ -121,6 +137,9 @@
         "farm",
         "rural"
       ],
+      "identityWeights": {
+        "farm": 2
+      },
       "belief": "Lost at last",
       "era": 2024,
       "effects": [],
@@ -143,6 +162,9 @@
       "identities": [
         "union"
       ],
+      "identityWeights": {
+        "union": 2
+      },
       "belief": "Lost at last",
       "era": 2024,
       "effects": [],
@@ -162,6 +184,9 @@
       "identities": [
         "hispanic"
       ],
+      "identityWeights": {
+        "hispanic": 2
+      },
       "belief": "Ran ahead of the ticket",
       "era": 2024,
       "effects": [],
@@ -181,6 +206,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 1
+      },
       "belief": "Held Michigan by a point",
       "era": 2024,
       "effects": [],
@@ -200,6 +228,9 @@
       "identities": [
         "urban"
       ],
+      "identityWeights": {
+        "urban": 2
+      },
       "belief": "Held Wisconsin",
       "era": 2024,
       "effects": [],
@@ -220,6 +251,9 @@
         "rural",
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 1
+      },
       "belief": "Governor of a state that votes 30 points the other way",
       "era": 2024,
       "effects": [],
@@ -244,6 +278,9 @@
         "evangelical",
         "urban"
       ],
+      "identityWeights": {
+        "black": 2
+      },
       "belief": "Ebenezer's pastor",
       "era": 2024,
       "effects": [],
@@ -269,6 +306,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 1
+      },
       "belief": "Astronaut",
       "era": 2024,
       "effects": [],
@@ -289,6 +329,10 @@
         "rural",
         "union"
       ],
+      "identityWeights": {
+        "union": 2,
+        "rural": 1
+      },
       "belief": "Hoodie in the Senate",
       "era": 2024,
       "effects": [],
@@ -312,6 +356,9 @@
         "black",
         "urban"
       ],
+      "identityWeights": {
+        "black": 2
+      },
       "belief": "The leader",
       "era": 2024,
       "effects": [],
@@ -335,6 +382,9 @@
         "hispanic",
         "urban"
       ],
+      "identityWeights": {
+        "urban": 1
+      },
       "belief": "The Bronx",
       "era": 2024,
       "effects": [
@@ -361,6 +411,9 @@
       "identities": [
         "jewish"
       ],
+      "identityWeights": {
+        "jewish": 2
+      },
       "belief": "Still an independent",
       "era": 2024,
       "effects": [
@@ -389,6 +442,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Still an independent",
       "era": 2024,
       "effects": [],
@@ -408,6 +464,9 @@
       "identities": [
         "urban"
       ],
+      "identityWeights": {
+        "urban": -2
+      },
       "belief": "Won the popular vote",
       "era": 2024,
       "effects": [
@@ -431,6 +490,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Hillbilly Elegy",
       "era": 2024,
       "effects": [
@@ -454,6 +516,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 1
+      },
       "belief": "Ran to the end of the primaries",
       "era": 2024,
       "effects": [],
@@ -492,6 +557,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 2
+      },
       "belief": "Won on schools",
       "era": 2024,
       "effects": [],
@@ -511,6 +579,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Certified, and survived",
       "era": 2024,
       "effects": [],
@@ -531,6 +602,10 @@
         "catholic",
         "rural"
       ],
+      "identityWeights": {
+        "catholic": 2,
+        "rural": 2
+      },
       "belief": "Old-guard governor",
       "era": 2024,
       "effects": [],
@@ -572,6 +647,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Still there",
       "era": 2024,
       "effects": [],
@@ -604,6 +682,9 @@
         "hispanic",
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "Held Texas by nine",
       "era": 2024,
       "effects": [],
@@ -627,6 +708,9 @@
         "rural",
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "Safe seat, national profile",
       "era": 2024,
       "effects": [
@@ -654,6 +738,9 @@
         "evangelical",
         "rural"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "Speaker by exhaustion",
       "era": 2024,
       "effects": [],
@@ -677,6 +764,9 @@
         "black",
         "evangelical"
       ],
+      "identityWeights": {
+        "black": 1
+      },
       "belief": "Appointed, then elected",
       "era": 2024,
       "effects": [],
@@ -699,6 +789,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 2
+      },
       "belief": "Lost by eleven running twenty ahead of the ticket",
       "era": 2024,
       "effects": [],
@@ -718,6 +811,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Won by forty in a state that voted blue by thirty",
       "era": 2024,
       "effects": [],
@@ -749,6 +845,9 @@
       "identities": [
         "hispanic"
       ],
+      "identityWeights": {
+        "hispanic": 1
+      },
       "belief": "Beat Sherrod Brown",
       "era": 2024,
       "effects": [],
@@ -768,6 +867,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 1
+      },
       "belief": "Lost twice",
       "era": 2024,
       "effects": [
@@ -791,6 +893,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "Won by twenty-eight",
       "era": 2024,
       "effects": [],
