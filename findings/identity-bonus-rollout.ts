@@ -64,61 +64,54 @@ export const finding: Finding = {
     + "and does the sim's fired identity-match magnitude move at all as a result?",
 
   headline:
-    'This commit re-cuts 27 more candidate cards (some reused across multiple packs), closing '
-    + "out one well-documented figure per tag: `rural` (Cordell Hull +2, log-cabin-born son of a "
-    + "Tennessee farmer, a birthplace the state still runs as a park; Joseph T. Robinson +2, farmer's "
-    + "son who chopped cotton and tended his father's orchard as a boy; Alben Barkley +2, tenant "
-    + "tobacco farmer's son who chopped wood and harvested tobacco before law school; Charles Curtis "
-    + '+2, raised on the Kaw reservation by his grandmother after his mother\'s death; Simeon Fess +2, '
-    + "orphaned young onto a farm near Harrod, Ohio; Wayne Morse +2, raised on his family's 320-acre "
-    + "working farm outside Madison, WI (still a National Register site); John C. Stennis +2 (both "
-    + "his '64 and '76 cards), born on a farm in Kemper County, MS; John Connally +2, a barefoot boy "
-    + "of mule-plowed furrows on the family's South Texas cotton farm before age 10; Everett Dirksen "
-    + "+2, raised on a farm his widowed mother ran inside Pekin, IL's city limits; Sam Nunn +2 (both "
-    + "his '76 and '92 cards), who left a House Armed Services staff job to run the family farm in "
-    + "Perry, GA; William E. Borah +1, farm-born but by his own account no farmer at heart; Carl "
-    + 'Hayden +1, born in adobe-house territorial Arizona to a town-founding father; Phil Scott +1 '
-    + "(both '16 and '24), Barre, VT construction/racing persona more blue-collar than literally "
-    + "agrarian), `farm` (Albert Gore Sr. +2, Possum Hollow farm boy who watched the Depression wipe "
-    + "out three local banks; Birch Bayh +2 (both '64 and '76), raised partly on his grandparents' "
-    + "farm and a 4-H tomato champion; Karl Mundt +1, adult 'agricultural pursuits' and a Senate Ag "
-    + "Committee record more professional than boyhood-farm), and `urban` (Hiram Johnson +2, an "
-    + "entire San Francisco prosecutorial and gubernatorial career; Tammy Baldwin +2 (both '16 and "
-    + "'24), born and raised in Madison, WI; Clifford Case +1 (both '64 and '76), a Wall Street firm "
-    + "and industrial-NJ political base; FDR +1, the urban ethnic/Catholic Tammany coalition he built "
-    + "as governor, distinct from his own patrician Hyde Park upbringing; Pat Harrison +1, small-town "
-    + 'Crystal Springs, MS rather than open country). Contested-ethnicity tags (hispanic/black) left '
-    + 'untouched, same as every prior commit, gated on #164/#240; Orrin Hatch\'s `evangelical` tag '
-    + "left unweighted too -- he's LDS, and #240 is the open decision on how denominations bucket. "
-    + 'Three more cards were checked and skipped as likely tag/biography mismatches rather than '
-    + "weighted on a stretch: James F. Byrnes ('rural', but born and raised in urban Charleston, SC), "
-    + "Richard Shelby ('rural', but born in Birmingham to a U.S. Steel draftsman), and Ron DeSantis "
-    + "('evangelical' on both his '16 and '24 cards, but raised and still practicing Catholic) -- "
-    + 'flagged on #164 rather than silently reweighted, since fixing a tag is that issue\'s call, not '
-    + "this rollout's. J. William Fulbright and Russell B. Long were checked and left alone for "
-    + 'insufficient personal grounding (a diversified family business with one farm among several '
-    + "holdings; a Shreveport upbringing once the family was already in power, respectively). "
-    + 'Two-hundred-twenty-six candidate cards of the full pool (226/349) now carry `identityWeights`, '
-    + 'up from one-hundred-ninety-nine. Measured over the shipped agent pool, all seven packs, full '
-    + 'sample: an identity match now fires in 20.9% of contested generals (up from 20.2%) and 51.3% '
-    + 'of contested primaries (up from 48.9%), mean pips 2.02 (up from 1.88) and mean tags 1.40 (flat) '
-    + "when a match fires. 123 of 349 still fall back to the flat default (identityBonus 1) -- 62 of "
-    + 'those carry no identity tag at all and can never be weighted; the other 61 are candidates for '
-    + "a future commit. The math from the prior comments still holds: closing the full gap to #19's "
-    + '+4/5 pip target by raising the flat default alone would still need roughly tripling it, and the '
-    + "sample still has a 3-tag simultaneous match: tripling would put that case at 9 pips, over #41's "
-    + "own ~8-pip full-stack ceiling. Same collision #41 flagged, still unresolved at this scale.",
-  stampedAt: '2026-09-09T16:55:21Z',
-  stampedOn: '0c1e851',
+    'This commit re-cuts 39 more candidate cards (some reused across multiple packs), closing '
+    + 'out most of the remaining pool that carries an identity tag but no override: `rural` (La '
+    + 'Follette Jr., Watson, Pinchot, Udall, Church, Ford, Culver, Stafford, Kerrey, Richards, '
+    + 'Simpson, Lott, Jeffords, Thompson, Edwards, Reid, Shuler, Hagel, Stefanik, DeWine -- '
+    + 'documented small-town/farm/working-rural biography, or, where personal upbringing was '
+    + "urban but the political base was rural (Church's Idaho wilderness/farm coalition, Ford's "
+    + "Owensboro KY good-ol'-boy base, Proxmire's decades of Wisconsin dairy-farmer advocacy), "
+    + 'the coalition basis the Pinchot/FDR precedent already established), `farm` (Culver, '
+    + 'Proxmire), `catholic` (Eagleton, Dodd, Kasich, Toomey, DeWine -- documented personal '
+    + 'upbringing or public faith narrative), `urban` (Eagleton, Mathias, Harris), `evangelical` '
+    + "(Reagan -- 1976 primary courting the same Southern religious-conservative bloc the Nikki "
+    + 'Haley precedent weighted; Lott, Shuler, Graham, Pawlenty, Sasse, Cotton, Blackburn -- '
+    + 'Southern Baptist/evangelical upbringing or public identification), `suburban` (Hagan, '
+    + 'Crist, Pawlenty, Stefanik, Blackburn, Crenshaw, Kelly, Lake), and `black` (Harris, both '
+    + 'her cards -- HBCU/AKA/self-identification central to her campaigns). Same per-card, '
+    + "only-tags-the-card-already-carries methodology as every prior commit. `hispanic` left off "
+    + "both Harris cards (gated on #245, which flags the tag itself as an accuracy problem); "
+    + "`evangelical` left off Harry Reid (he is LDS, same #240 denomination-bucketing gate as "
+    + 'Hatch) -- weighted his `rural` tag only. Two-hundred-sixty-five candidate cards of the '
+    + 'full pool (265/349) now carry `identityWeights`, up from two-hundred-twenty-six. 22 '
+    + 'tagged-but-unweighted cards remain: 10 are prior commits\' already-flagged mismatches or '
+    + 'insufficient-grounding skips (Byrnes, Fulbright, both Longs, both Shelbys, both DeSantis '
+    + 'cards, both Hatch cards); the other 12 are new judgment calls from this pass -- Collins '
+    + '(x3, `suburban`), McCarthy (`suburban`), Jones (`rural`+`evangelical`), Bush '
+    + '(`evangelical`), Hollings (`rural`), and Tsongas (`catholic`) look like tag/bio mismatches, '
+    + 'flagged separately on #164; Flake and McMullin are gated on #240 same as Reid/Hatch (both '
+    + 'LDS); Rand Paul left alone for insufficient grounding, Abbott on the existing hispanic '
+    + 'gate. Measured over the shipped agent pool, all seven packs, full sample: an identity '
+    + 'match now fires in 22.5% of contested generals (up from 20.9%) and 49.7% of contested '
+    + 'primaries (down from 51.3%), mean pips 2.02 (flat) and mean tags 1.40 (flat) when a match '
+    + 'fires. 84 of 349 still fall back to the flat default (identityBonus 1) -- 62 of those carry '
+    + 'no identity tag at all and can never be weighted; the other 22 are the judgment-call/gate '
+    + "cases above. The math from the prior comments still holds: closing the full gap to #19's "
+    + '+4/5 pip target by raising the flat default alone would still need roughly tripling it, and '
+    + "the sample still has a 3-tag simultaneous match: tripling would put that case at 9 pips, "
+    + "over #41's own ~8-pip full-stack ceiling. Same collision #41 flagged, still unresolved at "
+    + 'this scale.',
+  stampedAt: '2026-09-09T17:44:00Z',
+  stampedOn: '8bf6f9a',
 
   predicate(): Claim[] {
     const seedCount = sample(60);
     const roll = rolloutShare();
     const m = matchStats(seedCount);
     return [
-      { name: 'candidate cards carrying signed identityWeights, of the full pool', value: roll, stamped: 64.76, tolerance: 0.2, unit: '%' },
-      { name: 'contested generals with an identity match', value: m.generalMatchShare, stamped: 20.86, tolerance: 3, unit: '%' },
-      { name: 'contested primaries with an identity match', value: m.primaryMatchShare, stamped: 51.26, tolerance: 3, unit: '%' },
+      { name: 'candidate cards carrying signed identityWeights, of the full pool', value: roll, stamped: 75.93, tolerance: 0.2, unit: '%' },
+      { name: 'contested generals with an identity match', value: m.generalMatchShare, stamped: 22.50, tolerance: 3, unit: '%' },
+      { name: 'contested primaries with an identity match', value: m.primaryMatchShare, stamped: 49.69, tolerance: 3, unit: '%' },
       { name: 'mean pips when an identity match fires', value: m.meanPips, stamped: 2.02, tolerance: 0.3 },
       { name: 'mean tags shared when an identity match fires', value: m.meanTags, stamped: 1.4, tolerance: 0.3 },
       { name: 'max tags shared simultaneously, this sample', value: m.maxTags, stamped: 3, tolerance: 0 },
