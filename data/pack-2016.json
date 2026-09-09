@@ -61,6 +61,10 @@
         "catholic",
         "hispanic"
       ],
+      "identityWeights": {
+        "catholic": 1,
+        "hispanic": 1
+      },
       "belief": "Spanish on the trail",
       "era": 2016,
       "effects": [],
@@ -242,6 +246,9 @@
       "identities": [
         "union"
       ],
+      "identityWeights": {
+        "union": 2
+      },
       "belief": "The last statewide Democrat",
       "era": 2016,
       "effects": [
@@ -271,6 +278,10 @@
         "catholic",
         "union"
       ],
+      "identityWeights": {
+        "catholic": 2,
+        "union": 1
+      },
       "belief": "Held Pennsylvania",
       "era": 2016,
       "effects": [],
@@ -293,6 +304,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 1
+      },
       "belief": "Won every county once",
       "era": 2016,
       "effects": [],
@@ -387,6 +401,10 @@
         "catholic",
         "urban"
       ],
+      "identityWeights": {
+        "catholic": 2,
+        "urban": 1
+      },
       "belief": "The Speaker again",
       "era": 2016,
       "effects": [],
@@ -656,6 +674,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "Christian, conservative, Republican",
       "era": 2016,
       "effects": [],
@@ -725,6 +746,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Won on a write-in",
       "era": 2016,
       "effects": [],
@@ -1891,6 +1915,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Independent by habit, not by accident",
       "era": 2016,
       "effects": [],

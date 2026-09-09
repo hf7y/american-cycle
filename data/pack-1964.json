@@ -13,6 +13,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "We shall overcome",
       "era": 1964,
       "effects": [],
@@ -32,6 +35,9 @@
       "identities": [
         "union"
       ],
+      "identityWeights": {
+        "union": 2
+      },
       "belief": "Out of the shadow of states' rights",
       "era": 1964,
       "effects": [],
@@ -51,6 +57,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 2
+      },
       "belief": "Carpetbagger who won",
       "era": 1964,
       "effects": [],
@@ -71,6 +80,10 @@
         "rural",
         "farm"
       ],
+      "identityWeights": {
+        "rural": 2,
+        "farm": 1
+      },
       "belief": "Led the southern bloc against the bill",
       "era": 1964,
       "effects": [],
@@ -93,6 +106,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 1
+      },
       "belief": "Ran the Senate quietly",
       "era": 1964,
       "effects": [],
@@ -192,6 +208,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 1
+      },
       "belief": "Not yet in revolt",
       "era": 1964,
       "effects": [],
@@ -496,6 +515,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "Walked out of the convention",
       "era": 1964,
       "effects": [],
@@ -723,6 +745,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Elected by write-in, running against his own party's machine",
       "era": 1954,
       "effects": [],

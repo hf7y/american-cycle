@@ -111,6 +111,11 @@
         "rural",
         "union"
       ],
+      "identityWeights": {
+        "farm": 2,
+        "rural": 1,
+        "union": 1
+      },
       "belief": "Prairie populist",
       "era": 1992,
       "effects": [],
@@ -156,6 +161,10 @@
         "catholic",
         "urban"
       ],
+      "identityWeights": {
+        "catholic": 2,
+        "urban": 2
+      },
       "belief": "A tale of two cities",
       "era": 1992,
       "effects": [],
@@ -317,6 +326,9 @@
       "identities": [
         "union"
       ],
+      "identityWeights": {
+        "union": 2
+      },
       "belief": "The democratic wing of the Democratic Party",
       "era": 1992,
       "effects": [
@@ -364,6 +376,10 @@
         "catholic",
         "union"
       ],
+      "identityWeights": {
+        "catholic": 2,
+        "union": 1
+      },
       "belief": "Pro-life Democrat",
       "era": 1992,
       "effects": [],
@@ -387,6 +403,10 @@
         "rural",
         "catholic"
       ],
+      "identityWeights": {
+        "rural": 1,
+        "catholic": 1
+      },
       "belief": "My vote cannot be bought but it can be rented",
       "era": 1992,
       "effects": [],
@@ -505,6 +525,10 @@
         "catholic",
         "urban"
       ],
+      "identityWeights": {
+        "catholic": 2,
+        "urban": 1
+      },
       "belief": "San Francisco fundraiser",
       "era": 1992,
       "effects": [],
@@ -528,6 +552,10 @@
         "union",
         "catholic"
       ],
+      "identityWeights": {
+        "union": 2,
+        "catholic": 1
+      },
       "belief": "Fair trade",
       "era": 1992,
       "effects": [],
@@ -841,6 +869,10 @@
         "catholic",
         "urban"
       ],
+      "identityWeights": {
+        "catholic": 1,
+        "urban": 1
+      },
       "belief": "Senator Pothole",
       "era": 1992,
       "effects": [],

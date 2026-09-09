@@ -14,6 +14,10 @@
         "evangelical",
         "rural"
       ],
+      "identityWeights": {
+        "evangelical": 2,
+        "rural": 1
+      },
       "belief": "Born-again peanut farmer; runs as an outsider",
       "era": 1976,
       "effects": [],
@@ -74,6 +78,9 @@
       "identities": [
         "union"
       ],
+      "identityWeights": {
+        "union": 2
+      },
       "belief": "Hawk abroad, liberal at home",
       "era": 1976,
       "effects": [],
@@ -203,6 +210,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Master of the rules",
       "era": 1976,
       "effects": [],
@@ -222,6 +232,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 2
+      },
       "belief": "National health insurance",
       "era": 1976,
       "effects": [
@@ -249,6 +262,11 @@
         "urban",
         "union"
       ],
+      "identityWeights": {
+        "catholic": 2,
+        "urban": 2,
+        "union": 1
+      },
       "belief": "All politics is local",
       "era": 1976,
       "effects": [],
@@ -298,6 +316,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 1
+      },
       "belief": "Social scientist in the Senate",
       "era": 1976,
       "effects": [],
@@ -608,6 +629,10 @@
         "catholic",
         "urban"
       ],
+      "identityWeights": {
+        "catholic": 1,
+        "urban": 1
+      },
       "belief": "Chaired the impeachment inquiry",
       "era": 1976,
       "effects": [],
@@ -688,6 +713,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 1
+      },
       "belief": "Rode the train home",
       "era": 1976,
       "effects": [],

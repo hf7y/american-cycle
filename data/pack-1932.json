@@ -33,6 +33,10 @@
         "rural",
         "farm"
       ],
+      "identityWeights": {
+        "rural": 1,
+        "farm": 1
+      },
       "belief": "Not worth a bucket of warm spit",
       "era": 1932,
       "effects": [],
@@ -164,6 +168,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Hated the New Deal from the right",
       "era": 1932,
       "effects": [],
@@ -226,6 +233,10 @@
         "rural",
         "farm"
       ],
+      "identityWeights": {
+        "rural": 2,
+        "farm": 2
+      },
       "belief": "Rural electrification",
       "era": 1932,
       "effects": [],
@@ -271,6 +282,10 @@
         "rural",
         "union"
       ],
+      "identityWeights": {
+        "union": 2,
+        "rural": 1
+      },
       "belief": "Progressive, then isolationist",
       "era": 1932,
       "effects": [],
@@ -313,6 +328,10 @@
         "rural",
         "evangelical"
       ],
+      "identityWeights": {
+        "rural": 1,
+        "evangelical": 1
+      },
       "belief": "Klansman turned civil libertarian",
       "era": 1932,
       "effects": [
@@ -406,6 +425,10 @@
         "catholic",
         "urban"
       ],
+      "identityWeights": {
+        "catholic": 2,
+        "urban": 1
+      },
       "belief": "Counted every county",
       "era": 1932,
       "effects": [],
@@ -673,6 +696,10 @@
         "farm",
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1,
+        "farm": 1
+      },
       "belief": "Carried two states",
       "era": 1932,
       "effects": [],
@@ -707,6 +734,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "Half of the tariff",
       "era": 1932,
       "effects": [],

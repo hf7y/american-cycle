@@ -138,6 +138,10 @@
         "catholic",
         "urban"
       ],
+      "identityWeights": {
+        "catholic": 2,
+        "urban": 1
+      },
       "belief": "First woman Speaker",
       "era": 2008,
       "effects": [],
@@ -250,6 +254,9 @@
       "identities": [
         "union"
       ],
+      "identityWeights": {
+        "union": 2
+      },
       "belief": "Against the trade deals",
       "era": 2008,
       "effects": [],
@@ -270,6 +277,10 @@
         "catholic",
         "union"
       ],
+      "identityWeights": {
+        "catholic": 2,
+        "union": 1
+      },
       "belief": "Pro-life Democrat",
       "era": 2008,
       "effects": [],
@@ -507,6 +518,10 @@
         "catholic",
         "hispanic"
       ],
+      "identityWeights": {
+        "catholic": 1,
+        "hispanic": 1
+      },
       "belief": "Missionary in Honduras",
       "era": 2008,
       "effects": [],
@@ -542,6 +557,10 @@
         "evangelical",
         "rural"
       ],
+      "identityWeights": {
+        "evangelical": 2,
+        "rural": 2
+      },
       "belief": "Hockey mom",
       "era": 2008,
       "effects": [
@@ -568,6 +587,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "Turnaround artist",
       "era": 2008,
       "effects": [],
@@ -588,6 +610,9 @@
         "evangelical",
         "rural"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "Preacher governor",
       "era": 2008,
       "effects": [],
@@ -611,6 +636,10 @@
         "catholic",
         "urban"
       ],
+      "identityWeights": {
+        "catholic": 1,
+        "urban": 2
+      },
       "belief": "America's mayor",
       "era": 2008,
       "effects": [],

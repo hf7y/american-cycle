@@ -64,40 +64,42 @@ export const finding: Finding = {
     + "and does the sim's fired identity-match magnitude move at all as a result?",
 
   headline:
-    'This commit deepens two buckets that previously carried only one or two weighted cards each, rather '
-    + 'than opening a new one. Seventy-three candidate cards of the full pool (73/349) now carry '
-    + '`identityWeights`: the fifty-five carried over from the five prior commits, plus eighteen more '
-    + 'split across `jewish` and `black`. `jewish` (13): Joe Lieberman \'08 (+2, the first Jewish '
-    + "major-party VP nominee) and Chuck Schumer '16 (+2, a Brooklyn base built on it) at the top; "
-    + "Barbara Boxer '92, Dianne Feinstein '92, Ron Wyden '92, Arlen Specter '92 and '08, Rahm Emanuel "
-    + "'08, Barney Frank '08, Russ Feingold '08, Al Franken '08, Eric Cantor '08 and Norm Coleman '08 "
-    + '(+1 each, part of the coalition without being the defining fact of the campaign). `black` (5): '
-    + "Edward Brooke '76 (+2, the first Black senator elected by popular vote), Cory Booker '16 (+2, "
-    + "Newark's urban Black base under his rise), Raphael Warnock '24 (+2, Ebenezer's pulpit and the GA "
-    + "runoff coalition), Hakeem Jeffries '24 (+2, a Central Brooklyn Black political base), and Tim "
-    + "Scott '24 (+1, a landmark seat built on a broader conservative coalition rather than a Black "
-    + "electoral base). Measured over the shipped agent pool, all seven packs: an identity match now "
-    + 'fires in 20.5% of contested generals (up from 20.1%) and 47.5% of contested primaries (down from '
-    + '48.4%, sample noise either direction), mean pips 1.66 (up from 1.65) and mean tags 1.42 (flat) '
-    + 'when a match fires. 276 of 349 still fall back to the flat default, and the math from the prior '
-    + "comments still holds: closing the full gap to #19's +4/5 pip target by raising the flat default "
-    + 'alone would still need roughly tripling it, and the sample still has a 3-tag simultaneous match: '
-    + 'tripling would put that case at 9 pips, over #41\'s own ~8-pip full-stack ceiling. Same collision '
-    + '#41 flagged, still unresolved at this scale -- re-cutting the remaining 276 cards is the same '
-    + 'per-card content task, just eighteen fewer of them.',
-  stampedAt: '2026-09-09T07:50:32Z',
-  stampedOn: 'd155118',
+    'This commit re-cuts 56 more candidate cards across all seven packs, the first pass to touch the '
+    + '1932/1964/1976/1992 packs since the founding batch and the first to give the `evangelical`, '
+    + '`suburban` and `farm` buckets depth outside 2008/2016/2024. One-hundred-twenty-nine candidate '
+    + 'cards of the full pool (129/349) now carry `identityWeights`, up from seventy-three. Notable '
+    + "additions: Sam Rayburn '32 (`rural`/`farm` +2 each, the rural Texas farm-belt Speaker), Reed "
+    + "Smoot '32 and George Romney '64 (`evangelical` +2, both LDS church leaders whose faith was "
+    + "central to their public identity), LBJ '64 (`rural` +2, the Hill Country ranch brand), Tip "
+    + "O'Neill '76 (`catholic`/`urban` +2 each, `union` +1, the Boston Irish machine icon), Mario "
+    + "Cuomo '92 (`catholic`/`urban` +2 each), Sarah Palin '08 (`evangelical`/`rural` +2 each), Mitt "
+    + "Romney '08 (`evangelical` +2), Sherrod Brown '08/'16/'24 and John Fetterman '24 (`union` +2, the "
+    + "clearest labor brands the pool carries), Tim Walz '24 (`rural` +2, the small-town-coach brand "
+    + "his campaign ran on), and Glenn Youngkin '24 (`suburban` +2, the 2021 Virginia race that is the "
+    + 'textbook case of a suburban swing). Measured over the shipped agent pool, all seven packs: an '
+    + 'identity match now fires in 20.5% of contested generals (flat vs the prior stamp) and 48.5% of '
+    + 'contested primaries (up from 47.5%), mean pips 1.87 (up from 1.66) and mean tags 1.47 (up from '
+    + '1.42) when a match fires -- the clearest movement any single commit in this rollout has produced, '
+    + 'because this batch leaned on `+2` weights more than prior ones did. 220 of 349 still fall back to '
+    + "the flat default (identityBonus 1), and the math from the prior comments still holds: closing "
+    + "the full gap to #19's +4/5 pip target by raising the flat default alone would still need roughly "
+    + 'tripling it, and the sample still has a 3-tag simultaneous match: tripling would put that case at '
+    + "9 pips, over #41's own ~8-pip full-stack ceiling. Same collision #41 flagged, still unresolved at "
+    + 'this scale -- re-cutting the remaining 220 cards is the same per-card content task, just '
+    + 'fifty-six fewer of them.',
+  stampedAt: '2026-09-09T08:28:22Z',
+  stampedOn: '3ea319c',
 
   predicate(): Claim[] {
     const seedCount = sample(60);
     const roll = rolloutShare();
     const m = matchStats(seedCount);
     return [
-      { name: 'candidate cards carrying signed identityWeights, of the full pool', value: roll, stamped: 20.92, tolerance: 0.2, unit: '%' },
-      { name: 'contested generals with an identity match', value: m.generalMatchShare, stamped: 20.46, tolerance: 3, unit: '%' },
-      { name: 'contested primaries with an identity match', value: m.primaryMatchShare, stamped: 47.5, tolerance: 3, unit: '%' },
-      { name: 'mean pips when an identity match fires', value: m.meanPips, stamped: 1.66, tolerance: 0.3 },
-      { name: 'mean tags shared when an identity match fires', value: m.meanTags, stamped: 1.42, tolerance: 0.3 },
+      { name: 'candidate cards carrying signed identityWeights, of the full pool', value: roll, stamped: 36.96, tolerance: 0.2, unit: '%' },
+      { name: 'contested generals with an identity match', value: m.generalMatchShare, stamped: 20.51, tolerance: 3, unit: '%' },
+      { name: 'contested primaries with an identity match', value: m.primaryMatchShare, stamped: 48.47, tolerance: 3, unit: '%' },
+      { name: 'mean pips when an identity match fires', value: m.meanPips, stamped: 1.87, tolerance: 0.3 },
+      { name: 'mean tags shared when an identity match fires', value: m.meanTags, stamped: 1.47, tolerance: 0.3 },
       { name: 'max tags shared simultaneously, this sample', value: m.maxTags, stamped: 3, tolerance: 0 },
     ];
   },
