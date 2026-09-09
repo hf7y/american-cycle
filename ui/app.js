@@ -403,6 +403,18 @@ function drawHand() {
     n.onclick = () => { if (pending && pending.kind==='declare'){ S.sel = S.sel===c?null:c; render(); } };
     h.appendChild(n);
   }
+  // Districts are held apart from the hand and gate every race below the
+  // presidency, so a board that only counts them hides the reason a state lit up.
+  for (const d of me.districts) {
+    const n = el('div','cc dc');
+    n.appendChild(el('div','nm',`${d.state}-${d.number}`));
+    n.appendChild(el('div','mt',`district · opens a race · ${d.era}`));
+    if (d.note) n.appendChild(el('div','bel',d.note));
+    const tw = el('div');
+    for (const g of d.demographics) tw.appendChild(el('span','tag',g));
+    n.appendChild(tw);
+    h.appendChild(n);
+  }
   const me2 = G.players[S.human];
   $('handHint').textContent = pending && pending.kind==='declare'
     ? `${cands.length - used.size} cards · ${me2.districts.length} districts · ${S.picks.length} declared`
