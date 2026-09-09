@@ -449,6 +449,14 @@ function logLine(year, html, big) {
 }
 function ticker(t){ $('ticker').textContent = t; }
 
+// #161 item 2: the modifier stack that produced a side's total, collapsed by default.
+function modStack(side) {
+  const rows = side.modifiers.map((m) =>
+    `<tr><td>${m.source}</td><td class="${m.pips>=0?'pos':'neg'}">${m.pips>=0?'+':''}${m.pips}</td></tr>`).join('');
+  return `<table class="stack">${rows || '<tr><td>no modifiers</td><td>0</td></tr>'}
+    <tr class="tot"><td>total</td><td>${side.modifierTotal>=0?'+':''}${side.modifierTotal}</td></tr></table>`;
+}
+
 function drainLog() {
   if (!G) return;
   for (; eventSeen < G.events.length; eventSeen++) {
@@ -461,8 +469,12 @@ function drainLog() {
       ${die('national', w.dice.national)}${die('state', w.dice.state)}${die('candidate', w.dice.candidate)}</div>`;
     const who = G.players[ev.winner].name;
     const upset = ev.upset ? ' <b>Upset</b> — the favourite lost.' : '';
+    const stacks = `<details class="mods"><summary>modifiers</summary>
+      <div class="ms"><b>${who}</b>${modStack(w)}</div>
+      <div class="ms"><b>${G.players[l.player].name}</b>${modStack(l)}</div>
+    </details>`;
     logLine(ev.year,
-      `${ev.state} ${OFFICE_LABEL[ev.office]} <b>${ev.round}</b> — ${who} takes it by ${ev.margin}.${upset}${dice}`);
+      `${ev.state} ${OFFICE_LABEL[ev.office]} <b>${ev.round}</b> — ${who} takes it by ${ev.margin}.${upset}${dice}${stacks}`);
   }
   for (; logSeen < G.log.length; logSeen++) {
     logLine(G.year, `<b>${G.log[logSeen]}</b>`, true);
