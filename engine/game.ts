@@ -10,7 +10,7 @@
  */
 import type {
   Amendment, CandidateCard, Card, DistrictCard, EnactedBill, IdentityTag,
-  Office, Party, RaceEvent, Seat,
+  Modifier, Office, Party, RaceEvent, Seat,
 } from './types/index.ts';
 import { RNG } from './rules/rng.ts';
 import { Wave } from './rules/resolution.ts';
@@ -1302,6 +1302,24 @@ export class Game {
       presidentialWinner,
       shock: this.shockPips,
     };
+  }
+
+  /** #161: previews `buildModifiers` pre-declaration, at general-round rates
+   *  since a primary might not even fire yet. */
+  previewModifiers(player: number, card: CandidateCard, office: Office, state: string, slot?: number,
+                    district?: DistrictCard, districts?: DistrictCard[]): Modifier[] {
+    const ctx = this.raceContext(office, state, slot);
+    const seat = this.seatFor(office, state, slot);
+    const d: Declaration = {
+      player, card, office, state, slot, district, districts,
+      incumbent: !!seat && seat.holder?.cardId === card.id,
+    };
+    this.readCounters(d);
+    this.readPosition(d);
+    const held = this.seats.find((st) => st.holder?.cardId === card.id
+      && !(st.office === office && st.state === state && st.slot === slot));
+    d.heldOffice = held?.office;
+    return buildModifiers(d, ctx, 'general', this.cfg.resolution, this.cfg.national, this.cfg.primaryGeneral);
   }
 
   /** Nomination is a national primary, so only two cards reach the general
