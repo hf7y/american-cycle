@@ -286,6 +286,9 @@
         "black",
         "urban"
       ],
+      "identityWeights": {
+        "black": 1
+      },
       "belief": "First Black woman senator",
       "era": 1992,
       "effects": [],
@@ -440,6 +443,9 @@
         "black",
         "urban"
       ],
+      "identityWeights": {
+        "black": 1
+      },
       "belief": "Harlem's chairman",
       "era": 1992,
       "effects": [],
@@ -464,6 +470,9 @@
         "urban",
         "evangelical"
       ],
+      "identityWeights": {
+        "black": 2
+      },
       "belief": "Good trouble",
       "era": 1992,
       "effects": [],

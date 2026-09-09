@@ -496,6 +496,9 @@
         "black",
         "urban"
       ],
+      "identityWeights": {
+        "black": 1
+      },
       "belief": "My faith in the Constitution is whole",
       "era": 1976,
       "effects": [],
@@ -520,6 +523,9 @@
         "urban",
         "evangelical"
       ],
+      "identityWeights": {
+        "black": 1
+      },
       "belief": "From the movement to the House",
       "era": 1976,
       "effects": [],
@@ -546,6 +552,9 @@
         "black",
         "urban"
       ],
+      "identityWeights": {
+        "black": 2
+      },
       "belief": "Antiwar left",
       "era": 1976,
       "effects": [
@@ -573,6 +582,9 @@
         "black",
         "urban"
       ],
+      "identityWeights": {
+        "black": 2
+      },
       "belief": "Unbought and unbossed",
       "era": 1976,
       "effects": [],

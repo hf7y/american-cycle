@@ -14,6 +14,9 @@
         "black",
         "urban"
       ],
+      "identityWeights": {
+        "black": 2
+      },
       "belief": "Hope and change",
       "era": 2008,
       "effects": [],
@@ -346,6 +349,9 @@
         "black",
         "urban"
       ],
+      "identityWeights": {
+        "black": 1
+      },
       "belief": "Ways and Means",
       "era": 2008,
       "effects": [],
