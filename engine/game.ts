@@ -945,11 +945,31 @@ export class Game {
    *  EVERYONE WHO VOTED TO IMPEACH EATS IT, not the filer -- filers are not
    *  tracked, and this makes impeachment a trap you can bait an opponent into. */
   private backfire(forRemoval: Seat[], targetParty: Party): void {
-    const pips = this.cfg.legislature.impeachBackfirePips ?? 0;
+    const base = this.cfg.legislature.impeachBackfirePips ?? 0;
+    if (!base) return;
+    const pips = Math.round(base * this.backfireStrainScale(forRemoval));
     if (!pips) return;
     for (const s of forRemoval) lean.nudge(this.leanMap, this.cfg.lean, s.state, s.holder!.party, -pips);
     const target = new Set(this.seats.filter((s) => s.holder?.party === targetParty).map((s) => s.state));
     for (const st of target) lean.nudge(this.leanMap, this.cfg.lean, st, targetParty, pips);
+  }
+
+  /** hf7y/american-cycle#84's refinement on the flat backfire above: 1 (the
+   *  flat behaviour, byte for byte) when `impeachBackfireStrainScaled` is
+   *  off, or when either side of the comparison carries no tag position --
+   *  an unmeasurable strain must not read as zero and cancel a penalty the
+   *  `lean.ts` ruling still calls trustworthy on its own chronological
+   *  warrant. Otherwise the convicting senators' own tag centroid against the
+   *  country's (every district in play, `districtsInPlay`), via
+   *  `tags.distance`: 0 when the coalition mirrors the electorate, 1 when it
+   *  sits in one disjoint tag corner -- an out-of-step coalition pays close
+   *  to the flat pips, a representative one pays little. */
+  private backfireStrainScale(forRemoval: Seat[]): number {
+    if (!this.cfg.legislature.impeachBackfireStrainScaled) return 1;
+    const coalition = tags.centroid(
+      forRemoval.map((s) => tags.weights(this.cardById.get(s.holder!.cardId)?.identities ?? [])));
+    const country = tags.centroid(this.districtsInPlay().map((d) => tags.weights(d.demographics)));
+    return tags.distance(coalition, country) ?? 1;
   }
 
   // ---- annual tick step 2-3: the omnibill -----------------------------------

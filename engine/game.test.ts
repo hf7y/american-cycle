@@ -695,3 +695,69 @@ test('#78: a second bill on the same tags, passed once the House flips, nets the
     'OH nets fully back to baseline: the D push (3 pips) overtakes the R remainder (2), then decays -1 toward zero');
   assert.equal(g.leanMap.TX, -2, 'TX has no earlier push to net against, so the same D bill just moves it, ordinarily');
 });
+
+// #84's other named arm: strain-scaled impeachment backfire. `backfire` docks
+// the convicting senators and pays the acquitted president's party -- flat,
+// unless `impeachBackfireStrainScaled` reads the convicting coalition's own
+// tag centroid against the country's (every district in play).
+class ImpeachTestAgent extends ScriptedAgent {
+  private moves: boolean;
+  private votes: boolean;
+  constructor(name: string, moves: boolean, votes: boolean) { super(name); this.moves = moves; this.votes = votes; }
+  moveImpeach(): boolean { return this.moves; }
+  voteImpeach(): boolean { return this.votes; }
+}
+
+/** One failed conviction, 1 of 3 senators against threshold 2/3 -- always a
+ *  backfire, never a removal. Odd year + `oddYearGovernors: false` skips
+ *  `elections()` entirely (the #78 tests' own trick), so nothing but
+ *  `backfire` can move `leanMap` this tick; biennial decay is also skipped on
+ *  an odd year, so the pips land un-netted. */
+function failedConviction(strainScaled: boolean | undefined, dSenatorTags: string[], districtTags: string[][]) {
+  const cfg = loadConfig('tuned.json');
+  cfg.legislature = { ...cfg.legislature, impeachBackfirePips: 6, impeachThreshold: 2 / 3, impeachBackfireStrainScaled: strainScaled };
+  cfg.amendment = { ...cfg.amendment, enabled: false };
+  cfg.game = { ...cfg.game, oddYearGovernors: false };
+
+  const r = new ImpeachTestAgent('R', false, false), d = new ImpeachTestAgent('D', true, true);
+  const g = new Game([r, d], structuredClone(CARDS), cfg, 1);
+  g.year = 1977;
+  g.president = { player: 0, cardId: 'pres', party: 'R', since: 1976 };
+  g.seats = [
+    { office: 'senator', state: 'OH', slot: 1, senateClass: 1, holder: { cardId: 'r1', player: 0, party: 'R', since: 1976 } },
+    { office: 'senator', state: 'MI', slot: 1, senateClass: 1, holder: { cardId: 'r2', player: 0, party: 'R', since: 1976 } },
+    { office: 'senator', state: 'TX', slot: 1, senateClass: 1, holder: { cardId: 'd1', player: 1, party: 'D', since: 1976 } },
+  ];
+  g.cardById.set('d1', cand({ id: 'd1', party: 'D', identities: dSenatorTags as never }));
+  g.players[0].hand = [];
+  g.players[1].hand = [];
+  g.players[0].districts = districtTags.map((t, i) => dist({ id: `Z-${i}`, state: 'ZZ', number: i, demographics: t as never }));
+  g.players[1].districts = [];
+
+  g.tick();
+  return g;
+}
+
+test('#84: strain scaling off reproduces the flat backfire exactly, whatever the coalition\'s own tags', () => {
+  const g = failedConviction(undefined, ['farm'], [['urban']]);
+  assert.equal(g.leanMap.TX, 6, 'the lone convicting D senator\'s state docks the full flat pips, unscaled');
+  assert.equal(g.leanMap.OH, 6, 'the acquitted president\'s (R) state pays the same flat pips, unscaled');
+});
+
+test('#84: strain scaling zeroes the backfire when the coalition mirrors the country', () => {
+  const g = failedConviction(true, ['urban'], [['urban']]);
+  assert.equal(g.leanMap.TX ?? 0, 0, 'coalition and country are the same tag -- distance 0, so 6*0 rounds to no push at all');
+  assert.equal(g.leanMap.OH ?? 0, 0, 'and the same zero scale applies to the target\'s reward side');
+});
+
+test('#84: strain scaling pays the full flat pips when the coalition sits in a disjoint tag corner', () => {
+  const g = failedConviction(true, ['farm'], [['urban']]);
+  assert.equal(g.leanMap.TX, 6, 'urban country vs. a farm-only coalition is maximum set-overlap distance (1) -- 6*1 is the flat pips');
+  assert.equal(g.leanMap.OH, 6, 'and the target\'s reward side scales identically');
+});
+
+test('#84: strain scaling falls back to the flat pips when neither side has a measurable tag position', () => {
+  const g = failedConviction(true, [], []);
+  assert.equal(g.leanMap.TX, 6, 'no districts in play and an untagged senator both read as "no position" -- undefined strain must not zero the penalty out');
+  assert.equal(g.leanMap.OH, 6, 'the fallback applies to both sides of the backfire alike');
+});
