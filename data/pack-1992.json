@@ -48,6 +48,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Environment before it polled",
       "era": 1992,
       "effects": [],
@@ -86,6 +89,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 2
+      },
       "belief": "Flat tax insurgent",
       "era": 1992,
       "effects": [
@@ -356,6 +362,9 @@
         "farm",
         "rural"
       ],
+      "identityWeights": {
+        "farm": 2
+      },
       "belief": "Against the trade deals",
       "era": 1992,
       "effects": [],
@@ -581,6 +590,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 2
+      },
       "belief": "Crime bill author",
       "era": 1992,
       "effects": [],
@@ -805,6 +817,9 @@
       "identities": [
         "urban"
       ],
+      "identityWeights": {
+        "urban": 2
+      },
       "belief": "Bleeding-heart conservative",
       "era": 1992,
       "effects": [
@@ -1184,6 +1199,10 @@
         "catholic",
         "urban"
       ],
+      "identityWeights": {
+        "catholic": 1,
+        "urban": 2
+      },
       "belief": "Mayor of Cleveland",
       "era": 1992,
       "effects": [],

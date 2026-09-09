@@ -39,6 +39,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 1
+      },
       "belief": "Ready on day one",
       "era": 2008,
       "effects": [],
@@ -77,6 +80,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 2
+      },
       "belief": "Foreign relations chairman",
       "era": 2008,
       "effects": [],
@@ -187,6 +193,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Reagan's Navy Secretary",
       "era": 2008,
       "effects": [],
@@ -662,6 +671,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Actor and senator",
       "era": 2008,
       "effects": [],
@@ -1048,6 +1060,10 @@
         "catholic",
         "urban"
       ],
+      "identityWeights": {
+        "catholic": 1,
+        "urban": 2
+      },
       "belief": "Deficit hawk",
       "era": 2008,
       "effects": [],
@@ -1932,6 +1948,9 @@
       "identities": [
         "jewish"
       ],
+      "identityWeights": {
+        "jewish": 2
+      },
       "belief": "Caucuses with the Democrats",
       "era": 2008,
       "effects": [

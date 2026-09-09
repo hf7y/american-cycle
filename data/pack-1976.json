@@ -347,6 +347,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 2
+      },
       "belief": "Era of limits",
       "era": 1976,
       "effects": [],

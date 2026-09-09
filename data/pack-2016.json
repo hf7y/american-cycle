@@ -13,6 +13,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 1
+      },
       "belief": "Stronger together",
       "era": 2016,
       "effects": [],
@@ -32,6 +35,9 @@
       "identities": [
         "jewish"
       ],
+      "identityWeights": {
+        "jewish": 2
+      },
       "belief": "Political revolution",
       "era": 2016,
       "effects": [
@@ -947,6 +953,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 1
+      },
       "belief": "Took down the flag",
       "era": 2016,
       "effects": [],

@@ -40,6 +40,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 2
+      },
       "belief": "Stepped aside in July",
       "era": 2024,
       "effects": [],
@@ -395,6 +398,9 @@
       "identities": [
         "jewish"
       ],
+      "identityWeights": {
+        "jewish": 2
+      },
       "belief": "Still an independent",
       "era": 2024,
       "effects": [
@@ -497,6 +503,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 1
+      },
       "belief": "Ran to the end of the primaries",
       "era": 2024,
       "effects": [],

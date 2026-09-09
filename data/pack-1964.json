@@ -801,6 +801,9 @@
       "identities": [
         "urban"
       ],
+      "identityWeights": {
+        "urban": 2
+      },
       "belief": "Fun City liberal",
       "era": 1964,
       "effects": [],
