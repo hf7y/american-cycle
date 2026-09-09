@@ -14,6 +14,9 @@
         "evangelical",
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Tough on crime, ends welfare as we know it",
       "era": 1992,
       "effects": [
@@ -665,6 +668,10 @@
         "catholic",
         "urban"
       ],
+      "identityWeights": {
+        "catholic": 2,
+        "urban": -2
+      },
       "belief": "Culture war at the convention",
       "era": 1992,
       "effects": [
@@ -965,6 +972,9 @@
         "evangelical",
         "rural"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "Senator No",
       "era": 1992,
       "effects": [
@@ -992,6 +1002,9 @@
         "rural",
         "evangelical"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Still there",
       "era": 1992,
       "effects": [

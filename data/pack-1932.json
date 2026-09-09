@@ -98,6 +98,9 @@
         "rural",
         "evangelical"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Every man a king",
       "era": 1932,
       "effects": [

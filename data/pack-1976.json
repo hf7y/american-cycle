@@ -113,6 +113,9 @@
         "rural",
         "evangelical"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Segregation then populism",
       "era": 1976,
       "effects": [
@@ -977,6 +980,9 @@
         "rural",
         "evangelical"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Switched parties and stayed",
       "era": 1976,
       "effects": [
@@ -1004,6 +1010,9 @@
         "evangelical",
         "rural"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "Senator No",
       "era": 1976,
       "effects": [

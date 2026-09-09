@@ -520,6 +520,9 @@
       "identities": [
         "urban"
       ],
+      "identityWeights": {
+        "urban": -2
+      },
       "belief": "Make America great again",
       "era": 2016,
       "effects": [

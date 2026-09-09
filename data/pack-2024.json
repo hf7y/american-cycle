@@ -335,6 +335,9 @@
         "hispanic",
         "urban"
       ],
+      "identityWeights": {
+        "urban": 1
+      },
       "belief": "The Bronx",
       "era": 2024,
       "effects": [
@@ -408,6 +411,9 @@
       "identities": [
         "urban"
       ],
+      "identityWeights": {
+        "urban": -2
+      },
       "belief": "Won the popular vote",
       "era": 2024,
       "effects": [
@@ -431,6 +437,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Hillbilly Elegy",
       "era": 2024,
       "effects": [

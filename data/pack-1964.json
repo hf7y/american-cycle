@@ -308,6 +308,9 @@
         "rural",
         "evangelical"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Segregation now",
       "era": 1964,
       "effects": [
@@ -734,6 +737,9 @@
         "rural",
         "evangelical"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Switched parties over the bill",
       "era": 1964,
       "succeeds": "strom-thurmond-1954",
