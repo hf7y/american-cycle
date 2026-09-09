@@ -559,21 +559,11 @@
       "party": "D",
       "homeState": "AL",
       "homeStateBonus": 2,
-      "identities": [
-        "rural",
-        "evangelical"
-      ],
+      "identities": [],
       "belief": "Prosecuted the church bombing",
       "era": 2016,
       "effects": [],
-      "provenance": {
-        "rural": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
-          "source": "hand-assigned"
-        }
-      }
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -687,16 +677,12 @@
       "homeState": "FL",
       "homeStateBonus": 1,
       "identities": [
-        "evangelical",
         "hispanic"
       ],
       "belief": "Please clap",
       "era": 2016,
       "effects": [],
       "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        },
         "hispanic": {
           "source": "hand-assigned"
         }
@@ -765,17 +751,11 @@
       "party": "R",
       "homeState": "ME",
       "homeStateBonus": 3,
-      "identities": [
-        "suburban"
-      ],
+      "identities": [],
       "belief": "The only split ticket in 2020",
       "era": 2016,
       "effects": [],
-      "provenance": {
-        "suburban": {
-          "source": "hand-assigned"
-        }
-      }
+      "provenance": {}
     },
     {
       "kind": "candidate",
