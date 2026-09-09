@@ -44,6 +44,18 @@ export interface YearObs {
    *  they cannot drift from the rules that actually ran (#29, #48). */
   isElection: boolean;
   isBill: boolean;
+  /** Whether an ELECTORAL result could add a lean counter this year, as
+   *  opposed to `isElection` merely meaning some race resolved. #173 made
+   *  `governorUp` historically accurate, and NJ/VA/KY/LA/MS's real off-cycle
+   *  schedules jointly cover every odd year 1932-2040 (#232) -- so with
+   *  `oddYearGovernors: true` (every shipped config), `isElection` is `true`
+   *  in 100% of years and can no longer split the series into "a race
+   *  resolved" vs "none did". The distinction C2 actually needs is whether a
+   *  race that resolved was ALLOWED to push lean: federal races always are;
+   *  an off-cycle governor race is gated by `cfg.lean.governorPushes` (see
+   *  `applyPush`, `engine/rules/lean.ts`), which is `'never'` on every
+   *  config but `governors-push.json`. */
+  electionCanWriteLean: boolean;
   lean: Lean;
   /** seat-weighted centroid of state lean — the polity, per the compass */
   country?: Position;
@@ -109,6 +121,8 @@ function observeYear(g: Game, nPlayers: number, cfg: Config, played: number): Ye
     year: played,
     isElection: isElectionYear(cfg, played),
     isBill: isBillYear(cfg, played),
+    electionCanWriteLean: played % 2 === 0
+      || (cfg.lean.governorPushes === 'with-lean' && isElectionYear(cfg, played)),
     lean: { ...g.leanMap },
     country: COMPASS.country(board),
     playerPos,

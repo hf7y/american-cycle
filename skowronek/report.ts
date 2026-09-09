@@ -37,13 +37,21 @@ function preconditionTable(pre: PreconditionState[]): string {
 function diagnosis(r: ConfigReport): string {
   const byId = new Map(r.pre.map((p) => [p.id, p]));
   const out: string[] = ['### Why each quadrant is unreachable', ''];
+  const explainedBy = new Map<Precondition, string>(); // first-missing id -> quadrant that spelled it out
   for (const [q, needs] of Object.entries(QUADRANT_NEEDS)) {
     const missing = needs.filter((n) => byId.get(n)?.status !== 'MET');
     if (!missing.length) { out.push(`- **${q}** — preconditions met; see the verdict table.`); continue; }
-    const first = byId.get(missing[0] as Precondition)!;
+    const firstId = missing[0] as Precondition;
     out.push(`- **${q}** — blocked by ${missing.map((m) => `\`${m}\``).join(', ')}.`);
-    out.push(`  - First missing: ${first.why}`);
-    out.push(`  - Control: ${first.control ?? 'none'}`);
+    const priorQ = explainedBy.get(firstId);
+    if (priorQ) {
+      out.push(`  - Same first-missing precondition as **${priorQ}**.`);
+    } else {
+      const first = byId.get(firstId)!;
+      out.push(`  - First missing: ${first.why}`);
+      out.push(`  - Control: ${first.control ?? 'none'}`);
+      explainedBy.set(firstId, q);
+    }
   }
   return out.join('\n');
 }
