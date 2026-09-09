@@ -22,6 +22,17 @@ export interface EconomyConfig {
   shockOnRollAtMost?: number;
   /** pips against an incumbent of average power. Scaled by power held. */
   shockPips?: number;
+  /** hf7y/american-cycle#84: the fancy version this file's own comment above
+   *  said to build once tags-on-bills and a country position existed — both
+   *  now do (v0.2 items 4 and 5). Undefined/false reproduces the cheap
+   *  power-scaled shock exactly. true reads `Declaration.shockExposure`
+   *  instead of `Declaration.power`: the shock lands on one incumbent's tag
+   *  position, drawn at random from the seats actually held that cycle, and
+   *  pays out by nearness in tag space rather than by seat count -- a
+   *  faction concentrated in one tag region is repeatedly near the epicenter
+   *  and pays on every seat; a diverse coalition is mostly elsewhere and
+   *  mostly does not. See `Game.rollShock` and `elections.ts`'s shock line. */
+  shockPositional?: boolean;
 }
 
 export interface Economy { level: number; accumulatedG: number; lastRateRise?: number; }
