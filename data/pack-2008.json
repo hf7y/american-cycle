@@ -96,6 +96,9 @@
       "identities": [
         "hispanic"
       ],
+      "identityWeights": {
+        "hispanic": 2
+      },
       "belief": "Governor and diplomat",
       "era": 2008,
       "effects": [],

@@ -162,6 +162,9 @@
       "identities": [
         "hispanic"
       ],
+      "identityWeights": {
+        "hispanic": 2
+      },
       "belief": "Ran ahead of the ticket",
       "era": 2024,
       "effects": [],
@@ -758,6 +761,9 @@
       "identities": [
         "hispanic"
       ],
+      "identityWeights": {
+        "hispanic": 1
+      },
       "belief": "Beat Sherrod Brown",
       "era": 2024,
       "effects": [],

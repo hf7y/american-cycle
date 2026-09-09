@@ -443,6 +443,9 @@
         "hispanic",
         "urban"
       ],
+      "identityWeights": {
+        "hispanic": 2
+      },
       "belief": "First Latina senator",
       "era": 2016,
       "effects": [],
@@ -574,6 +577,9 @@
         "cuban",
         "evangelical"
       ],
+      "identityWeights": {
+        "cuban": 2
+      },
       "belief": "Son of a bartender",
       "era": 2016,
       "effects": [],

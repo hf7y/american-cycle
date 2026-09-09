@@ -64,34 +64,36 @@ export const finding: Finding = {
     + "and does the sim's fired identity-match magnitude move at all as a result?",
 
   headline:
-    'Still short, but climbing. Thirty-six candidate cards of the full pool now carry `identityWeights` '
-    + '-- Goldwater (#41\'s own falsifier), the twenty-six re-cut for #19 in the two prior commits '
+    'Still short, but climbing. Forty-one candidate cards of the full pool now carry `identityWeights` '
+    + '-- Goldwater (#41\'s own falsifier), the thirty-five re-cut for #19 in the three prior commits '
     + '(the segregationist-era rural bucket, evangelical direct-mail figures, catholic/urban realignment '
-    + 'figures, union, jewish senators, and a handful of signature urban/rural brands), and nine more: '
-    + 'the civil-rights-to-modern `black` bucket -- Shirley Chisholm \'76 and Ronald Dellums \'76 (black '
-    + '+2, the most identity-forward campaigns of the founding Congressional Black Caucus era), Barack '
-    + 'Obama \'08 (black +2, the modern high-water mark for Black-vote concentration behind a single '
-    + 'nominee), and Barbara Jordan \'76, Andrew Young \'76, John Lewis \'92, Charles Rangel \'92/\'08 '
-    + 'and Carol Moseley Braun \'92 (black +1, landmark careers with a documented but more '
-    + 'coalition-crossing profile than the +2 cases) -- so 313 of 349 still fall back to the flat '
-    + 'default. Measured over the shipped agent pool, all seven packs: an identity match now fires in '
-    + '18.1% of contested generals and 50.5% of contested primaries (both moved by the sample, not by a '
-    + 'rule change), at a mean 1.61 pips across a mean 1.39 shared tags when it fires -- still close to '
-    + 'the pre-#41 flat mechanic, because most of the pool still IS the pre-#41 flat mechanic. Closing '
-    + "the remaining gap to #19's +4/5 pip target by raising the flat default alone would still need "
-    + 'roughly tripling it, and the sample still has a 3-tag simultaneous match: tripling would put that '
-    + 'case at 9 pips, over #41\'s own ~8-pip full-stack ceiling. Same collision #41 flagged, still '
-    + 'unresolved at this scale -- re-cutting the remaining 313 cards is the same per-card content task, '
-    + 'just thirty-five fewer of them.',
-  stampedAt: '2026-09-09T05:12:00Z',
-  stampedOn: '3436cc0',
+    + 'figures, union, jewish senators, the civil-rights-to-modern `black` bucket, and a handful of '
+    + 'signature urban/rural brands), and five more: the first pass at the `hispanic`/`cuban` buckets, '
+    + 'untouched by any prior commit -- Marco Rubio \'16 (`cuban` +2, the Miami-Dade Cuban-American base '
+    + 'his campaign was built on), Bill Richardson \'08 and Catherine Cortez Masto \'16 (`hispanic` +2, '
+    + 'a Southwest governor/diplomat and the first Latina senator, both with a documented Hispanic-vote '
+    + 'reliance in their home states), Ruben Gallego \'24 (`hispanic` +2, documented outperformance with '
+    + 'Latino voters in his own 2024 Arizona race), and Bernie Moreno \'24 (`hispanic` +1, a smaller and '
+    + 'less central base than the others -- Ohio\'s Hispanic vote share is thin next to NM/NV/AZ) -- so '
+    + '308 of 349 still fall back to the flat default. Measured over the shipped agent pool, all seven '
+    + 'packs: an identity match still fires in 18.1% of contested generals and 50.5% of contested '
+    + 'primaries (this sample of seeds did not happen to draw the five new cards, so those two figures '
+    + "and the mean-pips/mean-tags figures are unmoved by this commit) -- still close to the pre-#41 "
+    + 'flat mechanic, because most of the pool still IS the pre-#41 flat mechanic. Closing the remaining '
+    + "gap to #19's +4/5 pip target by raising the flat default alone would still need roughly tripling "
+    + 'it, and the sample still has a 3-tag simultaneous match: tripling would put that case at 9 pips, '
+    + 'over #41\'s own ~8-pip full-stack ceiling. Same collision #41 flagged, still unresolved at this '
+    + 'scale -- re-cutting the remaining 308 cards is the same per-card content task, just five fewer of '
+    + 'them, and now covers every tag the pool carries except `farm` and `suburban`.',
+  stampedAt: '2026-09-09T06:05:00Z',
+  stampedOn: 'b67dcc3',
 
   predicate(): Claim[] {
     const seedCount = sample(60);
     const roll = rolloutShare();
     const m = matchStats(seedCount);
     return [
-      { name: 'candidate cards carrying signed identityWeights, of the full pool', value: roll, stamped: 10.32, tolerance: 0.2, unit: '%' },
+      { name: 'candidate cards carrying signed identityWeights, of the full pool', value: roll, stamped: 11.75, tolerance: 0.2, unit: '%' },
       { name: 'contested generals with an identity match', value: m.generalMatchShare, stamped: 18.06, tolerance: 3, unit: '%' },
       { name: 'contested primaries with an identity match', value: m.primaryMatchShare, stamped: 50.49, tolerance: 3, unit: '%' },
       { name: 'mean pips when an identity match fires', value: m.meanPips, stamped: 1.61, tolerance: 0.3 },
