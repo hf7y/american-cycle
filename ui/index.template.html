@@ -147,6 +147,20 @@ label.f{display:flex;flex-direction:column;gap:4px;font-size:12px}
 .note{font-size:12px;color:var(--ink-2);line-height:1.45}
 .setup-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:520px){.setup-grid{grid-template-columns:1fr}}
+
+/* report loop */
+#report{position:fixed;right:14px;bottom:14px;z-index:30;max-width:300px;
+  background:var(--card);border:1px solid var(--rule);border-top:3px solid var(--brass);
+  border-radius:2px;box-shadow:var(--shadow)}
+#report summary{padding:8px 12px;cursor:pointer;font-size:12px;font-family:var(--display);
+  font-weight:600;list-style:none;color:var(--ink-2)}
+#report summary::-webkit-details-marker{display:none}
+#report[open] summary{border-bottom:1px solid var(--rule);color:var(--ink)}
+#report .body{padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+#report textarea{font:inherit;font-size:12px;padding:6px 8px;background:var(--paper-2);
+  color:var(--ink);border:1px solid var(--rule);border-radius:2px;resize:vertical;width:100%}
+#report .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+#repStatus{font-size:11px;color:var(--ink-2)}
 </style>
 
 <div id="chyron">
@@ -183,7 +197,25 @@ label.f{display:flex;flex-direction:column;gap:4px;font-size:12px}
 
 <div id="modal"><div id="modalBox"><div id="modalBody"></div></div></div>
 
-<footer id="buildStamp">build <!--__STAMP__--></footer>
+<details id="report">
+  <summary>Got an idea or found a bug? Tell us as you play</summary>
+  <div class="body">
+    <div class="row">
+      <label class="f" style="flex-direction:row;align-items:center;gap:4px">
+        <input type="radio" name="repKind" value="idea" checked>Idea</label>
+      <label class="f" style="flex-direction:row;align-items:center;gap:4px">
+        <input type="radio" name="repKind" value="bug">Bug</label>
+    </div>
+    <textarea id="repMsg" rows="3" placeholder="What happened, or what would make this better?"></textarea>
+    <input class="hp" type="text" id="repWebsite" name="website" autocomplete="off" tabindex="-1" aria-hidden="true">
+    <div class="row">
+      <button class="btn" id="repSend">Send</button>
+      <span id="repStatus"></span>
+    </div>
+  </div>
+</details>
+
+<footer id="buildStamp">build <!--__STAMP__--> &middot; <a href="rules.html">rules</a></footer>
 
 <script>
 /*__PACKS__*/

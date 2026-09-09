@@ -494,4 +494,41 @@ function gameOver(deckOut) {
 function modal(html){ $('modalBody').innerHTML = html; $('modal').classList.add('on'); }
 function closeModal(){ $('modal').classList.remove('on'); }
 
+// ---- report loop --------------------------------------------------------
+function buildStamp() {
+  return ($('buildStamp')?.textContent || '').replace(/^build\s+/, '').split('·')[0].trim();
+}
+function wireReport() {
+  const send = $('repSend');
+  if (!send) return;
+  send.onclick = async () => {
+    const msg = $('repMsg'), status = $('repStatus');
+    const text = msg.value.trim();
+    if (!text) { status.textContent = 'Say something first.'; return; }
+    const kind = document.querySelector('input[name=repKind]:checked')?.value || 'idea';
+    send.disabled = true;
+    status.textContent = 'Sending…';
+    try {
+      const res = await fetch('/.netlify/functions/report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          kind, message: text,
+          honeypot: $('repWebsite') ? $('repWebsite').value : '',
+          seed: S.seed, cfgName: S.cfgName, startEra: S.startEra,
+          opponents: S.opponents, year: G ? G.year : null,
+          buildStamp: buildStamp(),
+        }),
+      });
+      if (res.ok) { status.textContent = 'Thanks, logged.'; msg.value = ''; }
+      else status.textContent = "Sent, but didn't get a clear confirmation back.";
+    } catch {
+      status.textContent = "Couldn't reach the server.";
+    } finally {
+      send.disabled = false;
+    }
+  };
+}
+
+wireReport();
 setup();
