@@ -400,6 +400,14 @@ function drawHand() {
     for (const f of c.effects) tw.appendChild(el('span','tag '+(f.type==='heterodox'?'het':f.type==='extremist'?'ext':''), f.type));
     for (const i of c.identities.slice(0,3)) tw.appendChild(el('span','tag',i));
     n.appendChild(tw);
+    const rec = G.cardRecord(c.id, c.party);
+    if (rec.billRecord || rec.crossBench || rec.offDistrict) {
+      const rw = el('div');
+      if (rec.billRecord) rw.appendChild(el('span','tag '+(rec.billRecord>0?'pos':'neg'), `record ${rec.billRecord>0?'+':''}${rec.billRecord}`));
+      if (rec.crossBench) rw.appendChild(el('span','tag','cross-bench ×'+rec.crossBench+(rec.crossBenchToward?' → '+rec.crossBenchToward:'')));
+      if (rec.offDistrict) rw.appendChild(el('span','tag neg','off-position ×'+rec.offDistrict));
+      n.appendChild(rw);
+    }
     n.onclick = () => { if (pending && pending.kind==='declare'){ S.sel = S.sel===c?null:c; render(); } };
     h.appendChild(n);
   }
