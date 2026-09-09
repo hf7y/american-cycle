@@ -64,44 +64,47 @@ export const finding: Finding = {
     + "and does the sim's fired identity-match magnitude move at all as a result?",
 
   headline:
-    'This commit re-cuts 20 more candidate cards, spread across six of the seven packs, closing out '
-    + "a specific, well-documented figure per tag rather than opening a new bucket: `catholic` (Joe/"
-    + "Joseph R. Biden '92/'08/'24 +2 each, a Scranton Catholic identity central to his brand across "
-    + "three decades; Jerry Brown '76/'92 +2 each, three years in a Jesuit novitiate before politics; "
-    + "George Voinovich '92/'08 +1 each, Slavic-Catholic Cleveland roots), `urban` (John Lindsay '64 "
-    + "+2, the quintessential reform mayor of New York; Jack Kemp '92 +2, urban enterprise zones were "
-    + "his signature policy; George Voinovich '92/'08 +2 each, two terms as Cleveland's mayor), "
-    + "`jewish` (Bernie Sanders '08/'16/'24 +2 each, the first Jewish candidate to win a state "
-    + "presidential primary), `rural` (Jim Webb '08 +2, his book on Scots-Irish Appalachian identity "
-    + "was the spine of his campaign; Al Gore '92 +1, the family farm in Carthage, TN; Fred Thompson "
-    + "'08 +1, a folksy Tennessee persona built into his ads), `farm` (Byron Dorgan '92 +2, decades on "
-    + "the Senate Agriculture Committee for a wheat state), `suburban` (Hillary Clinton '08/'16 +1 "
-    + "each, the Park Ridge, IL upbringing her own campaign biography cited), and `evangelical` (Nikki "
-    + "Haley '16/'24 +1 each, a Sikh-raised convert to Christianity who ran in South Carolina's "
-    + 'evangelical-heavy primary electorate). One-hundred-sixty-nine candidate cards of the full pool '
-    + "(169/349) now carry `identityWeights`, up from one-hundred-forty-nine. Measured over the "
-    + 'shipped agent pool, all seven packs, full sample: an identity match now fires in 19.5% of '
-    + 'contested generals (up from 19.2%) and 49.2% of contested primaries (up from 49.1%), mean pips '
-    + '1.84 (up from 1.82) and mean tags 1.44 (up from 1.43) when a match fires. 180 of 349 still fall '
-    + "back to the flat default (identityBonus 1), and the math from the prior comments still holds: "
-    + "closing the full gap to #19's +4/5 pip target by raising the flat default alone would still need "
+    'This commit re-cuts 18 more candidate cards, spread across all seven packs, closing out a '
+    + 'specific, well-documented figure per tag: `catholic` (Eugene McCarthy \'76 +2, nine months as '
+    + "a Benedictine novice intending the priesthood before politics; Patrick Moynihan '92 +2, an "
+    + "Irish-Catholic identity central to his career and his own writing on ethnic voting; John "
+    + "Boehner '08 +1 and Paul Ryan '16 +1, both well-documented devout Catholics), `evangelical` "
+    + "(Jim DeMint '08 +2 and Tom Coburn '08 +2, both culture-warrior religious conservatives whose "
+    + "Senate careers were built on that identity), `farm` (Bourke Hickenlooper '64 +2, a trained "
+    + "agricultural engineer and farm economist before politics; Dick Clark '76 +1, famous for "
+    + "walking Iowa farm to farm; Nancy Kassebaum '92 +1, Kansas wheat-farm heritage as Alf Landon's "
+    + "daughter), `rural` (Barry Goldwater '76 +2, the defining Arizona rancher persona; Sam Ervin "
+    + "'64 +2, the 'country lawyer' self-description that became his trademark; Margaret Chase Smith "
+    + "'64 +1, small-town Skowhegan, Maine roots; plus the farm-tagged Hickenlooper/Clark/Kassebaum "
+    + "cards above, all also rural), `suburban` (Steny Hoyer '08 +1, Prince George's County, MD; Amy "
+    + "Klobuchar '08 +1, Hennepin County prosecutor; Elissa Slotkin '24 +1, the archetypal suburban "
+    + "swing-district profile), `urban` (Frances Perkins '32 +2, her Hull House settlement-house "
+    + "years in Chicago; Hugh Scott '64 +1, Philadelphia machine politics), and `union` (Philip Hart "
+    + "'64 +2, a UAW-backed career that earned him 'the conscience of the Senate'). One-hundred-"
+    + 'eighty-seven candidate cards of the full pool (187/349) now carry `identityWeights`, up from '
+    + 'one-hundred-sixty-nine. Measured over the shipped agent pool, all seven packs, full sample: an '
+    + 'identity match now fires in 21.2% of contested generals (up from 19.5%) and 49.1% of contested '
+    + 'primaries (roughly flat, was 49.2%), mean pips 1.84 (flat) and mean tags 1.40 (down from 1.44, '
+    + 'more single-tag matches entering the sample) when a match fires. 162 of 349 still fall back to '
+    + "the flat default (identityBonus 1), and the math from the prior comments still holds: closing "
+    + "the full gap to #19's +4/5 pip target by raising the flat default alone would still need "
     + 'roughly tripling it, and the sample still has a 3-tag simultaneous match: tripling would put '
-    + "that case at 9 pips, over #41's own ~8-pip full-stack ceiling. Same collision #41 flagged, still "
-    + 'unresolved at this scale -- re-cutting the remaining 180 cards is the same per-card content '
-    + 'task, just twenty fewer of them.',
-  stampedAt: '2026-09-09T10:25:00Z',
-  stampedOn: '49ab96f',
+    + "that case at 9 pips, over #41's own ~8-pip full-stack ceiling. Same collision #41 flagged, "
+    + 'still unresolved at this scale -- re-cutting the remaining 162 cards is the same per-card '
+    + 'content task, just eighteen fewer of them.',
+  stampedAt: '2026-09-09T13:10:00Z',
+  stampedOn: '5881f82',
 
   predicate(): Claim[] {
     const seedCount = sample(60);
     const roll = rolloutShare();
     const m = matchStats(seedCount);
     return [
-      { name: 'candidate cards carrying signed identityWeights, of the full pool', value: roll, stamped: 48.42, tolerance: 0.2, unit: '%' },
-      { name: 'contested generals with an identity match', value: m.generalMatchShare, stamped: 19.49, tolerance: 3, unit: '%' },
-      { name: 'contested primaries with an identity match', value: m.primaryMatchShare, stamped: 49.15, tolerance: 3, unit: '%' },
+      { name: 'candidate cards carrying signed identityWeights, of the full pool', value: roll, stamped: 53.58, tolerance: 0.2, unit: '%' },
+      { name: 'contested generals with an identity match', value: m.generalMatchShare, stamped: 21.24, tolerance: 3, unit: '%' },
+      { name: 'contested primaries with an identity match', value: m.primaryMatchShare, stamped: 49.11, tolerance: 3, unit: '%' },
       { name: 'mean pips when an identity match fires', value: m.meanPips, stamped: 1.84, tolerance: 0.3 },
-      { name: 'mean tags shared when an identity match fires', value: m.meanTags, stamped: 1.44, tolerance: 0.3 },
+      { name: 'mean tags shared when an identity match fires', value: m.meanTags, stamped: 1.40, tolerance: 0.3 },
       { name: 'max tags shared simultaneously, this sample', value: m.maxTags, stamped: 3, tolerance: 0 },
     ];
   },

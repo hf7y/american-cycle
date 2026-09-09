@@ -202,6 +202,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 1
+      },
       "belief": "Held Michigan by a point",
       "era": 2024,
       "effects": [],

@@ -612,6 +612,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 2
+      },
       "belief": "Defining deviancy down",
       "era": 1992,
       "effects": [],
@@ -933,6 +936,10 @@
         "rural",
         "farm"
       ],
+      "identityWeights": {
+        "rural": 1,
+        "farm": 1
+      },
       "belief": "Landon's daughter",
       "era": 1992,
       "effects": [],

@@ -451,6 +451,9 @@
       "identities": [
         "urban"
       ],
+      "identityWeights": {
+        "urban": 2
+      },
       "belief": "First woman in a cabinet",
       "era": 1932,
       "effects": [],

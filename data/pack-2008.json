@@ -361,6 +361,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 1
+      },
       "belief": "The majority leader",
       "era": 2008,
       "effects": [],
@@ -454,6 +457,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 1
+      },
       "belief": "Prosecutor from the Iron Range",
       "era": 2008,
       "effects": [],
@@ -721,6 +727,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 1
+      },
       "belief": "Country club conservative",
       "era": 2008,
       "effects": [],
@@ -873,6 +882,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "Ideological validator",
       "era": 2008,
       "effects": [
@@ -901,6 +913,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "Dr. No",
       "era": 2008,
       "effects": [

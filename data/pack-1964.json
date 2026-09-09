@@ -242,6 +242,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Country lawyer against the bill",
       "era": 1964,
       "effects": [],
@@ -285,6 +288,10 @@
         "catholic",
         "union"
       ],
+      "identityWeights": {
+        "catholic": 1,
+        "union": 2
+      },
       "belief": "The conscience of the Senate",
       "era": 1964,
       "effects": [],
@@ -559,6 +566,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Declaration of Conscience",
       "era": 1964,
       "effects": [],
@@ -648,6 +658,10 @@
         "farm",
         "rural"
       ],
+      "identityWeights": {
+        "farm": 2,
+        "rural": 1
+      },
       "belief": "Midwestern regular",
       "era": 1964,
       "effects": [],
@@ -729,6 +743,9 @@
       "identities": [
         "urban"
       ],
+      "identityWeights": {
+        "urban": 1
+      },
       "belief": "Eastern moderate leadership",
       "era": 1964,
       "effects": [],

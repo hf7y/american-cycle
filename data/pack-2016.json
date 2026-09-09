@@ -721,6 +721,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 1
+      },
       "belief": "The budget",
       "era": 2016,
       "effects": [],

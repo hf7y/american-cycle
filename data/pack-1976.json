@@ -748,6 +748,10 @@
         "farm",
         "rural"
       ],
+      "identityWeights": {
+        "farm": 1,
+        "rural": 1
+      },
       "belief": "Walked the state",
       "era": 1976,
       "effects": [],
@@ -1011,6 +1015,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Extremism in defense of liberty",
       "era": 1976,
       "effects": [
@@ -2307,6 +2314,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 2
+      },
       "belief": "Ran outside both parties",
       "era": 1976,
       "effects": [
