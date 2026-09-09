@@ -12,7 +12,6 @@
       "homeStateBonus": 0,
       "identities": [
         "black",
-        "hispanic",
         "urban"
       ],
       "belief": "A new way forward",
@@ -20,9 +19,6 @@
       "effects": [],
       "provenance": {
         "black": {
-          "source": "hand-assigned"
-        },
-        "hispanic": {
           "source": "hand-assigned"
         },
         "urban": {

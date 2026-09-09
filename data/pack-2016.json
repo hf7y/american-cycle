@@ -121,7 +121,6 @@
       "homeStateBonus": 1,
       "identities": [
         "black",
-        "hispanic",
         "urban"
       ],
       "belief": "Attorney general",
@@ -129,9 +128,6 @@
       "effects": [],
       "provenance": {
         "black": {
-          "source": "hand-assigned"
-        },
-        "hispanic": {
           "source": "hand-assigned"
         },
         "urban": {
