@@ -175,6 +175,9 @@
         "rural",
         "farm"
       ],
+      "identityWeights": {
+        "farm": 2
+      },
       "belief": "Wrote two amendments",
       "era": 1976,
       "effects": [],
@@ -410,6 +413,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Defense conservative",
       "era": 1976,
       "effects": [],
@@ -429,6 +435,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Armed Services chairman",
       "era": 1976,
       "effects": [],
@@ -1204,6 +1213,9 @@
       "identities": [
         "urban"
       ],
+      "identityWeights": {
+        "urban": 1
+      },
       "belief": "Liberal on civil rights",
       "era": 1976,
       "effects": [],

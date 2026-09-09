@@ -474,6 +474,9 @@
       "identities": [
         "urban"
       ],
+      "identityWeights": {
+        "urban": 2
+      },
       "belief": "Held Wisconsin",
       "era": 2016,
       "effects": [],
@@ -833,6 +836,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Won Vermont as it voted Democratic",
       "era": 2016,
       "effects": [],

@@ -128,6 +128,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "One of two votes against the Gulf of Tonkin",
       "era": 1964,
       "effects": [
@@ -170,6 +173,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Armed Services",
       "era": 1964,
       "effects": [],
@@ -265,6 +271,9 @@
         "rural",
         "farm"
       ],
+      "identityWeights": {
+        "farm": 2
+      },
       "belief": "A southerner who signed nothing",
       "era": 1964,
       "effects": [],
@@ -314,6 +323,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Wounded in Dallas",
       "era": 1964,
       "effects": [],
@@ -363,6 +375,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Fifty-six years in Congress",
       "era": 1964,
       "effects": [],
@@ -431,6 +446,9 @@
         "rural",
         "farm"
       ],
+      "identityWeights": {
+        "farm": 2
+      },
       "belief": "Rewrote presidential succession",
       "era": 1964,
       "effects": [],
@@ -547,6 +565,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Delivered the Republican votes for the bill",
       "era": 1964,
       "effects": [],
@@ -626,6 +647,9 @@
       "identities": [
         "urban"
       ],
+      "identityWeights": {
+        "urban": 1
+      },
       "belief": "Civil rights Republican",
       "era": 1964,
       "effects": [],
@@ -685,6 +709,9 @@
         "rural",
         "farm"
       ],
+      "identityWeights": {
+        "farm": 1
+      },
       "belief": "Half of Mundt-Nixon",
       "era": 1964,
       "effects": [],

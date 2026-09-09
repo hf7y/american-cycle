@@ -224,6 +224,9 @@
       "identities": [
         "urban"
       ],
+      "identityWeights": {
+        "urban": 2
+      },
       "belief": "Held Wisconsin",
       "era": 2024,
       "effects": [],
@@ -797,6 +800,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Won by forty in a state that voted blue by thirty",
       "era": 2024,
       "effects": [],
