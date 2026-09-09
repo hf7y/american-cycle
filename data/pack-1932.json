@@ -356,17 +356,11 @@
       "party": "D",
       "homeState": "SC",
       "homeStateBonus": 5,
-      "identities": [
-        "rural"
-      ],
+      "identities": [],
       "belief": "Assistant president",
       "era": 1932,
       "effects": [],
-      "provenance": {
-        "rural": {
-          "source": "hand-assigned"
-        }
-      }
+      "provenance": {}
     },
     {
       "kind": "candidate",

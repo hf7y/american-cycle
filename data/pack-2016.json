@@ -915,17 +915,11 @@
       "party": "R",
       "homeState": "FL",
       "homeStateBonus": 1,
-      "identities": [
-        "evangelical"
-      ],
+      "identities": [],
       "belief": "Won by 32,000 votes",
       "era": 2016,
       "effects": [],
-      "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        }
-      }
+      "provenance": {}
     },
     {
       "kind": "candidate",
