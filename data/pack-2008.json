@@ -19,7 +19,8 @@
       "effects": [],
       "provenance": {
         "black": {
-          "source": "hand-assigned"
+          "source": "wikidata",
+          "vintage": "2026-09-08"
         },
         "urban": {
           "source": "hand-assigned"
@@ -429,7 +430,8 @@
       "identities": [],
       "belief": "Governor who won rural Virginia",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -502,7 +504,8 @@
       "identities": [],
       "belief": "Maverick",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -629,7 +632,8 @@
         {
           "type": "extremist"
         }
-      ]
+      ],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -641,7 +645,8 @@
       "identities": [],
       "belief": "The minority leader",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -733,7 +738,8 @@
       "identities": [],
       "belief": "Voted for the stimulus in committee",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -787,7 +793,8 @@
       "identities": [],
       "belief": "Nunn-Lugar",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",

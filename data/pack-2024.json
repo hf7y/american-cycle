@@ -20,7 +20,8 @@
       "effects": [],
       "provenance": {
         "black": {
-          "source": "hand-assigned"
+          "source": "wikidata",
+          "vintage": "2026-09-08"
         },
         "hispanic": {
           "source": "hand-assigned"
@@ -249,7 +250,8 @@
       "effects": [],
       "provenance": {
         "black": {
-          "source": "hand-assigned"
+          "source": "wikidata",
+          "vintage": "2026-09-08"
         },
         "evangelical": {
           "source": "hand-assigned"
@@ -591,7 +593,8 @@
       "identities": [],
       "belief": "Stepped down as leader",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -737,7 +740,8 @@
       "identities": [],
       "belief": "Four terms in a purple state",
       "era": 2024,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",

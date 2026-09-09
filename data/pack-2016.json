@@ -87,7 +87,8 @@
         {
           "type": "extremist"
         }
-      ]
+      ],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -105,7 +106,8 @@
       "effects": [],
       "provenance": {
         "black": {
-          "source": "hand-assigned"
+          "source": "wikidata",
+          "vintage": "2026-09-08"
         },
         "urban": {
           "source": "hand-assigned"
@@ -129,7 +131,8 @@
       "effects": [],
       "provenance": {
         "black": {
-          "source": "hand-assigned"
+          "source": "wikidata",
+          "vintage": "2026-09-08"
         },
         "hispanic": {
           "source": "hand-assigned"
@@ -673,7 +676,8 @@
       "identities": [],
       "belief": "Held the seat open",
       "era": 2016,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -723,7 +727,8 @@
       "identities": [],
       "belief": "Most popular governor in America",
       "era": 2016,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -956,7 +961,8 @@
       "identities": [],
       "belief": "Trade negotiator",
       "era": 2016,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
