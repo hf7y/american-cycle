@@ -61,6 +61,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Two Americas",
       "era": 2008,
       "effects": [],
@@ -124,6 +127,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 2
+      },
       "belief": "Banking chairman",
       "era": 2008,
       "effects": [],
@@ -171,6 +177,9 @@
         "evangelical",
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Pro-life majority leader",
       "era": 2008,
       "effects": [],
@@ -313,6 +322,10 @@
         "evangelical",
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2,
+        "evangelical": 1
+      },
       "belief": "Blue Dog quarterback",
       "era": 2008,
       "effects": [],
@@ -491,6 +504,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 1
+      },
       "belief": "Rode the wave",
       "era": 2008,
       "effects": [],
@@ -775,6 +791,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "McCain's wingman",
       "era": 2008,
       "effects": [],
@@ -851,6 +870,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Republican against the war",
       "era": 2008,
       "effects": [],
@@ -965,6 +987,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 1
+      },
       "belief": "Hugged the president",
       "era": 2008,
       "effects": [],
@@ -1007,6 +1032,10 @@
         "evangelical",
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 2,
+        "evangelical": 1
+      },
       "belief": "Sam's Club Republicans",
       "era": 2008,
       "effects": [],

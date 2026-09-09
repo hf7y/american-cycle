@@ -106,6 +106,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Western conservationist",
       "era": 1976,
       "effects": [],
@@ -155,6 +158,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Ran the intelligence hearings",
       "era": 1976,
       "effects": [],
@@ -372,6 +378,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Tobacco and coal",
       "era": 1976,
       "effects": [],
@@ -680,6 +689,10 @@
         "catholic",
         "urban"
       ],
+      "identityWeights": {
+        "catholic": 2,
+        "urban": 2
+      },
       "belief": "Dropped from a ticket",
       "era": 1976,
       "effects": [],
@@ -790,6 +803,10 @@
         "farm",
         "rural"
       ],
+      "identityWeights": {
+        "farm": 1,
+        "rural": 1
+      },
       "belief": "Liberal in a farm state",
       "era": 1976,
       "effects": [],
@@ -824,6 +841,9 @@
       "identities": [
         "farm"
       ],
+      "identityWeights": {
+        "farm": 1
+      },
       "belief": "The Golden Fleece Award",
       "era": 1976,
       "effects": [],
@@ -896,6 +916,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 1
+      },
       "belief": "A time for choosing",
       "era": 1976,
       "effects": [
@@ -1424,6 +1447,9 @@
       "identities": [
         "urban"
       ],
+      "identityWeights": {
+        "urban": 1
+      },
       "belief": "Civil rights Republican",
       "era": 1976,
       "effects": [],
@@ -1443,6 +1469,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Education and the environment",
       "era": 1976,
       "effects": [],

@@ -15,6 +15,10 @@
         "hispanic",
         "urban"
       ],
+      "identityWeights": {
+        "black": 2,
+        "urban": 2
+      },
       "belief": "A new way forward",
       "era": 2024,
       "effects": [],
@@ -302,6 +306,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 1
+      },
       "belief": "Astronaut",
       "era": 2024,
       "effects": [],
@@ -595,6 +602,10 @@
         "catholic",
         "rural"
       ],
+      "identityWeights": {
+        "catholic": 2,
+        "rural": 2
+      },
       "belief": "Old-guard governor",
       "era": 2024,
       "effects": [],
@@ -856,6 +867,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 1
+      },
       "belief": "Lost twice",
       "era": 2024,
       "effects": [

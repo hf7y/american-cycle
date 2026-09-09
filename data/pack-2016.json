@@ -137,6 +137,10 @@
         "hispanic",
         "urban"
       ],
+      "identityWeights": {
+        "black": 2,
+        "urban": 2
+      },
       "belief": "Attorney general",
       "era": 2016,
       "effects": [],
@@ -663,6 +667,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 2
+      },
       "belief": "Expanded Medicaid",
       "era": 2016,
       "effects": [],
@@ -858,6 +865,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "Never Trump, mostly",
       "era": 2016,
       "effects": [],
@@ -919,6 +929,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 1
+      },
       "belief": "Harvard and the infantry",
       "era": 2016,
       "effects": [
@@ -1062,6 +1075,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 1
+      },
       "belief": "Voted to convict",
       "era": 2016,
       "effects": [],
@@ -1101,6 +1117,10 @@
         "rural",
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 2,
+        "rural": 1
+      },
       "belief": "Moderate turned loyalist",
       "era": 2016,
       "effects": [],
@@ -1124,6 +1144,10 @@
         "evangelical",
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 2,
+        "evangelical": 1
+      },
       "belief": "Hard right in a red state",
       "era": 2016,
       "effects": [
@@ -1150,6 +1174,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 1
+      },
       "belief": "The eyepatch",
       "era": 2016,
       "effects": [],

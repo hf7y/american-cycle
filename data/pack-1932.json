@@ -635,6 +635,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Progressive by inheritance",
       "era": 1932,
       "effects": [],
@@ -845,6 +848,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Old guard floor leader",
       "era": 1932,
       "effects": [],
@@ -864,6 +870,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Conservation Republican",
       "era": 1932,
       "effects": [],

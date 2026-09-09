@@ -147,6 +147,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Medal of Honor",
       "era": 1992,
       "effects": [],
@@ -193,6 +196,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Born with a silver foot",
       "era": 1992,
       "effects": [],
@@ -1019,6 +1025,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Wyoming humor",
       "era": 1992,
       "effects": [],
@@ -1039,6 +1048,10 @@
         "rural",
         "evangelical"
       ],
+      "identityWeights": {
+        "rural": 1,
+        "evangelical": 2
+      },
       "belief": "The whip",
       "era": 1992,
       "effects": [],
@@ -1145,6 +1158,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Left the party in 2001",
       "era": 1992,
       "effects": [],
@@ -1176,6 +1192,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Welfare reform laboratory",
       "era": 1992,
       "effects": [],
