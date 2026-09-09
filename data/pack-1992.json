@@ -61,17 +61,11 @@
       "party": "D",
       "homeState": "MA",
       "homeStateBonus": 2,
-      "identities": [
-        "catholic"
-      ],
+      "identities": [],
       "belief": "Pro-business Democrat",
       "era": 1992,
       "effects": [],
-      "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        }
-      }
+      "provenance": {}
     },
     {
       "kind": "candidate",

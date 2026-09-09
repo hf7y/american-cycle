@@ -550,17 +550,11 @@
       "party": "R",
       "homeState": "ME",
       "homeStateBonus": 3,
-      "identities": [
-        "suburban"
-      ],
+      "identities": [],
       "belief": "Still there",
       "era": 2024,
       "effects": [],
-      "provenance": {
-        "suburban": {
-          "source": "hand-assigned"
-        }
-      }
+      "provenance": {}
     },
     {
       "kind": "candidate",
