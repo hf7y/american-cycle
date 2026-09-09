@@ -64,33 +64,35 @@ export const finding: Finding = {
     + "and does the sim's fired identity-match magnitude move at all as a result?",
 
   headline:
-    'Less barely. Fifteen candidate cards of the full pool now carry `identityWeights` -- Goldwater '
-    + '(#41\'s own falsifier) plus fourteen re-cut for #19: Wallace \'64/\'76 and Thurmond \'64/\'76/\'92 '
-    + '(rural, the segregationist-era rural base), Helms \'76/\'92 (evangelical, the direct-mail '
-    + 'conservative movement), Buchanan \'92 (catholic asset / urban liability, the populist-vs-cosmopolitan '
-    + 'split his own campaign exposed), Clinton \'92 and Vance \'24 (rural), and Trump \'16/\'24 (urban '
-    + 'liability, matching the dense-urban-county returns both cycles) and AOC \'24 (urban asset) -- so '
-    + '334 of 349 still fall back to the flat default. Measured over the shipped agent pool, all seven '
-    + "packs: an identity match now fires in 20.9% of contested generals and 48.1% of contested primaries "
-    + '(both down from the prior stamp, moved by the sample, not by a rule change), at a mean 1.47 pips '
+    'Still short, but climbing. Twenty-seven candidate cards of the full pool now carry `identityWeights` '
+    + '-- Goldwater (#41\'s own falsifier), fourteen re-cut for #19 (Wallace \'64/\'76 and Thurmond '
+    + '\'64/\'76/\'92, rural; Helms \'76/\'92, evangelical; Buchanan \'92, catholic asset / urban liability; '
+    + 'Clinton \'92 and Vance \'24, rural; Trump \'16/\'24, urban liability; AOC \'24, urban asset), and '
+    + 'twelve more (Al Smith \'32 and Buchanan-era catholic realignment figures La Guardia/Cermak \'32, '
+    + 'urban/catholic; Wagner \'32, union, the Wagner Act\'s own author; Bilbo \'32, Byrd \'32/\'76 and '
+    + 'Eastland \'76, rural, the same segregationist-machine bucket as Wallace/Thurmond/Long; Javits '
+    + '\'64/\'76 and Ribicoff \'64/\'76, jewish, each senator\'s own documented Jewish-vote concentration) '
+    + '-- so 322 of 349 still fall back to the flat default. Measured over the shipped agent pool, all '
+    + 'seven packs: an identity match now fires in 22.4% of contested generals and 48.8% of contested '
+    + 'primaries (both up slightly, moved by the sample, not by a rule change), at a mean 1.58 pips '
     + 'across a mean 1.39 shared tags when it fires -- still close to the pre-#41 flat mechanic, because '
     + 'most of the pool still IS the pre-#41 flat mechanic. Closing the remaining gap to #19\'s +4/5 pip '
     + "target by raising the flat default alone would still need roughly tripling it, and the sample "
     + 'still has a 3-tag simultaneous match: tripling would put that case at 9 pips, over #41\'s own '
     + '~8-pip full-stack ceiling. Same collision #41 flagged, still unresolved at this scale -- re-cutting '
-    + 'the remaining 334 cards is the same per-card content task, just fourteen fewer of them.',
-  stampedAt: '2026-09-09T03:20:00Z',
-  stampedOn: 'aebde8b',
+    + 'the remaining 322 cards is the same per-card content task, just twenty-six fewer of them.',
+  stampedAt: '2026-09-09T04:05:48Z',
+  stampedOn: '5ab3d18',
 
   predicate(): Claim[] {
     const seedCount = sample(60);
     const roll = rolloutShare();
     const m = matchStats(seedCount);
     return [
-      { name: 'candidate cards carrying signed identityWeights, of the full pool', value: roll, stamped: 4.3, tolerance: 0.2, unit: '%' },
-      { name: 'contested generals with an identity match', value: m.generalMatchShare, stamped: 20.93, tolerance: 3, unit: '%' },
-      { name: 'contested primaries with an identity match', value: m.primaryMatchShare, stamped: 48.09, tolerance: 3, unit: '%' },
-      { name: 'mean pips when an identity match fires', value: m.meanPips, stamped: 1.47, tolerance: 0.3 },
+      { name: 'candidate cards carrying signed identityWeights, of the full pool', value: roll, stamped: 7.74, tolerance: 0.2, unit: '%' },
+      { name: 'contested generals with an identity match', value: m.generalMatchShare, stamped: 22.36, tolerance: 3, unit: '%' },
+      { name: 'contested primaries with an identity match', value: m.primaryMatchShare, stamped: 48.76, tolerance: 3, unit: '%' },
+      { name: 'mean pips when an identity match fires', value: m.meanPips, stamped: 1.58, tolerance: 0.3 },
       { name: 'mean tags shared when an identity match fires', value: m.meanTags, stamped: 1.39, tolerance: 0.3 },
       { name: 'max tags shared simultaneously, this sample', value: m.maxTags, stamped: 3, tolerance: 0 },
     ];

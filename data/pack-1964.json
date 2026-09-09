@@ -376,6 +376,9 @@
         "jewish",
         "urban"
       ],
+      "identityWeights": {
+        "jewish": 1
+      },
       "belief": "Governor, cabinet, Senate",
       "era": 1964,
       "effects": [],
@@ -551,6 +554,9 @@
         "jewish",
         "urban"
       ],
+      "identityWeights": {
+        "jewish": 2
+      },
       "belief": "Liberal Republican in full",
       "era": 1964,
       "effects": [],

@@ -413,6 +413,9 @@
         "rural",
         "farm"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Plantation conservatism",
       "era": 1976,
       "effects": [
@@ -470,6 +473,9 @@
       "identities": [
         "jewish"
       ],
+      "identityWeights": {
+        "jewish": 1
+      },
       "belief": "Chicago convention scold",
       "era": 1976,
       "effects": [],
@@ -899,6 +905,9 @@
         "jewish",
         "urban"
       ],
+      "identityWeights": {
+        "jewish": 2
+      },
       "belief": "Liberal Republican",
       "era": 1976,
       "effects": [],
@@ -2209,6 +2218,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Left the party and held the seat",
       "era": 1976,
       "effects": [],

@@ -56,6 +56,9 @@
         "catholic",
         "urban"
       ],
+      "identityWeights": {
+        "catholic": 2
+      },
       "belief": "The Happy Warrior of the sidewalks",
       "era": 1932,
       "effects": [],
@@ -136,6 +139,9 @@
         "urban",
         "union"
       ],
+      "identityWeights": {
+        "union": 2
+      },
       "belief": "Wrote the labor act",
       "era": 1932,
       "effects": [],
@@ -242,6 +248,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Pay-as-you-go conservatism",
       "era": 1932,
       "effects": [],
@@ -336,6 +345,9 @@
         "rural",
         "farm"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "The worst of the Delta",
       "era": 1932,
       "effects": [
@@ -437,6 +449,9 @@
         "urban",
         "union"
       ],
+      "identityWeights": {
+        "urban": 1
+      },
       "belief": "Built the Chicago machine",
       "era": 1932,
       "effects": [],
@@ -623,6 +638,9 @@
         "urban",
         "union"
       ],
+      "identityWeights": {
+        "urban": 1
+      },
       "belief": "The Little Flower",
       "era": 1932,
       "effects": [],
