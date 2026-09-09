@@ -100,6 +100,9 @@
         "black",
         "urban"
       ],
+      "identityWeights": {
+        "black": 2
+      },
       "belief": "Newark mayor",
       "era": 2016,
       "effects": [],
@@ -407,6 +410,9 @@
         "jewish",
         "urban"
       ],
+      "identityWeights": {
+        "jewish": 2
+      },
       "belief": "The leader",
       "era": 2016,
       "effects": [],

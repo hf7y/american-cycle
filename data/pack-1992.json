@@ -240,6 +240,9 @@
         "jewish",
         "urban"
       ],
+      "identityWeights": {
+        "jewish": 1
+      },
       "belief": "Year of the Woman",
       "era": 1992,
       "effects": [],
@@ -263,6 +266,9 @@
         "jewish",
         "urban"
       ],
+      "identityWeights": {
+        "jewish": 1
+      },
       "belief": "Mayor during the assassinations",
       "era": 1992,
       "effects": [],
@@ -594,6 +600,9 @@
       "identities": [
         "jewish"
       ],
+      "identityWeights": {
+        "jewish": 1
+      },
       "belief": "Health care markets",
       "era": 1992,
       "effects": [],
@@ -794,6 +803,9 @@
         "jewish",
         "urban"
       ],
+      "identityWeights": {
+        "jewish": 1
+      },
       "belief": "Single bullet, and later a switch",
       "era": 1992,
       "effects": [],

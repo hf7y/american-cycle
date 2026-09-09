@@ -256,6 +256,9 @@
         "evangelical",
         "urban"
       ],
+      "identityWeights": {
+        "black": 2
+      },
       "belief": "Ebenezer's pastor",
       "era": 2024,
       "effects": [],
@@ -324,6 +327,9 @@
         "black",
         "urban"
       ],
+      "identityWeights": {
+        "black": 2
+      },
       "belief": "The leader",
       "era": 2024,
       "effects": [],
@@ -698,6 +704,9 @@
         "black",
         "evangelical"
       ],
+      "identityWeights": {
+        "black": 1
+      },
       "belief": "Appointed, then elected",
       "era": 2024,
       "effects": [],

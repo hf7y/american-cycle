@@ -316,6 +316,9 @@
         "jewish",
         "urban"
       ],
+      "identityWeights": {
+        "jewish": 1
+      },
       "belief": "Recruited the Blue Dogs",
       "era": 2008,
       "effects": [],
@@ -384,6 +387,9 @@
         "jewish",
         "urban"
       ],
+      "identityWeights": {
+        "jewish": 1
+      },
       "belief": "Financial services",
       "era": 2008,
       "effects": [],
@@ -406,6 +412,9 @@
       "identities": [
         "jewish"
       ],
+      "identityWeights": {
+        "jewish": 1
+      },
       "belief": "The only no vote on the Patriot Act",
       "era": 2008,
       "effects": [],
@@ -475,6 +484,9 @@
       "identities": [
         "jewish"
       ],
+      "identityWeights": {
+        "jewish": 1
+      },
       "belief": "Won by 312 votes",
       "era": 2008,
       "effects": [],
@@ -688,6 +700,9 @@
         "jewish",
         "suburban"
       ],
+      "identityWeights": {
+        "jewish": 1
+      },
       "belief": "Young Gun",
       "era": 2008,
       "effects": [],
@@ -761,6 +776,9 @@
         "jewish",
         "urban"
       ],
+      "identityWeights": {
+        "jewish": 1
+      },
       "belief": "Switched parties in 2009",
       "era": 2008,
       "effects": [],
@@ -969,6 +987,9 @@
         "jewish",
         "urban"
       ],
+      "identityWeights": {
+        "jewish": 1
+      },
       "belief": "Lost the recount",
       "era": 2008,
       "effects": [],
@@ -1854,6 +1875,9 @@
       "identities": [
         "jewish"
       ],
+      "identityWeights": {
+        "jewish": 2
+      },
       "belief": "Lost the primary, won the general",
       "era": 2008,
       "effects": [],

@@ -946,6 +946,9 @@
         "black",
         "urban"
       ],
+      "identityWeights": {
+        "black": 2
+      },
       "belief": "First elected since Reconstruction",
       "era": 1976,
       "effects": [],

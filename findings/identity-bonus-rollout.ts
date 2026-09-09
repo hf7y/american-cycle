@@ -64,42 +64,39 @@ export const finding: Finding = {
     + "and does the sim's fired identity-match magnitude move at all as a result?",
 
   headline:
-    'Every tag the pool carries now has at least one weighted card -- `farm` and `suburban`, the two '
-    + "gaps the prior commit's headline named, are closed by this one. Fifty-five candidate cards of the "
-    + 'full pool (55/349) now carry `identityWeights`: the forty-one carried over from the four prior '
-    + 'commits, plus fourteen more split across the two remaining buckets. `farm`: Charles L. McNary \'32 '
-    + '(+2, co-author of the McNary-Haugen Farm Relief Bill, the era\'s defining agricultural-policy '
-    + 'fight), George W. Norris \'32 (+1, rural electrification/TVA rather than farm-price policy '
-    + 'directly, a lighter tie), Milton Young \'76 (+2, decades chairing the Agriculture Appropriations '
-    + "subcommittee for North Dakota wheat), Robert/Bob Dole '76 and '92 (+1 each, Senate Agriculture "
-    + "Committee and the Food Stamp Act's farm-subsidy link, a Kansas wheat-country identity but one arm "
-    + "of a broader national profile), and Jon Tester '08/'16/'24 (+2 each, an actual working Montana "
-    + "grain farmer -- the most literal case the pool has). `suburban`: Josh Shapiro '24 (+2, the "
-    + "Philadelphia-suburbs firewall his governorship was built on), Larry Hogan '16/'24 (+2 each, a "
-    + "moderate-Republican brand that lived on DC/Baltimore-county crossover votes), Claire McCaskill "
-    + "'08/'16 (+1 each, St. Louis County as the core of her statewide coalition), and Gretchen Whitmer "
-    + "'24 (+1, the Oakland/Macomb-county firewall her 2022 reelection made explicit). Measured over the "
-    + 'shipped agent pool, all seven packs: an identity match now fires in 20.1% of contested generals '
-    + '(up from 18.1%) and 48.4% of contested primaries (down from 50.5%, sample noise either direction), '
-    + 'mean pips 1.65 (up from 1.61) and mean tags 1.42 (up from 1.39) when a match fires -- this sample '
-    + 'did draw some of the new cards, unlike the `hispanic`/`cuban` commit. 294 of 349 still fall back '
-    + "to the flat default, and the math from the prior comments still holds: closing the full gap to #19's "
-    + "+4/5 pip target by raising the flat default alone would still need roughly tripling it, and the "
-    + 'sample still has a 3-tag simultaneous match: tripling would put that case at 9 pips, over #41\'s '
-    + 'own ~8-pip full-stack ceiling. Same collision #41 flagged, still unresolved at this scale -- '
-    + 're-cutting the remaining 294 cards is the same per-card content task, just fourteen fewer of them.',
-  stampedAt: '2026-09-09T06:35:00Z',
-  stampedOn: '2e926a4',
+    'This commit deepens two buckets that previously carried only one or two weighted cards each, rather '
+    + 'than opening a new one. Seventy-three candidate cards of the full pool (73/349) now carry '
+    + '`identityWeights`: the fifty-five carried over from the five prior commits, plus eighteen more '
+    + 'split across `jewish` and `black`. `jewish` (13): Joe Lieberman \'08 (+2, the first Jewish '
+    + "major-party VP nominee) and Chuck Schumer '16 (+2, a Brooklyn base built on it) at the top; "
+    + "Barbara Boxer '92, Dianne Feinstein '92, Ron Wyden '92, Arlen Specter '92 and '08, Rahm Emanuel "
+    + "'08, Barney Frank '08, Russ Feingold '08, Al Franken '08, Eric Cantor '08 and Norm Coleman '08 "
+    + '(+1 each, part of the coalition without being the defining fact of the campaign). `black` (5): '
+    + "Edward Brooke '76 (+2, the first Black senator elected by popular vote), Cory Booker '16 (+2, "
+    + "Newark's urban Black base under his rise), Raphael Warnock '24 (+2, Ebenezer's pulpit and the GA "
+    + "runoff coalition), Hakeem Jeffries '24 (+2, a Central Brooklyn Black political base), and Tim "
+    + "Scott '24 (+1, a landmark seat built on a broader conservative coalition rather than a Black "
+    + "electoral base). Measured over the shipped agent pool, all seven packs: an identity match now "
+    + 'fires in 20.5% of contested generals (up from 20.1%) and 47.5% of contested primaries (down from '
+    + '48.4%, sample noise either direction), mean pips 1.66 (up from 1.65) and mean tags 1.42 (flat) '
+    + 'when a match fires. 276 of 349 still fall back to the flat default, and the math from the prior '
+    + "comments still holds: closing the full gap to #19's +4/5 pip target by raising the flat default "
+    + 'alone would still need roughly tripling it, and the sample still has a 3-tag simultaneous match: '
+    + 'tripling would put that case at 9 pips, over #41\'s own ~8-pip full-stack ceiling. Same collision '
+    + '#41 flagged, still unresolved at this scale -- re-cutting the remaining 276 cards is the same '
+    + 'per-card content task, just eighteen fewer of them.',
+  stampedAt: '2026-09-09T07:50:32Z',
+  stampedOn: 'd155118',
 
   predicate(): Claim[] {
     const seedCount = sample(60);
     const roll = rolloutShare();
     const m = matchStats(seedCount);
     return [
-      { name: 'candidate cards carrying signed identityWeights, of the full pool', value: roll, stamped: 15.76, tolerance: 0.2, unit: '%' },
-      { name: 'contested generals with an identity match', value: m.generalMatchShare, stamped: 20.13, tolerance: 3, unit: '%' },
-      { name: 'contested primaries with an identity match', value: m.primaryMatchShare, stamped: 48.43, tolerance: 3, unit: '%' },
-      { name: 'mean pips when an identity match fires', value: m.meanPips, stamped: 1.65, tolerance: 0.3 },
+      { name: 'candidate cards carrying signed identityWeights, of the full pool', value: roll, stamped: 20.92, tolerance: 0.2, unit: '%' },
+      { name: 'contested generals with an identity match', value: m.generalMatchShare, stamped: 20.46, tolerance: 3, unit: '%' },
+      { name: 'contested primaries with an identity match', value: m.primaryMatchShare, stamped: 47.5, tolerance: 3, unit: '%' },
+      { name: 'mean pips when an identity match fires', value: m.meanPips, stamped: 1.66, tolerance: 0.3 },
       { name: 'mean tags shared when an identity match fires', value: m.meanTags, stamped: 1.42, tolerance: 0.3 },
       { name: 'max tags shared simultaneously, this sample', value: m.maxTags, stamped: 3, tolerance: 0 },
     ];
