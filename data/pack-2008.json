@@ -124,6 +124,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 2
+      },
       "belief": "Banking chairman",
       "era": 2008,
       "effects": [],
@@ -851,6 +854,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Republican against the war",
       "era": 2008,
       "effects": [],
@@ -965,6 +971,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 1
+      },
       "belief": "Hugged the president",
       "era": 2008,
       "effects": [],
