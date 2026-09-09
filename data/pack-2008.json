@@ -711,17 +711,11 @@
       "party": "R",
       "homeState": "ME",
       "homeStateBonus": 3,
-      "identities": [
-        "suburban"
-      ],
+      "identities": [],
       "belief": "The last split ticket",
       "era": 2008,
       "effects": [],
-      "provenance": {
-        "suburban": {
-          "source": "hand-assigned"
-        }
-      }
+      "provenance": {}
     },
     {
       "kind": "candidate",

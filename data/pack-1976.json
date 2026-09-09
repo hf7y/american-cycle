@@ -760,17 +760,11 @@
       "party": "D",
       "homeState": "SC",
       "homeStateBonus": 3,
-      "identities": [
-        "rural"
-      ],
+      "identities": [],
       "belief": "Hunger in America",
       "era": 1976,
       "effects": [],
-      "provenance": {
-        "rural": {
-          "source": "hand-assigned"
-        }
-      }
+      "provenance": {}
     },
     {
       "kind": "candidate",
