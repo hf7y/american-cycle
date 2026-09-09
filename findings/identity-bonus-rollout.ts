@@ -64,40 +64,43 @@ export const finding: Finding = {
     + "and does the sim's fired identity-match magnitude move at all as a result?",
 
   headline:
-    'Still short, but climbing. Forty-one candidate cards of the full pool now carry `identityWeights` '
-    + '-- Goldwater (#41\'s own falsifier), the thirty-five re-cut for #19 in the three prior commits '
-    + '(the segregationist-era rural bucket, evangelical direct-mail figures, catholic/urban realignment '
-    + 'figures, union, jewish senators, the civil-rights-to-modern `black` bucket, and a handful of '
-    + 'signature urban/rural brands), and five more: the first pass at the `hispanic`/`cuban` buckets, '
-    + 'untouched by any prior commit -- Marco Rubio \'16 (`cuban` +2, the Miami-Dade Cuban-American base '
-    + 'his campaign was built on), Bill Richardson \'08 and Catherine Cortez Masto \'16 (`hispanic` +2, '
-    + 'a Southwest governor/diplomat and the first Latina senator, both with a documented Hispanic-vote '
-    + 'reliance in their home states), Ruben Gallego \'24 (`hispanic` +2, documented outperformance with '
-    + 'Latino voters in his own 2024 Arizona race), and Bernie Moreno \'24 (`hispanic` +1, a smaller and '
-    + 'less central base than the others -- Ohio\'s Hispanic vote share is thin next to NM/NV/AZ) -- so '
-    + '308 of 349 still fall back to the flat default. Measured over the shipped agent pool, all seven '
-    + 'packs: an identity match still fires in 18.1% of contested generals and 50.5% of contested '
-    + 'primaries (this sample of seeds did not happen to draw the five new cards, so those two figures '
-    + "and the mean-pips/mean-tags figures are unmoved by this commit) -- still close to the pre-#41 "
-    + 'flat mechanic, because most of the pool still IS the pre-#41 flat mechanic. Closing the remaining '
-    + "gap to #19's +4/5 pip target by raising the flat default alone would still need roughly tripling "
-    + 'it, and the sample still has a 3-tag simultaneous match: tripling would put that case at 9 pips, '
-    + 'over #41\'s own ~8-pip full-stack ceiling. Same collision #41 flagged, still unresolved at this '
-    + 'scale -- re-cutting the remaining 308 cards is the same per-card content task, just five fewer of '
-    + 'them, and now covers every tag the pool carries except `farm` and `suburban`.',
-  stampedAt: '2026-09-09T06:05:00Z',
-  stampedOn: 'b67dcc3',
+    'Every tag the pool carries now has at least one weighted card -- `farm` and `suburban`, the two '
+    + "gaps the prior commit's headline named, are closed by this one. Fifty-five candidate cards of the "
+    + 'full pool (55/349) now carry `identityWeights`: the forty-one carried over from the four prior '
+    + 'commits, plus fourteen more split across the two remaining buckets. `farm`: Charles L. McNary \'32 '
+    + '(+2, co-author of the McNary-Haugen Farm Relief Bill, the era\'s defining agricultural-policy '
+    + 'fight), George W. Norris \'32 (+1, rural electrification/TVA rather than farm-price policy '
+    + 'directly, a lighter tie), Milton Young \'76 (+2, decades chairing the Agriculture Appropriations '
+    + "subcommittee for North Dakota wheat), Robert/Bob Dole '76 and '92 (+1 each, Senate Agriculture "
+    + "Committee and the Food Stamp Act's farm-subsidy link, a Kansas wheat-country identity but one arm "
+    + "of a broader national profile), and Jon Tester '08/'16/'24 (+2 each, an actual working Montana "
+    + "grain farmer -- the most literal case the pool has). `suburban`: Josh Shapiro '24 (+2, the "
+    + "Philadelphia-suburbs firewall his governorship was built on), Larry Hogan '16/'24 (+2 each, a "
+    + "moderate-Republican brand that lived on DC/Baltimore-county crossover votes), Claire McCaskill "
+    + "'08/'16 (+1 each, St. Louis County as the core of her statewide coalition), and Gretchen Whitmer "
+    + "'24 (+1, the Oakland/Macomb-county firewall her 2022 reelection made explicit). Measured over the "
+    + 'shipped agent pool, all seven packs: an identity match now fires in 20.1% of contested generals '
+    + '(up from 18.1%) and 48.4% of contested primaries (down from 50.5%, sample noise either direction), '
+    + 'mean pips 1.65 (up from 1.61) and mean tags 1.42 (up from 1.39) when a match fires -- this sample '
+    + 'did draw some of the new cards, unlike the `hispanic`/`cuban` commit. 294 of 349 still fall back '
+    + "to the flat default, and the math from the prior comments still holds: closing the full gap to #19's "
+    + "+4/5 pip target by raising the flat default alone would still need roughly tripling it, and the "
+    + 'sample still has a 3-tag simultaneous match: tripling would put that case at 9 pips, over #41\'s '
+    + 'own ~8-pip full-stack ceiling. Same collision #41 flagged, still unresolved at this scale -- '
+    + 're-cutting the remaining 294 cards is the same per-card content task, just fourteen fewer of them.',
+  stampedAt: '2026-09-09T06:35:00Z',
+  stampedOn: '2e926a4',
 
   predicate(): Claim[] {
     const seedCount = sample(60);
     const roll = rolloutShare();
     const m = matchStats(seedCount);
     return [
-      { name: 'candidate cards carrying signed identityWeights, of the full pool', value: roll, stamped: 11.75, tolerance: 0.2, unit: '%' },
-      { name: 'contested generals with an identity match', value: m.generalMatchShare, stamped: 18.06, tolerance: 3, unit: '%' },
-      { name: 'contested primaries with an identity match', value: m.primaryMatchShare, stamped: 50.49, tolerance: 3, unit: '%' },
-      { name: 'mean pips when an identity match fires', value: m.meanPips, stamped: 1.61, tolerance: 0.3 },
-      { name: 'mean tags shared when an identity match fires', value: m.meanTags, stamped: 1.39, tolerance: 0.3 },
+      { name: 'candidate cards carrying signed identityWeights, of the full pool', value: roll, stamped: 15.76, tolerance: 0.2, unit: '%' },
+      { name: 'contested generals with an identity match', value: m.generalMatchShare, stamped: 20.13, tolerance: 3, unit: '%' },
+      { name: 'contested primaries with an identity match', value: m.primaryMatchShare, stamped: 48.43, tolerance: 3, unit: '%' },
+      { name: 'mean pips when an identity match fires', value: m.meanPips, stamped: 1.65, tolerance: 0.3 },
+      { name: 'mean tags shared when an identity match fires', value: m.meanTags, stamped: 1.42, tolerance: 0.3 },
       { name: 'max tags shared simultaneously, this sample', value: m.maxTags, stamped: 3, tolerance: 0 },
     ];
   },

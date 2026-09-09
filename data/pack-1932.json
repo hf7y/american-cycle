@@ -532,6 +532,9 @@
         "rural",
         "farm"
       ],
+      "identityWeights": {
+        "farm": 1
+      },
       "belief": "Progressive Republican; wrote the TVA",
       "era": 1932,
       "effects": [
@@ -614,6 +617,9 @@
         "farm",
         "rural"
       ],
+      "identityWeights": {
+        "farm": 2
+      },
       "belief": "Farm relief twice vetoed",
       "era": 1932,
       "effects": [],

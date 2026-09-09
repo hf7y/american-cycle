@@ -169,6 +169,9 @@
         "farm",
         "rural"
       ],
+      "identityWeights": {
+        "farm": 2
+      },
       "belief": "Still farming",
       "era": 2016,
       "effects": [],
@@ -214,6 +217,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 1
+      },
       "belief": "Ran against the wave",
       "era": 2016,
       "effects": [],
@@ -744,6 +750,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 2
+      },
       "belief": "Won Maryland twice",
       "era": 2016,
       "effects": [],

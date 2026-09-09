@@ -203,6 +203,9 @@
         "farm",
         "rural"
       ],
+      "identityWeights": {
+        "farm": 2
+      },
       "belief": "Flat-top farmer",
       "era": 2008,
       "effects": [],
@@ -225,6 +228,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 1
+      },
       "belief": "Prosecutor",
       "era": 2008,
       "effects": [],

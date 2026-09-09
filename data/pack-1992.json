@@ -708,6 +708,9 @@
         "rural",
         "farm"
       ],
+      "identityWeights": {
+        "farm": 1
+      },
       "belief": "The deficit hawk",
       "era": 1992,
       "effects": [],

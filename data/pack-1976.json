@@ -858,6 +858,9 @@
         "rural",
         "farm"
       ],
+      "identityWeights": {
+        "farm": 1
+      },
       "belief": "Prairie conservative",
       "era": 1976,
       "effects": [],
@@ -1310,6 +1313,9 @@
         "farm",
         "rural"
       ],
+      "identityWeights": {
+        "farm": 2
+      },
       "belief": "Wheat and the farm bill",
       "era": 1976,
       "effects": [],
