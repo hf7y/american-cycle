@@ -252,14 +252,35 @@ const d5: TrackItem = {
  *  modelled era seven went out after 1947: the 22nd, 23rd, 24th, 25th and
  *  26th ratified; the ERA stalled at 35 of 38 and DC Voting Rights reached 16
  *  before its seven years ran out. That is 5 of 7, 71% postwar. This is the
- *  stage the engine models and the number it is calibrated against.
+ *  stage the engine models and the number it is calibrated against. It is
+ *  route-agnostic — `ratify()` never asks how a proposal reached the states —
+ *  so it is computed over every proposal from either route, unchanged by #86.
  *
- *  CALLING A CONVENTION HAS NO ORACLE. Article V's convention route has never
- *  been used — no convention has been called in 237 years, against roughly
- *  four hundred state applications. The historical rate is zero and the game
- *  calls one in nearly every game, because a game needs an ending. That is an
- *  authored number for a stated design reason, and it is reported here
- *  without a bar rather than graded against a zero that would be meaningless.
+ *  TWO PROPOSAL ROUTES EXIST SINCE #86, AND ONLY ONE HAS AN ORACLE.
+ *  `congressionalPropose()` always records `called: []` (no state ever votes
+ *  on a proposal, only the two chambers do — see `game.test.ts`'s own
+ *  "this is the chamber route" assertion on that empty array) while
+ *  `convention()` only ever pushes a record once `called.length` has cleared
+ *  two-thirds of the states. `called.length === 0` is therefore an exact,
+ *  not approximate, discriminant between the two — nothing else touches an
+ *  amendment record between proposal and ratification.
+ *
+ *  - Congress proposing directly is 33 of 33 real proposals since 1789 and
+ *    seven since 1947, ~1.4 per sixteen postwar years. It has an oracle and
+ *    is reported as a characterization below, NOT graded — a proposal that
+ *    later fails to ratify does not stop the clock, so this rate is not
+ *    capped at one the way ratified-amendments-per-time is, but it is still
+ *    downward-biased whenever a proposal DOES ratify (the game ends, and the
+ *    years that would have held a further proposal are never played).
+ *    Sizing that bias needs a design ruling on the band, not a swept number.
+ *
+ *  - CALLING A CONVENTION HAS NO ORACLE. Article V's convention route has
+ *    never been used — no convention has been called in 237 years, against
+ *    roughly four hundred state applications. The historical rate is zero,
+ *    and #86 made the route rare by construction (tried only when there is
+ *    no House majority party to hand the pen to), not by a printed
+ *    probability. Reported without a bar rather than graded against a zero
+ *    that would be meaningless.
  *
  *  AMENDMENTS PER UNIT TIME IS CONTAMINATED BY THE ENDING RULE. Six
  *  amendments entered the Constitution between 1947 and 2026, one per ~13
@@ -278,14 +299,19 @@ const d6: TrackItem = {
     + 'configs are the out-of-sample test, and they are reported below rather than tuned to match.',
   run({ runs }): Measure[] {
     const all = runs.flatMap((r) => r.amendments);
+    // `called: []` only ever comes from congressionalPropose() — convention()
+    // never pushes a record below the two-thirds-of-states threshold.
+    const congressional = all.filter((a) => a.called.length === 0);
+    const conventions = all.filter((a) => a.called.length > 0);
     const ratified = all.filter((a) => a.ratifiedIn !== undefined);
     const years = runs.reduce((n, r) => n + r.years, 0);
     // The ERA case: how far short does a failure get? 35 of 38 is the model.
     const failed = all.filter((a) => a.failedIn !== undefined);
     const shortfall = failed.map((a) => a.ratified.length);
     return [
-      { name: 'ratification given proposal', value: share(ratified.length, all.length), unit: 'share of conventions', n: all.length },
-      { name: 'conventions called a game', value: all.length / runs.length, n: runs.length },
+      { name: 'ratification given proposal', value: share(ratified.length, all.length), unit: 'share of proposals', n: all.length },
+      { name: 'congressional proposals per 16 game-years', value: years ? 16 * congressional.length / years : 0, n: runs.length },
+      { name: 'conventions called a game', value: conventions.length / runs.length, n: runs.length },
       { name: 'amendments per 16 game-years', value: years ? 16 * ratified.length / years : 0, n: runs.length },
       { name: 'failed amendments: mean states reached', value: mean(shortfall), unit: 'of 38 needed', n: failed.length },
     ];
@@ -296,9 +322,12 @@ const d6: TrackItem = {
       pass: r >= 0.6 && r <= 0.9,
       note: `${(100 * r).toFixed(0)}% of proposals ratify, against 71% postwar (5 of 7 sent to the states `
         + 'after 1947) and 82% all-time (27 of 33). Band is 60-90%, which spans both point estimates and '
-        + 'leaves room for the small-n uncertainty in 5 of 7. The convention-call rate alongside it has NO '
-        + 'bar: Article V conventions have never been called, so the historical value is zero and the game '
-        + 'needs an ending.',
+        + 'leaves room for the small-n uncertainty in 5 of 7, and is route-agnostic since ratify() is. The '
+        + 'congressional-proposal rate alongside it is characterization only, against ~1.4 per postwar '
+        + 'sixteen years (7 of 79) — reported, not graded, since a passing band is a design call this item '
+        + "does not make on its own. The convention-call rate has NO bar: Article V conventions have never "
+        + 'been called, so the historical value is zero and the route stays as the rare fallback #86 built '
+        + 'it to be.',
     };
   },
 };

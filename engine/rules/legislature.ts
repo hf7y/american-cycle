@@ -94,12 +94,24 @@ export function author(seats: Seat[]): number | undefined {
  *  pick; this is the full field it used to pick from unopposed -- every
  *  player holding at least one House seat of the majority party, since only
  *  they can plausibly carry a bill through the chamber they'd be writing
- *  for. */
+ *  for.
+ *
+ *  `majorityParty` names the plurality leader (a tie is broken by iteration
+ *  order, not left unanswered) -- fine for the scoring bonus it was written
+ *  for, but hf7y/american-cycle#86's "no House majority party" fallback to a
+ *  convention means an actual majority, over half the held seats, or that
+ *  route is dead code: with only two parties seated a 435-ish odd-sized
+ *  House always hands someone 218, so the fallback could never trigger. A
+ *  third party's seats (or wartime vacancies) can deny anyone that half,
+ *  which is the "no pen to win" this function is named for. */
 export function authorCandidates(seats: Seat[]): number[] {
+  const { house } = chambers(seats);
   const maj = majorityParty(seats, 'representative');
   if (!maj) return [];
   const players = new Set<number>();
-  for (const s of seats) if (s.office === 'representative' && s.holder?.party === maj) players.add(s.holder.player);
+  let majCount = 0;
+  for (const s of house) if (s.holder!.party === maj) { players.add(s.holder!.player); majCount++; }
+  if (majCount * 2 <= house.length) return [];
   return [...players].sort((a, b) => a - b);
 }
 
@@ -186,4 +198,25 @@ export function tallyBill(
 export function impeach(cfg: LegislatureConfig, seats: Seat[], yesVotes: number): boolean {
   const { senate } = chambers(seats);
   return atLeast(yesVotes, senate.length, cfg.impeachThreshold);
+}
+
+export interface AmendmentProposalOutcome {
+  houseYes: number; houseTotal: number;
+  senateYes: number; senateTotal: number;
+  passed: boolean;
+}
+
+/** hf7y/american-cycle#86's ruling: the route 33 of 33 ratified amendments
+ *  actually took. Two-thirds of each chamber, and no presentment -- Article V
+ *  gives the president no role in a proposal, so there is no veto to skip
+ *  around, only the two chamber votes. `fraction` is `AmendmentConfig.callFraction`:
+ *  Article V spends the same two-thirds bar on calling a convention and on a
+ *  congressional proposal, so this reuses it rather than printing a second
+ *  copy of the same constant. */
+export function proposeAmendment(fraction: number, seats: Seat[], votes: Vote[]): AmendmentProposalOutcome {
+  const { house, senate } = chambers(seats);
+  const houseYes = votes.filter((v) => v.office === 'representative' && v.yes).length;
+  const senateYes = votes.filter((v) => v.office === 'senator' && v.yes).length;
+  const passed = atLeast(houseYes, house.length, fraction) && atLeast(senateYes, senate.length, fraction);
+  return { houseYes, houseTotal: house.length, senateYes, senateTotal: senate.length, passed };
 }
