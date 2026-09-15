@@ -10,7 +10,7 @@
  */
 import type {
   Amendment, CandidateCard, Card, DistrictCard, EnactedBill, IdentityTag,
-  Office, Party, RaceEvent, Seat,
+  Modifier, Office, Party, RaceEvent, Seat,
 } from './types/index.ts';
 import { RNG } from './rules/rng.ts';
 import { Wave } from './rules/resolution.ts';
@@ -111,7 +111,21 @@ export interface Config {
            *  is drafted normally and the seat is simply contestable under new
            *  demographics. Off by default, an older district card is never
            *  displaced. */
-          districtSupersession?: boolean };
+          districtSupersession?: boolean;
+          /** hf7y/american-cycle#105 lever B: a House general LOSER returns to
+           *  hand instead of being discarded -- the declaration is still spent
+           *  for this cycle either way, but the card is not lost to the
+           *  discard pile. Off by default; #105 measured lever A
+           *  (`lean.pushKeyedOn: 'surprise'`) alone as insufficient to move
+           *  the House margin distribution off its 0.0%-at-40+-points floor,
+           *  so B and C are the remaining, unmeasured levers named there. */
+          generalLoserReturns?: boolean;
+          /** hf7y/american-cycle#105 lever C: contesting a House general gives
+           *  every non-winning nominee, not only the winner, a shot at
+           *  `capture()` -- reusing it unchanged, only who may call it
+           *  changes. Off by default, and inert unless `captureEnabled` is
+           *  also on (there is nothing to capture with the mechanic off). */
+          contestCapture?: boolean };
 }
 
 export interface PlayerState {
@@ -1277,9 +1291,16 @@ export class Game {
 
       const won = nominees.find((d) => d.player === out.event!.winner)!;
       results.push({ ev: out.event, won });
-      for (const d of nominees) if (d.player !== out.event.winner) this.discardCard(d);
+      const losers = nominees.filter((d) => d.player !== out.event!.winner);
+      for (const d of losers) {
+        if (office === 'representative' && this.cfg.game.generalLoserReturns) this.returnToHand(d);
+        else this.discardCard(d);
+      }
       this.seat(office as Office, state, slot, won);
-      if (office === 'representative' && this.cfg.game.captureEnabled !== false) this.capture(won, state, slot);
+      if (office === 'representative' && this.cfg.game.captureEnabled !== false) {
+        this.capture(won, state, slot);
+        if (this.cfg.game.contestCapture) for (const d of losers) this.capture(d, state, slot);
+      }
     }
 
     this.pushLean(results);
@@ -1322,6 +1343,24 @@ export class Game {
       presidentialWinner,
       shock: this.shockPips,
     };
+  }
+
+  /** #161: previews `buildModifiers` pre-declaration, at general-round rates
+   *  since a primary might not even fire yet. */
+  previewModifiers(player: number, card: CandidateCard, office: Office, state: string, slot?: number,
+                    district?: DistrictCard, districts?: DistrictCard[]): Modifier[] {
+    const ctx = this.raceContext(office, state, slot);
+    const seat = this.seatFor(office, state, slot);
+    const d: Declaration = {
+      player, card, office, state, slot, district, districts,
+      incumbent: !!seat && seat.holder?.cardId === card.id,
+    };
+    this.readCounters(d);
+    this.readPosition(d);
+    const held = this.seats.find((st) => st.holder?.cardId === card.id
+      && !(st.office === office && st.state === state && st.slot === slot));
+    d.heldOffice = held?.office;
+    return buildModifiers(d, ctx, 'general', this.cfg.resolution, this.cfg.national, this.cfg.primaryGeneral);
   }
 
   /** Nomination is a national primary, so only two cards reach the general
