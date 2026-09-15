@@ -14,6 +14,10 @@
         "evangelical",
         "rural"
       ],
+      "identityWeights": {
+        "evangelical": 2,
+        "rural": 1
+      },
       "belief": "Born-again peanut farmer; runs as an outsider",
       "era": 1976,
       "effects": [],
@@ -36,6 +40,9 @@
       "identities": [
         "union"
       ],
+      "identityWeights": {
+        "union": 1
+      },
       "belief": "Labor liberal",
       "era": 1976,
       "effects": [],
@@ -55,6 +62,9 @@
       "identities": [
         "union"
       ],
+      "identityWeights": {
+        "union": 2
+      },
       "belief": "The Happy Warrior",
       "era": 1976,
       "effects": [],
@@ -74,6 +84,9 @@
       "identities": [
         "union"
       ],
+      "identityWeights": {
+        "union": 2
+      },
       "belief": "Hawk abroad, liberal at home",
       "era": 1976,
       "effects": [],
@@ -93,6 +106,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Western conservationist",
       "era": 1976,
       "effects": [],
@@ -113,6 +129,9 @@
         "rural",
         "evangelical"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Segregation then populism",
       "era": 1976,
       "effects": [
@@ -139,6 +158,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Ran the intelligence hearings",
       "era": 1976,
       "effects": [],
@@ -159,6 +181,9 @@
         "rural",
         "farm"
       ],
+      "identityWeights": {
+        "farm": 2
+      },
       "belief": "Wrote two amendments",
       "era": 1976,
       "effects": [],
@@ -181,6 +206,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 1
+      },
       "belief": "Clean air and water",
       "era": 1976,
       "effects": [],
@@ -200,6 +228,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Master of the rules",
       "era": 1976,
       "effects": [],
@@ -219,6 +250,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 2
+      },
       "belief": "National health insurance",
       "era": 1976,
       "effects": [
@@ -246,6 +280,11 @@
         "urban",
         "union"
       ],
+      "identityWeights": {
+        "catholic": 2,
+        "urban": 2,
+        "union": 1
+      },
       "belief": "All politics is local",
       "era": 1976,
       "effects": [],
@@ -295,6 +334,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 1
+      },
       "belief": "Social scientist in the Senate",
       "era": 1976,
       "effects": [],
@@ -314,6 +356,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 2
+      },
       "belief": "Era of limits",
       "era": 1976,
       "effects": [],
@@ -333,6 +378,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Tobacco and coal",
       "era": 1976,
       "effects": [],
@@ -352,6 +400,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Country lawyer",
       "era": 1976,
       "effects": [],
@@ -371,6 +422,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Defense conservative",
       "era": 1976,
       "effects": [],
@@ -390,6 +444,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Armed Services chairman",
       "era": 1976,
       "effects": [],
@@ -410,6 +467,9 @@
         "rural",
         "farm"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Plantation conservatism",
       "era": 1976,
       "effects": [
@@ -467,6 +527,9 @@
       "identities": [
         "jewish"
       ],
+      "identityWeights": {
+        "jewish": 1
+      },
       "belief": "Chicago convention scold",
       "era": 1976,
       "effects": [],
@@ -487,6 +550,9 @@
         "black",
         "urban"
       ],
+      "identityWeights": {
+        "black": 1
+      },
       "belief": "My faith in the Constitution is whole",
       "era": 1976,
       "effects": [],
@@ -511,6 +577,9 @@
         "urban",
         "evangelical"
       ],
+      "identityWeights": {
+        "black": 1
+      },
       "belief": "From the movement to the House",
       "era": 1976,
       "effects": [],
@@ -537,6 +606,9 @@
         "black",
         "urban"
       ],
+      "identityWeights": {
+        "black": 2
+      },
       "belief": "Antiwar left",
       "era": 1976,
       "effects": [
@@ -564,6 +636,9 @@
         "black",
         "urban"
       ],
+      "identityWeights": {
+        "black": 2
+      },
       "belief": "Unbought and unbossed",
       "era": 1976,
       "effects": [],
@@ -587,6 +662,10 @@
         "catholic",
         "urban"
       ],
+      "identityWeights": {
+        "catholic": 1,
+        "urban": 1
+      },
       "belief": "Chaired the impeachment inquiry",
       "era": 1976,
       "effects": [],
@@ -610,6 +689,10 @@
         "catholic",
         "urban"
       ],
+      "identityWeights": {
+        "catholic": 2,
+        "urban": 2
+      },
       "belief": "Dropped from a ticket",
       "era": 1976,
       "effects": [],
@@ -645,6 +728,9 @@
         "catholic",
         "rural"
       ],
+      "identityWeights": {
+        "catholic": 1
+      },
       "belief": "Prosecutor turned senator",
       "era": 1976,
       "effects": [],
@@ -667,6 +753,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 1
+      },
       "belief": "Rode the train home",
       "era": 1976,
       "effects": [],
@@ -687,6 +776,10 @@
         "farm",
         "rural"
       ],
+      "identityWeights": {
+        "farm": 1,
+        "rural": 1
+      },
       "belief": "Walked the state",
       "era": 1976,
       "effects": [],
@@ -710,6 +803,10 @@
         "farm",
         "rural"
       ],
+      "identityWeights": {
+        "farm": 1,
+        "rural": 1
+      },
       "belief": "Liberal in a farm state",
       "era": 1976,
       "effects": [],
@@ -744,6 +841,9 @@
       "identities": [
         "farm"
       ],
+      "identityWeights": {
+        "farm": 1
+      },
       "belief": "The Golden Fleece Award",
       "era": 1976,
       "effects": [],
@@ -782,6 +882,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Walkin' Lawton",
       "era": 1976,
       "effects": [],
@@ -813,6 +916,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 1
+      },
       "belief": "A time for choosing",
       "era": 1976,
       "effects": [
@@ -837,6 +943,9 @@
         "rural",
         "farm"
       ],
+      "identityWeights": {
+        "farm": 1
+      },
       "belief": "Prairie conservative",
       "era": 1976,
       "effects": [],
@@ -896,6 +1005,9 @@
         "jewish",
         "urban"
       ],
+      "identityWeights": {
+        "jewish": 2
+      },
       "belief": "Liberal Republican",
       "era": 1976,
       "effects": [],
@@ -919,6 +1031,9 @@
         "black",
         "urban"
       ],
+      "identityWeights": {
+        "black": 2
+      },
       "belief": "First elected since Reconstruction",
       "era": 1976,
       "effects": [],
@@ -941,6 +1056,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Extremism in defense of liberty",
       "era": 1976,
       "effects": [
@@ -977,6 +1095,9 @@
         "rural",
         "evangelical"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Switched parties and stayed",
       "era": 1976,
       "effects": [
@@ -1004,6 +1125,9 @@
         "evangelical",
         "rural"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "Senator No",
       "era": 1976,
       "effects": [
@@ -1078,6 +1202,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 1
+      },
       "belief": "Antiwar Republican",
       "era": 1976,
       "effects": [],
@@ -1109,6 +1236,9 @@
       "identities": [
         "urban"
       ],
+      "identityWeights": {
+        "urban": 1
+      },
       "belief": "Liberal on civil rights",
       "era": 1976,
       "effects": [],
@@ -1129,6 +1259,9 @@
         "catholic",
         "hispanic"
       ],
+      "identityWeights": {
+        "catholic": 1
+      },
       "belief": "Budget hawk",
       "era": 1976,
       "effects": [],
@@ -1151,6 +1284,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 2
+      },
       "belief": "Reagan's best friend",
       "era": 1976,
       "effects": [],
@@ -1170,6 +1306,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 2
+      },
       "belief": "Elected on the Conservative line",
       "era": 1976,
       "effects": [
@@ -1193,6 +1332,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "Ordained priest",
       "era": 1976,
       "effects": [],
@@ -1280,6 +1422,9 @@
         "farm",
         "rural"
       ],
+      "identityWeights": {
+        "farm": 2
+      },
       "belief": "Wheat and the farm bill",
       "era": 1976,
       "effects": [],
@@ -1302,6 +1447,9 @@
       "identities": [
         "urban"
       ],
+      "identityWeights": {
+        "urban": 1
+      },
       "belief": "Civil rights Republican",
       "era": 1976,
       "effects": [],
@@ -1321,6 +1469,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Education and the environment",
       "era": 1976,
       "effects": [],
@@ -2200,6 +2351,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Left the party and held the seat",
       "era": 1976,
       "effects": [],
@@ -2219,6 +2373,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 2
+      },
       "belief": "Ran outside both parties",
       "era": 1976,
       "effects": [
