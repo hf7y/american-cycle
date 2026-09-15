@@ -310,7 +310,8 @@
       "identities": [],
       "belief": "The astronaut",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -322,7 +323,8 @@
       "identities": [],
       "belief": "Conservative on money",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -515,7 +517,8 @@
       "identities": [],
       "belief": "Reform liberal",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -558,7 +561,8 @@
       "effects": [],
       "provenance": {
         "black": {
-          "source": "hand-assigned"
+          "source": "wikidata",
+          "vintage": "2026-09-08"
         },
         "urban": {
           "source": "hand-assigned"
@@ -585,7 +589,8 @@
       "effects": [],
       "provenance": {
         "black": {
-          "source": "hand-assigned"
+          "source": "wikidata",
+          "vintage": "2026-09-08"
         },
         "urban": {
           "source": "hand-assigned"
@@ -644,7 +649,8 @@
       "effects": [],
       "provenance": {
         "black": {
-          "source": "hand-assigned"
+          "source": "wikidata",
+          "vintage": "2026-09-08"
         },
         "urban": {
           "source": "hand-assigned"
@@ -715,7 +721,8 @@
       "identities": [],
       "belief": "New generation of Democrats",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -829,7 +836,8 @@
       "identities": [],
       "belief": "Party organizer",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -962,7 +970,8 @@
       "identities": [],
       "belief": "Eastern establishment",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -974,7 +983,8 @@
       "identities": [],
       "belief": "What did the president know",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -986,7 +996,8 @@
       "identities": [],
       "belief": "Corporate moderate",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -1076,7 +1087,8 @@
       "identities": [],
       "belief": "Built the Texas GOP",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -1148,7 +1160,8 @@
       "identities": [],
       "belief": "Mayor of Indianapolis",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -1172,7 +1185,8 @@
       "identities": [],
       "belief": "Rebuilt the party",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -1184,7 +1198,8 @@
       "identities": [],
       "belief": "Pro-choice Republican",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -1218,7 +1233,8 @@
       "identities": [],
       "belief": "Watergate committee maverick",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -1367,7 +1383,8 @@
       "identities": [],
       "belief": "Semanticist college president",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -1379,7 +1396,8 @@
       "identities": [],
       "belief": "Resigned rather than fire Cox",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -1391,7 +1409,8 @@
       "identities": [],
       "belief": "Half of Kemp-Roth",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -1403,7 +1422,8 @@
       "identities": [],
       "belief": "Alaska's appropriator",
       "era": 1976,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
