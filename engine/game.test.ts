@@ -763,3 +763,36 @@ test('#84: strain scaling falls back to the flat pips when neither side has a me
   assert.equal(g.leanMap.TX, 6, 'no districts in play and an untagged senator both read as "no position" -- undefined strain must not zero the penalty out');
   assert.equal(g.leanMap.OH, 6, 'the fallback applies to both sides of the backfire alike');
 });
+
+// #84: the positional shock should be selective -- it lands on whoever sits
+// near the drawn epicenter, not on every incumbent the way the cheap shock
+// (scaled by power alone) does.
+test('#84: a positional shock year hits fewer incumbents than a cheap shock year', () => {
+  const base = loadConfig('tuned.json');
+  const alwaysShock = { ...base.economy, shockOnRollAtMost: 6, shockPips: 6 };
+
+  const shockCoverage = (positional: boolean, seed: number) => {
+    const cfg: Config = { ...base, economy: { ...alwaysShock, shockPositional: positional } };
+    const rng = new RNG(seed);
+    const agents: Agent[] = ['Greedy', 'Lookahead', 'SenateFlood', 'HeterodoxSpecialist'].map((n) => new AGENTS[n](cfg, rng));
+    const g = new Game(agents, structuredClone(CARDS), cfg, seed);
+    for (let i = 0; i < 12; i++) g.tick();
+    let incumbentSides = 0, shocked = 0;
+    for (const e of g.events) {
+      if (e.round !== 'general') continue;
+      for (const s of e.sides) {
+        if (!s.modifiers.some((m) => m.source === 'incumbency')) continue;
+        incumbentSides++;
+        if (s.modifiers.some((m) => m.source === 'shock')) shocked++;
+      }
+    }
+    return { incumbentSides, shocked };
+  };
+
+  const cheap = shockCoverage(false, 42);
+  const positional = shockCoverage(true, 42);
+  assert.ok(cheap.incumbentSides > 20, 'a real sample of incumbent sides over 12 years, not a fluke');
+  assert.equal(cheap.shocked, cheap.incumbentSides, 'the cheap shock, scaled by power alone, hits every incumbent');
+  assert.ok(positional.shocked < positional.incumbentSides,
+    'the positional shock, scaled by tag-space nearness to one drawn epicenter, spares incumbents far from it');
+});

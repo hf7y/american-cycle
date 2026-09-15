@@ -107,8 +107,13 @@ export interface RaceContext {
   /** set once the presidential general has resolved, for down-ballot coattails */
   presidentialWinner?: Party;
   /** v0.2 item 9: pips of exogenous shock this year, 0 in a quiet one. Falls
-   *  on incumbents, scaled by `Declaration.power`. */
+   *  on incumbents, scaled by `Declaration.power` (the cheap version) or
+   *  `Declaration.shockExposure` (hf7y/american-cycle#84's positional
+   *  version), per `shockPositional`. */
   shock?: number;
+  /** #84: which of `Declaration.power` / `Declaration.shockExposure` the
+   *  shock line above should read. Mirrors `EconomyConfig.shockPositional`. */
+  shockPositional?: boolean;
 }
 
 export interface Declaration {
@@ -149,6 +154,10 @@ export interface Declaration {
   /** v0.2 item 9: the player's share of held seats over its fair share, so
    *  1 is an average faction. The shock is proportional to power held. */
   power?: number;
+  /** #84: nearness in [0,1] between this card's tags and the shock epicenter
+   *  drawn this cycle (1 = exact match, 0 = disjoint or either side untagged).
+   *  Undefined in a quiet cycle, or under the cheap (non-positional) shock. */
+  shockExposure?: number;
   /** Set by `game.ts`'s `runPrimaries` when this card won its primary by
    *  fewer than `PrimaryGeneralConfig.bruisingPrimaryMargin` pips (#95). Read
    *  once, in the general round only -- a primary loser never reaches here. */
@@ -296,11 +305,13 @@ export function buildModifiers(
       m.push({ source: `off-position votes \u00d7${d.offDistrict}`, pips: pg.offDistrictPips * d.offDistrict });
     }
 
-    // v0.2 item 9: the cheap shock. It falls on the people in office and it
-    // falls hardest on whoever holds most of them, which is the only brake in
-    // the design that reads a player's total position rather than one race.
+    // v0.2 item 9 (cheap) / #84 (positional): the shock falls on the people
+    // in office. The cheap reading falls hardest on whoever holds most of
+    // them; the positional reading falls hardest on whoever sits nearest the
+    // epicenter drawn this cycle, regardless of how many seats that is.
     if (ctx.shock && d.incumbent) {
-      const pips = -Math.round(ctx.shock * (d.power ?? 1));
+      const weight = ctx.shockPositional ? (d.shockExposure ?? 0) : (d.power ?? 1);
+      const pips = -Math.round(ctx.shock * weight);
       if (pips) m.push({ source: 'shock', pips });
     }
 
