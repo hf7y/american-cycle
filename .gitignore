@@ -4,3 +4,4 @@ reports/raw/
 __pycache__/
 .claude/trash/
 /site/
+.claude/worktrees/
