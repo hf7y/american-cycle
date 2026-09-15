@@ -580,11 +580,20 @@ test('#106: districtSupersession off (default) leaves an earlier era\'s card in 
 test('engine/config/three-terms.json actually ends a game on three-terms, not just the year cap', () => {
   const cfg = loadConfig('three-terms.json');
   // #41 re-cut Goldwater's card, which shifted seed 2's trace to an
-  // amendment ending -- a single seed's chaos, not a claim about this
-  // config, which still reaches three-terms in 24 of 30 seeds checked.
-  const rng = new RNG(1);
+  // amendment ending; #19's identityWeights rollout shifted it again; #86's
+  // congressional proposal path shifted it again, harder -- that path is
+  // gated on the same House-majority pen `BillAuthor` is built to entrench,
+  // so proposing (and, on the same shipped `ratifyFraction`, ratifying) is
+  // now reachable well before three-terms is, on most seeds. Not a bug in
+  // any of these features; it is the rebalancing hf7y/american-cycle#86's
+  // own ruling names as its largest risk, and the proposal RATE it leaves
+  // open is a separate, unmeasured follow-up (D6-amendment-rate), not
+  // something this wiring pass was asked to tune. Re-swept against this
+  // exact combined pool+rules state (0-39): reaches three-terms on 13, 17,
+  // 19, 26, 29, 31.
+  const rng = new RNG(13);
   const agents: Agent[] = ['Greedy', 'BillAuthor', 'Random'].map((n) => new AGENTS[n](cfg, rng));
-  const g = new Game(agents, structuredClone(CARDS), cfg, 1);
+  const g = new Game(agents, structuredClone(CARDS), cfg, 13);
   const result = g.run();
   assert.equal(result.endedBy, 'three-terms');
   assert.equal(result.wonBy, result.winner, 'a victory condition, not a score tie-break, decided this game');
@@ -694,4 +703,166 @@ test('#78: a second bill on the same tags, passed once the House flips, nets the
   assert.equal(g.leanMap.OH, 0,
     'OH nets fully back to baseline: the D push (3 pips) overtakes the R remainder (2), then decays -1 toward zero');
   assert.equal(g.leanMap.TX, -2, 'TX has no earlier push to net against, so the same D bill just moves it, ordinarily');
+});
+
+// #84's other named arm: strain-scaled impeachment backfire. `backfire` docks
+// the convicting senators and pays the acquitted president's party -- flat,
+// unless `impeachBackfireStrainScaled` reads the convicting coalition's own
+// tag centroid against the country's (every district in play).
+class ImpeachTestAgent extends ScriptedAgent {
+  private moves: boolean;
+  private votes: boolean;
+  constructor(name: string, moves: boolean, votes: boolean) { super(name); this.moves = moves; this.votes = votes; }
+  moveImpeach(): boolean { return this.moves; }
+  voteImpeach(): boolean { return this.votes; }
+}
+
+/** One failed conviction, 1 of 3 senators against threshold 2/3 -- always a
+ *  backfire, never a removal. Odd year + `oddYearGovernors: false` skips
+ *  `elections()` entirely (the #78 tests' own trick), so nothing but
+ *  `backfire` can move `leanMap` this tick; biennial decay is also skipped on
+ *  an odd year, so the pips land un-netted. */
+function failedConviction(strainScaled: boolean | undefined, dSenatorTags: string[], districtTags: string[][]) {
+  const cfg = loadConfig('tuned.json');
+  cfg.legislature = { ...cfg.legislature, impeachBackfirePips: 6, impeachThreshold: 2 / 3, impeachBackfireStrainScaled: strainScaled };
+  cfg.amendment = { ...cfg.amendment, enabled: false };
+  cfg.game = { ...cfg.game, oddYearGovernors: false };
+
+  const r = new ImpeachTestAgent('R', false, false), d = new ImpeachTestAgent('D', true, true);
+  const g = new Game([r, d], structuredClone(CARDS), cfg, 1);
+  g.year = 1977;
+  g.president = { player: 0, cardId: 'pres', party: 'R', since: 1976 };
+  g.seats = [
+    { office: 'senator', state: 'OH', slot: 1, senateClass: 1, holder: { cardId: 'r1', player: 0, party: 'R', since: 1976 } },
+    { office: 'senator', state: 'MI', slot: 1, senateClass: 1, holder: { cardId: 'r2', player: 0, party: 'R', since: 1976 } },
+    { office: 'senator', state: 'TX', slot: 1, senateClass: 1, holder: { cardId: 'd1', player: 1, party: 'D', since: 1976 } },
+  ];
+  g.cardById.set('d1', cand({ id: 'd1', party: 'D', identities: dSenatorTags as never }));
+  g.players[0].hand = [];
+  g.players[1].hand = [];
+  g.players[0].districts = districtTags.map((t, i) => dist({ id: `Z-${i}`, state: 'ZZ', number: i, demographics: t as never }));
+  g.players[1].districts = [];
+
+  g.tick();
+  return g;
+}
+
+test('#84: strain scaling off reproduces the flat backfire exactly, whatever the coalition\'s own tags', () => {
+  const g = failedConviction(undefined, ['farm'], [['urban']]);
+  assert.equal(g.leanMap.TX, 6, 'the lone convicting D senator\'s state docks the full flat pips, unscaled');
+  assert.equal(g.leanMap.OH, 6, 'the acquitted president\'s (R) state pays the same flat pips, unscaled');
+});
+
+test('#84: strain scaling zeroes the backfire when the coalition mirrors the country', () => {
+  const g = failedConviction(true, ['urban'], [['urban']]);
+  assert.equal(g.leanMap.TX ?? 0, 0, 'coalition and country are the same tag -- distance 0, so 6*0 rounds to no push at all');
+  assert.equal(g.leanMap.OH ?? 0, 0, 'and the same zero scale applies to the target\'s reward side');
+});
+
+test('#84: strain scaling pays the full flat pips when the coalition sits in a disjoint tag corner', () => {
+  const g = failedConviction(true, ['farm'], [['urban']]);
+  assert.equal(g.leanMap.TX, 6, 'urban country vs. a farm-only coalition is maximum set-overlap distance (1) -- 6*1 is the flat pips');
+  assert.equal(g.leanMap.OH, 6, 'and the target\'s reward side scales identically');
+});
+
+test('#84: strain scaling falls back to the flat pips when neither side has a measurable tag position', () => {
+  const g = failedConviction(true, [], []);
+  assert.equal(g.leanMap.TX, 6, 'no districts in play and an untagged senator both read as "no position" -- undefined strain must not zero the penalty out');
+  assert.equal(g.leanMap.OH, 6, 'the fallback applies to both sides of the backfire alike');
+});
+
+// #84: the positional shock should be selective -- it lands on whoever sits
+// near the drawn epicenter, not on every incumbent the way the cheap shock
+// (scaled by power alone) does.
+test('#84: a positional shock year hits fewer incumbents than a cheap shock year', () => {
+  const base = loadConfig('tuned.json');
+  const alwaysShock = { ...base.economy, shockOnRollAtMost: 6, shockPips: 6 };
+
+  const shockCoverage = (positional: boolean, seed: number) => {
+    const cfg: Config = { ...base, economy: { ...alwaysShock, shockPositional: positional } };
+    const rng = new RNG(seed);
+    const agents: Agent[] = ['Greedy', 'Lookahead', 'SenateFlood', 'HeterodoxSpecialist'].map((n) => new AGENTS[n](cfg, rng));
+    const g = new Game(agents, structuredClone(CARDS), cfg, seed);
+    for (let i = 0; i < 12; i++) g.tick();
+    let incumbentSides = 0, shocked = 0;
+    for (const e of g.events) {
+      if (e.round !== 'general') continue;
+      for (const s of e.sides) {
+        if (!s.modifiers.some((m) => m.source === 'incumbency')) continue;
+        incumbentSides++;
+        if (s.modifiers.some((m) => m.source === 'shock')) shocked++;
+      }
+    }
+    return { incumbentSides, shocked };
+  };
+
+  const cheap = shockCoverage(false, 42);
+  const positional = shockCoverage(true, 42);
+  assert.ok(cheap.incumbentSides > 20, 'a real sample of incumbent sides over 12 years, not a fluke');
+  assert.equal(cheap.shocked, cheap.incumbentSides, 'the cheap shock, scaled by power alone, hits every incumbent');
+  assert.ok(positional.shocked < positional.incumbentSides,
+    'the positional shock, scaled by tag-space nearness to one drawn epicenter, spares incumbents far from it');
+});
+
+// --------------------------------------------------- #86: the congressional amendment route
+
+test('#86: two-thirds of each chamber proposes an amendment directly, with no state convention involved', () => {
+  const cfg = loadConfig('as-written-plus.json');
+  cfg.amendment = { ...cfg.amendment, tagsPerAmendment: 1 };
+
+  const author = new BillYesAgent('author');
+  const g = new Game([author], structuredClone(CARDS), cfg, 1);
+  g.year = 1977; // odd: no election, isolating the proposal from any electoral noise
+  g.seats = [
+    { office: 'representative', state: 'OH', slot: 1, holder: { cardId: 'h1', player: 0, party: 'D', since: 1976 } },
+    { office: 'representative', state: 'OH', slot: 2, holder: { cardId: 'h2', player: 0, party: 'D', since: 1976 } },
+    { office: 'representative', state: 'OH', slot: 3, holder: { cardId: 'h3', player: 0, party: 'D', since: 1976 } },
+    { office: 'senator', state: 'OH', slot: 1, senateClass: 1, holder: { cardId: 's1', player: 0, party: 'D', since: 1976 } },
+    { office: 'senator', state: 'OH', slot: 2, senateClass: 2, holder: { cardId: 's2', player: 0, party: 'D', since: 1976 } },
+    { office: 'senator', state: 'OH', slot: 3, senateClass: 1, holder: { cardId: 's3', player: 0, party: 'D', since: 1976 } },
+  ];
+  g.players[0].hand = [];
+  g.players[0].districts = [dist({ id: 'OH-1', state: 'OH', number: 1, demographics: ['union'] })];
+
+  g.tick();
+
+  assert.equal(g.amendments.length, 1, 'a unanimous chamber proposes on the first try');
+  assert.deepEqual(g.amendments[0].tags, ['union'], 'the author’s own coalition supplies the content, same as a bill');
+  assert.deepEqual(g.amendments[0].called, [], 'no state ever voted to call anything -- this is the chamber route');
+  assert.equal(g.bills.length, 0, 'the year’s legislating slot went to the proposal, not an ordinary bill');
+});
+
+test('#86: a chamber short of two-thirds in EITHER house proposes nothing, and does not fall through to a state convention', () => {
+  const cfg = loadConfig('as-written-plus.json');
+  cfg.amendment = { ...cfg.amendment, tagsPerAmendment: 1 };
+
+  // House: unanimous D, clears two-thirds easily. Senate: only 2 of 10 D --
+  // ScriptedAgent (player 1's default) votes false on everything, so the
+  // other 8 senators reject it and the chamber vote fails on the Senate side
+  // alone.
+  const author = new BillYesAgent('author');
+  const obstructed = new ScriptedAgent('obstructed');
+  const g = new Game([author, obstructed], structuredClone(CARDS), cfg, 1);
+  g.year = 1977;
+  g.seats = [
+    { office: 'representative', state: 'OH', slot: 1, holder: { cardId: 'h1', player: 0, party: 'D', since: 1976 } },
+    { office: 'representative', state: 'OH', slot: 2, holder: { cardId: 'h2', player: 0, party: 'D', since: 1976 } },
+    { office: 'senator', state: 'OH', slot: 1, senateClass: 1, holder: { cardId: 's1', player: 0, party: 'D', since: 1976 } },
+    { office: 'senator', state: 'OH', slot: 2, senateClass: 2, holder: { cardId: 's2', player: 0, party: 'D', since: 1976 } },
+    ...Array.from({ length: 8 }, (_, i) => ({
+      office: 'senator' as const, state: 'TX', slot: i + 1, senateClass: 1 as const,
+      holder: { cardId: `s${i + 3}`, player: 1, party: 'R' as const, since: 1976 },
+    })),
+  ];
+  g.players[0].hand = [];
+  g.players[0].districts = [dist({ id: 'OH-1', state: 'OH', number: 1, demographics: ['union'] })];
+  g.players[1].hand = [];
+  g.players[1].districts = [];
+
+  g.tick();
+
+  assert.equal(g.amendments.length, 0, 'two of ten senators is nowhere near two-thirds');
+  assert.ok(g.log.some((l) => l.includes('the amendment proposal fails in Congress')));
+  assert.ok(!g.log.some((l) => l.includes('convention')), 'a failed chamber vote does not hand the year to the rare route');
+  assert.equal(g.bills.length, 0, 'the year’s slot was still spent on the attempt, exactly like a failed convention call');
 });

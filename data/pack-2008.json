@@ -14,12 +14,16 @@
         "black",
         "urban"
       ],
+      "identityWeights": {
+        "black": 2
+      },
       "belief": "Hope and change",
       "era": 2008,
       "effects": [],
       "provenance": {
         "black": {
-          "source": "hand-assigned"
+          "source": "wikidata",
+          "vintage": "2026-09-08"
         },
         "urban": {
           "source": "hand-assigned"
@@ -36,6 +40,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 1
+      },
       "belief": "Ready on day one",
       "era": 2008,
       "effects": [],
@@ -55,6 +62,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Two Americas",
       "era": 2008,
       "effects": [],
@@ -74,6 +84,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 2
+      },
       "belief": "Foreign relations chairman",
       "era": 2008,
       "effects": [],
@@ -93,6 +106,9 @@
       "identities": [
         "hispanic"
       ],
+      "identityWeights": {
+        "hispanic": 2
+      },
       "belief": "Governor and diplomat",
       "era": 2008,
       "effects": [],
@@ -112,6 +128,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 2
+      },
       "belief": "Banking chairman",
       "era": 2008,
       "effects": [],
@@ -132,6 +151,10 @@
         "catholic",
         "urban"
       ],
+      "identityWeights": {
+        "catholic": 2,
+        "urban": 1
+      },
       "belief": "First woman Speaker",
       "era": 2008,
       "effects": [],
@@ -155,6 +178,9 @@
         "evangelical",
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Pro-life majority leader",
       "era": 2008,
       "effects": [],
@@ -177,6 +203,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Reagan's Navy Secretary",
       "era": 2008,
       "effects": [],
@@ -197,6 +226,9 @@
         "farm",
         "rural"
       ],
+      "identityWeights": {
+        "farm": 2
+      },
       "belief": "Flat-top farmer",
       "era": 2008,
       "effects": [],
@@ -219,6 +251,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 1
+      },
       "belief": "Prosecutor",
       "era": 2008,
       "effects": [],
@@ -238,6 +273,9 @@
       "identities": [
         "union"
       ],
+      "identityWeights": {
+        "union": 2
+      },
       "belief": "Against the trade deals",
       "era": 2008,
       "effects": [],
@@ -258,6 +296,10 @@
         "catholic",
         "union"
       ],
+      "identityWeights": {
+        "catholic": 2,
+        "union": 1
+      },
       "belief": "Pro-life Democrat",
       "era": 2008,
       "effects": [],
@@ -281,6 +323,10 @@
         "evangelical",
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2,
+        "evangelical": 1
+      },
       "belief": "Blue Dog quarterback",
       "era": 2008,
       "effects": [],
@@ -304,6 +350,9 @@
         "jewish",
         "urban"
       ],
+      "identityWeights": {
+        "jewish": 1
+      },
       "belief": "Recruited the Blue Dogs",
       "era": 2008,
       "effects": [],
@@ -326,6 +375,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 1
+      },
       "belief": "The majority leader",
       "era": 2008,
       "effects": [],
@@ -346,6 +398,9 @@
         "black",
         "urban"
       ],
+      "identityWeights": {
+        "black": 1
+      },
       "belief": "Ways and Means",
       "era": 2008,
       "effects": [],
@@ -369,6 +424,9 @@
         "jewish",
         "urban"
       ],
+      "identityWeights": {
+        "jewish": 1
+      },
       "belief": "Financial services",
       "era": 2008,
       "effects": [],
@@ -391,6 +449,9 @@
       "identities": [
         "jewish"
       ],
+      "identityWeights": {
+        "jewish": 1
+      },
       "belief": "The only no vote on the Patriot Act",
       "era": 2008,
       "effects": [],
@@ -410,6 +471,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 1
+      },
       "belief": "Prosecutor from the Iron Range",
       "era": 2008,
       "effects": [],
@@ -429,7 +493,8 @@
       "identities": [],
       "belief": "Governor who won rural Virginia",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -441,6 +506,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 1
+      },
       "belief": "Rode the wave",
       "era": 2008,
       "effects": [],
@@ -460,6 +528,9 @@
       "identities": [
         "jewish"
       ],
+      "identityWeights": {
+        "jewish": 1
+      },
       "belief": "Won by 312 votes",
       "era": 2008,
       "effects": [],
@@ -480,6 +551,10 @@
         "catholic",
         "hispanic"
       ],
+      "identityWeights": {
+        "catholic": 1,
+        "hispanic": 1
+      },
       "belief": "Missionary in Honduras",
       "era": 2008,
       "effects": [],
@@ -502,7 +577,8 @@
       "identities": [],
       "belief": "Maverick",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -515,6 +591,10 @@
         "evangelical",
         "rural"
       ],
+      "identityWeights": {
+        "evangelical": 2,
+        "rural": 2
+      },
       "belief": "Hockey mom",
       "era": 2008,
       "effects": [
@@ -541,6 +621,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "Turnaround artist",
       "era": 2008,
       "effects": [],
@@ -561,6 +644,9 @@
         "evangelical",
         "rural"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "Preacher governor",
       "era": 2008,
       "effects": [],
@@ -584,6 +670,10 @@
         "catholic",
         "urban"
       ],
+      "identityWeights": {
+        "catholic": 1,
+        "urban": 2
+      },
       "belief": "America's mayor",
       "era": 2008,
       "effects": [],
@@ -606,6 +696,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Actor and senator",
       "era": 2008,
       "effects": [],
@@ -629,7 +722,8 @@
         {
           "type": "extremist"
         }
-      ]
+      ],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -641,7 +735,8 @@
       "identities": [],
       "belief": "The minority leader",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -653,6 +748,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 1
+      },
       "belief": "Country club conservative",
       "era": 2008,
       "effects": [],
@@ -673,6 +771,9 @@
         "jewish",
         "suburban"
       ],
+      "identityWeights": {
+        "jewish": 1
+      },
       "belief": "Young Gun",
       "era": 2008,
       "effects": [],
@@ -695,6 +796,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "McCain's wingman",
       "era": 2008,
       "effects": [],
@@ -711,17 +815,11 @@
       "party": "R",
       "homeState": "ME",
       "homeStateBonus": 3,
-      "identities": [
-        "suburban"
-      ],
+      "identities": [],
       "belief": "The last split ticket",
       "era": 2008,
       "effects": [],
-      "provenance": {
-        "suburban": {
-          "source": "hand-assigned"
-        }
-      }
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -733,7 +831,8 @@
       "identities": [],
       "belief": "Voted for the stimulus in committee",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -746,6 +845,9 @@
         "jewish",
         "urban"
       ],
+      "identityWeights": {
+        "jewish": 1
+      },
       "belief": "Switched parties in 2009",
       "era": 2008,
       "effects": [],
@@ -768,6 +870,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Republican against the war",
       "era": 2008,
       "effects": [],
@@ -787,7 +892,8 @@
       "identities": [],
       "belief": "Nunn-Lugar",
       "era": 2008,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -799,6 +905,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "Ideological validator",
       "era": 2008,
       "effects": [
@@ -827,6 +936,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "Dr. No",
       "era": 2008,
       "effects": [
@@ -851,6 +963,9 @@
         "evangelical",
         "farm"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "Compassionate conservative",
       "era": 2008,
       "effects": [],
@@ -873,6 +988,9 @@
       "identities": [
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 1
+      },
       "belief": "Hugged the president",
       "era": 2008,
       "effects": [],
@@ -892,6 +1010,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 1
+      },
       "belief": "Rhodes scholar governor",
       "era": 2008,
       "effects": [],
@@ -912,6 +1033,10 @@
         "evangelical",
         "suburban"
       ],
+      "identityWeights": {
+        "suburban": 2,
+        "evangelical": 1
+      },
       "belief": "Sam's Club Republicans",
       "era": 2008,
       "effects": [],
@@ -934,6 +1059,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "The lobbyist governor",
       "era": 2008,
       "effects": [],
@@ -954,6 +1082,9 @@
         "jewish",
         "urban"
       ],
+      "identityWeights": {
+        "jewish": 1
+      },
       "belief": "Lost the recount",
       "era": 2008,
       "effects": [],
@@ -977,6 +1108,10 @@
         "catholic",
         "urban"
       ],
+      "identityWeights": {
+        "catholic": 1,
+        "urban": 2
+      },
       "belief": "Deficit hawk",
       "era": 2008,
       "effects": [],
@@ -1839,6 +1974,9 @@
       "identities": [
         "jewish"
       ],
+      "identityWeights": {
+        "jewish": 2
+      },
       "belief": "Lost the primary, won the general",
       "era": 2008,
       "effects": [],
@@ -1858,6 +1996,9 @@
       "identities": [
         "jewish"
       ],
+      "identityWeights": {
+        "jewish": 2
+      },
       "belief": "Caucuses with the Democrats",
       "era": 2008,
       "effects": [

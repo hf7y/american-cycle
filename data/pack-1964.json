@@ -13,6 +13,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "We shall overcome",
       "era": 1964,
       "effects": [],
@@ -32,6 +35,9 @@
       "identities": [
         "union"
       ],
+      "identityWeights": {
+        "union": 2
+      },
       "belief": "Out of the shadow of states' rights",
       "era": 1964,
       "effects": [],
@@ -51,6 +57,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 2
+      },
       "belief": "Carpetbagger who won",
       "era": 1964,
       "effects": [],
@@ -71,6 +80,10 @@
         "rural",
         "farm"
       ],
+      "identityWeights": {
+        "rural": 2,
+        "farm": 1
+      },
       "belief": "Led the southern bloc against the bill",
       "era": 1964,
       "effects": [],
@@ -93,6 +106,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 1
+      },
       "belief": "Ran the Senate quietly",
       "era": 1964,
       "effects": [],
@@ -112,6 +128,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "One of two votes against the Gulf of Tonkin",
       "era": 1964,
       "effects": [
@@ -154,6 +173,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Armed Services",
       "era": 1964,
       "effects": [],
@@ -192,6 +214,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 1
+      },
       "belief": "Not yet in revolt",
       "era": 1964,
       "effects": [],
@@ -223,6 +248,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Country lawyer against the bill",
       "era": 1964,
       "effects": [],
@@ -243,6 +271,9 @@
         "rural",
         "farm"
       ],
+      "identityWeights": {
+        "farm": 2
+      },
       "belief": "A southerner who signed nothing",
       "era": 1964,
       "effects": [],
@@ -266,6 +297,10 @@
         "catholic",
         "union"
       ],
+      "identityWeights": {
+        "catholic": 1,
+        "union": 2
+      },
       "belief": "The conscience of the Senate",
       "era": 1964,
       "effects": [],
@@ -288,6 +323,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Wounded in Dallas",
       "era": 1964,
       "effects": [],
@@ -308,6 +346,9 @@
         "rural",
         "evangelical"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Segregation now",
       "era": 1964,
       "effects": [
@@ -334,6 +375,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Fifty-six years in Congress",
       "era": 1964,
       "effects": [],
@@ -353,6 +397,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 1
+      },
       "belief": "Polish-American from a Yankee state",
       "era": 1964,
       "effects": [],
@@ -373,6 +420,9 @@
         "jewish",
         "urban"
       ],
+      "identityWeights": {
+        "jewish": 1
+      },
       "belief": "Governor, cabinet, Senate",
       "era": 1964,
       "effects": [],
@@ -396,6 +446,9 @@
         "rural",
         "farm"
       ],
+      "identityWeights": {
+        "farm": 2
+      },
       "belief": "Rewrote presidential succession",
       "era": 1964,
       "effects": [],
@@ -490,6 +543,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "Walked out of the convention",
       "era": 1964,
       "effects": [],
@@ -509,6 +565,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Delivered the Republican votes for the bill",
       "era": 1964,
       "effects": [],
@@ -528,6 +587,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Declaration of Conscience",
       "era": 1964,
       "effects": [],
@@ -548,6 +610,9 @@
         "jewish",
         "urban"
       ],
+      "identityWeights": {
+        "jewish": 2
+      },
       "belief": "Liberal Republican in full",
       "era": 1964,
       "effects": [],
@@ -582,6 +647,9 @@
       "identities": [
         "urban"
       ],
+      "identityWeights": {
+        "urban": 1
+      },
       "belief": "Civil rights Republican",
       "era": 1964,
       "effects": [],
@@ -614,6 +682,10 @@
         "farm",
         "rural"
       ],
+      "identityWeights": {
+        "farm": 2,
+        "rural": 1
+      },
       "belief": "Midwestern regular",
       "era": 1964,
       "effects": [],
@@ -637,6 +709,9 @@
         "rural",
         "farm"
       ],
+      "identityWeights": {
+        "farm": 1
+      },
       "belief": "Half of Mundt-Nixon",
       "era": 1964,
       "effects": [],
@@ -695,6 +770,9 @@
       "identities": [
         "urban"
       ],
+      "identityWeights": {
+        "urban": 1
+      },
       "belief": "Eastern moderate leadership",
       "era": 1964,
       "effects": [],
@@ -714,6 +792,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Elected by write-in, running against his own party's machine",
       "era": 1954,
       "effects": [],
@@ -734,6 +815,9 @@
         "rural",
         "evangelical"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Switched parties over the bill",
       "era": 1964,
       "succeeds": "strom-thurmond-1954",
@@ -761,6 +845,9 @@
       "identities": [
         "urban"
       ],
+      "identityWeights": {
+        "urban": 2
+      },
       "belief": "Fun City liberal",
       "era": 1964,
       "effects": [],

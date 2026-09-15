@@ -21,7 +21,7 @@
  */
 import type { RunObs, YearObs } from './observe.ts';
 import {
-  BILL_CORPUS_ABSENT, BILL_POSITION_ABSENT, COMPASS, dist, norm, type Position,
+  BILL_CORPUS_ABSENT, BILL_POSITION_ABSENT, COMPASS, dist, norm, scale, sub, zero, type Position,
 } from './position.ts';
 
 // ------------------------------------------------------------- preconditions
@@ -112,18 +112,97 @@ export function crossings(xs: number[], threshold: number): number {
   return n;
 }
 
-/** The country-position series of one run, as scalars along axis 0. At n>1
- *  axes this becomes signed projection onto the principal axis; it is the one
- *  place the suite assumes a 1-D reading and it is isolated here on purpose. */
-export const countrySeries = (run: RunObs): number[] =>
-  run.years.map((y) => (y.country ? y.country[0] : 0));
+/** First principal axis of a set of positions: the unit vector along which
+ *  the points vary most, found by power iteration on the mean-centred
+ *  covariance matrix. PCA's sign is arbitrary (v and -v are the same axis),
+ *  which a SIGNED series cannot tolerate -- so the axis is oriented to agree
+ *  with the run's own start-to-end displacement, giving "moved this way" the
+ *  same reading `regimeRuns`/`crossings` already expect from a 1-D series.
+ *  Degenerates gracefully: fewer than 2 points, or a point set with no
+ *  variance at all (covariance is the zero matrix), returns the zero vector
+ *  rather than an arbitrary direction. */
+export function principalAxis(points: Position[]): Position {
+  const dim = points[0]?.length ?? 0;
+  if (!dim || points.length < 2) return zero(Math.max(dim, 1));
+  const m = zero(dim);
+  points.forEach((p) => p.forEach((v, i) => { m[i] += v / points.length; }));
+  const centred = points.map((p) => sub(p, m));
+  const cov: number[][] = Array.from({ length: dim }, () => zero(dim));
+  for (const c of centred) {
+    for (let i = 0; i < dim; i++) for (let j = 0; j < dim; j++) cov[i][j] += (c[i] * c[j]) / centred.length;
+  }
+  let v = zero(dim); v[0] = 1;
+  for (let iter = 0; iter < 100; iter++) {
+    const next = zero(dim);
+    for (let i = 0; i < dim; i++) for (let j = 0; j < dim; j++) next[i] += cov[i][j] * v[j];
+    const n = norm(next);
+    if (n < 1e-12) return v; // no variance left to follow -- keep the last direction found
+    v = scale(next, 1 / n);
+  }
+  const disp = sub(points[points.length - 1], points[0]);
+  const d = v.reduce((s, x, i) => s + x * disp[i], 0);
+  return d < 0 ? scale(v, -1) : v;
+}
+
+/** Deadband for `regimeRuns`/`crossings`/the displaced-share check, as a
+ *  function of the compass in force. `REGIME_THRESHOLD` (0.25) was calibrated
+ *  in lean-counter units against a synthetic ±2 swing -- a 1/8 deadband:swing
+ *  ratio (C1, `controls.ts`). A `dim > 1` compass places positions on the tag
+ *  simplex, where displacement is typically hundredths to low tenths, not
+ *  lean counters, so the same NUMBER answers a differently-scaled question
+ *  (hf7y/american-cycle#92). This preserves the ratio instead of the number:
+ *  the tag-space swing is the distance between two maximally-separated
+ *  simplex points (two disjoint one-hot tag vectors), and the deadband is
+ *  1/8 of that. Validated by `syntheticControlSimplex` (controls.ts), the
+ *  tag-space C1. */
+export function regimeThresholdFor(dim: number): number {
+  if (dim <= 1) return REGIME_THRESHOLD;
+  const a = zero(dim); a[0] = 1;
+  const b = zero(dim); b[1] = 1;
+  return dist(a, b) * (REGIME_THRESHOLD / 2);
+}
+
+/** The country-position series of one run, as a signed scalar. Under a 1-D
+ *  compass (`LEAN_COMPASS`) this is axis 0, unchanged from before #92's
+ *  gating -- provably so, since that branch never calls `principalAxis`.
+ *
+ *  At `dim > 1` it is the signed projection onto the run's own principal
+ *  axis, taken AFTER subtracting the run's own starting position. Not
+ *  optional: `regimeRuns`/`crossings` classify displacement against a zero
+ *  that is supposed to mean "at rest" (`REGIME_THRESHOLD`'s own docstring),
+ *  and a raw tag-simplex position has no such zero -- the origin is not even
+ *  a point ON the simplex. Projecting the raw position instead of the
+ *  start-relative one put every synthetic case in `syntheticControlSimplex`
+ *  permanently "displaced" regardless of threshold, which is how that
+ *  control caught this. `countryDrift` already uses the same start-relative
+ *  convention; this keeps both readings of the same run agreeing on what
+ *  "baseline" means. */
+export const countrySeries = (run: RunObs): number[] => {
+  if (COMPASS.dim === 1) return run.years.map((y) => (y.country ? y.country[0] : 0));
+  const points = run.years.map((y) => y.country).filter((p): p is Position => !!p);
+  if (points.length < 2) return run.years.map(() => 0);
+  const axis = principalAxis(points);
+  const start = points[0];
+  return run.years.map((y) => (y.country ? sub(y.country, start).reduce((s, v, i) => s + v * axis[i], 0) : 0));
+};
 
 /** Displacement of the polity from its own baseline. NOT strain: strain is the
  *  distance between a SETTLEMENT and the country, and this build has no
  *  settlement object to be the other end of that measurement. Reported because
- *  it is the closest live quantity, and labelled so it is never read as strain. */
-export const countryDrift = (run: RunObs): number[] =>
-  run.years.map((y) => (y.country ? norm(y.country) : 0));
+ *  it is the closest live quantity, and labelled so it is never read as strain.
+ *
+ *  Under `LEAN_COMPASS` (dim 1) "baseline" is 0 by §10's own rule -- the board
+ *  tracks deviation from a state's normal, so a country position near the
+ *  origin already means "at rest" and `norm` is correct. `TAG_COMPASS`
+ *  positions have no rule-given zero (they are normalised weight vectors on
+ *  the simplex, and the origin is not a point on it), so "at rest" there
+ *  means the run's OWN starting position, and drift is distance from that. */
+export const countryDrift = (run: RunObs): number[] => {
+  if (COMPASS.dim === 1) return run.years.map((y) => (y.country ? norm(y.country) : 0));
+  const start = run.years.find((y) => y.country)?.country;
+  if (!start) return run.years.map(() => 0);
+  return run.years.map((y) => (y.country ? dist(y.country, start) : 0));
+};
 
 // ------------------------------------------------------------- power windows
 
@@ -185,6 +264,8 @@ export const CYCLE_YEARS_HIGH = 40;
 export const REGIME_THRESHOLD = 0.25;
 
 export function eraChecks(runs: RunObs[], maxYears: number): Check[] {
+  const threshold = regimeThresholdFor(COMPASS.dim);
+  const driftUnit = COMPASS.dim === 1 ? 'lean counters' : 'simplex distance';
   const series = runs.map(countrySeries);
   const drift = runs.map(countryDrift);
 
@@ -192,20 +273,20 @@ export function eraChecks(runs: RunObs[], maxYears: number): Check[] {
   const vr = series.map((s) => varianceRatio(s, 4)).filter((x) => Number.isFinite(x));
   const meanAbs = drift.map((d) => mean(d));
   const peak = drift.map((d) => Math.max(...d, 0));
-  const cross = runs.map((r, i) => crossings(series[i], REGIME_THRESHOLD) / Math.max(1, r.years.length) * 10);
+  const cross = runs.map((r, i) => crossings(series[i], threshold) / Math.max(1, r.years.length) * 10);
   // Share of years the polity sits outside the deadband, and the longest
   // unbroken stretch on one side. C1 established that the variance ratio
   // CANNOT carry this judgement -- a step-function settlement scores VR ~1,
   // indistinguishable from a random walk -- so persistence is read from run
   // length and VR is reported as description only.
-  const displaced = runs.map((r, i) => drift[i].filter((d) => d >= REGIME_THRESHOLD).length / Math.max(1, r.years.length));
-  const longestRun = runs.map((r, i) => Math.max(0, ...regimeRuns(series[i], REGIME_THRESHOLD)));
+  const displaced = runs.map((r, i) => drift[i].filter((d) => d >= threshold).length / Math.max(1, r.years.length));
+  const longestRun = runs.map((r, i) => Math.max(0, ...regimeRuns(series[i], threshold)));
   const formation: Check = {
     id: 'settlement-formation',
     question: 'Do settlements form at all, or does the country position random-walk with no persistent regime?',
     measures: {
-      'mean |country position|': measure(meanAbs, 'lean counters'),
-      'peak |country position|': measure(peak, 'lean counters'),
+      'mean |country position|': measure(meanAbs, driftUnit),
+      'peak |country position|': measure(peak, driftUnit),
       'years displaced beyond deadband': measure(displaced, 'share'),
       'longest unbroken run on one side': measure(longestRun, 'years'),
       'variance ratio at lag 4 (descriptive)': measure(vr, '1 = random walk'),
@@ -217,12 +298,12 @@ export function eraChecks(runs: RunObs[], maxYears: number): Check[] {
       + 'historical low). Short runs around a near-zero mean are a polity oscillating about its baseline, not a '
       + 'regime — and every downstream quadrant then measures nothing. Variance ratio is printed for '
       + 'description only: C1 showed a step-function settlement scores ~1, the same as a random walk, so it '
-      + 'cannot be the criterion.',
+      + `cannot be the criterion. Deadband ${threshold.toFixed(4)} ${driftUnit} (regimeThresholdFor, #92).`,
   };
 
   // 2 — regime duration
-  const runsAll = runs.flatMap((r, i) => regimeRuns(series[i], REGIME_THRESHOLD));
-  const longest = runs.map((r, i) => Math.max(0, ...regimeRuns(series[i], REGIME_THRESHOLD)));
+  const runsAll = runs.flatMap((r, i) => regimeRuns(series[i], threshold));
+  const longest = runs.map((r, i) => Math.max(0, ...regimeRuns(series[i], threshold)));
   const gameLen = runs.map((r) => r.years.length);
   const duration: Check = {
     id: 'regime-duration',

@@ -24,6 +24,7 @@ let G = null, gen = null, pending = null, S = {
 // ---- setup ------------------------------------------------------------------
 // Strength is measured, not guessed: win rate in the human seat against
 // Greedy + HouseFarm + Random, over 240 games each. Fair share is 25%.
+const BOARD_OPPONENT = 'Greedy'; // this repo's "ordinary player" proxy, vs itself: fairest 1v1 by construction
 const OPPONENT_BLURB = {
   Greedy:'Fair fight. Takes the best race on the board every time, with no plan beyond this cycle.',
   Lookahead:'Hardest. Values a seat by what it pays over its whole term — it wins about half of all games it plays.',
@@ -42,7 +43,7 @@ const OPPONENT_BLURB = {
   BillBlocker:'Strong. Floods the Senate like SenateFlood, but votes no on everything — denies the 60% cloture threshold outright.',
 };
 const SOLITAIRE_BLURB = {
-  Greedy:"Fair fight. You'll win about half of these, one-on-one.",
+  Greedy:"The board's recommended opponent. Fair fight — you'll win about half of these, one-on-one.",
   Lookahead:'Hardest 1v1 of all sixteen. Wins 79% of the time — this is not a first solitaire game.',
   Random:'Gentle 1v1. You should win about 73% of these.',
   HouseFarm:'Very gentle 1v1. You should win about 93% of these.',
@@ -83,7 +84,7 @@ function setup() {
   const s1Opts = ['fair', 'gentle', 'hard'].map((tier) => {
     const names = Object.keys(AGENTS).filter((k) => SOLITAIRE_TIER[k] === tier);
     if (!names.length) return '';
-    return `<optgroup label="${SOLITAIRE_TIER_LABEL[tier]}">${names.map((k) => `<option value="${k}">${k}</option>`).join('')}</optgroup>`;
+    return `<optgroup label="${SOLITAIRE_TIER_LABEL[tier]}">${names.map((k) => `<option value="${k}">${k}${k === BOARD_OPPONENT ? ' — the board (recommended)' : ''}</option>`).join('')}</optgroup>`;
   }).join('');
   const cfgs = Object.keys(CONFIGS).map((k) => `<option value="${k}"${k === 'as-written-plus' ? ' selected' : ''}>${k}</option>`).join('');
   modal(`
@@ -113,7 +114,7 @@ function setup() {
   // Measured default (findings/multiplayer-default-fitness.ts): an ordinary
   // player wins 37% of 4-player games here, above the 25% fair share -- this
   // table favors the human, not the reverse.
-  $('s1').value = 'Greedy'; $('s2').value = 'HouseFarm'; $('s3').value = 'Random';
+  $('s1').value = BOARD_OPPONENT; $('s2').value = 'HouseFarm'; $('s3').value = 'Random';
   const sync = () => {
     const soloOpponent = $('s1').value && !$('s2').value && !$('s3').value;
     $('b1').textContent = !$('s1').value
@@ -209,20 +210,26 @@ function racesInState(state) {
   return S.eligibleFor(S.sel).filter((r) => r.state === state && !taken.has(uiRaceKey(r)));
 }
 
+// The district fit for race `r`, shared by pickRace and the hover preview.
+function districtFitFor(r) {
+  const me = G.players[S.human];
+  const statewide = G.cfg.game.statewideFitSums && (r.office === 'senator' || r.office === 'governor')
+    ? G.players.flatMap((p) => p.districts).filter((d) => d.state === r.state)
+    : undefined;
+  const district = r.office === 'representative'
+    ? G.players.flatMap((p) => p.districts).find((d) => d.state === r.state && d.number === r.slot)
+    : statewide ? undefined : me.districts.find((d) => d.state === r.state);
+  return { district, districts: statewide };
+}
+
 function pickRace(state) {
   if (!S.sel) { ticker('Choose a candidate first.'); return; }
   const rs = racesInState(state);
   if (!rs.length) return;
   const card = S.sel;
   const choose = (r) => {
-    const me = G.players[S.human];
-    const statewide = G.cfg.game.statewideFitSums && (r.office === 'senator' || r.office === 'governor')
-      ? G.players.flatMap((p) => p.districts).filter((d) => d.state === r.state)
-      : undefined;
-    const district = r.office === 'representative'
-      ? G.players.flatMap((p) => p.districts).find((d) => d.state === r.state && d.number === r.slot)
-      : statewide ? undefined : me.districts.find((d) => d.state === r.state);
-    S.picks.push({ player:S.human, card, district, districts:statewide,
+    const { district, districts } = districtFitFor(r);
+    S.picks.push({ player:S.human, card, district, districts,
                    office:r.office, state:r.state, slot:r.slot });
     S.sel = null; closeModal(); render();
   };
@@ -234,6 +241,32 @@ function pickRace(state) {
     $('rr').appendChild(b);
   }
 }
+
+// #161 item 1: the withdrawal stack, one hover before a declaration.
+function showRacePreview(state, atEl) {
+  const rs = racesInState(state);
+  if (!rs.length) return;
+  const card = S.sel;
+  const sections = rs.map((r) => {
+    const { district, districts } = districtFitFor(r);
+    const mods = G.previewModifiers(S.human, card, r.office, r.state, r.slot, district, districts);
+    const total = mods.reduce((n, m) => n + m.pips, 0);
+    const rows = mods.map((m) =>
+      `<tr><td>${m.source}</td><td class="${m.pips>=0?'pos':'neg'}">${m.pips>=0?'+':''}${m.pips}</td></tr>`).join('');
+    const label = `${OFFICE_LABEL[r.office]}${r.slot && r.office==='representative' ? ' '+r.slot : ''}`;
+    return `<h4>${label}</h4><table class="stack">${rows || '<tr><td>no modifiers</td><td>0</td></tr>'}
+      <tr class="tot"><td>if it reaches the general</td><td>${total>=0?'+':''}${total}</td></tr></table>`;
+  });
+  const p = $('racePreview');
+  p.innerHTML = sections.join('<div style="height:6px"></div>');
+  p.classList.add('on');
+  const box = atEl.getBoundingClientRect();
+  const pw = p.offsetWidth || 220;
+  const left = Math.min(window.innerWidth - pw - 8, box.right + 8);
+  p.style.left = `${Math.max(8, left)}px`;
+  p.style.top = `${Math.max(8, box.top)}px`;
+}
+function hideRacePreview() { $('racePreview').classList.remove('on'); }
 
 // ---- withdrawal window ------------------------------------------------------
 function phaseWithdraw() {
@@ -308,6 +341,7 @@ function majorityOf(seats, office) {
 // ---- rendering --------------------------------------------------------------
 function render() {
   if (!G) return;
+  hideRacePreview();
   $('cYear').textContent = G.year;
   const e = G.economy;
   $('cEcon').textContent = e.level > 1 ? `+${e.level} boom` : e.level < -1 ? `${e.level} slump` : `${e.level>=0?'+':''}${e.level} flat`;
@@ -362,7 +396,11 @@ function drawMap() {
       }
       t.appendChild(row);
     }
-    if (openStates.has(code)) { t.classList.add('act'); t.onclick = () => pickRace(code); }
+    if (openStates.has(code)) {
+      t.classList.add('act'); t.onclick = () => pickRace(code);
+      t.onmouseenter = () => showRacePreview(code, t);
+      t.onmouseleave = hideRacePreview;
+    }
     if (declaredHere.has(code)) t.classList.add('race');
     t.title = `${code} — lean ${lean>0?'R+':lean<0?'D+':''}${Math.abs(lean)||'even'}`;
     m.appendChild(t);
@@ -502,4 +540,41 @@ function gameOver(deckOut) {
 function modal(html){ $('modalBody').innerHTML = html; $('modal').classList.add('on'); }
 function closeModal(){ $('modal').classList.remove('on'); }
 
+// ---- report loop --------------------------------------------------------
+function buildStamp() {
+  return ($('buildStamp')?.textContent || '').replace(/^build\s+/, '').split('·')[0].trim();
+}
+function wireReport() {
+  const send = $('repSend');
+  if (!send) return;
+  send.onclick = async () => {
+    const msg = $('repMsg'), status = $('repStatus');
+    const text = msg.value.trim();
+    if (!text) { status.textContent = 'Say something first.'; return; }
+    const kind = document.querySelector('input[name=repKind]:checked')?.value || 'idea';
+    send.disabled = true;
+    status.textContent = 'Sending…';
+    try {
+      const res = await fetch('/.netlify/functions/report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          kind, message: text,
+          honeypot: $('repWebsite') ? $('repWebsite').value : '',
+          seed: S.seed, cfgName: S.cfgName, startEra: S.startEra,
+          opponents: S.opponents, year: G ? G.year : null,
+          buildStamp: buildStamp(),
+        }),
+      });
+      if (res.ok) { status.textContent = 'Thanks, logged.'; msg.value = ''; }
+      else status.textContent = "Sent, but didn't get a clear confirmation back.";
+    } catch {
+      status.textContent = "Couldn't reach the server.";
+    } finally {
+      send.disabled = false;
+    }
+  };
+}
+
+wireReport();
 setup();

@@ -321,3 +321,28 @@ test('#24: an independent card reads no environment term -- there is no presiden
   assert.equal(mods.find((m) => m.source === 'extremist (primary)')?.pips, pg.extremistPrimary,
     'partySign is 0 for an independent, so the tide has no party to attach to');
 });
+
+// #84: the positional shock reads `Declaration.shockExposure`, not `.power`.
+test('#84: cheap shock (default) scales by power, ignoring shockExposure', () => {
+  const incumbent: Declaration = {
+    player: 0, card: cand({}), office: 'senator', state: 'OH', incumbent: true, power: 2, shockExposure: 0,
+  };
+  const mods = buildModifiers(incumbent, ctx({ shock: 3 }), 'general', res, nat, pg);
+  assert.equal(mods.find((m) => m.source === 'shock')?.pips, -6, 'unset shockPositional reads .power, same as before #84');
+});
+
+test('#84: positional shock scales by shockExposure, ignoring power', () => {
+  const incumbent: Declaration = {
+    player: 0, card: cand({}), office: 'senator', state: 'OH', incumbent: true, power: 4, shockExposure: 0.5,
+  };
+  const mods = buildModifiers(incumbent, ctx({ shock: 4, shockPositional: true }), 'general', res, nat, pg);
+  assert.equal(mods.find((m) => m.source === 'shock')?.pips, -2,
+    'shockPositional reads .shockExposure -- a dominant player far from the epicenter pays little');
+});
+
+test('#84: positional shock is silent on an incumbent with no measured exposure', () => {
+  const incumbent: Declaration = { player: 0, card: cand({}), office: 'senator', state: 'OH', incumbent: true, power: 4 };
+  const mods = buildModifiers(incumbent, ctx({ shock: 4, shockPositional: true }), 'general', res, nat, pg);
+  assert.equal(mods.find((m) => m.source === 'shock'), undefined,
+    'undefined shockExposure (no epicenter drawn, or this card carries no tags) reads as 0, never a fabricated power-scaled hit');
+});

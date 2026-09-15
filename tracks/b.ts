@@ -221,7 +221,11 @@ const b7: TrackItem = {
       { name: 'mean game length', value: mean(runs.map((r) => r.years)), unit: 'years', n: runs.length },
       { name: 'bills on the books at the epilogue', value: mean(runs.map((r) => r.billsOnBooks)), n: runs.length },
       { name: 'bills repealed a game', value: mean(runs.map((r) => r.billsRepealed)), n: runs.length },
-      { name: 'conventions called a game', value: mean(runs.map((r) => r.amendments.length)), n: runs.length },
+      // `called: []` marks a congressional proposal (#86); `convention()`
+      // never records below two-thirds of states. See D6 for the split's
+      // full rationale — this line only needs the same discriminant.
+      { name: 'congressional proposals a game', value: mean(runs.map((r) => r.amendments.filter((a) => a.called.length === 0).length)), n: runs.length },
+      { name: 'conventions called a game', value: mean(runs.map((r) => r.amendments.filter((a) => a.called.length > 0).length)), n: runs.length },
     ];
   },
 };

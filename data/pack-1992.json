@@ -14,6 +14,9 @@
         "evangelical",
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Tough on crime, ends welfare as we know it",
       "era": 1992,
       "effects": [
@@ -45,6 +48,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Environment before it polled",
       "era": 1992,
       "effects": [],
@@ -61,17 +67,11 @@
       "party": "D",
       "homeState": "MA",
       "homeStateBonus": 2,
-      "identities": [
-        "catholic"
-      ],
+      "identities": [],
       "belief": "Pro-business Democrat",
       "era": 1992,
       "effects": [],
-      "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        }
-      }
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -83,6 +83,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 2
+      },
       "belief": "Flat tax insurgent",
       "era": 1992,
       "effects": [
@@ -108,6 +111,11 @@
         "rural",
         "union"
       ],
+      "identityWeights": {
+        "farm": 2,
+        "rural": 1,
+        "union": 1
+      },
       "belief": "Prairie populist",
       "era": 1992,
       "effects": [],
@@ -133,6 +141,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Medal of Honor",
       "era": 1992,
       "effects": [],
@@ -153,6 +164,10 @@
         "catholic",
         "urban"
       ],
+      "identityWeights": {
+        "catholic": 2,
+        "urban": 2
+      },
       "belief": "A tale of two cities",
       "era": 1992,
       "effects": [],
@@ -175,6 +190,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Born with a silver foot",
       "era": 1992,
       "effects": [],
@@ -194,6 +212,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Defense conservative",
       "era": 1992,
       "effects": [],
@@ -214,6 +235,9 @@
         "rural",
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 1
+      },
       "belief": "HOPE scholarships",
       "era": 1992,
       "effects": [],
@@ -237,6 +261,9 @@
         "jewish",
         "urban"
       ],
+      "identityWeights": {
+        "jewish": 1
+      },
       "belief": "Year of the Woman",
       "era": 1992,
       "effects": [],
@@ -260,6 +287,9 @@
         "jewish",
         "urban"
       ],
+      "identityWeights": {
+        "jewish": 1
+      },
       "belief": "Mayor during the assassinations",
       "era": 1992,
       "effects": [],
@@ -283,12 +313,16 @@
         "black",
         "urban"
       ],
+      "identityWeights": {
+        "black": 1
+      },
       "belief": "First Black woman senator",
       "era": 1992,
       "effects": [],
       "provenance": {
         "black": {
-          "source": "hand-assigned"
+          "source": "wikidata",
+          "vintage": "2026-09-08"
         },
         "urban": {
           "source": "hand-assigned"
@@ -305,6 +339,9 @@
       "identities": [
         "union"
       ],
+      "identityWeights": {
+        "union": 2
+      },
       "belief": "The democratic wing of the Democratic Party",
       "era": 1992,
       "effects": [
@@ -329,6 +366,9 @@
         "farm",
         "rural"
       ],
+      "identityWeights": {
+        "farm": 2
+      },
       "belief": "Against the trade deals",
       "era": 1992,
       "effects": [],
@@ -352,6 +392,10 @@
         "catholic",
         "union"
       ],
+      "identityWeights": {
+        "catholic": 2,
+        "union": 1
+      },
       "belief": "Pro-life Democrat",
       "era": 1992,
       "effects": [],
@@ -375,6 +419,10 @@
         "rural",
         "catholic"
       ],
+      "identityWeights": {
+        "rural": 1,
+        "catholic": 1
+      },
       "belief": "My vote cannot be bought but it can be rented",
       "era": 1992,
       "effects": [],
@@ -394,17 +442,11 @@
       "party": "D",
       "homeState": "AL",
       "homeStateBonus": 2,
-      "identities": [
-        "rural"
-      ],
+      "identities": [],
       "belief": "Switched parties in 1994",
       "era": 1992,
       "effects": [],
-      "provenance": {
-        "rural": {
-          "source": "hand-assigned"
-        }
-      }
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -413,18 +455,12 @@
       "party": "R",
       "homeState": "AL",
       "homeStateBonus": 2,
-      "identities": [
-        "rural"
-      ],
+      "identities": [],
       "belief": "The switch made the seat safer, not weaker",
       "era": 1996,
       "effects": [],
       "succeeds": "richard-shelby-1992",
-      "provenance": {
-        "rural": {
-          "source": "hand-assigned"
-        }
-      }
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -437,6 +473,9 @@
         "black",
         "urban"
       ],
+      "identityWeights": {
+        "black": 1
+      },
       "belief": "Harlem's chairman",
       "era": 1992,
       "effects": [],
@@ -461,12 +500,16 @@
         "urban",
         "evangelical"
       ],
+      "identityWeights": {
+        "black": 2
+      },
       "belief": "Good trouble",
       "era": 1992,
       "effects": [],
       "provenance": {
         "black": {
-          "source": "hand-assigned"
+          "source": "wikidata",
+          "vintage": "2026-09-08"
         },
         "urban": {
           "source": "hand-assigned"
@@ -487,6 +530,10 @@
         "catholic",
         "urban"
       ],
+      "identityWeights": {
+        "catholic": 2,
+        "urban": 1
+      },
       "belief": "San Francisco fundraiser",
       "era": 1992,
       "effects": [],
@@ -510,6 +557,10 @@
         "union",
         "catholic"
       ],
+      "identityWeights": {
+        "union": 2,
+        "catholic": 1
+      },
       "belief": "Fair trade",
       "era": 1992,
       "effects": [],
@@ -532,6 +583,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 2
+      },
       "belief": "Crime bill author",
       "era": 1992,
       "effects": [],
@@ -551,6 +605,9 @@
       "identities": [
         "catholic"
       ],
+      "identityWeights": {
+        "catholic": 2
+      },
       "belief": "Defining deviancy down",
       "era": 1992,
       "effects": [],
@@ -570,7 +627,8 @@
       "identities": [],
       "belief": "Tax reform and basketball",
       "era": 1992,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -582,6 +640,9 @@
       "identities": [
         "jewish"
       ],
+      "identityWeights": {
+        "jewish": 1
+      },
       "belief": "Health care markets",
       "era": 1992,
       "effects": [],
@@ -601,6 +662,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Switched to the GOP in 1995",
       "era": 1992,
       "effects": [],
@@ -620,6 +684,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Rode the switch to a deeper red seat",
       "era": 1995,
       "effects": [],
@@ -640,7 +707,8 @@
       "identities": [],
       "belief": "Health care as a right",
       "era": 1992,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -652,7 +720,8 @@
       "identities": [],
       "belief": "Read my lips",
       "era": 1992,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -665,6 +734,10 @@
         "catholic",
         "urban"
       ],
+      "identityWeights": {
+        "catholic": 2,
+        "urban": -2
+      },
       "belief": "Culture war at the convention",
       "era": 1992,
       "effects": [
@@ -692,6 +765,9 @@
         "rural",
         "farm"
       ],
+      "identityWeights": {
+        "farm": 1
+      },
       "belief": "The deficit hawk",
       "era": 1992,
       "effects": [],
@@ -718,7 +794,8 @@
         {
           "type": "extremist"
         }
-      ]
+      ],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -734,7 +811,8 @@
         {
           "type": "extremist"
         }
-      ]
+      ],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -746,6 +824,9 @@
       "identities": [
         "urban"
       ],
+      "identityWeights": {
+        "urban": 2
+      },
       "belief": "Bleeding-heart conservative",
       "era": 1992,
       "effects": [
@@ -775,6 +856,9 @@
         "jewish",
         "urban"
       ],
+      "identityWeights": {
+        "jewish": 1
+      },
       "belief": "Single bullet, and later a switch",
       "era": 1992,
       "effects": [],
@@ -797,7 +881,8 @@
       "identities": [],
       "belief": "Keating Five survivor",
       "era": 1992,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -810,6 +895,10 @@
         "catholic",
         "urban"
       ],
+      "identityWeights": {
+        "catholic": 1,
+        "urban": 1
+      },
       "belief": "Senator Pothole",
       "era": 1992,
       "effects": [],
@@ -852,6 +941,10 @@
         "rural",
         "farm"
       ],
+      "identityWeights": {
+        "rural": 1,
+        "farm": 1
+      },
       "belief": "Landon's daughter",
       "era": 1992,
       "effects": [],
@@ -874,7 +967,8 @@
       "identities": [],
       "belief": "Cut taxes thirty percent",
       "era": 1992,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -886,7 +980,8 @@
       "identities": [],
       "belief": "Fiscally conservative, socially liberal",
       "era": 1992,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -898,7 +993,8 @@
       "identities": [],
       "belief": "Proposition 187",
       "era": 1992,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -910,7 +1006,8 @@
       "identities": [],
       "belief": "Nunn-Lugar",
       "era": 1992,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -922,6 +1019,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Wyoming humor",
       "era": 1992,
       "effects": [],
@@ -942,6 +1042,10 @@
         "rural",
         "evangelical"
       ],
+      "identityWeights": {
+        "rural": 1,
+        "evangelical": 2
+      },
       "belief": "The whip",
       "era": 1992,
       "effects": [],
@@ -965,6 +1069,9 @@
         "evangelical",
         "rural"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "Senator No",
       "era": 1992,
       "effects": [
@@ -992,6 +1099,9 @@
         "rural",
         "evangelical"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Still there",
       "era": 1992,
       "effects": [
@@ -1018,7 +1128,8 @@
       "identities": [],
       "belief": "Texas treasurer",
       "era": 1992,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -1030,7 +1141,8 @@
       "identities": [],
       "belief": "Environmental Republican",
       "era": 1992,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -1042,6 +1154,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Left the party in 2001",
       "era": 1992,
       "effects": [],
@@ -1061,7 +1176,8 @@
       "identities": [],
       "belief": "Centrist dealmaker",
       "era": 1992,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -1073,6 +1189,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Welfare reform laboratory",
       "era": 1992,
       "effects": [],
@@ -1092,6 +1211,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Cut the income tax",
       "era": 1992,
       "effects": [],
@@ -1112,6 +1234,10 @@
         "catholic",
         "urban"
       ],
+      "identityWeights": {
+        "catholic": 1,
+        "urban": 2
+      },
       "belief": "Mayor of Cleveland",
       "era": 1992,
       "effects": [],
@@ -1990,7 +2116,8 @@
       "identities": [],
       "belief": "Won the governorship as A Connecticut Party",
       "era": 1992,
-      "effects": []
+      "effects": [],
+      "provenance": {}
     },
     {
       "kind": "candidate",
@@ -2006,7 +2133,8 @@
         {
           "type": "extremist"
         }
-      ]
+      ],
+      "provenance": {}
     }
   ]
 }
