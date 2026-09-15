@@ -13,6 +13,9 @@
       "identities": [
         "urban"
       ],
+      "identityWeights": {
+        "urban": 1
+      },
       "belief": "Bold, persistent experimentation",
       "era": 1932,
       "effects": [],
@@ -33,6 +36,10 @@
         "rural",
         "farm"
       ],
+      "identityWeights": {
+        "rural": 1,
+        "farm": 1
+      },
       "belief": "Not worth a bucket of warm spit",
       "era": 1932,
       "effects": [],
@@ -56,6 +63,9 @@
         "catholic",
         "urban"
       ],
+      "identityWeights": {
+        "catholic": 2
+      },
       "belief": "The Happy Warrior of the sidewalks",
       "era": 1932,
       "effects": [],
@@ -78,6 +88,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Free trade above all",
       "era": 1932,
       "effects": [],
@@ -98,6 +111,9 @@
         "rural",
         "evangelical"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Every man a king",
       "era": 1932,
       "effects": [
@@ -133,6 +149,9 @@
         "urban",
         "union"
       ],
+      "identityWeights": {
+        "union": 2
+      },
       "belief": "Wrote the labor act",
       "era": 1932,
       "effects": [],
@@ -155,6 +174,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Hated the New Deal from the right",
       "era": 1932,
       "effects": [],
@@ -175,6 +197,9 @@
         "rural",
         "farm"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Ran Finance for the South",
       "era": 1932,
       "effects": [],
@@ -197,6 +222,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Majority leader from a one-party state",
       "era": 1932,
       "effects": [],
@@ -217,6 +245,10 @@
         "rural",
         "farm"
       ],
+      "identityWeights": {
+        "rural": 2,
+        "farm": 2
+      },
       "belief": "Rural electrification",
       "era": 1932,
       "effects": [],
@@ -239,6 +271,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Pay-as-you-go conservatism",
       "era": 1932,
       "effects": [],
@@ -259,6 +294,10 @@
         "rural",
         "union"
       ],
+      "identityWeights": {
+        "union": 2,
+        "rural": 1
+      },
       "belief": "Progressive, then isolationist",
       "era": 1932,
       "effects": [],
@@ -281,6 +320,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "The Veep in waiting",
       "era": 1932,
       "effects": [],
@@ -301,6 +343,10 @@
         "rural",
         "evangelical"
       ],
+      "identityWeights": {
+        "rural": 1,
+        "evangelical": 1
+      },
       "belief": "Klansman turned civil libertarian",
       "era": 1932,
       "effects": [
@@ -333,6 +379,9 @@
         "rural",
         "farm"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "The worst of the Delta",
       "era": 1932,
       "effects": [
@@ -391,6 +440,10 @@
         "catholic",
         "urban"
       ],
+      "identityWeights": {
+        "catholic": 2,
+        "urban": 1
+      },
       "belief": "Counted every county",
       "era": 1932,
       "effects": [],
@@ -413,6 +466,9 @@
       "identities": [
         "urban"
       ],
+      "identityWeights": {
+        "urban": 2
+      },
       "belief": "First woman in a cabinet",
       "era": 1932,
       "effects": [],
@@ -434,6 +490,9 @@
         "urban",
         "union"
       ],
+      "identityWeights": {
+        "urban": 1
+      },
       "belief": "Built the Chicago machine",
       "era": 1932,
       "effects": [],
@@ -472,6 +531,9 @@
         "rural",
         "farm"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "First vice president of Native descent",
       "era": 1932,
       "effects": [],
@@ -494,6 +556,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "The Lion of Idaho, and an isolationist",
       "era": 1932,
       "effects": [],
@@ -514,6 +579,9 @@
         "rural",
         "farm"
       ],
+      "identityWeights": {
+        "farm": 1
+      },
       "belief": "Progressive Republican; wrote the TVA",
       "era": 1932,
       "effects": [
@@ -545,6 +613,9 @@
       "identities": [
         "urban"
       ],
+      "identityWeights": {
+        "urban": 2
+      },
       "belief": "Progressive and isolationist",
       "era": 1932,
       "effects": [],
@@ -564,6 +635,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Progressive by inheritance",
       "era": 1932,
       "effects": [],
@@ -596,6 +670,9 @@
         "farm",
         "rural"
       ],
+      "identityWeights": {
+        "farm": 2
+      },
       "belief": "Farm relief twice vetoed",
       "era": 1932,
       "effects": [],
@@ -620,6 +697,9 @@
         "urban",
         "union"
       ],
+      "identityWeights": {
+        "urban": 1
+      },
       "belief": "The Little Flower",
       "era": 1932,
       "effects": [],
@@ -646,6 +726,10 @@
         "farm",
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1,
+        "farm": 1
+      },
       "belief": "Carried two states",
       "era": 1932,
       "effects": [],
@@ -680,6 +764,9 @@
       "identities": [
         "evangelical"
       ],
+      "identityWeights": {
+        "evangelical": 2
+      },
       "belief": "Half of the tariff",
       "era": 1932,
       "effects": [],
@@ -715,6 +802,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 2
+      },
       "belief": "Dry to the last",
       "era": 1932,
       "effects": [],
@@ -758,6 +848,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Old guard floor leader",
       "era": 1932,
       "effects": [],
@@ -777,6 +870,9 @@
       "identities": [
         "rural"
       ],
+      "identityWeights": {
+        "rural": 1
+      },
       "belief": "Conservation Republican",
       "era": 1932,
       "effects": [],
