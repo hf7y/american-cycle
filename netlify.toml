@@ -1,0 +1,9 @@
+[build]
+  command = "node ui/build.ts && node docs/build.ts && mkdir -p site && cp ui/index.html site/index.html && cp docs/rules.html site/rules.html"
+  publish = "site"
+
+[build.environment]
+  NODE_VERSION = "24"
+
+[functions]
+  directory = "netlify/functions"
