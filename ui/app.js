@@ -24,6 +24,7 @@ let G = null, gen = null, pending = null, S = {
 // ---- setup ------------------------------------------------------------------
 // Strength is measured, not guessed: win rate in the human seat against
 // Greedy + HouseFarm + Random, over 240 games each. Fair share is 25%.
+const BOARD_OPPONENT = 'Greedy'; // this repo's "ordinary player" proxy, vs itself: fairest 1v1 by construction
 const OPPONENT_BLURB = {
   Greedy:'Fair fight. Takes the best race on the board every time, with no plan beyond this cycle.',
   Lookahead:'Hardest. Values a seat by what it pays over its whole term — it wins about half of all games it plays.',
@@ -42,7 +43,7 @@ const OPPONENT_BLURB = {
   BillBlocker:'Strong. Floods the Senate like SenateFlood, but votes no on everything — denies the 60% cloture threshold outright.',
 };
 const SOLITAIRE_BLURB = {
-  Greedy:"Fair fight. You'll win about half of these, one-on-one.",
+  Greedy:"The board's recommended opponent. Fair fight — you'll win about half of these, one-on-one.",
   Lookahead:'Hardest 1v1 of all sixteen. Wins 79% of the time — this is not a first solitaire game.',
   Random:'Gentle 1v1. You should win about 73% of these.',
   HouseFarm:'Very gentle 1v1. You should win about 93% of these.',
@@ -83,7 +84,7 @@ function setup() {
   const s1Opts = ['fair', 'gentle', 'hard'].map((tier) => {
     const names = Object.keys(AGENTS).filter((k) => SOLITAIRE_TIER[k] === tier);
     if (!names.length) return '';
-    return `<optgroup label="${SOLITAIRE_TIER_LABEL[tier]}">${names.map((k) => `<option value="${k}">${k}</option>`).join('')}</optgroup>`;
+    return `<optgroup label="${SOLITAIRE_TIER_LABEL[tier]}">${names.map((k) => `<option value="${k}">${k}${k === BOARD_OPPONENT ? ' — the board (recommended)' : ''}</option>`).join('')}</optgroup>`;
   }).join('');
   const cfgs = Object.keys(CONFIGS).map((k) => `<option value="${k}"${k === 'as-written-plus' ? ' selected' : ''}>${k}</option>`).join('');
   modal(`
@@ -113,7 +114,7 @@ function setup() {
   // Measured default (findings/multiplayer-default-fitness.ts): an ordinary
   // player wins 37% of 4-player games here, above the 25% fair share -- this
   // table favors the human, not the reverse.
-  $('s1').value = 'Greedy'; $('s2').value = 'HouseFarm'; $('s3').value = 'Random';
+  $('s1').value = BOARD_OPPONENT; $('s2').value = 'HouseFarm'; $('s3').value = 'Random';
   const sync = () => {
     const soloOpponent = $('s1').value && !$('s2').value && !$('s3').value;
     $('b1').textContent = !$('s1').value
