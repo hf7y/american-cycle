@@ -22,10 +22,10 @@
 import { RNG } from '../engine/rules/rng.ts';
 import type { RunObs } from './observe.ts';
 import {
-  measure, mean, powerWindows, regimeRuns, varianceRatio,
+  measure, mean, powerWindows, principalAxis, regimeRuns, regimeThresholdFor, varianceRatio,
   REGIME_THRESHOLD, type Check, type PreconditionState,
 } from './checks.ts';
-import { BILL_CORPUS_ABSENT, BILL_POSITION_ABSENT } from './position.ts';
+import { BILL_CORPUS_ABSENT, BILL_POSITION_ABSENT, sub, zero, type Position } from './position.ts';
 
 /** C1 — the formation/duration instrument, on three series with known answers. */
 export function syntheticControl(): { check: Check; passed: boolean } {
@@ -75,6 +75,84 @@ export function syntheticControl(): { check: Check; passed: boolean } {
   };
 }
 
+/** C1-TAG — the same instrument-liveness question as C1, re-derived for a
+ *  `dim > 1` compass (hf7y/american-cycle#92). `TAG_COMPASS` positions sit on
+ *  the tag simplex, not a lean-counter line, so C1's ±2 step and 0.25
+ *  deadband do not carry over unmodified. This builds the analogous step
+ *  regime / random walk / white noise IN the simplex (dimension `dim`,
+ *  default `TAG_COMPASS.dim`), runs them through the same principal-axis
+ *  projection `countrySeries` would use at `dim > 1`, and checks
+ *  `regimeThresholdFor(dim)` against C1's own pass criteria: the regime run
+ *  must be long, longer than white noise's, and white noise must mean-revert.
+ *
+ *  The step points are two disjoint one-hot tag vectors — the same points
+ *  `regimeThresholdFor` uses to derive the deadband, so this control is
+ *  checking the derivation against the numbers it produced, not a fresh pair.
+ *  Noise/walk are built by moving a small fixed mass between two random tags
+ *  and renormalising, which is the simplex-preserving analogue of the ±1 d6
+ *  step C1 uses on the lean line. */
+export function syntheticControlSimplex(dim: number): { check: Check; passed: boolean; threshold: number } {
+  const n = 40;
+  const step = 0.05;
+  const pointA: Position = zero(dim); pointA[0] = 1;
+  const pointB: Position = zero(dim); pointB[1] = 1;
+  const threshold = regimeThresholdFor(dim);
+
+  const rng = new RNG(20260901);
+  const jiggle = (p: Position): Position => {
+    const i = Math.floor(rng.d6() / 6 * dim) % dim;
+    const j = (i + 1 + Math.floor(rng.d6() / 6 * (dim - 1))) % dim;
+    const out = [...p];
+    const delta = Math.min(step, out[i]);
+    out[i] -= delta; out[j] += delta;
+    return out;
+  };
+
+  const regimePts: Position[] = Array.from({ length: n }, (_, i) => (i < n / 2 ? pointA : pointB));
+  const walkPts: Position[] = []; let w = pointA;
+  for (let i = 0; i < n; i++) { w = jiggle(w); walkPts.push(w); }
+  const noisePts: Position[] = Array.from({ length: n }, () => jiggle(pointA));
+
+  const project = (pts: Position[]): number[] => {
+    const axis = principalAxis(pts);
+    const start = pts[0];
+    return pts.map((p) => sub(p, start).reduce((s, v, i) => s + v * axis[i], 0));
+  };
+  const regimeSeries = project(regimePts);
+  const walkSeries = project(walkPts);
+  const noiseSeries = project(noisePts);
+
+  const longest = (xs: number[]) => Math.max(0, ...regimeRuns(xs, threshold));
+  const m = {
+    'derived deadband': { value: threshold, n: 1, se: 0, unit: 'simplex distance' },
+    'synthetic regime: longest run': { value: longest(regimeSeries), n: 1, se: 0, unit: 'years' },
+    'synthetic regime: variance ratio': { value: varianceRatio(regimeSeries, 4), n: 1, se: 0 },
+    'random walk: longest run': { value: longest(walkSeries), n: 1, se: 0, unit: 'years' },
+    'random walk: variance ratio': { value: varianceRatio(walkSeries, 4), n: 1, se: 0 },
+    'white noise: longest run': { value: longest(noiseSeries), n: 1, se: 0, unit: 'years' },
+    'white noise: variance ratio': { value: varianceRatio(noiseSeries, 4), n: 1, se: 0 },
+  };
+  const passed = m['synthetic regime: longest run'].value >= 15
+    && m['synthetic regime: longest run'].value > m['white noise: longest run'].value
+    && m['white noise: variance ratio'].value < 1;
+  return {
+    passed,
+    threshold,
+    check: {
+      id: 'control-instrument-liveness-simplex',
+      question: 'C1-TAG: with a dim>1 compass, does the principal-axis projection see a settlement that is there by construction?',
+      measures: m,
+      verdict: passed ? 'HEALTHY' : 'UNHEALTHY',
+      note: passed
+        ? `Deadband ${threshold.toFixed(4)} (regimeThresholdFor(${dim}), C1's own 1/8 deadband:swing ratio `
+          + 'applied to the distance between two one-hot tag vectors) separates a built 20-year regime from '
+          + 'white noise on the principal-axis projection, the same separation C1 established for LEAN_COMPASS.'
+        : `THE INSTRUMENT IS BROKEN for a dim=${dim} compass at deadband ${threshold.toFixed(4)}. Every `
+          + 'formation and duration number under that compass is uninterpretable until this is fixed.',
+    },
+  };
+}
+
 /** C2 — does ANY non-electoral mechanism write to the settlement board?
  *
  *  This replaces a pool-swap comparison that could not answer the question. An
@@ -83,12 +161,20 @@ export function syntheticControl(): { check: Check; passed: boolean } {
  *  it" with "they played elections differently" — and the RNG stream diverges
  *  the moment passage differs, so even the same seed is not the same game.
  *
- *  This test needs no second pool and has no confound. §7 gates races on
- *  `isElectionYear`. In a NON-election year no race resolves, so the only lean
- *  writer that can run is `decay`, which moves every state strictly toward zero
- *  (engine/rules/lean.ts). Therefore |lean[state]| must be non-increasing that
- *  year. If |lean| never rises in a non-election year — while bills are passing
- *  in those same years — then nothing legislative writes to the board.
+ *  This test needs no second pool and has no confound. §7 gates federal races
+ *  on `isElectionYear`, and #232 found that `isElectionYear` alone can no
+ *  longer split the series: #173's historically-accurate `governorUp` makes
+ *  some state's off-cycle governor race resolve in literally every odd year
+ *  1932-2040, so `isElectionYear` is `true` for 100% of years under every
+ *  shipped config (`oddYearGovernors: true` everywhere). That race still
+ *  cannot WRITE lean unless `cfg.lean.governorPushes === 'with-lean'`
+ *  (`'never'` on every config but `governors-push.json` — see `applyPush`),
+ *  so `YearObs.electionCanWriteLean` is the gate this control actually needs:
+ *  a year where it is `false` has decay as the only possible lean writer
+ *  (engine/rules/lean.ts), which moves every state strictly toward zero.
+ *  Therefore |lean[state]| must be non-increasing that year. If |lean| never
+ *  rises in such a year — while bills are passing in those same years — then
+ *  nothing legislative writes to the board.
  *
  *  The positive control is the same detector on election years, where pushes
  *  and the honeymoon DO add counters. If it fires there and is silent in
@@ -108,7 +194,7 @@ export function leanWriterControl(runs: RunObs[]): { check: Check; movementDetec
       for (const st of Object.keys(cur.lean)) {
         if (Math.abs(cur.lean[st]) > Math.abs(prev.lean[st] ?? 0) + EPS) rose++;
       }
-      if (cur.isElection) { electionYears++; electionRises += rose; }
+      if (cur.electionCanWriteLean) { electionYears++; electionRises += rose; }
       else {
         offYears++; offRises += rose;
         bills += cur.billsPassedCum - prev.billsPassedCum;
@@ -120,6 +206,13 @@ export function leanWriterControl(runs: RunObs[]): { check: Check; movementDetec
 
   const detectorLive = electionRises > 0;
   const movementDetected = offRises > 0;
+  // #232: a config with `governorPushes: 'with-lean'` (only `governors-push.json`
+  // ships this) makes an off-cycle governor race a lean writer, and #173's real
+  // schedule gives every odd year one -- so `electionCanWriteLean` is `true` in
+  // 100% of that config's years too, and `offYears` is genuinely zero. That is
+  // "no sample", not "sampled and found nothing"; reporting it as UNHEALTHY would
+  // repeat the exact ambiguity this file's header warns against.
+  const noOffYears = offYears === 0;
 
   return {
     movementDetected,
@@ -132,17 +225,22 @@ export function leanWriterControl(runs: RunObs[]): { check: Check; movementDetec
         'bills passed in non-election years': measure(offBills, 'per game'),
         'non-election bill years per game': measure(offBillYears, 'years'),
       },
-      verdict: movementDetected ? 'HEALTHY' : 'UNHEALTHY',
+      verdict: noOffYears ? 'BLOCKED' : movementDetected ? 'HEALTHY' : 'UNHEALTHY',
       note: !detectorLive
         ? 'THE DETECTOR IS DEAD: |lean| never rose even in an election year, so its silence off-season proves '
           + 'nothing. Do not read C2.'
-        : movementDetected
-          ? 'Lean rises in years with no election, so some non-electoral mechanism writes to the board and a '
-            + 'legislative settlement channel is at least possible.'
-          : 'The detector fires in election years and is silent in every non-election year, while bills pass '
-            + 'in those same years. So legislation cannot write to the settlement board at all: lean is '
-            + 'election-only (applyPush, honeymoon, decay). This is CANNOT ACT as a property of the rules, '
-            + 'not of any agent\'s choices — no pool, however maximising, can move it.',
+        : noOffYears
+          ? 'THIS CONFIG HAS NO NON-ELECTION YEARS TO SAMPLE: `governorPushes: \'with-lean\'` makes an '
+            + 'off-cycle governor race a lean writer, and one resolves in every odd year (#232), so '
+            + '`electionCanWriteLean` is true 100% of the time under this config. C2 cannot be evaluated here '
+            + '— read it on a `governorPushes: \'never\'` config instead.'
+          : movementDetected
+            ? 'Lean rises in years with no election, so some non-electoral mechanism writes to the board and a '
+              + 'legislative settlement channel is at least possible.'
+            : 'The detector fires in election years and is silent in every non-election year, while bills pass '
+              + 'in those same years. So legislation cannot write to the settlement board at all: lean is '
+              + 'election-only (applyPush, honeymoon, decay). This is CANNOT ACT as a property of the rules, '
+              + 'not of any agent\'s choices — no pool, however maximising, can move it.',
     },
   };
 }
