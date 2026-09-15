@@ -31,6 +31,18 @@ export interface LegislatureConfig {
   /** v0.2 item 7: flat lean pips against every senator who voted to convict,
    *  and the same toward the acquitted president's party. */
   impeachBackfirePips?: number;
+  /** hf7y/american-cycle#84: the refinement `lean.ts`'s `nudge` doc named and
+   *  deferred -- "it needs bill positions to have a magnitude, which nothing
+   *  records" -- which v0.2 items 4 and 5 since supplied. Undefined/false
+   *  reproduces the flat backfire exactly. true scales `impeachBackfirePips`
+   *  by tag-space strain: the distance between the convicting senators' own
+   *  tag centroid and the country's (every district in play), via
+   *  `tags.distance`/`tags.centroid`. A coalition whose members mirror the
+   *  electorate reads as low strain and backfires lightly; one drawn from one
+   *  tag corner reads as high strain and backfires close to the flat pips. No
+   *  position on either side (`tags.distance` undefined) falls back to the
+   *  flat pips rather than zeroing the penalty out. See `Game.backfire`. */
+  impeachBackfireStrainScaled?: boolean;
   /** v0.2 item 8: flat lean pips against the party blamed for a shutdown. */
   shutdownPips?: number;
   /** #78's ruling: a passed bill places a counter, this many flat lean pips
