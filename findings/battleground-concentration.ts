@@ -212,7 +212,7 @@ export const finding: Finding = {
     + "never beat one -- 'chosen' is arithmetically unreachable outside tie order, and pack-passing means "
     + "every player has already stripped candidates from a pack before its districts are even considered.",
   stampedAt: '2026-09-07T08:53:51Z',
-  stampedOn: '4668444',
+  stampedOn: 'cd27d21',
 
   predicate(): Claim[] {
     const cfg = loadConfig('tuned.json');
