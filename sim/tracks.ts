@@ -3,6 +3,7 @@
  *   node sim/tracks.ts                                   # run everything
  *   node sim/tracks.ts --emit reports/char-v0.2.json     # freeze Track B
  *   node sim/tracks.ts --diff a.json b.json              # compare two tags
+ *   node sim/tracks.ts --gate a.json b.json              # #147's movement gate
  *   node sim/tracks.ts --track C --config tuned.json
  *
  *  EXIT CODES. Track A (the measurement layer) and Track B block: they must
@@ -19,6 +20,7 @@ import { loadConfig, loadPacks, playOne, ALL_PACKS, BALANCE_PACKS } from './harn
 import { B } from '../tracks/b.ts';
 import { C } from '../tracks/c.ts';
 import { D } from '../tracks/d.ts';
+import { gate } from '../tracks/gate.ts';
 import {
   CAPABILITY_NOTE, deckSensitivity, probe,
   type Capabilities, type Measure, type TrackCtx, type TrackItem,
@@ -70,6 +72,26 @@ if (process.argv.includes('--diff')) {
     if (missing.length) console.log(`\n  ${label} build could not be asked: ${missing.join(', ')}`);
   }
   process.exit(0);
+}
+
+// --gate — hf7y/american-cycle#147's movement gate. Unlike --diff, which
+// reports every paired row for a human to read, this judges a FROZEN subset
+// (tracks/gate.ts's FROZEN_GATE_ROWS) and exits nonzero if any of them did
+// not move measurably closer to the record. Gates the NEXT TAG, not this
+// build's own tests — CI staying green says the instrument works; this says
+// the reading moved.
+if (process.argv.includes('--gate')) {
+  const i = process.argv.indexOf('--gate');
+  const [a, b] = [process.argv[i + 1], process.argv[i + 2]].map((f) => JSON.parse(readFileSync(f, 'utf8')));
+  const result = gate(a, b);
+  console.log(`${a.tag ?? a.config} -> ${b.tag ?? b.config}  (movement gate, hf7y/american-cycle#147)\n`);
+  for (const r of result.rows) {
+    console.log(`  [${r.pass ? 'PASS' : 'FAIL'}] ${r.id} :: ${r.measure}`);
+    console.log(`         ${r.note}`);
+  }
+  const passed = result.rows.filter((r) => r.pass).length;
+  console.log(`\n${passed}/${result.rows.length} frozen rows cleared the gate.`);
+  process.exit(result.pass ? 0 : 1);
 }
 
 // --deck-sweep — hf7y/american-cycle#91's "multi-pool run". Plays the WHOLE
