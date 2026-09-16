@@ -37,6 +37,11 @@ export const finding: Finding = {
       SenateFlood: 65, HouseFarm: 7.3, HeterodoxSpecialist: 41, BillMaximizer: 23,
       Impeacher: 66.3, VPBackstab: 65.3, Launchpad: 62.7, EconomyChicken: 46,
       BillAuthor: 14.3, Vetoer: 53.3, BillBlocker: 78, Lookahead: 79,
+      // hf7y/american-cycle#37: at 1v1 there is exactly one other player to
+      // build a ledger with, and both sides run the same fit-first default,
+      // so the extra reciprocal yes votes cut close to evenly -- a coin
+      // flip, same shape RunawayBrake's own 1v1 degenerate case reads.
+      Dealmaker: 50.7,
     };
 
     return AGENT_NAMES.map((name) => {

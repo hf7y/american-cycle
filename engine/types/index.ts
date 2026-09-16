@@ -133,6 +133,13 @@ export interface EnactedBill {
   /** the spending magnitude, unchanged from v0.1 */
   g: number;
   author: number;
+  /** hf7y/american-cycle#37: who voted yes, deduped by player -- the only
+   *  ledger a scripted agent can trade against, since voting is simultaneous
+   *  and secret (`omnibill`, engine/game.ts) and nothing else records an
+   *  individual player's past votes. Only ever appended when the bill this
+   *  attaches to actually passed, matching every other passage-gated
+   *  consequence in this file. */
+  yesVoters?: number[];
   /** v0.2 item 4: the bill's position, in the same vocabulary as
    *  `CandidateCard.identities` and `DistrictCard.demographics`. */
   tags: IdentityTag[];
