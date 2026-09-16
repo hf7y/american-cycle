@@ -190,12 +190,12 @@ If an implementation question is not answered by the design doc, **it is probabl
 
 ## Untestable by simulation
 
-The social layer is a large fraction of this design and none of it can be measured by agents:
+The social layer is a large fraction of this design and most of it still cannot be measured by agents:
 
 - Negotiation before the bill vote
 - VP horse-trading during the nomination
-- Coalition-building for impeachment
 - Naming the omnibill
-- Table politics against a runaway leader
 
 Where a finding depends on any of these, recommend a human playtest rather than a parameter change.
+
+**Two items left this list 2026-09-16 (hf7y/american-cycle#37):** table politics against a runaway leader (`RunawayBrake`, #257) and coalition-building for impeachment (`Dealmaker` + `Whip`, #258/#260) are both now agent-reachable, via the public post-hoc favour ledger `Dealmaker` introduced (`EnactedBill.yesVoters`) rather than pre-vote negotiation. The three still above share a different blocker: `engine/game.ts`'s bill vote is simultaneous and secret by construction, so no agent can signal another before casting its own vote. Whether that changes is hf7y/american-cycle#263, open.
