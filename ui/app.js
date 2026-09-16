@@ -43,6 +43,7 @@ const OPPONENT_BLURB = {
   BillBlocker:'Strong. Floods the Senate like SenateFlood, but votes no on everything — denies the 60% cloture threshold outright.',
   Dealmaker:'Fair fight. Votes fit first like everyone else, but repays a bill author who has helped it before, even off-fit — and never forgets a favour that was never returned.',
   RunawayBrake:'Ordinary until a rival is clearly running away — then it contests that rival\'s own held seats, blocks every bill, and moves to impeach them if they hold the presidency. Needs a third player to tell a runaway leader from an ordinary rival, so at 1v1 it plays exactly like Greedy.',
+  Whip:'Packs the House and Senate to build a favour ledger, then only moves to impeach a president once its own count of opposition seats and owed favours actually clears the real two-thirds Senate threshold — never on Impeacher\'s looser 50% guess.',
 };
 const SOLITAIRE_BLURB = {
   Greedy:"The board's recommended opponent. Fair fight — you'll win about half of these, one-on-one.",
@@ -64,11 +65,12 @@ const SOLITAIRE_BLURB = {
   WalkoverFarmer:'Gentle 1v1. You should win about 77% of these.',
   Dealmaker:'Fair 1v1. You should win about 49% of these — at 1v1 there is only one other player to build a ledger with, so it plays close to Greedy.',
   RunawayBrake:'Fair 1v1 — plays exactly like Greedy with only one rival to measure. You should win about 49% of these.',
+  Whip:'Very gentle 1v1. You should win about 93% of these — its declare policy overpacks the House and Senate for a favour ledger that never gets built at 1v1, the same narrow-diet weakness BillAuthor has.',
 };
 const SOLITAIRE_TIER = {
   Greedy:'fair', HeterodoxSpecialist:'fair', EconomyChicken:'fair', Vetoer:'fair', Dealmaker:'fair', RunawayBrake:'fair',
   Lookahead:'hard', BillBlocker:'hard', Impeacher:'hard', VPBackstab:'hard', SenateFlood:'hard', Launchpad:'hard',
-  HouseFarm:'gentle', WideAndEmpty:'gentle', BillAuthor:'gentle', RunawayMaximiser:'gentle', WalkoverFarmer:'gentle', BillMaximizer:'gentle', Random:'gentle',
+  HouseFarm:'gentle', WideAndEmpty:'gentle', BillAuthor:'gentle', RunawayMaximiser:'gentle', WalkoverFarmer:'gentle', BillMaximizer:'gentle', Random:'gentle', Whip:'gentle',
 };
 const SOLITAIRE_TIER_LABEL = { fair:'Fair 1v1 (40–60% for you)', gentle:'Gentle 1v1 (favors you)', hard:'Hard 1v1 (favors the agent)' };
 const CONFIG_BLURB = {

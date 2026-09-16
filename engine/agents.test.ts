@@ -1,15 +1,17 @@
 /** hf7y/american-cycle#37: unit tests for `Dealmaker`'s ledger (`favor`, via
- *  `voteBill`) and `RunawayBrake`'s deterministic decision points (leader
- *  detection, the bill-vote block, impeachment targeting) -- both are
- *  decision points PR-review of a scripted agent should target directly
- *  rather than through a full simulated game. `npm test`'s glob covers
+ *  `voteBill`), `RunawayBrake`'s deterministic decision points (leader
+ *  detection, the bill-vote block, impeachment targeting), and `Whip`'s
+ *  coalition arithmetic (moveImpeach's predicted-yes count against the real
+ *  2/3 threshold, voteImpeach's cross-party defection) -- all are decision
+ *  points PR-review of a scripted agent should target directly rather than
+ *  through a full simulated game. `npm test`'s glob covers
  *  `engine/**\/*.test.ts`, not `sim/`, hence this file living here rather
  *  than beside the agents it tests. */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import type { Config, GameView, PlayerState } from './game.ts';
-import { Dealmaker, RunawayBrake } from '../sim/agents.ts';
+import { Dealmaker, RunawayBrake, Whip } from '../sim/agents.ts';
 import { RNG } from './rules/rng.ts';
 import type { EnactedBill, Seat } from './types/index.ts';
 
@@ -174,4 +176,77 @@ test('RunawayBrake: never moves or votes to impeach when no rival is running awa
   const level = view([player(0), player(1), player(1), player(1)], seats);
   assert.equal(agent().moveImpeach(level), false);
   assert.equal(agent().voteImpeach(level, seats[1]), false);
+});
+
+/** hf7y/american-cycle#37: `Whip` reads the same `favor` ledger `Dealmaker`
+ *  introduced to both size up an impeachment coalition before moving
+ *  (`moveImpeach`, against the real 2/3 threshold rather than Impeacher's
+ *  50% or VPBackstab's 25%) and to actually cross party lines paying down a
+ *  debt at the vote itself (`voteImpeach`). */
+const whip = () => new Whip('Whip', cfg, new RNG(1));
+
+test('Whip: does not move when opposition arithmetic alone falls short of 2/3', () => {
+  const seats: Seat[] = [
+    { office: 'president', state: 'US', holder: { cardId: 'p', player: 2, party: 'R', since: 2024 } },
+    { office: 'senator', state: 'OH', senateClass: 1, holder: { cardId: 's1', player: 0, party: 'D', since: 2020 } },
+    { office: 'senator', state: 'TX', senateClass: 2, holder: { cardId: 's2', player: 3, party: 'R', since: 2020 } },
+    { office: 'senator', state: 'CA', senateClass: 3, holder: { cardId: 's3', player: 3, party: 'R', since: 2020 } },
+  ];
+  const v = view([player(0), player(1), player(1), player(1)], seats);
+  assert.equal(whip().moveImpeach(v), false, 'only one of three senators opposes -- short of 2/3');
+});
+
+test('Whip: moves once opposition alone clears 2/3', () => {
+  const seats: Seat[] = [
+    { office: 'president', state: 'US', holder: { cardId: 'p', player: 2, party: 'R', since: 2024 } },
+    { office: 'senator', state: 'OH', senateClass: 1, holder: { cardId: 's1', player: 0, party: 'D', since: 2020 } },
+    { office: 'senator', state: 'TX', senateClass: 2, holder: { cardId: 's2', player: 3, party: 'D', since: 2020 } },
+    { office: 'senator', state: 'CA', senateClass: 3, holder: { cardId: 's3', player: 3, party: 'R', since: 2020 } },
+  ];
+  const v = view([player(0), player(1), player(1), player(1)], seats);
+  assert.equal(whip().moveImpeach(v), true, 'two of three senators oppose -- past 2/3');
+});
+
+test('Whip: a favour owed by a same-party senator fills the gap opposition alone cannot', () => {
+  const seats: Seat[] = [
+    { office: 'president', state: 'US', holder: { cardId: 'p', player: 2, party: 'R', since: 2024 } },
+    { office: 'senator', state: 'OH', senateClass: 1, holder: { cardId: 's1', player: 0, party: 'D', since: 2020 } },
+    // player 3 holds the other two seats, same party as the president --
+    // opposition alone (1/3) falls well short of 2/3.
+    { office: 'senator', state: 'TX', senateClass: 2, holder: { cardId: 's2', player: 3, party: 'R', since: 2020 } },
+    { office: 'senator', state: 'CA', senateClass: 3, holder: { cardId: 's3', player: 3, party: 'R', since: 2020 } },
+  ];
+  // player 3 authored a bill the mover (player 0) voted yes on -- favor(3, 0) > 0, player 3 owes player 0.
+  const bills: EnactedBill[] = [{ id: 'b0', year: 2020, g: 3, author: 3, tags: [], yesVoters: [0, 3] }];
+  const v: GameView = { ...view([player(0), player(1), player(1), player(1)], seats), bills };
+  assert.equal(whip().moveImpeach(v), true, 'the debtor holding both remaining seats covers the shortfall');
+});
+
+test('Whip: never moves against its own party\'s president', () => {
+  const seats: Seat[] = [{ office: 'president', state: 'US', holder: { cardId: 'p', player: 0, party: 'R', since: 2024 } }];
+  const v = view([player(0), player(1), player(1), player(1)], seats);
+  assert.equal(whip().moveImpeach(v), false);
+});
+
+test('Whip: an opposition-party senator always votes to convict', () => {
+  const seats: Seat[] = [{ office: 'president', state: 'US', holder: { cardId: 'p', player: 2, party: 'R', since: 2024 } }];
+  const opposed: Seat = { office: 'senator', state: 'OH', senateClass: 1, holder: { cardId: 's1', player: 0, party: 'D', since: 2020 } };
+  const v = view([player(0), player(1), player(1), player(1)], seats);
+  assert.equal(whip().voteImpeach(v, opposed), true);
+});
+
+test('Whip: a same-party senator crosses to convict when it owes another player a favour', () => {
+  const seats: Seat[] = [{ office: 'president', state: 'US', holder: { cardId: 'p', player: 2, party: 'R', since: 2024 } }];
+  const same: Seat = { office: 'senator', state: 'TX', senateClass: 2, holder: { cardId: 's2', player: 0, party: 'R', since: 2020 } };
+  // player 0 (this senator) authored a bill player 1 voted yes on -- favor(0, 1) > 0, player 0 owes player 1.
+  const bills: EnactedBill[] = [{ id: 'b0', year: 2020, g: 3, author: 0, tags: [], yesVoters: [0, 1] }];
+  const v: GameView = { ...view([player(0), player(1), player(1), player(1)], seats), bills };
+  assert.equal(whip().voteImpeach(v, same), true);
+});
+
+test('Whip: a same-party senator with no debt to anyone stays loyal', () => {
+  const seats: Seat[] = [{ office: 'president', state: 'US', holder: { cardId: 'p', player: 2, party: 'R', since: 2024 } }];
+  const same: Seat = { office: 'senator', state: 'TX', senateClass: 2, holder: { cardId: 's2', player: 0, party: 'R', since: 2020 } };
+  const v = view([player(0), player(1), player(1), player(1)], seats);
+  assert.equal(whip().voteImpeach(v, same), false);
 });

@@ -636,6 +636,55 @@ export class RunawayBrake extends Base {
   }
 }
 
+/** hf7y/american-cycle#37's own 2026-09-16 comment names the remaining gap
+ *  once Dealmaker (repays a favour already on the books) and RunawayBrake
+ *  (reacts to a rival's score) both shipped: "coalition-building for
+ *  impeachment, beyond the arithmetic Impeacher/VPBackstab already do."
+ *  Those two move/vote on raw Senate party count alone. This one reads the
+ *  same favour ledger Dealmaker introduced -- `EnactedBill.yesVoters`, a
+ *  counter already on the board, not a new channel -- to both size up a
+ *  coalition before moving and to actually cross party lines paying down a
+ *  debt when the vote comes. */
+export class Whip extends Base {
+  declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[] {
+    const o = counterDeclare(options(v, open, this.cfg), pending, v.me, 2).map((x) => ({
+      ...x, edge: x.edge + (x.office === 'representative' ? 6 : x.office === 'senator' ? 3 : 0),
+    }));
+    return pickDistinct(o.sort(byEdge), this.budget(v) + 2);
+  }
+  voteBill(v: GameView, g: number, seat: Seat, billTags?: readonly IdentityTag[], authorId?: number): boolean {
+    if (super.voteBill(v, g, seat, billTags)) return true;
+    if (authorId === undefined || authorId === v.me) return false;
+    return favor(v.me, authorId, v.bills) > 0;
+  }
+  proposeG(): number { return 4; }
+  /** Moves only once a coalition that actually clears `impeachThreshold` is
+   *  there: every senator opposed to the president on party, plus every
+   *  senator who owes THIS agent a favour regardless of party -- a real
+   *  prediction against the 2/3 the vote itself needs, not the looser
+   *  50%/25% thresholds Impeacher and VPBackstab settle for. */
+  moveImpeach(v: GameView): boolean {
+    const pres = v.seats.find((s) => s.office === 'president' && s.holder);
+    if (!pres || pres.holder!.player === v.me) return false;
+    const senate = v.seats.filter((s) => s.office === 'senator' && s.holder);
+    if (!senate.length) return false;
+    const predictedYes = senate.filter((s) =>
+      s.holder!.party !== pres.holder!.party || favor(s.holder!.player, v.me, v.bills) > 0).length;
+    return predictedYes / senate.length >= this.cfg.legislature.impeachThreshold;
+  }
+  /** Opposition-party senators vote as every other agent's default does.
+   *  A same-party senator crosses when it owes ANYONE a favour it has
+   *  never repaid -- the debtor side of exactly the prediction
+   *  `moveImpeach` made, since a vote is cast without knowing who moved. */
+  voteImpeach(v: GameView, seat: Seat): boolean {
+    const pres = v.seats.find((s) => s.office === 'president' && s.holder);
+    if (!pres) return false;
+    if (seat.holder!.party !== pres.holder!.party) return true;
+    const me = seat.holder!.player;
+    return v.players.some((_, other) => other !== me && favor(me, other, v.bills) > 0);
+  }
+}
+
 export const AGENTS: Record<string, new (cfg: Config, rng: RNG) => Agent> = {
   Random: class extends RandomAgent { constructor(c: Config, r: RNG) { super('Random', c, r); } },
   Greedy: class extends GreedyAgent { constructor(c: Config, r: RNG) { super('Greedy', c, r); } },
@@ -656,4 +705,5 @@ export const AGENTS: Record<string, new (cfg: Config, rng: RNG) => Agent> = {
   BillBlocker: class extends BillBlocker { constructor(c: Config, r: RNG) { super('BillBlocker', c, r); } },
   Dealmaker: class extends Dealmaker { constructor(c: Config, r: RNG) { super('Dealmaker', c, r); } },
   RunawayBrake: class extends RunawayBrake { constructor(c: Config, r: RNG) { super('RunawayBrake', c, r); } },
+  Whip: class extends Whip { constructor(c: Config, r: RNG) { super('Whip', c, r); } },
 };

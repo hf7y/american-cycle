@@ -48,6 +48,12 @@ export const finding: Finding = {
       // exactly GreedyAgent's declare/vote/veto and this is a Greedy-mirror
       // duel, correctly landing at a coin flip.
       RunawayBrake: 50.7,
+      // hf7y/american-cycle#37: `Whip`'s declare() reuses BillAuthor's own
+      // House/Senate weighting (favour-building needs bills to author and
+      // Senate seats to hold), and BillAuthor is already this table's
+      // second-weakest 1v1 opponent (14.3%) for exactly that reason -- too
+      // narrow a diet of races to convert. Whip lands lower still.
+      Whip: 6.7,
     };
 
     return AGENT_NAMES.map((name) => {
