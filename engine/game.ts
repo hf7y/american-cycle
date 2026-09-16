@@ -374,6 +374,10 @@ export class Game {
   private offDistrict = new Map<string, number>();
   /** v0.2 item 9: pips of shock in force this year, 0 in a quiet one. */
   private shockPips = 0;
+  /** #84: this cycle's shock epicenter under `shockPositional` -- the tag
+   *  position of one currently-held seat, drawn at random. Undefined in a
+   *  quiet cycle, under the cheap shock, or when no held seat carries tags. */
+  private shockEpicenter?: tags.TagWeights;
   private agents: Agent[];
   private scoreHistory: number[][] = [];
   /** hf7y/american-cycle#171/#55: declare/refill order rotates by
@@ -858,9 +862,66 @@ export class Game {
     return t.length ? { player: best, tags: t } : undefined;
   }
 
+  /** hf7y/american-cycle#86's ruling: the ordinary path, gated on
+   *  hf7y/american-cycle#83's pen -- the House-authorship vote is the
+   *  precondition, so only the player who won it can move a proposal here.
+   *  Two-thirds of each chamber votes on the proposal directly (`leg.
+   *  proposeAmendment`); the ratification stage that follows is
+   *  route-agnostic and untouched (`ratify()`, below).
+   *
+   *  This is why the convention stays rare without a printed probability:
+   *  it is tried below ONLY when there is no pen to win in the first place
+   *  (`resolveAuthor` finds no House majority party), which the shipped
+   *  packs make an uncommon shape of chamber. Every other bill year that
+   *  doesn't reach two-thirds here simply proposes nothing, same as most
+   *  real Congresses in most real years -- it does not fall through to a
+   *  convention, which would make the state route the common one instead of
+   *  the one the record never used. Returns true when the year was spent,
+   *  same contract as `convention()` and `impeachment()`. */
+  private congressionalPropose(): boolean {
+    if (!this.cfg.amendment.enabled) return false;
+    if (this.amendments.some((a) => a.ratifiedIn === undefined && a.failedIn === undefined)) return false;
+    const authorId = this.resolveAuthor();
+    if (authorId === undefined) return false;
+
+    const view = this.view(authorId);
+    const proposedTags = this.agents[authorId].moveAmendment?.(view, undefined)
+      ?? this.defaultBillTags(authorId).slice(0, this.cfg.amendment.tagsPerAmendment);
+    if (!proposedTags.length) return false;
+
+    const votes: leg.Vote[] = [];
+    for (const s of this.seats) {
+      if (!s.holder || (s.office !== 'senator' && s.office !== 'representative')) continue;
+      // Reuses the bill-vote hook: a proposal is voted the same way a bill
+      // is, by fit between the seat's district and the tags on offer. `g` is
+      // spending and has no referent here, so agents that key off it (e.g.
+      // EconomyChicken) see `g === 0`, their own "nothing to spend" case.
+      const yes = this.agents[s.holder.player].voteBill(this.view(s.holder.player), 0, s, proposedTags);
+      votes.push({ player: s.holder.player, party: s.holder.party, office: s.office, yes, cardId: s.holder.cardId });
+    }
+
+    const out = leg.proposeAmendment(this.cfg.amendment.callFraction, this.seats, votes);
+    if (!out.passed) {
+      this.log.push(`${this.year}: the amendment proposal fails in Congress, ${out.houseYes}/${out.houseTotal} H, ${out.senateYes}/${out.senateTotal} S`);
+      return true;
+    }
+
+    this.amendments.push({
+      id: `a${this.year}`, proposer: authorId, tags: proposedTags,
+      calledIn: this.year, called: [], ratified: [], rescinded: [],
+    });
+    this.log.push(`${this.year}: Congress proposes an amendment on [${proposedTags.join(', ')}], ${out.houseYes}/${out.houseTotal} H, ${out.senateYes}/${out.senateTotal} S`);
+    return true;
+  }
+
   /** Calling a convention spends the year's legislating, exactly as
    *  impeachment does: wanting the ending is a decision taken INSTEAD of
-   *  governing, not alongside it. Returns true when the year was spent. */
+   *  governing, not alongside it. Returns true when the year was spent.
+   *
+   *  Reached only when hf7y/american-cycle#86's ordinary path above found no
+   *  pen to award -- states filling a vacuum Congress itself cannot act
+   *  from, which is what keeps this the rare route in a game where it
+   *  otherwise never lost that footing to try. */
   private convention(): boolean {
     if (!this.cfg.amendment.enabled) return false;
     if (this.amendments.some((a) => a.ratifiedIn === undefined && a.failedIn === undefined)) return false;
@@ -959,11 +1020,31 @@ export class Game {
    *  EVERYONE WHO VOTED TO IMPEACH EATS IT, not the filer -- filers are not
    *  tracked, and this makes impeachment a trap you can bait an opponent into. */
   private backfire(forRemoval: Seat[], targetParty: Party): void {
-    const pips = this.cfg.legislature.impeachBackfirePips ?? 0;
+    const base = this.cfg.legislature.impeachBackfirePips ?? 0;
+    if (!base) return;
+    const pips = Math.round(base * this.backfireStrainScale(forRemoval));
     if (!pips) return;
     for (const s of forRemoval) lean.nudge(this.leanMap, this.cfg.lean, s.state, s.holder!.party, -pips);
     const target = new Set(this.seats.filter((s) => s.holder?.party === targetParty).map((s) => s.state));
     for (const st of target) lean.nudge(this.leanMap, this.cfg.lean, st, targetParty, pips);
+  }
+
+  /** hf7y/american-cycle#84's refinement on the flat backfire above: 1 (the
+   *  flat behaviour, byte for byte) when `impeachBackfireStrainScaled` is
+   *  off, or when either side of the comparison carries no tag position --
+   *  an unmeasurable strain must not read as zero and cancel a penalty the
+   *  `lean.ts` ruling still calls trustworthy on its own chronological
+   *  warrant. Otherwise the convicting senators' own tag centroid against the
+   *  country's (every district in play, `districtsInPlay`), via
+   *  `tags.distance`: 0 when the coalition mirrors the electorate, 1 when it
+   *  sits in one disjoint tag corner -- an out-of-step coalition pays close
+   *  to the flat pips, a representative one pays little. */
+  private backfireStrainScale(forRemoval: Seat[]): number {
+    if (!this.cfg.legislature.impeachBackfireStrainScaled) return 1;
+    const coalition = tags.centroid(
+      forRemoval.map((s) => tags.weights(this.cardById.get(s.holder!.cardId)?.identities ?? [])));
+    const country = tags.centroid(this.districtsInPlay().map((d) => tags.weights(d.demographics)));
+    return tags.distance(coalition, country) ?? 1;
   }
 
   // ---- annual tick step 2-3: the omnibill -----------------------------------
@@ -1310,6 +1391,10 @@ export class Game {
     d.partyFit = tags.distance(mine, party);
     d.offDistrict = this.offDistrict.get(d.card.id) ?? 0;
     d.power = this.powerOf(d.player);
+    if (this.shockEpicenter) {
+      const distance = tags.distance(this.shockEpicenter, mine);
+      d.shockExposure = distance === undefined ? 0 : 1 - distance;
+    }
   }
 
   private raceContext(office: Office, state: string, slot: number | undefined, presidentialWinner?: Party): RaceContext {
@@ -1322,6 +1407,7 @@ export class Game {
       economyMod: econ.economyModifier(this.economy, this.cfg.economy, this.cfg.national.strongEconomy, this.cfg.national.recession),
       presidentialWinner,
       shock: this.shockPips,
+      shockPositional: this.cfg.economy.shockPositional,
     };
   }
 
@@ -1658,7 +1744,7 @@ export class Game {
   *interactiveTick(human: number): Generator<UiRequest, void, UiAnswer> {
     for (const p of this.players) p.tapped.clear();
     this.convertSuccessions();
-    if (isBillYear(this.cfg, this.year) && !this.impeachment() && !this.convention()) {
+    if (isBillYear(this.cfg, this.year) && !this.impeachment() && !this.congressionalPropose() && !this.convention()) {
       this.omnibillInteractive(human, yield* this.askBill(human));
     }
     this.ratify();
@@ -1679,7 +1765,20 @@ export class Game {
     // called from `run()` alone, so a browser game ran to the year cap however
     // many bills anyone authored. Set here rather than returned so the existing
     // generator signature holds; the driver reads `wonBy`.
-    if (this.wonBy === undefined) {
+    //
+    // `run()` never calls `victor()` once `this.endedBy` is already set --
+    // `if (this.endedBy) break;` above its own call -- because an amendment
+    // ratifying is itself an ending, and it names no winner (v0.2 item 3's own
+    // rule: ratification stops the clock without naming one). This path had
+    // dropped that guard, so a game `ratify()` had just ended by amendment
+    // still asked `victor()` and could hand it a `bills`-target winner anyway
+    // -- surfaced by hf7y/american-cycle#86, which makes ratifying reachable
+    // through an ordinary chamber vote rather than only the rare, harder
+    // convention route, so this path actually gets exercised now instead of
+    // sitting dead on the one config where both endings compete for the same
+    // game (`engine/victory.test.ts`, "both paths agree on who won and when",
+    // seed 7777).
+    if (this.wonBy === undefined && !this.endedBy) {
       this.wonBy = this.victor();
       // `endedBy` was set by `run()` alone, so the browser could ratify an
       // amendment or reach a bill target and keep playing. Both paths now
@@ -1807,16 +1906,27 @@ export class Game {
    *  whose colour is not its own party -- and which party they DO carry is
    *  the direction of the defection. */
   private readCounters(d: Declaration): void {
-    const rec = this.billCounters.get(d.card.id);
-    d.billRecord = rec?.record ?? 0;
+    const rec = this.cardRecord(d.card.id, d.card.party);
+    d.billRecord = rec.billRecord;
+    d.crossBench = rec.crossBench;
+    d.crossBenchToward = rec.crossBenchToward;
+  }
+
+  /** #161 item 2: the same tallies `readCounters`/`readPosition` write onto a
+   *  Declaration, exposed read-only so the UI can show a hand card's record --
+   *  a politician's accumulated cross-bench votes, bill record and off-position
+   *  votes -- before it is ever played into a race, not only once withdrawal
+   *  asks. Public for the same reason `withdrawalView` is: the page has no
+   *  other way to reach a private map keyed by card id. */
+  cardRecord(cardId: string, party: Party): { crossBench: number; crossBenchToward?: Party; billRecord: number; offDistrict: number } {
+    const rec = this.billCounters.get(cardId);
     let cross = 0, toward: Party | undefined, most = 0;
     for (const [colour, n] of Object.entries(rec?.counters ?? {}) as [Party, number][]) {
-      if (colour === d.card.party) continue;
+      if (colour === party) continue;
       cross += n;
       if (n > most) { most = n; toward = colour; }
     }
-    d.crossBench = cross;
-    d.crossBenchToward = toward;
+    return { crossBench: cross, crossBenchToward: toward, billRecord: rec?.record ?? 0, offDistrict: this.offDistrict.get(cardId) ?? 0 };
   }
 
   /** Bill-vote counters, by card id. */
@@ -1832,10 +1942,10 @@ export class Game {
     for (const p of this.players) p.tapped.clear();      // 1. action phase
     this.convertSuccessions();
     const billYear = isBillYear(this.cfg, this.year);
-    // The year's legislating slot, now three-way: a removal, a convention
-    // call, or a bill. Wanting the ending is a decision taken INSTEAD of
-    // legislating.
-    if (billYear && !this.impeachment() && !this.convention()) this.omnibill();   // 2-3.
+    // The year's legislating slot, now four-way: a removal, a congressional
+    // amendment proposal, a convention call, or a bill. Wanting the ending is
+    // a decision taken INSTEAD of legislating.
+    if (billYear && !this.impeachment() && !this.congressionalPropose() && !this.convention()) this.omnibill();   // 2-3.
     this.ratify();
     const fed = econ.fedCheck(this.economy, this.cfg.economy, this.rng);  // 4.
     // Logged in BOTH paths. The interactive tick logged this and the headless
@@ -1861,6 +1971,18 @@ export class Game {
     this.shockPips = econ.shockCheck(this.cfg.economy, this.rng)
       ? (this.cfg.economy.shockPips ?? 0) : 0;
     if (this.shockPips) { this.stats.shocks++; this.log.push(`${this.year}: a shock hits the incumbents`); }
+    // #84: the epicenter is one currently-held seat's tag position, drawn at
+    // random from every seat actually held -- so a faction that concentrates
+    // its seats in one tag region is proportionally more likely to supply the
+    // draw AND to sit near it once drawn, with no separate weighting needed.
+    this.shockEpicenter = undefined;
+    if (this.shockPips && this.cfg.economy.shockPositional) {
+      const positions = this.seats
+        .filter((s) => s.holder)
+        .map((s) => tags.weights(this.cardById.get(s.holder!.cardId)?.identities ?? []))
+        .filter((w) => !tags.isEmpty(w));
+      if (positions.length) this.shockEpicenter = this.rng.pick(positions);
+    }
   }
 
   /** Set when a victory condition fires, so the result can say which. */
