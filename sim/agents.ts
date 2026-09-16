@@ -538,6 +538,65 @@ export class BillBlocker extends Base {
   voteBill(): boolean { return false; }
 }
 
+/** hf7y/american-cycle#37: DECISIONS.md names "table politics against a
+ *  runaway leader" as one of five things ruled untestable by simulation,
+ *  because every agent above optimises its own score and none of them treat
+ *  a RIVAL's score as an input at all. This one does. Once a rival is
+ *  clearly ahead of the rest of the field, it stops scoring for itself on
+ *  three axes and starts spending against that rival specifically:
+ *  contesting the leader's own held seats first, denying every bill outright
+ *  regardless of tag fit, and moving to remove the leader the moment they
+ *  hold the presidency. `RunawayMaximiser`'s own comment asks whether the
+ *  RULES alone supply a brake; this is the agent that asks whether the TABLE
+ *  does. */
+export class RunawayBrake extends Base {
+  /** +6 matches this file's other single-pickup bonuses (defend a held seat,
+   *  step a governor to Senate): a leader must clear the rest of the field's
+   *  average by a full pickup, not by whatever happens to be left in hands
+   *  after one uneven declare round. Unprinted (#87). */
+  private static readonly RUNAWAY_MARGIN = 6;
+  /** The rival with the highest score, but only once they clear the REST of
+   *  the field's average by the margin above -- a two-player gap the third
+   *  and fourth players have already closed is not a runaway, it is noise. */
+  protected leader(v: GameView): number | undefined {
+    const others = v.players.map((p, i) => ({ i, score: p.score })).filter((s) => s.i !== v.me);
+    if (others.length < 2) return undefined;
+    const top = others.reduce((b, s) => (s.score > b.score ? s : b), others[0]);
+    const rest = others.filter((s) => s.i !== top.i);
+    const restMean = rest.reduce((n, s) => n + s.score, 0) / rest.length;
+    return top.score - restMean >= RunawayBrake.RUNAWAY_MARGIN ? top.i : undefined;
+  }
+  declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[] {
+    const leader = this.leader(v);
+    const held = leader === undefined ? new Set<string>()
+      : new Set(v.seats.filter((s) => s.holder?.player === leader)
+        .map((s) => raceKey({ office: s.office, state: s.state, slot: s.slot })));
+    const o = counterDeclare(options(v, open, this.cfg), pending, v.me, 2)
+      .map((x) => (held.has(raceKey(x.d)) ? { ...x, edge: x.edge + 6 } : x));
+    return pickDistinct(o.sort(byEdge), this.budget(v));
+  }
+  /** No bill clears while a rival is running away -- the table denies the
+   *  leader's chamber a win regardless of what the bill actually does, which
+   *  is the blunt, deniable form real coalition obstruction takes. Absent a
+   *  leader, votes exactly as every other agent above does. */
+  voteBill(v: GameView, g: number, seat: Seat, billTags?: readonly IdentityTag[]): boolean {
+    return this.leader(v) === undefined ? super.voteBill(v, g, seat, billTags) : false;
+  }
+  moveImpeach(v: GameView): boolean {
+    const leader = this.leader(v);
+    const pres = v.seats.find((s) => s.office === 'president' && s.holder);
+    if (leader === undefined || !pres || pres.holder!.player !== leader) return false;
+    const senate = v.seats.filter((s) => s.office === 'senator' && s.holder);
+    const against = senate.filter((s) => s.holder!.party !== pres.holder!.party).length;
+    return senate.length > 0 && against / senate.length >= 0.5;
+  }
+  voteImpeach(v: GameView, seat: Seat): boolean {
+    const leader = this.leader(v);
+    const pres = v.seats.find((s) => s.office === 'president' && s.holder);
+    return leader !== undefined && !!pres && pres.holder!.player === leader && seat.holder?.party !== pres.holder!.party;
+  }
+}
+
 export const AGENTS: Record<string, new (cfg: Config, rng: RNG) => Agent> = {
   Random: class extends RandomAgent { constructor(c: Config, r: RNG) { super('Random', c, r); } },
   Greedy: class extends GreedyAgent { constructor(c: Config, r: RNG) { super('Greedy', c, r); } },
@@ -556,4 +615,5 @@ export const AGENTS: Record<string, new (cfg: Config, rng: RNG) => Agent> = {
   BillAuthor: class extends BillAuthor { constructor(c: Config, r: RNG) { super('BillAuthor', c, r); } },
   Vetoer: class extends Vetoer { constructor(c: Config, r: RNG) { super('Vetoer', c, r); } },
   BillBlocker: class extends BillBlocker { constructor(c: Config, r: RNG) { super('BillBlocker', c, r); } },
+  RunawayBrake: class extends RunawayBrake { constructor(c: Config, r: RNG) { super('RunawayBrake', c, r); } },
 };
