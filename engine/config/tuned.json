@@ -102,7 +102,8 @@
     "deckOutEnds": true,
     "billTarget": 8,
     "resignToRun": true,
-    "oddYearGovernors": true
+    "oddYearGovernors": true,
+    "generalLoserReturns": true
   },
   "placeholders": {
     "primaryGeneral.extremistPrimary": "Extremism is a primary bonus and a general penalty, and no magnitude was ever printed.",
@@ -135,7 +136,8 @@
     "hand.bonusPresident": "Office hand-size bonuses were printed without saying per-seat or per-office. Read per seat rather than per office they compound into a runaway as seats accumulate; findings/runaway-no-brake.ts measures the determination point with them switched off. Implemented per office held, same as hand.bonusSenator, hand.bonusGovernor and hand.bonusRepresentative.",
     "hand.bonusSenator": "Per office held, not per seat -- see hand.bonusPresident.",
     "hand.bonusGovernor": "Per office held, not per seat -- see hand.bonusPresident.",
-    "hand.bonusRepresentative": "Per office held, not per seat -- see hand.bonusPresident."
+    "hand.bonusRepresentative": "Per office held, not per seat -- see hand.bonusPresident.",
+    "game.generalLoserReturns": "The sacrificial-candidate finding's lever B, on by default here. The engine booked nearly every House race as a walkover because a general-election loser was discarded instead of returning to hand the way a primary loser already does -- nobody was left to run a second bid. Measured: enabling it alone moved the largest share of walkovers into contested races of the three levers tried. It does not touch the blowout band, which is capped separately by the pip vocabulary and out of reach for any of these levers. The paired flag, game.contestCapture, measured inert and stays off."
   },
   "scoring": {
     "billOnBooks": 3,
