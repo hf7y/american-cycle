@@ -42,6 +42,7 @@ const OPPONENT_BLURB = {
   Vetoer:'Strong on some rulesets. Chases the presidency and vetoes every bill while it holds the pen, rather than only under split government.',
   BillBlocker:'Strong. Floods the Senate like SenateFlood, but votes no on everything — denies the 60% cloture threshold outright.',
   Dealmaker:'Fair fight. Votes fit first like everyone else, but repays a bill author who has helped it before, even off-fit — and never forgets a favour that was never returned.',
+  RunawayBrake:'Ordinary until a rival is clearly running away — then it contests that rival\'s own held seats, blocks every bill, and moves to impeach them if they hold the presidency. Needs a third player to tell a runaway leader from an ordinary rival, so at 1v1 it plays exactly like Greedy.',
 };
 const SOLITAIRE_BLURB = {
   Greedy:"The board's recommended opponent. Fair fight — you'll win about half of these, one-on-one.",
@@ -62,9 +63,10 @@ const SOLITAIRE_BLURB = {
   RunawayMaximiser:'Very gentle 1v1. You should win about 85% of these.',
   WalkoverFarmer:'Gentle 1v1. You should win about 77% of these.',
   Dealmaker:'Fair 1v1. You should win about 49% of these — at 1v1 there is only one other player to build a ledger with, so it plays close to Greedy.',
+  RunawayBrake:'Fair 1v1 — plays exactly like Greedy with only one rival to measure. You should win about 49% of these.',
 };
 const SOLITAIRE_TIER = {
-  Greedy:'fair', HeterodoxSpecialist:'fair', EconomyChicken:'fair', Vetoer:'fair', Dealmaker:'fair',
+  Greedy:'fair', HeterodoxSpecialist:'fair', EconomyChicken:'fair', Vetoer:'fair', Dealmaker:'fair', RunawayBrake:'fair',
   Lookahead:'hard', BillBlocker:'hard', Impeacher:'hard', VPBackstab:'hard', SenateFlood:'hard', Launchpad:'hard',
   HouseFarm:'gentle', WideAndEmpty:'gentle', BillAuthor:'gentle', RunawayMaximiser:'gentle', WalkoverFarmer:'gentle', BillMaximizer:'gentle', Random:'gentle',
 };

@@ -42,6 +42,12 @@ export const finding: Finding = {
       // so the extra reciprocal yes votes cut close to evenly -- a coin
       // flip, same shape RunawayBrake's own 1v1 degenerate case reads.
       Dealmaker: 50.7,
+      // hf7y/american-cycle#37: RunawayBrake's leader-detection needs a
+      // rival AND a benchmark rival to compare them against (see its own
+      // `leader()` comment) -- unmeetable at 1v1, so it degenerates to
+      // exactly GreedyAgent's declare/vote/veto and this is a Greedy-mirror
+      // duel, correctly landing at a coin flip.
+      RunawayBrake: 50.7,
     };
 
     return AGENT_NAMES.map((name) => {
