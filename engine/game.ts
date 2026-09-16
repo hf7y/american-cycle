@@ -204,7 +204,11 @@ export interface Agent {
    *  nomination. Any player may offer a card to any ticket. */
   offerVP?(v: GameView, nominee: { player: number; party: Party }): CandidateCard | undefined;
   pickVP?(v: GameView, offers: VPOffer[]): VPOffer | undefined;
-  voteBill(v: GameView, g: number, seat: Seat, billTags?: readonly IdentityTag[]): boolean;
+  /** hf7y/american-cycle#37: `authorId` is who proposed this year's bill --
+   *  the only identity a vote-trading agent needs to check its ledger
+   *  against. Omit-safe: every existing agent's narrower signature still
+   *  satisfies this interface. */
+  voteBill(v: GameView, g: number, seat: Seat, billTags?: readonly IdentityTag[], authorId?: number): boolean;
   veto(v: GameView, g: number): boolean;
 }
 
@@ -896,7 +900,7 @@ export class Game {
       // is, by fit between the seat's district and the tags on offer. `g` is
       // spending and has no referent here, so agents that key off it (e.g.
       // EconomyChicken) see `g === 0`, their own "nothing to spend" case.
-      const yes = this.agents[s.holder.player].voteBill(this.view(s.holder.player), 0, s, proposedTags);
+      const yes = this.agents[s.holder.player].voteBill(this.view(s.holder.player), 0, s, proposedTags, authorId);
       votes.push({ player: s.holder.player, party: s.holder.party, office: s.office, yes, cardId: s.holder.cardId });
     }
 
@@ -1070,7 +1074,7 @@ export class Game {
     for (const s of this.seats) {
       if (!s.holder || (s.office !== 'senator' && s.office !== 'representative')) continue;
       const yes = s.holder.player === human && humanYes !== undefined
-        ? humanYes : this.agents[s.holder.player].voteBill(this.view(s.holder.player), g, s, billTags);
+        ? humanYes : this.agents[s.holder.player].voteBill(this.view(s.holder.player), g, s, billTags, authorId);
       votes.push({ player: s.holder.player, party: s.holder.party, office: s.office, yes, cardId: s.holder.cardId });
     }
 
@@ -1139,7 +1143,8 @@ export class Game {
         this.stats.billsRepealed++;
         this.log.push(`${this.year}: ${repealing.id} repealed, ${out.houseYes}/${out.houseTotal} H, ${out.senateYes}/${out.senateTotal} S`);
       } else {
-        this.bills.push({ id: `b${this.year}-${this.bills.length}`, year: this.year, g, author: authorId, tags: billTags });
+        const yesVoters = [...new Set(votes.filter((v) => v.yes).map((v) => v.player))];
+        this.bills.push({ id: `b${this.year}-${this.bills.length}`, year: this.year, g, author: authorId, tags: billTags, yesVoters });
         this.log.push(`${this.year}: omnibill G${g} [${billTags.join(', ')}] passed ${out.houseYes}/${out.houseTotal} H, ${out.senateYes}/${out.senateTotal} S`);
       }
       // #78's ruling: a passed bill places a counter, toward the House

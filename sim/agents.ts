@@ -4,7 +4,7 @@
 import type { Agent, GameView, OpenRace, PendingPeg, Config, VPOffer } from '../engine/game.ts';
 import type { Declaration, WithdrawalView } from '../engine/rules/elections.ts';
 import { buildModifiers, eligible, homeDistrict } from '../engine/rules/elections.ts';
-import type { CandidateCard, IdentityTag, Office, Party, Seat } from '../engine/types/index.ts';
+import type { CandidateCard, EnactedBill, IdentityTag, Office, Party, Seat } from '../engine/types/index.ts';
 import { RNG } from '../engine/rules/rng.ts';
 import * as tags from '../engine/rules/tags.ts';
 import { economyModifier } from '../engine/rules/economy.ts';
@@ -538,6 +538,45 @@ export class BillBlocker extends Base {
   voteBill(): boolean { return false; }
 }
 
+/** hf7y/american-cycle#37: the plank of DECISIONS.md's "untestable by
+ *  simulation" table politics list that RunawayBrake (#255/#257, reacting to
+ *  a rival's SCORE) and VPBackstab (reacting to a rival's TICKET) both leave
+ *  untouched -- an agent that trades. Voting is simultaneous and secret
+ *  (`omnibill`, engine/game.ts), so no agent can see another's vote before
+ *  casting its own: there is no channel to negotiate an offer on. The one
+ *  channel that DOES survive is the public record afterward -- `v.bills`
+ *  already names who authored each passed bill, and now (`EnactedBill.
+ *  yesVoters`) who voted for it -- so trading here means paying forward a
+ *  favour already on the books, not striking a deal in advance. */
+function favor(me: number, other: number, bills: readonly EnactedBill[]): number {
+  let f = 0;
+  for (const b of bills) {
+    if (b.author === me && b.yesVoters?.includes(other)) f += 1;
+    if (b.author === other && b.yesVoters?.includes(me)) f -= 1;
+  }
+  return f;
+}
+
+export class Dealmaker extends Base {
+  declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[] {
+    return pickDistinct(counterDeclare(options(v, open, this.cfg), pending, v.me, 2).sort(byEdge), this.budget(v));
+  }
+  /** A bill that already fits needs no trade. One that does not still gets a
+   *  yes when its author is in this agent's debt -- `favor` is positive only
+   *  when `authorId` has voted yes on a bill THIS agent authored more often
+   *  than this agent has returned the favour, so repaying it can only ever
+   *  clear a real balance, never manufacture one on a stranger. Nothing here
+   *  ever forgives a balance except a vote actually cast the other way, so an
+   *  author who takes the vote and never reciprocates simply never earns a
+   *  second one -- the whole of "remember who reneged" is that the ledger
+   *  has no eraser. */
+  voteBill(v: GameView, g: number, seat: Seat, billTags?: readonly IdentityTag[], authorId?: number): boolean {
+    if (super.voteBill(v, g, seat, billTags)) return true;
+    if (authorId === undefined || authorId === v.me) return false;
+    return favor(v.me, authorId, v.bills) > 0;
+  }
+}
+
 /** hf7y/american-cycle#37: DECISIONS.md names "table politics against a
  *  runaway leader" as one of five things ruled untestable by simulation,
  *  because every agent above optimises its own score and none of them treat
@@ -615,5 +654,6 @@ export const AGENTS: Record<string, new (cfg: Config, rng: RNG) => Agent> = {
   BillAuthor: class extends BillAuthor { constructor(c: Config, r: RNG) { super('BillAuthor', c, r); } },
   Vetoer: class extends Vetoer { constructor(c: Config, r: RNG) { super('Vetoer', c, r); } },
   BillBlocker: class extends BillBlocker { constructor(c: Config, r: RNG) { super('BillBlocker', c, r); } },
+  Dealmaker: class extends Dealmaker { constructor(c: Config, r: RNG) { super('Dealmaker', c, r); } },
   RunawayBrake: class extends RunawayBrake { constructor(c: Config, r: RNG) { super('RunawayBrake', c, r); } },
 };
