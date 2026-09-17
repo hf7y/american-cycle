@@ -160,7 +160,13 @@ function playOneTracked(cfg: Config, seed: number): { r: GameResult; log: readon
 }
 
 function main(): void {
-  const games = Number(process.argv[2] ?? 120);
+  // 120 games/config zeroed `convention-call-fails` under #10's uncontestedPush
+  // retune (0/240, fixed seeds) though it still fires -- 23/1600 at games=800 --
+  // because stronger lean push clears the 2/3 bar more often, thinning an
+  // already-rare event (5/240 pre-retune) below this tool's zero-tolerance gate.
+  // 480 (6/800 measured) restores real margin without losing the "small, fast
+  // N" property this file's own comment names as the point of ALWAYS_SEATED.
+  const games = Number(process.argv[2] ?? 480);
   const configArg = process.argv[3];
   const configs = configArg ? configArg.split(',') : ['as-written-plus.json', 'tuned.json'];
 
