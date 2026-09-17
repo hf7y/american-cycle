@@ -193,9 +193,10 @@ If an implementation question is not answered by the design doc, **it is probabl
 The social layer is a large fraction of this design and most of it still cannot be measured by agents:
 
 - Negotiation before the bill vote
-- VP horse-trading during the nomination
 - Naming the omnibill
 
 Where a finding depends on any of these, recommend a human playtest rather than a parameter change.
 
-**Two items left this list 2026-09-16 (hf7y/american-cycle#37):** table politics against a runaway leader (`RunawayBrake`, #257) and coalition-building for impeachment (`Dealmaker` + `Whip`, #258/#260) are both now agent-reachable, via the public post-hoc favour ledger `Dealmaker` introduced (`EnactedBill.yesVoters`) rather than pre-vote negotiation. The three still above share a different blocker: `engine/game.ts`'s bill vote is simultaneous and secret by construction, so no agent can signal another before casting its own vote. Whether that changes is hf7y/american-cycle#263, open.
+**Two items left this list 2026-09-16 (hf7y/american-cycle#37):** table politics against a runaway leader (`RunawayBrake`, #257) and coalition-building for impeachment (`Dealmaker` + `Whip`, #258/#260) are both now agent-reachable, via the public post-hoc favour ledger `Dealmaker` introduced (`EnactedBill.yesVoters`) rather than pre-vote negotiation. "Negotiation before the bill vote" shares a different blocker: `engine/game.ts`'s bill vote is simultaneous and secret by construction, so no agent can signal another before casting its own vote. Whether that changes is hf7y/american-cycle#263, open.
+
+**A third item left this list 2026-09-17 (hf7y/american-cycle#37):** VP horse-trading during the nomination was never blocked by the simultaneous-vote wall above -- `offerVP`/`pickVP` are already a real bilateral channel, `VPBackstab` uses it one-directionally to plant a card for a later coup. What was missing was an agent that PRICES the ticket against the same debt `Dealmaker` already tracks, and a way for that agent to see who currently holds it: `GameView.vicePresident` made the ticket visible the same way `v.bills` makes bill authorship visible, and `Horsetrader` reads both channels' combined balance. `findings/vp-horsetrading-changes-passage.ts` measures it the same way `vote-trading-changes-passage.ts` measured `Dealmaker`.
