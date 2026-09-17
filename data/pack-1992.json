@@ -2135,6 +2135,28 @@
         }
       ],
       "provenance": {}
+    },
+    {
+      "kind": "candidate",
+      "id": "daniel-inouye-1992",
+      "name": "Daniel Inouye",
+      "party": "D",
+      "homeState": "HI",
+      "homeStateBonus": 3,
+      "identities": [
+        "urban"
+      ],
+      "identityWeights": {
+        "urban": 1
+      },
+      "belief": "Hawaii's senator since statehood",
+      "era": 1992,
+      "effects": [],
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     }
   ]
 }

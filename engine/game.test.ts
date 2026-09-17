@@ -588,12 +588,14 @@ test('engine/config/three-terms.json actually ends a game on three-terms, not ju
   // any of these features; it is the rebalancing hf7y/american-cycle#86's
   // own ruling names as its largest risk, and the proposal RATE it leaves
   // open is a separate, unmeasured follow-up (D6-amendment-rate), not
-  // something this wiring pass was asked to tune. Re-swept against this
-  // exact combined pool+rules state (0-39): reaches three-terms on 13, 17,
-  // 19, 26, 29, 31.
-  const rng = new RNG(13);
+  // something this wiring pass was asked to tune. hf7y/american-cycle#90's
+  // Hawaii-native candidate cards (Fong/Matsunaga/Inouye/Lingle/Hirono/Green)
+  // shifted the pool again and moved seed 13 to an amendment ending. Re-swept
+  // against this exact combined pool+rules state (0-79): reaches
+  // three-terms on 4, 21, 31, 45, 64, 67.
+  const rng = new RNG(4);
   const agents: Agent[] = ['Greedy', 'BillAuthor', 'Random'].map((n) => new AGENTS[n](cfg, rng));
-  const g = new Game(agents, structuredClone(CARDS), cfg, 13);
+  const g = new Game(agents, structuredClone(CARDS), cfg, 4);
   const result = g.run();
   assert.equal(result.endedBy, 'three-terms');
   assert.equal(result.wonBy, result.winner, 'a victory condition, not a score tie-break, decided this game');
