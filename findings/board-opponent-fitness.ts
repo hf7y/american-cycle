@@ -48,6 +48,11 @@ export const finding: Finding = {
       // exactly GreedyAgent's declare/vote/veto and this is a Greedy-mirror
       // duel, correctly landing at a coin flip.
       RunawayBrake: 50.7,
+      // hf7y/american-cycle#37: unlike RunawayBrake, the VP channel is live
+      // at 1v1 -- there is exactly one other player to offer a ticket to or
+      // accept one from, so a real (if small) ledger builds and edges this
+      // past a coin flip rather than degenerating to a Greedy mirror.
+      Horsetrader: 54,
     };
 
     return AGENT_NAMES.map((name) => {

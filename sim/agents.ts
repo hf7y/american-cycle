@@ -577,6 +577,54 @@ export class Dealmaker extends Base {
   }
 }
 
+/** hf7y/american-cycle#37: DECISIONS.md's second untested plank, "VP
+ *  horse-trading during the nomination". `offerVP`/`pickVP` were already a
+ *  real bilateral channel -- `VPBackstab` uses it, one-directionally, to
+ *  plant a card for a later coup -- but no agent had ever priced a ticket
+ *  slot against the same debt `Dealmaker` already tracks. `GameView.
+ *  vicePresident` (added for this) makes who currently supplies the
+ *  president's running mate visible the same way `v.bills` makes bill
+ *  authorship visible, so the ticket becomes a second thing `favor` can
+ *  read: giving a debtor the VP slot repays exactly like a yes-vote does,
+ *  and receiving one from a debtor is exactly like being owed one. */
+function vpFavor(me: number, other: number, v: GameView): number {
+  const pres = v.seats.find((s) => s.office === 'president' && s.holder);
+  if (!pres?.holder || !v.vicePresident) return 0;
+  if (pres.holder.player === me && v.vicePresident.from === other) return 1;   // other supplied MY running mate: I owe them
+  if (pres.holder.player === other && v.vicePresident.from === me) return -1;  // I supplied THEIRS: already repaid
+  return 0;
+}
+
+export class Horsetrader extends Base {
+  declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[] {
+    return pickDistinct(counterDeclare(options(v, open, this.cfg), pending, v.me, 2).sort(byEdge), this.budget(v));
+  }
+  /** Same repay-only policy as `Dealmaker.voteBill`, reading both channels'
+   *  combined balance -- a VP slot given can buy a yes just as a favour
+   *  repaid on the bill ledger already does. */
+  voteBill(v: GameView, g: number, seat: Seat, billTags?: readonly IdentityTag[], authorId?: number): boolean {
+    if (super.voteBill(v, g, seat, billTags)) return true;
+    if (authorId === undefined || authorId === v.me) return false;
+    return favor(v.me, authorId, v.bills) + vpFavor(v.me, authorId, v) > 0;
+  }
+  /** Offer the ticket to whoever the bill ledger says is owed -- never to a
+   *  stranger, and never merely for the best card on offer the way `Base`'s
+   *  default or `VPBackstab`'s unconditional offer do. */
+  offerVP(v: GameView, nominee: { player: number; party: Party }): CandidateCard | undefined {
+    if (nominee.player === v.me || favor(v.me, nominee.player, v.bills) <= 0) return undefined;
+    const hand = v.players[v.me].hand.filter((c) => c.kind === 'candidate') as CandidateCard[];
+    if (!hand.length) return undefined;
+    return hand.reduce((best, c) => (c.homeStateBonus > best.homeStateBonus ? c : best), hand[0]);
+  }
+  /** Accept the offer from whoever is owed the most, cementing the standing
+   *  balance instead of chasing the largest home-state number the way
+   *  `Base`'s default does. */
+  pickVP(v: GameView, offers: VPOffer[]): VPOffer | undefined {
+    if (!offers.length) return undefined;
+    return offers.reduce((best, o) => (favor(v.me, o.from, v.bills) > favor(v.me, best.from, v.bills) ? o : best), offers[0]);
+  }
+}
+
 /** hf7y/american-cycle#37: DECISIONS.md names "table politics against a
  *  runaway leader" as one of five things ruled untestable by simulation,
  *  because every agent above optimises its own score and none of them treat
@@ -656,4 +704,5 @@ export const AGENTS: Record<string, new (cfg: Config, rng: RNG) => Agent> = {
   BillBlocker: class extends BillBlocker { constructor(c: Config, r: RNG) { super('BillBlocker', c, r); } },
   Dealmaker: class extends Dealmaker { constructor(c: Config, r: RNG) { super('Dealmaker', c, r); } },
   RunawayBrake: class extends RunawayBrake { constructor(c: Config, r: RNG) { super('RunawayBrake', c, r); } },
+  Horsetrader: class extends Horsetrader { constructor(c: Config, r: RNG) { super('Horsetrader', c, r); } },
 };

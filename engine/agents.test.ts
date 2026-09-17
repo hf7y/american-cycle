@@ -8,10 +8,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import type { Config, GameView, PlayerState } from './game.ts';
-import { Dealmaker, RunawayBrake } from '../sim/agents.ts';
+import type { Config, GameView, PlayerState, VPOffer } from './game.ts';
+import { Dealmaker, RunawayBrake, Horsetrader } from '../sim/agents.ts';
 import { RNG } from './rules/rng.ts';
-import type { EnactedBill, Seat } from './types/index.ts';
+import type { CandidateCard, EnactedBill, Seat } from './types/index.ts';
 
 const cfg: Config = JSON.parse(readFileSync(new URL('./config/tuned.json', import.meta.url), 'utf8'));
 
@@ -174,4 +174,63 @@ test('RunawayBrake: never moves or votes to impeach when no rival is running awa
   const level = view([player(0), player(1), player(1), player(1)], seats);
   assert.equal(agent().moveImpeach(level), false);
   assert.equal(agent().voteImpeach(level, seats[1]), false);
+});
+
+/** hf7y/american-cycle#37: `Horsetrader` reads the same `favor` ledger
+ *  `Dealmaker` does, plus `GameView.vicePresident` for the ticket side --
+ *  unit-tested directly for the same reason `Dealmaker`'s tests above are:
+ *  a scripted agent's decision points, not a full simulated game. */
+const card = (id: string, homeStateBonus: number): CandidateCard =>
+  ({ id, name: id, party: 'D', homeState: 'ZZ', homeStateBonus, identities: [], era: 1976, effects: [] });
+
+const horsetrader = () => new Horsetrader('Horsetrader', cfg, new RNG(1));
+
+test('Horsetrader: offers the ticket to nobody when no debt is owed', () => {
+  const { v } = fixture([]);
+  assert.equal(horsetrader().offerVP(v, { player: 1, party: 'D' }), undefined);
+});
+
+test('Horsetrader: never offers to itself, ledger or not', () => {
+  const bills: EnactedBill[] = [{ id: 'b0', year: 1976, g: 3, author: 0, tags: ['union'], yesVoters: [0] }];
+  const { v } = fixture(bills);
+  assert.equal(horsetrader().offerVP(v, { player: 0, party: 'D' }), undefined);
+});
+
+test('Horsetrader: offers its best card once the ledger shows a debt owed to the nominee', () => {
+  // player 1 voted yes on player 0's own bill -- player 0 owes player 1
+  const bills: EnactedBill[] = [{ id: 'b0', year: 1976, g: 3, author: 0, tags: ['union'], yesVoters: [0, 1] }];
+  const { v } = fixture(bills);
+  v.players[0].hand = [
+    { kind: 'candidate', ...card('weak', 1) },
+    { kind: 'candidate', ...card('strong', 4) },
+  ];
+  assert.equal(horsetrader().offerVP(v, { player: 1, party: 'D' })?.id, 'strong');
+});
+
+test('Horsetrader: accepts the offer from whoever is owed the most, not the biggest home-state bonus', () => {
+  // player 2 voted yes on player 0's own bill -- player 0 owes player 2, not player 1
+  const bills: EnactedBill[] = [{ id: 'b0', year: 1976, g: 3, author: 0, tags: ['union'], yesVoters: [0, 2] }];
+  const { v } = fixture(bills);
+  const offers: VPOffer[] = [
+    { from: 1, card: card('big-bonus', 5) },
+    { from: 2, card: card('owed', 1) },
+  ];
+  assert.equal(horsetrader().pickVP(v, offers)?.from, 2);
+});
+
+test('Horsetrader: repays a bill author who supplied its running mate, even off-fit', () => {
+  const { v, seat } = fixture([]);
+  v.seats = [{ office: 'president', state: 'US', holder: { cardId: 'p', player: 0, party: 'D', since: 1976 } }, seat];
+  v.vicePresident = { cardId: 'vp1', card: card('vp1', 2), from: 1 };
+  // player 1 supplied player 0's own running mate: player 0 owes them, off-fit or not
+  assert.equal(horsetrader().voteBill(v, 3, seat, ['union'], 1), true);
+});
+
+test('Horsetrader: giving a rival the VP slot is not itself a debt owed back', () => {
+  const { v, seat } = fixture([]);
+  v.seats = [{ office: 'president', state: 'US', holder: { cardId: 'p', player: 1, party: 'D', since: 1976 } }, seat];
+  v.vicePresident = { cardId: 'vp1', card: card('vp1', 2), from: 0 };
+  // player 0 supplied player 1's running mate -- that is player 0 helping,
+  // so it must not read as player 1 owing them
+  assert.equal(horsetrader().voteBill(v, 3, seat, ['union'], 1), false);
 });

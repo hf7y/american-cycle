@@ -153,6 +153,13 @@ export interface GameView {
    *  `repealedIn` set, because "what did you undo" is a decision input. */
   bills: readonly EnactedBill[];
   amendments: readonly Amendment[];
+  /** hf7y/american-cycle#37: the ticket was already tracked (`this.
+   *  vicePresident`, set in `presidentialRace`) but never handed to an agent
+   *  -- the same class of gap #39 named a bug rather than an oversight to
+   *  leave standing: a visible track agents cannot read. Who currently
+   *  supplies the sitting president's running mate is public information at
+   *  the table, so it belongs here. */
+  vicePresident?: VicePresident;
 }
 
 export interface Agent {
@@ -665,6 +672,7 @@ export class Game {
       economy: this.economy, lean: this.leanMap, seats: this.seats,
       players: this.players, me, presidentParty: this.president?.party,
       bills: this.bills, amendments: this.amendments,
+      vicePresident: this.vicePresident,
     };
   }
 
