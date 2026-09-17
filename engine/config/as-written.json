@@ -93,7 +93,9 @@
   },
   "draft": {
     "packSize": 15,
-    "districtsPerPack": 5
+    "districtsPerPack": 5,
+    "districtsDealt": 14,
+    "districtsPerCycle": 1
   },
   "game": {
     "startYear": 1976,

@@ -28,6 +28,16 @@ import { STATES, BY_CODE, senateUp, governorUp, electors, DC_ELECTORS, type Stat
 
 export interface Config {
   name: string;
+  /** hf7y/american-cycle#158: districts stopped competing with candidates for
+   *  a shared hand slot the moment they stopped being drafted (see
+   *  `draft.districtsDealt` below) -- `base`/`bonusX` now size the CANDIDATE
+   *  draft alone, run one card at a time (`draftCandidates`), not a combined
+   *  hand of both kinds filled by pack-passing. This is the answer to
+   *  DECISIONS.md Open item 2 ("the master tuning knob for game length and
+   *  runaway"): the knob survives under the same name, but it no longer also
+   *  sets board size (open-race count), which #77/#90 measured it doing
+   *  jointly with districts before -- raising it now raises ONLY candidate
+   *  supply against a district count fixed at deal time. */
   hand: { base: number; bonusPresident: number; bonusSenator: number; bonusGovernor: number; bonusRepresentative: number };
   resolution: { incumbency: number; identityBonus: number; incumbencyPrimary: number; crossOfficeIncumbency: number;
                 incumbencyHouse?: number; incumbencySenate?: number };
@@ -48,7 +58,18 @@ export interface Config {
      *  findings/odd-year-is-the-bill.ts. */
     billFrequency?: 'annual' | 'biennial';
   };
-  draft: { packSize: number; districtsPerPack: number };
+  /** `packSize`/`districtsPerPack` are the OLD pack-pass draft's knobs and
+   *  are read nowhere in the live path any more (hf7y/american-cycle#158) --
+   *  kept typed, unremoved, because several scratch scripts and one finding
+   *  (`findings/battleground-concentration.ts` item 2, a DRAFT-time forced
+   *  pick per #132) still read them for their own historical measurement.
+   *  `districtsDealt` is the new knob: every district a player will hold is
+   *  dealt once, directly, face down, at construction -- no pack, no choice,
+   *  no opponent ever sees a card go by. `districtsPerCycle` is the small
+   *  ongoing trickle that keeps later-era districts entering play the way
+   *  they always have (a 2010s district under a 1970s politician), now as a
+   *  private deal rather than a pack-pass pick. */
+  draft: { packSize: number; districtsPerPack: number; districtsDealt: number; districtsPerCycle?: number };
   /** v0.2 item 1. There is no running tally to configure: these are the
    *  weights the EPILOGUE reads off the board. */
   scoring: ScoringConfig;
@@ -131,7 +152,19 @@ export interface Config {
 export interface PlayerState {
   id: number;
   name: string;
+  /** hf7y/american-cycle#158: candidate cards only, drafted face-up one at a
+   *  time (`Game.draftCandidates`). Districts no longer pass through here --
+   *  see `districts`, below -- so `hand.length` alone is what `handSize()`
+   *  sizes; typed `Card[]` rather than the narrower candidate type only
+   *  because a handful of call sites still filter defensively
+   *  (`c.kind === 'candidate'`) from before the split. */
   hand: Card[];
+  /** hf7y/american-cycle#158: "the whole hand." Dealt once, secretly, at
+   *  construction (`Game.dealDistricts`), with a small ongoing private
+   *  trickle (`Game.dealMoreDistricts`) as later eras enter play -- never
+   *  through a pack, never a choice. A district transfers on `capture()` and
+   *  is otherwise conserved for the life of the game; it does not compete
+   *  with a candidate card for a hand slot any more. */
   districts: DistrictCard[];
   score: number;
   /** cards tapped to endorse this cycle; untap at cycle start */
@@ -163,7 +196,22 @@ export interface Agent {
   /** Which races to enter. Declaration is sequential around the table, so
    *  `pending` carries the pegs already on the board -- visible as contested
    *  races, with the cards still face down. Counter-declaring is the
-   *  counterplay to spreading thin. */
+   *  counterplay to spreading thin.
+   *
+   *  hf7y/american-cycle#158: called once per ROUND, not once per cycle. The
+   *  return is still your full edge-ranked wishlist (unchanged contract --
+   *  `sim/agents.ts`'s `options()`/`counterDeclare()`/`pickDistinct()` build
+   *  exactly this, bounded by `budget()`), but the engine now only takes the
+   *  FIRST entry that is not a card or a race you have already committed
+   *  this cycle, and calls again next round with `pending` grown by
+   *  whatever everyone else placed since. An array with nothing new in it
+   *  (everything already committed, or genuinely empty) is a pass, and once
+   *  you pass you are done for the cycle -- the set of legal, uncommitted
+   *  options can only shrink from here. Play stops when every active player
+   *  passes in the same round: the emergent stopping rule, in place of a
+   *  fixed hand exhausting itself in one batch. No shipped agent needs to
+   *  change anything to satisfy this -- returning a ranked list already
+   *  does the right thing under either calling convention. */
   declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[];
   /** Decided on incomplete information, by construction -- see
    *  engine/rules/elections.test.ts ("the withdrawal window closes before
@@ -292,6 +340,19 @@ export function victorOf(
 const raceKeyOf = (d: { office: Office; state: string; slot?: number }) => `${d.office}|${d.state}|${d.slot ?? ''}`;
 const sameRace = (a: { office: Office; state: string; slot?: number }, b: { office: Office; state: string; slot?: number }) =>
   raceKeyOf(a) === raceKeyOf(b);
+
+/** Runs a `UiRequest`-yielding generator to completion with no UI attached.
+ *  `declareRounds` only ever yields when `i === human`; called with
+ *  `human = -1` (matches no real seat, the same sentinel `game.parity.test.ts`
+ *  documents for the tick/interactiveTick split) it never yields at all, so
+ *  the generator's body runs straight through on the first `.next()` and
+ *  `driveHeadless` is just the type-safe way to read its return value back
+ *  out without a UI-shaped caller pretending to answer requests nobody sent. */
+function driveHeadless<T>(gen: Generator<unknown, T, unknown>): T {
+  const r = gen.next();
+  if (!r.done) throw new Error('declareRounds yielded with no human seat (human = -1) -- this should be unreachable');
+  return r.value;
+}
 
 export interface VPOffer { from: number; card: CandidateCard }
 /** A second card on the ticket. It does not score and is not consumed on
@@ -438,7 +499,12 @@ export class Game {
     this.eraQueue = eras.map((e) => this.rng.shuffle(cards.filter((c) => c.era === e)));
     this.talon = this.eraQueue.shift() ?? [];
     for (const c of cards) if (c.kind === 'candidate') this.cardById.set(c.id, c);
-    this.draft();
+    // hf7y/american-cycle#158: districts are dealt once, secretly, before a
+    // single politician card is ever revealed -- "that is the whole hand."
+    // Candidates are then drafted face-up, one at a time (`draftCandidates`),
+    // never through a shared pack again.
+    this.dealDistricts(cfg.draft.districtsDealt);
+    this.draftCandidates((p) => this.handSize(p));
   }
 
   /** The office bonuses are per OFFICE HELD, not per seat: "base 12 with
@@ -479,76 +545,11 @@ export class Game {
     return (mine / held.length) * this.players.length;
   }
 
-  private draw(p: PlayerState, n: number): void {
-    for (let i = 0; i < n; i++) {
-      if (!this.talon.length) {
-        // The next era enters play before the discard is recycled -- that is
-        // what puts 2010s districts under 1970s politicians.
-        if (this.eraQueue.length) this.talon = this.eraQueue.shift()!;
-        else if (this.discard.length) { this.talon = this.rng.shuffle(this.discard); this.discard = []; }
-        else return;                                 // the deck-out ending
-      }
-      const c = this.talon.pop()!;
-      if (c.kind === 'district') this.admitDistrict(p, c); else p.hand.push(c);
-    }
-  }
-
-  /** The draft: packs are dealt, each player takes one card and passes the
-   *  rest, and the pass repeats until the packs are exhausted. Repeat until
-   *  hands are full.
-   *
-   *  This replaces a random deal, and the difference is not cosmetic: dealing
-   *  at random made the opening hand predict the winner at twice chance,
-   *  because nobody could correct a bad opening. A draft is exactly the
-   *  mechanism that lets them. */
-  private draft(): void {
-    const size = this.cfg.draft.packSize;
-    let guard = 0;
-    // 40 rounds is a stall guard, not a rule: one card is taken per pack per
-    // round, so filling even the largest configured hand (well under 40 with
-    // hand.base=16 plus office bonuses) finishes long before this fires. It
-    // only bites if a config makes hands unfillable, in which case a game
-    // that ends short of a full hand beats one that spins forever (#87).
-    while (this.players.some((p) => this.held(p) < this.handSize(p)) && guard++ < 40) {
-      const packs: Card[][] = [];
-      for (let i = 0; i < this.players.length; i++) {
-        const pack: Card[] = [];
-        for (let k = 0; k < size; k++) {
-          const c = this.nextCard();
-          if (!c) break;
-          pack.push(c);
-        }
-        packs.push(pack);
-      }
-      if (packs.every((pk) => !pk.length)) return;      // pool exhausted
-
-      while (packs.some((pk) => pk.length)) {
-        const taken: (Card | undefined)[] = [];
-        for (let i = 0; i < this.players.length; i++) {
-          const pack = packs[i];
-          if (!pack.length) { taken.push(undefined); continue; }
-          const p = this.players[i];
-          const want = this.held(p) < this.handSize(p);
-          const pick = want
-            ? (this.agents[i].draftPick?.(this.view(i), pack) ?? defaultPick(pack, p, this.cfg.draft.districtsPerPack))
-            : pack[0];
-          const idx = pack.findIndex((c) => c === pick);
-          taken.push(pack.splice(idx >= 0 ? idx : 0, 1)[0]);
-        }
-        taken.forEach((c, i) => {
-          if (!c) return;
-          const p = this.players[i];
-          if (this.held(p) >= this.handSize(p)) { this.discard.push(c); return; }
-          if (c.kind === 'district') this.admitDistrict(p, c); else p.hand.push(c);
-        });
-        // pass the remainder around the table
-        packs.unshift(packs.pop()!);
-      }
-    }
-  }
-
   /** Pull one card from the talon, advancing eras and reshuffling the discard
-   *  the same way the constructor's initial deal does. */
+   *  the same way the constructor's initial deal does. Kind-agnostic --
+   *  callers that want one kind only (`dealDistricts`, `draftCandidates`) set
+   *  the other kind aside and return it to the talon when they are done, so
+   *  neither kind is ever discarded just for coming up at the wrong moment. */
   private nextCard(): Card | undefined {
     if (!this.talon.length) {
       if (this.eraQueue.length) this.talon = this.eraQueue.shift()!;
@@ -558,8 +559,101 @@ export class Game {
     return this.talon.pop();
   }
 
-  /** total cards held: candidates in hand plus districts in play */
-  held(p: PlayerState): number { return p.hand.length + p.districts.length; }
+  /** hf7y/american-cycle#158: "each player is dealt district cards, held
+   *  secret. That is the whole hand." Districts never went through a pack a
+   *  second player could see; the only thing that changes is that they no
+   *  longer compete with a candidate for the SAME pack-pass pick, because
+   *  there is no longer a pack -- a district is simply dealt, face down, the
+   *  moment it is drawn. Candidate cards drawn while looking for a district
+   *  are set aside and returned to the talon once every player is at target,
+   *  so the snake draft that follows (`draftCandidates`) sees them too. */
+  private dealDistricts(target: number): void {
+    const setAside: Card[] = [];
+    let anyWant = true;
+    while (anyWant) {
+      anyWant = false;
+      for (const p of this.players) {
+        if (p.districts.length >= target) continue;
+        anyWant = true;
+        let c = this.nextCard();
+        while (c && c.kind !== 'district') { setAside.push(c); c = this.nextCard(); }
+        if (!c) { anyWant = false; break; }            // pool exhausted
+        this.admitDistrict(p, c);
+      }
+    }
+    this.talon.push(...setAside);
+  }
+
+  /** The ongoing trickle: a handful of new districts, dealt the same private
+   *  way as `dealDistricts`, so a later era's redrawn seats (CA-8 running
+   *  urban/black/union -> urban/catholic -> urban/academic) keep entering
+   *  play over a long game the way they always have. Decoupled from the
+   *  candidate draft entirely -- raising or lowering this does not touch how
+   *  many politicians anyone holds. */
+  private dealMoreDistricts(n: number): void {
+    if (!n) return;
+    const setAside: Card[] = [];
+    for (const p of this.players) {
+      for (let k = 0; k < n; k++) {
+        let c = this.nextCard();
+        while (c && c.kind !== 'district') { setAside.push(c); c = this.nextCard(); }
+        if (!c) { this.talon.push(...setAside); return; }
+        this.admitDistrict(p, c);
+      }
+    }
+    this.talon.push(...setAside);
+  }
+
+  /** hf7y/american-cycle#158: politicians are drafted face-up, one at a
+   *  time, in SNAKE order (1..N, then N..1, repeating) -- keep or pass. The
+   *  direction reverses every round specifically so the same seat is not
+   *  first for every single reveal, which is the amplifier hf7y/american-cycle#55
+   *  measured on the OLD system's rotation: "seat 0 sits at 28% against a
+   *  33.3% fair share... the rotation is not incidental, it is the thing
+   *  holding the game fair." A card passed is discarded, not re-offered --
+   *  the simplest reading of "keep or pass" the issue names, and the one
+   *  documented here rather than the alternative (re-offering the same card
+   *  down the line) that a future measurement might prefer instead.
+   *
+   *  Replaces the old pack-pass draft for candidates ONLY -- districts are
+   *  dealt separately, above, and never enter this loop. */
+  private draftCandidates(target: (p: PlayerState) => number, startOrder?: number[]): void {
+    let guard = 0, forward = true;
+    // The refill call rotates its starting order by `cycleOffset` for the
+    // same reason `elections()` and the old `refill()` did: dealing (or
+    // declaring) in a fixed seat order hands the low seats a persistent
+    // edge whenever the pool is short. The initial construction-time draft
+    // has no round history to be unfair about yet, so it takes the identity
+    // order.
+    const order = startOrder ?? this.players.map((_, i) => i);
+    const setAside: Card[] = [];
+    while (this.players.some((p) => p.hand.length < target(p)) && guard++ < 4000) {
+      const seq = forward ? order : [...order].reverse();
+      forward = !forward;
+      let dealtAny = false;
+      for (const i of seq) {
+        const p = this.players[i];
+        if (p.hand.length >= target(p)) continue;
+        // District cards drawn while looking for a candidate are set aside,
+        // not admitted here -- `dealDistricts`/`dealMoreDistricts` are the
+        // only places a district enters play, so a player's district count
+        // stays a fact about THOSE deals, not an accident of draft timing.
+        let c = this.nextCard();
+        while (c && c.kind !== 'candidate') { setAside.push(c); c = this.nextCard(); }
+        if (!c) { this.talon.push(...setAside); return; }   // pool exhausted
+        dealtAny = true;
+        const custom = this.agents[i].draftPick;
+        // Reinterpreting the existing hook for a single-card reveal: a
+        // one-element pack, and a defined return (the card itself) means
+        // "keep." No shipped agent overrides `draftPick` today, so every
+        // agent runs `defaultKeepPolitician` unless and until one does.
+        const keep = custom ? custom(this.view(i), [c]) !== undefined : defaultKeepPolitician(c, p);
+        if (keep) p.hand.push(c); else this.discard.push(c);
+      }
+      if (!dealtAny) break;                             // every hand already full
+    }
+    this.talon.push(...setAside);
+  }
 
   /** Seats are held for their real terms, and then the member may run
    *  again. Winning removed the card from hand and nothing put it back, so no
@@ -1227,13 +1321,80 @@ export class Game {
   }
 
   // ---- annual tick steps 6-9: the elections ---------------------------------
+  /** hf7y/american-cycle#158: declarations go down ONE AT A TIME around the
+   *  circle, in repeating rounds, until a full round passes with nobody
+   *  adding anything new -- the emergent stopping rule the issue's ruling
+   *  asked for, in place of a fixed hand exhausting itself in one batch.
+   *  This is also the whole of "opponents can challenge a declaration":
+   *  because the loop keeps coming back around, everyone gets to react to
+   *  every peg placed since their last turn, not just to whoever went before
+   *  them in a single pass -- no separate challenge phase is needed.
+   *
+   *  `Agent.declare` keeps its EXACT signature and every shipped agent is
+   *  unchanged: `options()`/`counterDeclare()`/`pickDistinct()`
+   *  (`sim/agents.ts`) already return a full edge-ranked wishlist bounded by
+   *  `budget()`. What changes is only how the engine READS that list -- each
+   *  round, it walks the ranked array and takes the first entry that is not
+   *  a card or a race this player has already committed THIS CYCLE, and
+   *  treats "nothing left that qualifies" as a pass. Because the set of
+   *  legal, not-yet-committed pairs for a given player can only shrink round
+   *  over round (open races are fixed for the cycle and a player's own
+   *  committed sets only grow), a player who passes once has no legal move
+   *  left and is dropped from the loop for the rest of the cycle -- this is
+   *  what bounds the round count without an arbitrary cap, and the `guard`
+   *  below is a safety net, not the real terminator.
+   *
+   *  Shared by the headless `elections()` and the interactive
+   *  `electionsInteractive()` (`yield*`s this directly) so the rules exist
+   *  exactly once, the same discipline `resolveDeclared` already keeps. */
+  private *declareRounds(order: number[], open: OpenRace[], human: number)
+    : Generator<UiRequest, Declaration[], UiAnswer> {
+    const pending: PendingPeg[] = [];
+    const decls: Declaration[] = [];
+    const usedCards = new Map<number, Set<string>>();
+    const usedRaces = new Map<number, Set<string>>();
+    const counts = new Map<number, number>();
+    const active = new Set(order);
+    for (const i of order) { usedCards.set(i, new Set()); usedRaces.set(i, new Set()); }
+    let guard = 0;
+    while (active.size && guard++ < 400) {
+      for (const i of order) {
+        if (!active.has(i)) continue;
+        let mine: Declaration[];
+        if (i === human) {
+          const answer = yield { kind: 'declare', year: this.year, open, pending: [...pending] };
+          mine = answer.declarations ?? [];
+        } else {
+          mine = this.agents[i].declare(this.view(i), open, pending);
+        }
+        const p = this.players[i];
+        const uc = usedCards.get(i)!, ur = usedRaces.get(i)!;
+        let picked: Declaration | undefined;
+        for (const d of mine) {
+          if (uc.has(d.card.id) || ur.has(raceKeyOf(d))) continue;
+          if (!p.hand.some((c) => c.kind === 'candidate' && c.id === d.card.id)) continue;
+          const house = this.cfg.game.districtLevelEligibility && d.office === 'representative' ? d.slot : undefined;
+          if (d.office !== 'president' && !eligible(d.card, d.state, p.districts, house)) continue;
+          picked = d; break;
+        }
+        if (!picked) { active.delete(i); continue; }      // pass: no legal, uncommitted option left
+        uc.add(picked.card.id); ur.add(raceKeyOf(picked));
+        decls.push({ ...picked, player: i });
+        pending.push({ player: i, office: picked.office, state: picked.state, slot: picked.slot, party: picked.card.party });
+        counts.set(i, (counts.get(i) ?? 0) + 1);
+      }
+    }
+    // Same metric as before -- total declarations per player this cycle --
+    // now summed across rounds instead of read off one batch call.
+    for (const i of order) this.stats.decisions.push(counts.get(i) ?? 0);
+    return decls;
+  }
+
   private elections(): void {
     const wave = new Wave(this.rng);
     const open = this.openRaces();
     this.releaseExpiringTerms(open);
     this.releaseHolders();
-    const decls: Declaration[] = [];
-    const pending: PendingPeg[] = [];
     // Declaration is sequential around the table, and the order rotates each
     // cycle so going last is not a permanent tax.
     // Math.floor matters: in an ODD year `year / 2` is fractional, so the
@@ -1242,18 +1403,7 @@ export class Game {
     // comment) is what keeps cycle 1 from always seating the same player
     // first.
     const order = this.players.map((_, i) => (i + Math.floor(this.year / 2) + this.cycleOffset) % this.players.length);
-    for (const i of order) {
-      const mine = this.agents[i].declare(this.view(i), open, pending);
-      this.stats.decisions.push(mine.length);
-      for (const d of mine) {
-        const p = this.players[i];
-        if (!p.hand.some((c) => c.kind === 'candidate' && c.id === d.card.id)) continue;
-        const house = this.cfg.game.districtLevelEligibility && d.office === 'representative' ? d.slot : undefined;
-        if (d.office !== 'president' && !eligible(d.card, d.state, p.districts, house)) continue;
-        decls.push({ ...d, player: i });
-        pending.push({ player: i, office: d.office, state: d.state, slot: d.slot, party: d.card.party });
-      }
-    }
+    const decls = driveHeadless(this.declareRounds(order, open, -1));
     this.vacateForRunners(decls);
     this.resolveDeclared(decls, wave, -1);
   }
@@ -1830,37 +1980,24 @@ export class Game {
   }
 
   private *electionsInteractive(human: number): Generator<UiRequest, void, UiAnswer> {
-    // The human declares in rotation, seeing the same pegs every agent does (#149).
+    // The human declares in rotation, seeing the same pegs every agent does
+    // (#149) -- and now, per #158, the same ROUND-BY-ROUND rotation every
+    // agent sees: `declareRounds` yields once per round the human is still
+    // active, not once for the whole cycle, so the human can react to a peg
+    // placed after their own last turn exactly as an agent reacting on its
+    // next round would.
     const wave = new Wave(this.rng);
     const open = this.openRaces();
     this.releaseExpiringTerms(open);
     this.releaseHolders();
-    const decls: Declaration[] = [];
-    const pending: PendingPeg[] = [];
     // Math.floor matters: in an ODD year `year / 2` is fractional, so the
     // rotation produced a fractional agent index and crashed the moment
     // odd-year governor races were allowed to run. `cycleOffset` (see field
     // comment) is what keeps cycle 1 from always seating the same player
     // first.
     const order = this.players.map((_, i) => (i + Math.floor(this.year / 2) + this.cycleOffset) % this.players.length);
-    for (const i of order) {
-      let mine: Declaration[];
-      if (i === human) {
-        const answer = yield { kind: 'declare', year: this.year, open, pending: [...pending] };
-        mine = this.humanDeclarations = answer.declarations ?? [];
-      } else {
-        mine = this.agents[i].declare(this.view(i), open, pending);
-      }
-      this.stats.decisions.push(mine.length);
-      for (const d of mine) {
-        const p = this.players[i];
-        if (!p.hand.some((c) => c.kind === 'candidate' && c.id === d.card.id)) continue;
-        const house = this.cfg.game.districtLevelEligibility && d.office === 'representative' ? d.slot : undefined;
-        if (d.office !== 'president' && !eligible(d.card, d.state, p.districts, house)) continue;
-        decls.push({ ...d, player: i });
-        pending.push({ player: i, office: d.office, state: d.state, slot: d.slot, party: d.card.party });
-      }
-    }
+    const decls = yield* this.declareRounds(order, open, human);
+    this.humanDeclarations = decls.filter((d) => d.player === human);
 
     this.vacateForRunners(decls);
 
@@ -1908,15 +2045,16 @@ export class Game {
    *  showed up as a persistent ~7% scoring advantage for seat 0 and a 22pp
    *  win-share gap -- entirely an artefact of the loop order, not the design.
    *
-   *  Presence is scarce and must be purchased in the draft, so hand size
-   *  caps TOTAL cards held; a district you keep is a candidate you do not. */
+   *  hf7y/american-cycle#158: districts no longer share the hand cap --
+   *  `handSize()` sizes the candidate draft alone, run face-up one card at a
+   *  time (`draftCandidates`), and a small, separate, private trickle
+   *  (`districtsPerCycle`) keeps later-era districts entering play the way
+   *  they always did. Raising or lowering one no longer moves the other. */
   private refill(): void {
     const start = (Math.floor(this.year / 2) + this.cycleOffset) % this.players.length;
-    for (let k = 0; k < this.players.length; k++) {
-      const p = this.players[(start + k) % this.players.length];
-      const want = this.handSize(p) - p.hand.length - p.districts.length;
-      if (want > 0) this.draw(p, want);
-    }
+    const order = this.players.map((_, i) => (start + i) % this.players.length);
+    this.draftCandidates((p) => this.handSize(p), order);
+    this.dealMoreDistricts(this.cfg.draft.districtsPerCycle ?? 0);
   }
 
   /** The endings. The rule itself is `victorOf`, module-level and exported;
@@ -2078,7 +2216,19 @@ export class Game {
 
 function clampInt(v: number, lo: number, hi: number): number { return Math.max(lo, Math.min(hi, Math.round(v))); }
 
-/** The default draft heuristic. Candidates are valued by home-state bonus and
+/** hf7y/american-cycle#158: the OLD pack-pass draft heuristic. Read nowhere
+ *  in the live path any more -- districts are dealt (`dealDistricts`), not
+ *  drafted, and candidates are kept-or-passed one at a time
+ *  (`defaultKeepPolitician`, below) rather than chosen from a multi-card
+ *  pack. Left in place, unmodified, because `findings/battleground-
+ *  concentration.ts` (item 2, a DRAFT-time forced-pick measurement per #132)
+ *  and `sim/scratch-pack-composition.ts` still call it directly to
+ *  reconstruct what the old draft would have done; both now measure a
+ *  mechanism the game no longer runs; item 2's own finding should read
+ *  STALE or be retired by whoever next touches it, not silently redefined
+ *  here to track the new mechanic.
+ *
+ *  The default draft heuristic. Candidates are valued by home-state bonus and
  *  card text; districts only while a player is thin on presence, because
  *  holding many is measurably a liability -- hand size caps total cards,
  *  so every district crowds out someone to run.
@@ -2115,4 +2265,22 @@ function defaultPick(pack: Card[], p: PlayerState, districtGoal: number): Card {
   };
   return pack.reduce((best, c) => (value(c) > value(best) ? c : best), pack[0]);
 }
-export { STATES, BY_CODE, electors, type StateDef, defaultPick };
+
+/** hf7y/american-cycle#158's live default: one candidate card revealed,
+ *  keep or pass. No shipped agent overrides `draftPick`, so this decides
+ *  every candidate draft today, the same status `defaultPick` held for the
+ *  mechanic it replaces.
+ *
+ *  Reuses `defaultPick`'s own candidate valuation unchanged (home-state bonus
+ *  plus card text) rather than inventing a second unprinted formula for the
+ *  same question -- "how good is this candidate card" does not change just
+ *  because it now arrives one at a time. Kept whenever that value clears 0;
+ *  the floor is deliberately low (a card needs a negative home-state bonus
+ *  with no printed effects to fail it) so a hand still fills reliably, but it
+ *  is a real, measurable pass rather than "always keep until full" -- see
+ *  the PR this shipped in for the share of reveals it actually declines. */
+function defaultKeepPolitician(card: Card & { kind: 'candidate' }, _p: PlayerState): boolean {
+  return 2 + card.homeStateBonus + card.effects.length > 0;
+}
+
+export { STATES, BY_CODE, electors, type StateDef, defaultPick, defaultKeepPolitician };

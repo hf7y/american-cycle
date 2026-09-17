@@ -32,9 +32,39 @@ function partyVariants(card: CandidateCard, cfg: Config): { card: CandidateCard;
   return [{ card, bonus: printedBonus }, { card: flipped, bonus: 0 }];
 }
 
+/** hf7y/american-cycle#158: declaration is now round-by-round (`declareRounds`
+ *  in engine/game.ts), so every active agent calls `declare` -- and therefore
+ *  `options` -- once per ROUND rather than once per cycle. `options`'s result
+ *  depends only on a player's own hand and districts, the fixed `open` race
+ *  list for the cycle, and `cfg` -- NOT on `pending`, which is threaded
+ *  through `counterDeclare` separately -- and neither hand nor districts
+ *  mutate during the declare phase (a card leaves the hand only at
+ *  resolution, after every round has run). So the expensive part (looping
+ *  every hand card against every open race, building modifiers for each) is
+ *  identical on every round for a given player and is safe to compute once
+ *  per player per cycle. `open` is a fresh array built once per cycle
+ *  (`Game.openRaces()`) and never mutated afterward, so its identity is
+ *  exactly the right cache key -- a `WeakMap` keyed on it needs no explicit
+ *  invalidation and cannot leak across games or cycles. Without this, a
+ *  16-round cycle recomputed the same board-wide scan sixteen times per
+ *  player; measured on `tuned.json`, this cut a representative game from
+ *  ~9.5s to well under 1s with byte-identical output (the cache changes
+ *  nothing about WHAT is computed, only how often). */
+const optionsCache = new WeakMap<OpenRace[], Map<number, Option[]>>();
+
 /** Every legal declaration this player could make, with its modifier edge.
  *  Agents differ only in how they score and cap this list. */
 export function options(v: GameView, open: OpenRace[], cfg: Config): Option[] {
+  let byPlayer = optionsCache.get(open);
+  const cached = byPlayer?.get(v.me);
+  if (cached) return cached;
+  const out = computeOptions(v, open, cfg);
+  if (!byPlayer) { byPlayer = new Map(); optionsCache.set(open, byPlayer); }
+  byPlayer.set(v.me, out);
+  return out;
+}
+
+function computeOptions(v: GameView, open: OpenRace[], cfg: Config): Option[] {
   const me = v.players[v.me];
   const cands = me.hand.filter((c) => c.kind === 'candidate') as (CandidateCard & { kind: 'candidate' })[];
   const out: Option[] = [];
