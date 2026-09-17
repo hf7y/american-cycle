@@ -133,10 +133,11 @@ export interface EnactedBill {
   /** the spending magnitude, unchanged from v0.1 */
   g: number;
   author: number;
-  /** hf7y/american-cycle#37: who voted yes, deduped by player -- the only
-   *  ledger a scripted agent can trade against, since voting is simultaneous
-   *  and secret (`omnibill`, engine/game.ts) and nothing else records an
-   *  individual player's past votes. Only ever appended when the bill this
+  /** hf7y/american-cycle#37: who voted yes, deduped by player -- a CROSS-YEAR
+   *  ledger a scripted agent can trade against (nothing else records an
+   *  individual player's past votes), distinct from `voteBill`'s own
+   *  `votesSoFar` argument, which carries only the current roll's votes as
+   *  they're cast (#263/#272). Only ever appended when the bill this
    *  attaches to actually passed, matching every other passage-gated
    *  consequence in this file. */
   yesVoters?: number[];

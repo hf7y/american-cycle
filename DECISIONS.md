@@ -192,10 +192,9 @@ If an implementation question is not answered by the design doc, **it is probabl
 
 The social layer is a large fraction of this design and most of it still cannot be measured by agents:
 
-- Negotiation before the bill vote
 - VP horse-trading during the nomination
 - Naming the omnibill
 
-Where a finding depends on any of these, recommend a human playtest rather than a parameter change.
+Where a finding depends on either of these, recommend a human playtest rather than a parameter change.
 
-**Two items left this list 2026-09-16 (hf7y/american-cycle#37):** table politics against a runaway leader (`RunawayBrake`, #257) and coalition-building for impeachment (`Dealmaker` + `Whip`, #258/#260) are both now agent-reachable, via the public post-hoc favour ledger `Dealmaker` introduced (`EnactedBill.yesVoters`) rather than pre-vote negotiation. The three still above share a different blocker: `engine/game.ts`'s bill vote is simultaneous and secret by construction, so no agent can signal another before casting its own vote. Whether that changes is hf7y/american-cycle#263, open.
+**Three items have left this list (hf7y/american-cycle#37).** 2026-09-16: table politics against a runaway leader (`RunawayBrake`, #257) and coalition-building for impeachment (`Dealmaker` + `Whip`, #258/#260) are both agent-reachable, via the public post-hoc favour ledger `Dealmaker` introduced (`EnactedBill.yesVoters`) rather than pre-vote negotiation. 2026-09-17: negotiation before the bill vote itself followed once #263 (merged as #272) turned the bill vote from simultaneous-and-secret into a sequential roll call -- `voteBill`'s `votesSoFar` argument now carries every vote already cast this roll, so a seat called late (any Senate seat, since the House is always called first) can condition on votes cast ahead of it. `Bandwagon` (#37) is the agent that reads it: real-time same-party momentum within one roll, not an offer struck in advance, but the same "no agent can signal another before casting its own vote" blocker this list used to cite for all three items is gone. VP horse-trading and naming the omnibill share no comparable channel yet and remain untestable.
