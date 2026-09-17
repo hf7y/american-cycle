@@ -1,6 +1,14 @@
 /** Scratch: hf7y/american-cycle#103 -- does an uncontested race predict where
  *  a district is going, or nothing at all?
  *
+ *  RECONCILED against sim/uncontested-predictiveness.ts (which disagreed
+ *  with this file at the strict unopposed row) on hf7y/american-cycle#10 --
+ *  see sim/uncontested-reconciled.ts for the pre-registered design and the
+ *  argument for preferring the other script's leave-one-out baseline over
+ *  this one's era fixed-effect norm. Kept as-is, not reaped: the wide
+ *  effective-competitiveness band below is where the two designs agree, and
+ *  that agreement is part of the reconciled argument.
+ *
  *  #10 scales a lean push by how decisively a race was won and was ruled
  *  PROVISIONALLY ZERO on the walkover case pending this measurement: crediting
  *  a walkover with a push assumes a party stopped fielding candidates because
