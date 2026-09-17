@@ -84,11 +84,18 @@ test('the gate fails overall if any one frozen row fails, even if the rest pass'
   assert.equal(result.pass, false);
 });
 
-test('the shipped frozen row set names no clock-bound or unpaired rows', () => {
-  // Regression guard for the two exclusions #147/gate.ts's header documents:
-  // D5 (clock-bound) and B1's walkover-share row (unpaired since #93).
+test('the shipped frozen row set names no clock-bound rows', () => {
+  // Regression guard for #147/gate.ts's remaining exclusion: D5 is
+  // clock-bound. B1's walkover-share row was excluded for the same reason
+  // until #10 settled its like-for-like historical class; it is now in the
+  // frozen set (see the row below) rather than excluded.
   for (const row of FROZEN_GATE_ROWS) {
     assert.notEqual(row.id, 'D5-realignment-lag');
-    assert.ok(!(row.id === 'B1-race-resolution' && row.measure === 'House generals: walkover share'));
   }
+});
+
+test('the frozen set includes B1 walkover share now that #10 settled its like-for-like class', () => {
+  assert.ok(FROZEN_GATE_ROWS.some(
+    (row) => row.id === 'B1-race-resolution' && row.measure === 'House generals: walkover share',
+  ));
 });
