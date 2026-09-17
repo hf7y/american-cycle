@@ -495,17 +495,10 @@
       "party": "D",
       "homeState": "LA",
       "homeStateBonus": 4,
-      "identities": [
-        "rural"
-      ],
+      "identities": [],
       "belief": "Wrote the tax code",
       "era": 1976,
-      "effects": [],
-      "provenance": {
-        "rural": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -1361,17 +1354,10 @@
       "party": "R",
       "homeState": "UT",
       "homeStateBonus": 3,
-      "identities": [
-        "evangelical"
-      ],
+      "identities": [],
       "belief": "Labor law opponent",
       "era": 1976,
-      "effects": [],
-      "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
