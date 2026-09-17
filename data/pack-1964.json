@@ -151,17 +151,10 @@
       "party": "D",
       "homeState": "AR",
       "homeStateBonus": 4,
-      "identities": [
-        "rural"
-      ],
+      "identities": [],
       "belief": "Internationalist, segregationist",
       "era": 1964,
-      "effects": [],
-      "provenance": {
-        "rural": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -192,17 +185,10 @@
       "party": "D",
       "homeState": "LA",
       "homeStateBonus": 5,
-      "identities": [
-        "rural"
-      ],
+      "identities": [],
       "belief": "Huey's son, and the tax code",
       "era": 1964,
-      "effects": [],
-      "provenance": {
-        "rural": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
