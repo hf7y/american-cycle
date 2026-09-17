@@ -230,22 +230,29 @@ function districtFitFor(r) {
   return { district, districts: statewide };
 }
 
-function pickRace(state) {
+function declareRace(r) {
+  const { district, districts } = districtFitFor(r);
+  S.picks.push({ player:S.human, card:S.sel, district, districts,
+                 office:r.office, state:r.state, slot:r.slot });
+  S.sel = null; closeModal(); render();
+}
+
+// `preferSlot` lets a district-card click (state + district number) skip the
+// state-picker modal when that exact House seat is open, the district-card-
+// as-target interaction #266 asked for.
+function pickRace(state, preferSlot) {
   if (!S.sel) { ticker('Choose a candidate first.'); return; }
   const rs = racesInState(state);
   if (!rs.length) return;
-  const card = S.sel;
-  const choose = (r) => {
-    const { district, districts } = districtFitFor(r);
-    S.picks.push({ player:S.human, card, district, districts,
-                   office:r.office, state:r.state, slot:r.slot });
-    S.sel = null; closeModal(); render();
-  };
-  if (rs.length === 1) return choose(rs[0]);
+  if (preferSlot != null) {
+    const direct = rs.find((r) => r.office === 'representative' && r.slot === preferSlot);
+    if (direct) return declareRace(direct);
+  }
+  if (rs.length === 1) return declareRace(rs[0]);
   modal(`<h2>${state} — which race?</h2><div class="row" style="margin-top:12px" id="rr"></div>`);
   for (const r of rs) {
     const b = el('button','btn ghost', `${OFFICE_LABEL[r.office]}${r.slot && r.office==='representative' ? ' '+r.slot : ''}`);
-    b.onclick = () => choose(r);
+    b.onclick = () => declareRace(r);
     $('rr').appendChild(b);
   }
 }
@@ -460,13 +467,15 @@ function drawHand() {
   // Districts are held apart from the hand and gate every race below the
   // presidency, so a board that only counts them hides the reason a state lit up.
   for (const d of me.districts) {
-    const n = el('div','cc dc');
+    const open = pending && pending.kind==='declare' && S.sel && racesInState(d.state).length > 0;
+    const n = el('div','cc dc'+(open?' act':''));
     n.appendChild(el('div','nm',`${d.state}-${d.number}`));
     n.appendChild(el('div','mt',`district · opens a race · ${d.era}`));
     if (d.note) n.appendChild(el('div','bel',d.note));
     const tw = el('div');
     for (const g of d.demographics) tw.appendChild(el('span','tag',g));
     n.appendChild(tw);
+    if (open) n.onclick = () => pickRace(d.state, d.number);
     h.appendChild(n);
   }
   const me2 = G.players[S.human];
@@ -570,6 +579,7 @@ function wireReport() {
   send.onclick = async () => {
     const msg = $('repMsg'), status = $('repStatus');
     const text = msg.value.trim();
+    status.className = '';
     if (!text) { status.textContent = 'Say something first.'; return; }
     const kind = document.querySelector('input[name=repKind]:checked')?.value || 'idea';
     send.disabled = true;
@@ -586,10 +596,11 @@ function wireReport() {
           buildStamp: buildStamp(),
         }),
       });
-      if (res.ok) { status.textContent = 'Thanks, logged.'; msg.value = ''; }
-      else status.textContent = "Sent, but didn't get a clear confirmation back.";
+      if (res.ok) { status.textContent = '✓ Thanks, logged.'; status.className = 'ok'; msg.value = ''; }
+      else { status.textContent = "Sent, but didn't get a clear confirmation back."; status.className = 'err'; }
     } catch {
       status.textContent = "Couldn't reach the server.";
+      status.className = 'err';
     } finally {
       send.disabled = false;
     }
