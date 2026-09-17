@@ -18,7 +18,13 @@ const $ = (id) => document.getElementById(id);
 const el = (t, cls, txt) => { const n = document.createElement(t); if (cls) n.className = cls; if (txt != null) n.textContent = txt; return n; };
 
 let G = null, gen = null, pending = null, S = {
-  sel: null, picks: [], human: 0, opponents: [], cfgName: 'as-written-plus', seed: 1, over: false,
+  // `usedCardIds`: which of the human's OWN candidate cards have already
+  // been committed this cycle. `pending.pending` (the engine's own record)
+  // answers "which races", but a peg is deliberately anonymous about WHICH
+  // card made it (opponents never see a card, per #158/#149) -- the human's
+  // own hand hides nothing from the human, so this is tracked client-side
+  // instead, reset at the start of each new declaration cycle.
+  sel: null, usedCardIds: new Set(), human: 0, opponents: [], cfgName: 'as-written-plus', seed: 1, over: false,
 };
 
 // ---- setup ------------------------------------------------------------------
@@ -196,8 +202,21 @@ function advance(answer) {
 }
 
 // ---- declaration ------------------------------------------------------------
+// hf7y/american-cycle#158: declarations go down ONE AT A TIME around the
+// circle now, in repeating rounds, until everyone passes on the same lap --
+// so `phaseDeclare` fires once per round the human is still active, not once
+// for the whole cycle. `S.picks` used to accumulate a whole cycle's worth of
+// choices before one batch submit; a stray extra pick queued there would now
+// be silently dropped the moment the round advanced without it, so a pick
+// submits immediately instead, and "already committed this cycle" is read
+// off `pending.pending` (the engine's own record of every peg placed so
+// far, including the human's) rather than kept twice.
+function myPegsThisCycle() {
+  return (pending.pending || []).filter((pg) => pg.player === S.human);
+}
+
 function phaseDeclare() {
-  S.picks = []; S.sel = null;
+  S.sel = null;
   const open = pending.open;
   const me = G.players[S.human];
   const eligibleFor = (card) => open.filter((r) =>
@@ -205,8 +224,12 @@ function phaseDeclare() {
     || eligible(card, r.state, me.districts,
                 G.cfg.game.districtLevelEligibility && r.office === 'representative' ? r.slot : undefined));
   S.eligibleFor = eligibleFor;
-  $('handHint').textContent = `${G.year} — pick a card, then a state`;
-  ticker(`${G.year}: declarations are open.`);
+  const already = myPegsThisCycle().length;
+  if (!already) S.usedCardIds = new Set();          // first round of a fresh cycle
+  $('handHint').textContent = already
+    ? `${G.year} — round ${already + 1}: pick another card, or pass`
+    : `${G.year} — declarations are open: pick a card, then a state, or pass`;
+  ticker(already ? `${G.year}: the circle comes back around to you.` : `${G.year}: declarations are open.`);
   render();
 }
 
@@ -214,9 +237,9 @@ const uiRaceKey = (r) => `${r.office}|${r.state}|${r.slot ?? ''}`;
 
 function racesInState(state) {
   if (!S.eligibleFor || !S.sel) return [];
-  // One peg per race per player. You may not stack three of your own
-  // candidates into a single Senate seat.
-  const taken = new Set(S.picks.map(uiRaceKey));
+  // One peg per race per player, and not into a race already committed
+  // earlier this cycle -- `pending.pending` already carries that.
+  const taken = new Set(myPegsThisCycle().map(uiRaceKey));
   return S.eligibleFor(S.sel).filter((r) => r.state === state && !taken.has(uiRaceKey(r)));
 }
 
@@ -232,13 +255,6 @@ function districtFitFor(r) {
   return { district, districts: statewide };
 }
 
-function declareRace(r) {
-  const { district, districts } = districtFitFor(r);
-  S.picks.push({ player:S.human, card:S.sel, district, districts,
-                 office:r.office, state:r.state, slot:r.slot });
-  S.sel = null; closeModal(); render();
-}
-
 // `preferSlot` lets a district-card click (state + district number) skip the
 // state-picker modal when that exact House seat is open, the district-card-
 // as-target interaction #266 asked for.
@@ -246,15 +262,26 @@ function pickRace(state, preferSlot) {
   if (!S.sel) { ticker('Choose a candidate first.'); return; }
   const rs = racesInState(state);
   if (!rs.length) return;
+  const card = S.sel;
+  // One declaration submits immediately -- this round's whole turn, per
+  // #158's one-at-a-time circle. The next round (if any is left to play)
+  // asks again, with this peg now visible in `pending.pending`.
+  const choose = (r) => {
+    const { district, districts } = districtFitFor(r);
+    const pick = { player:S.human, card, district, districts,
+                   office:r.office, state:r.state, slot:r.slot };
+    S.usedCardIds.add(card.id);
+    S.sel = null; closeModal(); advance({ declarations: [pick] });
+  };
   if (preferSlot != null) {
     const direct = rs.find((r) => r.office === 'representative' && r.slot === preferSlot);
-    if (direct) return declareRace(direct);
+    if (direct) return choose(direct);
   }
-  if (rs.length === 1) return declareRace(rs[0]);
+  if (rs.length === 1) return choose(rs[0]);
   modal(`<h2>${state} — which race?</h2><div class="row" style="margin-top:12px" id="rr"></div>`);
   for (const r of rs) {
     const b = el('button','btn ghost', `${OFFICE_LABEL[r.office]}${r.slot && r.office==='representative' ? ' '+r.slot : ''}`);
-    b.onclick = () => declareRace(r);
+    b.onclick = () => choose(r);
     $('rr').appendChild(b);
   }
 }
@@ -380,7 +407,7 @@ function render() {
 
 function drawMap() {
   const m = $('map'); m.replaceChildren();
-  const declaredHere = new Set(S.picks.map((p)=>p.state));
+  const declaredHere = new Set(myPegsThisCycle().map((p)=>p.state));
   const openStates = new Set();
   if (pending && pending.kind === 'declare' && S.sel) for (const r of racesInState_all(S.sel)) openStates.add(r.state);
   const opponentPegs = new Map();
@@ -425,7 +452,7 @@ function drawMap() {
 }
 function racesInState_all(card){
   const me = G.players[S.human];
-  const taken = new Set(S.picks.map(uiRaceKey));
+  const taken = new Set(myPegsThisCycle().map(uiRaceKey));
   return (pending.open||[]).filter((r)=>
     (r.office==='president'
      || eligible(card, r.state, me.districts,
@@ -436,7 +463,7 @@ function racesInState_all(card){
 function drawHand() {
   const h = $('hand'); h.replaceChildren();
   const me = G.players[S.human];
-  const used = new Set(S.picks.map((p)=>p.card.id));
+  const used = S.usedCardIds;
   const cands = me.hand.filter((c)=>c.kind==='candidate');
   if (!cands.length) h.appendChild(el('p','note','No candidates in hand.'));
   for (const c of cands) {
@@ -481,8 +508,9 @@ function drawHand() {
     h.appendChild(n);
   }
   const me2 = G.players[S.human];
+  const declaredSoFar = pending && pending.kind === 'declare' ? myPegsThisCycle().length : 0;
   $('handHint').textContent = pending && pending.kind==='declare'
-    ? `${cands.length - used.size} cards · ${me2.districts.length} districts · ${S.picks.length} declared`
+    ? `${cands.length - used.size} cards · ${me2.districts.length} districts · ${declaredSoFar} declared this cycle`
     : `${cands.length} cards · ${me2.districts.length} districts`;
 }
 
@@ -490,18 +518,19 @@ function drawControls() {
   const c = $('controls'); c.replaceChildren();
   if (S.over) { const b = el('button','btn','New game'); b.onclick = setup; c.appendChild(b); return; }
   if (!pending || pending.kind !== 'declare') return;
-  const go = el('button','btn', S.picks.length ? `Run ${S.picks.length} race${S.picks.length>1?'s':''}` : 'Sit this cycle out');
-  go.onclick = () => { const p = S.picks; S.picks = []; S.sel = null; advance({ declarations: p }); };
-  c.appendChild(go);
-  if (S.picks.length) {
-    const u = el('button','btn ghost','Undo last');
-    u.onclick = () => { S.picks.pop(); render(); };
-    c.appendChild(u);
-    c.appendChild(el('span','note', S.picks.map((p)=>`${p.card.name} → ${p.state} ${OFFICE_LABEL[p.office]}`).join(' · ')));
-  } else if (S.sel) {
+  // hf7y/american-cycle#158: one declaration per round, submitted the
+  // instant a race is chosen (see `pickRace`) -- the only decision left for
+  // this control row is whether to pass THIS round, which ends the human's
+  // part in the cycle the same way it does for every agent (a pass is
+  // final: the set of legal, uncommitted options can only shrink from here).
+  const already = myPegsThisCycle().length;
+  const pass = el('button','btn ghost', already ? 'Pass — done for this cycle' : 'Sit this cycle out');
+  pass.onclick = () => { S.sel = null; advance({ declarations: [] }); };
+  c.appendChild(pass);
+  if (S.sel) {
     c.appendChild(el('span','note',`${S.sel.name} — click a highlighted state.`));
   } else {
-    c.appendChild(el('span','note','Click a card to see where it can run.'));
+    c.appendChild(el('span','note','Click a card to see where it can run, or pass.'));
   }
 }
 
