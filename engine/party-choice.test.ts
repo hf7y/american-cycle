@@ -38,7 +38,7 @@ function fixture(card: CandidateCard, stateLean: number): { v: GameView; open: O
     seats: [],
     players: [{ id: 0, name: 'P', hand: [{ kind: 'candidate', ...card }], districts: [], score: 0, tapped: new Set() }],
     me: 0,
-    bills: [], amendments: [],
+    bills: [], amendments: [], vpGrants: [],
   };
   const open: OpenRace[] = [{ office: 'senator', state: 'ZZ' }];
   return { v, open };
