@@ -153,6 +153,9 @@ export interface GameView {
    *  `repealedIn` set, because "what did you undo" is a decision input. */
   bills: readonly EnactedBill[];
   amendments: readonly Amendment[];
+  /** hf7y/american-cycle#37: every VP ticket assembled so far, public the same
+   *  way a passed bill's yes-voters are -- see `VPGrant`. */
+  vpGrants: readonly VPGrant[];
 }
 
 export interface Agent {
@@ -290,6 +293,15 @@ export interface VPOffer { from: number; card: CandidateCard }
  *  a loss. `from` is who supplied it -- on succession THAT player scores, which
  *  is the whole of the VP backstab. */
 export interface VicePresident { cardId: string; card: CandidateCard; from: number }
+/** hf7y/american-cycle#37: a public record of every ticket assembled, so an
+ *  agent can trade against VP grants the same way `EnactedBill.yesVoters`
+ *  already lets one trade against bill votes. `offerVP` is blind -- no player
+ *  sees another's offer before making its own, the same secrecy `voteBill`
+ *  has -- but the ticket it produces is a fact on the board afterward, same
+ *  as a passed bill's yes-voters are. Nothing recorded that fact before this;
+ *  `vicePresident` on `Game` only ever held the CURRENT ticket, overwritten
+ *  every term. This is the history that made it. */
+export interface VPGrant { year: number; to: number; from: number; card: CandidateCard }
 
 export interface OpenRace { office: Office; state: string; slot?: number; incumbent?: Seat }
 /** A peg on the board: the race is contested, the card is not visible. */
@@ -363,6 +375,8 @@ export class Game {
    *  in skowronek/ read it -- `BILL_CORPUS_ABSENT` was the note saying this
    *  did not exist. */
   bills: EnactedBill[] = [];
+  /** hf7y/american-cycle#37: see `VPGrant`. */
+  vpGrants: VPGrant[] = [];
   amendments: Amendment[] = [];
   shutdownBlame: { year: number; party: Party; wasMajority: boolean }[] = [];
   successions: { year: number; office: Office; state: string; slot?: number; from: Party; to: Party }[] = [];
@@ -664,7 +678,7 @@ export class Game {
       isPresidentialYear: this.year % 4 === 0,
       economy: this.economy, lean: this.leanMap, seats: this.seats,
       players: this.players, me, presidentParty: this.president?.party,
-      bills: this.bills, amendments: this.amendments,
+      bills: this.bills, amendments: this.amendments, vpGrants: this.vpGrants,
     };
   }
 
@@ -1474,6 +1488,7 @@ export class Game {
       if (!offers.length) continue;
       const chosen = this.agents[nom.player].pickVP?.(this.view(nom.player), offers) ?? offers[0];
       tickets.set(nom.player, { cardId: chosen.card.id, card: chosen.card, from: chosen.from });
+      this.vpGrants.push({ year: this.year, to: nom.player, from: chosen.from, card: chosen.card });
       const supplier = this.players[chosen.from];
       supplier.hand = supplier.hand.filter((c) => !(c.kind === 'candidate' && c.id === chosen.card.id));
     }

@@ -10,10 +10,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import type { Config, GameView, PlayerState } from './game.ts';
-import { Dealmaker, RunawayBrake, Whip } from '../sim/agents.ts';
+import type { Config, GameView, PlayerState, VPGrant, VPOffer } from './game.ts';
+import { Dealmaker, RunawayBrake, Whip, RunningMate } from '../sim/agents.ts';
 import { RNG } from './rules/rng.ts';
-import type { EnactedBill, Seat } from './types/index.ts';
+import type { CandidateCard, EnactedBill, Seat } from './types/index.ts';
 
 const cfg: Config = JSON.parse(readFileSync(new URL('./config/tuned.json', import.meta.url), 'utf8'));
 
@@ -22,7 +22,7 @@ const cfg: Config = JSON.parse(readFileSync(new URL('./config/tuned.json', impor
  *  `union` vs. `farm` don't overlap, so `tags.distance` reads 1, safely past
  *  `VOTE_AT_DISTANCE` (0.6) regardless of party fallback. Isolates the
  *  ledger: without it, this fixture's bill never earns a yes on fit alone. */
-function fixture(bills: EnactedBill[]): { v: GameView; seat: Seat } {
+function fixture(bills: EnactedBill[], vpGrants: VPGrant[] = []): { v: GameView; seat: Seat } {
   const seat: Seat = { office: 'senator', state: 'ZZ', holder: { cardId: 'c1', player: 0, party: 'D', since: 1976 } };
   const v: GameView = {
     year: 1978, isElectionYear: true, isMidterm: true, isPresidentialYear: false,
@@ -34,7 +34,7 @@ function fixture(bills: EnactedBill[]): { v: GameView; seat: Seat } {
       districts: [{ id: 'ZZ-1', state: 'ZZ', number: 1, era: 1976, demographics: ['farm'] }],
     }],
     me: 0,
-    bills, amendments: [],
+    bills, amendments: [], vpGrants,
   };
   return { v, seat };
 }
@@ -97,7 +97,7 @@ const player = (score: number): PlayerState => ({ id: 0, name: 'P', hand: [], di
 
 const view = (players: PlayerState[], seats: Seat[] = []): GameView => ({
   year: 2024, isElectionYear: true, isMidterm: false, isPresidentialYear: true,
-  economy: { level: 0, accumulatedG: 0 }, lean: {}, seats, players, me: 0, bills: [], amendments: [],
+  economy: { level: 0, accumulatedG: 0 }, lean: {}, seats, players, me: 0, bills: [], amendments: [], vpGrants: [],
 });
 
 test('RunawayBrake: no leader among a level field', () => {
@@ -249,4 +249,74 @@ test('Whip: a same-party senator with no debt to anyone stays loyal', () => {
   const same: Seat = { office: 'senator', state: 'TX', senateClass: 2, holder: { cardId: 's2', player: 0, party: 'R', since: 2020 } };
   const v = view([player(0), player(1), player(1), player(1)], seats);
   assert.equal(whip().voteImpeach(v, same), false);
+});
+
+/** hf7y/american-cycle#37: unit tests for `RunningMate`'s combined bill+VP
+ *  ledger (`vpFavor`, alongside `favor`). Isolates the sign convention `favor`
+ *  already set -- positive `favor(me, other)`/`vpFavor(me, other)` means ME:
+ *  a favour or a VP grant taken and not yet returned, which is why a debtor
+ *  is the NEGATIVE case, not the positive one, and getting that backwards is
+ *  exactly the bug a unit test on the raw ledger functions is for. */
+const runningMate = () => new RunningMate('RunningMate', cfg, new RNG(1));
+const cand = (id: string, homeStateBonus: number): CandidateCard => ({
+  id, name: id, party: 'D', homeState: 'ZZ', homeStateBonus, identities: [], era: 1976, effects: [],
+});
+
+test('RunningMate: offers its best card to a nominee it has no history with', () => {
+  const { v } = fixture([]);
+  const withHand: GameView = {
+    ...v,
+    players: [{ ...v.players[0], hand: [
+      { kind: 'candidate', ...cand('c2', 2) },
+      { kind: 'candidate', ...cand('c5', 5) },
+      { kind: 'candidate', ...cand('c3', 3) },
+    ] }],
+  };
+  const offer = runningMate().offerVP(withHand, { player: 1, party: 'D' });
+  assert.equal(offer?.id, 'c5');
+});
+
+test('RunningMate: withholds from a nominee it already gave a VP grant, unrepaid', () => {
+  // player 0 (this agent) already gave player 1 a VP grant -- vpFavor(0, 1) < 0, player 1 owes ME.
+  const grants: VPGrant[] = [{ year: 2020, to: 1, from: 0, card: cand('old', 4) }];
+  const { v } = fixture([], grants);
+  const withHand: GameView = { ...v, players: [{ ...v.players[0], hand: [{ kind: 'candidate', ...cand('c5', 5) }] }] };
+  assert.equal(runningMate().offerVP(withHand, { player: 1, party: 'D' }), undefined);
+});
+
+test('RunningMate: still offers to a nominee it owes from a past VP grant', () => {
+  // player 1 gave player 0 (this agent) a VP grant -- vpFavor(0, 1) > 0, ME in debt to player 1.
+  const grants: VPGrant[] = [{ year: 2020, to: 0, from: 1, card: cand('old', 4) }];
+  const { v } = fixture([], grants);
+  const withHand: GameView = { ...v, players: [{ ...v.players[0], hand: [{ kind: 'candidate', ...cand('c5', 5) }] }] };
+  assert.notEqual(runningMate().offerVP(withHand, { player: 1, party: 'D' }), undefined);
+});
+
+test('RunningMate: never offers to itself', () => {
+  const { v } = fixture([]);
+  assert.equal(runningMate().offerVP(v, { player: 0, party: 'D' }), undefined);
+});
+
+test('RunningMate: pickVP prefers the supplier it owes over a better card from a stranger', () => {
+  const { v } = fixture([]);
+  // player 2 gave player 0 a VP grant before -- vpFavor(0, 2) > 0, ME in debt to player 2.
+  const grants: VPGrant[] = [{ year: 2020, to: 0, from: 2, card: cand('old', 1) }];
+  const withGrants: GameView = { ...v, vpGrants: grants };
+  const offers: VPOffer[] = [
+    { from: 1, card: cand('stranger', 9) },
+    { from: 2, card: cand('debtor', 2) },
+  ];
+  assert.equal(runningMate().pickVP(withGrants, offers)?.from, 2);
+});
+
+test('RunningMate: repays a VP grant with a yes vote on an off-fit bill', () => {
+  // player 1 gave player 0 (this agent) a VP grant -- ME in debt to player 1, no bills exchanged.
+  const grants: VPGrant[] = [{ year: 2020, to: 0, from: 1, card: cand('old', 4) }];
+  const { v, seat } = fixture([], grants);
+  assert.equal(runningMate().voteBill(v, 3, seat, ['union'], 1), true);
+});
+
+test('RunningMate: extends no favour on VP grants alone to a stranger', () => {
+  const { v, seat } = fixture([]);
+  assert.equal(runningMate().voteBill(v, 3, seat, ['union'], 1), false);
 });

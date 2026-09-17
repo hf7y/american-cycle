@@ -1,7 +1,7 @@
 /** Scripted agents. The first three measure skill signal; the rest are the
  *  strategies SIM-BRIEF asks to be tested for dominance. Each also doubles
  *  as an opponent personality in the app. */
-import type { Agent, GameView, OpenRace, PendingPeg, Config, VPOffer } from '../engine/game.ts';
+import type { Agent, GameView, OpenRace, PendingPeg, Config, VPOffer, VPGrant } from '../engine/game.ts';
 import type { Declaration, WithdrawalView } from '../engine/rules/elections.ts';
 import { buildModifiers, eligible, homeDistrict } from '../engine/rules/elections.ts';
 import type { CandidateCard, EnactedBill, IdentityTag, Office, Party, Seat } from '../engine/types/index.ts';
@@ -685,6 +685,74 @@ export class Whip extends Base {
   }
 }
 
+/** hf7y/american-cycle#37's own 2026-09-16 comment named the three items
+ *  DECISIONS.md's "untestable by simulation" list still had open -- negotiation
+ *  before the bill vote, VP horse-trading beyond `VPBackstab`, naming the
+ *  omnibill -- and called all three "genuinely blocked" by the same wall:
+ *  voting is simultaneous and secret, so no agent can see or signal another
+ *  before casting its own vote. That is true of the bill vote. It is not true
+ *  of the VP pick in the same way: `offerVP` IS answered blind, same as a
+ *  vote, but the ticket it produces is a public fact afterward -- `VPGrant`
+ *  (`engine/game.ts`) is that fact, recorded the moment a ticket is chosen,
+ *  exactly parallel to how `EnactedBill.yesVoters` records a bill's result
+ *  after a vote nobody could see coming. Dealmaker and Whip already trade on
+ *  the bill-vote version of this same shape -- "a public post-hoc ledger
+ *  rather than pre-vote negotiation" is how #37's own comment described that
+ *  trade counting as reaching its list item. This is the identical trade,
+ *  on the channel that item's comment said was blocked but was actually just
+ *  unrecorded. */
+/** Same sign convention `favor` (above) already established: positive means
+ *  ME -- a grant received and not yet repaid is a debt THIS agent carries,
+ *  same as a yes vote taken and not yet returned. `g.to === me` is the
+ *  receiving side of a grant, so it is the `+= 1` (mirrors `b.author === me`
+ *  above, the receiving side of a vote); `g.from === me` is this agent
+ *  having ALREADY given, which is `-= 1`, the credit it is owed. */
+function vpFavor(me: number, other: number, vpGrants: readonly VPGrant[]): number {
+  let f = 0;
+  for (const g of vpGrants) {
+    if (g.to === me && g.from === other) f += 1;
+    if (g.to === other && g.from === me) f -= 1;
+  }
+  return f;
+}
+
+export class RunningMate extends Base {
+  declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[] {
+    return pickDistinct(counterDeclare(options(v, open, this.cfg), pending, v.me, 2).sort(byEdge), this.budget(v));
+  }
+  /** Withhold from a nominee this agent has already given more to than it
+   *  has gotten back -- combined favour negative, a debtor on both channels
+   *  who has not repaid -- and offer everyone else its best card, including
+   *  a clean slate: an offer is how a relationship on this ledger starts,
+   *  the same way Dealmaker's first yes vote on a stranger's bill is unearned
+   *  by construction. */
+  offerVP(v: GameView, nominee: { player: number; party: Party }): CandidateCard | undefined {
+    if (nominee.player === v.me) return undefined;
+    if (favor(v.me, nominee.player, v.bills) + vpFavor(v.me, nominee.player, v.vpGrants) < 0) return undefined;
+    const hand = v.players[v.me].hand.filter((c) => c.kind === 'candidate') as CandidateCard[];
+    if (!hand.length) return undefined;
+    return hand.reduce((best, c) => (c.homeStateBonus > best.homeStateBonus ? c : best), hand[0]);
+  }
+  /** Prefer whichever supplier this agent already owes the most -- taking
+   *  their card is a visible, in-game way to favour a past benefactor, the
+   *  same debt `voteBill` below repays with a vote -- over `Base`'s raw best
+   *  card or `VPBackstab`'s arbitrary first offer. */
+  pickVP(v: GameView, offers: VPOffer[]): VPOffer | undefined {
+    const scored = (o: VPOffer) => favor(v.me, o.from, v.bills) + vpFavor(v.me, o.from, v.vpGrants);
+    return offers.reduce((best, o) => {
+      const s = scored(o), bs = scored(best);
+      return s > bs || (s === bs && o.card.homeStateBonus > best.card.homeStateBonus) ? o : best;
+    }, offers[0]);
+  }
+  /** Repays either half of the combined ledger: a bill-vote favour, exactly
+   *  as Dealmaker/Whip already do, or a VP grant never paid back in a vote. */
+  voteBill(v: GameView, g: number, seat: Seat, billTags?: readonly IdentityTag[], authorId?: number): boolean {
+    if (super.voteBill(v, g, seat, billTags)) return true;
+    if (authorId === undefined || authorId === v.me) return false;
+    return favor(v.me, authorId, v.bills) + vpFavor(v.me, authorId, v.vpGrants) > 0;
+  }
+}
+
 export const AGENTS: Record<string, new (cfg: Config, rng: RNG) => Agent> = {
   Random: class extends RandomAgent { constructor(c: Config, r: RNG) { super('Random', c, r); } },
   Greedy: class extends GreedyAgent { constructor(c: Config, r: RNG) { super('Greedy', c, r); } },
@@ -706,4 +774,5 @@ export const AGENTS: Record<string, new (cfg: Config, rng: RNG) => Agent> = {
   Dealmaker: class extends Dealmaker { constructor(c: Config, r: RNG) { super('Dealmaker', c, r); } },
   RunawayBrake: class extends RunawayBrake { constructor(c: Config, r: RNG) { super('RunawayBrake', c, r); } },
   Whip: class extends Whip { constructor(c: Config, r: RNG) { super('Whip', c, r); } },
+  RunningMate: class extends RunningMate { constructor(c: Config, r: RNG) { super('RunningMate', c, r); } },
 };
