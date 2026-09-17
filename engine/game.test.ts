@@ -18,10 +18,11 @@ import {
   Game, type Config, type Agent, type GameView, type OpenRace, type PendingPeg,
 } from './game.ts';
 import type { Declaration } from './rules/elections.ts';
+import type { Vote } from './rules/legislature.ts';
 import { RNG } from './rules/rng.ts';
 import { AGENTS } from '../sim/agents.ts';
 import { STATES, BY_CODE, senateUp, electors, totalElectors, DC_ELECTORS } from './states.ts';
-import type { Card, CandidateCard, DistrictCard } from './types/index.ts';
+import type { Card, CandidateCard, DistrictCard, Seat, IdentityTag } from './types/index.ts';
 
 const loadConfig = (name: string): Config =>
   JSON.parse(readFileSync(new URL(`./config/${name}`, import.meta.url), 'utf8')) as Config;
@@ -703,6 +704,47 @@ test('#78: a second bill on the same tags, passed once the House flips, nets the
   assert.equal(g.leanMap.OH, 0,
     'OH nets fully back to baseline: the D push (3 pips) overtakes the R remainder (2), then decays -1 toward zero');
   assert.equal(g.leanMap.TX, -2, 'TX has no earlier push to net against, so the same D bill just moves it, ordinarily');
+});
+
+// ------------------------------------------------- #263: the bill vote is a roll call
+
+/** Records every `voteBill` call it receives -- the seat called and how many
+ *  votes were already cast this roll -- rather than deciding anything, so a
+ *  test can assert on the CALL ORDER and the visible tally, not just the
+ *  final outcome `BillYesAgent` above already covers. */
+class RollCallRecordingAgent extends ScriptedAgent {
+  calls: { state: string; office: string; priorVotes: number }[] = [];
+  voteBill(_v?: GameView, _g?: number, seat?: Seat, _billTags?: readonly IdentityTag[], _authorId?: number,
+    votesSoFar?: readonly Vote[]): boolean {
+    this.calls.push({ state: seat!.state, office: seat!.office, priorVotes: votesSoFar?.length ?? -1 });
+    return true;
+  }
+}
+
+test('hf7y/american-cycle#263: the omnibill calls seats House-then-Senate, alphabetical by state, each seeing every prior vote', () => {
+  const cfg = loadConfig('as-written-plus.json');
+  cfg.amendment = { ...cfg.amendment, enabled: false };
+
+  const a = new RollCallRecordingAgent('a');
+  const g = new Game([a], structuredClone(CARDS), cfg, 1);
+  g.year = 1977;
+  g.seats = [
+    { office: 'senator', state: 'OH', slot: 1, senateClass: 1, holder: { cardId: 's-oh', player: 0, party: 'R', since: 1976 } },
+    { office: 'representative', state: 'CA', slot: 5, holder: { cardId: 'h-ca', player: 0, party: 'R', since: 1976 } },
+    { office: 'representative', state: 'AZ', slot: 1, holder: { cardId: 'h-az', player: 0, party: 'R', since: 1976 } },
+    { office: 'senator', state: 'AZ', slot: 2, senateClass: 2, holder: { cardId: 's-az', player: 0, party: 'R', since: 1976 } },
+  ];
+  g.players[0].hand = [];
+  g.players[0].districts = [];
+
+  g.tick();
+
+  assert.deepEqual(a.calls, [
+    { state: 'AZ', office: 'representative', priorVotes: 0 },
+    { state: 'CA', office: 'representative', priorVotes: 1 },
+    { state: 'AZ', office: 'senator', priorVotes: 2 },
+    { state: 'OH', office: 'senator', priorVotes: 3 },
+  ], 'House called first and alphabetically, then Senate, alphabetically -- each seat sees one more prior vote than the last');
 });
 
 // #84's other named arm: strain-scaled impeachment backfire. `backfire` docks

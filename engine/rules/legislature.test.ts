@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  tallyBill, impeach, author, majorityParty, authorCandidates, resolveAuthorVote, proposeAmendment,
+  tallyBill, impeach, author, majorityParty, authorCandidates, resolveAuthorVote, proposeAmendment, rollCall,
 } from './legislature.ts';
 import type { LegislatureConfig, Vote } from './legislature.ts';
 import type { Seat, Party } from '../types/index.ts';
@@ -158,4 +158,29 @@ test('hf7y/american-cycle#86: a three-way plurality with nobody over half is als
   const seats = bench(house, []);
   assert.equal(majorityParty(seats, 'representative'), 'D', 'plurality leader is still named');
   assert.deepEqual(authorCandidates(seats), [], 'but a 4-of-10 plurality is not a pen to win');
+});
+
+test('hf7y/american-cycle#263: the roll call is House then Senate, alphabetical by state', () => {
+  const seats: Seat[] = [
+    { office: 'senator', state: 'OH', slot: 1, holder: { cardId: 's-oh', player: 0, party: 'D', since: 1976 } },
+    { office: 'representative', state: 'CA', slot: 5, holder: { cardId: 'h-ca', player: 0, party: 'D', since: 1976 } },
+    { office: 'senator', state: 'AZ', slot: 2, holder: { cardId: 's-az', player: 0, party: 'D', since: 1976 } },
+    { office: 'representative', state: 'AZ', slot: 1, holder: { cardId: 'h-az', player: 0, party: 'D', since: 1976 } },
+    { office: 'representative', state: 'OH', slot: 2, holder: { cardId: 'h-oh', player: 0, party: 'D', since: 1976 } },
+    { office: 'governor', state: 'AZ', holder: { cardId: 'g-az', player: 0, party: 'D', since: 1976 } },
+    { office: 'representative', state: 'NJ', slot: 1, holder: undefined },
+  ];
+  assert.deepEqual(rollCall(seats).map((s) => s.holder.cardId),
+    ['h-az', 'h-ca', 'h-oh', 's-az', 's-oh'],
+    'both House seats precede both Senate seats, each chamber alphabetical by state; an unheld seat and a governor seat are excluded');
+});
+
+test('hf7y/american-cycle#263: a state\'s two senators (or a multi-district delegation) break their tie by slot', () => {
+  const seats: Seat[] = [
+    { office: 'senator', state: 'OH', slot: 3, holder: { cardId: 's-oh-3', player: 0, party: 'D', since: 1976 } },
+    { office: 'senator', state: 'OH', slot: 1, holder: { cardId: 's-oh-1', player: 0, party: 'D', since: 1976 } },
+    { office: 'representative', state: 'OH', slot: 9, holder: { cardId: 'h-oh-9', player: 0, party: 'D', since: 1976 } },
+    { office: 'representative', state: 'OH', slot: 2, holder: { cardId: 'h-oh-2', player: 0, party: 'D', since: 1976 } },
+  ];
+  assert.deepEqual(rollCall(seats).map((s) => s.holder.cardId), ['h-oh-2', 'h-oh-9', 's-oh-1', 's-oh-3']);
 });

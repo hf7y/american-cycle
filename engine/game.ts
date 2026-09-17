@@ -206,9 +206,14 @@ export interface Agent {
   pickVP?(v: GameView, offers: VPOffer[]): VPOffer | undefined;
   /** hf7y/american-cycle#37: `authorId` is who proposed this year's bill --
    *  the only identity a vote-trading agent needs to check its ledger
-   *  against. Omit-safe: every existing agent's narrower signature still
-   *  satisfies this interface. */
-  voteBill(v: GameView, g: number, seat: Seat, billTags?: readonly IdentityTag[], authorId?: number): boolean;
+   *  against. hf7y/american-cycle#263's ruling: the vote is a roll call, not
+   *  simultaneous, so `votesSoFar` carries every vote already cast this
+   *  roll -- in `leg.rollCall`'s order, House then Senate, alphabetical by
+   *  state -- for the seats called ahead of this one. Empty for whichever
+   *  seat is called first. Omit-safe: every existing agent's narrower
+   *  signature still satisfies this interface. */
+  voteBill(v: GameView, g: number, seat: Seat, billTags?: readonly IdentityTag[], authorId?: number,
+    votesSoFar?: readonly leg.Vote[]): boolean;
   veto(v: GameView, g: number): boolean;
 }
 
@@ -894,14 +899,15 @@ export class Game {
     if (!proposedTags.length) return false;
 
     const votes: leg.Vote[] = [];
-    for (const s of this.seats) {
-      if (!s.holder || (s.office !== 'senator' && s.office !== 'representative')) continue;
+    for (const s of leg.rollCall(this.seats)) {
       // Reuses the bill-vote hook: a proposal is voted the same way a bill
       // is, by fit between the seat's district and the tags on offer. `g` is
       // spending and has no referent here, so agents that key off it (e.g.
       // EconomyChicken) see `g === 0`, their own "nothing to spend" case.
-      const yes = this.agents[s.holder.player].voteBill(this.view(s.holder.player), 0, s, proposedTags, authorId);
-      votes.push({ player: s.holder.player, party: s.holder.party, office: s.office, yes, cardId: s.holder.cardId });
+      // Same roll call as the omnibill (#263): House then Senate, alphabetical
+      // by state, each seat sees every vote already cast.
+      const yes = this.agents[s.holder.player].voteBill(this.view(s.holder.player), 0, s, proposedTags, authorId, votes);
+      votes.push({ player: s.holder.player, party: s.holder.party, office: s.office as 'senator' | 'representative', yes, cardId: s.holder.cardId });
     }
 
     const out = leg.proposeAmendment(this.cfg.amendment.callFraction, this.seats, votes);
@@ -1071,11 +1077,10 @@ export class Game {
       : (this.agents[authorId].proposeTags?.(view, this.bills) ?? this.defaultBillTags(authorId));
 
     const votes: leg.Vote[] = [];
-    for (const s of this.seats) {
-      if (!s.holder || (s.office !== 'senator' && s.office !== 'representative')) continue;
+    for (const s of leg.rollCall(this.seats)) {
       const yes = s.holder.player === human && humanYes !== undefined
-        ? humanYes : this.agents[s.holder.player].voteBill(this.view(s.holder.player), g, s, billTags, authorId);
-      votes.push({ player: s.holder.player, party: s.holder.party, office: s.office, yes, cardId: s.holder.cardId });
+        ? humanYes : this.agents[s.holder.player].voteBill(this.view(s.holder.player), g, s, billTags, authorId, votes);
+      votes.push({ player: s.holder.player, party: s.holder.party, office: s.office as 'senator' | 'representative', yes, cardId: s.holder.cardId });
     }
 
     const pres = this.president;
