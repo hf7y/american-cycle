@@ -29,7 +29,7 @@
 <body>
 <h1>american-cycle: rules reference</h1>
 <em class="gen">Generated from the engine (config <code>as-written-plus</code>, build
-<code>e73cafcc</code>) by <code>node docs/build.ts</code>. Never
+<code>0cdf6086</code>) by <code>node docs/build.ts</code>. Never
 edit <code>docs/rules.html</code> by hand &mdash; edit
 <code>docs/rules.template.html</code> or the engine, then regenerate.
 If a number here is wrong, the engine is wrong, not the prose.</em>
@@ -40,13 +40,26 @@ which party to run each candidate under. Fifty states' worth of races come up
 on a fixed cycle; you can only afford to contest a fraction of them, so the
 game is about choosing which fraction.</p>
 
+<p>Districts are dealt to you secretly, once, at the start of the game, with a
+small trickle of new ones as later eras enter play &mdash; nobody else ever
+sees which districts you hold. They are what makes a House race exist at all:
+a seat is only in play where some player's district card names it. Politician
+cards are different &mdash; they are drafted face-up, one at a time, snake
+order around the table: keep or pass.</p>
+
 <h2>The turn</h2>
-<p>Each year: draft a pack of candidate and district cards, declare candidates
-into open races, a window to withdraw before the dice are visible, elections
-resolve, the legislature votes on the year's omnibill, and lean decays toward
-zero everywhere. Your hand holds <b>16</b> cards at the start of a
-cycle under <code>as-written-plus</code> &mdash; far fewer than the races on
-the board, which is why most of them go uncontested.</p>
+<p>Each year: draft any politician cards needed to refill your hand (one card
+revealed at a time, keep or pass), declare candidates into open races one at a
+time around the table in repeating rounds until everyone passes on the same
+lap, a window to withdraw before the dice are visible, elections resolve, the
+legislature votes on the year's omnibill, and lean decays toward zero
+everywhere. Declaring one at a time means every declaration is a live target:
+the next player around the table can see the peg you just placed and counter
+into the same race before it resolves. Your hand holds <b>16</b>
+candidate cards at the start of a cycle under <code>as-written-plus</code>
+&mdash; the number of races that actually draw a second declarer, and
+therefore stay contested rather than going to a walkover, is an outcome of
+this process, not a fixed count.</p>
 
 <h2>How a race resolves</h2>
 <p>Every race rolls three six-sided dice per side: <b>national</b> (shared by
