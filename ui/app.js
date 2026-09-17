@@ -44,6 +44,7 @@ const OPPONENT_BLURB = {
   Dealmaker:'Fair fight. Votes fit first like everyone else, but repays a bill author who has helped it before, even off-fit — and never forgets a favour that was never returned.',
   RunawayBrake:'Ordinary until a rival is clearly running away — then it contests that rival\'s own held seats, blocks every bill, and moves to impeach them if they hold the presidency. Needs a third player to tell a runaway leader from an ordinary rival, so at 1v1 it plays exactly like Greedy.',
   Whip:'Packs the House and Senate to build a favour ledger, then only moves to impeach a president once its own count of opposition seats and owed favours actually clears the real two-thirds Senate threshold — never on Impeacher\'s looser 50% guess.',
+  Bandwagon:'Votes fit first like everyone else, but a bill vote called late in the roll can watch its own party break hard one way and join or defect from its district to match — the same seat can vote differently on the same bill depending only on when it is called.',
 };
 const SOLITAIRE_BLURB = {
   Greedy:"The board's recommended opponent. Fair fight — you'll win about half of these, one-on-one.",
@@ -66,9 +67,10 @@ const SOLITAIRE_BLURB = {
   Dealmaker:'Fair 1v1. You should win about 49% of these — at 1v1 there is only one other player to build a ledger with, so it plays close to Greedy.',
   RunawayBrake:'Fair 1v1 — plays exactly like Greedy with only one rival to measure. You should win about 49% of these.',
   Whip:'Very gentle 1v1. You should win about 93% of these — its declare policy overpacks the House and Senate for a favour ledger that never gets built at 1v1, the same narrow-diet weakness BillAuthor has.',
+  Bandwagon:'Fair 1v1. You should win about 48% of these — its declare policy is a plain Greedy mirror, so only bill votes differ, and those move score at the margin rather than deciding the game.',
 };
 const SOLITAIRE_TIER = {
-  Greedy:'fair', HeterodoxSpecialist:'fair', EconomyChicken:'fair', Vetoer:'fair', Dealmaker:'fair', RunawayBrake:'fair',
+  Greedy:'fair', HeterodoxSpecialist:'fair', EconomyChicken:'fair', Vetoer:'fair', Dealmaker:'fair', RunawayBrake:'fair', Bandwagon:'fair',
   Lookahead:'hard', BillBlocker:'hard', Impeacher:'hard', VPBackstab:'hard', SenateFlood:'hard', Launchpad:'hard',
   HouseFarm:'gentle', WideAndEmpty:'gentle', BillAuthor:'gentle', RunawayMaximiser:'gentle', WalkoverFarmer:'gentle', BillMaximizer:'gentle', Random:'gentle', Whip:'gentle',
 };

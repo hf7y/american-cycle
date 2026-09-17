@@ -5,6 +5,7 @@ import type { Agent, GameView, OpenRace, PendingPeg, Config, VPOffer } from '../
 import type { Declaration, WithdrawalView } from '../engine/rules/elections.ts';
 import { buildModifiers, eligible, homeDistrict } from '../engine/rules/elections.ts';
 import type { CandidateCard, EnactedBill, IdentityTag, Office, Party, Seat } from '../engine/types/index.ts';
+import type { Vote } from '../engine/rules/legislature.ts';
 import { RNG } from '../engine/rules/rng.ts';
 import * as tags from '../engine/rules/tags.ts';
 import { economyModifier } from '../engine/rules/economy.ts';
@@ -541,13 +542,14 @@ export class BillBlocker extends Base {
 /** hf7y/american-cycle#37: the plank of DECISIONS.md's "untestable by
  *  simulation" table politics list that RunawayBrake (#255/#257, reacting to
  *  a rival's SCORE) and VPBackstab (reacting to a rival's TICKET) both leave
- *  untouched -- an agent that trades. Voting is simultaneous and secret
- *  (`omnibill`, engine/game.ts), so no agent can see another's vote before
- *  casting its own: there is no channel to negotiate an offer on. The one
- *  channel that DOES survive is the public record afterward -- `v.bills`
- *  already names who authored each passed bill, and now (`EnactedBill.
- *  yesVoters`) who voted for it -- so trading here means paying forward a
- *  favour already on the books, not striking a deal in advance. */
+ *  untouched -- an agent that trades. At the time this was written the bill
+ *  vote was simultaneous and secret, so no agent could see another's vote
+ *  before casting its own; #263/#272 later opened that channel (see
+ *  `Bandwagon`, below), but `favor` predates it and deliberately does not use
+ *  it -- this is the CROSS-YEAR ledger. `v.bills` already names who authored
+ *  each passed bill, and (`EnactedBill.yesVoters`) who voted for it, so
+ *  trading here means paying forward a favour already on the books from a
+ *  prior year, not reading the current roll in progress. */
 function favor(me: number, other: number, bills: readonly EnactedBill[]): number {
   let f = 0;
   for (const b of bills) {
@@ -685,6 +687,50 @@ export class Whip extends Base {
   }
 }
 
+/** hf7y/american-cycle#37: the roll call itself (#263, merged as #272) is the
+ *  channel "negotiation before the bill vote" was blocked on -- DECISIONS.md
+ *  said no agent could see another's vote before casting its own, and that is
+ *  no longer true. `voteBill`'s `votesSoFar` argument carries every vote
+ *  already cast this roll, in `leg.rollCall`'s fixed House-then-Senate,
+ *  alphabetical-by-state order. This is the first agent that reads it: not a
+ *  favour struck in advance (there is still no channel to negotiate an offer
+ *  on, only to observe one already cast), but the real-time version of what a
+ *  whip does on the floor -- watch how the caucus is breaking and fall in
+ *  line, exactly the "no channel" DECISIONS.md described until #272.
+ *
+ *  Momentum only overrides a district vote fit alone leaves undecided or
+ *  would flip; it needs a real signal (a few votes cast) before it will act,
+ *  and a mixed signal (between `BREAK_AT` and `JOIN_AT`) falls back to fit
+ *  like every other agent. Because the roll call has a fixed order, the same
+ *  seat can now vote differently on the identical bill depending only on when
+ *  it is called -- called first, there is no momentum yet and it votes its
+ *  district; called last, in the Senate, it has seen the entire House and
+ *  most of the Senate before it decides. */
+export class Bandwagon extends Base {
+  /** Fewer than this many same-party votes cast so far reads as one early
+   *  holdout, not momentum. Unprinted (#87). */
+  private static readonly MIN_SIGNAL = 2;
+  private static readonly JOIN_AT = 0.7;
+  private static readonly BREAK_AT = 0.3;
+  private momentum(party: Party, votesSoFar: readonly Vote[]): boolean | undefined {
+    const mine = votesSoFar.filter((x) => x.party === party);
+    if (mine.length < Bandwagon.MIN_SIGNAL) return undefined;
+    const yesShare = mine.filter((x) => x.yes).length / mine.length;
+    if (yesShare >= Bandwagon.JOIN_AT) return true;
+    if (yesShare <= Bandwagon.BREAK_AT) return false;
+    return undefined;
+  }
+  declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[] {
+    const o = counterDeclare(options(v, open, this.cfg), pending, v.me, 2);
+    return pickDistinct(o.sort(byEdge), this.budget(v));
+  }
+  voteBill(v: GameView, g: number, seat: Seat, billTags?: readonly IdentityTag[], authorId?: number,
+    votesSoFar?: readonly Vote[]): boolean {
+    const m = seat.holder && votesSoFar ? this.momentum(seat.holder.party, votesSoFar) : undefined;
+    return m !== undefined ? m : super.voteBill(v, g, seat, billTags);
+  }
+}
+
 export const AGENTS: Record<string, new (cfg: Config, rng: RNG) => Agent> = {
   Random: class extends RandomAgent { constructor(c: Config, r: RNG) { super('Random', c, r); } },
   Greedy: class extends GreedyAgent { constructor(c: Config, r: RNG) { super('Greedy', c, r); } },
@@ -706,4 +752,5 @@ export const AGENTS: Record<string, new (cfg: Config, rng: RNG) => Agent> = {
   Dealmaker: class extends Dealmaker { constructor(c: Config, r: RNG) { super('Dealmaker', c, r); } },
   RunawayBrake: class extends RunawayBrake { constructor(c: Config, r: RNG) { super('RunawayBrake', c, r); } },
   Whip: class extends Whip { constructor(c: Config, r: RNG) { super('Whip', c, r); } },
+  Bandwagon: class extends Bandwagon { constructor(c: Config, r: RNG) { super('Bandwagon', c, r); } },
 };

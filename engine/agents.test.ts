@@ -11,9 +11,10 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import type { Config, GameView, PlayerState } from './game.ts';
-import { Dealmaker, RunawayBrake, Whip } from '../sim/agents.ts';
+import { Bandwagon, Dealmaker, RunawayBrake, Whip } from '../sim/agents.ts';
 import { RNG } from './rules/rng.ts';
 import type { EnactedBill, Seat } from './types/index.ts';
+import type { Vote } from './rules/legislature.ts';
 
 const cfg: Config = JSON.parse(readFileSync(new URL('./config/tuned.json', import.meta.url), 'utf8'));
 
@@ -249,4 +250,59 @@ test('Whip: a same-party senator with no debt to anyone stays loyal', () => {
   const same: Seat = { office: 'senator', state: 'TX', senateClass: 2, holder: { cardId: 's2', player: 0, party: 'R', since: 2020 } };
   const v = view([player(0), player(1), player(1), player(1)], seats);
   assert.equal(whip().voteImpeach(v, same), false);
+});
+
+/** hf7y/american-cycle#37: `Bandwagon` is the first agent to read
+ *  `voteBill`'s `votesSoFar` (#263/#272's roll call) -- real-time same-party
+ *  momentum, not `Dealmaker`/`Whip`'s cross-year ledger. Reuses `fixture`
+ *  above: a `D` senator in a district that shares no tag with `union` (fit
+ *  reads false) but shares every tag with `farm` (fit reads true), so both
+ *  override directions are provable against a known fit baseline. */
+const bw = () => new Bandwagon('Bandwagon', cfg, new RNG(1));
+
+test('Bandwagon: no votesSoFar falls back to fit', () => {
+  const { v, seat } = fixture([]);
+  assert.equal(bw().voteBill(v, 3, seat, ['union'], 1, []), false);
+});
+
+test('Bandwagon: a single same-party vote is one early holdout, not momentum', () => {
+  const { v, seat } = fixture([]);
+  const votesSoFar: Vote[] = [{ player: 5, party: 'D', office: 'representative', yes: true, cardId: 'x1' }];
+  assert.equal(bw().voteBill(v, 3, seat, ['union'], 1, votesSoFar), false);
+});
+
+test('Bandwagon: strong same-party yes momentum overrides a fit-no', () => {
+  const { v, seat } = fixture([]);
+  const votesSoFar: Vote[] = [
+    { player: 5, party: 'D', office: 'representative', yes: true, cardId: 'x1' },
+    { player: 6, party: 'D', office: 'representative', yes: true, cardId: 'x2' },
+  ];
+  assert.equal(bw().voteBill(v, 3, seat, ['union'], 1, votesSoFar), true);
+});
+
+test('Bandwagon: strong same-party no momentum overrides a fit-yes', () => {
+  const { v, seat } = fixture([]);
+  const votesSoFar: Vote[] = [
+    { player: 5, party: 'D', office: 'representative', yes: false, cardId: 'x1' },
+    { player: 6, party: 'D', office: 'representative', yes: false, cardId: 'x2' },
+  ];
+  assert.equal(bw().voteBill(v, 3, seat, ['farm'], 1, votesSoFar), false);
+});
+
+test('Bandwagon: a mixed same-party signal falls back to fit', () => {
+  const { v, seat } = fixture([]);
+  const votesSoFar: Vote[] = [
+    { player: 5, party: 'D', office: 'representative', yes: true, cardId: 'x1' },
+    { player: 6, party: 'D', office: 'representative', yes: false, cardId: 'x2' },
+  ];
+  assert.equal(bw().voteBill(v, 3, seat, ['union'], 1, votesSoFar), false);
+});
+
+test('Bandwagon: momentum counts only the seat\'s own party, not the whole roll', () => {
+  const { v, seat } = fixture([]);
+  const votesSoFar: Vote[] = [
+    { player: 5, party: 'R', office: 'representative', yes: true, cardId: 'x1' },
+    { player: 6, party: 'R', office: 'representative', yes: true, cardId: 'x2' },
+  ];
+  assert.equal(bw().voteBill(v, 3, seat, ['union'], 1, votesSoFar), false, 'two R yes votes are not D momentum');
 });

@@ -54,6 +54,13 @@ export const finding: Finding = {
       // second-weakest 1v1 opponent (14.3%) for exactly that reason -- too
       // narrow a diet of races to convert. Whip lands lower still.
       Whip: 6.7,
+      // hf7y/american-cycle#37: `Bandwagon`'s declare() is byte-identical to
+      // GreedyAgent's (counterDeclare + pickDistinct, no edge bonus), so
+      // seat-winning plays out the same as the Greedy-mirror duel Dealmaker
+      // and RunawayBrake both land on -- its momentum override only touches
+      // voteBill, which moves score at the margin (bill status), not at the
+      // scale that decides most games (seats held).
+      Bandwagon: 52.3,
     };
 
     return AGENT_NAMES.map((name) => {
