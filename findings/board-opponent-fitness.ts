@@ -61,6 +61,12 @@ export const finding: Finding = {
       // voteBill, which moves score at the margin (bill status), not at the
       // scale that decides most games (seats held).
       Bandwagon: 52.3,
+      // hf7y/american-cycle#37: `RunningMate` trades on the same ledger
+      // Dealmaker's declare() also reuses (plain GreedyAgent-shaped
+      // declare()), and at 1v1 there is exactly one other player to build a
+      // balance with -- same shape as Dealmaker's own 1v1 coin flip, for the
+      // same reason.
+      RunningMate: 46.3,
     };
 
     return AGENT_NAMES.map((name) => {
