@@ -685,6 +685,57 @@ export class Whip extends Base {
   }
 }
 
+/** hf7y/american-cycle#37's last remaining plank once Dealmaker (repays a
+ *  bill favour) and Whip (predicts an impeachment coalition off the same
+ *  ledger) shipped: "VP horse-trading during the nomination". That plank was
+ *  read too pessimistically on 2026-09-16 -- offerVP/pickVP
+ *  (engine/game.ts:1465) is not the omnibill's simultaneous secret vote at
+ *  all, it is a collect-then-choose exchange visible to the nominee, and the
+ *  same `favor` ledger Dealmaker/Whip read reaches straight across it: cement
+ *  an alliance that has already paid off rather than spend a card's tempo on
+ *  a stranger. */
+export class Kingmaker extends Base {
+  declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[] {
+    return pickDistinct(counterDeclare(options(v, open, this.cfg), pending, v.me, 2).sort(byEdge), this.budget(v));
+  }
+  voteBill(v: GameView, g: number, seat: Seat, billTags?: readonly IdentityTag[], authorId?: number): boolean {
+    if (super.voteBill(v, g, seat, billTags)) return true;
+    if (authorId === undefined || authorId === v.me) return false;
+    return favor(v.me, authorId, v.bills) > 0;
+  }
+  /** Offering is not free -- it costs the tempo of a card that is not
+   *  consumed on a loss but is gone from the hand for the rest of the game
+   *  either way. Only spend it where there is a balance to protect: a
+   *  nominee who has already voted yes on this agent's own bills. A stranger
+   *  gets nothing, same restraint `Dealmaker`'s own comment states -- paying
+   *  forward a favour already on the books, never striking a deal in
+   *  advance, because there is no channel to strike one on before the offer
+   *  itself is due. */
+  offerVP(v: GameView, nominee: { player: number; party: Party }): CandidateCard | undefined {
+    if (nominee.player === v.me) return undefined;
+    if (favor(v.me, nominee.player, v.bills) <= 0) return undefined;
+    const hand = v.players[v.me].hand.filter((c) => c.kind === 'candidate') as CandidateCard[];
+    if (!hand.length) return undefined;
+    return hand.reduce((best, c) => (c.homeStateBonus > best.homeStateBonus ? c : best), hand[0]);
+  }
+  /** `favor` is one signed ledger entry per pair, not two independent ones --
+   *  `favor(A, B) === -favor(B, A)` always, by construction (see the ledger's
+   *  own definition above `Dealmaker`). So the offer this agent should prefer
+   *  is not one from someone IT owes (that is the exact opposite condition
+   *  from the one that made them offer in the first place, and can never
+   *  co-occur with it) but one from an offerer who owes THIS agent --
+   *  `favor(o.from, v.me)`, not `favor(v.me, o.from)` -- since an offer
+   *  extended on that balance is itself a debt starting to be repaid, the
+   *  mirror of what `offerVP` above checks before making one. Falls back to
+   *  `Base`'s own best-card default once no offer comes from anyone in this
+   *  agent's debt. */
+  pickVP(v: GameView, offers: VPOffer[]): VPOffer | undefined {
+    const owed = offers.filter((o) => favor(o.from, v.me, v.bills) > 0)
+      .reduce((best: VPOffer | undefined, o) => (!best || o.card.homeStateBonus > best.card.homeStateBonus ? o : best), undefined);
+    return owed ?? super.pickVP(v, offers);
+  }
+}
+
 export const AGENTS: Record<string, new (cfg: Config, rng: RNG) => Agent> = {
   Random: class extends RandomAgent { constructor(c: Config, r: RNG) { super('Random', c, r); } },
   Greedy: class extends GreedyAgent { constructor(c: Config, r: RNG) { super('Greedy', c, r); } },
@@ -706,4 +757,5 @@ export const AGENTS: Record<string, new (cfg: Config, rng: RNG) => Agent> = {
   Dealmaker: class extends Dealmaker { constructor(c: Config, r: RNG) { super('Dealmaker', c, r); } },
   RunawayBrake: class extends RunawayBrake { constructor(c: Config, r: RNG) { super('RunawayBrake', c, r); } },
   Whip: class extends Whip { constructor(c: Config, r: RNG) { super('Whip', c, r); } },
+  Kingmaker: class extends Kingmaker { constructor(c: Config, r: RNG) { super('Kingmaker', c, r); } },
 };

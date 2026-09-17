@@ -11,9 +11,9 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import type { Config, GameView, PlayerState } from './game.ts';
-import { Dealmaker, RunawayBrake, Whip } from '../sim/agents.ts';
+import { Dealmaker, Kingmaker, RunawayBrake, Whip } from '../sim/agents.ts';
 import { RNG } from './rules/rng.ts';
-import type { EnactedBill, Seat } from './types/index.ts';
+import type { CandidateCard, EnactedBill, Seat } from './types/index.ts';
 
 const cfg: Config = JSON.parse(readFileSync(new URL('./config/tuned.json', import.meta.url), 'utf8'));
 
@@ -249,4 +249,48 @@ test('Whip: a same-party senator with no debt to anyone stays loyal', () => {
   const same: Seat = { office: 'senator', state: 'TX', senateClass: 2, holder: { cardId: 's2', player: 0, party: 'R', since: 2020 } };
   const v = view([player(0), player(1), player(1), player(1)], seats);
   assert.equal(whip().voteImpeach(v, same), false);
+});
+
+/** hf7y/american-cycle#37: `Kingmaker` reads the same `favor` ledger
+ *  `Dealmaker`/`Whip` do, applied to `offerVP`/`pickVP` instead of
+ *  `voteBill`/`voteImpeach` -- the VP-nomination horse-trading plank. */
+const kingmaker = () => new Kingmaker('Kingmaker', cfg, new RNG(1));
+
+const candidate = (id: string, homeStateBonus: number): CandidateCard => ({
+  id, name: id, party: 'D', homeState: 'ZZ', homeStateBonus, identities: [], era: 2024, effects: [],
+});
+
+test('Kingmaker: offers nothing to a nominee it is not owed a favour by', () => {
+  const me = { ...player(0), hand: [{ kind: 'candidate' as const, ...candidate('c1', 5) }] };
+  const v = view([me, player(0)]);
+  assert.equal(kingmaker().offerVP(v, { player: 1, party: 'D' }), undefined);
+});
+
+test('Kingmaker: offers its best card to a nominee already in its debt', () => {
+  const bills: EnactedBill[] = [{ id: 'b0', year: 2020, g: 3, author: 0, tags: [], yesVoters: [0, 1] }];
+  const me = { ...player(0), hand: [{ kind: 'candidate' as const, ...candidate('c1', 2) }, { kind: 'candidate' as const, ...candidate('c2', 7) }] };
+  const v: GameView = { ...view([me, player(0)]), bills };
+  assert.equal(kingmaker().offerVP(v, { player: 1, party: 'D' })?.id, 'c2');
+});
+
+test('Kingmaker: never offers to itself', () => {
+  const bills: EnactedBill[] = [{ id: 'b0', year: 2020, g: 3, author: 0, tags: [], yesVoters: [0] }];
+  const me = { ...player(0), hand: [{ kind: 'candidate' as const, ...candidate('c1', 5) }] };
+  const v: GameView = { ...view([me]), bills };
+  assert.equal(kingmaker().offerVP(v, { player: 0, party: 'D' }), undefined);
+});
+
+test('Kingmaker: picks an offer from a player already in its debt over a bigger stranger card', () => {
+  // player 1 authored a bill this agent (player 0) voted yes on -- player 1
+  // owes player 0, so their offer is itself a debt starting to be repaid.
+  const bills: EnactedBill[] = [{ id: 'b0', year: 2020, g: 3, author: 1, tags: [], yesVoters: [0] }];
+  const v: GameView = { ...view([player(0), player(0), player(0)]), bills };
+  const offers = [{ from: 2, card: candidate('rich-stranger', 9) }, { from: 1, card: candidate('ally', 3) }];
+  assert.equal(kingmaker().pickVP(v, offers)?.card.id, 'ally');
+});
+
+test('Kingmaker: falls back to the best card when no offer comes from a debtor', () => {
+  const v = view([player(0), player(0), player(0)]);
+  const offers = [{ from: 1, card: candidate('small', 2) }, { from: 2, card: candidate('big', 6) }];
+  assert.equal(kingmaker().pickVP(v, offers)?.card.id, 'big');
 });

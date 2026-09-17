@@ -44,10 +44,11 @@ const OPPONENT_BLURB = {
   Dealmaker:'Fair fight. Votes fit first like everyone else, but repays a bill author who has helped it before, even off-fit — and never forgets a favour that was never returned.',
   RunawayBrake:'Ordinary until a rival is clearly running away — then it contests that rival\'s own held seats, blocks every bill, and moves to impeach them if they hold the presidency. Needs a third player to tell a runaway leader from an ordinary rival, so at 1v1 it plays exactly like Greedy.',
   Whip:'Packs the House and Senate to build a favour ledger, then only moves to impeach a president once its own count of opposition seats and owed favours actually clears the real two-thirds Senate threshold — never on Impeacher\'s looser 50% guess.',
+  Kingmaker:'Reads the same favour ledger as Dealmaker, but at the VP nomination — only offers its best card, or picks one, from a player who already owes it a vote. Spends nothing on a stranger.',
 };
 const SOLITAIRE_BLURB = {
   Greedy:"The board's recommended opponent. Fair fight — you'll win about half of these, one-on-one.",
-  Lookahead:'Hardest 1v1 of all sixteen. Wins 79% of the time — this is not a first solitaire game.',
+  Lookahead:'Hardest 1v1 of all seventeen. Wins 79% of the time — this is not a first solitaire game.',
   Random:'Gentle 1v1. You should win about 73% of these.',
   HouseFarm:'Very gentle 1v1. You should win about 93% of these.',
   SenateFlood:'Hard 1v1. Wins about 65% of the time.',
@@ -59,7 +60,7 @@ const SOLITAIRE_BLURB = {
   VPBackstab:'Hard 1v1. Wins about 65% of the time.',
   Launchpad:'Hard 1v1. Wins about 63% of the time.',
   BillAuthor:'Very gentle 1v1. You should win about 86% of these.',
-  Vetoer:'Fairest 1v1 of all sixteen. You should win about 47% of these.',
+  Vetoer:'Fairest 1v1 of all seventeen. You should win about 47% of these.',
   BillBlocker:'Hardest 1v1 aside from Lookahead. Wins about 78% of the time.',
   RunawayMaximiser:'Very gentle 1v1. You should win about 85% of these.',
   WalkoverFarmer:'Gentle 1v1. You should win about 77% of these.',

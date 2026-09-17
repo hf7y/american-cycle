@@ -10,7 +10,7 @@ export const finding: Finding = {
   id: 'board-opponent-fitness',
   dependsOn: [],
   question:
-    'Now that #202 lets the setup screen seat exactly one opponent, which of the sixteen non-Greedy scripted '
+    'Now that #202 lets the setup screen seat exactly one opponent, which of the scripted '
     + "agents give a human a fair one-on-one game (Greedy standing in for an ordinary player, per this repo's own "
     + "skill-signal convention), and does the app's existing OPPONENT_BLURB -- calibrated against a fixed "
     + 'three-opponent field -- still describe them accurately at 1v1?',
@@ -20,12 +20,13 @@ export const finding: Finding = {
     + 'BillAuthor 85.7%, RunawayMaximiser 85.3%, WalkoverFarmer/BillMaximizer 77%, Random 73.3%) and six are '
     + "near-unwinnable (Lookahead 79%, BillBlocker 78%, Impeacher 66.3%, VPBackstab 65.3%, SenateFlood 65%, "
     + 'Launchpad 62.7% win rate for the agent) -- against the 3-opponent blurb text (e.g. Lookahead "wins about '
-    + 'half of all games it plays", Greedy is "a fair fight") that ships regardless of table size. Only three '
-    + 'land in a fair 40-60% band for the human: HeterodoxSpecialist (human wins 59%), EconomyChicken (54%), '
-    + 'Vetoer (46.7%). Shipped a solitaire-specific blurb in ui/app.js that only renders when exactly one '
-    + 'opponent is seated, so the 3-opponent numbers stay correct for the field they were measured against.',
-  stampedAt: '2026-09-06T14:00:00Z',
-  stampedOn: '9d18c76',
+    + 'half of all games it plays", Greedy is "a fair fight") that ships regardless of table size. Four '
+    + 'land in a fair 40-60% band for the human: Kingmaker (human wins 46%), HeterodoxSpecialist (59%), '
+    + 'EconomyChicken (54%), Vetoer (46.7%). Shipped a solitaire-specific blurb in ui/app.js that only renders '
+    + 'when exactly one opponent is seated, so the 3-opponent numbers stay correct for the field they were '
+    + 'measured against.',
+  stampedAt: '2026-09-16T15:00:00Z',
+  stampedOn: '469c0ea',
 
   predicate(): Claim[] {
     const cfg = loadConfig('tuned.json');
@@ -54,6 +55,13 @@ export const finding: Finding = {
       // second-weakest 1v1 opponent (14.3%) for exactly that reason -- too
       // narrow a diet of races to convert. Whip lands lower still.
       Whip: 6.7,
+      // hf7y/american-cycle#37: `Kingmaker`'s offerVP/pickVP only diverge
+      // from `Base`'s own defaults once a favour is already on the ledger
+      // (see its own comment) -- at 1v1 that ledger builds off ordinary
+      // fit-vote reciprocity same as `Dealmaker`'s, and a VP pick that
+      // happens to land on the only other player at the table changes
+      // little either way. Lands in the fair band, same shape as Dealmaker.
+      Kingmaker: 54,
     };
 
     return AGENT_NAMES.map((name) => {
