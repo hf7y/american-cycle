@@ -77,6 +77,24 @@ export function chambers(seats: Seat[]) {
   return { house, senate };
 }
 
+/** hf7y/american-cycle#263's ruling: the bill vote is a roll call, not a
+ *  blind simultaneous ballot -- each chamber calls its own roll separately
+ *  (the Speaker presides in the House, the VP in the Senate) in a fixed
+ *  order, alphabetical by state, never a free choice for whoever presides.
+ *  Ties within a state (a multi-district House delegation, or a state's two
+ *  senators) break by `slot`, already the stable per-seat key. The House is
+ *  called first: the omnibill spends G, and revenue/spending measures
+ *  originate there by the same practice the alphabetical order is drawn
+ *  from. Each seat's vote is public the moment it is cast, to every seat
+ *  called after it in this order -- see `Game.omnibill`'s `votesSoFar`. */
+export function rollCall(seats: Seat[]): (Seat & { holder: NonNullable<Seat['holder']> })[] {
+  const called = (office: 'representative' | 'senator') =>
+    seats
+      .filter((s): s is Seat & { holder: NonNullable<Seat['holder']> } => !!s.holder && s.office === office)
+      .sort((a, b) => (a.state === b.state ? (a.slot ?? 0) - (b.slot ?? 0) : a.state.localeCompare(b.state)));
+  return [...called('representative'), ...called('senator')];
+}
+
 export function majorityParty(seats: Seat[], office: 'senator' | 'representative'): Party | undefined {
   const held = seats.filter((s) => s.office === office && s.holder);
   const tally = new Map<Party, number>();
