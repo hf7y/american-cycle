@@ -675,17 +675,10 @@
       "party": "R",
       "homeState": "FL",
       "homeStateBonus": 1,
-      "identities": [
-        "hispanic"
-      ],
+      "identities": [],
       "belief": "Please clap",
       "era": 2016,
-      "effects": [],
-      "provenance": {
-        "hispanic": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -865,17 +858,10 @@
       "party": "R",
       "homeState": "AZ",
       "homeStateBonus": 2,
-      "identities": [
-        "evangelical"
-      ],
+      "identities": [],
       "belief": "Conscience of a conservative",
       "era": 2016,
-      "effects": [],
-      "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -974,17 +960,10 @@
       "party": "R",
       "homeState": "TX",
       "homeStateBonus": 1,
-      "identities": [
-        "hispanic"
-      ],
+      "identities": [],
       "belief": "Governor of Texas",
       "era": 2016,
-      "effects": [],
-      "provenance": {
-        "hispanic": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -1063,17 +1042,10 @@
       "party": "R",
       "homeState": "CA",
       "homeStateBonus": 1,
-      "identities": [
-        "suburban"
-      ],
+      "identities": [],
       "belief": "The leader",
       "era": 2016,
-      "effects": [],
-      "provenance": {
-        "suburban": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -1976,21 +1948,14 @@
       "party": "I",
       "homeState": "UT",
       "homeStateBonus": 1,
-      "identities": [
-        "evangelical"
-      ],
+      "identities": [],
       "belief": "Ran to deny a majority",
       "era": 2016,
       "effects": [
         {
           "type": "extremist"
         }
-      ],
-      "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        }
-      }
+      ]
     }
   ]
 }

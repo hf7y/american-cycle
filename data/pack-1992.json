@@ -918,17 +918,10 @@
       "party": "R",
       "homeState": "UT",
       "homeStateBonus": 2,
-      "identities": [
-        "evangelical"
-      ],
+      "identities": [],
       "belief": "Worked with Kennedy",
       "era": 1992,
-      "effects": [],
-      "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
