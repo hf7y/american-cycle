@@ -32,12 +32,7 @@
       "party": "D",
       "homeState": "VT",
       "homeStateBonus": 2,
-      "identities": [
-        "jewish"
-      ],
-      "identityWeights": {
-        "jewish": 2
-      },
+      "identities": [],
       "belief": "Political revolution",
       "era": 2016,
       "effects": [
@@ -49,12 +44,7 @@
           "pips": 2,
           "note": "an ideological validator with a national following"
         }
-      ],
-      "provenance": {
-        "jewish": {
-          "source": "hand-assigned"
-        }
-      }
+      ]
     },
     {
       "kind": "candidate",
@@ -64,20 +54,15 @@
       "homeState": "VA",
       "homeStateBonus": 1,
       "identities": [
-        "catholic",
         "hispanic"
       ],
       "identityWeights": {
-        "catholic": 1,
         "hispanic": 1
       },
       "belief": "Spanish on the trail",
       "era": 2016,
       "effects": [],
       "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        },
         "hispanic": {
           "source": "hand-assigned"
         }
@@ -97,8 +82,7 @@
         {
           "type": "extremist"
         }
-      ],
-      "provenance": {}
+      ]
     },
     {
       "kind": "candidate",
@@ -290,20 +274,15 @@
       "homeState": "PA",
       "homeStateBonus": 1,
       "identities": [
-        "catholic",
         "union"
       ],
       "identityWeights": {
-        "catholic": 2,
         "union": 1
       },
       "belief": "Held Pennsylvania",
       "era": 2016,
       "effects": [],
       "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        },
         "union": {
           "source": "hand-assigned"
         }
@@ -339,28 +318,12 @@
       "homeState": "LA",
       "homeStateBonus": 3,
       "identities": [
-        "catholic",
         "rural"
       ],
-      "identityWeights": {
-        "catholic": 1
-      },
       "belief": "Pro-life, pro-Medicaid",
       "era": 2016,
-      "effects": [
-        {
-          "type": "conditional",
-          "pips": 2,
-          "when": {
-            "identity": "catholic"
-          },
-          "note": "pro-life: a bonus in Catholic districts"
-        }
-      ],
+      "effects": [],
       "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        },
         "rural": {
           "source": "hand-assigned"
         }
@@ -422,20 +385,15 @@
       "homeState": "CA",
       "homeStateBonus": 0,
       "identities": [
-        "catholic",
         "urban"
       ],
       "identityWeights": {
-        "catholic": 2,
         "urban": 1
       },
       "belief": "The Speaker again",
       "era": 2016,
       "effects": [],
       "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        },
         "urban": {
           "source": "hand-assigned"
         }
@@ -449,19 +407,12 @@
       "homeState": "NY",
       "homeStateBonus": 0,
       "identities": [
-        "jewish",
         "urban"
       ],
-      "identityWeights": {
-        "jewish": 2
-      },
       "belief": "The leader",
       "era": 2016,
       "effects": [],
       "provenance": {
-        "jewish": {
-          "source": "hand-assigned"
-        },
         "urban": {
           "source": "hand-assigned"
         }
@@ -523,12 +474,10 @@
       "homeState": "PA",
       "homeStateBonus": 2,
       "identities": [
-        "catholic",
         "union"
       ],
       "identityWeights": {
-        "union": 2,
-        "catholic": 1
+        "union": 2
       },
       "belief": "Won a Trump district",
       "era": 2016,
@@ -543,9 +492,6 @@
         }
       ],
       "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        },
         "union": {
           "source": "hand-assigned"
         }
@@ -561,8 +507,7 @@
       "identities": [],
       "belief": "Prosecuted the church bombing",
       "era": 2016,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -598,12 +543,8 @@
       "homeState": "TX",
       "homeStateBonus": 1,
       "identities": [
-        "hispanic",
-        "evangelical"
+        "hispanic"
       ],
-      "identityWeights": {
-        "evangelical": 2
-      },
       "belief": "The shutdown",
       "era": 2016,
       "effects": [
@@ -613,9 +554,6 @@
       ],
       "provenance": {
         "hispanic": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         }
       }
@@ -628,8 +566,7 @@
       "homeState": "FL",
       "homeStateBonus": 1,
       "identities": [
-        "cuban",
-        "evangelical"
+        "cuban"
       ],
       "identityWeights": {
         "cuban": 2
@@ -639,9 +576,6 @@
       "effects": [],
       "provenance": {
         "cuban": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         }
       }
@@ -653,20 +587,10 @@
       "party": "R",
       "homeState": "OH",
       "homeStateBonus": 2,
-      "identities": [
-        "catholic"
-      ],
-      "identityWeights": {
-        "catholic": 2
-      },
+      "identities": [],
       "belief": "Expanded Medicaid",
       "era": 2016,
-      "effects": [],
-      "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -694,20 +618,10 @@
       "party": "R",
       "homeState": "IN",
       "homeStateBonus": 1,
-      "identities": [
-        "evangelical"
-      ],
-      "identityWeights": {
-        "evangelical": 2
-      },
+      "identities": [],
       "belief": "Christian, conservative, Republican",
       "era": 2016,
-      "effects": [],
-      "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -716,20 +630,10 @@
       "party": "R",
       "homeState": "WI",
       "homeStateBonus": 2,
-      "identities": [
-        "catholic"
-      ],
-      "identityWeights": {
-        "catholic": 1
-      },
+      "identities": [],
       "belief": "The budget",
       "era": 2016,
-      "effects": [],
-      "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -741,8 +645,7 @@
       "identities": [],
       "belief": "Held the seat open",
       "era": 2016,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -754,8 +657,7 @@
       "identities": [],
       "belief": "The only split ticket in 2020",
       "era": 2016,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -789,8 +691,7 @@
       "identities": [],
       "belief": "Most popular governor in America",
       "era": 2016,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -843,20 +744,10 @@
       "party": "R",
       "homeState": "NE",
       "homeStateBonus": 2,
-      "identities": [
-        "evangelical"
-      ],
-      "identityWeights": {
-        "evangelical": 2
-      },
+      "identities": [],
       "belief": "Never Trump, mostly",
       "era": 2016,
-      "effects": [],
-      "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -865,17 +756,10 @@
       "party": "R",
       "homeState": "AZ",
       "homeStateBonus": 2,
-      "identities": [
-        "evangelical"
-      ],
+      "identities": [],
       "belief": "Conscience of a conservative",
       "era": 2016,
-      "effects": [],
-      "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -900,24 +784,14 @@
       "party": "R",
       "homeState": "AR",
       "homeStateBonus": 2,
-      "identities": [
-        "evangelical"
-      ],
-      "identityWeights": {
-        "evangelical": 1
-      },
+      "identities": [],
       "belief": "Harvard and the infantry",
       "era": 2016,
       "effects": [
         {
           "type": "extremist"
         }
-      ],
-      "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        }
-      }
+      ]
     },
     {
       "kind": "candidate",
@@ -926,24 +800,14 @@
       "party": "R",
       "homeState": "MO",
       "homeStateBonus": 2,
-      "identities": [
-        "evangelical"
-      ],
-      "identityWeights": {
-        "evangelical": 1
-      },
+      "identities": [],
       "belief": "Big tech populist",
       "era": 2016,
       "effects": [
         {
           "type": "extremist"
         }
-      ],
-      "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        }
-      }
+      ]
     },
     {
       "kind": "candidate",
@@ -952,20 +816,10 @@
       "party": "R",
       "homeState": "SC",
       "homeStateBonus": 2,
-      "identities": [
-        "evangelical"
-      ],
-      "identityWeights": {
-        "evangelical": 1
-      },
+      "identities": [],
       "belief": "Took down the flag",
       "era": 2016,
-      "effects": [],
-      "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -996,8 +850,7 @@
       "identities": [],
       "belief": "Won by 32,000 votes",
       "era": 2016,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -1031,8 +884,7 @@
       "identities": [],
       "belief": "Trade negotiator",
       "era": 2016,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -1041,20 +893,10 @@
       "party": "R",
       "homeState": "PA",
       "homeStateBonus": 1,
-      "identities": [
-        "catholic"
-      ],
-      "identityWeights": {
-        "catholic": 1
-      },
+      "identities": [],
       "belief": "Voted to convict",
       "era": 2016,
-      "effects": [],
-      "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -1110,12 +952,10 @@
       "homeState": "TN",
       "homeStateBonus": 2,
       "identities": [
-        "evangelical",
         "suburban"
       ],
       "identityWeights": {
-        "suburban": 2,
-        "evangelical": 1
+        "suburban": 2
       },
       "belief": "Hard right in a red state",
       "era": 2016,
@@ -1125,9 +965,6 @@
         }
       ],
       "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        },
         "suburban": {
           "source": "hand-assigned"
         }
@@ -1163,8 +1000,7 @@
       "era": 2016,
       "demographics": [
         "union",
-        "rural",
-        "catholic"
+        "rural"
       ],
       "note": "Conor Lamb's Trump district",
       "provenance": {
@@ -1172,9 +1008,6 @@
           "source": "hand-assigned"
         },
         "rural": {
-          "source": "hand-assigned"
-        },
-        "catholic": {
           "source": "hand-assigned"
         }
       }
@@ -1566,15 +1399,11 @@
       "number": 14,
       "era": 2016,
       "demographics": [
-        "rural",
-        "evangelical"
+        "rural"
       ],
       "note": "Northwest Georgia",
       "provenance": {
         "rural": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         }
       }
@@ -1658,15 +1487,11 @@
       "number": 9,
       "era": 2016,
       "demographics": [
-        "rural",
-        "evangelical"
+        "rural"
       ],
       "note": "Southwest Virginia",
       "provenance": {
         "rural": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         }
       }
@@ -1822,15 +1647,11 @@
       "number": 4,
       "era": 2016,
       "demographics": [
-        "suburban",
-        "evangelical"
+        "suburban"
       ],
       "note": "Salt Lake suburbs",
       "provenance": {
         "suburban": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         }
       }
@@ -1976,21 +1797,14 @@
       "party": "I",
       "homeState": "UT",
       "homeStateBonus": 1,
-      "identities": [
-        "evangelical"
-      ],
+      "identities": [],
       "belief": "Ran to deny a majority",
       "era": 2016,
       "effects": [
         {
           "type": "extremist"
         }
-      ],
-      "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        }
-      }
+      ]
     }
   ]
 }

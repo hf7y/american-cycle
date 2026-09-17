@@ -2,8 +2,13 @@ export type Party = 'D' | 'R' | 'I';
 export type Office = 'president' | 'senator' | 'governor' | 'representative';
 export type Round = 'primary' | 'general';
 
+/** hf7y/american-cycle#240, RULED 2026-09-16: a tag is kept only if its
+ *  coefficient is statistically significant against the real MEDSL returns,
+ *  district-clustered errors, Holm-Bonferroni corrected. `catholic`,
+ *  `evangelical` and `jewish` were tested (`sim/tag-significance.ts`) and
+ *  did not survive -- dropped, not reclassified. */
 export type IdentityTag =
-  | 'catholic' | 'evangelical' | 'jewish' | 'black' | 'hispanic' | 'cuban'
+  | 'black' | 'hispanic' | 'cuban'
   | 'union' | 'rural' | 'suburban' | 'urban'
   | 'farm';
 

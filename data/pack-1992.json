@@ -11,7 +11,6 @@
       "homeState": "AR",
       "homeStateBonus": 2,
       "identities": [
-        "evangelical",
         "rural"
       ],
       "identityWeights": {
@@ -30,9 +29,6 @@
         }
       ],
       "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        },
         "rural": {
           "source": "hand-assigned"
         }
@@ -70,8 +66,7 @@
       "identities": [],
       "belief": "Pro-business Democrat",
       "era": 1992,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -80,24 +75,14 @@
       "party": "D",
       "homeState": "CA",
       "homeStateBonus": 1,
-      "identities": [
-        "catholic"
-      ],
-      "identityWeights": {
-        "catholic": 2
-      },
+      "identities": [],
       "belief": "Flat tax insurgent",
       "era": 1992,
       "effects": [
         {
           "type": "extremist"
         }
-      ],
-      "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        }
-      }
+      ]
     },
     {
       "kind": "candidate",
@@ -161,20 +146,15 @@
       "homeState": "NY",
       "homeStateBonus": 2,
       "identities": [
-        "catholic",
         "urban"
       ],
       "identityWeights": {
-        "catholic": 2,
         "urban": 2
       },
       "belief": "A tale of two cities",
       "era": 1992,
       "effects": [],
       "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        },
         "urban": {
           "source": "hand-assigned"
         }
@@ -232,20 +212,13 @@
       "homeState": "GA",
       "homeStateBonus": 2,
       "identities": [
-        "rural",
-        "evangelical"
+        "rural"
       ],
-      "identityWeights": {
-        "evangelical": 1
-      },
       "belief": "HOPE scholarships",
       "era": 1992,
       "effects": [],
       "provenance": {
         "rural": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         }
       }
@@ -258,19 +231,12 @@
       "homeState": "CA",
       "homeStateBonus": 1,
       "identities": [
-        "jewish",
         "urban"
       ],
-      "identityWeights": {
-        "jewish": 1
-      },
       "belief": "Year of the Woman",
       "era": 1992,
       "effects": [],
       "provenance": {
-        "jewish": {
-          "source": "hand-assigned"
-        },
         "urban": {
           "source": "hand-assigned"
         }
@@ -284,19 +250,12 @@
       "homeState": "CA",
       "homeStateBonus": 1,
       "identities": [
-        "jewish",
         "urban"
       ],
-      "identityWeights": {
-        "jewish": 1
-      },
       "belief": "Mayor during the assassinations",
       "era": 1992,
       "effects": [],
       "provenance": {
-        "jewish": {
-          "source": "hand-assigned"
-        },
         "urban": {
           "source": "hand-assigned"
         }
@@ -389,20 +348,15 @@
       "homeState": "PA",
       "homeStateBonus": 2,
       "identities": [
-        "catholic",
         "union"
       ],
       "identityWeights": {
-        "catholic": 2,
         "union": 1
       },
       "belief": "Pro-life Democrat",
       "era": 1992,
       "effects": [],
       "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        },
         "union": {
           "source": "hand-assigned"
         }
@@ -416,21 +370,16 @@
       "homeState": "LA",
       "homeStateBonus": 2,
       "identities": [
-        "rural",
-        "catholic"
+        "rural"
       ],
       "identityWeights": {
-        "rural": 1,
-        "catholic": 1
+        "rural": 1
       },
       "belief": "My vote cannot be bought but it can be rented",
       "era": 1992,
       "effects": [],
       "provenance": {
         "rural": {
-          "source": "hand-assigned"
-        },
-        "catholic": {
           "source": "hand-assigned"
         }
       }
@@ -445,8 +394,7 @@
       "identities": [],
       "belief": "Switched parties in 1994",
       "era": 1992,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -459,8 +407,7 @@
       "belief": "The switch made the seat safer, not weaker",
       "era": 1996,
       "effects": [],
-      "succeeds": "richard-shelby-1992",
-      "provenance": {}
+      "succeeds": "richard-shelby-1992"
     },
     {
       "kind": "candidate",
@@ -497,8 +444,7 @@
       "homeStateBonus": 1,
       "identities": [
         "black",
-        "urban",
-        "evangelical"
+        "urban"
       ],
       "identityWeights": {
         "black": 2
@@ -513,9 +459,6 @@
         },
         "urban": {
           "source": "hand-assigned"
-        },
-        "evangelical": {
-          "source": "hand-assigned"
         }
       }
     },
@@ -527,20 +470,15 @@
       "homeState": "CA",
       "homeStateBonus": 1,
       "identities": [
-        "catholic",
         "urban"
       ],
       "identityWeights": {
-        "catholic": 2,
         "urban": 1
       },
       "belief": "San Francisco fundraiser",
       "era": 1992,
       "effects": [],
       "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        },
         "urban": {
           "source": "hand-assigned"
         }
@@ -554,21 +492,16 @@
       "homeState": "MO",
       "homeStateBonus": 2,
       "identities": [
-        "union",
-        "catholic"
+        "union"
       ],
       "identityWeights": {
-        "union": 2,
-        "catholic": 1
+        "union": 2
       },
       "belief": "Fair trade",
       "era": 1992,
       "effects": [],
       "provenance": {
         "union": {
-          "source": "hand-assigned"
-        },
-        "catholic": {
           "source": "hand-assigned"
         }
       }
@@ -580,20 +513,10 @@
       "party": "D",
       "homeState": "DE",
       "homeStateBonus": 2,
-      "identities": [
-        "catholic"
-      ],
-      "identityWeights": {
-        "catholic": 2
-      },
+      "identities": [],
       "belief": "Crime bill author",
       "era": 1992,
-      "effects": [],
-      "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -602,20 +525,10 @@
       "party": "D",
       "homeState": "NY",
       "homeStateBonus": 1,
-      "identities": [
-        "catholic"
-      ],
-      "identityWeights": {
-        "catholic": 2
-      },
+      "identities": [],
       "belief": "Defining deviancy down",
       "era": 1992,
-      "effects": [],
-      "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -627,8 +540,7 @@
       "identities": [],
       "belief": "Tax reform and basketball",
       "era": 1992,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -637,20 +549,10 @@
       "party": "D",
       "homeState": "OR",
       "homeStateBonus": 2,
-      "identities": [
-        "jewish"
-      ],
-      "identityWeights": {
-        "jewish": 1
-      },
+      "identities": [],
       "belief": "Health care markets",
       "era": 1992,
-      "effects": [],
-      "provenance": {
-        "jewish": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -707,8 +609,7 @@
       "identities": [],
       "belief": "Health care as a right",
       "era": 1992,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -720,8 +621,7 @@
       "identities": [],
       "belief": "Read my lips",
       "era": 1992,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -731,11 +631,9 @@
       "homeState": "VA",
       "homeStateBonus": 1,
       "identities": [
-        "catholic",
         "urban"
       ],
       "identityWeights": {
-        "catholic": 2,
         "urban": -2
       },
       "belief": "Culture war at the convention",
@@ -746,9 +644,6 @@
         }
       ],
       "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        },
         "urban": {
           "source": "hand-assigned"
         }
@@ -794,8 +689,7 @@
         {
           "type": "extremist"
         }
-      ],
-      "provenance": {}
+      ]
     },
     {
       "kind": "candidate",
@@ -811,8 +705,7 @@
         {
           "type": "extremist"
         }
-      ],
-      "provenance": {}
+      ]
     },
     {
       "kind": "candidate",
@@ -853,19 +746,12 @@
       "homeState": "PA",
       "homeStateBonus": 2,
       "identities": [
-        "jewish",
         "urban"
       ],
-      "identityWeights": {
-        "jewish": 1
-      },
       "belief": "Single bullet, and later a switch",
       "era": 1992,
       "effects": [],
       "provenance": {
-        "jewish": {
-          "source": "hand-assigned"
-        },
         "urban": {
           "source": "hand-assigned"
         }
@@ -881,8 +767,7 @@
       "identities": [],
       "belief": "Keating Five survivor",
       "era": 1992,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -892,20 +777,15 @@
       "homeState": "NY",
       "homeStateBonus": 1,
       "identities": [
-        "catholic",
         "urban"
       ],
       "identityWeights": {
-        "catholic": 1,
         "urban": 1
       },
       "belief": "Senator Pothole",
       "era": 1992,
       "effects": [],
       "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        },
         "urban": {
           "source": "hand-assigned"
         }
@@ -918,17 +798,10 @@
       "party": "R",
       "homeState": "UT",
       "homeStateBonus": 2,
-      "identities": [
-        "evangelical"
-      ],
+      "identities": [],
       "belief": "Worked with Kennedy",
       "era": 1992,
-      "effects": [],
-      "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -967,8 +840,7 @@
       "identities": [],
       "belief": "Cut taxes thirty percent",
       "era": 1992,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -980,8 +852,7 @@
       "identities": [],
       "belief": "Fiscally conservative, socially liberal",
       "era": 1992,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -993,8 +864,7 @@
       "identities": [],
       "belief": "Proposition 187",
       "era": 1992,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -1006,8 +876,7 @@
       "identities": [],
       "belief": "Nunn-Lugar",
       "era": 1992,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -1039,21 +908,16 @@
       "homeState": "MS",
       "homeStateBonus": 2,
       "identities": [
-        "rural",
-        "evangelical"
+        "rural"
       ],
       "identityWeights": {
-        "rural": 1,
-        "evangelical": 2
+        "rural": 1
       },
       "belief": "The whip",
       "era": 1992,
       "effects": [],
       "provenance": {
         "rural": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         }
       }
@@ -1066,12 +930,8 @@
       "homeState": "NC",
       "homeStateBonus": 3,
       "identities": [
-        "evangelical",
         "rural"
       ],
-      "identityWeights": {
-        "evangelical": 2
-      },
       "belief": "Senator No",
       "era": 1992,
       "effects": [
@@ -1080,9 +940,6 @@
         }
       ],
       "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        },
         "rural": {
           "source": "hand-assigned"
         }
@@ -1096,8 +953,7 @@
       "homeState": "SC",
       "homeStateBonus": 3,
       "identities": [
-        "rural",
-        "evangelical"
+        "rural"
       ],
       "identityWeights": {
         "rural": 2
@@ -1112,9 +968,6 @@
       "provenance": {
         "rural": {
           "source": "hand-assigned"
-        },
-        "evangelical": {
-          "source": "hand-assigned"
         }
       }
     },
@@ -1128,8 +981,7 @@
       "identities": [],
       "belief": "Texas treasurer",
       "era": 1992,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -1141,8 +993,7 @@
       "identities": [],
       "belief": "Environmental Republican",
       "era": 1992,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -1176,8 +1027,7 @@
       "identities": [],
       "belief": "Centrist dealmaker",
       "era": 1992,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -1231,20 +1081,15 @@
       "homeState": "OH",
       "homeStateBonus": 2,
       "identities": [
-        "catholic",
         "urban"
       ],
       "identityWeights": {
-        "catholic": 1,
         "urban": 2
       },
       "belief": "Mayor of Cleveland",
       "era": 1992,
       "effects": [],
       "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        },
         "urban": {
           "source": "hand-assigned"
         }
@@ -1297,15 +1142,11 @@
       "number": 8,
       "era": 1992,
       "demographics": [
-        "urban",
-        "catholic"
+        "urban"
       ],
       "note": "San Francisco",
       "provenance": {
         "urban": {
-          "source": "hand-assigned"
-        },
-        "catholic": {
           "source": "hand-assigned"
         }
       }
@@ -1393,15 +1234,11 @@
       "number": 6,
       "era": 1992,
       "demographics": [
-        "suburban",
-        "evangelical"
+        "suburban"
       ],
       "note": "Fort Worth suburbs",
       "provenance": {
         "suburban": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         }
       }
@@ -1473,15 +1310,11 @@
       "number": 6,
       "era": 1992,
       "demographics": [
-        "suburban",
-        "evangelical"
+        "suburban"
       ],
       "note": "Gingrich's Cobb County",
       "provenance": {
         "suburban": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         }
       }
@@ -1622,8 +1455,7 @@
       "era": 1992,
       "demographics": [
         "union",
-        "rural",
-        "catholic"
+        "rural"
       ],
       "note": "Murtha's district",
       "provenance": {
@@ -1631,9 +1463,6 @@
           "source": "hand-assigned"
         },
         "rural": {
-          "source": "hand-assigned"
-        },
-        "catholic": {
           "source": "hand-assigned"
         }
       }
@@ -1686,8 +1515,7 @@
       "era": 1992,
       "demographics": [
         "black",
-        "urban",
-        "catholic"
+        "urban"
       ],
       "note": "New Orleans",
       "provenance": {
@@ -1695,9 +1523,6 @@
           "source": "hand-assigned"
         },
         "urban": {
-          "source": "hand-assigned"
-        },
-        "catholic": {
           "source": "hand-assigned"
         }
       }
@@ -1926,8 +1751,7 @@
       "era": 1992,
       "demographics": [
         "urban",
-        "union",
-        "catholic"
+        "union"
       ],
       "note": "Milwaukee",
       "provenance": {
@@ -1935,9 +1759,6 @@
           "source": "hand-assigned"
         },
         "union": {
-          "source": "hand-assigned"
-        },
-        "catholic": {
           "source": "hand-assigned"
         }
       }
@@ -2009,15 +1830,11 @@
       "number": 5,
       "era": 1992,
       "demographics": [
-        "rural",
-        "evangelical"
+        "rural"
       ],
       "note": "Eastern Kentucky",
       "provenance": {
         "rural": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         }
       }
@@ -2070,15 +1887,11 @@
       "era": 1992,
       "demographics": [
         "urban",
-        "catholic",
         "union"
       ],
       "note": "Boston",
       "provenance": {
         "urban": {
-          "source": "hand-assigned"
-        },
-        "catholic": {
           "source": "hand-assigned"
         },
         "union": {
@@ -2093,15 +1906,11 @@
       "number": 1,
       "era": 1992,
       "demographics": [
-        "urban",
-        "catholic"
+        "urban"
       ],
       "note": "Hartford",
       "provenance": {
         "urban": {
-          "source": "hand-assigned"
-        },
-        "catholic": {
           "source": "hand-assigned"
         }
       }
@@ -2116,8 +1925,7 @@
       "identities": [],
       "belief": "Won the governorship as A Connecticut Party",
       "era": 1992,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -2133,8 +1941,7 @@
         {
           "type": "extremist"
         }
-      ],
-      "provenance": {}
+      ]
     }
   ]
 }

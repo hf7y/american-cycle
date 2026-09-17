@@ -27,6 +27,7 @@
  */
 import { readFileSync } from 'node:fs';
 import { loadConfig, loadPacks, playOne } from './harness.ts';
+import { TAGS } from '../engine/rules/tags.ts';
 import type { Card, DistrictCard, IdentityTag, Party, RaceEvent } from '../engine/types/index.ts';
 
 const PANEL = new URL('../data/historical/house_district_panel.json', import.meta.url);
@@ -220,7 +221,6 @@ function main(): void {
   const Ain: Carrier = (u) => sure(feOf(u));
 
   // ---- B: an era-keyed demographics table, fitted from the panel, LOO by district
-  const TAGS: IdentityTag[] = ['catholic', 'evangelical', 'jewish', 'black', 'hispanic', 'cuban', 'union', 'rural', 'suburban', 'urban', 'farm'];
   const byEra = new Map<string, (DistrictCard & { unit: string })[]>();
   for (const d of districts) { const le = d.unit.split('|')[1]; if (!byEra.has(le)) byEra.set(le, []); byEra.get(le)!.push(d); }
   /** tag -> mean district effect over the era's cards carrying it, `drop` excluded. */

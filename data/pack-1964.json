@@ -54,20 +54,10 @@
       "party": "D",
       "homeState": "NY",
       "homeStateBonus": 3,
-      "identities": [
-        "catholic"
-      ],
-      "identityWeights": {
-        "catholic": 2
-      },
+      "identities": [],
       "belief": "Carpetbagger who won",
       "era": 1964,
-      "effects": [],
-      "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -103,20 +93,10 @@
       "party": "D",
       "homeState": "MT",
       "homeStateBonus": 4,
-      "identities": [
-        "catholic"
-      ],
-      "identityWeights": {
-        "catholic": 1
-      },
+      "identities": [],
       "belief": "Ran the Senate quietly",
       "era": 1964,
-      "effects": [],
-      "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -211,20 +191,10 @@
       "party": "D",
       "homeState": "MN",
       "homeStateBonus": 4,
-      "identities": [
-        "catholic"
-      ],
-      "identityWeights": {
-        "catholic": 1
-      },
+      "identities": [],
       "belief": "Not yet in revolt",
       "era": 1964,
-      "effects": [],
-      "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -294,20 +264,15 @@
       "homeState": "MI",
       "homeStateBonus": 4,
       "identities": [
-        "catholic",
         "union"
       ],
       "identityWeights": {
-        "catholic": 1,
         "union": 2
       },
       "belief": "The conscience of the Senate",
       "era": 1964,
       "effects": [],
       "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        },
         "union": {
           "source": "hand-assigned"
         }
@@ -343,8 +308,7 @@
       "homeState": "AL",
       "homeStateBonus": 5,
       "identities": [
-        "rural",
-        "evangelical"
+        "rural"
       ],
       "identityWeights": {
         "rural": 2
@@ -358,9 +322,6 @@
       ],
       "provenance": {
         "rural": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         }
       }
@@ -394,20 +355,10 @@
       "party": "D",
       "homeState": "ME",
       "homeStateBonus": 4,
-      "identities": [
-        "catholic"
-      ],
-      "identityWeights": {
-        "catholic": 1
-      },
+      "identities": [],
       "belief": "Polish-American from a Yankee state",
       "era": 1964,
-      "effects": [],
-      "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -417,19 +368,12 @@
       "homeState": "CT",
       "homeStateBonus": 4,
       "identities": [
-        "jewish",
         "urban"
       ],
-      "identityWeights": {
-        "jewish": 1
-      },
       "belief": "Governor, cabinet, Senate",
       "era": 1964,
       "effects": [],
       "provenance": {
-        "jewish": {
-          "source": "hand-assigned"
-        },
         "urban": {
           "source": "hand-assigned"
         }
@@ -540,20 +484,10 @@
       "party": "R",
       "homeState": "MI",
       "homeStateBonus": 4,
-      "identities": [
-        "evangelical"
-      ],
-      "identityWeights": {
-        "evangelical": 2
-      },
+      "identities": [],
       "belief": "Walked out of the convention",
       "era": 1964,
-      "effects": [],
-      "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -607,19 +541,12 @@
       "homeState": "NY",
       "homeStateBonus": 3,
       "identities": [
-        "jewish",
         "urban"
       ],
-      "identityWeights": {
-        "jewish": 2
-      },
       "belief": "Liberal Republican in full",
       "era": 1964,
       "effects": [],
       "provenance": {
-        "jewish": {
-          "source": "hand-assigned"
-        },
         "urban": {
           "source": "hand-assigned"
         }
@@ -812,8 +739,7 @@
       "homeState": "SC",
       "homeStateBonus": 5,
       "identities": [
-        "rural",
-        "evangelical"
+        "rural"
       ],
       "identityWeights": {
         "rural": 2
@@ -828,9 +754,6 @@
       ],
       "provenance": {
         "rural": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         }
       }
@@ -953,8 +876,7 @@
       "era": 1964,
       "demographics": [
         "black",
-        "urban",
-        "catholic"
+        "urban"
       ],
       "note": "New Orleans",
       "provenance": {
@@ -962,9 +884,6 @@
           "source": "hand-assigned"
         },
         "urban": {
-          "source": "hand-assigned"
-        },
-        "catholic": {
           "source": "hand-assigned"
         }
       }
@@ -1080,15 +999,11 @@
       "number": 19,
       "era": 1964,
       "demographics": [
-        "urban",
-        "jewish"
+        "urban"
       ],
       "note": "Upper West Side",
       "provenance": {
         "urban": {
-          "source": "hand-assigned"
-        },
-        "jewish": {
           "source": "hand-assigned"
         }
       }
@@ -1121,8 +1036,7 @@
       "era": 1964,
       "demographics": [
         "urban",
-        "union",
-        "catholic"
+        "union"
       ],
       "note": "Daley's machine",
       "provenance": {
@@ -1130,9 +1044,6 @@
           "source": "hand-assigned"
         },
         "union": {
-          "source": "hand-assigned"
-        },
-        "catholic": {
           "source": "hand-assigned"
         }
       }
@@ -1168,15 +1079,11 @@
       "number": 16,
       "era": 1964,
       "demographics": [
-        "union",
-        "catholic"
+        "union"
       ],
       "note": "Dearborn and the Rouge",
       "provenance": {
         "union": {
-          "source": "hand-assigned"
-        },
-        "catholic": {
           "source": "hand-assigned"
         }
       }
@@ -1233,8 +1140,7 @@
       "era": 1964,
       "demographics": [
         "union",
-        "rural",
-        "catholic"
+        "rural"
       ],
       "note": "Johnstown",
       "provenance": {
@@ -1242,9 +1148,6 @@
           "source": "hand-assigned"
         },
         "rural": {
-          "source": "hand-assigned"
-        },
-        "catholic": {
           "source": "hand-assigned"
         }
       }
@@ -1257,15 +1160,11 @@
       "era": 1964,
       "demographics": [
         "urban",
-        "catholic",
         "union"
       ],
       "note": "Boston wards",
       "provenance": {
         "urban": {
-          "source": "hand-assigned"
-        },
-        "catholic": {
           "source": "hand-assigned"
         },
         "union": {
@@ -1404,15 +1303,11 @@
       "number": 2,
       "era": 1964,
       "demographics": [
-        "rural",
-        "evangelical"
+        "rural"
       ],
       "note": "East Tennessee, Republican since the war",
       "provenance": {
         "rural": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         }
       }

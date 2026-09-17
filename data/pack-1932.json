@@ -60,19 +60,12 @@
       "homeState": "NY",
       "homeStateBonus": 5,
       "identities": [
-        "catholic",
         "urban"
       ],
-      "identityWeights": {
-        "catholic": 2
-      },
       "belief": "The Happy Warrior of the sidewalks",
       "era": 1932,
       "effects": [],
       "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        },
         "urban": {
           "source": "hand-assigned"
         }
@@ -108,8 +101,7 @@
       "homeState": "LA",
       "homeStateBonus": 5,
       "identities": [
-        "rural",
-        "evangelical"
+        "rural"
       ],
       "identityWeights": {
         "rural": 2
@@ -131,9 +123,6 @@
       ],
       "provenance": {
         "rural": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         }
       }
@@ -340,12 +329,10 @@
       "homeState": "AL",
       "homeStateBonus": 5,
       "identities": [
-        "rural",
-        "evangelical"
+        "rural"
       ],
       "identityWeights": {
-        "rural": 1,
-        "evangelical": 1
+        "rural": 1
       },
       "belief": "Klansman turned civil libertarian",
       "era": 1932,
@@ -361,9 +348,6 @@
       ],
       "provenance": {
         "rural": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         }
       }
@@ -408,8 +392,7 @@
       "identities": [],
       "belief": "Assistant president",
       "era": 1932,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -431,20 +414,15 @@
       "homeState": "NY",
       "homeStateBonus": 4,
       "identities": [
-        "catholic",
         "urban"
       ],
       "identityWeights": {
-        "catholic": 2,
         "urban": 1
       },
       "belief": "Counted every county",
       "era": 1932,
       "effects": [],
       "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        },
         "urban": {
           "source": "hand-assigned"
         }
@@ -480,7 +458,6 @@
       "homeState": "IL",
       "homeStateBonus": 5,
       "identities": [
-        "catholic",
         "urban",
         "union"
       ],
@@ -491,9 +468,6 @@
       "era": 1932,
       "effects": [],
       "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        },
         "urban": {
           "source": "hand-assigned"
         },
@@ -687,7 +661,6 @@
       "homeState": "NY",
       "homeStateBonus": 4,
       "identities": [
-        "catholic",
         "urban",
         "union"
       ],
@@ -698,9 +671,6 @@
       "era": 1932,
       "effects": [],
       "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        },
         "urban": {
           "source": "hand-assigned"
         },
@@ -755,20 +725,10 @@
       "party": "R",
       "homeState": "UT",
       "homeStateBonus": 5,
-      "identities": [
-        "evangelical"
-      ],
-      "identityWeights": {
-        "evangelical": 2
-      },
+      "identities": [],
       "belief": "Half of the tariff",
       "era": 1932,
-      "effects": [],
-      "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -884,15 +844,11 @@
       "era": 1932,
       "demographics": [
         "urban",
-        "catholic",
         "union"
       ],
       "note": "Lower East Side",
       "provenance": {
         "urban": {
-          "source": "hand-assigned"
-        },
-        "catholic": {
           "source": "hand-assigned"
         },
         "union": {
@@ -907,15 +863,11 @@
       "number": 20,
       "era": 1932,
       "demographics": [
-        "urban",
-        "jewish"
+        "urban"
       ],
       "note": "Harlem and up",
       "provenance": {
         "urban": {
-          "source": "hand-assigned"
-        },
-        "jewish": {
           "source": "hand-assigned"
         }
       }
@@ -948,8 +900,7 @@
       "era": 1932,
       "demographics": [
         "urban",
-        "union",
-        "catholic"
+        "union"
       ],
       "note": "Back of the Yards",
       "provenance": {
@@ -957,9 +908,6 @@
           "source": "hand-assigned"
         },
         "union": {
-          "source": "hand-assigned"
-        },
-        "catholic": {
           "source": "hand-assigned"
         }
       }
@@ -1012,8 +960,7 @@
       "era": 1932,
       "demographics": [
         "urban",
-        "union",
-        "catholic"
+        "union"
       ],
       "note": "Philadelphia wards",
       "provenance": {
@@ -1021,9 +968,6 @@
           "source": "hand-assigned"
         },
         "union": {
-          "source": "hand-assigned"
-        },
-        "catholic": {
           "source": "hand-assigned"
         }
       }
@@ -1056,15 +1000,11 @@
       "era": 1932,
       "demographics": [
         "urban",
-        "catholic",
         "union"
       ],
       "note": "South Boston",
       "provenance": {
         "urban": {
-          "source": "hand-assigned"
-        },
-        "catholic": {
           "source": "hand-assigned"
         },
         "union": {
@@ -1124,15 +1064,11 @@
       "era": 1932,
       "demographics": [
         "urban",
-        "catholic",
         "union"
       ],
       "note": "Pendergast's Kansas City",
       "provenance": {
         "urban": {
-          "source": "hand-assigned"
-        },
-        "catholic": {
           "source": "hand-assigned"
         },
         "union": {
@@ -1192,15 +1128,11 @@
       "era": 1932,
       "demographics": [
         "rural",
-        "evangelical",
         "farm"
       ],
       "note": "Long's parishes",
       "provenance": {
         "rural": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         },
         "farm": {

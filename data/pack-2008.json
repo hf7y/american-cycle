@@ -81,20 +81,10 @@
       "party": "D",
       "homeState": "DE",
       "homeStateBonus": 2,
-      "identities": [
-        "catholic"
-      ],
-      "identityWeights": {
-        "catholic": 2
-      },
+      "identities": [],
       "belief": "Foreign relations chairman",
       "era": 2008,
-      "effects": [],
-      "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -125,20 +115,10 @@
       "party": "D",
       "homeState": "CT",
       "homeStateBonus": 2,
-      "identities": [
-        "catholic"
-      ],
-      "identityWeights": {
-        "catholic": 2
-      },
+      "identities": [],
       "belief": "Banking chairman",
       "era": 2008,
-      "effects": [],
-      "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -148,20 +128,15 @@
       "homeState": "CA",
       "homeStateBonus": 1,
       "identities": [
-        "catholic",
         "urban"
       ],
       "identityWeights": {
-        "catholic": 2,
         "urban": 1
       },
       "belief": "First woman Speaker",
       "era": 2008,
       "effects": [],
       "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        },
         "urban": {
           "source": "hand-assigned"
         }
@@ -175,7 +150,6 @@
       "homeState": "NV",
       "homeStateBonus": 2,
       "identities": [
-        "evangelical",
         "rural"
       ],
       "identityWeights": {
@@ -185,9 +159,6 @@
       "era": 2008,
       "effects": [],
       "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        },
         "rural": {
           "source": "hand-assigned"
         }
@@ -293,20 +264,15 @@
       "homeState": "PA",
       "homeStateBonus": 2,
       "identities": [
-        "catholic",
         "union"
       ],
       "identityWeights": {
-        "catholic": 2,
         "union": 1
       },
       "belief": "Pro-life Democrat",
       "era": 2008,
       "effects": [],
       "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        },
         "union": {
           "source": "hand-assigned"
         }
@@ -320,20 +286,15 @@
       "homeState": "NC",
       "homeStateBonus": 2,
       "identities": [
-        "evangelical",
         "rural"
       ],
       "identityWeights": {
-        "rural": 2,
-        "evangelical": 1
+        "rural": 2
       },
       "belief": "Blue Dog quarterback",
       "era": 2008,
       "effects": [],
       "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        },
         "rural": {
           "source": "hand-assigned"
         }
@@ -347,19 +308,12 @@
       "homeState": "IL",
       "homeStateBonus": 1,
       "identities": [
-        "jewish",
         "urban"
       ],
-      "identityWeights": {
-        "jewish": 1
-      },
       "belief": "Recruited the Blue Dogs",
       "era": 2008,
       "effects": [],
       "provenance": {
-        "jewish": {
-          "source": "hand-assigned"
-        },
         "urban": {
           "source": "hand-assigned"
         }
@@ -421,19 +375,12 @@
       "homeState": "MA",
       "homeStateBonus": 1,
       "identities": [
-        "jewish",
         "urban"
       ],
-      "identityWeights": {
-        "jewish": 1
-      },
       "belief": "Financial services",
       "era": 2008,
       "effects": [],
       "provenance": {
-        "jewish": {
-          "source": "hand-assigned"
-        },
         "urban": {
           "source": "hand-assigned"
         }
@@ -446,20 +393,10 @@
       "party": "D",
       "homeState": "WI",
       "homeStateBonus": 2,
-      "identities": [
-        "jewish"
-      ],
-      "identityWeights": {
-        "jewish": 1
-      },
+      "identities": [],
       "belief": "The only no vote on the Patriot Act",
       "era": 2008,
-      "effects": [],
-      "provenance": {
-        "jewish": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -493,8 +430,7 @@
       "identities": [],
       "belief": "Governor who won rural Virginia",
       "era": 2008,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -525,20 +461,10 @@
       "party": "D",
       "homeState": "MN",
       "homeStateBonus": 1,
-      "identities": [
-        "jewish"
-      ],
-      "identityWeights": {
-        "jewish": 1
-      },
+      "identities": [],
       "belief": "Won by 312 votes",
       "era": 2008,
-      "effects": [],
-      "provenance": {
-        "jewish": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -548,20 +474,15 @@
       "homeState": "VA",
       "homeStateBonus": 2,
       "identities": [
-        "catholic",
         "hispanic"
       ],
       "identityWeights": {
-        "catholic": 1,
         "hispanic": 1
       },
       "belief": "Missionary in Honduras",
       "era": 2008,
       "effects": [],
       "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        },
         "hispanic": {
           "source": "hand-assigned"
         }
@@ -577,8 +498,7 @@
       "identities": [],
       "belief": "Maverick",
       "era": 2008,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -588,11 +508,9 @@
       "homeState": "AK",
       "homeStateBonus": 3,
       "identities": [
-        "evangelical",
         "rural"
       ],
       "identityWeights": {
-        "evangelical": 2,
         "rural": 2
       },
       "belief": "Hockey mom",
@@ -603,9 +521,6 @@
         }
       ],
       "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        },
         "rural": {
           "source": "hand-assigned"
         }
@@ -618,20 +533,10 @@
       "party": "R",
       "homeState": "MA",
       "homeStateBonus": 1,
-      "identities": [
-        "evangelical"
-      ],
-      "identityWeights": {
-        "evangelical": 2
-      },
+      "identities": [],
       "belief": "Turnaround artist",
       "era": 2008,
-      "effects": [],
-      "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -641,19 +546,12 @@
       "homeState": "AR",
       "homeStateBonus": 2,
       "identities": [
-        "evangelical",
         "rural"
       ],
-      "identityWeights": {
-        "evangelical": 2
-      },
       "belief": "Preacher governor",
       "era": 2008,
       "effects": [],
       "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        },
         "rural": {
           "source": "hand-assigned"
         }
@@ -667,20 +565,15 @@
       "homeState": "NY",
       "homeStateBonus": 1,
       "identities": [
-        "catholic",
         "urban"
       ],
       "identityWeights": {
-        "catholic": 1,
         "urban": 2
       },
       "belief": "America's mayor",
       "era": 2008,
       "effects": [],
       "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        },
         "urban": {
           "source": "hand-assigned"
         }
@@ -722,8 +615,7 @@
         {
           "type": "extremist"
         }
-      ],
-      "provenance": {}
+      ]
     },
     {
       "kind": "candidate",
@@ -735,8 +627,7 @@
       "identities": [],
       "belief": "The minority leader",
       "era": 2008,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -745,20 +636,10 @@
       "party": "R",
       "homeState": "OH",
       "homeStateBonus": 2,
-      "identities": [
-        "catholic"
-      ],
-      "identityWeights": {
-        "catholic": 1
-      },
+      "identities": [],
       "belief": "Country club conservative",
       "era": 2008,
-      "effects": [],
-      "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -768,19 +649,12 @@
       "homeState": "VA",
       "homeStateBonus": 2,
       "identities": [
-        "jewish",
         "suburban"
       ],
-      "identityWeights": {
-        "jewish": 1
-      },
       "belief": "Young Gun",
       "era": 2008,
       "effects": [],
       "provenance": {
-        "jewish": {
-          "source": "hand-assigned"
-        },
         "suburban": {
           "source": "hand-assigned"
         }
@@ -793,20 +667,10 @@
       "party": "R",
       "homeState": "SC",
       "homeStateBonus": 2,
-      "identities": [
-        "evangelical"
-      ],
-      "identityWeights": {
-        "evangelical": 2
-      },
+      "identities": [],
       "belief": "McCain's wingman",
       "era": 2008,
-      "effects": [],
-      "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -818,8 +682,7 @@
       "identities": [],
       "belief": "The last split ticket",
       "era": 2008,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -831,8 +694,7 @@
       "identities": [],
       "belief": "Voted for the stimulus in committee",
       "era": 2008,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -842,19 +704,12 @@
       "homeState": "PA",
       "homeStateBonus": 2,
       "identities": [
-        "jewish",
         "urban"
       ],
-      "identityWeights": {
-        "jewish": 1
-      },
       "belief": "Switched parties in 2009",
       "era": 2008,
       "effects": [],
       "provenance": {
-        "jewish": {
-          "source": "hand-assigned"
-        },
         "urban": {
           "source": "hand-assigned"
         }
@@ -892,8 +747,7 @@
       "identities": [],
       "belief": "Nunn-Lugar",
       "era": 2008,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -902,12 +756,7 @@
       "party": "R",
       "homeState": "SC",
       "homeStateBonus": 2,
-      "identities": [
-        "evangelical"
-      ],
-      "identityWeights": {
-        "evangelical": 2
-      },
+      "identities": [],
       "belief": "Ideological validator",
       "era": 2008,
       "effects": [
@@ -919,12 +768,7 @@
           "pips": 2,
           "note": "an ideological validator with a national following"
         }
-      ],
-      "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        }
-      }
+      ]
     },
     {
       "kind": "candidate",
@@ -933,24 +777,14 @@
       "party": "R",
       "homeState": "OK",
       "homeStateBonus": 2,
-      "identities": [
-        "evangelical"
-      ],
-      "identityWeights": {
-        "evangelical": 2
-      },
+      "identities": [],
       "belief": "Dr. No",
       "era": 2008,
       "effects": [
         {
           "type": "extremist"
         }
-      ],
-      "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        }
-      }
+      ]
     },
     {
       "kind": "candidate",
@@ -960,19 +794,12 @@
       "homeState": "KS",
       "homeStateBonus": 2,
       "identities": [
-        "evangelical",
         "farm"
       ],
-      "identityWeights": {
-        "evangelical": 2
-      },
       "belief": "Compassionate conservative",
       "era": 2008,
       "effects": [],
       "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        },
         "farm": {
           "source": "hand-assigned"
         }
@@ -1007,20 +834,10 @@
       "party": "R",
       "homeState": "LA",
       "homeStateBonus": 2,
-      "identities": [
-        "evangelical"
-      ],
-      "identityWeights": {
-        "evangelical": 1
-      },
+      "identities": [],
       "belief": "Rhodes scholar governor",
       "era": 2008,
-      "effects": [],
-      "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -1030,20 +847,15 @@
       "homeState": "MN",
       "homeStateBonus": 2,
       "identities": [
-        "evangelical",
         "suburban"
       ],
       "identityWeights": {
-        "suburban": 2,
-        "evangelical": 1
+        "suburban": 2
       },
       "belief": "Sam's Club Republicans",
       "era": 2008,
       "effects": [],
       "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        },
         "suburban": {
           "source": "hand-assigned"
         }
@@ -1079,19 +891,12 @@
       "homeState": "MN",
       "homeStateBonus": 1,
       "identities": [
-        "jewish",
         "urban"
       ],
-      "identityWeights": {
-        "jewish": 1
-      },
       "belief": "Lost the recount",
       "era": 2008,
       "effects": [],
       "provenance": {
-        "jewish": {
-          "source": "hand-assigned"
-        },
         "urban": {
           "source": "hand-assigned"
         }
@@ -1105,20 +910,15 @@
       "homeState": "OH",
       "homeStateBonus": 2,
       "identities": [
-        "catholic",
         "urban"
       ],
       "identityWeights": {
-        "catholic": 1,
         "urban": 2
       },
       "belief": "Deficit hawk",
       "era": 2008,
       "effects": [],
       "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        },
         "urban": {
           "source": "hand-assigned"
         }
@@ -1163,15 +963,11 @@
       "number": 5,
       "era": 2008,
       "demographics": [
-        "urban",
-        "catholic"
+        "urban"
       ],
       "note": "North Side",
       "provenance": {
         "urban": {
-          "source": "hand-assigned"
-        },
-        "catholic": {
           "source": "hand-assigned"
         }
       }
@@ -1331,15 +1127,11 @@
       "number": 22,
       "era": 2008,
       "demographics": [
-        "suburban",
-        "jewish"
+        "suburban"
       ],
       "note": "Broward-Palm Beach",
       "provenance": {
         "suburban": {
-          "source": "hand-assigned"
-        },
-        "jewish": {
           "source": "hand-assigned"
         }
       }
@@ -1372,8 +1164,7 @@
       "era": 2008,
       "demographics": [
         "union",
-        "rural",
-        "catholic"
+        "rural"
       ],
       "note": "Murtha country",
       "provenance": {
@@ -1381,9 +1172,6 @@
           "source": "hand-assigned"
         },
         "rural": {
-          "source": "hand-assigned"
-        },
-        "catholic": {
           "source": "hand-assigned"
         }
       }
@@ -1451,15 +1239,11 @@
       "number": 9,
       "era": 2008,
       "demographics": [
-        "rural",
-        "evangelical"
+        "rural"
       ],
       "note": "Fighting Ninth",
       "provenance": {
         "rural": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         }
       }
@@ -1491,15 +1275,11 @@
       "number": 11,
       "era": 2008,
       "demographics": [
-        "rural",
-        "evangelical"
+        "rural"
       ],
       "note": "Western North Carolina",
       "provenance": {
         "rural": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         }
       }
@@ -1592,8 +1372,7 @@
       "era": 2008,
       "demographics": [
         "union",
-        "rural",
-        "catholic"
+        "rural"
       ],
       "note": "South Bend",
       "provenance": {
@@ -1601,9 +1380,6 @@
           "source": "hand-assigned"
         },
         "rural": {
-          "source": "hand-assigned"
-        },
-        "catholic": {
           "source": "hand-assigned"
         }
       }
@@ -1615,15 +1391,11 @@
       "number": 9,
       "era": 2008,
       "demographics": [
-        "suburban",
-        "jewish"
+        "suburban"
       ],
       "note": "Oakland County",
       "provenance": {
         "suburban": {
-          "source": "hand-assigned"
-        },
-        "jewish": {
           "source": "hand-assigned"
         }
       }
@@ -1636,8 +1408,7 @@
       "era": 2008,
       "demographics": [
         "rural",
-        "union",
-        "catholic"
+        "union"
       ],
       "note": "Green Bay",
       "provenance": {
@@ -1645,9 +1416,6 @@
           "source": "hand-assigned"
         },
         "union": {
-          "source": "hand-assigned"
-        },
-        "catholic": {
           "source": "hand-assigned"
         }
       }
@@ -1659,15 +1427,11 @@
       "number": 6,
       "era": 2008,
       "demographics": [
-        "suburban",
-        "evangelical"
+        "suburban"
       ],
       "note": "The Sixth",
       "provenance": {
         "suburban": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         }
       }
@@ -1700,8 +1464,7 @@
       "era": 2008,
       "demographics": [
         "farm",
-        "rural",
-        "evangelical"
+        "rural"
       ],
       "note": "Northern Missouri",
       "provenance": {
@@ -1709,9 +1472,6 @@
           "source": "hand-assigned"
         },
         "rural": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         }
       }
@@ -1763,15 +1523,11 @@
       "number": 2,
       "era": 2008,
       "demographics": [
-        "rural",
-        "evangelical"
+        "rural"
       ],
       "note": "Montgomery",
       "provenance": {
         "rural": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         }
       }
@@ -1784,8 +1540,7 @@
       "era": 2008,
       "demographics": [
         "rural",
-        "farm",
-        "evangelical"
+        "farm"
       ],
       "note": "North Mississippi",
       "provenance": {
@@ -1793,9 +1548,6 @@
           "source": "hand-assigned"
         },
         "farm": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         }
       }
@@ -1807,15 +1559,11 @@
       "number": 6,
       "era": 2008,
       "demographics": [
-        "suburban",
-        "evangelical"
+        "suburban"
       ],
       "note": "Baton Rouge",
       "provenance": {
         "suburban": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         }
       }
@@ -1971,20 +1719,10 @@
       "party": "I",
       "homeState": "CT",
       "homeStateBonus": 2,
-      "identities": [
-        "jewish"
-      ],
-      "identityWeights": {
-        "jewish": 2
-      },
+      "identities": [],
       "belief": "Lost the primary, won the general",
       "era": 2008,
-      "effects": [],
-      "provenance": {
-        "jewish": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -1993,12 +1731,7 @@
       "party": "I",
       "homeState": "VT",
       "homeStateBonus": 3,
-      "identities": [
-        "jewish"
-      ],
-      "identityWeights": {
-        "jewish": 2
-      },
+      "identities": [],
       "belief": "Caucuses with the Democrats",
       "era": 2008,
       "effects": [
@@ -2010,12 +1743,7 @@
           "pips": 2,
           "note": "an ideological validator with a national following"
         }
-      ],
-      "provenance": {
-        "jewish": {
-          "source": "hand-assigned"
-        }
-      }
+      ]
     }
   ]
 }

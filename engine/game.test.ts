@@ -515,7 +515,7 @@ test('once the first era is exhausted, the draft moves into the next one', () =>
  *  1992 and admits the superseding card. */
 test('#106: a later-era district card discards the seat\'s earlier one, under the flag', () => {
   const ca8_1976 = dist({ id: 'CA-8-1976', state: 'CA', number: 8, era: 1976, demographics: ['urban', 'black'] });
-  const ca8_1992 = dist({ id: 'CA-8-1992', state: 'CA', number: 8, era: 1992, demographics: ['urban', 'catholic'] });
+  const ca8_1992 = dist({ id: 'CA-8-1992', state: 'CA', number: 8, era: 1992, demographics: ['urban', 'farm'] });
   const filler = cand({ id: 'filler', era: 1976 });
 
   const declFn = (v: GameView, open: OpenRace[]): Declaration[] => {
@@ -549,7 +549,7 @@ test('#106: a later-era district card discards the seat\'s earlier one, under th
 
 test('#106: districtSupersession off (default) leaves an earlier era\'s card in play', () => {
   const ca8_1976 = dist({ id: 'CA-8-1976', state: 'CA', number: 8, era: 1976, demographics: ['urban', 'black'] });
-  const ca8_1992 = dist({ id: 'CA-8-1992', state: 'CA', number: 8, era: 1992, demographics: ['urban', 'catholic'] });
+  const ca8_1992 = dist({ id: 'CA-8-1992', state: 'CA', number: 8, era: 1992, demographics: ['urban', 'farm'] });
   const filler = cand({ id: 'filler', era: 1976 });
 
   const declFn = (v: GameView, open: OpenRace[]): Declaration[] => {
@@ -589,12 +589,14 @@ test('engine/config/three-terms.json actually ends a game on three-terms, not ju
   // any of these features; it is the rebalancing hf7y/american-cycle#86's
   // own ruling names as its largest risk, and the proposal RATE it leaves
   // open is a separate, unmeasured follow-up (D6-amendment-rate), not
-  // something this wiring pass was asked to tune. Re-swept against this
-  // exact combined pool+rules state (0-39): reaches three-terms on 13, 17,
-  // 19, 26, 29, 31.
-  const rng = new RNG(13);
+  // something this wiring pass was asked to tune. #240 dropped catholic/
+  // evangelical/jewish from every card's identities/demographics, which
+  // shifted seed 13's trace to an amendment ending in turn. Re-swept against
+  // this exact combined pool+rules state (0-39): reaches three-terms on 3,
+  // 8, 17, 19, 33, 38.
+  const rng = new RNG(17);
   const agents: Agent[] = ['Greedy', 'BillAuthor', 'Random'].map((n) => new AGENTS[n](cfg, rng));
-  const g = new Game(agents, structuredClone(CARDS), cfg, 13);
+  const g = new Game(agents, structuredClone(CARDS), cfg, 17);
   const result = g.run();
   assert.equal(result.endedBy, 'three-terms');
   assert.equal(result.wonBy, result.winner, 'a victory condition, not a score tie-break, decided this game');

@@ -101,7 +101,7 @@ test('#106: a favourite son may run in their home district with no district card
  *  ownership of the card nor which of them is asked matters, only `d.district`
  *  (or, for a statewide sum, `d.districts`) does. */
 test('#106: two candidates contesting the same district both price the same fit, regardless of who holds the card', () => {
-  const cd = dist({ id: 'OH-9', state: 'OH', number: 9, demographics: ['union', 'catholic'] });
+  const cd = dist({ id: 'OH-9', state: 'OH', number: 9, demographics: ['union', 'farm'] });
   const home = { player: 0, card: cand({ identities: ['union'] }), district: cd, office: 'senator' as const, state: 'OH' };
   const away = { player: 1, card: cand({ id: 'b', identities: ['union'] }), district: cd, office: 'senator' as const, state: 'OH' };
   const homeMods = buildModifiers(home, ctx({}), 'general', res, nat, pg);

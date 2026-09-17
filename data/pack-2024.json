@@ -38,20 +38,10 @@
       "party": "D",
       "homeState": "DE",
       "homeStateBonus": 1,
-      "identities": [
-        "catholic"
-      ],
-      "identityWeights": {
-        "catholic": 2
-      },
+      "identities": [],
       "belief": "Stepped aside in July",
       "era": 2024,
-      "effects": [],
-      "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -83,7 +73,6 @@
       "homeState": "PA",
       "homeStateBonus": 1,
       "identities": [
-        "jewish",
         "suburban"
       ],
       "identityWeights": {
@@ -93,9 +82,6 @@
       "era": 2024,
       "effects": [],
       "provenance": {
-        "jewish": {
-          "source": "hand-assigned"
-        },
         "suburban": {
           "source": "hand-assigned"
         }
@@ -245,20 +231,13 @@
       "homeState": "KY",
       "homeStateBonus": 3,
       "identities": [
-        "rural",
-        "evangelical"
+        "rural"
       ],
-      "identityWeights": {
-        "evangelical": 1
-      },
       "belief": "Governor of a state that votes 30 points the other way",
       "era": 2024,
       "effects": [],
       "provenance": {
         "rural": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         }
       }
@@ -272,7 +251,6 @@
       "homeStateBonus": 1,
       "identities": [
         "black",
-        "evangelical",
         "urban"
       ],
       "identityWeights": {
@@ -285,9 +263,6 @@
         "black": {
           "source": "wikidata",
           "vintage": "2026-09-08"
-        },
-        "evangelical": {
-          "source": "hand-assigned"
         },
         "urban": {
           "source": "hand-assigned"
@@ -406,12 +381,7 @@
       "party": "I",
       "homeState": "VT",
       "homeStateBonus": 2,
-      "identities": [
-        "jewish"
-      ],
-      "identityWeights": {
-        "jewish": 2
-      },
+      "identities": [],
       "belief": "Still an independent",
       "era": 2024,
       "effects": [
@@ -423,12 +393,7 @@
           "pips": 2,
           "note": "an ideological validator with a national following"
         }
-      ],
-      "provenance": {
-        "jewish": {
-          "source": "hand-assigned"
-        }
-      }
+      ]
     },
     {
       "kind": "candidate",
@@ -511,20 +476,10 @@
       "party": "R",
       "homeState": "SC",
       "homeStateBonus": 1,
-      "identities": [
-        "evangelical"
-      ],
-      "identityWeights": {
-        "evangelical": 1
-      },
+      "identities": [],
       "belief": "Ran to the end of the primaries",
       "era": 2024,
-      "effects": [],
-      "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -536,8 +491,7 @@
       "identities": [],
       "belief": "Won Florida by nineteen",
       "era": 2024,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -591,20 +545,15 @@
       "homeState": "OH",
       "homeStateBonus": 2,
       "identities": [
-        "catholic",
         "rural"
       ],
       "identityWeights": {
-        "catholic": 2,
         "rural": 2
       },
       "belief": "Old-guard governor",
       "era": 2024,
       "effects": [],
       "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        },
         "rural": {
           "source": "hand-assigned"
         }
@@ -620,8 +569,7 @@
       "identities": [],
       "belief": "Still there",
       "era": 2024,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -655,8 +603,7 @@
       "identities": [],
       "belief": "Stepped down as leader",
       "era": 2024,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -666,20 +613,13 @@
       "homeState": "TX",
       "homeStateBonus": 1,
       "identities": [
-        "hispanic",
-        "evangelical"
+        "hispanic"
       ],
-      "identityWeights": {
-        "evangelical": 2
-      },
       "belief": "Held Texas by nine",
       "era": 2024,
       "effects": [],
       "provenance": {
         "hispanic": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         }
       }
@@ -692,12 +632,8 @@
       "homeState": "GA",
       "homeStateBonus": 1,
       "identities": [
-        "rural",
-        "evangelical"
+        "rural"
       ],
-      "identityWeights": {
-        "evangelical": 2
-      },
       "belief": "Safe seat, national profile",
       "era": 2024,
       "effects": [
@@ -707,9 +643,6 @@
       ],
       "provenance": {
         "rural": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         }
       }
@@ -722,19 +655,12 @@
       "homeState": "LA",
       "homeStateBonus": 1,
       "identities": [
-        "evangelical",
         "rural"
       ],
-      "identityWeights": {
-        "evangelical": 2
-      },
       "belief": "Speaker by exhaustion",
       "era": 2024,
       "effects": [],
       "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        },
         "rural": {
           "source": "hand-assigned"
         }
@@ -748,8 +674,7 @@
       "homeState": "SC",
       "homeStateBonus": 1,
       "identities": [
-        "black",
-        "evangelical"
+        "black"
       ],
       "identityWeights": {
         "black": 1
@@ -759,9 +684,6 @@
       "effects": [],
       "provenance": {
         "black": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         }
       }
@@ -820,8 +742,7 @@
       "identities": [],
       "belief": "Four terms in a purple state",
       "era": 2024,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -878,20 +799,10 @@
       "party": "R",
       "homeState": "AR",
       "homeStateBonus": 2,
-      "identities": [
-        "evangelical"
-      ],
-      "identityWeights": {
-        "evangelical": 2
-      },
+      "identities": [],
       "belief": "Won by twenty-eight",
       "era": 2024,
-      "effects": [],
-      "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "district",
@@ -1191,15 +1102,11 @@
       "era": 2024,
       "demographics": [
         "suburban",
-        "jewish",
         "hispanic"
       ],
       "note": "Nassau County, flipped",
       "provenance": {
         "suburban": {
-          "source": "hand-assigned"
-        },
-        "jewish": {
           "source": "hand-assigned"
         },
         "hispanic": {

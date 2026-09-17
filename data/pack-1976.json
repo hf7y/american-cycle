@@ -11,20 +11,15 @@
       "homeState": "GA",
       "homeStateBonus": 3,
       "identities": [
-        "evangelical",
         "rural"
       ],
       "identityWeights": {
-        "evangelical": 2,
         "rural": 1
       },
       "belief": "Born-again peanut farmer; runs as an outsider",
       "era": 1976,
       "effects": [],
       "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        },
         "rural": {
           "source": "hand-assigned"
         }
@@ -126,8 +121,7 @@
       "homeState": "AL",
       "homeStateBonus": 4,
       "identities": [
-        "rural",
-        "evangelical"
+        "rural"
       ],
       "identityWeights": {
         "rural": 2
@@ -141,9 +135,6 @@
       ],
       "provenance": {
         "rural": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         }
       }
@@ -203,20 +194,10 @@
       "party": "D",
       "homeState": "ME",
       "homeStateBonus": 3,
-      "identities": [
-        "catholic"
-      ],
-      "identityWeights": {
-        "catholic": 1
-      },
+      "identities": [],
       "belief": "Clean air and water",
       "era": 1976,
-      "effects": [],
-      "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -247,12 +228,7 @@
       "party": "D",
       "homeState": "MA",
       "homeStateBonus": 3,
-      "identities": [
-        "catholic"
-      ],
-      "identityWeights": {
-        "catholic": 2
-      },
+      "identities": [],
       "belief": "National health insurance",
       "era": 1976,
       "effects": [
@@ -261,12 +237,7 @@
           "pips": 2,
           "note": "an ideological validator with a national following"
         }
-      ],
-      "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        }
-      }
+      ]
     },
     {
       "kind": "candidate",
@@ -276,12 +247,10 @@
       "homeState": "MA",
       "homeStateBonus": 3,
       "identities": [
-        "catholic",
         "urban",
         "union"
       ],
       "identityWeights": {
-        "catholic": 2,
         "urban": 2,
         "union": 1
       },
@@ -289,9 +258,6 @@
       "era": 1976,
       "effects": [],
       "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        },
         "urban": {
           "source": "hand-assigned"
         },
@@ -310,8 +276,7 @@
       "identities": [],
       "belief": "The astronaut",
       "era": 1976,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -323,8 +288,7 @@
       "identities": [],
       "belief": "Conservative on money",
       "era": 1976,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -333,20 +297,10 @@
       "party": "D",
       "homeState": "NY",
       "homeStateBonus": 2,
-      "identities": [
-        "catholic"
-      ],
-      "identityWeights": {
-        "catholic": 1
-      },
+      "identities": [],
       "belief": "Social scientist in the Senate",
       "era": 1976,
-      "effects": [],
-      "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -355,20 +309,10 @@
       "party": "D",
       "homeState": "CA",
       "homeStateBonus": 2,
-      "identities": [
-        "catholic"
-      ],
-      "identityWeights": {
-        "catholic": 2
-      },
+      "identities": [],
       "belief": "Era of limits",
       "era": 1976,
-      "effects": [],
-      "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -517,8 +461,7 @@
       "identities": [],
       "belief": "Reform liberal",
       "era": 1976,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -527,20 +470,10 @@
       "party": "D",
       "homeState": "CT",
       "homeStateBonus": 3,
-      "identities": [
-        "jewish"
-      ],
-      "identityWeights": {
-        "jewish": 1
-      },
+      "identities": [],
       "belief": "Chicago convention scold",
       "era": 1976,
-      "effects": [],
-      "provenance": {
-        "jewish": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -578,8 +511,7 @@
       "homeStateBonus": 2,
       "identities": [
         "black",
-        "urban",
-        "evangelical"
+        "urban"
       ],
       "identityWeights": {
         "black": 1
@@ -593,9 +525,6 @@
           "vintage": "2026-09-08"
         },
         "urban": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         }
       }
@@ -665,20 +594,15 @@
       "homeState": "NJ",
       "homeStateBonus": 3,
       "identities": [
-        "catholic",
         "urban"
       ],
       "identityWeights": {
-        "catholic": 1,
         "urban": 1
       },
       "belief": "Chaired the impeachment inquiry",
       "era": 1976,
       "effects": [],
       "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        },
         "urban": {
           "source": "hand-assigned"
         }
@@ -692,20 +616,15 @@
       "homeState": "MO",
       "homeStateBonus": 3,
       "identities": [
-        "catholic",
         "urban"
       ],
       "identityWeights": {
-        "catholic": 2,
         "urban": 2
       },
       "belief": "Dropped from a ticket",
       "era": 1976,
       "effects": [],
       "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        },
         "urban": {
           "source": "hand-assigned"
         }
@@ -721,8 +640,7 @@
       "identities": [],
       "belief": "New generation of Democrats",
       "era": 1976,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -732,19 +650,12 @@
       "homeState": "VT",
       "homeStateBonus": 3,
       "identities": [
-        "catholic",
         "rural"
       ],
-      "identityWeights": {
-        "catholic": 1
-      },
       "belief": "Prosecutor turned senator",
       "era": 1976,
       "effects": [],
       "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        },
         "rural": {
           "source": "hand-assigned"
         }
@@ -757,20 +668,10 @@
       "party": "D",
       "homeState": "DE",
       "homeStateBonus": 3,
-      "identities": [
-        "catholic"
-      ],
-      "identityWeights": {
-        "catholic": 1
-      },
+      "identities": [],
       "belief": "Rode the train home",
       "era": 1976,
-      "effects": [],
-      "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -836,8 +737,7 @@
       "identities": [],
       "belief": "Party organizer",
       "era": 1976,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -871,8 +771,7 @@
       "identities": [],
       "belief": "Hunger in America",
       "era": 1976,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -915,24 +814,14 @@
       "party": "R",
       "homeState": "CA",
       "homeStateBonus": 3,
-      "identities": [
-        "evangelical"
-      ],
-      "identityWeights": {
-        "evangelical": 1
-      },
+      "identities": [],
       "belief": "A time for choosing",
       "era": 1976,
       "effects": [
         {
           "type": "extremist"
         }
-      ],
-      "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        }
-      }
+      ]
     },
     {
       "kind": "candidate",
@@ -970,8 +859,7 @@
       "identities": [],
       "belief": "Eastern establishment",
       "era": 1976,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -983,8 +871,7 @@
       "identities": [],
       "belief": "What did the president know",
       "era": 1976,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -996,8 +883,7 @@
       "identities": [],
       "belief": "Corporate moderate",
       "era": 1976,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -1007,19 +893,12 @@
       "homeState": "NY",
       "homeStateBonus": 2,
       "identities": [
-        "jewish",
         "urban"
       ],
-      "identityWeights": {
-        "jewish": 2
-      },
       "belief": "Liberal Republican",
       "era": 1976,
       "effects": [],
       "provenance": {
-        "jewish": {
-          "source": "hand-assigned"
-        },
         "urban": {
           "source": "hand-assigned"
         }
@@ -1087,8 +966,7 @@
       "identities": [],
       "belief": "Built the Texas GOP",
       "era": 1976,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -1098,8 +976,7 @@
       "homeState": "SC",
       "homeStateBonus": 4,
       "identities": [
-        "rural",
-        "evangelical"
+        "rural"
       ],
       "identityWeights": {
         "rural": 2
@@ -1114,9 +991,6 @@
       "provenance": {
         "rural": {
           "source": "hand-assigned"
-        },
-        "evangelical": {
-          "source": "hand-assigned"
         }
       }
     },
@@ -1128,12 +1002,8 @@
       "homeState": "NC",
       "homeStateBonus": 4,
       "identities": [
-        "evangelical",
         "rural"
       ],
-      "identityWeights": {
-        "evangelical": 2
-      },
       "belief": "Senator No",
       "era": 1976,
       "effects": [
@@ -1142,9 +1012,6 @@
         }
       ],
       "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        },
         "rural": {
           "source": "hand-assigned"
         }
@@ -1160,8 +1027,7 @@
       "identities": [],
       "belief": "Mayor of Indianapolis",
       "era": 1976,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -1185,8 +1051,7 @@
       "identities": [],
       "belief": "Rebuilt the party",
       "era": 1976,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -1198,8 +1063,7 @@
       "identities": [],
       "belief": "Pro-choice Republican",
       "era": 1976,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -1208,20 +1072,10 @@
       "party": "R",
       "homeState": "OR",
       "homeStateBonus": 3,
-      "identities": [
-        "evangelical"
-      ],
-      "identityWeights": {
-        "evangelical": 1
-      },
+      "identities": [],
       "belief": "Antiwar Republican",
       "era": 1976,
-      "effects": [],
-      "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -1233,8 +1087,7 @@
       "identities": [],
       "belief": "Watergate committee maverick",
       "era": 1976,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -1266,19 +1119,12 @@
       "homeState": "NM",
       "homeStateBonus": 3,
       "identities": [
-        "catholic",
         "hispanic"
       ],
-      "identityWeights": {
-        "catholic": 1
-      },
       "belief": "Budget hawk",
       "era": 1976,
       "effects": [],
       "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        },
         "hispanic": {
           "source": "hand-assigned"
         }
@@ -1291,20 +1137,10 @@
       "party": "R",
       "homeState": "NV",
       "homeStateBonus": 3,
-      "identities": [
-        "catholic"
-      ],
-      "identityWeights": {
-        "catholic": 2
-      },
+      "identities": [],
       "belief": "Reagan's best friend",
       "era": 1976,
-      "effects": [],
-      "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -1313,24 +1149,14 @@
       "party": "R",
       "homeState": "NY",
       "homeStateBonus": 2,
-      "identities": [
-        "catholic"
-      ],
-      "identityWeights": {
-        "catholic": 2
-      },
+      "identities": [],
       "belief": "Elected on the Conservative line",
       "era": 1976,
       "effects": [
         {
           "type": "extremist"
         }
-      ],
-      "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        }
-      }
+      ]
     },
     {
       "kind": "candidate",
@@ -1339,20 +1165,10 @@
       "party": "R",
       "homeState": "MO",
       "homeStateBonus": 3,
-      "identities": [
-        "evangelical"
-      ],
-      "identityWeights": {
-        "evangelical": 2
-      },
+      "identities": [],
       "belief": "Ordained priest",
       "era": 1976,
-      "effects": [],
-      "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -1361,17 +1177,10 @@
       "party": "R",
       "homeState": "UT",
       "homeStateBonus": 3,
-      "identities": [
-        "evangelical"
-      ],
+      "identities": [],
       "belief": "Labor law opponent",
       "era": 1976,
-      "effects": [],
-      "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        }
-      }
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -1383,8 +1192,7 @@
       "identities": [],
       "belief": "Semanticist college president",
       "era": 1976,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -1396,8 +1204,7 @@
       "identities": [],
       "belief": "Resigned rather than fire Cox",
       "era": 1976,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -1409,8 +1216,7 @@
       "identities": [],
       "belief": "Half of Kemp-Roth",
       "era": 1976,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -1422,8 +1228,7 @@
       "identities": [],
       "belief": "Alaska's appropriator",
       "era": 1976,
-      "effects": [],
-      "provenance": {}
+      "effects": []
     },
     {
       "kind": "candidate",
@@ -1502,15 +1307,11 @@
       "number": 12,
       "era": 1976,
       "demographics": [
-        "urban",
-        "jewish"
+        "urban"
       ],
       "note": "Brooklyn",
       "provenance": {
         "urban": {
-          "source": "hand-assigned"
-        },
-        "jewish": {
           "source": "hand-assigned"
         }
       }
@@ -1542,15 +1343,11 @@
       "number": 39,
       "era": 1976,
       "demographics": [
-        "rural",
-        "catholic"
+        "rural"
       ],
       "note": "Upstate",
       "provenance": {
         "rural": {
-          "source": "hand-assigned"
-        },
-        "catholic": {
           "source": "hand-assigned"
         }
       }
@@ -1563,15 +1360,11 @@
       "era": 1976,
       "demographics": [
         "urban",
-        "catholic",
         "union"
       ],
       "note": "Boston",
       "provenance": {
         "urban": {
-          "source": "hand-assigned"
-        },
-        "catholic": {
           "source": "hand-assigned"
         },
         "union": {
@@ -1586,15 +1379,11 @@
       "number": 2,
       "era": 1976,
       "demographics": [
-        "union",
-        "catholic"
+        "union"
       ],
       "note": "Springfield",
       "provenance": {
         "union": {
-          "source": "hand-assigned"
-        },
-        "catholic": {
           "source": "hand-assigned"
         }
       }
@@ -1627,8 +1416,7 @@
       "era": 1976,
       "demographics": [
         "urban",
-        "union",
-        "catholic"
+        "union"
       ],
       "note": "Northwest Chicago",
       "provenance": {
@@ -1636,9 +1424,6 @@
           "source": "hand-assigned"
         },
         "union": {
-          "source": "hand-assigned"
-        },
-        "catholic": {
           "source": "hand-assigned"
         }
       }
@@ -1866,15 +1651,11 @@
       "number": 20,
       "era": 1976,
       "demographics": [
-        "union",
-        "catholic"
+        "union"
       ],
       "note": "Pittsburgh",
       "provenance": {
         "union": {
-          "source": "hand-assigned"
-        },
-        "catholic": {
           "source": "hand-assigned"
         }
       }
@@ -1886,15 +1667,11 @@
       "number": 16,
       "era": 1976,
       "demographics": [
-        "rural",
-        "evangelical"
+        "rural"
       ],
       "note": "Lancaster",
       "provenance": {
         "rural": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         }
       }
@@ -1930,15 +1707,11 @@
       "number": 1,
       "era": 1976,
       "demographics": [
-        "urban",
-        "catholic"
+        "urban"
       ],
       "note": "Cincinnati",
       "provenance": {
         "urban": {
-          "source": "hand-assigned"
-        },
-        "catholic": {
           "source": "hand-assigned"
         }
       }
@@ -1991,15 +1764,11 @@
       "era": 1976,
       "demographics": [
         "rural",
-        "evangelical",
         "farm"
       ],
       "note": "South Georgia",
       "provenance": {
         "rural": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         },
         "farm": {
@@ -2095,8 +1864,7 @@
       "era": 1976,
       "demographics": [
         "black",
-        "urban",
-        "catholic"
+        "urban"
       ],
       "note": "New Orleans",
       "provenance": {
@@ -2104,9 +1872,6 @@
           "source": "hand-assigned"
         },
         "urban": {
-          "source": "hand-assigned"
-        },
-        "catholic": {
           "source": "hand-assigned"
         }
       }
@@ -2218,15 +1983,11 @@
       "number": 5,
       "era": 1976,
       "demographics": [
-        "rural",
-        "evangelical"
+        "rural"
       ],
       "note": "Eastern Kentucky",
       "provenance": {
         "rural": {
-          "source": "hand-assigned"
-        },
-        "evangelical": {
           "source": "hand-assigned"
         }
       }
@@ -2299,15 +2060,11 @@
       "era": 1976,
       "demographics": [
         "urban",
-        "catholic",
         "union"
       ],
       "note": "New Haven",
       "provenance": {
         "urban": {
-          "source": "hand-assigned"
-        },
-        "catholic": {
           "source": "hand-assigned"
         },
         "union": {
@@ -2322,14 +2079,10 @@
       "number": 1,
       "era": 1976,
       "demographics": [
-        "evangelical",
         "rural"
       ],
       "note": "Northern Utah",
       "provenance": {
-        "evangelical": {
-          "source": "hand-assigned"
-        },
         "rural": {
           "source": "hand-assigned"
         }
@@ -2384,24 +2137,14 @@
       "party": "I",
       "homeState": "MN",
       "homeStateBonus": 2,
-      "identities": [
-        "catholic"
-      ],
-      "identityWeights": {
-        "catholic": 2
-      },
+      "identities": [],
       "belief": "Ran outside both parties",
       "era": 1976,
       "effects": [
         {
           "type": "extremist"
         }
-      ],
-      "provenance": {
-        "catholic": {
-          "source": "hand-assigned"
-        }
-      }
+      ]
     }
   ]
 }

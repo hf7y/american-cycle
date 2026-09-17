@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { loadConfig, loadPacks, playOne } from '../sim/harness.ts';
 import { fit, era, mean, type Row, type Obs } from '../sim/district-partisanship.ts';
+import { TAGS } from '../engine/rules/tags.ts';
 import type { Card, DistrictCard, IdentityTag } from '../engine/types/index.ts';
 import { seeds as sample } from './sample.ts';
 import type { Claim, Finding } from './types.ts';
@@ -36,7 +37,6 @@ const ALL_PACKS = ['1932', '1964', '1976', '1992', '2008', '2016', '2024'];
  *  not listed here (1932/1964/2024) sit outside the panel entirely. */
 const PACK_ERA: Record<string, string> = { '1976': 'A', '1992': 'C', '2008': 'D', '2016': 'E' };
 const AGENTS = ['Greedy', 'Lookahead', 'SenateFlood', 'HouseFarm'];
-const TAGS: IdentityTag[] = ['catholic', 'evangelical', 'jewish', 'black', 'hispanic', 'cuban', 'union', 'rural', 'suburban', 'urban', 'farm'];
 const GAMES = sample(200);
 
 function panelRows(): Row[] {

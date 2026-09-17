@@ -30,7 +30,7 @@ import type { Claim, Finding } from './types.ts';
  *  kind. */
 const PANEL_PACKS = ['1976', '1992', '2008', '2016'];
 const PLACE: IdentityTag[] = ['urban', 'rural', 'suburban'];
-const DEMOGRAPHIC: IdentityTag[] = ['catholic', 'evangelical', 'jewish', 'black', 'hispanic', 'cuban', 'union', 'farm'];
+const DEMOGRAPHIC: IdentityTag[] = ['black', 'hispanic', 'cuban', 'union', 'farm'];
 
 function panel(f: string) {
   return JSON.parse(readFileSync(new URL(`../data/historical/${f}`, import.meta.url), 'utf8')).rows as
