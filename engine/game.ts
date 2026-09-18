@@ -353,6 +353,10 @@ export interface GameResult {
    *  predecessor's and successor's parties, so a run can tell a genuine flip
    *  from a same-party succession. */
   successions: { year: number; office: Office; state: string; slot?: number; from: Party; to: Party }[];
+  /** hf7y/american-cycle#37: nominees who received an offered VP, against
+   *  how many nominees there were -- see `stats.vpGranted`/`vpNominees`. */
+  vpGranted: number;
+  vpNominees: number;
 }
 
 export class Game {
@@ -378,7 +382,13 @@ export class Game {
              *  Counting "uncontested generals" instead undercounts badly: a race
              *  several players crowd in one party resolves as a contested PRIMARY
              *  and a one-candidate general. */
-            raceSlots: 0, contestedSlots: 0, billsRepealed: 0, shutdowns: 0, shocks: 0 };
+            raceSlots: 0, contestedSlots: 0, billsRepealed: 0, shutdowns: 0, shocks: 0,
+            /** hf7y/american-cycle#37: how often a nominee actually receives an
+             *  offered VP, against how many nominees could have -- `Kingmaker`
+             *  gates its own offer on `favor`, so this is the direct read on
+             *  whether that costs nominees the slot outright, upstream of
+             *  whatever the general election does with it. */
+            vpGranted: 0, vpNominees: 0 };
   /** v0.2 item 6: off-position yes-votes, by card id. */
   private offDistrict = new Map<string, number>();
   /** v0.2 item 9: pips of shock in force this year, 0 in a quiet one. */
@@ -1469,6 +1479,7 @@ export class Game {
     // card; the nominee decides. A card placed here is not consumed on a loss.
     const tickets = new Map<number, VicePresident>();
     for (const nom of nominees) {
+      this.stats.vpNominees++;
       const offers: VPOffer[] = [];
       for (let i = 0; i < this.players.length; i++) {
         const card = this.agents[i].offerVP?.(this.view(i), { player: nom.player, party: nom.card.party });
@@ -1477,6 +1488,7 @@ export class Game {
         }
       }
       if (!offers.length) continue;
+      this.stats.vpGranted++;
       const chosen = this.agents[nom.player].pickVP?.(this.view(nom.player), offers) ?? offers[0];
       tickets.set(nom.player, { cardId: chosen.card.id, card: chosen.card, from: chosen.from });
       const supplier = this.players[chosen.from];
@@ -2057,6 +2069,7 @@ export class Game {
       billsRepealed: this.stats.billsRepealed,
       shutdownBlame: this.shutdownBlame,
       successions: this.successions,
+      vpGranted: this.stats.vpGranted, vpNominees: this.stats.vpNominees,
     };
   }
 }

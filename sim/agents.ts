@@ -687,6 +687,32 @@ export class Whip extends Base {
   }
 }
 
+/** hf7y/american-cycle#37: DECISIONS.md's "VP horse-trading" item, tested
+ *  against the one channel that predates every ledger-based agent above --
+ *  "Any player may offer a card; the nominee decides" (game.ts's
+ *  `presidentialRace`) has existed since the ticket mechanic shipped, and
+ *  `VPBackstab` already uses it, but unconditionally: it offers its best
+ *  card to ANY rival, hoping to plant a backstab later. This tests the
+ *  opposite instinct -- treat the slot as a chip to be spent, not given
+ *  away -- by gating the same offer on `favor`, the cross-year ledger
+ *  `Dealmaker`/`Whip` already read: help only a nominee who is not
+ *  currently in this agent's debt.
+ *
+ *  Not the full trade DECISIONS.md's item describes -- `GameView` carries no
+ *  VP history, current or past, for any agent to read, so there is still no
+ *  channel for the RECIPIENT to owe anything back for the slot specifically.
+ *  This measures whether conditioning existing legislative goodwill changes
+ *  who gets helped (`Game.stats.vpGranted`/`vpNominees`), not whether a new
+ *  debt gets created and repaid. */
+export class Kingmaker extends Base {
+  offerVP(v: GameView, nominee: { player: number; party: Party }): CandidateCard | undefined {
+    if (nominee.player === v.me || favor(v.me, nominee.player, v.bills) < 0) return undefined;
+    const hand = v.players[v.me].hand.filter((c) => c.kind === 'candidate') as CandidateCard[];
+    if (!hand.length) return undefined;
+    return hand.reduce((best, c) => (c.homeStateBonus > best.homeStateBonus ? c : best), hand[0]);
+  }
+}
+
 /** hf7y/american-cycle#37: the roll call itself (#263, merged as #272) is the
  *  channel "negotiation before the bill vote" was blocked on -- DECISIONS.md
  *  said no agent could see another's vote before casting its own, and that is
@@ -753,4 +779,5 @@ export const AGENTS: Record<string, new (cfg: Config, rng: RNG) => Agent> = {
   RunawayBrake: class extends RunawayBrake { constructor(c: Config, r: RNG) { super('RunawayBrake', c, r); } },
   Whip: class extends Whip { constructor(c: Config, r: RNG) { super('Whip', c, r); } },
   Bandwagon: class extends Bandwagon { constructor(c: Config, r: RNG) { super('Bandwagon', c, r); } },
+  Kingmaker: class extends Kingmaker { constructor(c: Config, r: RNG) { super('Kingmaker', c, r); } },
 };
