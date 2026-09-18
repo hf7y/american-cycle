@@ -45,7 +45,12 @@ function fixture(card: CandidateCard, stateLean: number): { v: GameView; open: O
 }
 
 test('party choice: unset default offers exactly one option, printed party, unchanged edge', () => {
-  const cfg = loadConfig('tuned.json');
+  // hf7y/american-cycle#15, RULED 2026-09-16: tuned.json now SHIPS
+  // partyChoice: 'free', so loading it no longer exercises the unset
+  // branch -- strip the field to test that branch on its own terms rather
+  // than on whatever tuned.json currently ships.
+  const base = loadConfig('tuned.json');
+  const cfg: Config = { ...base, game: { ...base.game, partyChoice: undefined } };
   const card = cand({ party: 'R' });
   const { v, open } = fixture(card, -8);
   const opts = options(v, open, cfg);

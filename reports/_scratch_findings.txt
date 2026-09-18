@@ -1,0 +1,169 @@
+
+adversarial-counters
+  Q: hf7y/american-cycle#75: the shipped six strategies formed a perfectly transitive ladder led by BillMaximizer, because nothing exercised the veto or Senate cloture denial. Do counters built against those two specific surfaces (Vetoer, BillBlocker) actually beat it, and does adding them to the field break the ladder's transitivity the way #75 expected?
+           Vetoer vs BillMaximizer duel, tuned                    58.33  (stamped 66.67, ±10)
+     drift Vetoer vs BillMaximizer duel, as-written-plus          83.33  (stamped 66.67, ±10)
+     drift BillBlocker vs BillMaximizer duel, tuned               83.33  (stamped 100, ±10)
+           BillBlocker vs BillMaximizer duel, as-written-plus    100.00  (stamped 91.67, ±10)
+     drift BillMaximizer round-robin share, tuned (extended field)    0.00  (stamped 8.33, ±6)
+     drift BillMaximizer round-robin share, as-written-plus (extended field)    8.33  (stamped 33.33, ±6)
+     drift SenateFlood round-robin share, tuned (extended field)   33.33  (stamped 8.33, ±8)
+     drift SenateFlood round-robin share, as-written-plus (extended field)   33.33  (stamped 25, ±8)
+           SenateFlood round-robin share, tuned, BALANCE_PACKS (extended field)   41.67  (stamped 36.67, ±8)
+  verdict: BillBlocker beats BillMaximizer on both configs; Vetoer beats BillMaximizer on both configs; BillMaximizer sits below fair share in the extended-field round robin on both configs -- its dominance is gone independent of which new agent tops the field; and SenateFlood's tuned share is itself deck-sensitive (hf7y/american-cycle#91): 33.3% all-seven vs 41.7% four-pack
+  STALE — 6 of 9 claims moved past tolerance.
+  headline stamped 2026-09-05T06:58:18Z on 2021e16; the predicate above is the current value.
+
+amendment-is-the-ending
+  Q: hf7y/american-cycle#145 ruled: scoring stays points (as v0.2 already reads the board), bills stop being a count to a target and become points among other points via `scoring.billOnBooks`, and the amendment is the ending. That reverses `as-written-plus.json`'s prior `victory: 'bills'` wiring. Before the ruling can move from "recorded" to "settled" in DECISIONS.md, #145 named one thing to check first: does the game still reliably terminate on a pool that is not chasing the amendment, or does removing the bill-count target just trade one runaway clock for an unbounded one?
+           as-written-plus.json ships amendment as the ending      1.00  (stamped 1, ±0)
+     drift passive pool: games ended by amendment ratification     0.00  (stamped 0.33, ±0.12)
+           passive pool: games ended by deck-out                   0.00  (stamped 0, ±0.03)
+     drift passive pool: games that ran out the 100-year cap       1.00  (stamped 0.67, ±0.12)
+           passive pool: games ended by the old bill target        0.00  (stamped 0, ±0)
+     drift passive pool, ALL_PACKS: games ended by amendment ratification    0.08  (stamped 0.23, ±0.12)
+  verdict: amendment ends 0% of games; deck-out essentially never fires, matching the no-cap amendment; the 100-year cap still binds 100% of the time, so it remains a real backstop, not a formality; and no game ends on the retired bill target; and ratification share is itself deck-sensitive (hf7y/american-cycle#91): 0% four-pack vs 8% all-seven
+  STALE — 3 of 6 claims moved past tolerance.
+  headline stamped 2026-09-05T06:58:20Z on 2021e16; the predicate above is the current value.
+
+amendment-victory-dominance
+  Q: hf7y/american-cycle#50 measured SenateFlood at 20.1%/41.2% (tuned/as-written-plus) against the 40% SIM-BRIEF dominance bar under `victory: 'points'`. Both shipped configs now ship `victory: 'amendment'` (hf7y/american-cycle#145), and an incidental byproduct of an unrelated build (#33) reported SenateFlood far higher under the new ending -- 81.7%/65.0% at n=360, three pools, each keeping SenateFlood as an unswapped control. Both #13 and #50 asked for a dedicated re-measurement rather than a byproduct number, on the SAME six-way field the points-victory number was measured on, at a real N: does the dominance hold, and does the amendment ending change how long games run and how they end?
+     drift SenateFlood share, tuned.json (amendment victory)      83.33  (stamped 91.67, ±8)
+           SenateFlood share, as-written-plus.json (amendment victory)   66.67  (stamped 66.67, ±8)
+           median years, tuned.json                               16.00  (stamped 16, ±2)
+           median years, as-written-plus.json                    100.00  (stamped 100, ±5)
+     drift games ratified, tuned.json                              8.33  (stamped 41.67, ±8)
+     drift games ratified, as-written-plus.json                    8.33  (stamped 0, ±5)
+           SenateFlood share, tuned.json, BALANCE_PACKS (amendment victory)   91.67  (stamped 91.67, ±8)
+  verdict: SenateFlood 83.3% on tuned.json, 66.7% on as-written-plus.json; DOMINANT on both shipped configs under the amendment victory, same as under points and under bills -- the hole relocates, it does not close; median game length 16y (tuned) vs 100y (as-written-plus), both the year cap itself -- this field almost never ratifies (8.3% / 8.3%); and the dominance figure held stable between the all-seven and four-pack decks (hf7y/american-cycle#91)
+  STALE — 3 of 7 claims moved past tolerance.
+  headline stamped 2026-09-05T06:58:24Z on 2021e16; the predicate above is the current value.
+
+arithmetic-load
+  Q: SIM-BRIEF Part 3 asks for the distribution of modifier-stack depth per race -- how many modifier lines a player adds up to resolve one side of one race -- and names its own failure example: "if the median race stacks 7 modifiers, it doesn't" promise mental math. Nothing has measured it. Does the shipped tuned.json clear that bar?
+           modifier-stack depth: median                            3.00  (stamped 3, ±1)
+           modifier-stack depth: p90                               5.00  (stamped 5, ±1)
+           modifier-stack depth: max                              10.00  (stamped 10, ±3)
+           modifier-stack depth: median, ALL_PACKS                 3.00  (stamped 3, ±1)
+  verdict: median modifier-stack depth is 3, well clear of SIM-BRIEF's 7-modifier failure example; p90 is 5 and the observed max is 10; and modifier-stack depth held stable between the four-pack and all-seven decks (hf7y/american-cycle#91)
+  HOLDS.
+
+balance-metrics
+  Q: SIM-BRIEF Part 2 sets two bars sim/roundrobin.ts measures but nothing asserts: skill signal (Greedy should beat Random 65-80% of the time -- enough margin for skill to read, not so much that Random is unplayable) and seat bias (no seat position should deviate more than 3pp from a fair share, at every table size 2-6). Do they hold on the shipped tuned.json?
+     drift skill signal: Greedy beats Random                      83.33  (stamped 67.7, ±8)
+     drift planning premium: Lookahead beats Greedy               66.67  (stamped 84.7, ±8)
+     drift seat bias: max deviation, 2p                            8.33  (stamped 1.3, ±2)
+     drift seat bias: max deviation, 3p                            8.33  (stamped 3.03, ±2)
+     drift seat bias: max deviation, 4p                            8.33  (stamped 1, ±2)
+     drift seat bias: max deviation, 5p                           13.33  (stamped 2.7, ±2)
+     drift seat bias: max deviation, 6p                           16.67  (stamped 1.13, ±2)
+     drift seat bias: max deviation, 3p, ALL_PACKS                16.67  (stamped 2.53, ±2.5)
+  verdict: skill signal is OUT of SIM-BRIEF's 65-80% band: Greedy beats Random 83.3% of the time; Lookahead beats Greedy 66.7% of the time; seat bias is past the 3pp bar at 6 players (16.7pp); the rest stay under it; and 3-player seat bias is itself deck-sensitive (hf7y/american-cycle#91): 8.3pp four-pack vs 16.7pp all-seven
+  STALE — 8 of 8 claims moved past tolerance.
+  headline stamped 2026-09-05T16:28:34Z on 7150d2f; the predicate above is the current value.
+
+bandwagon-momentum-changes-passage
+  Q: hf7y/american-cycle#37: `vote-trading-changes-passage.ts` measured `Dealmaker`'s cross-YEAR favour ledger against the same table this finding uses. `Bandwagon` (#263/#272's roll call) is a different channel -- real-time same-party momentum WITHIN one roll, not a ledger settled after the fact -- and can push a vote either direction, not only toward yes. Does seating it -- one seat, then every seat, on the exact table vote-trading-changes-passage.ts used -- move passage the way herd behaviour would predict, and does it change cross-bench volume the same way a favour ledger did (crossings falling, substituted by the ledger) or a different way?
+     drift mixed table (no Bandwagon): bills pass                  0.35  (stamped 0.468, ±0.1)
+     drift mixed table: cross-bench votes a game                  23.50  (stamped 16.8, ±6)
+           one Bandwagon seat: bills pass                          0.57  (stamped 0.513, ±0.1)
+     drift one Bandwagon seat: cross-bench votes a game           28.92  (stamped 19.8, ±6)
+           every seat Bandwagon: bills pass                        0.58  (stamped 0.552, ±0.1)
+     drift every seat Bandwagon: cross-bench votes a game         24.83  (stamped 18.6, ±6)
+  verdict: passage: 35.2% baseline, 57.1% one seat, 57.6% every seat; cross-bench votes a game: 23.5 baseline, 28.9 one seat, 24.8 every seat; a table with momentum passes more bills on MORE raw cross-bench votes -- amplification, not substitution
+  STALE — 4 of 6 claims moved past tolerance.
+  headline stamped 2026-09-17T10:45:00Z on 988f38c; the predicate above is the current value.
+
+battleground-concentration
+  Q: hf7y/american-cycle#186: does anything already in the engine concentrate declarations toward low-|lean| (battleground) states, or is contest rate uniform across |lean| regardless of cause? Checked first: the shipped agents' own declare() logic, unmodified (item 1), whether a state's |lean| correlates with whether its House race actually draws 2+ declarers, pooled against the existing track/finding corpus before running anything new (item 3), and whether declared-race |lean| differs between a district a player was forced onto at draft time (no candidate in the pack) and one they chose over an available candidate (item 2). hf7y/american-cycle#273: item 2 as #186/#229 ORIGINALLY framed it -- a declared race where only one of a player's cards was eligible (forced) vs. one where two or more competed (chosen) -- never actually landed as PR #229 closed unmerged, so it is re-measured fresh here rather than cited from that comment thread.
+     drift Greedy: mean |lean|, legal options                      2.77  (stamped 0.9614, ±0.1)
+     drift Greedy: mean |lean|, declared                           3.46  (stamped 0.9911, ±0.15)
+     drift Lookahead: mean |lean|, legal options                   2.89  (stamped 1.2875, ±0.15)
+     drift Lookahead: mean |lean|, declared                        2.58  (stamped 0.9562, ±0.15)
+     drift Lookahead, BALANCE_PACKS: mean |lean|, legal options    2.57  (stamped 1.0351, ±0.2)
+     drift Lookahead, BALANCE_PACKS: mean |lean|, declared         2.53  (stamped 0.7924, ±0.2)
+     drift House generals: mean |lean|, contested (2+ declarers)    2.76  (stamped 1.6896, ±0.3)
+     drift House generals: mean |lean|, uncontested (walkover)     3.23  (stamped 1.4154, ±0.3)
+           defaultPick: cheapest candidate value vs. district ceiling (2)    2.00  (stamped 2, ±0)
+           Greedy: forced-pick share of drafted districts          1.00  (stamped 1, ±0.05)
+     drift Greedy: mean |lean| declared, forced pick               3.55  (stamped 1.5308, ±0.3)
+           Lookahead: forced-pick share of drafted districts       1.00  (stamped 1, ±0.05)
+     drift Lookahead: mean |lean| declared, forced pick            4.13  (stamped 1.4907, ±0.3)
+     drift Greedy: forced-race share, declare time                 0.24  (stamped 0.34, ±0.08)
+     drift Greedy: mean |lean|, forced race                        2.20  (stamped 0.13, ±0.15)
+     drift Greedy: mean |lean|, chosen race                        3.87  (stamped 0.4, ±0.15)
+           Lookahead: forced-race share, declare time              0.34  (stamped 0.33, ±0.08)
+     drift Lookahead: mean |lean|, forced race                     1.94  (stamped 0.22, ±0.15)
+     drift Lookahead: mean |lean|, chosen race                     2.91  (stamped 0.47, ±0.15)
+  verdict: Greedy shows a real |lean| tilt (declared - legal = 0.69); Lookahead self-selects toward LOW |lean| unassisted (declared - legal = -0.31); and the size of that self-selection is itself deck-sensitive (hf7y/american-cycle#91): -0.31 all-seven vs -0.04 four-pack; so the open question for #186 narrows to whether a myopic (Greedy-shaped) agent or player needs a lean signal added to its scoring, not whether the engine needs a new incentive mechanism; and contested House races do run lower |lean| than walkovers (-0.47), consistent with battleground concentration; and item 2, draft-time framing: this comparison doesn't exist to make -- 100% of Greedy's and 100% of Lookahead's drafted districts are FORCED (no candidate in the pack) rather than chosen over one, because defaultPick's own value() caps a district at exactly a candidate's floor -- a district can tie a cheap candidate but never beat one, so "chosen" is arithmetically unreachable outside tie order; and item 2, #186/#229's ORIGINAL declare-time framing (hf7y/american-cycle#273, PR #229's own code never landed anywhere on main): a real forced/chosen split exists here -- 24% of Greedy's and 34% of Lookahead's declared races had only one eligible card, and both agents' CHOSEN races run at meaningfully higher |lean| than their FORCED ones (Greedy +1.67, Lookahead +0.96) -- the direction #229's own unverified numbers also had, though not the magnitude, now backed by a predicate this file re-derives
+  STALE — 15 of 19 claims moved past tolerance.
+  headline stamped 2026-09-17T15:00:00Z on 0d5696c; the predicate above is the current value.
+
+bill-passage-is-the-table
+  Q: Does the 60% Senate threshold stall the omnibill? The filibuster means bills essentially cannot pass without cross-benching, which makes cooperation structurally necessary rather than optional -- does that hold up?
+     drift mixed table at 60%: bills pass                          0.49  (stamped 0.15, ±0.07)
+     drift one BillMaximizer at 60%: bills pass                    0.70  (stamped 0.57, ±0.12)
+           four BillMaximizers at 60%: bills pass                  1.00  (stamped 1, ±0.06)
+     drift mixed table at 50%: bills pass                          0.56  (stamped 0.38, ±0.1)
+     drift mixed table at 67%: bills pass                          0.44  (stamped 0.09, ±0.06)
+     drift mixed table: cross-bench votes a game                  21.75  (stamped 59.67, ±18)
+     drift four BillMaximizers: cross-bench votes a game          40.00  (stamped 131.67, ±60)
+           mixed table at 60%, ALL_PACKS: bills pass               0.22  (stamped 0.25, ±0.07)
+  verdict: changing the table moves passage 51pp, the threshold 13pp; so passage is set by who is at the table, not by the filibuster; and cross-benching does not track it; and the mixed-table passage figure is itself deck-sensitive (hf7y/american-cycle#91): 49pp four-pack vs 22pp all-seven
+  STALE — 6 of 8 claims moved past tolerance.
+  headline stamped 2026-09-05T03:41:32Z on 218542b; the predicate above is the current value.
+
+board-opponent-fitness
+  Q: Now that #202 lets the setup screen seat exactly one opponent, which of the sixteen non-Greedy scripted agents give a human a fair one-on-one game (Greedy standing in for an ordinary player, per this repo's own skill-signal convention), and does the app's existing OPPONENT_BLURB -- calibrated against a fixed three-opponent field -- still describe them accurately at 1v1?
+     drift Random: win rate vs Greedy, 1v1                         8.33  (stamped 26.7, ±8)
+     drift Lookahead: win rate vs Greedy, 1v1                     66.67  (stamped 79, ±8)
+           WideAndEmpty: win rate vs Greedy, 1v1                   0.00  (stamped 0, ±8)
+     drift WalkoverFarmer: win rate vs Greedy, 1v1                33.33  (stamped 22.7, ±8)
+     drift RunawayMaximiser: win rate vs Greedy, 1v1              50.00  (stamped 14.7, ±8)
+     drift SenateFlood: win rate vs Greedy, 1v1                   50.00  (stamped 65, ±8)
+     drift HouseFarm: win rate vs Greedy, 1v1                     16.67  (stamped 7.3, ±8)
+           HeterodoxSpecialist: win rate vs Greedy, 1v1           41.67  (stamped 41, ±8)
+     drift BillMaximizer: win rate vs Greedy, 1v1                 33.33  (stamped 23, ±8)
+     drift Impeacher: win rate vs Greedy, 1v1                     50.00  (stamped 66.3, ±8)
+           VPBackstab: win rate vs Greedy, 1v1                    58.33  (stamped 65.3, ±8)
+     drift Launchpad: win rate vs Greedy, 1v1                     33.33  (stamped 62.7, ±8)
+           EconomyChicken: win rate vs Greedy, 1v1                41.67  (stamped 46, ±8)
+     drift BillAuthor: win rate vs Greedy, 1v1                    41.67  (stamped 14.3, ±8)
+           Vetoer: win rate vs Greedy, 1v1                        50.00  (stamped 53.3, ±8)
+     drift BillBlocker: win rate vs Greedy, 1v1                   66.67  (stamped 78, ±8)
+     drift Dealmaker: win rate vs Greedy, 1v1                     41.67  (stamped 50.7, ±8)
+     drift RunawayBrake: win rate vs Greedy, 1v1                  41.67  (stamped 50.7, ±8)
+     drift Whip: win rate vs Greedy, 1v1                          16.67  (stamped 6.7, ±8)
+     drift Bandwagon: win rate vs Greedy, 1v1                     41.67  (stamped 52.3, ±8)
+           RunningMate: win rate vs Greedy, 1v1                   41.67  (stamped 46.3, ±8)
+  verdict: fair 1v1 opponents (human wins 40-60%): RunawayMaximiser (50.0%), SenateFlood (50.0%), HeterodoxSpecialist (58.3%), Impeacher (50.0%), VPBackstab (41.7%), EconomyChicken (58.3%), BillAuthor (58.3%), Vetoer (50.0%), Dealmaker (58.3%), RunawayBrake (58.3%), Bandwagon (58.3%), RunningMate (58.3%); lopsided toward the human: WideAndEmpty (100.0%), Random (91.7%), HouseFarm (83.3%), Whip (83.3%), WalkoverFarmer (66.7%), BillMaximizer (66.7%), Launchpad (66.7%); lopsided toward the agent: Lookahead (66.7%), BillBlocker (66.7%)
+  STALE — 15 of 21 claims moved past tolerance.
+  headline stamped 2026-09-06T14:00:00Z on 9d18c76; the predicate above is the current value.
+
+contest-ratio
+  Q: What actually sets the contest rate, and does the shipped tuning reach the level SIM-BRIEF asks for -- with the district-to-candidate ratio (DECISIONS.md open question 4) as the other lever?
+           hand 8, districts 0.15                                 36.77  (stamped 37.84, ±3)
+           hand 16, districts 0.15                                47.81  (stamped 47.72, ±3)
+           hand 24, districts 0.15                                58.28  (stamped 56, ±3)
+           hand 16, districts 0.06                                49.43  (stamped 48.9, ±3)
+           hand 16, districts 0.40                                47.38  (stamped 44.48, ±3)
+           hand 16, districts 1.00                                34.46  (stamped 32.75, ±3)
+           hand 16, districts 0.15, BALANCE_PACKS                 48.23  (stamped 47.65, ±3)
+  verdict: contest rises monotonically with hand size; and falls monotonically as district supply rises; every configuration is short of the 60% target; and the crossing point held stable between the all-seven and four-pack decks (hf7y/american-cycle#91)
+  HOLDS.
+
+contest-vs-walkover
+  Q: Is scaling cards and races until states are actually contested an alternative to deciding what an uncontested win pushes (uncontestedPush, engine/rules/lean.ts), and the district-to-candidate ratio (DECISIONS.md open question 4)?
+           low contest, walkover off: contested share              0.32  (stamped 0.27, ±0.1)
+     drift low contest, walkover off: states realigned             7.92  (stamped 4.67, ±1)
+           high contest, walkover off: contested share             0.69  (stamped 0.63, ±0.12)
+     drift high contest, walkover off: states realigned            1.58  (stamped 19, ±3)
+           low contest, walkover on: states realigned             11.75  (stamped 13.42, ±3)
+     drift both: states realigned                                  6.25  (stamped 29.08, ±5)
+     drift high contest, walkover off, BALANCE_PACKS: states realigned    2.17  (stamped 13.62, ±3)
+  verdict: contest alone does NOT realign the map; the walkover rule alone also does; and together they overshoot; and "contest alone" realignment is itself deck-sensitive (hf7y/american-cycle#91): 1.6 all-seven vs 2.2 four-pack
+  STALE — 4 of 7 claims moved past tolerance.
+  headline stamped 2026-09-05T06:58:35Z on 2021e16; the predicate above is the current value.
+
+cross-bench-pricing
+  Q: Party fluidity is already the default — PlayerState has no party field and a player is a faction holding cards of both parties. So does party hardening emerge from strategy, and what should cross-benching cost in the primary against the general?

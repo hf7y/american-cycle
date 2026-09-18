@@ -99,6 +99,14 @@ button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--brass);out
   border-radius:1px;margin:3px 3px 0 0;text-transform:uppercase;letter-spacing:.04em}
 .tag.het{border-color:var(--brass);color:var(--brass)}
 .tag.ext{border-color:var(--gop);color:var(--gop)}
+/* hf7y/american-cycle#15: the tie is the printed/historical party, a cue
+   only -- nothing the engine reads once a declaration is made. */
+.partyRow{display:flex;align-items:center;gap:5px;margin-top:5px}
+.partyRow .tie{display:inline-block;width:9px;height:9px;border-radius:0 0 3px 3px;flex:0 0 auto}
+.partyRow .tie.D{background:var(--dem)} .partyRow .tie.R{background:var(--gop)}
+.partyRow .flip{font-family:var(--mono);font-size:9px;padding:1px 5px;border:1px solid var(--rule);
+  border-radius:1px;background:transparent;color:var(--ink-2);text-transform:uppercase;letter-spacing:.03em}
+.partyRow .flip:hover{border-color:var(--brass);color:var(--ink)}
 
 /* log --------------------------------------------------------------------- */
 #log{max-height:460px;overflow-y:auto;font-size:13px;display:flex;flex-direction:column;gap:0}

@@ -19,6 +19,7 @@ const el = (t, cls, txt) => { const n = document.createElement(t); if (cls) n.cl
 
 let G = null, gen = null, pending = null, S = {
   sel: null, picks: [], human: 0, opponents: [], cfgName: 'as-written-plus', seed: 1, over: false,
+  partyChoice: {}, // hf7y/american-cycle#15: cardId -> the party the human has chosen to run it under, when the ruleset opens that choice. Absent means the printed party.
 };
 
 // ---- setup ------------------------------------------------------------------
@@ -159,7 +160,7 @@ function start() {
   const rng = new RNG(S.seed);
   const you = { name:'You', declare:()=>[], withdraw:()=>false, proposeG:()=>3, voteBill:()=>true, veto:()=>false };
   const agents = [you, ...S.opponents.map((n) => new AGENTS[n](cfg, rng))];
-  S.human = 0; S.over = false;
+  S.human = 0; S.over = false; S.partyChoice = {};
   G = new Game(agents, cards, cfg, S.seed);
   $('cfgName').textContent = S.cfgName;
   gen = G.interactiveTick(S.human);
@@ -212,6 +213,18 @@ function phaseDeclare() {
 
 const uiRaceKey = (r) => `${r.office}|${r.state}|${r.slot ?? ''}`;
 
+// hf7y/american-cycle#15: the card the human is actually about to run,
+// after any party flip they've chosen -- 'printed' (or unset) never offers
+// the choice, so this returns the card unchanged in that case, same as
+// sim/agents.ts's partyVariants() does for a scripted agent.
+function effectiveCard(c) {
+  if (!c) return c;
+  const mode = G.cfg.game.partyChoice;
+  if (!mode || mode === 'printed' || c.party === 'I') return c;
+  const chosen = S.partyChoice[c.id];
+  return chosen && chosen !== c.party ? { ...c, party: chosen } : c;
+}
+
 function racesInState(state) {
   if (!S.eligibleFor || !S.sel) return [];
   // One peg per race per player. You may not stack three of your own
@@ -234,7 +247,7 @@ function districtFitFor(r) {
 
 function declareRace(r) {
   const { district, districts } = districtFitFor(r);
-  S.picks.push({ player:S.human, card:S.sel, district, districts,
+  S.picks.push({ player:S.human, card:effectiveCard(S.sel), district, districts,
                  office:r.office, state:r.state, slot:r.slot });
   S.sel = null; closeModal(); render();
 }
@@ -263,7 +276,7 @@ function pickRace(state, preferSlot) {
 function showRacePreview(state, atEl) {
   const rs = racesInState(state);
   if (!rs.length) return;
-  const card = S.sel;
+  const card = effectiveCard(S.sel);
   const sections = rs.map((r) => {
     const { district, districts } = districtFitFor(r);
     const mods = G.previewModifiers(S.human, card, r.office, r.state, r.slot, district, districts);
@@ -439,23 +452,44 @@ function drawHand() {
   const used = new Set(S.picks.map((p)=>p.card.id));
   const cands = me.hand.filter((c)=>c.kind==='candidate');
   if (!cands.length) h.appendChild(el('p','note','No candidates in hand.'));
+  const canChoose = (G.cfg.game.partyChoice === 'free' || G.cfg.game.partyChoice === 'printedAffinity');
   for (const c of cands) {
     if (used.has(c.id)) continue;
-    const n = el('div','cc '+c.party+(S.sel && S.sel.id===c.id?' sel':''));
+    const flippable = canChoose && c.party !== 'I';
+    const runAs = flippable && S.partyChoice[c.id] ? S.partyChoice[c.id] : c.party;
+    const n = el('div','cc '+runAs+(S.sel && S.sel.id===c.id?' sel':''));
     const hd = el('div','hd');
     const src = (typeof PORTRAITS !== 'undefined') && PORTRAITS[c.id];
     if (src) { const img = el('img','pt'); img.src = src; img.alt = ''; hd.appendChild(img); }
     const txt = el('div');
     txt.appendChild(el('div','nm',c.name));
-    txt.appendChild(el('div','mt',`${c.party} · ${c.homeState}${c.homeStateBonus?' +'+c.homeStateBonus:''} · ${c.era}`));
+    txt.appendChild(el('div','mt',`${runAs} · ${c.homeState}${c.homeStateBonus?' +'+c.homeStateBonus:''} · ${c.era}`));
     hd.appendChild(txt);
     n.appendChild(hd);
+    // hf7y/american-cycle#15: the tie is the printed (historical) party --
+    // display only, nothing the engine reads -- and the flip button is the
+    // one place a human player reaches the same free-choice mechanism the
+    // scripted agents already have via sim/agents.ts's partyVariants().
+    if (flippable) {
+      const row = el('div','partyRow');
+      const tie = el('span','tie '+c.party);
+      tie.title = `Ran historically as ${c.party === 'R' ? 'Republican' : 'Democrat'}`;
+      row.appendChild(tie);
+      const flip = el('button','flip', runAs === c.party ? 'run as this party' : `flipped from ${c.party}`);
+      flip.onclick = (e) => {
+        e.stopPropagation();
+        S.partyChoice[c.id] = runAs === 'R' ? 'D' : 'R';
+        render();
+      };
+      row.appendChild(flip);
+      n.appendChild(row);
+    }
     if (c.belief) n.appendChild(el('div','bel','"'+c.belief+'"'));
     const tw = el('div');
     for (const f of c.effects) tw.appendChild(el('span','tag '+(f.type==='heterodox'?'het':f.type==='extremist'?'ext':''), f.type));
     for (const i of c.identities.slice(0,3)) tw.appendChild(el('span','tag',i));
     n.appendChild(tw);
-    const rec = G.cardRecord(c.id, c.party);
+    const rec = G.cardRecord(c.id, runAs);
     if (rec.billRecord || rec.crossBench || rec.offDistrict) {
       const rw = el('div');
       if (rec.billRecord) rw.appendChild(el('span','tag '+(rec.billRecord>0?'pos':'neg'), `record ${rec.billRecord>0?'+':''}${rec.billRecord}`));
