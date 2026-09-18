@@ -192,7 +192,7 @@ If an implementation question is not answered by the design doc, **it is probabl
 
 ## Untestable by simulation — none remain (hf7y/american-cycle#37)
 
-Five items were listed here at various points; all five now have either a shipped agent or a Cut entry, closing #37:
+Every item once listed here now has either a shipped agent or a Cut entry, closing #37:
 
 - Table politics against a runaway leader — `RunawayBrake` (#257).
 - Coalition-building for impeachment — `Dealmaker` + `Whip` (#258/#260).
