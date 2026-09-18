@@ -167,6 +167,8 @@ These were considered in design and rejected. Each has a plausible-sounding case
 
 **A Fed with appointments, interest rates, inflation, and unemployment as separate systems.** Collapsed to one accumulated-spending track and a 2d6 roll-under.
 
+**Naming the omnibill.** The last item on hf7y/american-cycle#37's "untestable by simulation" list, and on different grounds than the four that left it: those four were blocked by the voting mechanism's secrecy and got un-blocked by recording a fact the engine already produced (a roll-call vote, a VP pick). A bill's name is not a fact the engine produces at all — the omnibill is a single spending magnitude G (`engine/rules/legislature.ts`) with no name field anywhere. Building a channel for it means inventing one, which the governing rule below already rules out. Cut, not pending.
+
 **The governing rule:** *if it cannot be a token on a card or a counter on the board, it does not exist.* When in doubt, apply this and cut.
 
 ---
@@ -188,12 +190,12 @@ If an implementation question is not answered by the design doc, **it is probabl
 
 ---
 
-## Untestable by simulation
+## Untestable by simulation — none remain (hf7y/american-cycle#37)
 
-The social layer is a large fraction of this design; one piece of it still cannot be measured by agents:
+Every item once listed here now has either a shipped agent or a Cut entry, closing #37:
 
-- Naming the omnibill
-
-Where a finding depends on this, recommend a human playtest rather than a parameter change.
-
-**Four items have left this list (hf7y/american-cycle#37).** 2026-09-16: table politics against a runaway leader (`RunawayBrake`, #257) and coalition-building for impeachment (`Dealmaker` + `Whip`, #258/#260) are both agent-reachable, via the public post-hoc favour ledger `Dealmaker` introduced (`EnactedBill.yesVoters`) rather than pre-vote negotiation. 2026-09-17: negotiation before the bill vote itself followed once #263 (merged as #272) turned the bill vote from simultaneous-and-secret into a sequential roll call -- `voteBill`'s `votesSoFar` argument now carries every vote already cast this roll, so a seat called late (any Senate seat, since the House is always called first) can condition on votes cast ahead of it. `Bandwagon` (#37) is the agent that reads it: real-time same-party momentum within one roll, not an offer struck in advance. VP horse-trading followed the same day and the same way: `offerVP`/`pickVP` is answered blind like a vote, but the ticket it produces is a public fact afterward, unrecorded until `VPGrant` (`engine/game.ts`) gave it the same post-hoc ledger treatment as `EnactedBill.yesVoters`; `RunningMate` (#278) trades on it, and `findings/vp-grants-change-passage.ts` measures cross-bench votes rising rather than falling, since a non-reciprocating partner never repays a `RunningMate` seat's own grants. Naming the omnibill is not in the same shape as the four that left: each of those had a real channel blocked by the voting mechanism's secrecy, and the fix was recording a fact the engine already produced, but a bill's name is not a fact the engine produces at all -- it is prose with no token or counter attached, the governing cut rule's own test for what does not exist on this board (see Cut, above). Building a channel for it means inventing one, not un-blocking one, so it stays on this list on different grounds: not "no channel yet," but nothing here for a channel to carry.
+- Table politics against a runaway leader — `RunawayBrake` (#257).
+- Coalition-building for impeachment — `Dealmaker` + `Whip` (#258/#260).
+- Negotiation before the bill vote — `Bandwagon` (#274), once #263/#272 turned the vote into a sequential roll call instead of simultaneous-and-secret.
+- VP horse-trading during the nomination — `RunningMate`/`VPGrant` (#278), the same post-hoc-ledger treatment applied to the VP pick.
+- Naming the omnibill — moved to Cut, above: it was never blocked by secrecy like the other four, there is simply no state for a channel to carry.
