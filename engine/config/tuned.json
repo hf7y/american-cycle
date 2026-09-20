@@ -105,7 +105,8 @@
     "billTarget": 8,
     "resignToRun": true,
     "oddYearGovernors": true,
-    "generalLoserReturns": true
+    "generalLoserReturns": true,
+    "partyChoice": "free"
   },
   "placeholders": {
     "primaryGeneral.extremistPrimary": "Extremism is a primary bonus and a general penalty, and no magnitude was ever printed.",

@@ -22,6 +22,12 @@ import type { Claim, Finding } from './types.ts';
  *  its map driftless; that prediction is itself one of the claims below,
  *  not assumed.
  *
+ *  RULED 2026-09-16: ship `partyChoice: 'free'` -- arm B, no pip bonus --
+ *  as `tuned.json`'s own default, with a display-only "historical party"
+ *  cue on the card (no `printedPartyPips`, nothing the engine reads; see
+ *  `ui/app.js`'s `tieCue`). This finding's own measurement is what the
+ *  ruling names as its evidence, not a new arm to test.
+ *
  *  NOT attempted here: C1 (the Solid South's full 1964-94 span) and C2/C3
  *  (West Virginia, California) by name -- `data/historical/*.json` starts in
  *  1976, so the pre-1976 leg of C1/C1b's own five-vehicle sequence
@@ -116,11 +122,12 @@ export const finding: Finding = {
   headline:
     "Both open arms move C4's shopping ratio and party-flip share far past the printed baseline, on BOTH "
     + "configs -- #15's own text predicted tuned.json alone would report a null because #10 keeps its map "
-    + "driftless, and that prediction does NOT hold: tuned.json's shopping ratio moves 2.41 (printed) -> 6.33 "
-    + '(printedAffinity) -> 10.39 (free), because C4 only needs a district\'s STANDING lean sign, not '
-    + "accumulated drift, to make relabeling pay. realigning.json moves the same direction and clears C4's "
-    + 'ratio >=2 / party-flip >0.05 bar in every open-arm cell, where the printed baseline sits right at the '
-    + "ratio floor and just under the party-flip one. 'free' produces MORE shopping than 'printedAffinity' in "
+    + "driftless, and that prediction does NOT hold: tuned.json's shopping ratio moves 1.53 (printed) -> 4.78 "
+    + '(printedAffinity) -> 8.72 (free), because C4 only needs a district\'s STANDING lean sign, not '
+    + "accumulated drift, to make relabeling pay. realigning.json moves the same direction and both open arms "
+    + "clear C4's combined bar (ratio >=2 AND party-flip >0.05) in every cell; the printed baseline's ratio "
+    + "alone now also clears 2.0 (2.42) but its party-flip share (0.04) still falls short of 0.05, so the "
+    + "combined bar stays uncleared for 'printed'. 'free' produces MORE shopping than 'printedAffinity' in "
     + "both configs, which is the arm ordering the historical story (five vehicles in twenty-eight years, no "
     + 'friction) would predict, but C1b names no numeric target to grade the two arms against beyond the '
     + "shared >=2 threshold, so this is a directional read, not a resolved which-arm-is-closer answer. D5's "
@@ -128,8 +135,8 @@ export const finding: Finding = {
     + 'flat reading the design record already has for the shipped build; free party choice changes WHO wins a '
     + 'seat, not how fast a delegation catches up to a lean crossing once seats already turn over near-instantly '
     + 'at this table size.',
-  stampedAt: '2026-09-06T13:15:00Z',
-  stampedOn: '9d18c76',
+  stampedAt: '2026-09-20T06:42:35Z',
+  stampedOn: '2e0def1',
 
   predicate(): Claim[] {
     const cards = loadPacks(ALL_PACKS);
@@ -141,18 +148,18 @@ export const finding: Finding = {
     const results = new Map(cells.map(([f, m]) => [`${f}|${m}`, measure(f, m, cards, n)]));
     const at = (f: string, m: Mode) => results.get(`${f}|${m}`)!;
     return [
-      { name: 'tuned.json printed: shopping ratio', value: at('tuned.json', 'printed').shoppingRatio, stamped: 2.41, tolerance: 0.6 },
-      { name: 'tuned.json printedAffinity: shopping ratio', value: at('tuned.json', 'printedAffinity').shoppingRatio, stamped: 6.33, tolerance: 1.5 },
-      { name: 'tuned.json free: shopping ratio', value: at('tuned.json', 'free').shoppingRatio, stamped: 10.39, tolerance: 2.5 },
-      { name: 'tuned.json printed: party flip share', value: at('tuned.json', 'printed').partyFlipShare, stamped: 0.042, tolerance: 0.015 },
-      { name: 'tuned.json printedAffinity: party flip share', value: at('tuned.json', 'printedAffinity').partyFlipShare, stamped: 0.183, tolerance: 0.04 },
-      { name: 'tuned.json free: party flip share', value: at('tuned.json', 'free').partyFlipShare, stamped: 0.344, tolerance: 0.07 },
-      { name: 'realigning.json printed: shopping ratio', value: at('realigning.json', 'printed').shoppingRatio, stamped: 1.98, tolerance: 0.6 },
-      { name: 'realigning.json printedAffinity: shopping ratio', value: at('realigning.json', 'printedAffinity').shoppingRatio, stamped: 6.72, tolerance: 1.7 },
-      { name: 'realigning.json free: shopping ratio', value: at('realigning.json', 'free').shoppingRatio, stamped: 7.20, tolerance: 1.8 },
-      { name: 'realigning.json printed: party flip share', value: at('realigning.json', 'printed').partyFlipShare, stamped: 0.042, tolerance: 0.015 },
-      { name: 'realigning.json printedAffinity: party flip share', value: at('realigning.json', 'printedAffinity').partyFlipShare, stamped: 0.166, tolerance: 0.04 },
-      { name: 'realigning.json free: party flip share', value: at('realigning.json', 'free').partyFlipShare, stamped: 0.269, tolerance: 0.06 },
+      { name: 'tuned.json printed: shopping ratio', value: at('tuned.json', 'printed').shoppingRatio, stamped: 1.53, tolerance: 0.6 },
+      { name: 'tuned.json printedAffinity: shopping ratio', value: at('tuned.json', 'printedAffinity').shoppingRatio, stamped: 4.78, tolerance: 1.5 },
+      { name: 'tuned.json free: shopping ratio', value: at('tuned.json', 'free').shoppingRatio, stamped: 8.72, tolerance: 2.5 },
+      { name: 'tuned.json printed: party flip share', value: at('tuned.json', 'printed').partyFlipShare, stamped: 0.05, tolerance: 0.015 },
+      { name: 'tuned.json printedAffinity: party flip share', value: at('tuned.json', 'printedAffinity').partyFlipShare, stamped: 0.16, tolerance: 0.04 },
+      { name: 'tuned.json free: party flip share', value: at('tuned.json', 'free').partyFlipShare, stamped: 0.29, tolerance: 0.07 },
+      { name: 'realigning.json printed: shopping ratio', value: at('realigning.json', 'printed').shoppingRatio, stamped: 2.42, tolerance: 0.6 },
+      { name: 'realigning.json printedAffinity: shopping ratio', value: at('realigning.json', 'printedAffinity').shoppingRatio, stamped: 8.84, tolerance: 1.7 },
+      { name: 'realigning.json free: shopping ratio', value: at('realigning.json', 'free').shoppingRatio, stamped: 11.06, tolerance: 1.8 },
+      { name: 'realigning.json printed: party flip share', value: at('realigning.json', 'printed').partyFlipShare, stamped: 0.04, tolerance: 0.015 },
+      { name: 'realigning.json printedAffinity: party flip share', value: at('realigning.json', 'printedAffinity').partyFlipShare, stamped: 0.19, tolerance: 0.04 },
+      { name: 'realigning.json free: party flip share', value: at('realigning.json', 'free').partyFlipShare, stamped: 0.33, tolerance: 0.06 },
       { name: 'realigning.json printedAffinity: median lag years', value: at('realigning.json', 'printedAffinity').medianLag, stamped: 0, tolerance: 1 },
       { name: 'realigning.json free: median lag years', value: at('realigning.json', 'free').medianLag, stamped: 0, tolerance: 1 },
     ];

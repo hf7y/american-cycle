@@ -40,6 +40,7 @@ rule instead of citing a section. The last category is the important one — mos
 | **The House is a feeder, not a win route** — *contested, see below* | Ruled 2026-09-01. `HouseFarm` has won 0-0.6% of games in every engine version ever measured, including 0.1% at n=2400; the `what-wins` predicate puts House seats at 0.13x winner-to-field and calls holding them anti-correlated with winning. The House is a stepping stone to higher office and should stop being graded as a failed strategy |
 | **No year cap. `billTarget` is the only length knob** — *amended 2026-09-01, superseded 2026-09-04, see below* | Ruled 2026-09-01 ("infinity"). With bills as the victory condition the game was measured to end itself: at `maxYears: 10000`, **100% of games terminate** at targets 5/8/12 on both shipped configs, target 8 giving a median of 11-12 years. **That does not reproduce.** `as-written-plus` now ships `maxYears: 100` as a backstop; the amendment records why |
 | **Scoring stays points; bills are points among others; the amendment is the ending** — *reverses 2026-09-01's bills-passed ruling* | Ruled 2026-09-04 on hf7y/american-cycle#145, resolving the collision the correction above measured. See above |
+| **Party is a free player choice at declaration, no pip bonus; the printed party stays visible as a display-only cue** | Ruled 2026-09-16 on hf7y/american-cycle#15, shipped as `tuned.json`'s `partyChoice: 'free'` default. `findings/party-choice.ts` measured both open arms moving C1b/C4's shopping ratio and party-flip share far past the printed baseline on both `tuned.json` and `realigning.json`, with 'free' shopping MORE than 'printedAffinity' -- the ordering the historical record (five vehicles in twenty-eight years, no friction) predicts. The historical-party cue (`ui/app.js`'s `tieCue`, read off `Game.cardById`, never `printedPartyPips`) is display only |
 
 ### Amendment, 2026-09-01: the no-cap ruling does not survive measurement
 
@@ -167,6 +168,8 @@ These were considered in design and rejected. Each has a plausible-sounding case
 
 **A Fed with appointments, interest rates, inflation, and unemployment as separate systems.** Collapsed to one accumulated-spending track and a 2d6 roll-under.
 
+**Naming the omnibill.** The last item on hf7y/american-cycle#37's "untestable by simulation" list, and on different grounds than the four that left it: those four were blocked by the voting mechanism's secrecy and got un-blocked by recording a fact the engine already produced (a roll-call vote, a VP pick). A bill's name is not a fact the engine produces at all — the omnibill is a single spending magnitude G (`engine/rules/legislature.ts`) with no name field anywhere. Building a channel for it means inventing one, which the governing rule below already rules out. Cut, not pending.
+
 **The governing rule:** *if it cannot be a token on a card or a counter on the board, it does not exist.* When in doubt, apply this and cut.
 
 ---
@@ -188,13 +191,12 @@ If an implementation question is not answered by the design doc, **it is probabl
 
 ---
 
-## Untestable by simulation
+## Untestable by simulation — none remain (hf7y/american-cycle#37)
 
-The social layer is a large fraction of this design and most of it still cannot be measured by agents:
+Every item once listed here now has either a shipped agent or a Cut entry, closing #37:
 
-- VP horse-trading during the nomination
-- Naming the omnibill
-
-Where a finding depends on either of these, recommend a human playtest rather than a parameter change.
-
-**Three items have left this list (hf7y/american-cycle#37).** 2026-09-16: table politics against a runaway leader (`RunawayBrake`, #257) and coalition-building for impeachment (`Dealmaker` + `Whip`, #258/#260) are both agent-reachable, via the public post-hoc favour ledger `Dealmaker` introduced (`EnactedBill.yesVoters`) rather than pre-vote negotiation. 2026-09-17: negotiation before the bill vote itself followed once #263 (merged as #272) turned the bill vote from simultaneous-and-secret into a sequential roll call -- `voteBill`'s `votesSoFar` argument now carries every vote already cast this roll, so a seat called late (any Senate seat, since the House is always called first) can condition on votes cast ahead of it. `Bandwagon` (#37) is the agent that reads it: real-time same-party momentum within one roll, not an offer struck in advance, but the same "no agent can signal another before casting its own vote" blocker this list used to cite for all three items is gone. VP horse-trading and naming the omnibill share no comparable channel yet and remain untestable.
+- Table politics against a runaway leader — `RunawayBrake` (#257).
+- Coalition-building for impeachment — `Dealmaker` + `Whip` (#258/#260).
+- Negotiation before the bill vote — `Bandwagon` (#274), once #263/#272 turned the vote into a sequential roll call instead of simultaneous-and-secret.
+- VP horse-trading during the nomination — `RunningMate`/`VPGrant` (#278), the same post-hoc-ledger treatment applied to the VP pick.
+- Naming the omnibill — moved to Cut, above: it was never blocked by secrecy like the other four, there is simply no state for a channel to carry.
