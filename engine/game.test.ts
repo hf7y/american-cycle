@@ -343,9 +343,13 @@ test('the tie-break is not fixed to one seat across different seeds', () => {
 // -------------------------------------------------------------- hand size
 
 /** Build a single-player game, seed a board of seats directly (bypassing a
- *  real election), clear the hand, and read off how many cards refill()
- *  actually draws for it in one election-year tick. That is `handSize()`'s
- *  entire observable surface. */
+ *  real election), clear the hand, and read off how many candidate cards
+ *  refill() actually draws for it in one election-year tick. That is
+ *  `handSize()`'s entire observable surface -- districts are deliberately
+ *  excluded: hf7y/american-cycle#158 decoupled the district trickle
+ *  (`dealMoreDistricts`, `draft.districtsPerCycle`) from the office-bonus
+ *  hand size entirely, so it adds the same count every tick regardless of
+ *  which offices are held, and would just be a constant offset here. */
 const heldAfterOneTick = (seed: (g: Game) => void): number => {
   const cfg = loadConfig('as-written-plus.json');
   const g = new Game([new ScriptedAgent('solo')], structuredClone(CARDS), cfg, 1);
@@ -353,7 +357,7 @@ const heldAfterOneTick = (seed: (g: Game) => void): number => {
   g.players[0].hand = [];
   g.players[0].districts = [];
   g.tick();
-  return g.players[0].hand.length + g.players[0].districts.length;
+  return g.players[0].hand.length;
 };
 
 test('the office hand bonus fires once an office is held', () => {

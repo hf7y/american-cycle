@@ -570,14 +570,23 @@ export class Game {
   private dealDistricts(target: number): void {
     const setAside: Card[] = [];
     let anyWant = true;
+    // Scoped to the CURRENT talon only, deliberately not `nextCard` -- the
+    // initial deal fills what the first era offers and stops there ("1992 is
+    // untouched" until the trickle reaches it), rather than reaching into a
+    // later era just because this era is one district short of `target`.
+    // That also sidesteps a real hang under `districtSupersession`: a
+    // superseded card `admitDistrict` discards would re-enter `this.discard`
+    // and `nextCard`'s reshuffle-on-empty would deal it right back out, so a
+    // seat with fewer live eras than `target` could cycle the same card
+    // forever rather than ever running the pool dry.
     while (anyWant) {
       anyWant = false;
       for (const p of this.players) {
         if (p.districts.length >= target) continue;
         anyWant = true;
-        let c = this.nextCard();
-        while (c && c.kind !== 'district') { setAside.push(c); c = this.nextCard(); }
-        if (!c) { anyWant = false; break; }            // pool exhausted
+        let c = this.talon.pop();
+        while (c && c.kind !== 'district') { setAside.push(c); c = this.talon.pop(); }
+        if (!c) { anyWant = false; break; }            // this era's pool exhausted
         this.admitDistrict(p, c);
       }
     }
