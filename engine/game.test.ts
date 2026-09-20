@@ -116,13 +116,18 @@ test('a simulated presidential general’s electors sum to the real total and pi
   // #40/#27 changed what agents value a House declaration at, which reorders
   // the RNG draws downstream -- seed 3 no longer reaches a contested
   // presidential race under the new modifier stack. Re-stamped to seed 1.
-  const rng = new RNG(1);
+  // hf7y/american-cycle#158's declare-rounds rewrite reorders those draws
+  // again -- every agent call now happens once per ROUND rather than once
+  // per cycle, so the same seed walks the RNG differently. Re-stamped to
+  // seed 2 (`sim/tmp-seed-search-106.ts`, run against this branch: seeds
+  // 1 and 3 no longer reach a contested presidential race, seed 2 does).
+  const rng = new RNG(2);
   const agents: Agent[] = ['Greedy', 'BillAuthor', 'Random'].map((n) => new AGENTS[n](cfg, rng));
-  const g = new Game(agents, structuredClone(CARDS), cfg, 1);
+  const g = new Game(agents, structuredClone(CARDS), cfg, 2);
   g.tick();
 
   const prez = g.events.filter((e) => e.office === 'president' && e.round === 'general');
-  assert.ok(prez.length > 0, 'seed 1 is stamped to produce a contested presidential race');
+  assert.ok(prez.length > 0, 'seed 2 is stamped to produce a contested presidential race');
   const evByPlayer = new Map<number, number>();
   for (const e of prez) {
     const ev = electors(BY_CODE[e.state], cfg.game.startYear) + (e.state === 'MD' ? DC_ELECTORS : 0);
@@ -345,7 +350,14 @@ test('the tie-break is not fixed to one seat across different seeds', () => {
 /** Build a single-player game, seed a board of seats directly (bypassing a
  *  real election), clear the hand, and read off how many cards refill()
  *  actually draws for it in one election-year tick. That is `handSize()`'s
- *  entire observable surface. */
+ *  entire observable surface.
+ *
+ *  hf7y/american-cycle#158: candidates only. Districts are no longer part of
+ *  `handSize()`'s target -- `refill()` tops them up separately and
+ *  unconditionally via `draft.districtsPerCycle`, regardless of what office
+ *  bonuses this player holds, so folding `districts.length` back into this
+ *  count would measure that independent trickle (a flat +1 here) instead of
+ *  the office-hand-bonus mechanic this helper exists to isolate. */
 const heldAfterOneTick = (seed: (g: Game) => void): number => {
   const cfg = loadConfig('as-written-plus.json');
   const g = new Game([new ScriptedAgent('solo')], structuredClone(CARDS), cfg, 1);
@@ -353,7 +365,7 @@ const heldAfterOneTick = (seed: (g: Game) => void): number => {
   g.players[0].hand = [];
   g.players[0].districts = [];
   g.tick();
-  return g.players[0].hand.length + g.players[0].districts.length;
+  return g.players[0].hand.length;
 };
 
 test('the office hand bonus fires once an office is held', () => {
@@ -527,7 +539,18 @@ test('#106: a later-era district card discards the seat\'s earlier one, under th
 
   const cfg = loadConfig('as-written-plus.json');
   cfg.hand = { ...cfg.hand, base: 2, bonusPresident: 0, bonusSenator: 0, bonusGovernor: 0, bonusRepresentative: 0 };
-  cfg.draft = { ...cfg.draft, packSize: 1 };
+  // hf7y/american-cycle#158: districts no longer share the hand cap -- the
+  // OLD `hand.base: 2` alone used to bound how many district cards this
+  // fixture could reach at construction (a district competed with `filler`
+  // for the same 2 slots), which is what kept 1992's card untouched until
+  // `filler` was played and a slot freed for refill to reach it. Districts
+  // are dealt separately now (`Game.dealDistricts`, sized by
+  // `draft.districtsDealt` alone), so this fixture has to say directly that
+  // only ONE district should be dealt up front -- leaving `districtsDealt`
+  // at the base config's 14 (with only two district cards ever available)
+  // used to make construction eat both era cards immediately, superseding
+  // 1976 before this test's first assertion ever ran.
+  cfg.draft = { ...cfg.draft, packSize: 1, districtsDealt: 1 };
   cfg.game = { ...cfg.game, districtSupersession: true };
 
   const g = new Game([agent], [

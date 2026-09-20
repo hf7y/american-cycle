@@ -566,11 +566,27 @@ export class Game {
    *  there is no longer a pack -- a district is simply dealt, face down, the
    *  moment it is drawn. Candidate cards drawn while looking for a district
    *  are set aside and returned to the talon once every player is at target,
-   *  so the snake draft that follows (`draftCandidates`) sees them too. */
+   *  so the snake draft that follows (`draftCandidates`) sees them too.
+   *
+   *  `guard` matters here in a way it would not without `districtSupersession`
+   *  (`admitDistrict`, above): a superseded card discarded this same pass can
+   *  recycle straight back out of `discard` into the talon the moment the
+   *  talon and era queue run dry, get redrawn, and get discarded again --
+   *  net zero change to `p.districts.length` every time round. With a
+   *  `target` no achievable seat count reaches (this repo's own
+   *  `districtSupersession` fixture in `engine/game.test.ts` sets exactly
+   *  this up: two era-cards for the one seat CA-8, `target` far above 1),
+   *  that cycle never satisfies "pool exhausted" -- `discard` is never
+   *  actually empty, it just keeps handing back the same card -- so the loop
+   *  never terminated on its own before this guard existed. Same bound and
+   *  the same "safety net, not the real terminator" status `draftCandidates`
+   *  already documents below: ordinary play deals a handful of districts per
+   *  player, nowhere near this cap. */
   private dealDistricts(target: number): void {
     const setAside: Card[] = [];
     let anyWant = true;
-    while (anyWant) {
+    let guard = 0;
+    while (anyWant && guard++ < 4000) {
       anyWant = false;
       for (const p of this.players) {
         if (p.districts.length >= target) continue;
