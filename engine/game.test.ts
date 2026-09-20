@@ -115,10 +115,12 @@ test('a simulated presidential general’s electors sum to the real total and pi
   const cfg = loadConfig('as-written-plus.json');
   // #40/#27 changed what agents value a House declaration at, which reorders
   // the RNG draws downstream -- seed 3 no longer reaches a contested
-  // presidential race under the new modifier stack. Re-stamped to seed 1.
-  const rng = new RNG(1);
+  // presidential race under the new modifier stack. Re-stamped to seed 1,
+  // then again to seed 2 once hf7y/american-cycle#158's one-at-a-time,
+  // snake-drafted turn loop reordered the RNG draws a second time.
+  const rng = new RNG(2);
   const agents: Agent[] = ['Greedy', 'BillAuthor', 'Random'].map((n) => new AGENTS[n](cfg, rng));
-  const g = new Game(agents, structuredClone(CARDS), cfg, 1);
+  const g = new Game(agents, structuredClone(CARDS), cfg, 2);
   g.tick();
 
   const prez = g.events.filter((e) => e.office === 'president' && e.round === 'general');
@@ -343,9 +345,13 @@ test('the tie-break is not fixed to one seat across different seeds', () => {
 // -------------------------------------------------------------- hand size
 
 /** Build a single-player game, seed a board of seats directly (bypassing a
- *  real election), clear the hand, and read off how many cards refill()
- *  actually draws for it in one election-year tick. That is `handSize()`'s
- *  entire observable surface. */
+ *  real election), clear the hand, and read off how many candidate cards
+ *  refill() actually draws for it in one election-year tick. That is
+ *  `handSize()`'s entire observable surface -- hf7y/american-cycle#158
+ *  decoupled districts from it entirely (`districtsPerCycle` sizes those
+ *  independently), so only `hand.length` reflects `handSize()` any more;
+ *  districts are still cleared here so the district trickle in the same
+ *  tick can't be mistaken for a candidate refill. */
 const heldAfterOneTick = (seed: (g: Game) => void): number => {
   const cfg = loadConfig('as-written-plus.json');
   const g = new Game([new ScriptedAgent('solo')], structuredClone(CARDS), cfg, 1);
@@ -353,7 +359,7 @@ const heldAfterOneTick = (seed: (g: Game) => void): number => {
   g.players[0].hand = [];
   g.players[0].districts = [];
   g.tick();
-  return g.players[0].hand.length + g.players[0].districts.length;
+  return g.players[0].hand.length;
 };
 
 test('the office hand bonus fires once an office is held', () => {
@@ -527,7 +533,12 @@ test('#106: a later-era district card discards the seat\'s earlier one, under th
 
   const cfg = loadConfig('as-written-plus.json');
   cfg.hand = { ...cfg.hand, base: 2, bonusPresident: 0, bonusSenator: 0, bonusGovernor: 0, bonusRepresentative: 0 };
-  cfg.draft = { ...cfg.draft, packSize: 1 };
+  // hf7y/american-cycle#158 decoupled `districtsDealt` from `hand.base` --
+  // it must be set explicitly to 1 here, or the loaded config's own default
+  // (sized for a real 604-card pool) reaches straight past era 1976's one
+  // district into 1992 at construction, before the race this test is
+  // actually about is ever run.
+  cfg.draft = { ...cfg.draft, packSize: 1, districtsDealt: 1 };
   cfg.game = { ...cfg.game, districtSupersession: true };
 
   const g = new Game([agent], [

@@ -566,11 +566,21 @@ export class Game {
    *  there is no longer a pack -- a district is simply dealt, face down, the
    *  moment it is drawn. Candidate cards drawn while looking for a district
    *  are set aside and returned to the talon once every player is at target,
-   *  so the snake draft that follows (`draftCandidates`) sees them too. */
+   *  so the snake draft that follows (`draftCandidates`) sees them too.
+   *
+   *  `guard` is the same safety net `draftCandidates` already carries, and
+   *  for the same reason: under `districtSupersession`, `admitDistrict` can
+   *  swallow a drawn card without growing `p.districts` at all (a stale
+   *  card that lands after a newer one already holds the seat is discarded
+   *  on arrival, not admitted). If that stale card is the only one left in
+   *  the supply, discard-recycling hands it right back out again next draw
+   *  -- with no cap, `target` above the number of DISTINCT seats the supply
+   *  can ever cover spins forever, since `p.districts.length` never moves
+   *  either way. */
   private dealDistricts(target: number): void {
     const setAside: Card[] = [];
-    let anyWant = true;
-    while (anyWant) {
+    let anyWant = true, guard = 0;
+    while (anyWant && guard++ < 4000) {
       anyWant = false;
       for (const p of this.players) {
         if (p.districts.length >= target) continue;
