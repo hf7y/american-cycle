@@ -45,7 +45,12 @@ function fixture(card: CandidateCard, stateLean: number): { v: GameView; open: O
 }
 
 test('party choice: unset default offers exactly one option, printed party, unchanged edge', () => {
-  const cfg = loadConfig('tuned.json');
+  // tuned.json itself now ships `partyChoice: 'free'` (RULED 2026-09-16, this
+  // issue) -- the UNSET code path this test targets is forced explicitly
+  // here rather than read off tuned.json's own default, which after that
+  // ruling no longer reproduces it.
+  const base = loadConfig('tuned.json');
+  const cfg: Config = { ...base, game: { ...base.game, partyChoice: undefined } };
   const card = cand({ party: 'R' });
   const { v, open } = fixture(card, -8);
   const opts = options(v, open, cfg);

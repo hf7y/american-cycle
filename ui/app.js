@@ -291,7 +291,7 @@ function phaseWithdraw() {
   const rows = view.myModifiers.map((m) =>
     `<tr><td>${m.source}${m.national ? ' <span class="note">(national)</span>' : ''}</td>
       <td class="${m.pips>=0?'pos':'neg'}">${m.pips>=0?'+':''}${m.pips}</td></tr>`).join('');
-  const opp = `<p class="note">Revealed against you: ${view.opponentCards.map((o)=>`<b>${o.party}</b>`).join(', ')}.</p>`;
+  const opp = `<p class="note">Revealed against you: ${view.opponentCards.map((o)=>`<b>${o.party}</b>${tieCue(o.cardId, o.party)}`).join(', ')}.</p>`;
   modal(`
     <span class="eyebrow">${round} · ${race.state} ${OFFICE_LABEL[race.office]}</span>
     <h2 style="font-size:21px;margin-top:4px">Withdraw ${race.cardName}?</h2>
@@ -433,12 +433,24 @@ function racesInState_all(card){
     && !taken.has(uiRaceKey(r)));
 }
 
+// hf7y/american-cycle#15: `G.cardById` is never mutated by a party-choice
+// flip (only a Declaration's own `card` copy is), so it stays the one place
+// to read a card's PRINTED party regardless of which label it last ran
+// under -- see the same invariant engine/game.ts leans on for `wantsIndependent`.
+function historicalPartyOf(cardId) { return G && G.cardById.get(cardId)?.party; }
+function tieCue(cardId, currentParty) {
+  const hist = historicalPartyOf(cardId);
+  if (!hist || hist === currentParty || hist === 'I' || currentParty === 'I') return '';
+  return `<span class="tie tie-${hist}" title="Printed ${hist === 'D' ? 'Democratic' : 'Republican'} -- running under the other label"></span>`;
+}
+
 function drawHand() {
   const h = $('hand'); h.replaceChildren();
   const me = G.players[S.human];
   const used = new Set(S.picks.map((p)=>p.card.id));
   const cands = me.hand.filter((c)=>c.kind==='candidate');
   if (!cands.length) h.appendChild(el('p','note','No candidates in hand.'));
+  const partyChoiceOpen = G.cfg.game.partyChoice === 'free' || G.cfg.game.partyChoice === 'printedAffinity';
   for (const c of cands) {
     if (used.has(c.id)) continue;
     const n = el('div','cc '+c.party+(S.sel && S.sel.id===c.id?' sel':''));
@@ -463,7 +475,18 @@ function drawHand() {
       if (rec.offDistrict) rw.appendChild(el('span','tag neg','off-position ×'+rec.offDistrict));
       n.appendChild(rw);
     }
-    n.onclick = () => { if (pending && pending.kind==='declare'){ S.sel = S.sel===c?null:c; render(); } };
+    // The physical card never flips -- `c.party` above always reads the
+    // printed label. Only the SELECTION (`S.sel`) can carry the other
+    // label into `declareRace`, and only while this card is picked.
+    if (partyChoiceOpen && c.party !== 'I' && S.sel && S.sel.id === c.id) {
+      const other = c.party === 'R' ? 'D' : 'R';
+      const flippedNow = S.sel.party !== c.party;
+      const fb = el('button', 'btn ghost flip',
+        flippedNow ? `Running as ${S.sel.party} — revert to printed ${c.party}` : `Run as ${other} instead`);
+      fb.onclick = (ev) => { ev.stopPropagation(); S.sel = flippedNow ? c : { ...c, party: other }; render(); };
+      n.appendChild(fb);
+    }
+    n.onclick = () => { if (pending && pending.kind==='declare'){ S.sel = (S.sel && S.sel.id===c.id) ? null : c; render(); } };
     h.appendChild(n);
   }
   // Districts are held apart from the hand and gate every race below the
@@ -497,7 +520,10 @@ function drawControls() {
     const u = el('button','btn ghost','Undo last');
     u.onclick = () => { S.picks.pop(); render(); };
     c.appendChild(u);
-    c.appendChild(el('span','note', S.picks.map((p)=>`${p.card.name} → ${p.state} ${OFFICE_LABEL[p.office]}`).join(' · ')));
+    const picksNote = el('span','note');
+    picksNote.innerHTML = S.picks.map((p)=>
+      `${p.card.name} (${p.card.party})${tieCue(p.card.id, p.card.party)} → ${p.state} ${OFFICE_LABEL[p.office]}`).join(' · ');
+    c.appendChild(picksNote);
   } else if (S.sel) {
     c.appendChild(el('span','note',`${S.sel.name} — click a highlighted state.`));
   } else {
@@ -533,13 +559,15 @@ function drainLog() {
     const dice = `<div class="dice">
       ${die('national', w.dice.national)}${die('state', w.dice.state)}${die('candidate', w.dice.candidate)}</div>`;
     const who = G.players[ev.winner].name;
+    const wCard = G.cardById.get(w.cardId);
+    const cand = wCard ? ` (${wCard.name}, ${w.party}${tieCue(w.cardId, w.party)})` : '';
     const upset = ev.upset ? ' <b>Upset</b> — the favourite lost.' : '';
     const stacks = `<details class="mods"><summary>modifiers</summary>
       <div class="ms"><b>${who}</b>${modStack(w)}</div>
       <div class="ms"><b>${G.players[l.player].name}</b>${modStack(l)}</div>
     </details>`;
     logLine(ev.year,
-      `${ev.state} ${OFFICE_LABEL[ev.office]} <b>${ev.round}</b> — ${who} takes it by ${ev.margin}.${upset}${dice}${stacks}`);
+      `${ev.state} ${OFFICE_LABEL[ev.office]} <b>${ev.round}</b> — ${who}${cand} takes it by ${ev.margin}.${upset}${dice}${stacks}`);
   }
   for (; logSeen < G.log.length; logSeen++) {
     logLine(G.year, `<b>${G.log[logSeen]}</b>`, true);
