@@ -29,7 +29,15 @@ import type { Claim, Finding } from './types.ts';
  *  the same gap `tracks/d.ts`'s D5 already flags for its own clock. C3's
  *  cross-office-divergence gap does not depend on which party a card runs
  *  under, only on which party WINS, so it has no reason to move here and is
- *  left to `tracks/c.ts`'s C3 on the shipped build. */
+ *  left to `tracks/c.ts`'s C3 on the shipped build.
+ *
+ *  RULED 2026-09-16: arm B ('free') ships as `tuned.json`'s default, on the
+ *  evidence below -- it shops more than arm A in both configs, the ordering
+ *  the historical story predicts. This finding's own `cfgFor` sets
+ *  `game.partyChoice` explicitly per cell regardless of the base file's
+ *  default, so shipping 'free' does not move any measurement here; every
+ *  OTHER finding that loads `tuned.json` without overriding the field does
+ *  move, and reads STALE against its own stamp for that reason alone. */
 const POOL = ['Greedy', 'Lookahead', 'SenateFlood', 'HeterodoxSpecialist'];
 const PRINTED_PARTY_PIPS = 3;
 

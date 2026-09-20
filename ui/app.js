@@ -12,6 +12,7 @@ const TILES = {
   HI:[0,7],TX:[3,7],FL:[8,7],
 };
 const OFFICE_LABEL = {president:'President',senator:'Senate',governor:'Governor',representative:'House'};
+const PARTY_LABEL = {D:'Democrat',R:'Republican',I:'Independent'};
 const PLAYER_COLORS = ['#8A6D22','#2F5C8A','#A63A2E','#3E6B4F','#6B4E8A','#8A5A2F'];
 
 const $ = (id) => document.getElementById(id);
@@ -232,9 +233,32 @@ function districtFitFor(r) {
   return { district, districts: statewide };
 }
 
+// hf7y/american-cycle#15, RULED 2026-09-16: free party choice ships for the
+// human too, not just the scripted agents `sim/agents.ts`'s partyVariants()
+// already covers. No pip bonus either way -- the tie cue below is display
+// only, and the card the engine sees is the only thing that carries the
+// player's pick.
 function declareRace(r) {
+  if (G.cfg.game.partyChoice === 'free' && S.sel.party !== 'I') return choosePartyThenDeclare(r);
+  finalizeDeclare(r, S.sel);
+}
+
+function choosePartyThenDeclare(r) {
+  const card = S.sel;
+  const other = card.party === 'R' ? 'D' : 'R';
+  modal(`<h2>Run ${card.name} as which party?</h2>
+    <p class="note">Ran as ${PARTY_LABEL[card.party]} historically -- <span class="tie ${card.party}"></span> shown either way.</p>
+    <div class="row" style="margin-top:12px">
+      <button class="btn" id="pPrinted">${PARTY_LABEL[card.party]}<span class="tie ${card.party}"></span></button>
+      <button class="btn ghost" id="pOther">${PARTY_LABEL[other]}<span class="tie ${card.party}"></span></button>
+    </div>`);
+  $('pPrinted').onclick = () => finalizeDeclare(r, card);
+  $('pOther').onclick = () => finalizeDeclare(r, { ...card, party: other });
+}
+
+function finalizeDeclare(r, card) {
   const { district, districts } = districtFitFor(r);
-  S.picks.push({ player:S.human, card:S.sel, district, districts,
+  S.picks.push({ player:S.human, card, district, districts,
                  office:r.office, state:r.state, slot:r.slot });
   S.sel = null; closeModal(); render();
 }

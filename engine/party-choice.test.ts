@@ -45,7 +45,11 @@ function fixture(card: CandidateCard, stateLean: number): { v: GameView; open: O
 }
 
 test('party choice: unset default offers exactly one option, printed party, unchanged edge', () => {
-  const cfg = loadConfig('tuned.json');
+  // tuned.json itself now ships partyChoice: 'free' (#15) -- this test wants
+  // the field truly ABSENT, not the shipped config, so strip it explicitly.
+  const base = loadConfig('tuned.json');
+  const { partyChoice, ...gameNoChoice } = base.game;
+  const cfg: Config = { ...base, game: gameNoChoice };
   const card = cand({ party: 'R' });
   const { v, open } = fixture(card, -8);
   const opts = options(v, open, cfg);
