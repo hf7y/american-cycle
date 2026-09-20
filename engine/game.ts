@@ -651,12 +651,17 @@ export class Game {
         while (c && c.kind !== 'candidate') { setAside.push(c); c = this.nextCard(); }
         if (!c) { this.talon.push(...setAside); return; }   // pool exhausted
         dealtAny = true;
-        const custom = this.agents[i].draftPick;
+        const agent = this.agents[i];
         // Reinterpreting the existing hook for a single-card reveal: a
         // one-element pack, and a defined return (the card itself) means
         // "keep." No shipped agent overrides `draftPick` today, so every
         // agent runs `defaultKeepPolitician` unless and until one does.
-        const keep = custom ? custom(this.view(i), [c]) !== undefined : defaultKeepPolitician(c, p);
+        // Called as agent.draftPick(...), not a detached reference -- a
+        // detached call drops `this`, which is silent for every shipped
+        // agent (none override draftPick) and throws for one that does
+        // (findings/battleground-concentration.ts's InstrumentedDraft*,
+        // which reads `this.cfg` inside its override).
+        const keep = agent.draftPick ? agent.draftPick(this.view(i), [c]) !== undefined : defaultKeepPolitician(c, p);
         if (keep) p.hand.push(c); else this.discard.push(c);
       }
       if (!dealtAny) break;                             // every hand already full
