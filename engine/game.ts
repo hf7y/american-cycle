@@ -28,7 +28,14 @@ import { STATES, BY_CODE, senateUp, governorUp, electors, DC_ELECTORS, type Stat
 
 export interface Config {
   name: string;
-  hand: { base: number; bonusPresident: number; bonusSenator: number; bonusGovernor: number; bonusRepresentative: number };
+  hand: { base: number; bonusPresident: number; bonusSenator: number; bonusGovernor: number; bonusRepresentative: number;
+          /** hf7y/american-cycle#158, behind `game.draftedHand`: the target
+           *  number of SECRET district cards dealt at setup once candidates
+           *  no longer share the hand with them. Unset falls back to `base`,
+           *  so a config that doesn't set it deals roughly the same number of
+           *  districts a legacy hand would have carried. Read nowhere outside
+           *  `draftedHand` mode. */
+          districtHandSize?: number };
   resolution: { incumbency: number; identityBonus: number; incumbencyPrimary: number; crossOfficeIncumbency: number;
                 incumbencyHouse?: number; incumbencySenate?: number };
   national: { strongEconomy: number; recession: number; midtermPenalty: number; coattailsWith: number; coattailsAgainst: number };
@@ -48,7 +55,23 @@ export interface Config {
      *  findings/odd-year-is-the-bill.ts. */
     billFrequency?: 'annual' | 'biennial';
   };
-  draft: { packSize: number; districtsPerPack: number };
+  draft: { packSize: number; districtsPerPack: number;
+           /** hf7y/american-cycle#158 acceptance 3, behind `game.draftedHand`:
+            *  the hand-size knob this mode removes -- DECISIONS.md's "master
+            *  tuning knob for game length and runaway" -- has no direct
+            *  replacement, because there is no standing hand to size. The
+            *  closest real lever is THROUGHPUT: how many face-up cards a
+            *  player may examine (flip-and-keep-or-pass, then optionally
+            *  declare) per election cycle, capped here rather than left
+            *  unbounded. This is not the same knob -- it bounds how fast new
+            *  options ARRIVE, not how many a player may ever hold at once, so
+            *  a long game can still accumulate a large backlog of
+            *  kept-but-undeclared cards across many cycles. See
+            *  findings/drafted-hand.ts for what this does and does not fix.
+            *  Unset falls back to `hand.base`, so a config that doesn't set
+            *  it draws through roughly as many cards per cycle as a legacy
+            *  `refill()` would have topped a hand back up to. */
+           faceUpDraftsPerCycle?: number };
   /** v0.2 item 1. There is no running tally to configure: these are the
    *  weights the EPILOGUE reads off the board. */
   scoring: ScoringConfig;
@@ -125,7 +148,54 @@ export interface Config {
            *  `capture()` -- reusing it unchanged, only who may call it
            *  changes. Off by default, and inert unless `captureEnabled` is
            *  also on (there is nothing to capture with the mechanic off). */
-          contestCapture?: boolean };
+          contestCapture?: boolean;
+          /** hf7y/american-cycle#158, RULED 2026-09-16: "the hand goes --
+           *  districts are the hand, politicians are drafted face-up one at
+           *  a time." Off by default; this is a measured, opt-in mechanism
+           *  change, NOT a promotion -- see #15's `partyChoice` for the shape
+           *  of that later step, which is Zach's call once the acceptance
+           *  criteria on the issue are answered, not this commit's.
+           *
+           *  What changes, concretely (see `draft()` and `electionsDrafted`):
+           *   - the initial deal (`draft()`) gives every player ONLY district
+           *     cards, to `hand.districtHandSize` -- held secret, same as
+           *     today's opening hand. No candidate ever enters a hand at setup.
+           *   - `elections()` is replaced by `electionsDrafted()` in an
+           *     election year: instead of each player taking one BATCH turn
+           *     (every declaration they want, all at once), players take
+           *     repeated MICRO-turns in the same rotation. Each micro-turn is
+           *     a face-up flip from the talon (kept to hand, or passed and
+           *     discarded, `Agent.draftKeep`) followed by AT MOST ONE
+           *     declaration (reusing `Agent.declare`'s existing best-first
+           *     ranking unchanged -- only its first not-yet-spent entry is
+           *     taken). Because placement is one card at a time, the next
+           *     player's turn is already a look at the peg just placed --
+           *     #158's free challenge round, and #106's "any player may
+           *     declare into an open district" falls out of the same turn
+           *     shape rather than a special-cased eligibility rule.
+           *   - STOPPING RULE: a full lap of the table with nobody declaring
+           *     ends the phase for the year. This is what makes the contest
+           *     rate emergent (#158 acceptance 1) rather than rationed by a
+           *     hand-size cap -- see findings/drafted-hand.ts.
+           *
+           *  Known placeholders (DECISIONS.md's "note the placeholder"
+           *  convention, since the issue leaves these open):
+           *   - a district admitted DURING the ongoing face-up draft (one
+           *     surfaces from the shared talon after the secret opening deal)
+           *     is necessarily public, since flipping it revealed it to
+           *     everyone -- only the INITIAL deal is secret. Not addressed by
+           *     this flag; flagged rather than papered over.
+           *   - `Agent.draftKeep` defaults to always-keep: nothing in this
+           *     design prices holding a drafted-but-undeclared politician, so
+           *     there is no reason for a rational agent ever to pass. Whether
+           *     keeping should cost something is exactly the kind of question
+           *     DECISIONS.md's Open list tracks rather than guesses at.
+           *   - headless only: `interactiveTick()` does not branch on this
+           *     flag, so a human-driven game with it on would see the legacy
+           *     empty-hand behaviour rather than the drafted-hand UI this
+           *     issue implies -- out of scope for an opt-in, sim-measured
+           *     mechanism (see the PR that added this flag). */
+          draftedHand?: boolean };
 }
 
 export interface PlayerState {
@@ -203,6 +273,14 @@ export interface Agent {
   /** Standard pack-pass draft: take one, pass the rest. Given a pack,
    *  return the card to take. Omit for the default heuristic. */
   draftPick?(v: GameView, pack: Card[]): Card | undefined;
+  /** hf7y/american-cycle#158, under `game.draftedHand` only: a politician
+   *  card just flipped face-up on this player's turn -- visible to every
+   *  player, not only this one, since flipping it is what revealed it. Keep
+   *  (true) adds it to hand; pass (false) discards it. Omit for the default:
+   *  always keep, since nothing in this design prices holding a card you
+   *  haven't declared yet -- see the flag's own doc comment on `Config.game`
+   *  for why that is an open question rather than a settled cost. */
+  draftKeep?(v: GameView, card: CandidateCard): boolean;
   /** The VP's real function is as a bargaining chip during the
    *  nomination. Any player may offer a card to any ticket. */
   offerVP?(v: GameView, nominee: { player: number; party: Party }): CandidateCard | undefined;
@@ -503,13 +581,24 @@ export class Game {
    *  mechanism that lets them. */
   private draft(): void {
     const size = this.cfg.draft.packSize;
+    // hf7y/american-cycle#158: under `draftedHand`, the opening deal gives
+    // every player ONLY district cards -- "each player is dealt district
+    // cards, held secret. That is the whole hand." A candidate that surfaces
+    // during this phase never enters a hand at all (politicians are drafted
+    // later, face-up, one at a time -- see `electionsDrafted`); it is
+    // discarded on the spot, same as a district drawn past the target. The
+    // target is `hand.districtHandSize`, falling back to `hand.base` so an
+    // unset config deals a comparable district count to the legacy hand.
+    const handless = this.cfg.game.draftedHand === true;
+    const districtGoal = this.cfg.hand.districtHandSize ?? this.cfg.hand.base;
+    const full = (p: PlayerState) => (handless ? p.districts.length >= districtGoal : this.held(p) >= this.handSize(p));
     let guard = 0;
     // 40 rounds is a stall guard, not a rule: one card is taken per pack per
     // round, so filling even the largest configured hand (well under 40 with
     // hand.base=16 plus office bonuses) finishes long before this fires. It
     // only bites if a config makes hands unfillable, in which case a game
     // that ends short of a full hand beats one that spins forever (#87).
-    while (this.players.some((p) => this.held(p) < this.handSize(p)) && guard++ < 40) {
+    while (this.players.some((p) => !full(p)) && guard++ < 40) {
       const packs: Card[][] = [];
       for (let i = 0; i < this.players.length; i++) {
         const pack: Card[] = [];
@@ -528,7 +617,7 @@ export class Game {
           const pack = packs[i];
           if (!pack.length) { taken.push(undefined); continue; }
           const p = this.players[i];
-          const want = this.held(p) < this.handSize(p);
+          const want = !full(p);
           const pick = want
             ? (this.agents[i].draftPick?.(this.view(i), pack) ?? defaultPick(pack, p, this.cfg.draft.districtsPerPack))
             : pack[0];
@@ -538,6 +627,11 @@ export class Game {
         taken.forEach((c, i) => {
           if (!c) return;
           const p = this.players[i];
+          if (handless) {
+            if (c.kind === 'district' && p.districts.length < districtGoal) this.admitDistrict(p, c);
+            else this.discard.push(c);
+            return;
+          }
           if (this.held(p) >= this.handSize(p)) { this.discard.push(c); return; }
           if (c.kind === 'district') this.admitDistrict(p, c); else p.hand.push(c);
         });
@@ -1254,6 +1348,99 @@ export class Game {
         pending.push({ player: i, office: d.office, state: d.state, slot: d.slot, party: d.card.party });
       }
     }
+    this.vacateForRunners(decls);
+    this.resolveDeclared(decls, wave, -1);
+  }
+
+  /** hf7y/american-cycle#158: replaces `elections()` under `draftedHand`.
+   *  See `Config.game.draftedHand`'s doc comment for the full design and its
+   *  documented placeholders. Short version: no batch turn -- players take
+   *  repeated MICRO-turns in the existing rotation, each one a face-up talon
+   *  flip (kept to hand or passed to discard) followed by at most one
+   *  declaration, reusing `Agent.declare`'s existing best-first ranking
+   *  unchanged (every shipped agent already returns options sorted via
+   *  `sim/agents.ts`'s `pickDistinct`; this takes the first entry not
+   *  already spent by this player this cycle). A full lap with nobody
+   *  declaring ends the phase -- the emergent stopping rule #158 asks for. */
+  private electionsDrafted(): void {
+    const wave = new Wave(this.rng);
+    const open = this.openRaces();
+    this.releaseExpiringTerms(open);
+    this.releaseHolders();
+    const decls: Declaration[] = [];
+    const pending: PendingPeg[] = [];
+    // Same rotation as `elections()` -- #158 acceptance 2 asks this to be
+    // MEASURED against #55's numbers, not assumed safe just because the
+    // formula is unchanged; see findings/drafted-hand.ts.
+    const order = this.players.map((_, i) => (i + Math.floor(this.year / 2) + this.cycleOffset) % this.players.length);
+    const n = order.length;
+    if (!n) return;
+    const declaredCardIds = new Set<string>();
+    const declaredRacesByPlayer: Set<string>[] = this.players.map(() => new Set<string>());
+    // See `Config.draft.faceUpDraftsPerCycle`'s doc comment: the throughput
+    // cap that replaces the removed hand-size knob. Without SOME bound here,
+    // "keep" defaulting to always-true (nothing prices holding a card) means
+    // a lap never naturally goes all-pass -- every turn "succeeds" at the
+    // draft half even when nobody wants to declare, so the phase would run
+    // until the talon and discard both empty rather than until play stalls.
+    const cap = Math.max(1, this.cfg.draft.faceUpDraftsPerCycle ?? this.cfg.hand.base);
+    const turnsUsed = new Array<number>(n).fill(0);
+
+    let consecutivePasses = 0, turns = 0;
+    // A stall guard bounding total iterations, not a rule: every player can
+    // be given at most `cap` real (flip+declare) turns, and a lap of
+    // already-capped players interleaved between them costs at most one more
+    // skipped iteration per player per lap -- so 2x the real-turn budget is
+    // always enough headroom.
+    const maxTurns = n * cap * 2;
+    while (consecutivePasses < n && turns < maxTurns) {
+      const i = order[turns % n];
+      turns++;
+      if (turnsUsed[i] >= cap) { consecutivePasses++; continue; }
+      turnsUsed[i]++;
+      const p = this.players[i];
+
+      // 1. the face-up politician draft -- happens every turn regardless of
+      // whether anyone declares, since it is not what the stopping rule
+      // keys on (see the flag's doc comment: a district card is admitted
+      // straight to whoever's turn it is, publicly, since flipping it is
+      // what revealed it; a politician is kept to hand or passed/discarded).
+      const flipped = this.nextCard();
+      if (flipped) {
+        if (flipped.kind === 'district') {
+          this.admitDistrict(p, flipped);
+        } else {
+          const keep = this.agents[i].draftKeep?.(this.view(i), flipped) ?? true;
+          if (keep) p.hand.push(flipped); else this.discard.push(flipped);
+        }
+      }
+
+      // 2. at most one declaration this turn. `declare()` is called fresh
+      // every micro-turn and, since nothing removes an already-declared card
+      // from hand until resolution, would otherwise keep re-offering it as
+      // the top choice -- filtered out here rather than by asking every
+      // agent to track its own turn-to-turn state.
+      const mine = this.agents[i].declare(this.view(i), open, pending);
+      const pick = mine.find((d) =>
+        p.hand.some((c) => c.kind === 'candidate' && c.id === d.card.id)
+        && !declaredCardIds.has(d.card.id)
+        && !declaredRacesByPlayer[i].has(raceKeyOf(d)));
+      let declared = false;
+      if (pick) {
+        const house = this.cfg.game.districtLevelEligibility && pick.office === 'representative' ? pick.slot : undefined;
+        if (pick.office === 'president' || eligible(pick.card, pick.state, p.districts, house)) {
+          decls.push({ ...pick, player: i });
+          pending.push({ player: i, office: pick.office, state: pick.state, slot: pick.slot, party: pick.card.party });
+          declaredCardIds.add(pick.card.id);
+          declaredRacesByPlayer[i].add(raceKeyOf(pick));
+          declared = true;
+        }
+      }
+
+      this.stats.decisions.push(declared ? 1 : 0);
+      consecutivePasses = declared ? 0 : consecutivePasses + 1;
+    }
+
     this.vacateForRunners(decls);
     this.resolveDeclared(decls, wave, -1);
   }
@@ -1982,8 +2169,12 @@ export class Game {
     this.rollShock();
 
     if (isElectionYear(this.cfg, this.year)) {
-      this.elections();                                  // 6-9.
-      this.refill();
+      // hf7y/american-cycle#158: `electionsDrafted()` absorbs card intake for
+      // the year itself (the face-up flip on every micro-turn), so `refill()`
+      // -- which tops hands up to `handSize()`, a concept this mode has no
+      // use for -- does not run alongside it.
+      if (this.cfg.game.draftedHand) this.electionsDrafted();  // 6-9, one-at-a-time.
+      else { this.elections(); this.refill(); }
     }
     this.rescore();
     this.scoreHistory.push(this.players.map((p) => p.score));
