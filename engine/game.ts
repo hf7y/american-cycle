@@ -398,6 +398,16 @@ export interface GameResult {
   uncontestedShare: number;
   /** share of race-slots that drew declarations from more than one player */
   contestedSlotShare: number;
+  /** hf7y/american-cycle#158 acceptance item 4 / hf7y/american-cycle#273's
+   *  original #186/#229 framing, re-measured under the one-at-a-time
+   *  declareRounds: |lean| of the state a declaration landed in, split by
+   *  whether the declaring player had exactly one of their own legal,
+   *  not-yet-committed cards eligible for that race (forced) or more than
+   *  one competing for it (chosen). See declareRounds' own comment for how
+   *  this is counted from the same picked/legal-options pass the engine
+   *  already runs, not inferred after the fact. */
+  declareForcedLean: number[];
+  declareChosenLean: number[];
   decisionCounts: number[];
   /** score by player, one row per year -- the runaway metrics (see
    *  findings/runaway-no-brake.ts, sim/roundrobin.ts) are cross-game curves
@@ -453,7 +463,8 @@ export class Game {
              *  Counting "uncontested generals" instead undercounts badly: a race
              *  several players crowd in one party resolves as a contested PRIMARY
              *  and a one-candidate general. */
-            raceSlots: 0, contestedSlots: 0, billsRepealed: 0, shutdowns: 0, shocks: 0 };
+            raceSlots: 0, contestedSlots: 0, billsRepealed: 0, shutdowns: 0, shocks: 0,
+            declareForcedLean: [] as number[], declareChosenLean: [] as number[] };
   /** v0.2 item 6: off-position yes-votes, by card id. */
   private offDistrict = new Map<string, number>();
   /** v0.2 item 9: pips of shock in force this year, 0 in a quiet one. */
@@ -1378,6 +1389,22 @@ export class Game {
           picked = d; break;
         }
         if (!picked) { active.delete(i); continue; }      // pass: no legal, uncommitted option left
+        // hf7y/american-cycle#158 acceptance item 4 / hf7y/american-cycle#273's
+        // original #186/#229 framing, re-measured under one-at-a-time rounds:
+        // how many of this player's OWN candidate cards -- still in hand and
+        // not yet committed this cycle (`uc`) -- are individually eligible
+        // for the exact race just picked? Exactly one (itself) is FORCED;
+        // more than one is CHOSEN over an available alternative. This counts
+        // straight off `p.hand`, not off `mine`: `mine` is `pickDistinct`'s
+        // output (sim/agents.ts), which already keeps only the single
+        // highest-edge card per race, so every entry in it is alone in its
+        // own race key by construction and would read every declaration as
+        // FORCED regardless of what else the player was holding.
+        const pickedHouse = this.cfg.game.districtLevelEligibility && picked.office === 'representative' ? picked.slot : undefined;
+        const eligibleForRace = p.hand.filter((c) => c.kind === 'candidate' && !uc.has(c.id)
+          && (picked.office === 'president' || eligible(c, picked.state, p.districts, pickedHouse)));
+        const declareAbsLean = Math.abs(this.leanMap[picked.state] ?? 0);
+        (eligibleForRace.length <= 1 ? this.stats.declareForcedLean : this.stats.declareChosenLean).push(declareAbsLean);
         uc.add(picked.card.id); ur.add(raceKeyOf(picked));
         decls.push({ ...picked, player: i });
         pending.push({ player: i, office: picked.office, state: picked.state, slot: picked.slot, party: picked.card.party });
@@ -2202,6 +2229,7 @@ export class Game {
       rateRises: this.stats.rateRises, finalLean: this.leanMap,
       uncontestedShare: this.events.length ? uncontested / this.events.length : 0,
       contestedSlotShare: this.stats.raceSlots ? this.stats.contestedSlots / this.stats.raceSlots : 0,
+      declareForcedLean: this.stats.declareForcedLean, declareChosenLean: this.stats.declareChosenLean,
       decisionCounts: this.stats.decisions, seatsByOffice,
       scoreHistory: this.scoreHistory,
       endedBy: this.endedBy,
