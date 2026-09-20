@@ -232,11 +232,44 @@ function districtFitFor(r) {
   return { district, districts: statewide };
 }
 
-function declareRace(r) {
+function declareRace(r, party) {
   const { district, districts } = districtFitFor(r);
-  S.picks.push({ player:S.human, card:S.sel, district, districts,
+  // hf7y/american-cycle#15: a party carried into the declaration overrides
+  // the card's printed one, the same override sim/agents.ts's
+  // partyVariants() builds for scripted agents -- the engine matches this
+  // declaration to the hand by `card.id` alone (engine/game.ts's
+  // `elections()`), so it never checks the party back against the printed
+  // card. `historicalParty` is UI-only bookkeeping for the picks summary
+  // below; nothing in the engine reads it.
+  const card = party && party !== S.sel.party ? { ...S.sel, party, historicalParty: S.sel.party } : S.sel;
+  S.picks.push({ player:S.human, card, district, districts,
                  office:r.office, state:r.state, slot:r.slot });
   S.sel = null; closeModal(); render();
+}
+
+// Free party choice (hf7y/american-cycle#15, shipped as tuned.json's
+// default) is closed for 'I' cards and any config left on 'printed' --
+// the same gate sim/agents.ts's partyVariants() applies.
+function partyChoiceOpen(card) {
+  const mode = G.cfg.game.partyChoice;
+  return !!mode && mode !== 'printed' && card.party !== 'I';
+}
+
+// Asks which party to run a card under, when free choice is open for it,
+// before handing off to declareRace. The printed party is called out as
+// "historical" -- the card's own colouring already carries it (drawHand's
+// `cc D`/`cc R` class), this is the same fact stated in words.
+function finishDeclare(r) {
+  if (!partyChoiceOpen(S.sel)) return declareRace(r);
+  const printed = S.sel.party, name = printed === 'D' ? 'Democrat' : 'Republican', other = printed === 'D' ? 'Republican' : 'Democrat';
+  modal(`<h2>${S.sel.name} — run as which party?</h2>
+    <p class="note" style="margin:8px 0 12px">Historically ran as a <b>${name}</b>. Free choice: no bonus either way.</p>
+    <div class="row" style="margin-top:12px" id="pp"></div>`);
+  const b1 = el('button','btn ghost tie', `Run as ${name} (historical)`);
+  b1.onclick = () => declareRace(r, printed);
+  const b2 = el('button','btn ghost', `Run as ${other}`);
+  b2.onclick = () => declareRace(r, printed === 'D' ? 'R' : 'D');
+  $('pp').appendChild(b1); $('pp').appendChild(b2);
 }
 
 // `preferSlot` lets a district-card click (state + district number) skip the
@@ -248,13 +281,13 @@ function pickRace(state, preferSlot) {
   if (!rs.length) return;
   if (preferSlot != null) {
     const direct = rs.find((r) => r.office === 'representative' && r.slot === preferSlot);
-    if (direct) return declareRace(direct);
+    if (direct) return finishDeclare(direct);
   }
-  if (rs.length === 1) return declareRace(rs[0]);
+  if (rs.length === 1) return finishDeclare(rs[0]);
   modal(`<h2>${state} — which race?</h2><div class="row" style="margin-top:12px" id="rr"></div>`);
   for (const r of rs) {
     const b = el('button','btn ghost', `${OFFICE_LABEL[r.office]}${r.slot && r.office==='representative' ? ' '+r.slot : ''}`);
-    b.onclick = () => declareRace(r);
+    b.onclick = () => finishDeclare(r);
     $('rr').appendChild(b);
   }
 }
@@ -497,7 +530,9 @@ function drawControls() {
     const u = el('button','btn ghost','Undo last');
     u.onclick = () => { S.picks.pop(); render(); };
     c.appendChild(u);
-    c.appendChild(el('span','note', S.picks.map((p)=>`${p.card.name} → ${p.state} ${OFFICE_LABEL[p.office]}`).join(' · ')));
+    c.appendChild(el('span','note', S.picks.map((p)=>
+      `${p.card.name}${p.card.historicalParty ? ` (running ${p.card.party}, historically ${p.card.historicalParty})` : ''}`
+      + ` → ${p.state} ${OFFICE_LABEL[p.office]}`).join(' · ')));
   } else if (S.sel) {
     c.appendChild(el('span','note',`${S.sel.name} — click a highlighted state.`));
   } else {

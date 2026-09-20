@@ -145,6 +145,9 @@ button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--brass);out
 .btn.ghost{background:transparent;color:var(--ink)}
 .btn.ghost:hover{background:var(--paper-2);color:var(--ink)}
 .btn[disabled]{opacity:.4;cursor:not-allowed}
+/* hf7y/american-cycle#15: the historical-party option in the free-choice
+   prompt carries the same colored-tie cue as a card's own top border. */
+.btn.ghost.tie{border-top:3px solid var(--brass)}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 select,input[type=number]{font:inherit;font-family:var(--mono);font-size:13px;padding:6px 8px;
   background:var(--card);color:var(--ink);border:1px solid var(--rule);border-radius:2px}
