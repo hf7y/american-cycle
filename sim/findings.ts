@@ -35,6 +35,15 @@ const sha = (() => {
  *  restamped by this tool at any point in its history. */
 const escapeRe = (s: string): string => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
+// `Math.abs(NaN - c.stamped) > c.tolerance` is `NaN > c.tolerance`, which is
+// `false` -- so a claim whose predicate divides 0/0 (a population that no
+// longer exists under an engine change, not sampling noise) read as HOLDS
+// instead of the drift it actually is. Every other NaN-producing bug in a
+// predicate would print `value NaN` right next to a `HOLDS` verdict, which
+// is a worse failure mode than the STALE this should have been.
+const isDrifted = (c: { value: number; stamped: number; tolerance: number }): boolean =>
+  Number.isNaN(c.value) || Math.abs(c.value - c.stamped) > c.tolerance;
+
 let stale = 0, broken = 0, held = 0, unstampable = 0;
 
 for (const file of files.sort()) {
@@ -45,10 +54,9 @@ for (const file of files.sort()) {
   try { claims = await f.predicate(); }
   catch (e) { broken++; console.log(`  BROKEN — ${(e as Error).message}`); continue; }
 
-  const drifted = claims.filter((c) => Math.abs(c.value - c.stamped) > c.tolerance);
+  const drifted = claims.filter(isDrifted);
   for (const c of claims) {
-    const d = Math.abs(c.value - c.stamped);
-    const mark = d > c.tolerance ? '  drift' : '       ';
+    const mark = isDrifted(c) ? '  drift' : '       ';
     console.log(`   ${mark} ${c.name.padEnd(52)} ${c.value.toFixed(2).padStart(7)}  (stamped ${c.stamped}, ±${c.tolerance})`);
   }
   console.log(`  verdict: ${f.verdict(claims)}`);
@@ -62,6 +70,9 @@ for (const file of files.sort()) {
       let src = readFileSync(path, 'utf8');
       const missed: string[] = [];
       for (const c of claims) {
+        // A NaN claim has nothing to restamp TO -- writing `stamped: NaN`
+        // would cement the break rather than surface it as unstampable.
+        if (Number.isNaN(c.value)) { missed.push(c.name); continue; }
         const rounded = Number(c.value.toFixed(2));
         const re = new RegExp(`(name: '${escapeRe(c.name)}'[^}]*stamped: )[-\\d.]+`);
         // Whether the PATTERN matched, not whether the text changed: a claim
