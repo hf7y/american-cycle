@@ -235,11 +235,29 @@ function pickRace(state) {
   const rs = racesInState(state);
   if (!rs.length) return;
   const card = S.sel;
-  const choose = (r) => {
+  const finish = (r, chosenCard) => {
     const { district, districts } = districtFitFor(r);
-    S.picks.push({ player:S.human, card, district, districts,
-                   office:r.office, state:r.state, slot:r.slot });
+    S.picks.push({ player:S.human, card: chosenCard, district, districts,
+                   office:r.office, state:r.state, slot:r.slot, printedParty: card.party });
     S.sel = null; closeModal(); render();
+  };
+  // #15, RULED 2026-09-16, arm B ('free'): party is a declare-time choice,
+  // not a printed fact, and carries no pip bonus either way. Independents
+  // have no other label to run under, so they skip the prompt.
+  const choose = (r) => {
+    if (G.cfg.game.partyChoice === 'free' && card.party !== 'I') {
+      const other = card.party === 'R' ? 'D' : 'R';
+      modal(`<h2>${card.name} — run as which party?</h2>
+        <p class="note">Printed party: <b>${card.party}</b>. This table lets you run either way, with no bonus or penalty for matching the printed one.</p>
+        <div class="row" style="margin-top:12px" id="pp"></div>`);
+      for (const p of [card.party, other]) {
+        const b = el('button','btn ghost', p === card.party ? `Run as ${p} (printed)` : `Run as ${p}`);
+        b.onclick = () => finish(r, p === card.party ? card : { ...card, party: p });
+        $('pp').appendChild(b);
+      }
+      return;
+    }
+    finish(r, card);
   };
   if (rs.length === 1) return choose(rs[0]);
   modal(`<h2>${state} — which race?</h2><div class="row" style="margin-top:12px" id="rr"></div>`);
@@ -486,7 +504,13 @@ function drawControls() {
     const u = el('button','btn ghost','Undo last');
     u.onclick = () => { S.picks.pop(); render(); };
     c.appendChild(u);
-    c.appendChild(el('span','note', S.picks.map((p)=>`${p.card.name} → ${p.state} ${OFFICE_LABEL[p.office]}`).join(' · ')));
+    // #15 arm B: a pick's card.party is whatever the player chose to run
+    // under; printedParty is the untouched historical label, shown as a
+    // tie mark only when the two diverge, so free choice stays visible
+    // without cluttering the common case of running as printed.
+    c.appendChild(el('span','note', S.picks.map((p) =>
+      `${p.card.name}${p.printedParty && p.printedParty !== p.card.party ? ` <span class="tie ${p.printedParty}" title="ran under printed party ${p.printedParty}">⚭${p.printedParty}</span>` : ''} (${p.card.party}) → ${p.state} ${OFFICE_LABEL[p.office]}`
+    ).join(' · ')));
   } else if (S.sel) {
     c.appendChild(el('span','note',`${S.sel.name} — click a highlighted state.`));
   } else {
