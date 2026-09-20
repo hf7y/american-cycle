@@ -87,12 +87,22 @@ button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--brass);out
 .cc.D{border-top-color:var(--dem)} .cc.R{border-top-color:var(--gop)}
 .cc.dc{flex:0 0 124px;background:var(--paper-2);border-top-color:var(--brass);cursor:default}
 .cc.dc:hover{transform:none}
+.cc.dc.act{cursor:pointer;box-shadow:0 0 0 1px var(--brass) inset}
+.cc.dc.act:hover{transform:translateY(-3px)}
 .cc .hd{display:flex;gap:7px;align-items:flex-start}
 .cc .pt{flex:0 0 36px;width:36px;height:36px;border-radius:1px;object-fit:cover;
   border:1px solid var(--rule);filter:grayscale(1) contrast(1.06);background:var(--paper-2)}
 .cc .nm{font-family:var(--display);font-size:14px;font-weight:600;line-height:1.15}
 .cc .mt{color:var(--ink-2);font-size:10px;font-family:var(--mono);margin-top:2px}
 .cc .bel{font-size:11px;font-style:italic;color:var(--ink-2);margin-top:5px;line-height:1.3}
+.btn.flip{padding:2px 7px;font-size:10px;margin-top:6px;display:inline-block}
+/* hf7y/american-cycle#15: a free party choice can run a card off its printed
+   label. This cue never feeds the engine (see printedPartyPips) -- it is the
+   "colored tie" the ruling asked for, marking what the card printed even
+   when the declaration reads otherwise. */
+.tie{display:inline-block;width:6px;height:9px;margin-left:3px;vertical-align:middle;
+  clip-path:polygon(50% 0%,100% 22%,66% 32%,78% 100%,50% 88%,22% 100%,34% 32%,0% 22%)}
+.tie-D{background:var(--dem)} .tie-R{background:var(--gop)}
 .tag{display:inline-block;font-family:var(--mono);font-size:9px;padding:1px 4px;border:1px solid var(--rule);
   border-radius:1px;margin:3px 3px 0 0;text-transform:uppercase;letter-spacing:.04em}
 .tag.het{border-color:var(--brass);color:var(--brass)}
@@ -174,6 +184,8 @@ label.f{display:flex;flex-direction:column;gap:4px;font-size:12px}
   color:var(--ink);border:1px solid var(--rule);border-radius:2px;resize:vertical;width:100%}
 #report .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 #repStatus{font-size:11px;color:var(--ink-2)}
+#repStatus.ok{color:var(--good);font-weight:600;font-size:12px}
+#repStatus.err{color:var(--bad);font-weight:600}
 </style>
 
 <div id="chyron">

@@ -37,13 +37,19 @@ const b1: TrackItem = {
       { name: 'contested: mean margin', value: mean(contested.map((e) => e.margin)), unit: 'pips', n: contested.length },
       { name: 'contested: median margin', value: quantile(contested.map((e) => e.margin), 0.5), unit: 'pips', n: contested.length },
       { name: 'contested-slot share', value: mean(runs.map((r) => r.contestedSlotShare)), unit: 'share of slots', n: runs.length },
-      // NOT LIKE-FOR-LIKE (#93, filed against B1's own original claim). This
-      // row is the engine's empty-ballot-line share; the returns run a
-      // sacrificial candidate who loses 80-20 and never produce an empty
-      // line, so subtracting the two manufactures a gap that is substantially
-      // a definitional artifact. Left un-paired with `historical` on purpose
-      // -- the honest comparison is the effective-competitiveness band below.
-      { name: 'House generals: walkover share', value: houseWalkover, unit: 'share of House generals', n: houseGenerals },
+      // #93 found the raw unopposed-flag comparison not like-for-like (an
+      // engine walkover is an empty ballot line; the returns run a
+      // sacrificial candidate who loses 80-20 and never produce one). #10's
+      // 2026-09-16 ruling settled the honest comparison class instead: the
+      // effective-competitiveness band at its widest (loosest) threshold,
+      // unopposed-or->=20pp -- the topping-out figure #10's own closing
+      // measurement paired this row against (85.0% engine vs 72.3% real,
+      // gap closed from ~7x to ~1.2x once #259's generalLoserReturns landed).
+      { name: 'House generals: walkover share', value: houseWalkover, unit: 'share of House generals', n: houseGenerals,
+        historical: effectiveCompetitiveness(20).share,
+        historicalNote: 'effective-competitiveness band at unopposed-or->=20pp margin (#93), the widest '
+          + 'threshold and the class #10 settled on as like-for-like for this row -- not the raw unopposed '
+          + 'flag, which is not like-for-like (#93).' },
       { name: 'historical: House generals unopposed (one side got no votes)',
         value: unopposedHouseShare().share, unit: 'share of House generals', n: unopposedHouseShare().n,
         historicalNote: '1976-2018, house_district_panel.json. Not a like-for-like bar for the walkover-share '

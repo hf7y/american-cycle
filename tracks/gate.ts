@@ -29,22 +29,28 @@
  *  - `D5-realignment-lag` is CLOCK-BOUND: a 16-year game cannot complete a
  *    32-year lag, so requiring movement there requires the clock to run
  *    longer, not the rule to improve. #147's own text names this exclusion.
- *  - `B1-race-resolution`'s walkover-share row carries NO `historical` field
- *    BY DESIGN as of #93 — the raw engine walkover share and the real
- *    unopposed rate are not like-for-like (an engine walkover is an empty
- *    ballot line; the returns run a sacrificial candidate who loses 80-20
- *    and never produce one), so pairing them the way #147's own worked
- *    example does would reintroduce the exact error #93 removed. #147 cited
- *    B1 as a candidate before that field was pulled; it no longer applies to
- *    the current build, and re-choosing a replacement is #147's call, not
- *    this file's.
+ *
+ *  ROW ADDED SINCE THE ORIGINAL FREEZE:
+ *
+ *  - `B1-race-resolution`'s walkover-share row carried NO `historical` field
+ *    as of #93 — the raw engine walkover share and the real unopposed rate
+ *    are not like-for-like (an engine walkover is an empty ballot line; the
+ *    returns run a sacrificial candidate who loses 80-20 and never produce
+ *    one). #10's 2026-09-16 ruling settled the like-for-like class instead —
+ *    the effective-competitiveness band at its widest threshold,
+ *    unopposed-or->=20pp — and its 2026-09-17 closing comment paired this
+ *    exact row against it (85.0% engine vs 72.3% real). `tracks/b.ts` now
+ *    carries that pairing, so the row is admissible under this gate's own
+ *    two conditions below and #147's ruling ("add a walkover/uncompetitive-
+ *    race row once #10's re-measurement lands, paired with the like-for-like
+ *    historical class #10 settles on") is what adds it here.
  *
  *  THE FROZEN SET BELOW IS THEREFORE PROVISIONAL, NOT A RULING: it is every
  *  row in the current build that (a) carries a `historical` figure on the
  *  same measure `--diff` already pairs, and (b) is not clock-bound. #147
  *  asked for the set to be argued, not assumed — this is what's mechanically
- *  available to argue over, not a claim that these three rows are the right
- *  ones to freeze.
+ *  available to argue over, not a claim that these are the right ones to
+ *  freeze.
  */
 import type { Measure } from './types.ts';
 
@@ -76,6 +82,7 @@ export const FROZEN_GATE_ROWS: GateRow[] = [
   { id: 'C3-cross-office-divergence', measure: 'share of state-cycles above 69pp', minFraction: DEFAULT_MIN_FRACTION },
   { id: 'D7-wave-reversal', measure: 'lag-1 autocorrelation of the national House seat-share swing', minFraction: DEFAULT_MIN_FRACTION },
   { id: 'D7-wave-reversal', measure: 'reversal rate after a swing of >=5.75pp', minFraction: DEFAULT_MIN_FRACTION },
+  { id: 'B1-race-resolution', measure: 'House generals: walkover share', minFraction: DEFAULT_MIN_FRACTION },
 ];
 
 export interface GateRowResult {
