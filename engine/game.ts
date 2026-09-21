@@ -68,8 +68,11 @@ export interface Config {
    *  no opponent ever sees a card go by. `districtsPerCycle` is the small
    *  ongoing trickle that keeps later-era districts entering play the way
    *  they always have (a 2010s district under a 1970s politician), now as a
-   *  private deal rather than a pack-pass pick. */
-  draft: { packSize: number; districtsPerPack: number; districtsDealt: number; districtsPerCycle?: number };
+   *  private deal rather than a pack-pass pick. `districtsCap` bounds where
+   *  that trickle stops piling up -- see `dealMoreDistricts`'s own comment;
+   *  this is #158's answer to DECISIONS.md's open "master tuning knob"
+   *  question now that districts no longer share `hand.base`. */
+  draft: { packSize: number; districtsPerPack: number; districtsDealt: number; districtsPerCycle?: number; districtsCap?: number };
   /** v0.2 item 1. There is no running tally to configure: these are the
    *  weights the EPILOGUE reads off the board. */
   scoring: ScoringConfig;
@@ -598,8 +601,28 @@ export class Game {
    *  urban/black/union -> urban/catholic -> urban/academic) keep entering
    *  play over a long game the way they always have. Decoupled from the
    *  candidate draft entirely -- raising or lowering this does not touch how
-   *  many politicians anyone holds. */
-  private dealMoreDistricts(n: number): void {
+   *  many politicians anyone holds.
+   *
+   *  `cap` (hf7y/american-cycle#158's still-open item 3) bounds how large a
+   *  hand-less player's district stash grows. Uncapped, it never shrinks --
+   *  `dealDistricts` seeds it once and this only ever adds -- so a 100-year
+   *  game's in-play House kept growing every cycle with nothing to stop it,
+   *  ending 3x the size it started (measured: 60 seats at year 1977 to 258 by
+   *  2046 on `as-written-plus`, seed 2). `chambers(seats).house.length` feeds
+   *  both `authorCandidates`'s majority bar and every `voteBill`'s
+   *  tag-distance check against `stateposition`, so a House that never stops
+   *  growing keeps diluting an author's fixed 2-tag pick against an ever
+   *  wider chamber -- diagnosed against the CI board playtest never seeing a
+   *  single Fed rate rise across a full seed-2 game (`billsPassed` and
+   *  `stats.rateRises` both 0 for 100 years; `sim/playtest.py`'s "the Fed
+   *  reacted to spending" check). At the cap, the OLDEST district not
+   *  backing a seat this player currently holds is discarded to make room --
+   *  the same bounded-but-rotating shape `hand.base` gave the old shared-pack
+   *  draft, not a hard freeze, so a later era can still displace an earlier
+   *  one once the player is at capacity. If every held district IS a
+   *  currently-held seat, the new card is set aside instead of evicting an
+   *  incumbent's own district out from under them. */
+  private dealMoreDistricts(n: number, cap?: number): void {
     if (!n) return;
     const setAside: Card[] = [];
     for (const p of this.players) {
@@ -607,6 +630,15 @@ export class Game {
         let c = this.nextCard();
         while (c && c.kind !== 'district') { setAside.push(c); c = this.nextCard(); }
         if (!c) { this.talon.push(...setAside); return; }
+        if (cap !== undefined && p.districts.length >= cap) {
+          const held = new Set(this.seats
+            .filter((s) => s.office === 'representative' && s.holder?.player === p.id)
+            .map((s) => `${s.state}:${s.slot}`));
+          const evictIdx = p.districts.findIndex((d) => !held.has(`${d.state}:${d.number}`));
+          if (evictIdx < 0) { setAside.push(c); continue; }
+          const [old] = p.districts.splice(evictIdx, 1);
+          this.discard.push({ kind: 'district', ...old });
+        }
         this.admitDistrict(p, c);
       }
     }
@@ -881,18 +913,36 @@ export class Game {
     p.districts.push(c);
   }
 
+  /** hf7y/american-cycle#158: a player's `districts` is now the whole
+   *  secret hand a district-card deal ever puts in their pocket -- most of
+   *  it never declared into, growing every cycle, decoupled from hand size
+   *  entirely (the redesign's own commit message). "The districts they
+   *  hold" (below) predates that and meant something narrower: the seats
+   *  they actually represent. Reading the raw hand here made a bill's tags
+   *  and a repeal target drift from noise in cards a player never contested,
+   *  diluting further every cycle -- diagnosed against the CI board
+   *  playtest never seeing a Fed rate rise across a full seed-2 game once
+   *  districts stopped being hand-capped. Filtering to House seats actually
+   *  held restores the sentence below to being literally true again. */
+  private representedDistricts(player: number): { state: string; demographics: IdentityTag[] }[] {
+    const held = new Set(this.seats
+      .filter((s) => s.office === 'representative' && s.holder?.player === player)
+      .map((s) => `${s.state}:${s.slot}`));
+    return this.players[player].districts.filter((d) => held.has(`${d.state}:${d.number}`));
+  }
+
   /** The tag position of one player's own coalition -- the districts they
    *  hold. This is what "a bloc concentrated in one tag region" means
    *  concretely, and why such a bloc passes bills cheaply. */
   private playerPosition(player: number): tags.TagWeights {
-    return tags.centroid(this.players[player].districts.map((d) => tags.weights(d.demographics)));
+    return tags.centroid(this.representedDistricts(player).map((d) => tags.weights(d.demographics)));
   }
 
   /** v0.2 item 4: what a bill is about, when the author does not say.
    *  The author's own districts -- the coalition they can actually pass. */
   private defaultBillTags(author: number): IdentityTag[] {
     const freq = new Map<IdentityTag, number>();
-    for (const d of this.players[author].districts) {
+    for (const d of this.representedDistricts(author)) {
       for (const t of d.demographics) freq.set(t, (freq.get(t) ?? 0) + 1);
     }
     return [...freq.entries()].sort((a, b) => b[1] - a[1])
@@ -2063,7 +2113,7 @@ export class Game {
     const start = (Math.floor(this.year / 2) + this.cycleOffset) % this.players.length;
     const order = this.players.map((_, i) => (start + i) % this.players.length);
     this.draftCandidates((p) => this.handSize(p), order);
-    this.dealMoreDistricts(this.cfg.draft.districtsPerCycle ?? 0);
+    this.dealMoreDistricts(this.cfg.draft.districtsPerCycle ?? 0, this.cfg.draft.districtsCap);
   }
 
   /** The endings. The rule itself is `victorOf`, module-level and exported;
