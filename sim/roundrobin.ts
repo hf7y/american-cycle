@@ -96,6 +96,45 @@ export function runawayMetrics(seeds: number[], agents: string[], cards: Card[],
   return { determination, curve, comeback: comebacks / runs.length, leadChanges: leadChanges / runs.length, games: runs.length };
 }
 
+/** hf7y/american-cycle#244: does the score lead change hands only at
+ *  presidential-year rows, the working hypothesis behind the 10/16-vs-14/16
+ *  saturation #237/#242/#243 all landed on? `isElectionYear`
+ *  (`engine/game.ts:236-238`) says every even row elects President or a
+ *  Senate/House class, and `oddYearGovernors` puts some state's governor up
+ *  in every odd row too -- so on its face every row is an election year for
+ *  SOME office, not just the row%4==0 presidential ones. This measures
+ *  whether the LEAD nonetheless only moves on presidential rows in practice,
+ *  or moves on all four residues.
+ */
+export function leadershipCadence(seeds: number[], agents: string[], cards: Card[], cfg: Config) {
+  const runs = seeds.map((s) => playOne(agents, cards, cfg, s)).filter((r) => r.scoreHistory.length > 1);
+  const residueChanges = [0, 0, 0, 0];
+  const residueLastChange = [0, 0, 0, 0];
+  let totalChanges = 0, gamesWithChange = 0;
+  for (const r of runs) {
+    let prev = -1, lastRow = -1;
+    r.scoreHistory.forEach((row, i) => {
+      const lead = row.indexOf(Math.max(...row));
+      if (prev !== -1 && lead !== prev) {
+        totalChanges++;
+        residueChanges[i % 4]++;
+        lastRow = i;
+      }
+      prev = lead;
+    });
+    if (lastRow >= 0) { gamesWithChange++; residueLastChange[lastRow % 4]++; }
+  }
+  return {
+    games: runs.length,
+    totalChanges,
+    gamesWithChange,
+    presidentialShareOfAllChanges: totalChanges ? residueChanges[0] / totalChanges : 0,
+    presidentialShareOfLastChange: gamesWithChange ? residueLastChange[0] / gamesWithChange : 0,
+    residueChanges,
+    residueLastChange,
+  };
+}
+
 if (import.meta.filename === process.argv[1]) {
   const cfg = loadConfig(process.argv[2] ?? 'tuned.json');
   const packs = arg('--packs', ALL_PACKS.join(',')).split(',');
