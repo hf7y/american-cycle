@@ -1956,6 +1956,19 @@
           "type": "extremist"
         }
       ]
+    },
+    {
+      "kind": "candidate",
+      "id": "mazie-hirono-2016",
+      "name": "Mazie Hirono",
+      "party": "D",
+      "homeState": "HI",
+      "homeStateBonus": 1,
+      "identities": [],
+      "belief": "First Asian-born woman in the Senate",
+      "era": 2016,
+      "effects": [],
+      "provenance": {}
     }
   ]
 }

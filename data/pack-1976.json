@@ -2388,6 +2388,28 @@
           "source": "hand-assigned"
         }
       }
+    },
+    {
+      "kind": "candidate",
+      "id": "spark-matsunaga-1976",
+      "name": "Spark Matsunaga",
+      "party": "D",
+      "homeState": "HI",
+      "homeStateBonus": 3,
+      "identities": [
+        "rural"
+      ],
+      "identityWeights": {
+        "rural": 1
+      },
+      "belief": "A 442nd veteran wins Fong's open seat",
+      "era": 1976,
+      "effects": [],
+      "provenance": {
+        "rural": {
+          "source": "hand-assigned"
+        }
+      }
     }
   ]
 }

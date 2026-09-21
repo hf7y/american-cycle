@@ -1506,6 +1506,19 @@
           "source": "hand-assigned"
         }
       }
+    },
+    {
+      "kind": "candidate",
+      "id": "josh-green-2024",
+      "name": "Josh Green",
+      "party": "D",
+      "homeState": "HI",
+      "homeStateBonus": 1,
+      "identities": [],
+      "belief": "A doctor turned governor",
+      "era": 2024,
+      "effects": [],
+      "provenance": {}
     }
   ]
 }

@@ -1466,6 +1466,28 @@
           "source": "hand-assigned"
         }
       }
+    },
+    {
+      "kind": "candidate",
+      "id": "hiram-fong-1964",
+      "name": "Hiram Fong",
+      "party": "R",
+      "homeState": "HI",
+      "homeStateBonus": 4,
+      "identities": [
+        "urban"
+      ],
+      "identityWeights": {
+        "urban": 1
+      },
+      "belief": "The first Asian American in the U.S. Senate",
+      "era": 1964,
+      "effects": [],
+      "provenance": {
+        "urban": {
+          "source": "hand-assigned"
+        }
+      }
     }
   ]
 }
