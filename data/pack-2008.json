@@ -2016,6 +2016,28 @@
           "source": "hand-assigned"
         }
       }
+    },
+    {
+      "kind": "candidate",
+      "id": "linda-lingle-2008",
+      "name": "Linda Lingle",
+      "party": "R",
+      "homeState": "HI",
+      "homeStateBonus": 2,
+      "identities": [
+        "jewish"
+      ],
+      "identityWeights": {
+        "jewish": 1
+      },
+      "belief": "A Republican governor in a Democratic state",
+      "era": 2008,
+      "effects": [],
+      "provenance": {
+        "jewish": {
+          "source": "hand-assigned"
+        }
+      }
     }
   ]
 }

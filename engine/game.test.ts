@@ -590,14 +590,15 @@ test('engine/config/three-terms.json actually ends a game on three-terms, not ju
   // own ruling names as its largest risk, and the proposal RATE it leaves
   // open is a separate, unmeasured follow-up (D6-amendment-rate), not
   // something this wiring pass was asked to tune. #240's tag-significance
-  // drops and #10's uncontestedPush:2 (which now polarizes the map faster,
-  // clearing the amendment's 2/3-call bar sooner) shifted seed 13's own
-  // trace to an amendment ending -- re-swept against this exact combined
-  // pool+rules state (0-59): reaches three-terms on 7, 17, 19, 21, 30, 31,
-  // 33, 36, 38, 39, 40, 44.
-  const rng = new RNG(17);
+  // drops and #10's uncontestedPush:2 shifted seed 13's own trace to an
+  // amendment ending; hf7y/american-cycle#90's Hawaii-native candidate cards
+  // (Fong/Matsunaga/Inouye/Lingle/Hirono/Green) shifted the pool again and
+  // moved seed 17 to an amendment ending too. Re-swept against this exact
+  // combined pool+rules state (0-79): reaches three-terms on 4, 5, 13, 15,
+  // 20, 21, 31, 33, 38, 39, 40, 43, 49, 56, 61, 66, 67, 72, 74, 75.
+  const rng = new RNG(4);
   const agents: Agent[] = ['Greedy', 'BillAuthor', 'Random'].map((n) => new AGENTS[n](cfg, rng));
-  const g = new Game(agents, structuredClone(CARDS), cfg, 17);
+  const g = new Game(agents, structuredClone(CARDS), cfg, 4);
   const result = g.run();
   assert.equal(result.endedBy, 'three-terms');
   assert.equal(result.wonBy, result.winner, 'a victory condition, not a score tie-break, decided this game');
