@@ -253,9 +253,24 @@ abstract class Base implements Agent {
 }
 
 export class RandomAgent extends Base {
+  // Keyed on `open` identity, exactly like `optionsCache` above, and safe for
+  // the same reason: `_pending` is unused below (this agent never reacts to
+  // what anyone else has declared this cycle), so the shuffled order cannot
+  // legitimately change from one round to the next. Before this cache, every
+  // round `declareRounds` called `declare` on this agent re-shuffled the
+  // full options list from scratch -- an O(options) `RNG.shuffle` on every
+  // round of every cycle instead of once per cycle, which both re-inflated
+  // the per-round cost `optionsCache` was added to kill and burned an amount
+  // of RNG entropy that scaled with round count, shifting every roll after
+  // it for the rest of the game.
+  private shuffleCache = new WeakMap<OpenRace[], Option[]>();
   declare(v: GameView, open: OpenRace[], _pending: PendingPeg[]): Declaration[] {
-    const o = options(v, open, this.cfg);
-    return pickDistinct(this.rng.shuffle(o), this.budget(v));
+    let order = this.shuffleCache.get(open);
+    if (!order) {
+      order = this.rng.shuffle([...options(v, open, this.cfg)]);
+      this.shuffleCache.set(open, order);
+    }
+    return pickDistinct(order, this.budget(v));
   }
   withdraw(): boolean { return false; }
   proposeG(): number { return 1 + this.rng.int(6); }

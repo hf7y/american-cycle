@@ -117,14 +117,16 @@ test('a simulated presidential general’s electors sum to the real total and pi
   // front, candidates drafted face-up one at a time), which reorders the RNG
   // draws downstream again the same way #40/#27 did before it -- seed 1 no
   // longer reaches a contested presidential race under the new turn loop.
-  // Re-stamped to seed 2.
-  const rng = new RNG(2);
+  // Re-stamped to seed 2, then to seed 3 once RandomAgent.declare() stopped
+  // re-shuffling (and re-drawing RNG) every declare round instead of once
+  // per cycle (#286) -- that reordered the draws downstream again.
+  const rng = new RNG(3);
   const agents: Agent[] = ['Greedy', 'BillAuthor', 'Random'].map((n) => new AGENTS[n](cfg, rng));
   const g = new Game(agents, structuredClone(CARDS), cfg, 2);
   g.tick();
 
   const prez = g.events.filter((e) => e.office === 'president' && e.round === 'general');
-  assert.ok(prez.length > 0, 'seed 2 is stamped to produce a contested presidential race');
+  assert.ok(prez.length > 0, 'seed 3 is stamped to produce a contested presidential race');
   const evByPlayer = new Map<number, number>();
   for (const e of prez) {
     const ev = electors(BY_CODE[e.state], cfg.game.startYear) + (e.state === 'MD' ? DC_ELECTORS : 0);
