@@ -2067,8 +2067,22 @@ export class Game {
   private refill(): void {
     const start = (Math.floor(this.year / 2) + this.cycleOffset) % this.players.length;
     const order = this.players.map((_, i) => (start + i) % this.players.length);
+    // The trickle only fires on a cycle that actually exhausted the talon and
+    // pulled in a new era pack during the candidate draft just above -- the
+    // same pace at which the old shared pack-pass draft this replaced (#158)
+    // exposed a later era's districts to begin with. Firing it on every
+    // election year regardless, as first shipped, had nothing bounding
+    // growth (a district admitted never returns to the discard the way a
+    // defeated candidate does): DECISIONS.md's item 2/3 correction measured
+    // the House reaching 80+ held seats by year 20 against ~30-40 on the old
+    // mechanic, and a fixed-seed 100-year board game never saw a single bill
+    // pass. Tying it to an actual era advance instead caps the lifetime
+    // trickle at one dose per era the pack ever had (six more after the
+    // start-of-game deal), which is what "as later eras enter play" says on
+    // its face.
+    const erasBefore = this.eraQueue.length;
     this.draftCandidates((p) => this.handSize(p), order);
-    this.dealMoreDistricts(this.cfg.draft.districtsPerCycle ?? 0);
+    if (this.eraQueue.length < erasBefore) this.dealMoreDistricts(this.cfg.draft.districtsPerCycle ?? 0);
   }
 
   /** The endings. The rule itself is `victorOf`, module-level and exported;
