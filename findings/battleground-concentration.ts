@@ -71,46 +71,78 @@ const empty = (): Tally => ({ legalLean: [], declaredLean: [], raceForcedLean: [
  *  already walk, so it costs nothing extra to compute. */
 function raceKey(o: { office: string; state: string; slot?: number }): string { return `${o.office}|${o.state}|${o.slot ?? ''}`; }
 
-class InstrumentedGreedy extends GreedyAgent {
-  t: Tally;
-  constructor(cfg: Config, rng: RNG, t: Tally) { super('Greedy', cfg, rng); this.t = t; }
-  declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[] {
-    const opts = options(v, open, this.cfg);
-    for (const o of opts) this.t.legalLean.push(Math.abs(v.lean[o.d.state] ?? 0));
-    const cardsByRace = new Map<string, Set<string>>();
+/** hf7y/american-cycle#158 changed what a `declare()` return value MEANS.
+ *  Under the old batch mechanic, `Game` called `declare()` once per cycle and
+ *  committed every entry it returned. Under the one-at-a-time mechanic
+ *  (`engine/game.ts`'s `declareRounds`), `declare()` is called once per
+ *  ROUND and still returns a full ranked wishlist (`pickDistinct`'s whole
+ *  `budget(v)`-sized list) -- but `declareRounds` only ever commits the
+ *  FIRST entry not already claimed by this player this cycle (own card
+ *  reused, or own race reused; a race with a rival's card in it is fine).
+ *  The original instrumentation here (pre-2026-09-21) recorded every entry
+ *  of the returned array as "declared" every round, which counts the same
+ *  never-committed speculative picks many times over and calls it a
+ *  population -- not a re-measurement of #273's question, a different and
+ *  wrong one. `usedCards`/`usedRaces` below reproduce `declareRounds`'
+ *  own per-player-per-cycle filter from the outside (the two engine checks
+ *  it also runs -- hand membership and eligibility -- are already
+ *  guaranteed by `options()`'s own construction, since hand/districts do
+ *  not change mid-cycle: a card leaves the hand only at resolution, after
+ *  every round has run) so only the one entry `declareRounds` would
+ *  actually commit this round is tallied. */
+interface DeclareTimeState {
+  cycleYear: number | undefined;
+  usedCards: Set<string>;
+  usedRaces: Set<string>;
+  cardsByRace: Map<string, Set<string>>;
+  legalLoggedThisCycle: boolean;
+}
+function newDeclareTimeState(): DeclareTimeState {
+  return { cycleYear: undefined, usedCards: new Set(), usedRaces: new Set(), cardsByRace: new Map(), legalLoggedThisCycle: false };
+}
+function instrument(s: DeclareTimeState, cfg: Config, v: GameView, open: OpenRace[], t: Tally, chosen: Declaration[]): void {
+  if (v.year !== s.cycleYear) {
+    s.cycleYear = v.year;
+    s.usedCards = new Set();
+    s.usedRaces = new Set();
+    s.legalLoggedThisCycle = false;
+  }
+  if (!s.legalLoggedThisCycle) {
+    const opts = options(v, open, cfg);
+    for (const o of opts) t.legalLean.push(Math.abs(v.lean[o.d.state] ?? 0));
+    s.cardsByRace = new Map();
     for (const o of opts) {
       const k = raceKey(o.d);
-      if (!cardsByRace.has(k)) cardsByRace.set(k, new Set());
-      cardsByRace.get(k)!.add(o.d.card.id);
+      if (!s.cardsByRace.has(k)) s.cardsByRace.set(k, new Set());
+      s.cardsByRace.get(k)!.add(o.d.card.id);
     }
+    s.legalLoggedThisCycle = true;
+  }
+  const committed = chosen.find((d) => !s.usedCards.has(d.card.id) && !s.usedRaces.has(raceKey(d)));
+  if (!committed) return;
+  s.usedCards.add(committed.card.id);
+  s.usedRaces.add(raceKey(committed));
+  t.declaredLean.push(Math.abs(v.lean[committed.state] ?? 0));
+  const n = s.cardsByRace.get(raceKey(committed))?.size ?? 1;
+  (n <= 1 ? t.raceForcedLean : t.raceChosenLean).push(Math.abs(v.lean[committed.state] ?? 0));
+}
+
+class InstrumentedGreedy extends GreedyAgent {
+  t: Tally; private s = newDeclareTimeState();
+  constructor(cfg: Config, rng: RNG, t: Tally) { super('Greedy', cfg, rng); this.t = t; }
+  declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[] {
     const chosen = super.declare(v, open, pending);
-    for (const d of chosen) {
-      this.t.declaredLean.push(Math.abs(v.lean[d.state] ?? 0));
-      const n = cardsByRace.get(raceKey(d))?.size ?? 1;
-      (n <= 1 ? this.t.raceForcedLean : this.t.raceChosenLean).push(Math.abs(v.lean[d.state] ?? 0));
-    }
+    instrument(this.s, this.cfg, v, open, this.t, chosen);
     return chosen;
   }
 }
 
 class InstrumentedLookahead extends LookaheadAgent {
-  t: Tally;
+  t: Tally; private s = newDeclareTimeState();
   constructor(cfg: Config, rng: RNG, t: Tally) { super('Lookahead', cfg, rng); this.t = t; }
   declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[] {
-    const opts = options(v, open, this.cfg);
-    for (const o of opts) this.t.legalLean.push(Math.abs(v.lean[o.d.state] ?? 0));
-    const cardsByRace = new Map<string, Set<string>>();
-    for (const o of opts) {
-      const k = raceKey(o.d);
-      if (!cardsByRace.has(k)) cardsByRace.set(k, new Set());
-      cardsByRace.get(k)!.add(o.d.card.id);
-    }
     const chosen = super.declare(v, open, pending);
-    for (const d of chosen) {
-      this.t.declaredLean.push(Math.abs(v.lean[d.state] ?? 0));
-      const n = cardsByRace.get(raceKey(d))?.size ?? 1;
-      (n <= 1 ? this.t.raceForcedLean : this.t.raceChosenLean).push(Math.abs(v.lean[d.state] ?? 0));
-    }
+    instrument(this.s, this.cfg, v, open, this.t, chosen);
     return chosen;
   }
 }
