@@ -1214,6 +1214,7 @@ export class Game {
       : undefined;
 
     const out = leg.tallyBill(this.cfg.legislature, this.seats, votes, g, pres, vetoes, override, this.rng);
+    if (process.env.DEBUG_BILL) console.log(`DEBUGVOTE year=${this.year} house=${out.houseYes}/${out.houseTotal} senate=${out.senateYes}/${out.senateTotal} passed=${out.passed} vetoed=${out.vetoed} pres=${pres?.party}`);
     this.stats.crossBench += out.crossBenched;
     // Voting places a counter on the card, coloured by the party in power.
     // Cross-bench votes therefore show as the opposite colour, and the card's
@@ -2122,7 +2123,13 @@ export class Game {
     // The year's legislating slot, now four-way: a removal, a congressional
     // amendment proposal, a convention call, or a bill. Wanting the ending is
     // a decision taken INSTEAD of legislating.
-    if (billYear && !this.impeachment() && !this.congressionalPropose() && !this.convention()) this.omnibill();   // 2-3.
+    if (billYear && process.env.DEBUG_BILL) {
+      const imp = this.impeachment();
+      const cp = !imp && this.congressionalPropose();
+      const conv = !imp && !cp && this.convention();
+      console.log(`DEBUGBILL year=${this.year} imp=${imp} cp=${cp} conv=${conv} amendmentsPending=${this.amendments.filter((a) => a.ratifiedIn === undefined && a.failedIn === undefined).length}`);
+      if (!imp && !cp && !conv) this.omnibill();
+    } else if (billYear && !this.impeachment() && !this.congressionalPropose() && !this.convention()) this.omnibill();   // 2-3.
     this.ratify();
     const fed = econ.fedCheck(this.economy, this.cfg.economy, this.rng);  // 4.
     // Logged in BOTH paths. The interactive tick logged this and the headless
