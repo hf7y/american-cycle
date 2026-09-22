@@ -11,6 +11,7 @@ on:
 jobs:
   engine:
     runs-on: ubuntu-latest
+    timeout-minutes: 30 # normal runtime is ~10min; a hang here should fail fast, not eat the platform's 6h default (#286/#288)
     steps:
       # Full history, because a findings stamp names a commit and the guard
       # that resolves it can only stand down on a depth-1 checkout -- which
