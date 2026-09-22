@@ -131,6 +131,35 @@ function computeOptions(v: GameView, open: OpenRace[], cfg: Config): Option[] {
 
 const raceKey = (r: { office: Office; state: string; slot?: number }) => `${r.office}|${r.state}|${r.slot ?? ''}`;
 
+/** hf7y/american-cycle#158/#286: like `optionsCache` above, `pending` is the
+ *  SAME array for the whole of one cycle's `declareRounds` (engine/game.ts)
+ *  -- only ever grown by `.push()`, never reassigned -- so its identity is
+ *  just as safe a cache key. Without this, `counterDeclare` rebuilt a
+ *  per-race-key Set from the FULL `pending` array on every one of a cycle's
+ *  P*R declare calls, an O(P*R^2) scan of string-keyed Set work that stacks
+ *  on top of the per-round redesign (#158) `optionsCache` already answers
+ *  for the (pending-independent) `options` half. This tracks each race's
+ *  declaring players incrementally instead, processing only the pegs pushed
+ *  since the last call. */
+interface PendingIndex { seen: number; byRace: Map<string, Set<number>> }
+const pendingCache = new WeakMap<PendingPeg[], PendingIndex>();
+
+/** Every race some player other than `me` has declared into this round. */
+function contestedFor(pending: PendingPeg[], me: number): Set<string> {
+  let idx = pendingCache.get(pending);
+  if (!idx) { idx = { seen: 0, byRace: new Map() }; pendingCache.set(pending, idx); }
+  for (; idx.seen < pending.length; idx.seen++) {
+    const p = pending[idx.seen];
+    const k = raceKey(p);
+    let players = idx.byRace.get(k);
+    if (!players) { players = new Set(); idx.byRace.set(k, players); }
+    players.add(p.player);
+  }
+  const out = new Set<string>();
+  for (const [k, players] of idx.byRace) if (players.size > 1 || !players.has(me)) out.add(k);
+  return out;
+}
+
 /** Denial: contesting a race someone else has declared costs a real card
  *  against someone who may have spent nothing -- which is the asymmetry that
  *  makes district gating necessary. An agent that never does this plays
@@ -145,7 +174,7 @@ const raceKey = (r: { office: Office; state: string; slot?: number }) => `${r.of
 export function counterDeclare(
   opts: Option[], pending: PendingPeg[], me: number, appetite: number,
 ): Option[] {
-  const contested = new Set(pending.filter((p) => p.player !== me).map(raceKey));
+  const contested = contestedFor(pending, me);
   return opts.map((o) => contested.has(raceKey(o.d)) ? { ...o, edge: o.edge + appetite } : o);
 }
 
