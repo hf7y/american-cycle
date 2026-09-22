@@ -698,14 +698,19 @@ test('#78: a second bill on the same tags, passed once the House flips, nets the
   g.tick(); // 1977, R-controlled: passes, pushes OH toward R
   assert.equal(g.leanMap.OH, 2, 'the first bill’s push, net of the same tick’s decay');
 
-  // The House flips to D. Player 1 needs a district of its own for the
+  // The House flips to D. Player 1 needs a HELD district of its own for the
   // default bill-tagger to reach for "union" again -- proposeTags is not
   // scripted here on purpose, so nothing in this test hand-picks the tag.
+  // representedDistricts() (hf7y/american-cycle#158) only counts seats a
+  // player actually holds, so the TX seat below has to appear in `seats`
+  // too, not just in `districts` -- a card dealt but never won doesn't
+  // count as part of the coalition anymore.
   g.year = 1979; // odd again: skip the intervening election year entirely
   g.seats = [
     { office: 'representative', state: 'OH', slot: 1, holder: { cardId: 'h3', player: 1, party: 'D', since: 1978 } },
     { office: 'representative', state: 'OH', slot: 2, holder: { cardId: 'h4', player: 1, party: 'D', since: 1978 } },
     { office: 'senator', state: 'OH', slot: 1, senateClass: 1, holder: { cardId: 's2', player: 1, party: 'D', since: 1978 } },
+    { office: 'representative', state: 'TX', slot: 1, holder: { cardId: 'h5', player: 1, party: 'D', since: 1978 } },
   ];
   g.players[1].districts = [dist({ id: 'TX-1', state: 'TX', number: 1, demographics: ['union'] })];
 

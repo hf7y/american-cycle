@@ -886,18 +886,34 @@ export class Game {
     p.districts.push(c);
   }
 
+  /** hf7y/american-cycle#158: `districts` is now a player's whole private
+   *  deal -- most of it never declared into, growing every cycle via
+   *  `dealMoreDistricts`, decoupled from hand size entirely. `playerPosition`
+   *  and `defaultBillTags` below predate that and mean "the districts they
+   *  hold" -- the seats they actually represent, not everything ever dealt
+   *  to them. Reading the raw `districts` array let a bill's tags and a
+   *  player's coalition centroid drift toward undeclared inventory, diluting
+   *  further every cycle the trickle runs. Filtering to House seats actually
+   *  held keeps both methods' own doc comments literally true. */
+  private representedDistricts(player: number): { state: string; number: number; demographics: IdentityTag[] }[] {
+    const held = new Set(this.seats
+      .filter((s) => s.office === 'representative' && s.holder?.player === player)
+      .map((s) => `${s.state}:${s.slot}`));
+    return this.players[player].districts.filter((d) => held.has(`${d.state}:${d.number}`));
+  }
+
   /** The tag position of one player's own coalition -- the districts they
    *  hold. This is what "a bloc concentrated in one tag region" means
    *  concretely, and why such a bloc passes bills cheaply. */
   private playerPosition(player: number): tags.TagWeights {
-    return tags.centroid(this.players[player].districts.map((d) => tags.weights(d.demographics)));
+    return tags.centroid(this.representedDistricts(player).map((d) => tags.weights(d.demographics)));
   }
 
   /** v0.2 item 4: what a bill is about, when the author does not say.
    *  The author's own districts -- the coalition they can actually pass. */
   private defaultBillTags(author: number): IdentityTag[] {
     const freq = new Map<IdentityTag, number>();
-    for (const d of this.players[author].districts) {
+    for (const d of this.representedDistricts(author)) {
       for (const t of d.demographics) freq.set(t, (freq.get(t) ?? 0) + 1);
     }
     return [...freq.entries()].sort((a, b) => b[1] - a[1])
