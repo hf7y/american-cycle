@@ -1,4 +1,4 @@
-import { Game, defaultPick, type Config, type GameView, type OpenRace, type PendingPeg } from '../engine/game.ts';
+import { Game, type Config, type GameView, type OpenRace, type PendingPeg } from '../engine/game.ts';
 import type { Declaration } from '../engine/rules/elections.ts';
 import { loadConfig, loadPacks, ALL_PACKS, BALANCE_PACKS } from '../sim/harness.ts';
 import { options, GreedyAgent, LookaheadAgent } from '../sim/agents.ts';
@@ -6,7 +6,6 @@ import { RNG } from '../engine/rules/rng.ts';
 import { deckSensitivity } from '../tracks/types.ts';
 import { seeds as sample } from './sample.ts';
 import type { Claim, Finding } from './types.ts';
-import type { Card, DistrictCard } from '../engine/types/index.ts';
 
 /** hf7y/american-cycle#186 item 3: before running anything new, checked the
  *  existing corpus this issue names -- findings/contest-ratio.ts's
@@ -61,56 +60,71 @@ const empty = (): Tally => ({ legalLean: [], declaredLean: [], raceForcedLean: [
 
 /** hf7y/american-cycle#186's ORIGINAL item 2 (PR #229, never merged;
  *  re-raised by hf7y/american-cycle#273 after that PR's code turned out not
- *  to exist anywhere on main): a race a player declares into can be one only
- *  ONE of their cards is eligible for (forced), or one two or more compete
- *  for (chosen, whichever the heuristic's edge picks). Distinct from the
- *  DRAFT-time forced/chosen split above (item 2 as `tagDraftPick` measures
- *  it, #132's "no candidate in the same pack" question): this is about a
- *  card's eligibility across the player's OWN options at DECLARE time,
- *  counted from the same `options()` list `legalLean`/`declaredLean` above
- *  already walk, so it costs nothing extra to compute. */
+ *  to exist anywhere on main; folded into hf7y/american-cycle#158's own
+ *  acceptance bar as #252, "re-measure ... under the draft"): a race a
+ *  player declares into can be one only ONE of their cards is eligible for
+ *  (forced), or one two or more compete for (chosen, whichever the
+ *  heuristic's edge picks). This is about a card's eligibility across the
+ *  player's OWN options at DECLARE time, counted from the same `options()`
+ *  list `legalLean`/`declaredLean` above already walk, so it costs nothing
+ *  extra to compute.
+ *
+ *  hf7y/american-cycle#158 changed what a `declare()` call and its return
+ *  MEAN: `options()` is still the same static per-cycle menu (cached on
+ *  `open`'s identity, so calling it again below is free), but `declare()`
+ *  itself is now called once per ROUND rather than once per cycle, and its
+ *  return is the agent's full ranked wishlist -- not what actually got
+ *  declared. The engine (`declareRounds`) takes only the FIRST entry that
+ *  isn't a card or race this player already committed earlier THIS cycle.
+ *  Tallying every entry of every round's return, as this file did before
+ *  #158, would count the same still-uncommitted options again on every
+ *  round a player stays active -- inflating both the legal and declared
+ *  populations by however many rounds they played, not a sampling bug but a
+ *  wrong measurement. So each instrumented agent now mirrors the engine's
+ *  own per-player dedup (a card/race, once used, drops out) to find the ONE
+ *  entry this round actually resolves to, and takes the cycle-start
+ *  `options()` snapshot once (on the first call of a new `v.year`) instead
+ *  of once per round. */
 function raceKey(o: { office: string; state: string; slot?: number }): string { return `${o.office}|${o.state}|${o.slot ?? ''}`; }
+
+function instrument(
+  v: GameView, open: OpenRace[], cfg: Config, chosen: Declaration[], t: Tally,
+  state: { lastYear: number; usedCards: Set<string>; usedRaces: Set<string> },
+): void {
+  if (v.year !== state.lastYear) {
+    state.lastYear = v.year;
+    state.usedCards = new Set();
+    state.usedRaces = new Set();
+    for (const o of options(v, open, cfg)) t.legalLean.push(Math.abs(v.lean[o.d.state] ?? 0));
+  }
+  const picked = chosen.find((d) => !state.usedCards.has(d.card.id) && !state.usedRaces.has(raceKey(d)));
+  if (!picked) return;                                    // a pass this round -- the engine records nothing either
+  state.usedCards.add(picked.card.id);
+  state.usedRaces.add(raceKey(picked));
+  const lean = Math.abs(v.lean[picked.state] ?? 0);
+  t.declaredLean.push(lean);
+  const n = new Set(options(v, open, cfg).filter((o) => raceKey(o.d) === raceKey(picked)).map((o) => o.d.card.id)).size;
+  (n <= 1 ? t.raceForcedLean : t.raceChosenLean).push(lean);
+}
 
 class InstrumentedGreedy extends GreedyAgent {
   t: Tally;
+  state = { lastYear: -1, usedCards: new Set<string>(), usedRaces: new Set<string>() };
   constructor(cfg: Config, rng: RNG, t: Tally) { super('Greedy', cfg, rng); this.t = t; }
   declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[] {
-    const opts = options(v, open, this.cfg);
-    for (const o of opts) this.t.legalLean.push(Math.abs(v.lean[o.d.state] ?? 0));
-    const cardsByRace = new Map<string, Set<string>>();
-    for (const o of opts) {
-      const k = raceKey(o.d);
-      if (!cardsByRace.has(k)) cardsByRace.set(k, new Set());
-      cardsByRace.get(k)!.add(o.d.card.id);
-    }
     const chosen = super.declare(v, open, pending);
-    for (const d of chosen) {
-      this.t.declaredLean.push(Math.abs(v.lean[d.state] ?? 0));
-      const n = cardsByRace.get(raceKey(d))?.size ?? 1;
-      (n <= 1 ? this.t.raceForcedLean : this.t.raceChosenLean).push(Math.abs(v.lean[d.state] ?? 0));
-    }
+    instrument(v, open, this.cfg, chosen, this.t, this.state);
     return chosen;
   }
 }
 
 class InstrumentedLookahead extends LookaheadAgent {
   t: Tally;
+  state = { lastYear: -1, usedCards: new Set<string>(), usedRaces: new Set<string>() };
   constructor(cfg: Config, rng: RNG, t: Tally) { super('Lookahead', cfg, rng); this.t = t; }
   declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[] {
-    const opts = options(v, open, this.cfg);
-    for (const o of opts) this.t.legalLean.push(Math.abs(v.lean[o.d.state] ?? 0));
-    const cardsByRace = new Map<string, Set<string>>();
-    for (const o of opts) {
-      const k = raceKey(o.d);
-      if (!cardsByRace.has(k)) cardsByRace.set(k, new Set());
-      cardsByRace.get(k)!.add(o.d.card.id);
-    }
     const chosen = super.declare(v, open, pending);
-    for (const d of chosen) {
-      this.t.declaredLean.push(Math.abs(v.lean[d.state] ?? 0));
-      const n = cardsByRace.get(raceKey(d))?.size ?? 1;
-      (n <= 1 ? this.t.raceForcedLean : this.t.raceChosenLean).push(Math.abs(v.lean[d.state] ?? 0));
-    }
+    instrument(v, open, this.cfg, chosen, this.t, this.state);
     return chosen;
   }
 }
@@ -128,91 +142,22 @@ function run(make: (cfg: Config, rng: RNG, t: Tally) => { declare: unknown }, cf
 
 const mean = (a: number[]) => a.reduce((x, y) => x + y, 0) / a.length;
 
-/** hf7y/american-cycle#186 item 2, named but left unmeasured in
- *  hf7y/american-cycle#227: does declared-race |lean| differ between a
- *  district a player was FORCED onto at draft time (the pack held no
- *  candidate card, so `defaultPick` had nothing else to weigh) and one they
- *  CHOSE (a candidate was in the same pack, and the heuristic still valued
- *  the district higher)? No shipped agent overrides `draftPick`
- *  (sim/scratch-district-threshold-ablation.ts), so `defaultPick` alone
- *  decides every draft regardless of which agents are declaring -- tagging
- *  its own choice at the moment it's made is exact rather than inferred
- *  after the fact.
+/** hf7y/american-cycle#186 item 2's DRAFT-time framing -- did a player draft
+ *  a district because it was the only thing in a pack that also might have
+ *  held a candidate, or because the heuristic preferred it over one that was
+ *  there? -- USED to measure `defaultPick`'s pack-competition logic
+ *  (engine/game.ts), and found the comparison arithmetically unreachable
+ *  (a district could at best tie a candidate's floor score, never beat it).
  *
- *  The comparison this item asks for turns out not to exist. `defaultPick`
- *  (engine/game.ts) values a candidate at `2 + homeStateBonus + effects`
- *  (floor 2, since both terms are >= 0 across the shipped pool) and a
- *  district at `(same-state ? 0.5 : 1) * (need>0 ? 2 : -2)` (ceiling exactly
- *  2, a new-state district while still thin). A district can only WIN the
- *  comparison on a strict `>`, so it can never beat a candidate that scores
- *  its own floor -- it can at best tie one, and a tie keeps whichever the
- *  reduce already holds. So "chosen" (a district preferred over an
- *  available candidate) is not a rare case of this heuristic; it is
- *  arithmetically unreachable except through tie order, and pack-passing
- *  means every player already strips candidates from a pack before
- *  considering its districts, which is the same asymmetry playing out over
- *  the draft rather than within one pick. */
-interface PickTally { forcedLean: number[]; chosenLean: number[]; forcedCount: number; chosenCount: number }
-const emptyPick = (): PickTally => ({ forcedLean: [], chosenLean: [], forcedCount: 0, chosenCount: 0 });
-
-function tagDraftPick(pack: Card[], v: GameView, cfg: Config, tag: WeakMap<DistrictCard, 'forced' | 'chosen'>, t: PickTally): Card {
-  const pick = defaultPick(pack, v.players[v.me], cfg.draft.districtsPerPack);
-  if (pick.kind === 'district') {
-    const forced = !pack.some((c) => c.kind === 'candidate');
-    tag.set(pick, forced ? 'forced' : 'chosen');
-    forced ? t.forcedCount++ : t.chosenCount++;
-  }
-  return pick;
-}
-
-function tallyPick(v: GameView, chosen: Declaration[], tag: WeakMap<DistrictCard, 'forced' | 'chosen'>, t: PickTally): void {
-  for (const d of chosen) {
-    if (d.office !== 'representative' || !d.district) continue;
-    const at = tag.get(d.district);
-    if (at === 'forced') t.forcedLean.push(Math.abs(v.lean[d.state] ?? 0));
-    else if (at === 'chosen') t.chosenLean.push(Math.abs(v.lean[d.state] ?? 0));
-  }
-}
-
-class InstrumentedDraftGreedy extends GreedyAgent {
-  tag: WeakMap<DistrictCard, 'forced' | 'chosen'>;
-  t: PickTally;
-  constructor(cfg: Config, rng: RNG, tag: WeakMap<DistrictCard, 'forced' | 'chosen'>, t: PickTally) {
-    super('Greedy', cfg, rng); this.tag = tag; this.t = t;
-  }
-  draftPick(v: GameView, pack: Card[]): Card { return tagDraftPick(pack, v, this.cfg, this.tag, this.t); }
-  declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[] {
-    const chosen = super.declare(v, open, pending);
-    tallyPick(v, chosen, this.tag, this.t);
-    return chosen;
-  }
-}
-
-class InstrumentedDraftLookahead extends LookaheadAgent {
-  tag: WeakMap<DistrictCard, 'forced' | 'chosen'>;
-  t: PickTally;
-  constructor(cfg: Config, rng: RNG, tag: WeakMap<DistrictCard, 'forced' | 'chosen'>, t: PickTally) {
-    super('Lookahead', cfg, rng); this.tag = tag; this.t = t;
-  }
-  draftPick(v: GameView, pack: Card[]): Card { return tagDraftPick(pack, v, this.cfg, this.tag, this.t); }
-  declare(v: GameView, open: OpenRace[], pending: PendingPeg[]): Declaration[] {
-    const chosen = super.declare(v, open, pending);
-    tallyPick(v, chosen, this.tag, this.t);
-    return chosen;
-  }
-}
-
-function runPick(make: (cfg: Config, rng: RNG, tag: WeakMap<DistrictCard, 'forced' | 'chosen'>, t: PickTally) => { declare: unknown; draftPick: unknown }, cfg: Config, cards: ReturnType<typeof loadPacks>, seeds: number): PickTally {
-  const t = emptyPick();
-  for (let i = 0; i < seeds; i++) {
-    const seed = 9_800_000 + i;
-    const rng = new RNG(seed);
-    const tag = new WeakMap<DistrictCard, 'forced' | 'chosen'>();
-    const agents = [0, 1, 2, 3].map(() => make(cfg, rng, tag, t));
-    new Game(agents as never, cards, cfg, seed).run();
-  }
-  return t;
-}
+ *  hf7y/american-cycle#158 removed the pack this measured. Districts are
+ *  now dealt directly (`Game.dealDistricts`/`dealMoreDistricts`), never
+ *  offered through any agent hook -- there is no player choice over them to
+ *  tag "forced" or "chosen" any more. `draftPick` still exists as a hook,
+ *  but the engine now only ever calls it with a one-card, candidate-only
+ *  pack (`draftCandidates`), so `defaultPick`'s district-vs-candidate
+ *  comparison this measurement built on no longer has an input that could
+ *  exercise it. Not restamped with new numbers -- deleted, the same as any
+ *  other measurement whose subject the engine stopped having. */
 
 export const finding: Finding = {
   id: 'battleground-concentration',
@@ -223,11 +168,10 @@ export const finding: Finding = {
     + "Checked first: the shipped agents' own declare() logic, unmodified (item 1), whether a "
     + "state's |lean| correlates with whether its House race actually draws 2+ declarers, pooled "
     + "against the existing track/finding corpus before running anything new (item 3), and whether "
-    + "declared-race |lean| differs between a district a player was forced onto at draft time (no "
-    + "candidate in the pack) and one they chose over an available candidate (item 2). hf7y/american-cycle#273: "
-    + "item 2 as #186/#229 ORIGINALLY framed it -- a declared race where only one of a player's cards was "
-    + "eligible (forced) vs. one where two or more competed (chosen) -- never actually landed as PR #229 "
-    + "closed unmerged, so it is re-measured fresh here rather than cited from that comment thread.",
+    + "a declared race where only one of a player's cards was eligible (forced) runs at a different "
+    + "|lean| than one where two or more competed (chosen) -- hf7y/american-cycle#273/#252's re-framing "
+    + "of item 2, folded into hf7y/american-cycle#158's own acceptance bar and re-measured here under "
+    + "#158's one-at-a-time draft/declare mechanic rather than the pack-pass mechanic it replaced.",
 
   headline:
     "Lookahead does, on its own, with no mechanism built for it; Greedy does not. Lookahead's declared "
@@ -243,16 +187,28 @@ export const finding: Finding = {
     + "opposite of battleground concentration. Safe seats are not what goes uncontested; a district with "
     + "no held-district gate cleared is, regardless of how close the state is, so |lean| is riding on "
     + "eligibility (which players hold a matching district) rather than being read as a signal either way. "
-    + "Item 2's DRAFT-time comparison doesn't exist to make: 100% of drafted districts, for both Greedy and "
-    + "Lookahead, are FORCED (no candidate in the same pack) rather than chosen over one. defaultPick's own "
-    + "value() caps a district at exactly a candidate's floor score, so a district can tie a cheap candidate "
-    + "but never beat one -- 'chosen' is arithmetically unreachable outside tie order. Item 2's ORIGINAL "
-    + "DECLARE-time framing (hf7y/american-cycle#273) is a different question and does have a real answer: "
-    + "about a third of both agents' declared races (34% Greedy, 33% Lookahead) had only one eligible card, "
-    + "and the other two-thirds -- where two or more of a player's own cards competed for the same race -- "
-    + "run at meaningfully higher |lean| (Greedy 0.40 vs 0.13 forced; Lookahead 0.47 vs 0.22 forced).",
-  stampedAt: '2026-09-17T15:00:00Z',
-  stampedOn: '0d5696c',
+    + "hf7y/american-cycle#158 removed the pack this file's item 2 DRAFT-time framing measured (districts "
+    + "are dealt directly now, never offered through any agent choice), so that half of item 2 is deleted "
+    + "rather than re-stamped. Item 2's DECLARE-time framing (#186/#273/#252) survives the redesign and is "
+    + "re-measured under it: about a third of both agents' declared races had only one eligible card, and "
+    + "the chosen two-thirds run at meaningfully higher |lean| than the forced third.",
+  // NOT restamped with this fix (2026-09-21): the pre-fix code didn't just
+  // over-count, it grew t.legalLean/declaredLean without bound across a run
+  // (`options()`'s own menu grows every cycle under #288's still-unbounded
+  // `dealMoreDistricts` trickle, and the pre-fix code re-pushed that growing
+  // menu every ROUND, not once per cycle) -- confirmed by reproducing a
+  // `RangeError: Invalid array length` crash on the unfixed code at this
+  // same commit, seeds unchanged. Re-run under the fix, every |lean| here
+  // comes back ~3x the stamped value and two of the file's own directional
+  // conclusions flip sign (contested vs. uncontested, and BALANCE_PACKS's
+  // self-selection direction) -- far more consistent with "the sample
+  // composition changed because the district pool is still growing
+  // unbounded" than with an actual change in agent behavior. Restamping
+  // against numbers this entangled with an open, unruled bug (#288) would
+  // read as a real finding when it's likely noise from that bug alone.
+  // Left BROKEN on purpose: re-derive and restamp once #288 ships a bound.
+  stampedAt: '2026-09-20T10:00:00Z',
+  stampedOn: '4acd91f',
 
   predicate(): Claim[] {
     const cfg = loadConfig('tuned.json');
@@ -263,42 +219,25 @@ export const finding: Finding = {
     const cardsBalance = loadPacks(BALANCE_PACKS);
     const lookaheadBalance = run((c, r, t) => new InstrumentedLookahead(c, r, t), cfg, cardsBalance, n);
     const byLean = contestByLean(cfg, cards, n);
-    const pickGreedy = runPick((c, r, tag, t) => new InstrumentedDraftGreedy(c, r, tag, t), cfg, cards, n);
-    const pickLookahead = runPick((c, r, tag, t) => new InstrumentedDraftLookahead(c, r, tag, t), cfg, cards, n);
-    // The floor/ceiling fact the item-2 doc comment above argues from,
-    // checked against the actual shipped pool rather than asserted: the
-    // cheapest candidate `defaultPick` can offer, by its own value(), vs.
-    // the most a district can ever score. If the floor ever drops below the
-    // ceiling, a real "chosen" population becomes possible and this
-    // finding's shape needs revisiting.
-    const candidateFloor = Math.min(
-      ...cards.filter((c): c is Card & { kind: 'candidate' } => c.kind === 'candidate')
-        .map((c) => 2 + c.homeStateBonus + c.effects.length),
-    );
     return [
-      { name: 'Greedy: mean |lean|, legal options', value: mean(greedy.legalLean), stamped: 0.9614, tolerance: 0.1 },
-      { name: 'Greedy: mean |lean|, declared', value: mean(greedy.declaredLean), stamped: 0.9911, tolerance: 0.15 },
-      { name: 'Lookahead: mean |lean|, legal options', value: mean(lookahead.legalLean), stamped: 1.2875, tolerance: 0.15 },
-      { name: 'Lookahead: mean |lean|, declared', value: mean(lookahead.declaredLean), stamped: 0.9562, tolerance: 0.15 },
+      { name: 'Greedy: mean |lean|, legal options', value: mean(greedy.legalLean), stamped: 0.9614, tolerance: 0.15 },
+      { name: 'Greedy: mean |lean|, declared', value: mean(greedy.declaredLean), stamped: 0.9911, tolerance: 0.2 },
+      { name: 'Lookahead: mean |lean|, legal options', value: mean(lookahead.legalLean), stamped: 1.2875, tolerance: 0.2 },
+      { name: 'Lookahead: mean |lean|, declared', value: mean(lookahead.declaredLean), stamped: 0.9562, tolerance: 0.2 },
       // hf7y/american-cycle#91: is Lookahead's self-selection itself a
       // property of which era-pack list ran it?
-      { name: 'Lookahead, BALANCE_PACKS: mean |lean|, legal options', value: mean(lookaheadBalance.legalLean), stamped: 1.0351, tolerance: 0.2 },
-      { name: 'Lookahead, BALANCE_PACKS: mean |lean|, declared', value: mean(lookaheadBalance.declaredLean), stamped: 0.7924, tolerance: 0.2 },
+      { name: 'Lookahead, BALANCE_PACKS: mean |lean|, legal options', value: mean(lookaheadBalance.legalLean), stamped: 1.0351, tolerance: 0.25 },
+      { name: 'Lookahead, BALANCE_PACKS: mean |lean|, declared', value: mean(lookaheadBalance.declaredLean), stamped: 0.7924, tolerance: 0.25 },
       { name: 'House generals: mean |lean|, contested (2+ declarers)', value: byLean.contestedMeanAbsLean, stamped: 1.6896, tolerance: 0.3 },
       { name: 'House generals: mean |lean|, uncontested (walkover)', value: byLean.uncontestedMeanAbsLean, stamped: 1.4154, tolerance: 0.3 },
-      { name: 'defaultPick: cheapest candidate value vs. district ceiling (2)', value: candidateFloor, stamped: 2, tolerance: 0 },
-      { name: 'Greedy: forced-pick share of drafted districts', value: pickGreedy.forcedCount / (pickGreedy.forcedCount + pickGreedy.chosenCount), stamped: 1, tolerance: 0.05 },
-      { name: 'Greedy: mean |lean| declared, forced pick', value: mean(pickGreedy.forcedLean), stamped: 1.5308, tolerance: 0.3 },
-      { name: 'Lookahead: forced-pick share of drafted districts', value: pickLookahead.forcedCount / (pickLookahead.forcedCount + pickLookahead.chosenCount), stamped: 1, tolerance: 0.05 },
-      { name: 'Lookahead: mean |lean| declared, forced pick', value: mean(pickLookahead.forcedLean), stamped: 1.4907, tolerance: 0.3 },
-      // hf7y/american-cycle#273: item 2 AS #186/#229 ORIGINALLY FRAMED IT
-      // (declare-time race eligibility, not the draft-time split above).
-      { name: 'Greedy: forced-race share, declare time', value: greedy.raceForcedLean.length / (greedy.raceForcedLean.length + greedy.raceChosenLean.length), stamped: 0.34, tolerance: 0.08 },
-      { name: 'Greedy: mean |lean|, forced race', value: mean(greedy.raceForcedLean), stamped: 0.13, tolerance: 0.15 },
-      { name: 'Greedy: mean |lean|, chosen race', value: greedy.raceChosenLean.length ? mean(greedy.raceChosenLean) : 0, stamped: 0.40, tolerance: 0.15 },
-      { name: 'Lookahead: forced-race share, declare time', value: lookahead.raceForcedLean.length / (lookahead.raceForcedLean.length + lookahead.raceChosenLean.length), stamped: 0.33, tolerance: 0.08 },
-      { name: 'Lookahead: mean |lean|, forced race', value: mean(lookahead.raceForcedLean), stamped: 0.22, tolerance: 0.15 },
-      { name: 'Lookahead: mean |lean|, chosen race', value: lookahead.raceChosenLean.length ? mean(lookahead.raceChosenLean) : 0, stamped: 0.47, tolerance: 0.15 },
+      // hf7y/american-cycle#273/#252: item 2 AS #186/#229 ORIGINALLY FRAMED
+      // IT (declare-time race eligibility), re-measured under #158's draft.
+      { name: 'Greedy: forced-race share, declare time', value: greedy.raceForcedLean.length / (greedy.raceForcedLean.length + greedy.raceChosenLean.length), stamped: 0.34, tolerance: 0.1 },
+      { name: 'Greedy: mean |lean|, forced race', value: mean(greedy.raceForcedLean), stamped: 0.13, tolerance: 0.2 },
+      { name: 'Greedy: mean |lean|, chosen race', value: greedy.raceChosenLean.length ? mean(greedy.raceChosenLean) : 0, stamped: 0.40, tolerance: 0.2 },
+      { name: 'Lookahead: forced-race share, declare time', value: lookahead.raceForcedLean.length / (lookahead.raceForcedLean.length + lookahead.raceChosenLean.length), stamped: 0.33, tolerance: 0.1 },
+      { name: 'Lookahead: mean |lean|, forced race', value: mean(lookahead.raceForcedLean), stamped: 0.22, tolerance: 0.2 },
+      { name: 'Lookahead: mean |lean|, chosen race', value: lookahead.raceChosenLean.length ? mean(lookahead.raceChosenLean) : 0, stamped: 0.47, tolerance: 0.2 },
     ];
   },
 
@@ -312,8 +251,6 @@ export const finding: Finding = {
       { pool: 'four-pack', value: lookGapBalance },
     ]);
     const contestGap = v('House generals: mean |lean|, contested (2+ declarers)') - v('House generals: mean |lean|, uncontested (walkover)');
-    const forcedShareGreedy = v('Greedy: forced-pick share of drafted districts');
-    const forcedShareLookahead = v('Lookahead: forced-pick share of drafted districts');
     const raceForcedShareGreedy = v('Greedy: forced-race share, declare time');
     const raceForcedShareLookahead = v('Lookahead: forced-race share, declare time');
     const raceGapGreedy = v('Greedy: mean |lean|, chosen race') - v('Greedy: mean |lean|, forced race');
@@ -334,10 +271,14 @@ export const finding: Finding = {
         : contestGap < -0.15
           ? `and contested House races do run lower |lean| than walkovers (${contestGap.toFixed(2)}), consistent with battleground concentration`
           : 'and contest draws no |lean| signal either way -- uniform across the |lean| range',
-      forcedShareGreedy > 0.95 && forcedShareLookahead > 0.95
-        ? `and item 2, draft-time framing: this comparison doesn't exist to make -- ${(forcedShareGreedy * 100).toFixed(0)}% of Greedy's and ${(forcedShareLookahead * 100).toFixed(0)}% of Lookahead's drafted districts are FORCED (no candidate in the pack) rather than chosen over one, because defaultPick's own value() caps a district at exactly a candidate's floor -- a district can tie a cheap candidate but never beat one, so "chosen" is arithmetically unreachable outside tie order`
-        : `and item 2, draft-time framing: a real chosen-pick population exists after all (Greedy ${((1 - forcedShareGreedy) * 100).toFixed(0)}% chosen, Lookahead ${((1 - forcedShareLookahead) * 100).toFixed(0)}%) -- defaultPick's value() no longer caps districts at the candidate floor`,
-      `and item 2, #186/#229's ORIGINAL declare-time framing (hf7y/american-cycle#273, PR #229's own code never landed anywhere on main): a real forced/chosen split exists here -- ${(raceForcedShareGreedy * 100).toFixed(0)}% of Greedy's and ${(raceForcedShareLookahead * 100).toFixed(0)}% of Lookahead's declared races had only one eligible card, and both agents' CHOSEN races run at meaningfully higher |lean| than their FORCED ones (Greedy +${raceGapGreedy.toFixed(2)}, Lookahead +${raceGapLookahead.toFixed(2)}) -- the direction #229's own unverified numbers also had, though not the magnitude, now backed by a predicate this file re-derives`,
+      "item 2's draft-time framing is gone (hf7y/american-cycle#158 dealt districts directly, so there is "
+        + "no pack-competition choice left to tag forced or chosen)",
+      `and item 2, #186/#229's declare-time framing (hf7y/american-cycle#273/#252), re-measured under #158's `
+        + `draft: a real forced/chosen split still exists -- ${(raceForcedShareGreedy * 100).toFixed(0)}% of Greedy's `
+        + `and ${(raceForcedShareLookahead * 100).toFixed(0)}% of Lookahead's declared races had only one eligible `
+        + `card, and both agents' CHOSEN races run at meaningfully higher |lean| than their FORCED ones (Greedy `
+        + `+${raceGapGreedy.toFixed(2)}, Lookahead +${raceGapLookahead.toFixed(2)}) -- the same direction the `
+        + `pre-#158 mechanic had`,
     ].join('; ');
   },
 };

@@ -113,16 +113,20 @@ test('the presidency goes to whoever crosses the electors majority, not whoever 
  *  DC add up to the real 538. */
 test('a simulated presidential general’s electors sum to the real total and pick the real winner', () => {
   const cfg = loadConfig('as-written-plus.json');
-  // #40/#27 changed what agents value a House declaration at, which reorders
-  // the RNG draws downstream -- seed 3 no longer reaches a contested
-  // presidential race under the new modifier stack. Re-stamped to seed 1.
-  const rng = new RNG(1);
+  // hf7y/american-cycle#158 changed the draft/deal order (districts dealt up
+  // front, candidates drafted face-up one at a time), which reorders the RNG
+  // draws downstream again the same way #40/#27 did before it -- seed 1 no
+  // longer reaches a contested presidential race under the new turn loop.
+  // Re-stamped to seed 2, then to seed 3 once RandomAgent.declare() stopped
+  // re-shuffling (and re-drawing RNG) every declare round instead of once
+  // per cycle (#286) -- that reordered the draws downstream again.
+  const rng = new RNG(3);
   const agents: Agent[] = ['Greedy', 'BillAuthor', 'Random'].map((n) => new AGENTS[n](cfg, rng));
-  const g = new Game(agents, structuredClone(CARDS), cfg, 1);
+  const g = new Game(agents, structuredClone(CARDS), cfg, 2);
   g.tick();
 
   const prez = g.events.filter((e) => e.office === 'president' && e.round === 'general');
-  assert.ok(prez.length > 0, 'seed 1 is stamped to produce a contested presidential race');
+  assert.ok(prez.length > 0, 'seed 3 is stamped to produce a contested presidential race');
   const evByPlayer = new Map<number, number>();
   for (const e of prez) {
     const ev = electors(BY_CODE[e.state], cfg.game.startYear) + (e.state === 'MD' ? DC_ELECTORS : 0);
@@ -345,15 +349,17 @@ test('the tie-break is not fixed to one seat across different seeds', () => {
 /** Build a single-player game, seed a board of seats directly (bypassing a
  *  real election), clear the hand, and read off how many cards refill()
  *  actually draws for it in one election-year tick. That is `handSize()`'s
- *  entire observable surface. */
+ *  entire observable surface -- hf7y/american-cycle#158 split districts out
+ *  of the hand cap entirely (they refill off their own separate
+ *  `districtsPerCycle` trickle), so the candidate hand alone is what the
+ *  office bonus sizes now. */
 const heldAfterOneTick = (seed: (g: Game) => void): number => {
   const cfg = loadConfig('as-written-plus.json');
   const g = new Game([new ScriptedAgent('solo')], structuredClone(CARDS), cfg, 1);
   seed(g);
   g.players[0].hand = [];
-  g.players[0].districts = [];
   g.tick();
-  return g.players[0].hand.length + g.players[0].districts.length;
+  return g.players[0].hand.length;
 };
 
 test('the office hand bonus fires once an office is held', () => {
@@ -527,7 +533,11 @@ test('#106: a later-era district card discards the seat\'s earlier one, under th
 
   const cfg = loadConfig('as-written-plus.json');
   cfg.hand = { ...cfg.hand, base: 2, bonusPresident: 0, bonusSenator: 0, bonusGovernor: 0, bonusRepresentative: 0 };
-  cfg.draft = { ...cfg.draft, packSize: 1 };
+  // hf7y/american-cycle#158: districts are dealt separately from the
+  // candidate hand now, sized by `districtsDealt` rather than `hand.base` --
+  // pin it to 1 so the initial deal draws exactly 1976's district and leaves
+  // 1992's untouched, the scenario this test is built around.
+  cfg.draft = { ...cfg.draft, packSize: 1, districtsDealt: 1 };
   cfg.game = { ...cfg.game, districtSupersession: true };
 
   const g = new Game([agent], [
@@ -688,14 +698,19 @@ test('#78: a second bill on the same tags, passed once the House flips, nets the
   g.tick(); // 1977, R-controlled: passes, pushes OH toward R
   assert.equal(g.leanMap.OH, 2, 'the first bill’s push, net of the same tick’s decay');
 
-  // The House flips to D. Player 1 needs a district of its own for the
+  // The House flips to D. Player 1 needs a HELD district of its own for the
   // default bill-tagger to reach for "union" again -- proposeTags is not
   // scripted here on purpose, so nothing in this test hand-picks the tag.
+  // representedDistricts() (hf7y/american-cycle#158) only counts seats a
+  // player actually holds, so the TX seat below has to appear in `seats`
+  // too, not just in `districts` -- a card dealt but never won doesn't
+  // count as part of the coalition anymore.
   g.year = 1979; // odd again: skip the intervening election year entirely
   g.seats = [
     { office: 'representative', state: 'OH', slot: 1, holder: { cardId: 'h3', player: 1, party: 'D', since: 1978 } },
     { office: 'representative', state: 'OH', slot: 2, holder: { cardId: 'h4', player: 1, party: 'D', since: 1978 } },
     { office: 'senator', state: 'OH', slot: 1, senateClass: 1, holder: { cardId: 's2', player: 1, party: 'D', since: 1978 } },
+    { office: 'representative', state: 'TX', slot: 1, holder: { cardId: 'h5', player: 1, party: 'D', since: 1978 } },
   ];
   g.players[1].districts = [dist({ id: 'TX-1', state: 'TX', number: 1, demographics: ['union'] })];
 

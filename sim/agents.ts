@@ -32,9 +32,39 @@ function partyVariants(card: CandidateCard, cfg: Config): { card: CandidateCard;
   return [{ card, bonus: printedBonus }, { card: flipped, bonus: 0 }];
 }
 
+/** hf7y/american-cycle#158: declaration is now round-by-round (`declareRounds`
+ *  in engine/game.ts), so every active agent calls `declare` -- and therefore
+ *  `options` -- once per ROUND rather than once per cycle. `options`'s result
+ *  depends only on a player's own hand and districts, the fixed `open` race
+ *  list for the cycle, and `cfg` -- NOT on `pending`, which is threaded
+ *  through `counterDeclare` separately -- and neither hand nor districts
+ *  mutate during the declare phase (a card leaves the hand only at
+ *  resolution, after every round has run). So the expensive part (looping
+ *  every hand card against every open race, building modifiers for each) is
+ *  identical on every round for a given player and is safe to compute once
+ *  per player per cycle. `open` is a fresh array built once per cycle
+ *  (`Game.openRaces()`) and never mutated afterward, so its identity is
+ *  exactly the right cache key -- a `WeakMap` keyed on it needs no explicit
+ *  invalidation and cannot leak across games or cycles. Without this, a
+ *  16-round cycle recomputed the same board-wide scan sixteen times per
+ *  player; measured on `tuned.json`, this cut a representative game from
+ *  ~9.5s to well under 1s with byte-identical output (the cache changes
+ *  nothing about WHAT is computed, only how often). */
+const optionsCache = new WeakMap<OpenRace[], Map<number, Option[]>>();
+
 /** Every legal declaration this player could make, with its modifier edge.
  *  Agents differ only in how they score and cap this list. */
 export function options(v: GameView, open: OpenRace[], cfg: Config): Option[] {
+  let byPlayer = optionsCache.get(open);
+  const cached = byPlayer?.get(v.me);
+  if (cached) return cached;
+  const out = computeOptions(v, open, cfg);
+  if (!byPlayer) { byPlayer = new Map(); optionsCache.set(open, byPlayer); }
+  byPlayer.set(v.me, out);
+  return out;
+}
+
+function computeOptions(v: GameView, open: OpenRace[], cfg: Config): Option[] {
   const me = v.players[v.me];
   const cands = me.hand.filter((c) => c.kind === 'candidate') as (CandidateCard & { kind: 'candidate' })[];
   const out: Option[] = [];
@@ -101,6 +131,35 @@ export function options(v: GameView, open: OpenRace[], cfg: Config): Option[] {
 
 const raceKey = (r: { office: Office; state: string; slot?: number }) => `${r.office}|${r.state}|${r.slot ?? ''}`;
 
+/** hf7y/american-cycle#158/#286: like `optionsCache` above, `pending` is the
+ *  SAME array for the whole of one cycle's `declareRounds` (engine/game.ts)
+ *  -- only ever grown by `.push()`, never reassigned -- so its identity is
+ *  just as safe a cache key. Without this, `counterDeclare` rebuilt a
+ *  per-race-key Set from the FULL `pending` array on every one of a cycle's
+ *  P*R declare calls, an O(P*R^2) scan of string-keyed Set work that stacks
+ *  on top of the per-round redesign (#158) `optionsCache` already answers
+ *  for the (pending-independent) `options` half. This tracks each race's
+ *  declaring players incrementally instead, processing only the pegs pushed
+ *  since the last call. */
+interface PendingIndex { seen: number; byRace: Map<string, Set<number>> }
+const pendingCache = new WeakMap<PendingPeg[], PendingIndex>();
+
+/** Every race some player other than `me` has declared into this round. */
+function contestedFor(pending: PendingPeg[], me: number): Set<string> {
+  let idx = pendingCache.get(pending);
+  if (!idx) { idx = { seen: 0, byRace: new Map() }; pendingCache.set(pending, idx); }
+  for (; idx.seen < pending.length; idx.seen++) {
+    const p = pending[idx.seen];
+    const k = raceKey(p);
+    let players = idx.byRace.get(k);
+    if (!players) { players = new Set(); idx.byRace.set(k, players); }
+    players.add(p.player);
+  }
+  const out = new Set<string>();
+  for (const [k, players] of idx.byRace) if (players.size > 1 || !players.has(me)) out.add(k);
+  return out;
+}
+
 /** Denial: contesting a race someone else has declared costs a real card
  *  against someone who may have spent nothing -- which is the asymmetry that
  *  makes district gating necessary. An agent that never does this plays
@@ -115,7 +174,7 @@ const raceKey = (r: { office: Office; state: string; slot?: number }) => `${r.of
 export function counterDeclare(
   opts: Option[], pending: PendingPeg[], me: number, appetite: number,
 ): Option[] {
-  const contested = new Set(pending.filter((p) => p.player !== me).map(raceKey));
+  const contested = contestedFor(pending, me);
   return opts.map((o) => contested.has(raceKey(o.d)) ? { ...o, edge: o.edge + appetite } : o);
 }
 
@@ -223,9 +282,24 @@ abstract class Base implements Agent {
 }
 
 export class RandomAgent extends Base {
+  // Keyed on `open` identity, exactly like `optionsCache` above, and safe for
+  // the same reason: `_pending` is unused below (this agent never reacts to
+  // what anyone else has declared this cycle), so the shuffled order cannot
+  // legitimately change from one round to the next. Before this cache, every
+  // round `declareRounds` called `declare` on this agent re-shuffled the
+  // full options list from scratch -- an O(options) `RNG.shuffle` on every
+  // round of every cycle instead of once per cycle, which both re-inflated
+  // the per-round cost `optionsCache` was added to kill and burned an amount
+  // of RNG entropy that scaled with round count, shifting every roll after
+  // it for the rest of the game.
+  private shuffleCache = new WeakMap<OpenRace[], Option[]>();
   declare(v: GameView, open: OpenRace[], _pending: PendingPeg[]): Declaration[] {
-    const o = options(v, open, this.cfg);
-    return pickDistinct(this.rng.shuffle(o), this.budget(v));
+    let order = this.shuffleCache.get(open);
+    if (!order) {
+      order = this.rng.shuffle([...options(v, open, this.cfg)]);
+      this.shuffleCache.set(open, order);
+    }
+    return pickDistinct(order, this.budget(v));
   }
   withdraw(): boolean { return false; }
   proposeG(): number { return 1 + this.rng.int(6); }
